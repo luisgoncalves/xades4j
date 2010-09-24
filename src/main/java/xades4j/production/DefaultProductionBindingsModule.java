@@ -1,0 +1,168 @@
+/*
+ * XAdES4j - A Java library for generation and verification of XAdES signatures.
+ * Copyright (C) 2010 Luis Goncalves.
+ * 
+ * This program is free software; you can redistribute it and/or modify it under
+ * the terms of the GNU General Public License as published by the Free Software
+ * Foundation; either version 2 of the License, or any later version.
+ * 
+ * This program is distributed in the hope that it will be useful, but WITHOUT
+ * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
+ * FOR A PARTICULAR PURPOSE. See the GNU General Public License for more details.
+ * 
+ * You should have received a copy of the GNU General Public License along with
+ * this program; if not, write to the Free Software Foundation, Inc., 59 Temple
+ * Place, Suite 330, Boston, MA 02111-1307 USA
+ */
+package xades4j.production;
+
+import com.google.inject.AbstractModule;
+import com.google.inject.TypeLiteral;
+import xades4j.properties.AllDataObjsCommitmentTypeProperty;
+import xades4j.properties.AllDataObjsTimeStampProperty;
+import xades4j.properties.ArchiveTimeStampProperty;
+import xades4j.properties.CertificateValuesProperty;
+import xades4j.properties.CommitmentTypeProperty;
+import xades4j.properties.CompleteCertificateRefsProperty;
+import xades4j.properties.CompleteRevocationRefsProperty;
+import xades4j.properties.CounterSignatureProperty;
+import xades4j.properties.DataObjectDesc;
+import xades4j.properties.DataObjectFormatProperty;
+import xades4j.properties.IndividualDataObjsTimeStampProperty;
+import xades4j.properties.RevocationValuesProperty;
+import xades4j.properties.SigAndRefsTimeStampProperty;
+import xades4j.properties.SignaturePolicyIdentifierProperty;
+import xades4j.properties.SignaturePolicyImpliedProperty;
+import xades4j.properties.SignatureProductionPlaceProperty;
+import xades4j.properties.SignatureTimeStampProperty;
+import xades4j.properties.SignerRoleProperty;
+import xades4j.properties.SigningCertificateProperty;
+import xades4j.properties.SigningTimeProperty;
+import xades4j.providers.AlgorithmsProvider;
+import xades4j.providers.DataObjectPropertiesProvider;
+import xades4j.providers.impl.DefaultAlgorithmsProvider;
+import xades4j.providers.impl.DefaultMessageDigestProvider;
+import xades4j.providers.impl.DefaultSignaturePropertiesProvider;
+import xades4j.providers.impl.DefaultTimeStampTokenProvider;
+import xades4j.providers.MessageDigestEngineProvider;
+import xades4j.providers.SignaturePropertiesProvider;
+import xades4j.providers.TimeStampTokenProvider;
+import xades4j.xml.marshalling.DefaultSignedPropertiesMarshaller;
+import xades4j.xml.marshalling.DefaultUnsignedPropertiesMarshaller;
+import xades4j.xml.marshalling.SignedPropertiesMarshaller;
+import xades4j.xml.marshalling.UnsignedPropertiesMarshaller;
+
+/**
+ * Contains the Guice bindings for the default components and the bindings for the
+ * needed internal components.
+ * 
+ * @author Luís
+ */
+class DefaultProductionBindingsModule extends AbstractModule
+{
+    @Override
+    protected void configure()
+    {
+        // Defaults for configurable components.
+        bind(SignaturePropertiesProvider.class).to(DefaultSignaturePropertiesProvider.class);
+        bind(DataObjectPropertiesProvider.class).toInstance(new DataObjectPropertiesProvider()
+        {
+            @Override
+            public void provideProperties(DataObjectDesc dataObj)
+            {
+                // By default no properties are specified for a data object.
+            }
+        });
+        bind(AlgorithmsProvider.class).to(DefaultAlgorithmsProvider.class);
+        bind(MessageDigestEngineProvider.class).to(DefaultMessageDigestProvider.class);
+        bind(TimeStampTokenProvider.class).to(DefaultTimeStampTokenProvider.class);
+        bind(SignedPropertiesMarshaller.class).to(DefaultSignedPropertiesMarshaller.class);
+        bind(UnsignedPropertiesMarshaller.class).to(DefaultUnsignedPropertiesMarshaller.class);
+
+        // PropertiesDataObjectsGenerator is not configurable but the individual
+        // generators may have dependencies.
+        bind(PropertiesDataObjectsGenerator.class).to(PropertiesDataObjectsGeneratorImpl.class);
+        bind(PropertyDataGeneratorsMapper.class).to(PropertyDataGeneratorsMapperImpl.class);
+
+        // PropertyDataGeneratorsMapperImpl relies on the injector to get
+        // the individual generators, so they need to be bound.
+        // - SignedSignatureProperties
+        bind(new TypeLiteral<PropertyDataObjectGenerator<SigningTimeProperty>>()
+        {
+        }).to(DataGenSigningTime.class);
+
+        bind(new TypeLiteral<PropertyDataObjectGenerator<SignerRoleProperty>>()
+        {
+        }).to(DataGenSignerRole.class);
+
+        bind(new TypeLiteral<PropertyDataObjectGenerator<SigningCertificateProperty>>()
+        {
+        }).to(DataGenSigningCertificate.class);
+
+        bind(new TypeLiteral<PropertyDataObjectGenerator<SignatureProductionPlaceProperty>>()
+        {
+        }).to(DataGenSigProdPlace.class);
+
+        bind(new TypeLiteral<PropertyDataObjectGenerator<SignaturePolicyIdentifierProperty>>()
+        {
+        }).to(DataGenSigPolicy.class);
+
+        bind(new TypeLiteral<PropertyDataObjectGenerator<SignaturePolicyImpliedProperty>>()
+        {
+        }).to(DataGenSigPolicyImplied.class);
+
+        // - SignedDataObjectProperties
+        bind(new TypeLiteral<PropertyDataObjectGenerator<DataObjectFormatProperty>>()
+        {
+        }).to(DataGenDataObjFormat.class);
+
+        bind(new TypeLiteral<PropertyDataObjectGenerator<CommitmentTypeProperty>>()
+        {
+        }).to(DataGenCommitmentType.class);
+
+        bind(new TypeLiteral<PropertyDataObjectGenerator<AllDataObjsCommitmentTypeProperty>>()
+        {
+        }).to(DataGenCommitmentTypeAllDataObjs.class);
+
+        bind(new TypeLiteral<PropertyDataObjectGenerator<IndividualDataObjsTimeStampProperty>>()
+        {
+        }).to(DataGenIndivDataObjsTimeStamp.class);
+
+        bind(new TypeLiteral<PropertyDataObjectGenerator<AllDataObjsTimeStampProperty>>()
+        {
+        }).to(DataGenAllDataObjsTimeStamp.class);
+
+        // - UnsignedSignatureProperties
+        bind(new TypeLiteral<PropertyDataObjectGenerator<CounterSignatureProperty>>()
+        {
+        }).to(DataGenCounterSig.class);
+
+        bind(new TypeLiteral<PropertyDataObjectGenerator<SignatureTimeStampProperty>>()
+        {
+        }).to(DataGenSigTimeStamp.class);
+
+        bind(new TypeLiteral<PropertyDataObjectGenerator<CompleteCertificateRefsProperty>>()
+        {
+        }).to(DataGenCompleteCertRefs.class);
+
+        bind(new TypeLiteral<PropertyDataObjectGenerator<CompleteRevocationRefsProperty>>()
+        {
+        }).to(DataGenCompleteRevocRefs.class);
+
+        bind(new TypeLiteral<PropertyDataObjectGenerator<SigAndRefsTimeStampProperty>>()
+        {
+        }).to(DataGenSigAndRefsTimeStamp.class);
+
+        bind(new TypeLiteral<PropertyDataObjectGenerator<CertificateValuesProperty>>()
+        {
+        }).to(DataGenCertificateValues.class);
+
+        bind(new TypeLiteral<PropertyDataObjectGenerator<RevocationValuesProperty>>()
+        {
+        }).to(DataGenRevocationValues.class);
+
+        bind(new TypeLiteral<PropertyDataObjectGenerator<ArchiveTimeStampProperty>>()
+        {
+        }).to(DataGenArchiveTimeStamp.class);
+    }
+}

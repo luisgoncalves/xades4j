@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jaxb:bindings xmlns:jaxb="http://java.sun.com/xml/ns/jaxb"
+               xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+               jaxb:version="2.0">
+  <jaxb:globalBindings>
+	 <jaxb:javaType name="byte[]" xmlType="xsd:base64Binary"
+        parseMethod="xades4j.utils.Base64.decode"
+        printMethod="xades4j.utils.Base64.encodeBytes"/>
+  </jaxb:globalBindings>
+  <jaxb:bindings schemaLocation="http://www.w3.org/TR/2002/REC-xmldsig-core-20020212/xmldsig-core-schema.xsd"  node="/xsd:schema">
+    <jaxb:schemaBindings>
+      <jaxb:package name="xades4j.xml.bind.xmldsig"/>
+	  <jaxb:nameXmlTransform>
+			<jaxb:typeName prefix="Xml"/>
+	   </jaxb:nameXmlTransform>
+    </jaxb:schemaBindings>
+  </jaxb:bindings>
+  <jaxb:bindings schemaLocation="XAdESv141.xsd" node="/xsd:schema">
+    <jaxb:schemaBindings>
+      <jaxb:package name="xades4j.xml.bind.xades"/>
+	  <jaxb:nameXmlTransform>
+			<jaxb:typeName prefix="Xml"/>
+	  </jaxb:nameXmlTransform>
+    </jaxb:schemaBindings>
+  </jaxb:bindings>
+  <jaxb:bindings schemaLocation="XAdES.xsd" node="/xsd:schema">
+    <jaxb:schemaBindings>
+      <jaxb:package name="xades4j.xml.bind.xades"/>
+	  <jaxb:nameXmlTransform>
+			<jaxb:typeName prefix="Xml"/>
+	  </jaxb:nameXmlTransform>
+    </jaxb:schemaBindings>
+  </jaxb:bindings>
+</jaxb:bindings>

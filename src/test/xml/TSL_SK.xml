@@ -1,0 +1,1548 @@
+﻿<?xml version="1.0" encoding="utf-8"?><!--
+
+*******************************************************************************
+	Application: ELPI TLS
+*******************************************************************************
+-->
+<tsl:TrustServiceStatusList xmlns:tsl="http://uri.etsi.org/02231/v2#" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" TSLTag="http://uri.etsi.org/02231/TSLTag" Id="ID01SK" xmlns:tslx="http://uri.etsi.org/02231/v2/additionaltypes#" xmlns:ds="http://www.w3.org/2000/09/xmldsig#" xmlns:xades="http://uri.etsi.org/01903/v1.3.2#" xmlns:ecc="http://uri.etsi.org/TrstSvc/SvcInfoExt/eSigDir-1999-93-EC-TrustedList/#">
+
+      
+<!--
+
+*******************************************************************************
+Application: ELPI TLS 1.1.1.1 
+Date:        14.8.2010 12:00:12
+*******************************************************************************
+-->
+
+
+  <tsl:SchemeInformation>
+    <tsl:TSLVersionIdentifier>3</tsl:TSLVersionIdentifier>
+    <tsl:TSLSequenceNumber>6</tsl:TSLSequenceNumber>
+    <tsl:TSLType>http://uri.etsi.org/TrstSvc/eSigDir-1999-93-EC-TrustedList/TSLType/generic</tsl:TSLType>
+    <tsl:SchemeOperatorName>
+      <tsl:Name xml:lang="en">NATIONAL SECURITY AUTHORITY</tsl:Name>
+      <tsl:Name xml:lang="sk">NÁRODNÝ BEZPEČNOSTNÝ ÚRAD</tsl:Name>
+    </tsl:SchemeOperatorName>
+    <tsl:SchemeOperatorAddress>
+      <tsl:PostalAddresses>
+        <tsl:PostalAddress xml:lang="en">
+          <tsl:StreetAddress>Budatinska 30</tsl:StreetAddress>
+          <tsl:Locality>BRATISLAVA 57</tsl:Locality>
+          
+          <tsl:PostalCode>850 07</tsl:PostalCode>
+          <tsl:CountryName>SK</tsl:CountryName>
+        </tsl:PostalAddress>
+        <tsl:PostalAddress xml:lang="sk">
+          <tsl:StreetAddress>Budatínska 30</tsl:StreetAddress>
+          <tsl:Locality>BRATISLAVA 57</tsl:Locality>
+          
+          <tsl:PostalCode>850 07</tsl:PostalCode>
+          <tsl:CountryName>SK</tsl:CountryName>
+        </tsl:PostalAddress>
+      </tsl:PostalAddresses>
+      <tsl:ElectronicAddress>
+        <tsl:URI>mailto:podatelna@nbusr.sk</tsl:URI>
+        <tsl:URI>mailto:info@nbusr.sk</tsl:URI>
+        <tsl:URI>http://www.nbusr.sk</tsl:URI>
+        <tsl:URI>tel:+421-2-6869-2114</tsl:URI>
+        <tsl:URI>fax:+421-2-6869-1701</tsl:URI>
+      </tsl:ElectronicAddress>
+    </tsl:SchemeOperatorAddress>
+    <tsl:SchemeName>
+      <tsl:Name xml:lang="en">SK:Supervision/Accreditation Status List of certification services from Certification Service Providers, which are supervised/accredited by the referenced Member State for compliance with the relevant provisions laid down in Directive 1999/93/EC and its implementation in the referenced Member State’s laws.</tsl:Name>
+      <tsl:Name xml:lang="sk">SK:Zoznam štatútov dohľadu nad certifikačnými službami/štatútov akreditácie certifikačných služieb poskytovateľov certifikačných služieb, ktorí sú pod dohľadom dotknutého členského štátu/ktorých členský štát akreditoval vzhľadom na dodržiavanie príslušných ustanovení Smernice 1999/93/ES a jej zodpovedajúcu implementáciu v právnych predpisoch dotknutých členských štátov.</tsl:Name>
+    </tsl:SchemeName>
+    <tsl:SchemeInformationURI>
+      <tsl:URI xml:lang="en">http://www.nbusr.sk/en/electronic-signature/ca-control-and-accreditation/index/html</tsl:URI>
+      <tsl:URI xml:lang="sk">http://www.nbusr.sk/sk/elektronicky-podpis/kontrola-a-akreditacia-ca/index.html</tsl:URI>
+    </tsl:SchemeInformationURI>
+    <tsl:StatusDeterminationApproach>http://uri.etsi.org/TrstSvc/eSigDir-1999-93-EC-TrustedList/StatusDetn/appropriate</tsl:StatusDeterminationApproach>
+    <tsl:SchemeTypeCommunityRules>
+      <tsl:URI>http://uri.etsi.org/TrstSvc/eSigDir-1999-93-EC-TrustedList/schemerules/common</tsl:URI>
+      <tsl:URI>http://uri.etsi.org/TrstSvc/eSigDir-1999-93-EC-TrustedList/schemerules/SK</tsl:URI>
+    </tsl:SchemeTypeCommunityRules>
+    <tsl:SchemeTerritory>SK</tsl:SchemeTerritory>
+    <tsl:PolicyOrLegalNotice>
+      <tsl:TSLLegalNotice xml:lang="en">The applicable legal framework for the present TSL implementation of the Trusted List of supervised/accredited Certification Service Providers for the Slovak Republic is the Directive 1999/93/EC of the European Parliament and of the Council 
+of 13 December 1999 on a Community framework for electronic signatures and its implementation in the Slovak Republic laws.</tsl:TSLLegalNotice>
+      <tsl:TSLLegalNotice xml:lang="sk">Platným právnym rámcom v Slovenskej republike pre TSL implementáciu zoznamu dôveryhodných poskytovateľov certifikačných služieb, ktorí podliehajú dohľadu / sú akreditovaní, je Smernica Európskeho parlamentu a Rady 1999/93/ES z 13. decembra 1999 o rámci spoločenstva pre elektronické podpisy a jej zodpovedajúca implementácia v právnych predpisoch Slovenskej republiky.</tsl:TSLLegalNotice>
+    </tsl:PolicyOrLegalNotice>
+    <tsl:HistoricalInformationPeriod>3653</tsl:HistoricalInformationPeriod>
+    <tsl:PointersToOtherTSL>
+      <tsl:OtherTSLPointer>
+        <tsl:ServiceDigitalIdentities>
+          <tsl:ServiceDigitalIdentity>
+            <tsl:DigitalId>
+              <tsl:X509Certificate>MIIDYjCCAkqgAwIBAgILAQAAAAABJv9VwPIwDQYJKoZIhvcNAQEFBQAwYzELMAkGA1UEBhMCQkUxGTAXBgNVBAoTEEdsb2JhbFNpZ24gbnYtc2ExFjAUBgNVBAsTDVNlcnZlclNpZ24gQ0ExITAfBgNVBAMTGEdsb2JhbFNpZ24gU2VydmVyU2lnbiBDQTAeFw0xMDAyMjQwOTA1MTNaFw0xMzAzMjgxMjA0NTBaMHwxCzAJBgNVBAYTAkxVMRMwEQYDVQQIEwpMdXhlbWJvdXJnMRMwEQYDVQQHEwpMdXhlbWJvdXJnMRwwGgYDVQQKExNFdXJvcGVhbiBDb21taXNzaW9uMQ4wDAYDVQQLEwVESUdJVDEVMBMGA1UEAxMMZWMuZXVyb3BhLmV1MIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBgQDDRdijTNsz5RGNbnyQA98W+5P8cS18KiSSenCkyVB7Zinicxk0k0GG6ndaGecvrEHt3+s/i+bA8zmxDzon1Gc+RUj7FE5DCdMWXM1/7gE2JYW2E2Iu0NtSABvdVjLu9cP/81p2sCnynj5EOCl21E+8smfjylxt+O8JzaaaQsjKuwIDAQABo4GBMH8wEQYJYIZIAYb4QgEBBAQDAgbAMA4GA1UdDwEB/wQEAwIE8DAfBgNVHSMEGDAWgBRIu6i/W4TSV0jkYemRIJHYHSXffzA5BgNVHR8EMjAwMC6gLKAqhihodHRwOi8vY3JsLmdsb2JhbHNpZ24ubmV0L1NlcnZlclNpZ24uY3JsMA0GCSqGSIb3DQEBBQUAA4IBAQA8tgDKlVnGcpyD/VVOegTqsPIvpXLpgXIv+QIOGd/VFvqI8EXiKJjr3+35n1S4U7FVYcJeSdC8I905fwatYT7b/Zf7BOY9DysFYW6NT3VqXoZZhp/b394yVxZfSIkyDLb2xkNj04/l04DyLnfpOPzZBpxRpOfZ8bRUfTp2n52mXLVO+bDgO6pYM9sAhsnDkcVZruvOd+Y0397KQ2x8omYRWCAhqYMCPgqnzQ3j7q4um8y8J93nOa5WhWFN7TFcaWEOF/lEDtfZr33XoM3+YX/+ehHIb7HSOcPb34o4tz7t7RKSQ/WXkheL2kNta0WwMx59/qVJ2Ipa78swKos5Sd2z</tsl:X509Certificate>
+
+
+
+
+
+            </tsl:DigitalId>
+            
+          </tsl:ServiceDigitalIdentity>
+          
+        </tsl:ServiceDigitalIdentities>
+        <tsl:TSLLocation>https://ec.europa.eu/information_society/policy/esignature/trusted-list/tl-hr.pdf</tsl:TSLLocation>
+				<tsl:AdditionalInformation>
+					<tsl:OtherInformation>
+						<tsl:TSLType>http://uri.etsi.org/TrstSvc/eSigDir-1999-93-EC-TrustedList/TSLType/schemes</tsl:TSLType>
+					</tsl:OtherInformation>
+					<tsl:OtherInformation>
+						<tsl:SchemeOperatorName>
+							<tsl:Name xml:lang="en">European Commission</tsl:Name>
+							<tsl:Name xml:lang="sk">Európska komisia</tsl:Name>
+						</tsl:SchemeOperatorName>
+					</tsl:OtherInformation>
+					<tsl:OtherInformation>
+						<tsl:SchemeTypeCommunityRules>
+							<tsl:URI>http://uri.etsi.org/TrstSvc/eSigDir-1999-93-EC-TrustedList/schemerules/CompiledList</tsl:URI>
+						</tsl:SchemeTypeCommunityRules>
+					</tsl:OtherInformation>
+					<tsl:OtherInformation>
+						<tsl:SchemeTerritory>EU</tsl:SchemeTerritory>
+					</tsl:OtherInformation>
+					<tsl:OtherInformation>
+						<tslx:MimeType>application/pdf</tslx:MimeType>
+					</tsl:OtherInformation>
+				</tsl:AdditionalInformation>
+      </tsl:OtherTSLPointer>
+			<tsl:OtherTSLPointer>
+				<tsl:ServiceDigitalIdentities>
+					<tsl:ServiceDigitalIdentity>
+						<tsl:DigitalId>
+							<tsl:X509Certificate>MIIFnDCCBISgAwIBAgIDAVZhMA0GCSqGSIb3DQEBBQUAMEUxCzAJBgNVBAYTAkxVMRYwFAYDVQQKEw1MdXhUcnVzdCBTLkEuMR4wHAYDVQQDExVMdXhUcnVzdCBRdWFsaWZpZWQgQ0EwHhcNMDkxMjIzMTAzNTU2WhcNMTIxMjIzMTAzNTU2WjCCAQYxCzAJBgNVBAYTAkJFMQswCQYDVQQHEwJCRTEcMBoGA1UEChMTRXVyb3BlYW4gQ29tbWlzc2lvbjELMAkGA1UECxMCTkExJDAiBgNVBAMTG0thcmVsIExvZGV3aWprIE0gRGUgVnJpZW5kdDETMBEGA1UEBBMKRGUgVnJpZW5kdDEZMBcGA1UEKhMQS2FyZWwgTG9kZXdpamsgTTEdMBsGA1UEBRMUMTAxMDAzMzIxMTAwMDQ3NDkzNzgxLDAqBgkqhkiG9w0BCQEWHUthcmVsLkRlLVZyaWVuZHRAZWMuZXVyb3BhLmV1MRwwGgYDVQQMExNQcm9mZXNzaW9uYWwgUGVyc29uMIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBgQC96JBqnjCmAk43LDuZDMu5lNGK7/UQnJBLDkUqN2Jb/STQSBJnRJchCY9DnKtqYG9cuSZDRxvIUkssqO/WpFu/I5fO9I4mvLGD9h4ot8/GkRntbEl3CnMlRKZJkAdcSHwuqnuNpfaZ4yGGIPslRy9pbRkfXSeeneJAo0Ixiu3QJwIDAQABo4ICVDCCAlAwDAYDVR0TAQH/BAIwADBgBggrBgEFBQcBAQRUMFIwIwYIKwYBBQUHMAGGF2h0dHA6Ly9vY3NwLmx1eHRydXN0Lmx1MCsGCCsGAQUFBzAChh9odHRwOi8vY2EubHV4dHJ1c3QubHUvTFRRQ0EuY3J0MIIBHQYDVR0gBIIBFDCCARAwggECBggrgSsBAQIEATCB9TCBxwYIKwYBBQUHAgIwgboagbdMdXhUcnVzdCBRdWFsaWZpZWQgQ2VydGlmaWNhdGUgb24gQ0NTRCBjb21wbGlhbnQgd2l0aCBFVFNJIFRTIDEwMSA0NTYgUUNQKyBjZXJ0aWZpY2F0ZSBwb2xpY3kuIEtleSBHZW5lcmF0aW9uIGJ5IENTUC4gU29sZSBBdXRob3Jpc2VkIFVzYWdlOiBTdXBwb3J0IG9mIFF1YWxpZmllZCBFbGVjdHJvbmljIFNpZ25hdHVyZS4wKQYIKwYBBQUHAgEWHWh0dHA6Ly9yZXBvc2l0b3J5Lmx1eHRydXN0Lmx1MAgGBgQAizABATA2BggrBgEFBQcBAwQqMCgwCAYGBACORgEBMBIGBgQAjkYBAjAIEwACAQACAQAwCAYGBACORgEEMBEGCWCGSAGG+EIBAQQEAwIFIDALBgNVHQ8EBAMCBkAwHwYDVR0jBBgwFoAUjZCjB90aE3eZTJKrTUPeP80pZAUwMQYDVR0fBCowKDAmoCSgIoYgaHR0cDovL2NybC5sdXh0cnVzdC5sdS9MVFFDQS5jcmwwEQYDVR0OBAoECEwDOyVe3IV5MA0GCSqGSIb3DQEBBQUAA4IBAQBStS9gFx5BmEv5VciG7qEPR5VzqEpBElkjXDYe68Dw7Ol1nCt51CSuAB2/UcTkfCDh6022H7+EtiUpdM6GH/7qDqZdjqYpQznbu4xkrGTMLrTA1lalhgWugGQIpmCg69kiXns/AXcuJVQSR3mA3BMvJrN5PNaALoguynWCrxRHPTUS3pT5J93jCn90ZPAGhxELRxMdZuFZ2UAn8D8XLUxiz0IK9yqdysJiLzWsQazUkZ+lzDG0mPomyRkl3LzEK8HXO3HKGr+2n760N+StYyjwywP/kS/3LoPQWfUfjWQE8jDiTgodZT4ewVSxuNrBH5Ls29aBi0YsT9NYstznKgaR</tsl:X509Certificate>
+
+
+
+
+
+						</tsl:DigitalId>
+					</tsl:ServiceDigitalIdentity>
+				</tsl:ServiceDigitalIdentities>
+				<tsl:TSLLocation>https://ec.europa.eu/information_society/policy/esignature/trusted-list/tl-mp.xml</tsl:TSLLocation>
+				<tsl:AdditionalInformation>
+					<tsl:OtherInformation>
+						<tsl:TSLType>http://uri.etsi.org/TrstSvc/eSigDir-1999-93-EC-TrustedList/TSLType/schemes</tsl:TSLType>
+					</tsl:OtherInformation>
+					<tsl:OtherInformation>
+						<tsl:SchemeOperatorName>
+							<tsl:Name xml:lang="en">European Commission</tsl:Name>
+							<tsl:Name xml:lang="sk">Európska komisia</tsl:Name>
+						</tsl:SchemeOperatorName>
+					</tsl:OtherInformation>
+					<tsl:OtherInformation>
+						<tsl:SchemeTypeCommunityRules>
+							<tsl:URI>http://uri.etsi.org/TrstSvc/eSigDir-1999-93-EC-TrustedList/schemerules/CompiledList</tsl:URI>
+						</tsl:SchemeTypeCommunityRules>
+					</tsl:OtherInformation>
+					<tsl:OtherInformation>
+						<tsl:SchemeTerritory>EU</tsl:SchemeTerritory>
+					</tsl:OtherInformation>
+					<tsl:OtherInformation>
+						<tslx:MimeType>application/vnd.etsi.tsl+xml</tslx:MimeType>
+					</tsl:OtherInformation>
+				</tsl:AdditionalInformation>
+			</tsl:OtherTSLPointer>
+    </tsl:PointersToOtherTSL>
+    <tsl:ListIssueDateTime>2010-08-23T12:00:00Z</tsl:ListIssueDateTime>
+    <tsl:NextUpdate>
+      <tsl:dateTime>2011-01-31T12:00:00Z</tsl:dateTime>
+    </tsl:NextUpdate>
+    <tsl:DistributionPoints>
+      <tsl:URI>http://ep.nbusr.sk/kca/tsl/tsl.xml</tsl:URI>
+      <tsl:URI>http://ep.nbusr.sk/kca/tsl/tsl_hrf.zip</tsl:URI>
+    </tsl:DistributionPoints>
+    
+  </tsl:SchemeInformation>
+  <tsl:TrustServiceProviderList>
+    <tsl:TrustServiceProvider>
+      <tsl:TSPInformation>
+        <tsl:TSPName>
+          <tsl:Name xml:lang="en">National Security Authority SK</tsl:Name>
+          <tsl:Name xml:lang="sk">Národný bezpečnostný úrad SK</tsl:Name>
+        </tsl:TSPName>
+        
+        <tsl:TSPAddress>
+          <tsl:PostalAddresses>
+            <tsl:PostalAddress xml:lang="en">
+              <tsl:StreetAddress>Budatinska 30</tsl:StreetAddress>
+              <tsl:Locality>BRATISLAVA 57</tsl:Locality>
+              
+              <tsl:PostalCode>850 07</tsl:PostalCode>
+              <tsl:CountryName>SK</tsl:CountryName>
+            </tsl:PostalAddress>
+            <tsl:PostalAddress xml:lang="sk">
+              <tsl:StreetAddress>Budatínska 30</tsl:StreetAddress>
+              <tsl:Locality>BRATISLAVA 57</tsl:Locality>
+              
+              <tsl:PostalCode>850 07</tsl:PostalCode>
+              <tsl:CountryName>SK</tsl:CountryName>
+            </tsl:PostalAddress>
+          </tsl:PostalAddresses>
+          <tsl:ElectronicAddress>
+            <tsl:URI>mailto:secadmin@nbusr.sk</tsl:URI>
+            <tsl:URI>mailto:webmaster@nbusr.sk </tsl:URI>
+            <tsl:URI>mailto:info@nbusr.sk </tsl:URI>
+            <tsl:URI>http://ep.nbusr.sk/</tsl:URI>
+            <tsl:URI>tel:+421-2-6869-2114</tsl:URI>
+            <tsl:URI>tel:+421-903-993-167</tsl:URI>
+            <tsl:URI>fax:+421-2-6869-1701</tsl:URI>
+          </tsl:ElectronicAddress>
+        </tsl:TSPAddress>
+        <tsl:TSPInformationURI>
+          <tsl:URI xml:lang="en">http://ep.nbusr.sk/kca/index_uk.html</tsl:URI>
+          <tsl:URI xml:lang="sk">http://ep.nbusr.sk/kca/index.html</tsl:URI>
+        </tsl:TSPInformationURI>
+        
+      </tsl:TSPInformation>
+      <tsl:TSPServices>
+        <tsl:TSPService>
+          <tsl:ServiceInformation>
+            <tsl:ServiceTypeIdentifier>http://uri.etsi.org/02231/Svctype/SignaturePolicyAuthority</tsl:ServiceTypeIdentifier>
+            <tsl:ServiceName>
+              <tsl:Name xml:lang="en">Root Certification Authority 2</tsl:Name>
+              <tsl:Name xml:lang="sk">Koreňová certifikačná autorita 2</tsl:Name>
+            </tsl:ServiceName>
+            <tsl:ServiceDigitalIdentity>
+              <tsl:DigitalId>
+			    <tsl:X509Certificate>MIIEvTCCA6WgAwIBAgIBATANBgkqhkiG9w0BAQUFADBxMQswCQYDVQQGEwJTSzET
+MBEGA1UEBwwKQnJhdGlzbGF2YTEiMCAGA1UECgwZTmFyb2RueSBiZXpwZWNub3N0
+bnkgdXJhZDEUMBIGA1UECwwLU2VrY2lhIElCRVAxEzARBgNVBAMMCktDQSBOQlUg
+U1IwHhcNMDUwMjIyMTYxMzM3WhcNMTUwMjIyMTU0MzU3WjBxMQswCQYDVQQGEwJT
+SzETMBEGA1UEBwwKQnJhdGlzbGF2YTEiMCAGA1UECgwZTmFyb2RueSBiZXpwZWNu
+b3N0bnkgdXJhZDEUMBIGA1UECwwLU2VrY2lhIElCRVAxEzARBgNVBAMMCktDQSBO
+QlUgU1IwggEiMA0GCSqGSIb3DQEBAQUAA4IBDwAwggEKAoIBAQDyb47JvT9lZUG+
+X9xRq03FpI3iDEt8UnWagCM2+7RTdx2P0de92hR5jtsTUWbHSjOtD5VP6IO6A0Jw
+Lr6c8XRvg4RsXfYyY55u3mPA32sxcIHWIbrXOoH38ZV7wao2OXQLL/KbbQiqBads
+2i5b/bUNuP2LdVOdpQGeHuOYm9MpEDvUOeth1hqkZXj+Y4iRuN7xmOBnWOCvGGOr
+KeyDw+kas9kTJ5OcX5DQVCyWNJSMy+8FYoLrraO2uYUuVBv8KzuuUSIkYMaFOurI
+yaWdqfTfnAud5TVn8OHSHztcn/shvZwZffa4hn5wWQ06pAMTzbaIRlyENDTDUOYx
+tD98ndjhAgMBAAGjggFeMIIBWjAPBgNVHRMBAf8EBTADAQH/MIHaBgNVHSAEgdIw
+gc8wgcIGDSuBHpGZhAUAAAABAgIwgbAwdQYIKwYBBQUHAgIwaRpnQ2VydGlmaWth
+dCBqZSB2eWRhbnkgYWtvIGt2YWxpZmlrb3ZhbnkgY2VydGlmaWthdCBLQ0EgTkJV
+IFNSIHYgc3VsYWRlIHMgcGxhdG55bWkgcHJhdm55bWkgcHJlZHBpc21pIFNSLjA3
+BggrBgEFBQcCARYraHR0cDovL2VwLm5idXNyLnNrL2tjYS9kb2Mva2NhcV9jcDFf
+Ml8yLnBkZjAIBgYEAI5GAQEwOwYDVR0fBDQwMjAwoC6gLIYqaHR0cDovL2VwLm5i
+dXNyLnNrL2tjYS9jcmxzMi9rY2FuYnVzcjIuY3JsMA4GA1UdDwEB/wQEAwIBBjAd
+BgNVHQ4EFgQUBtqJ59OOUzp5d+nr+aa2MmU/RiQwDQYJKoZIhvcNAQEFBQADggEB
+API7KdFYYQm/SBgQV0u6r4d4Cyn5uq5B3fFsfhvJKT72SuhAnGrfa3DpJ/igJxuQ
+P3wYoXZIHRd8bo/CbuvT9KUdpi8329Ip6hFfUVW/1FL7hXGPmljYj0xE41HNME++
+odm9mb3IzHFctdjElbmhijpINWRoCw2nJPDT1O+Wb5ZyfPhZ+slEpTwTgfd1e7KI
+PVjXIZecem6NKey5vew9i4AGcW0tVkDaaaqHJzUHUc60KB7Xh1JaM5SdMYG3ePDZ
+phGzdDmE3P8N69JlgDYKtv3cotuYEukcL+k7PrkBGV49XApkBdU/I2cfAFTe82e/
+4vdcZPB0aHckCrUZq/S0cd0=</tsl:X509Certificate>
+			  </tsl:DigitalId>
+            </tsl:ServiceDigitalIdentity>
+            <tsl:ServiceStatus>http://uri.etsi.org/TrstSvc/eSigDir-1999-93-EC-TrustedList/Svcstatus/accredited</tsl:ServiceStatus>
+            <tsl:StatusStartingTime>2005-02-22T00:00:00Z</tsl:StatusStartingTime>
+            
+            <tsl:ServiceSupplyPoints>
+              <tsl:ServiceSupplyPoint> http://ep.nbusr.sk/kca/crls2/kcanbusr2.crl</tsl:ServiceSupplyPoint>
+              
+            </tsl:ServiceSupplyPoints>
+            <tsl:TSPServiceDefinitionURI>
+              <tsl:URI xml:lang="en">http://www.nbusr.sk/en/electronic-signature/signature-policies/index.html</tsl:URI>
+              <tsl:URI xml:lang="sk">http://www.nbusr.sk/sk/elektronicky-podpis/podpisove-politiky/index.html</tsl:URI>
+              <tsl:URI xml:lang="en">http://ep.nbusr.sk/kca/zoznam_certifikatov_uk.html</tsl:URI>
+              <tsl:URI xml:lang="sk">http://ep.nbusr.sk/kca/zoznam_certifikatov.html</tsl:URI>
+              <tsl:URI xml:lang="en">http://ep.nbusr.sk/kca/legislativa_uk.html</tsl:URI>
+              <tsl:URI xml:lang="sk">http://ep.nbusr.sk/kca/legislativa.html</tsl:URI>
+              <tsl:URI xml:lang="en">http://ep.nbusr.sk/kca/crl2_uk.html</tsl:URI>
+              <tsl:URI xml:lang="sk">http://ep.nbusr.sk/kca/crl2.html</tsl:URI>
+            </tsl:TSPServiceDefinitionURI>
+            <tsl:ServiceInformationExtensions>
+              <tsl:Extension Critical="true">
+ <ecc:Qualifications>
+  <ecc:QualificationElement>
+   <ecc:Qualifiers>
+    <ecc:Qualifier uri="http://uri.etsi.org/TrstSvc/eSigDir-1999-93-EC-TrustedList/SvcInfoExt/QCWithSSCD"/>
+   </ecc:Qualifiers>
+   <ecc:CriteriaList assert="all">
+    <ecc:PolicySet>
+     <ecc:PolicyIdentifier>
+      <xades:Identifier>1.3.158.36061701.0.0.0.1.2.2</xades:Identifier>
+      <xades:Description>EN: Only Qualified certificates with SSCD and Maintenance certificates for QES verification.
+	   SK: Iba kvalifikované certifikáty s SSCD a certifikáty na správu pre overenie ZEP</xades:Description>
+     </ecc:PolicyIdentifier>
+    </ecc:PolicySet>
+   </ecc:CriteriaList>
+  </ecc:QualificationElement>
+ </ecc:Qualifications>
+              </tsl:Extension>
+              <tsl:Extension Critical="true">
+<tsl:AdditionalServiceInformation>
+<tsl:URI xml:lang="en">http://uri.etsi.org/TrstSvc/eSigDir-1999-93-EC-TrustedList/SvcInfoExt/RootCA-QC</tsl:URI>
+</tsl:AdditionalServiceInformation>
+              </tsl:Extension>
+            </tsl:ServiceInformationExtensions>
+          </tsl:ServiceInformation>
+          
+        </tsl:TSPService>
+        <tsl:TSPService>
+          <tsl:ServiceInformation>
+            <tsl:ServiceTypeIdentifier>http://uri.etsi.org/02231/Svctype/SignaturePolicyAuthority</tsl:ServiceTypeIdentifier>
+            <tsl:ServiceName>
+              <tsl:Name xml:lang="en">Root Certification Authority 3</tsl:Name>
+              <tsl:Name xml:lang="sk">Koreňová certifikačná autorita 3</tsl:Name>
+            </tsl:ServiceName>
+            <tsl:ServiceDigitalIdentity>
+              <tsl:DigitalId>
+                <tsl:X509Certificate>MIIIiTCCBnGgAwIBAgIBATANBgkqhkiG9w0BAQsFADBtMQswCQYDVQQGEwJTSzET
+MBEGA1UEBwwKQnJhdGlzbGF2YTEiMCAGA1UECgwZTmFyb2RueSBiZXpwZWNub3N0
+bnkgdXJhZDEOMAwGA1UECwwFU0lCRVAxFTATBgNVBAMMDEtDQSBOQlUgU1IgMzAe
+Fw0wOTExMDYwOTU5MzlaFw0yNTExMDYwNzI5MDlaMG0xCzAJBgNVBAYTAlNLMRMw
+EQYDVQQHDApCcmF0aXNsYXZhMSIwIAYDVQQKDBlOYXJvZG55IGJlenBlY25vc3Ru
+eSB1cmFkMQ4wDAYDVQQLDAVTSUJFUDEVMBMGA1UEAwwMS0NBIE5CVSBTUiAzMIIC
+IjANBgkqhkiG9w0BAQEFAAOCAg8AMIICCgKCAgEA26rQjy9KlxLVuet9WdyDXIsx
+F/Llbl7OLNLFJ9xn6rOO8NcFIZfSlA1USbEfK+3kMJyNYJNyFi8OGQq3vv9/yRjJ
+5EARzVlns4ROhI/nxEahu4ET4VxVuyO5h0fmyJiGdFwJIPzFUxXYd2Z+u2OpLbNL
+ynj4HG9k2CK6p5TB0CXzj4MUr7rbXF0sV+J3iQwcFSJol8C4gGln9wC4czC44jHW
+fZUSvQ3vK9hrSBbJJ3bYLZV/RawKvR4SkWDxnFiOti7ujULrWpfkgiCo2TDV4NSG
+saGeXEIzoBShYRtppibHjmuLyFwZmvggY2/ux+EVwt6bgrlftQLpORF2rTQAdt10
+OyZNuMRphkKuDwgd1EhK4vW9XubLNbBCDBRhHG8dp7Vj/WOIVJPuQKR31O2ngnNi
+V4ItFLfVTU6h54/IgN4WDIM72Ak75yVInkqUbq1uYeHI375wIVUR1eLkW1FusT+w
+MYvVApZKg/0GX6lNLRmpQOOFv7iPXaoO4YSN761PkHJf5qJVyYS8dCM/ecpATRKR
+/RfdJSNmHcPHea8U+Zr5v+0f9DkWJ/zwzLAWNdU34C4s1LBmLA6uGAGfj8uesQ+5
+GRKCDcZwUA195XLN2o0JYner9ZY5L+DBTgjbxocxey55qvsEqWhiJO0KwkgwM//t
+HiO5WxS/RW6k1ts16OMCAwEAAaOCAzIwggMuMFAGA1UdIARJMEcwRQYNK4EekZmE
+BQAAAAECAjA0MDIGCCsGAQUFBwIBFiZodHRwOi8vZXAubmJ1c3Iuc2sva2NhL2Rv
+Yy9rY2FfY3BzLnBkZjAPBgNVHRMBAf8EBTADAQH/MIIBWAYDVR0fBIIBTzCCAUsw
+MKAuoCyGKmh0dHA6Ly9lcC5uYnVzci5zay9rY2EvY3JsczMva2NhbmJ1c3IzLmNy
+bDCBkKCBjaCBioaBh2xkYXA6Ly9lcC5uYnVzci5zay9jbiUzZEtDQSUyME5CVSUy
+MFNSJTIwMyxvdSUzZFNJQkVQLG8lM2ROYXJvZG55JTIwYmV6cGVjbm9zdG55JTIw
+dXJhZCxsJTNkQnJhdGlzbGF2YSxjJTNkU0s/Y2VydGlmaWNhdGVSZXZvY2F0aW9u
+TGlzdDCBg6CBgKB+hnxsZGFwOi8vL2NuJTNkS0NBJTIwTkJVJTIwU1IlMjAzLG91
+JTNkU0lCRVAsbyUzZE5hcm9kbnklMjBiZXpwZWNub3N0bnklMjB1cmFkLGwlM2RC
+cmF0aXNsYXZhLGMlM2RTSz9jZXJ0aWZpY2F0ZVJldm9jYXRpb25MaXN0MIIBPAYI
+KwYBBQUHAQsEggEuMIIBKjA7BggrBgEFBQcwBYYvaHR0cDovL2VwLm5idXNyLnNr
+L2tjYS9jZXJ0cy9rY2EzL2tjYW5idXNyMy5wN2MwegYIKwYBBQUHMAWGbmxkYXA6
+Ly9lcC5uYnVzci5zay9jbj1LQ0EgTkJVIFNSIDMsb3U9U0lCRVAsbz1OYXJvZG55
+IGJlenBlY25vc3RueSB1cmFkLGw9QnJhdGlzbGF2YSxjPVNLP2NhQ2VydGlmaWNh
+dGU7YmluYXJ5MG8GCCsGAQUFBzAFhmNsZGFwOi8vL2NuPUtDQSBOQlUgU1IgMyxv
+dT1TSUJFUCxvPU5hcm9kbnkgYmV6cGVjbm9zdG55IHVyYWQsbD1CcmF0aXNsYXZh
+LGM9U0s/Y2FDZXJ0aWZpY2F0ZTtiaW5hcnkwDgYDVR0PAQH/BAQDAgEGMB0GA1Ud
+DgQWBBR/8T0hwpdaLpcHDrFpgyX9IYY+BzANBgkqhkiG9w0BAQsFAAOCAgEANtv5
+EullQrKjuYnue9kecm9voLAnwqLqip4XEB22msgAuIrLkEteMt61k/BFgthXau9f
+BwD9CXu3qwTjtf+fyTgbU1aVR0b/ByzTbmkp179lQ5S8XOnawS9567JWNHaNiRW4
+XNN3WbQSsIfxBo5Vs1e0uW0GadTIXaRgMxwiWIpobd3nu1PbWlYPgi15dwRY4uSf
+jNQ1HFbVVgefi6Z4O32YKzxV38N+Os7uVsVcniyvI2Xo+MbUVzmdF2ExNvuguf06
+jekc/VfHSFY5zs1sMJyZI1aYmkbthQIHIQV5sK3/Bqv89I8Zx2CBwVTM/dgzzcds
+Nvh0RWkb3qK9tVqhJya2kGCFCD+h6Cya1d6TE4aWDub1dAX4L1w1lqdawG4rnz+H
+hoG5ZioUFzNdFJEYJCdCRcbrG0DsO25In1GZVbO6mhWcof6vwKW4cTknKi09MUe5
+l1q5oKu1VsIzDimymUe0B2sG5yWnkCYz91BaYQdabr11FlwiKriMNzlXcd4FC/o6
+MvPNPvUWzkiEV9wg82uztiKANqRaFYcO8sHYajx4IY1kELi9TUectuWL2EjaNp9O
+JnbL2YXCVemtb9PUYdZG+gWpH5DlEAxhsMpY+qH7x1sunu4NtwIZmdBKZG76MDwz
+0mCPgmYSous91QQBqeThl3hGnliUk8fF2aNJesA=</tsl:X509Certificate>
+              </tsl:DigitalId>
+            </tsl:ServiceDigitalIdentity>
+            <tsl:ServiceStatus>http://uri.etsi.org/TrstSvc/eSigDir-1999-93-EC-TrustedList/Svcstatus/accredited</tsl:ServiceStatus>
+            <tsl:StatusStartingTime>2009-11-06T09:59:39Z</tsl:StatusStartingTime>
+            <tsl:ServiceSupplyPoints>
+              <tsl:ServiceSupplyPoint>http://ep.nbusr.sk/kca/crls3/kcanbusr3.crl</tsl:ServiceSupplyPoint>
+              <tsl:ServiceSupplyPoint>http://ep.nbusr.sk/kca/certs/kca3/kcanbusr3.p7c</tsl:ServiceSupplyPoint>
+            </tsl:ServiceSupplyPoints>
+            <tsl:TSPServiceDefinitionURI>
+              <tsl:URI xml:lang="en">http://www.nbusr.sk/en/electronic-signature/signature-policies/index.html</tsl:URI>
+              <tsl:URI xml:lang="sk">http://www.nbusr.sk/sk/elektronicky-podpis/podpisove-politiky/index.html</tsl:URI>
+              <tsl:URI xml:lang="en">http://ep.nbusr.sk/kca/zoznam_certifikatov_uk.html</tsl:URI>
+              <tsl:URI xml:lang="sk">http://ep.nbusr.sk/kca/zoznam_certifikatov.html</tsl:URI>
+              <tsl:URI xml:lang="en">http://ep.nbusr.sk/kca/legislativa_uk.html</tsl:URI>
+              <tsl:URI xml:lang="sk">http://ep.nbusr.sk/kca/legislativa.html</tsl:URI>
+              <tsl:URI xml:lang="en">http://ep.nbusr.sk/kca/crl3_uk.html</tsl:URI>
+              <tsl:URI xml:lang="sk">http://ep.nbusr.sk/kca/crl3.html</tsl:URI>
+            </tsl:TSPServiceDefinitionURI>
+            <tsl:ServiceInformationExtensions>
+              <tsl:Extension Critical="true">
+                <ecc:Qualifications>
+                  <ecc:QualificationElement>
+                    <ecc:Qualifiers>
+                      <ecc:Qualifier uri="http://uri.etsi.org/TrstSvc/eSigDir-1999-93-EC-TrustedList/SvcInfoExt/QCWithSSCD"/>
+                    </ecc:Qualifiers>
+                    <ecc:CriteriaList assert="all">
+                      <ecc:PolicySet>
+                        <ecc:PolicyIdentifier>
+                          <xades:Identifier>1.3.158.36061701.0.0.0.1.2.2</xades:Identifier>
+                          <xades:Description>EN: Only Qualified certificates with SSCD and Maintenance certificates for QES verification.
+	   SK: Iba kvalifikované certifikáty s SSCD a certifikáty na správu pre overenie ZEP</xades:Description>
+                        </ecc:PolicyIdentifier>
+                      </ecc:PolicySet>
+                    </ecc:CriteriaList>
+                  </ecc:QualificationElement>
+                </ecc:Qualifications>
+              </tsl:Extension>
+              <tsl:Extension Critical="true">
+                <tsl:AdditionalServiceInformation>
+                  <tsl:URI xml:lang="en">http://uri.etsi.org/TrstSvc/eSigDir-1999-93-EC-TrustedList/SvcInfoExt/RootCA-QC</tsl:URI>
+                </tsl:AdditionalServiceInformation>
+              </tsl:Extension>
+              <tsl:Extension Critical="true">
+                <tsl:AdditionalServiceInformation>
+                  <tsl:URI xml:lang="en">http://uri.etsi.org/TrstSvc/eSigDir-1999-93-EC-TrustedList/SvcInfoExt/OCSP-QC</tsl:URI>
+                </tsl:AdditionalServiceInformation>
+              </tsl:Extension>
+            </tsl:ServiceInformationExtensions>
+          </tsl:ServiceInformation>
+        </tsl:TSPService>
+        <tsl:TSPService>
+          <tsl:ServiceInformation>
+            <tsl:ServiceTypeIdentifier>http://uri.etsi.org/TrstSvc/Svctype/CA/QC</tsl:ServiceTypeIdentifier>
+            <tsl:ServiceName>
+              <tsl:Name xml:lang="en">The Slovak National Certification Authority (SNCA)</tsl:Name>
+              <tsl:Name xml:lang="sk">Slovenská národná certifikačná autorita (SNCA)</tsl:Name>
+            </tsl:ServiceName>
+            <tsl:ServiceDigitalIdentity>
+              <tsl:DigitalId>
+                <tsl:X509Certificate>MIIGmzCCBYOgAwIBAgICIW4wDQYJKoZIhvcNAQEFBQAwcTELMAkGA1UEBhMCU0sx
+EzARBgNVBAcMCkJyYXRpc2xhdmExIjAgBgNVBAoMGU5hcm9kbnkgYmV6cGVjbm9z
+dG55IHVyYWQxFDASBgNVBAsMC1Nla2NpYSBJQkVQMRMwEQYDVQQDDApLQ0EgTkJV
+IFNSMB4XDTA2MDgyNDExMTgxM1oXDTExMDgyNDExMTcyN1owZTELMAkGA1UEBhMC
+U0sxEzARBgNVBAcMCkJyYXRpc2xhdmExIjAgBgNVBAoMGU5hcm9kbnkgYmV6cGVj
+bm9zdG55IHVyYWQxDjAMBgNVBAsMBVNJQkVQMQ0wCwYDVQQDDARTTkNBMIIBIjAN
+BgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAstRsWtSGa+W6KE+HTffiIHhfAugP
++uPv7yoJzEp0CjZOtZXB/FkjNoXma19vKYSaP9EI7TAuFzuWI+hnaMRoeITU0qpW
+N0cPrRzhiLU5XbbBIjAIutsNu79TKo6tSObQEtsCqfnfquTpAaPdOeIMxcCg7DZc
+k5msMUsJGHEx/3TeWCNU+6ZKw1c6vjgM3BzmOVzl7OjqhjqaNFA3xjiXXSNKO5RA
+0AGMXYOUY+HlNJjOqVdWoyXWznEI+6U3TYLqxmhYpO/E9AA79IQczY0H/qZoj8RR
+0GWVUOPdOA5gLOKVKlB68BF9hmYQ5HiQNiwGDA2CY/ogIQOh8AZQMSzKhwIDAQAB
+o4IDRzCCA0MwEgYDVR0TAQH/BAgwBgEB/wIBATAaBgNVHSAEEzARMA8GDSuBHpGZ
+hAUAAAABAgIwggFZBggrBgEFBQcBAQSCAUswggFHMDsGCCsGAQUFBzAChi9odHRw
+Oi8vZXAubmJ1c3Iuc2sva2NhL2NlcnRzL2tjYTIva2NhbmJ1c3IyLnA3YzCBiAYI
+KwYBBQUHMAKGfGxkYXA6Ly9lcC5uYnVzci5zay9jbj1LQ0ElMjBOQlUlMjBTUixv
+dT1TZWtjaWElMjBJQkVQLG89TmFyb2RueSUyMGJlenBlY25vc3RueSUyMHVyYWQs
+bD1CcmF0aXNsYXZhLGM9U0s/Y2FDZXJ0aWZpY2F0ZTtiaW5hcnkwfQYIKwYBBQUH
+MAKGcWxkYXA6Ly8vY249S0NBJTIwTkJVJTIwU1Isb3U9U2VrY2lhJTIwSUJFUCxv
+PU5hcm9kbnklMjBiZXpwZWNub3N0bnklMjB1cmFkLGw9QnJhdGlzbGF2YSxjPVNL
+P2NhQ2VydGlmaWNhdGU7YmluYXJ5MA4GA1UdDwEB/wQEAwIBBjAfBgNVHSMEGDAW
+gBQG2onn045TOnl36ev5prYyZT9GJDCCAWIGA1UdHwSCAVkwggFVMDCgLqAshipo
+dHRwOi8vZXAubmJ1c3Iuc2sva2NhL2NybHMyL2tjYW5idXNyMi5jcmwwgZSggZGg
+gY6GgYtsZGFwOi8vZXAubmJ1c3Iuc2svY24lM2RLQ0ElMjBOQlUlMjBTUixvdSUz
+ZFNla2NpYSUyMElCRVAsbyUzZE5hcm9kbnklMjBiZXpwZWNub3N0bnklMjB1cmFk
+LGwlM2RCcmF0aXNsYXZhLGMlM2RTSz9jZXJ0aWZpY2F0ZVJldm9jYXRpb25MaXN0
+MIGJoIGGoIGDhoGAbGRhcDovLy9jbiUzZEtDQSUyME5CVSUyMFNSLG91JTNkU2Vr
+Y2lhJTIwSUJFUCxvJTNkTmFyb2RueSUyMGJlenBlY25vc3RueSUyMHVyYWQsbCUz
+ZEJyYXRpc2xhdmEsYyUzZFNLP2NlcnRpZmljYXRlUmV2b2NhdGlvbkxpc3QwHQYD
+VR0OBBYEFDiz2QCl9oG5Sw2bKttNZWexpRvMMA0GCSqGSIb3DQEBBQUAA4IBAQDA
+2RHxrmUew3azfGujbAbhUi1wBUkStFtu7ZS3KmQ/YkEWxl0/DUvPPsRLwlF4EMbf
+ivW5bVHVXkIZS/eGsyV6mxzwlURugR4D4FgRpiv1AryXSkY18nop55XvC3yksaOL
+3nb+TKhwoFvUWvm0sQ6j9OHCatNvz5qE96MAKIqZG2W0Pm0KnJrLmRzs7zra1ddk
+SLPS+VKbIj+9FkBor4n6q6EM3v6X/nCp3Lrce9WjIlyRjx9uConGjd6Utgcy1uFy
+sf4aHBZDL6x9GtzXFje0H37rD4euayigV4nxBKVJg0sWEuAGNrg9S9gbGg8BxZPY
+xExbpzhZLjvlJhffNHjJ</tsl:X509Certificate>
+              </tsl:DigitalId>
+            </tsl:ServiceDigitalIdentity>
+            <tsl:ServiceStatus>http://uri.etsi.org/TrstSvc/eSigDir-1999-93-EC-TrustedList/Svcstatus/accredited</tsl:ServiceStatus>
+            <tsl:StatusStartingTime>2006-08-15T00:00:00Z</tsl:StatusStartingTime>
+            <tsl:ServiceSupplyPoints>
+              <tsl:ServiceSupplyPoint>http://ep.nbusr.sk/snca/crls/snca1.crl</tsl:ServiceSupplyPoint>
+              <tsl:ServiceSupplyPoint>ldap://ep.nbusr.sk/cn=SNCA,ou=SIBEP,o=Narodny%20bezpecnostny%20urad,l=Bratislava,c=SK?certificateRevocationList</tsl:ServiceSupplyPoint>
+            </tsl:ServiceSupplyPoints>
+            <tsl:TSPServiceDefinitionURI>
+              <tsl:URI xml:lang="en">http://ep.nbusr.sk/snca/index_en.html</tsl:URI>
+              <tsl:URI xml:lang="sk">http://ep.nbusr.sk/snca/</tsl:URI>
+              
+              
+              
+              
+            </tsl:TSPServiceDefinitionURI>
+            <tsl:ServiceInformationExtensions>
+              <tsl:Extension Critical="true">
+                <ecc:Qualifications>
+                  <ecc:QualificationElement>
+                    <ecc:Qualifiers>
+                      <ecc:Qualifier uri="http://uri.etsi.org/TrstSvc/eSigDir-1999-93-EC-TrustedList/SvcInfoExt/QCWithSSCD"/>
+                    </ecc:Qualifiers>
+                    <ecc:CriteriaList assert="all">
+                      <ecc:PolicySet>
+                        <ecc:PolicyIdentifier>
+                          <xades:Identifier>1.3.158.36061701.0.0.0.1.2.2</xades:Identifier>
+                          <xades:Description>EN: Only Qualified certificates with SSCD and Maintenance certificates for QES verification.
+	   SK: Iba kvalifikované certifikáty s SSCD a certifikáty na správu pre overenie ZEP</xades:Description>
+                        </ecc:PolicyIdentifier>
+                      </ecc:PolicySet>
+                    </ecc:CriteriaList>
+                  </ecc:QualificationElement>
+                </ecc:Qualifications>
+              </tsl:Extension>
+              
+              
+            </tsl:ServiceInformationExtensions>
+          </tsl:ServiceInformation>
+        </tsl:TSPService>
+        <tsl:TSPService>
+          <tsl:ServiceInformation>
+            <tsl:ServiceTypeIdentifier>http://uri.etsi.org/TrstSvc/Svctype/CA/QC</tsl:ServiceTypeIdentifier>
+            <tsl:ServiceName>
+              <tsl:Name xml:lang="en">The Slovak National Certification Authority 2 (SNCA2)</tsl:Name>
+              <tsl:Name xml:lang="sk">Slovenská národná certifikačná autorita 2 (SNCA2)</tsl:Name>
+            </tsl:ServiceName>
+            <tsl:ServiceDigitalIdentity>
+              <tsl:DigitalId>
+                <tsl:X509Certificate>MIIIAzCCBeugAwIBAgICASYwDQYJKoZIhvcNAQELBQAwbTELMAkGA1UEBhMCU0sxEzARBgNVBAcM
+CkJyYXRpc2xhdmExIjAgBgNVBAoMGU5hcm9kbnkgYmV6cGVjbm9zdG55IHVyYWQxDjAMBgNVBAsM
+BVNJQkVQMRUwEwYDVQQDDAxLQ0EgTkJVIFNSIDMwHhcNMTAwNDI3MDkxMTAxWhcNMjAwNDI3MDkw
+NTA3WjBmMQswCQYDVQQGEwJTSzETMBEGA1UEBwwKQnJhdGlzbGF2YTEiMCAGA1UECgwZTmFyb2Ru
+eSBiZXpwZWNub3N0bnkgdXJhZDEOMAwGA1UECwwFU0lCRVAxDjAMBgNVBAMMBVNOQ0EyMIIBIjAN
+BgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAqZwDvisbPqOE3BDskKiL7b6vp2ErB63XQQxUBTUb
+Jma5y4cqN5vrMW6GsNwRhymzt73A3mLrEQwAlVSNv9++jDPXt0aydqtgOyHR+77QXf2UGbfCfqQa
+wwGo+73iduetctH33NJvtPc4hNWViYkaunuyFwnEYW8JdJ3+hSIAYjB3wf/IVwwZ1OjDUTxmtVKa
+4akEyzSVVD3RcmsagliTdFAs5s+ui4vnLNFm9har+OH2xjgk3r1GyrCG47MBpfzabOIP17Dm0GhV
+NHAXr2jE7L/djy4hUMpWswYBdvJqUPUsLE7ZX6z9PAPmBWBBokiaGeuGUq8Rqt9UGJvCyemL0QID
+AQABo4IDsjCCA64wEgYDVR0TAQH/BAgwBgEB/wIBATBTBgNVHSABAf8ESTBHMEUGDSuBHpGZhAUA
+AAABAgIwNDAyBggrBgEFBQcCARYmaHR0cDovL2VwLm5idXNyLnNrL2tjYS9kb2Mva2NhX2Nwcy5w
+ZGYwQgYDVR0hBDswOTAXBg0rgR6RmYQFAAAAAQICBgYEAIswAQEwHgYNK4EekZmEBQAAAAECAgYN
+K4EekZmEBQAAAAECAjAPBgNVHSQBAf8EBTADgAEAMIIBQAYIKwYBBQUHAQEEggEyMIIBLjA/Bggr
+BgEFBQcwAoYzaHR0cDovL2VwLm5idXNyLnNrL2tjYS9jZXJ0cy9rY2EzL2tjYW5idXNyM19wN2Mu
+cDdjMHoGCCsGAQUFBzAChm5sZGFwOi8vZXAubmJ1c3Iuc2svY249S0NBIE5CVSBTUiAzLG91PVNJ
+QkVQLG89TmFyb2RueSBiZXpwZWNub3N0bnkgdXJhZCxsPUJyYXRpc2xhdmEsYz1TSz9jYUNlcnRp
+ZmljYXRlO2JpbmFyeTBvBggrBgEFBQcwAoZjbGRhcDovLy9jbj1LQ0EgTkJVIFNSIDMsb3U9U0lC
+RVAsbz1OYXJvZG55IGJlenBlY25vc3RueSB1cmFkLGw9QnJhdGlzbGF2YSxjPVNLP2NhQ2VydGlm
+aWNhdGU7YmluYXJ5MA4GA1UdDwEB/wQEAwIBBjAfBgNVHSMEGDAWgBR/8T0hwpdaLpcHDrFpgyX9
+IYY+BzCCAVgGA1UdHwSCAU8wggFLMDCgLqAshipodHRwOi8vZXAubmJ1c3Iuc2sva2NhL2NybHMz
+L2tjYW5idXNyMy5jcmwwgZCggY2ggYqGgYdsZGFwOi8vZXAubmJ1c3Iuc2svY24lM2RLQ0ElMjBO
+QlUlMjBTUiUyMDMsb3UlM2RTSUJFUCxvJTNkTmFyb2RueSUyMGJlenBlY25vc3RueSUyMHVyYWQs
+bCUzZEJyYXRpc2xhdmEsYyUzZFNLP2NlcnRpZmljYXRlUmV2b2NhdGlvbkxpc3QwgYOggYCgfoZ8
+bGRhcDovLy9jbiUzZEtDQSUyME5CVSUyMFNSJTIwMyxvdSUzZFNJQkVQLG8lM2ROYXJvZG55JTIw
+YmV6cGVjbm9zdG55JTIwdXJhZCxsJTNkQnJhdGlzbGF2YSxjJTNkU0s/Y2VydGlmaWNhdGVSZXZv
+Y2F0aW9uTGlzdDAdBgNVHQ4EFgQUAUF7cc3AZSNiuYhyCmlP2vqFL4owDQYJKoZIhvcNAQELBQAD
+ggIBAMyF4zkyFKNTrdIHfwInwLHmsfMt1HBg5V43qMjwSFd52YhJ8/81JKOlA7hlgu60CNIeFVI3
+/BheSOy84SF/qr1+yRUW4tnlWIoV4lA6hSVpd6LnC75aD+UDzTWwKnIhrKX0Ya6f/dpN8WTdSeNo
+iXFkyQqmyqAsBPx3fMzigwsVfw1ISur/gUrLQC5qZP++kDq43mVSY/PrkW7BsviP40tbFq8gWlsi
+9GaC7iiy9KVfB9bynWVaUf/xguqOQO3awtbJqYWAdlYhvMTvWaMLacT3wkmJz2tuNjooFKedmPTj
+zvBh30rd+Ue/3S4/PkmSIUUq4PFXZMTJUVu+Hbz8aq2/4Uhmpcg0h4iNhq36q+IWxbyCcs4MCjZX
+j7+I1AsNYJi0p4PVF0AxpY1MmoDeA5VjGkzb+Jot6q/lR4Gx9Xn29ijov6tfsdK5I3GiH8p7wms8
+S/qEHBRmRTDcqMrmB4zXiE2ZR06otJk4tZRMVMH1fB9ERVWp436iorgup7Tbcs5LJL1eVq9Tt8dN
+D4Ryr8bWaH1GYzxSztKCFxqpcrob5qDLJ3SEPdRvgr8oYmuXhURGKWaXrm/oTlnwiqrFkOOiE5eo
+rPqb9Nb+UPtNCXUVpI1XhA+oiso45HBTcBXdw3M9Nyb37EXHbl7njhES03SfOLwaU/pBpDohdGar
+H5Ml</tsl:X509Certificate>
+              </tsl:DigitalId>
+            </tsl:ServiceDigitalIdentity>
+            <tsl:ServiceStatus>http://uri.etsi.org/TrstSvc/eSigDir-1999-93-EC-TrustedList/Svcstatus/accredited</tsl:ServiceStatus>
+            <tsl:StatusStartingTime>2006-08-15T00:00:00Z</tsl:StatusStartingTime>
+            <tsl:ServiceSupplyPoints>
+              <tsl:ServiceSupplyPoint>http://ep.nbusr.sk/snca/crls2/snca2.crl</tsl:ServiceSupplyPoint>
+              <tsl:ServiceSupplyPoint>ldap://ep.nbusr.sk/cn=SNCA2,ou=SIBEP,o=Narodny%20bezpecnostny%20urad,l=Bratislava,c=SK?certificateRevocationList</tsl:ServiceSupplyPoint>
+            </tsl:ServiceSupplyPoints>
+            <tsl:TSPServiceDefinitionURI>
+              <tsl:URI xml:lang="en">http://ep.nbusr.sk/snca/index_en.html</tsl:URI>
+              <tsl:URI xml:lang="sk">http://ep.nbusr.sk/snca/</tsl:URI>
+            </tsl:TSPServiceDefinitionURI>
+            <tsl:ServiceInformationExtensions>
+              <tsl:Extension Critical="true">
+                <ecc:Qualifications>
+                  <ecc:QualificationElement>
+                    <ecc:Qualifiers>
+                      <ecc:Qualifier uri="http://uri.etsi.org/TrstSvc/eSigDir-1999-93-EC-TrustedList/SvcInfoExt/QCWithSSCD"/>
+                    </ecc:Qualifiers>
+                    <ecc:CriteriaList assert="all">
+                      <ecc:PolicySet>
+                        <ecc:PolicyIdentifier>
+                          <xades:Identifier>1.3.158.36061701.0.0.0.1.2.2</xades:Identifier>
+                          <xades:Description>EN: Only Qualified certificates with SSCD and Maintenance certificates for QES verification.
+	   SK: Iba kvalifikované certifikáty s SSCD a certifikáty na správu pre overenie ZEP</xades:Description>
+                        </ecc:PolicyIdentifier>
+                      </ecc:PolicySet>
+                    </ecc:CriteriaList>
+                  </ecc:QualificationElement>
+                </ecc:Qualifications>
+              </tsl:Extension>
+            </tsl:ServiceInformationExtensions>
+          </tsl:ServiceInformation>
+        </tsl:TSPService>
+      </tsl:TSPServices>
+    </tsl:TrustServiceProvider>
+    <tsl:TrustServiceProvider>
+      <tsl:TSPInformation>
+        <tsl:TSPName>
+          <tsl:Name xml:lang="en">Disig, a.s.</tsl:Name>
+          <tsl:Name xml:lang="sk">Disig, a.s.</tsl:Name>
+        </tsl:TSPName>
+        <tsl:TSPTradeName>
+          <tsl:Name xml:lang="en">CA Disig</tsl:Name>
+          <tsl:Name xml:lang="sk">CA Disig</tsl:Name>
+        </tsl:TSPTradeName>
+        <tsl:TSPAddress>
+          <tsl:PostalAddresses>
+            <tsl:PostalAddress xml:lang="en">
+              <tsl:StreetAddress>Zahradnicka 151</tsl:StreetAddress>
+              <tsl:Locality>BRATISLAVA 2</tsl:Locality>
+              <tsl:StateOrProvince>821 08</tsl:StateOrProvince>
+              
+              <tsl:CountryName>SK</tsl:CountryName>
+            </tsl:PostalAddress>
+            <tsl:PostalAddress xml:lang="sk">
+              <tsl:StreetAddress>Záhradnícka 151</tsl:StreetAddress>
+              <tsl:Locality>BRATISLAVA 2</tsl:Locality>
+              <tsl:StateOrProvince>821 08</tsl:StateOrProvince>
+              
+              <tsl:CountryName>SK</tsl:CountryName>
+            </tsl:PostalAddress>
+          </tsl:PostalAddresses>
+          <tsl:ElectronicAddress>
+            <tsl:URI>mailto:disig@disig.sk</tsl:URI>
+            <tsl:URI>http://www.disig.eu</tsl:URI>
+            <tsl:URI>http://www.disig.sk</tsl:URI>
+          </tsl:ElectronicAddress>
+        </tsl:TSPAddress>
+        <tsl:TSPInformationURI>
+          <tsl:URI xml:lang="en">http://www.disig.eu/index.php?id=ca&amp;L=1</tsl:URI>
+          <tsl:URI xml:lang="sk">http://www.disig.sk/index.php?id=ca</tsl:URI>
+        </tsl:TSPInformationURI>
+        
+      </tsl:TSPInformation>
+      <tsl:TSPServices>
+        <tsl:TSPService>
+          <tsl:ServiceInformation>
+            <tsl:ServiceTypeIdentifier>http://uri.etsi.org/TrstSvc/Svctype/CA/QC</tsl:ServiceTypeIdentifier>
+            <tsl:ServiceName>
+              <tsl:Name xml:lang="en">Certification Authority CA Disig</tsl:Name>
+              <tsl:Name xml:lang="sk">Certifikačná autorita CA Disig</tsl:Name>
+            </tsl:ServiceName>
+            <tsl:ServiceDigitalIdentity>
+                <tsl:DigitalId>
+                  <tsl:X509Certificate>MIIGmjCCBYKgAwIBAgICJ8IwDQYJKoZIhvcNAQEFBQAwcTELMAkGA1UEBhMCU0sx
+EzARBgNVBAcMCkJyYXRpc2xhdmExIjAgBgNVBAoMGU5hcm9kbnkgYmV6cGVjbm9z
+dG55IHVyYWQxFDASBgNVBAsMC1Nla2NpYSBJQkVQMRMwEQYDVQQDDApLQ0EgTkJV
+IFNSMB4XDTA3MTAwOTExMjIyNloXDTExMTAwOTExMjE1OFowYTELMAkGA1UEBhMC
+U0sxEzARBgNVBAcMCkJyYXRpc2xhdmExEzARBgNVBAoMCkRpc2lnIGEucy4xFTAT
+BgNVBAsMDEFDQS0zMDcvMjAwNzERMA8GA1UEAwwIQ0EgRGlzaWcwggEiMA0GCSqG
+SIb3DQEBAQUAA4IBDwAwggEKAoIBAQDNoSb1rI4myqpw27lrVcDwD/LVMbWgUMQY
+DzHrSVxuLM2Jg9fM2wuN+xNpJjqrk8ZsVrD4LXFi2WASSq6UbVj3MXB6RuohHtx5
+BvAeHY7dfHStMCbUqYlP5GqUPwPAeamDqeCGjBkDx1mTBnsl9dN4YTuIybue6YjI
+Zn8rtnIsjmGuUtbX7z7946oJg9RQp3yiw3dLCyOv0CIVzuKagPhvnV7vi+dE4poW
+cQop74W/YtrD1tq3Rf5BSuJkeOaC+U5qI+QyIYQrphN1AancfcIMCQplzgfR+Ijm
+RMa/n7GhUAQ/yz4gfxQRUGD+WvqWa50xn13kCwsUGF63mZdWBt3vAgMBAAGjggNK
+MIIDRjASBgNVHRMBAf8ECDAGAQH/AgEBMB0GA1UdIAEB/wQTMBEwDwYNK4EekZmE
+BQAAAAECAjCCAVkGCCsGAQUFBwEBBIIBSzCCAUcwOwYIKwYBBQUHMAKGL2h0dHA6
+Ly9lcC5uYnVzci5zay9rY2EvY2VydHMva2NhMi9rY2FuYnVzcjIucDdjMIGIBggr
+BgEFBQcwAoZ8bGRhcDovL2VwLm5idXNyLnNrL2NuPUtDQSUyME5CVSUyMFNSLG91
+PVNla2NpYSUyMElCRVAsbz1OYXJvZG55JTIwYmV6cGVjbm9zdG55JTIwdXJhZCxs
+PUJyYXRpc2xhdmEsYz1TSz9jYUNlcnRpZmljYXRlO2JpbmFyeTB9BggrBgEFBQcw
+AoZxbGRhcDovLy9jbj1LQ0ElMjBOQlUlMjBTUixvdT1TZWtjaWElMjBJQkVQLG89
+TmFyb2RueSUyMGJlenBlY25vc3RueSUyMHVyYWQsbD1CcmF0aXNsYXZhLGM9U0s/
+Y2FDZXJ0aWZpY2F0ZTtiaW5hcnkwDgYDVR0PAQH/BAQDAgEGMB8GA1UdIwQYMBaA
+FAbaiefTjlM6eXfp6/mmtjJlP0YkMIIBYgYDVR0fBIIBWTCCAVUwMKAuoCyGKmh0
+dHA6Ly9lcC5uYnVzci5zay9rY2EvY3JsczIva2NhbmJ1c3IyLmNybDCBlKCBkaCB
+joaBi2xkYXA6Ly9lcC5uYnVzci5zay9jbiUzZEtDQSUyME5CVSUyMFNSLG91JTNk
+U2VrY2lhJTIwSUJFUCxvJTNkTmFyb2RueSUyMGJlenBlY25vc3RueSUyMHVyYWQs
+bCUzZEJyYXRpc2xhdmEsYyUzZFNLP2NlcnRpZmljYXRlUmV2b2NhdGlvbkxpc3Qw
+gYmggYaggYOGgYBsZGFwOi8vL2NuJTNkS0NBJTIwTkJVJTIwU1Isb3UlM2RTZWtj
+aWElMjBJQkVQLG8lM2ROYXJvZG55JTIwYmV6cGVjbm9zdG55JTIwdXJhZCxsJTNk
+QnJhdGlzbGF2YSxjJTNkU0s/Y2VydGlmaWNhdGVSZXZvY2F0aW9uTGlzdDAdBgNV
+HQ4EFgQU8Sp+5ArGH/e3himjRwAE2lTQvIswDQYJKoZIhvcNAQEFBQADggEBAOWh
+3OtxM2t+doUwb0ijL3h9nhDGNwl4GXB5aeG+h7b0IEJNiJRqjyZB16OVabdxB3Rt
+rgN6lKsFY36ri+wrpMhPOf5Y0jG1MEszlWVI99tLNEGmlgxXeC/Q+JgKNMV8huBm
+gMqniKosK5mFUf02TgzjEaU6Vvxr9pNGga5Twe/nxmhTcP6m+uwYrd5KekDKJtVX
+ExZbn26SuEq40bfGjT6YwsF2fibg1/k1jWZaH9Rb+wmrZBBQGKEM9Yh+pu5r+hYC
+dpBi9w4GYMWJmgnWDLFoujqSC4BCN6k3Io3lvX5F3tuo2Za5lXOSDn21DOtuy51S
+1O1IxU6qyI5Uq+WLga4=</tsl:X509Certificate>
+                </tsl:DigitalId>
+            </tsl:ServiceDigitalIdentity>
+            <tsl:ServiceStatus>http://uri.etsi.org/TrstSvc/eSigDir-1999-93-EC-TrustedList/Svcstatus/accredited</tsl:ServiceStatus>
+            <tsl:StatusStartingTime>2007-07-26T00:00:00Z</tsl:StatusStartingTime>
+            
+            <tsl:ServiceSupplyPoints>
+              <tsl:ServiceSupplyPoint>http://www.disig.eu/aca/crl/aca_disig.crl</tsl:ServiceSupplyPoint>
+              <tsl:ServiceSupplyPoint>http://www.disig.sk/aca/crl/aca_disig.crl</tsl:ServiceSupplyPoint>
+              <tsl:ServiceSupplyPoint>http://www.disig.eu/index.php?id=certsearch&amp;L=1</tsl:ServiceSupplyPoint>
+              <tsl:ServiceSupplyPoint>http://www.disig.sk/index.php?id=certsearch</tsl:ServiceSupplyPoint>
+            </tsl:ServiceSupplyPoints>
+            <tsl:TSPServiceDefinitionURI>
+              <tsl:URI xml:lang="en">http://www.disig.eu/index.php?id=ca&amp;L=1</tsl:URI>
+              <tsl:URI xml:lang="sk">http://www.disig.sk/index.php?id=ca&amp;amp;L=0</tsl:URI>
+            </tsl:TSPServiceDefinitionURI>
+            <tsl:ServiceInformationExtensions>
+              <tsl:Extension Critical="true">
+ <ecc:Qualifications>
+  <ecc:QualificationElement>
+                    <ecc:Qualifiers>
+                      <ecc:Qualifier uri="http://uri.etsi.org/TrstSvc/eSigDir-1999-93-EC-TrustedList/SvcInfoExt/QCWithSSCD"/>
+                    </ecc:Qualifiers>
+   <ecc:CriteriaList assert="all">
+    <ecc:PolicySet>
+     <ecc:PolicyIdentifier>
+      <xades:Identifier>1.3.158.36061701.0.0.0.1.2.2</xades:Identifier>
+      <xades:Description>EN: Only Qualified certificates with SSCD and Maintenance certificates for QES verification.
+	   SK: Iba kvalifikované certifikáty s SSCD a certifikáty na správu pre overenie ZEP</xades:Description>
+     </ecc:PolicyIdentifier>
+    </ecc:PolicySet>
+   </ecc:CriteriaList>
+  </ecc:QualificationElement>
+ </ecc:Qualifications>
+              </tsl:Extension>
+              
+            </tsl:ServiceInformationExtensions>
+          </tsl:ServiceInformation>
+          
+        </tsl:TSPService>
+        <tsl:TSPService>
+          <tsl:ServiceInformation>
+            <tsl:ServiceTypeIdentifier>http://uri.etsi.org/TrstSvc/Svctype/CA/QC</tsl:ServiceTypeIdentifier>
+            <tsl:ServiceName>
+              <tsl:Name xml:lang="en">Certification Authority CA Disig</tsl:Name>
+              <tsl:Name xml:lang="sk">Certifikačná autorita CA Disig</tsl:Name>
+            </tsl:ServiceName>
+            <tsl:ServiceDigitalIdentity>
+              <tsl:DigitalId>
+                <tsl:X509Certificate>MIIJADCCBuigAwIBAgICAPQwDQYJKoZIhvcNAQELBQAwbTELMAkGA1UEBhMCU0sx
+EzARBgNVBAcMCkJyYXRpc2xhdmExIjAgBgNVBAoMGU5hcm9kbnkgYmV6cGVjbm9z
+dG55IHVyYWQxDjAMBgNVBAsMBVNJQkVQMRUwEwYDVQQDDAxLQ0EgTkJVIFNSIDMw
+HhcNMDkxMjA4MTI0NzMwWhcNMTkxMjA4MTI0NjI1WjBjMQswCQYDVQQGEwJTSzET
+MBEGA1UEBwwKQnJhdGlzbGF2YTETMBEGA1UECgwKRGlzaWcgYS5zLjEXMBUGA1UE
+CwwOQUNBLTMwNy0yMDA3LTIxETAPBgNVBAMMCENBIERpc2lnMIICIjANBgkqhkiG
+9w0BAQEFAAOCAg8AMIICCgKCAgEAvgUCciy3pcZY1kYAb2ih6SNNti72VBOScEii
+oCgt5noA5ZT5hmnFxdSKnPhIZ3Yxrgo+sCcXd/9XOZBRuAo73Sc0ipsp+zK8Z0/H
+0QTuEJo/s/O62xK7uS9FvOVY4qnR5NkTJC8aE/VlOaIHgWH9bnh5aegfiKMoT9BP
+s/pE+V1KheToKI7DK9kqWu//kibSOZPiD5lIwkRVRJo42AnswYXK5nLY12vrZYox
+kBqkdFBqKtO/hNSCoEdNNFQZ5zfKUM3euaIeZ+ysJX2RrAVkXQTyoypUGA0pkdLv
+3bwE4ny3E+j5Fn0fOvn5q+Jh57ohHwQ4raO1VZc8Wx/DwZH1E64WEMT6zPf8b2W7
+wZrYcLAF4ifaOxLKN1yeOQjLL0No+1sLjc7540cxRWR7O5uamrfGRvqJLYkxcOBY
+RYq0RtTKd2Xd4axE5IP9DTXDTlbp+nQMmJMKTGj+/NpWkLUGV5A7V8TEmZ08SKS3
+1PlxGfgDPJ+07N82eGY5FpBBDzAHg/cPbUFr0ah9892aN3Z4cnmar3Slx1nrffJo
+uwGGjx0bYaKxJCmwjrUYHr84Qrfs0ALcJQDczrQmsuzba+eEOUz2WAfSmTjudxHv
+FmawhH9RnZFBwV2J4nbK06qvPB4WaN5e1PrBuYAzbwVeiH++nfMyV8D7ou8EsAcL
+qt1Ko5sCAwEAAaOCA7IwggOuMBIGA1UdEwEB/wQIMAYBAf8CAQEwUwYDVR0gAQH/
+BEkwRzBFBg0rgR6RmYQFAAAAAQICMDQwMgYIKwYBBQUHAgEWJmh0dHA6Ly9lcC5u
+YnVzci5zay9rY2EvZG9jL2tjYV9jcHMucGRmMEIGA1UdIQQ7MDkwFwYNK4EekZmE
+BQAAAAECAgYGBACLMAEBMB4GDSuBHpGZhAUAAAABAgIGDSuBHpGZhAUAAAABAgIw
+DwYDVR0kAQH/BAUwA4ABADCCAUAGCCsGAQUFBwEBBIIBMjCCAS4wPwYIKwYBBQUH
+MAKGM2h0dHA6Ly9lcC5uYnVzci5zay9rY2EvY2VydHMva2NhMy9rY2FuYnVzcjNf
+cDdjLnA3YzB6BggrBgEFBQcwAoZubGRhcDovL2VwLm5idXNyLnNrL2NuPUtDQSBO
+QlUgU1IgMyxvdT1TSUJFUCxvPU5hcm9kbnkgYmV6cGVjbm9zdG55IHVyYWQsbD1C
+cmF0aXNsYXZhLGM9U0s/Y2FDZXJ0aWZpY2F0ZTtiaW5hcnkwbwYIKwYBBQUHMAKG
+Y2xkYXA6Ly8vY249S0NBIE5CVSBTUiAzLG91PVNJQkVQLG89TmFyb2RueSBiZXpw
+ZWNub3N0bnkgdXJhZCxsPUJyYXRpc2xhdmEsYz1TSz9jYUNlcnRpZmljYXRlO2Jp
+bmFyeTAOBgNVHQ8BAf8EBAMCAQYwHwYDVR0jBBgwFoAUf/E9IcKXWi6XBw6xaYMl
+/SGGPgcwggFYBgNVHR8EggFPMIIBSzAwoC6gLIYqaHR0cDovL2VwLm5idXNyLnNr
+L2tjYS9jcmxzMy9rY2FuYnVzcjMuY3JsMIGQoIGNoIGKhoGHbGRhcDovL2VwLm5i
+dXNyLnNrL2NuJTNkS0NBJTIwTkJVJTIwU1IlMjAzLG91JTNkU0lCRVAsbyUzZE5h
+cm9kbnklMjBiZXpwZWNub3N0bnklMjB1cmFkLGwlM2RCcmF0aXNsYXZhLGMlM2RT
+Sz9jZXJ0aWZpY2F0ZVJldm9jYXRpb25MaXN0MIGDoIGAoH6GfGxkYXA6Ly8vY24l
+M2RLQ0ElMjBOQlUlMjBTUiUyMDMsb3UlM2RTSUJFUCxvJTNkTmFyb2RueSUyMGJl
+enBlY25vc3RueSUyMHVyYWQsbCUzZEJyYXRpc2xhdmEsYyUzZFNLP2NlcnRpZmlj
+YXRlUmV2b2NhdGlvbkxpc3QwHQYDVR0OBBYEFBV/X18IaSrGcAOh+lFqTayNX5hT
+MA0GCSqGSIb3DQEBCwUAA4ICAQDZaSXqjtnmj/cLVEU2vly8bFcjkkcVJB3e9nG6
+nBSyNwpS/IMg2Z5YMccSRiynXjPCSNP+4g4nMwW3ZMXJJ+TBjXDlUiwUocedaO3j
+xFMG8BFEAI3qiREecmOcp3Zwd82ZLpUof8qfXthWtqlXABE97dA4XIyfbt0DiNvP
+03moRLa8gtwQSN7QyLFUNCrlRNoH5DskDnRpHJzCJ4hNpcaghNLpk1mEHzjb8MPr
+uOzhUtEib/WC0tjrgqbMz9c3OT0R1ikiS0LoU+IsNaQgpXVt/UTkTtYeX+sxj1ds
+tlQuV5W1nzA1Ep3U760xqua73pgvb+oxLtm+0QfZkIIhpCPxdIRQRfbG/nigjqmu
+wdF7IOhpTm0CzNHxtvI7XZDUq3rybkTqzZ4rFnNzqsJNUNZdkBEu3Tv/ftjHyFN1
+LEuLn6PSHHd+bMI8UZBv7dIUYoBiL1Q9ALAh/l30wcinU/ZIG2mGwwUs8KX7fwrg
++NSL0PcKatQflYz96bJ7IcKVSB/ifSXOVAwLOq9e/eV/fXf/FjoXtKYw3FcBx6XA
+5NJfv/Ns5Ii0ASz0OxSsC3n01Ix+tnUZ31mv2ZXYF2F0mECNxPYUCFfiGFyIgw7p
+uJKOVkJ92slDk+HORGx0LGzCKH2oNe0aF81fWkjMiU5uRHCEFNVskNfcEgpaMq82
+hrEwTQ==</tsl:X509Certificate>
+              </tsl:DigitalId>
+            </tsl:ServiceDigitalIdentity>
+            <tsl:ServiceStatus>http://uri.etsi.org/TrstSvc/eSigDir-1999-93-EC-TrustedList/Svcstatus/accredited</tsl:ServiceStatus>
+            <tsl:StatusStartingTime>2007-07-26T00:00:00Z</tsl:StatusStartingTime>
+            
+            <tsl:ServiceSupplyPoints>
+              <tsl:ServiceSupplyPoint>http://www.disig.eu/aca2/crl/aca2_disig.crl </tsl:ServiceSupplyPoint>
+              <tsl:ServiceSupplyPoint>http://www.disig.sk/aca2/crl/aca2_disig.crl</tsl:ServiceSupplyPoint>
+              <tsl:ServiceSupplyPoint>http://www.disig.eu/index.php?id=certsearch&amp;L=1</tsl:ServiceSupplyPoint>
+              <tsl:ServiceSupplyPoint>http://www.disig.sk/index.php?id=certsearch</tsl:ServiceSupplyPoint>
+            </tsl:ServiceSupplyPoints>
+            <tsl:TSPServiceDefinitionURI>
+              <tsl:URI xml:lang="en">http://www.disig.eu/index.php?id=ca&amp;L=1</tsl:URI>
+              <tsl:URI xml:lang="sk">http://www.disig.sk/index.php?id=ca&amp;amp;L=0</tsl:URI>
+            </tsl:TSPServiceDefinitionURI>
+            <tsl:ServiceInformationExtensions>
+              <tsl:Extension Critical="true">
+                <ecc:Qualifications>
+                  <ecc:QualificationElement>
+                    <ecc:Qualifiers>
+                      <ecc:Qualifier uri="http://uri.etsi.org/TrstSvc/eSigDir-1999-93-EC-TrustedList/SvcInfoExt/QCWithSSCD"/>
+                    </ecc:Qualifiers>
+                    <ecc:CriteriaList assert="all">
+                      <ecc:PolicySet>
+                        <ecc:PolicyIdentifier>
+                          <xades:Identifier>1.3.158.36061701.0.0.0.1.2.2</xades:Identifier>
+                          <xades:Description>EN: Only Qualified certificates with SSCD and Maintenance certificates for QES verification.
+	   SK: Iba kvalifikované certifikáty s SSCD a certifikáty na správu pre overenie ZEP</xades:Description>
+                        </ecc:PolicyIdentifier>
+                      </ecc:PolicySet>
+                    </ecc:CriteriaList>
+                  </ecc:QualificationElement>
+                </ecc:Qualifications>
+              </tsl:Extension>
+              
+            </tsl:ServiceInformationExtensions>
+          </tsl:ServiceInformation>
+        </tsl:TSPService>
+      </tsl:TSPServices>
+    </tsl:TrustServiceProvider>
+    <tsl:TrustServiceProvider>
+      <tsl:TSPInformation>
+        <tsl:TSPName>
+          <tsl:Name xml:lang="en">Ministry of Defence Slovak Republic</tsl:Name>
+          <tsl:Name xml:lang="sk">Ministerstvo obrany SR</tsl:Name>
+        </tsl:TSPName>
+        <tsl:TSPTradeName>
+          <tsl:Name xml:lang="en">CAMOSR</tsl:Name>
+          <tsl:Name xml:lang="sk">CAMOSR</tsl:Name>
+        </tsl:TSPTradeName>
+        <tsl:TSPAddress>
+          <tsl:PostalAddresses>
+            <tsl:PostalAddress xml:lang="en">
+              <tsl:StreetAddress>Olbrachtova 5</tsl:StreetAddress>
+              <tsl:Locality>Trencin</tsl:Locality>
+              
+              <tsl:PostalCode>911 01</tsl:PostalCode>
+              <tsl:CountryName>SK</tsl:CountryName>
+            </tsl:PostalAddress>
+            <tsl:PostalAddress xml:lang="sk">
+              <tsl:StreetAddress>Olbrachtova 5</tsl:StreetAddress>
+              <tsl:Locality>Trenčín</tsl:Locality>
+              
+              <tsl:PostalCode>911 01</tsl:PostalCode>
+              <tsl:CountryName>SK</tsl:CountryName>
+            </tsl:PostalAddress>
+          </tsl:PostalAddresses>
+          <tsl:ElectronicAddress>
+            <tsl:URI>mailto:ca@mil.sk</tsl:URI>
+            <tsl:URI>http://www.pki.mil.sk</tsl:URI>
+            <tsl:URI>tel:+421-960-401-111</tsl:URI>
+          </tsl:ElectronicAddress>
+        </tsl:TSPAddress>
+        <tsl:TSPInformationURI>
+          <tsl:URI xml:lang="en">http://www.pki.mil.sk</tsl:URI>
+          <tsl:URI xml:lang="sk">http://www.pki.mil.sk</tsl:URI>
+        </tsl:TSPInformationURI>
+      </tsl:TSPInformation>
+      <tsl:TSPServices>
+        <tsl:TSPService>
+          <tsl:ServiceInformation>
+            <tsl:ServiceTypeIdentifier>http://uri.etsi.org/TrstSvc/Svctype/CA/QC</tsl:ServiceTypeIdentifier>
+            <tsl:ServiceName>
+              <tsl:Name xml:lang="en">Certification Authority Ministry of Defence Slovak Republic (CAMOSR)</tsl:Name>
+              <tsl:Name xml:lang="sk">Certifikačná autorita Ministerstva obrany Slovenskej republiky (CAMOSR)</tsl:Name>
+            </tsl:ServiceName>
+            <tsl:ServiceDigitalIdentity>
+              <tsl:DigitalId>
+                <tsl:X509Certificate>MIIGmzCCBYOgAwIBAgICI4owDQYJKoZIhvcNAQEFBQAwcTELMAkGA1UEBhMCU0sx
+EzARBgNVBAcMCkJyYXRpc2xhdmExIjAgBgNVBAoMGU5hcm9kbnkgYmV6cGVjbm9z
+dG55IHVyYWQxFDASBgNVBAsMC1Nla2NpYSBJQkVQMRMwEQYDVQQDDApLQ0EgTkJV
+IFNSMB4XDTA2MTIxOTA5MTI0NloXDTExMTIxOTA5MTIzMVowYjELMAkGA1UEBhMC
+U0sxEDAOBgNVBAcMB1RyZW5jaW4xHDAaBgNVBAoME01pbmlzdHJ5IG9mIERlZmVu
+Y2UxEjAQBgNVBAsMCVN0clJhUEtJUzEPMA0GA1UEAwwGQ0FNT1NSMIIBIjANBgkq
+hkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAs2L2Bn1SJOiaoemDwKIsGmkiZYv/mNF4
+8pX/aH660v2fFxWtBhWMOv0sJak76q24WmCNDuwwEiwM6P0LCXXXOcdOcsmOUzNm
+61gYQJ9PQfzPXkpDvfY1MNCXUT42UuPE2gO8rHMC7MhOHDZd2gbmaD7PmDs1RPJi
+51oSHN1MXqzgrdiI7/pqZ+hFVXtXflKmyYn8ncdPMU1HYvLBhf8mhU+4XSRV/jBS
+rKlOr1s/g9LI58tQLCTAyGMplJiaC1rv49GNqVYeLURzaTrFY5jeOo/hoIhpV5kH
+q/Cbf37MmZy1uIN39h6I3JnjBbhvnmyTqqVC7W3imNFlnus8kZY1GQIDAQABo4ID
+SjCCA0YwEgYDVR0TAQH/BAgwBgEB/wIBATAdBgNVHSABAf8EEzARMA8GDSuBHpGZ
+hAUAAAABAgIwggFZBggrBgEFBQcBAQSCAUswggFHMDsGCCsGAQUFBzAChi9odHRw
+Oi8vZXAubmJ1c3Iuc2sva2NhL2NlcnRzL2tjYTIva2NhbmJ1c3IyLnA3YzCBiAYI
+KwYBBQUHMAKGfGxkYXA6Ly9lcC5uYnVzci5zay9jbj1LQ0ElMjBOQlUlMjBTUixv
+dT1TZWtjaWElMjBJQkVQLG89TmFyb2RueSUyMGJlenBlY25vc3RueSUyMHVyYWQs
+bD1CcmF0aXNsYXZhLGM9U0s/Y2FDZXJ0aWZpY2F0ZTtiaW5hcnkwfQYIKwYBBQUH
+MAKGcWxkYXA6Ly8vY249S0NBJTIwTkJVJTIwU1Isb3U9U2VrY2lhJTIwSUJFUCxv
+PU5hcm9kbnklMjBiZXpwZWNub3N0bnklMjB1cmFkLGw9QnJhdGlzbGF2YSxjPVNL
+P2NhQ2VydGlmaWNhdGU7YmluYXJ5MA4GA1UdDwEB/wQEAwIBBjAfBgNVHSMEGDAW
+gBQG2onn045TOnl36ev5prYyZT9GJDCCAWIGA1UdHwSCAVkwggFVMDCgLqAshipo
+dHRwOi8vZXAubmJ1c3Iuc2sva2NhL2NybHMyL2tjYW5idXNyMi5jcmwwgZSggZGg
+gY6GgYtsZGFwOi8vZXAubmJ1c3Iuc2svY24lM2RLQ0ElMjBOQlUlMjBTUixvdSUz
+ZFNla2NpYSUyMElCRVAsbyUzZE5hcm9kbnklMjBiZXpwZWNub3N0bnklMjB1cmFk
+LGwlM2RCcmF0aXNsYXZhLGMlM2RTSz9jZXJ0aWZpY2F0ZVJldm9jYXRpb25MaXN0
+MIGJoIGGoIGDhoGAbGRhcDovLy9jbiUzZEtDQSUyME5CVSUyMFNSLG91JTNkU2Vr
+Y2lhJTIwSUJFUCxvJTNkTmFyb2RueSUyMGJlenBlY25vc3RueSUyMHVyYWQsbCUz
+ZEJyYXRpc2xhdmEsYyUzZFNLP2NlcnRpZmljYXRlUmV2b2NhdGlvbkxpc3QwHQYD
+VR0OBBYEFEeIBzY+J2PyjVk/S1xq1apl9ZZrMA0GCSqGSIb3DQEBBQUAA4IBAQAa
+W3lQvhODc7c2clPJGas4/Ojmz2LC5U+opzy8y/y1rIYWX1a7iq6WcKehkHFPV1gs
+1FA2N1Gz8skohuhEHaGLYz1jqINZUp/YXJHND5rFa2VsM86e0djZf+lDhDqndNVJ
+zEgh23IpbAbXR/30NKj5kbpbk1WiYJoxpoU2+e6RyQqVvjvWRzp+ffIerlvAQgo+
+xD0/iXsR4vVbP64zbTgehObVPKBPjMOEPcvyJXfA4ReXIOxnzUPeAqFsBLBQEl5U
+lxSUbQrTa2g7lmXv3NTurqxcnos8IuUmbRK7Ia+379ithoY2yAfxcZbgE54Idhhb
+JRoni953faWVQNdzxpEE</tsl:X509Certificate>
+              </tsl:DigitalId>
+            </tsl:ServiceDigitalIdentity>
+            <tsl:ServiceStatus>http://uri.etsi.org/TrstSvc/eSigDir-1999-93-EC-TrustedList/Svcstatus/accredited</tsl:ServiceStatus>
+            <tsl:StatusStartingTime>2006-10-31T00:00:00Z</tsl:StatusStartingTime>
+            
+            <tsl:ServiceSupplyPoints>
+              <tsl:ServiceSupplyPoint> http://www.pki.mil.sk/8828/crl.php</tsl:ServiceSupplyPoint>
+              
+            </tsl:ServiceSupplyPoints>
+            <tsl:TSPServiceDefinitionURI>
+              <tsl:URI xml:lang="en">http://www.pki.mil.sk</tsl:URI>
+              <tsl:URI xml:lang="sk">http://www.pki.mil.sk</tsl:URI>
+            </tsl:TSPServiceDefinitionURI>
+            <tsl:ServiceInformationExtensions>
+              <tsl:Extension Critical="true">
+                <ecc:Qualifications>
+                  <ecc:QualificationElement>
+                    <ecc:Qualifiers>
+                      <ecc:Qualifier uri="http://uri.etsi.org/TrstSvc/eSigDir-1999-93-EC-TrustedList/SvcInfoExt/QCWithSSCD"/>
+                    </ecc:Qualifiers>
+                    <ecc:CriteriaList assert="all">
+                      <ecc:PolicySet>
+                        <ecc:PolicyIdentifier>
+                          <xades:Identifier>1.3.158.36061701.0.0.0.1.2.2</xades:Identifier>
+                          <xades:Description>EN: Only Qualified certificates with SSCD and Maintenance certificates for QES verification.
+	   SK: Iba kvalifikované certifikáty s SSCD a certifikáty na správu pre overenie ZEP</xades:Description>
+                        </ecc:PolicyIdentifier>
+                      </ecc:PolicySet>
+                    </ecc:CriteriaList>
+                  </ecc:QualificationElement>
+                </ecc:Qualifications>
+              </tsl:Extension>
+              
+            </tsl:ServiceInformationExtensions>
+          </tsl:ServiceInformation>
+        </tsl:TSPService>
+        <tsl:TSPService>
+          <tsl:ServiceInformation>
+            <tsl:ServiceTypeIdentifier>http://uri.etsi.org/TrstSvc/Svctype/CA/QC</tsl:ServiceTypeIdentifier>
+            <tsl:ServiceName>
+              <tsl:Name xml:lang="en">Certification Authority Ministry of Defence Slovak Republic 2 (CAMOSR2)</tsl:Name>
+              <tsl:Name xml:lang="sk">Certifikačná autorita Ministerstva obrany Slovenskej republiky 2 (CAMOSR2)</tsl:Name>
+            </tsl:ServiceName>
+            <tsl:ServiceDigitalIdentity>
+              <tsl:DigitalId>
+                <tsl:X509Certificate>MIII7DCCBtSgAwIBAgICAP4wDQYJKoZIhvcNAQELBQAwbTELMAkGA1UEBhMCU0sx
+EzARBgNVBAcMCkJyYXRpc2xhdmExIjAgBgNVBAoMGU5hcm9kbnkgYmV6cGVjbm9z
+dG55IHVyYWQxDjAMBgNVBAsMBVNJQkVQMRUwEwYDVQQDDAxLQ0EgTkJVIFNSIDMw
+HhcNMDkxMjA5MDg1ODI5WhcNMTkxMjA5MDg1ODA3WjBPMQswCQYDVQQGEwJTSzEQ
+MA4GA1UEBwwHVHJlbmNpbjEcMBoGA1UECgwTTWluaXN0cnkgb2YgRGVmZW5jZTEQ
+MA4GA1UEAwwHQ0FNT1NSMjCCAiIwDQYJKoZIhvcNAQEBBQADggIPADCCAgoCggIB
+ANDtH9RMzcUPL7yR4vDm1k8hlVFQA/LO79wZj/vB437V/t3hJ7++uOhz5IMwlGc4
+Yg53iVvCZVZvfXNv+ys0w6mcN7V+cjKHw99WkMp4F7tQTBohxicqJfbnEcWpmsic
+Qmm8ndp5kQTlqc2R+fSqvqxj7Y2jySl/Egox9P1w48tnq32qV0UXQb+Hp7n9OGoL
+PNffL2rV1vcEJKtHlHlsYKBl8dI/zlSewp2vW/O8tAfgiFEwVvGL//C8QLveheBB
+ENOUccN13zOtrz3pLE9yfp2xleahi+ikgzOo7clavIZ+TdiOwU3SXT1BF3KCDWFR
+heC//YoF5VQTklHMue1sEJOhEs1nVfJRytpyeQ3jyCMKAC63e3Q/ZItOo2/EX0zf
+T7ADZ0yFtrbaSKaCkVtcZEMJHF9LBmPMpoW5qxiy8nc57a4XZG3oa9GvHz7nwXga
+bHl+6pGlNrYzQleiwZcJlkImYRbo+UuWIVq0+JqEONaYuaBLYEToP/5FLMpSPTFb
+AhGuy+dpFJq+7eSvplP6fklTNjPZbcTHAFLcNANJS5XxeazwX+OlnDpJvt4HxAO5
+L76hgPOn1nQRngLduVWqSSzqg4xmfJkI01byi5dMpPMll7ft9JVcF/5wKQ1GooBR
+AED0cgtqtfQFMhYK4v9xvUCyrfyR/dj9rD2JRDWjVZIrAgMBAAGjggOyMIIDrjAS
+BgNVHRMBAf8ECDAGAQH/AgEBMFMGA1UdIAEB/wRJMEcwRQYNK4EekZmEBQAAAAEC
+AjA0MDIGCCsGAQUFBwIBFiZodHRwOi8vZXAubmJ1c3Iuc2sva2NhL2RvYy9rY2Ff
+Y3BzLnBkZjBCBgNVHSEEOzA5MBcGDSuBHpGZhAUAAAABAgIGBgQAizABATAeBg0r
+gR6RmYQFAAAAAQICBg0rgR6RmYQFAAAAAQICMA8GA1UdJAEB/wQFMAOAAQAwggFA
+BggrBgEFBQcBAQSCATIwggEuMD8GCCsGAQUFBzAChjNodHRwOi8vZXAubmJ1c3Iu
+c2sva2NhL2NlcnRzL2tjYTMva2NhbmJ1c3IzX3A3Yy5wN2MwegYIKwYBBQUHMAKG
+bmxkYXA6Ly9lcC5uYnVzci5zay9jbj1LQ0EgTkJVIFNSIDMsb3U9U0lCRVAsbz1O
+YXJvZG55IGJlenBlY25vc3RueSB1cmFkLGw9QnJhdGlzbGF2YSxjPVNLP2NhQ2Vy
+dGlmaWNhdGU7YmluYXJ5MG8GCCsGAQUFBzAChmNsZGFwOi8vL2NuPUtDQSBOQlUg
+U1IgMyxvdT1TSUJFUCxvPU5hcm9kbnkgYmV6cGVjbm9zdG55IHVyYWQsbD1CcmF0
+aXNsYXZhLGM9U0s/Y2FDZXJ0aWZpY2F0ZTtiaW5hcnkwDgYDVR0PAQH/BAQDAgEG
+MB8GA1UdIwQYMBaAFH/xPSHCl1oulwcOsWmDJf0hhj4HMIIBWAYDVR0fBIIBTzCC
+AUswMKAuoCyGKmh0dHA6Ly9lcC5uYnVzci5zay9rY2EvY3JsczMva2NhbmJ1c3Iz
+LmNybDCBkKCBjaCBioaBh2xkYXA6Ly9lcC5uYnVzci5zay9jbiUzZEtDQSUyME5C
+VSUyMFNSJTIwMyxvdSUzZFNJQkVQLG8lM2ROYXJvZG55JTIwYmV6cGVjbm9zdG55
+JTIwdXJhZCxsJTNkQnJhdGlzbGF2YSxjJTNkU0s/Y2VydGlmaWNhdGVSZXZvY2F0
+aW9uTGlzdDCBg6CBgKB+hnxsZGFwOi8vL2NuJTNkS0NBJTIwTkJVJTIwU1IlMjAz
+LG91JTNkU0lCRVAsbyUzZE5hcm9kbnklMjBiZXpwZWNub3N0bnklMjB1cmFkLGwl
+M2RCcmF0aXNsYXZhLGMlM2RTSz9jZXJ0aWZpY2F0ZVJldm9jYXRpb25MaXN0MB0G
+A1UdDgQWBBRR4unANORA5laayj5J1CZP/N6KYjANBgkqhkiG9w0BAQsFAAOCAgEA
+NKJ27CsFL8EtxFFPGZ2By+kWkSVeLOVSq2UZNm0R0Vl0qzaqOnPQJGSzm5spBZ1n
+m7bEw9biqF2B9yBaYi3FWymPazQSLNQUZtH0uOgg6iRuKZ+QlLbrl5jfe6UsZuFR
+20V+robRabzmGYtoFXx49G+A1GUHT7m9jZeISM1Ad2ucBYPVVoxHGQTMt1cSs5FH
+2d0vLPrsGPPh8DhhbWfbnuGNzOyGKUQPjTZFBZChKmn3vIxOuxdrHZadxB0nSWWz
+YmFcikwT7fE/t4zq2GT32pDy6AUvCEC9rsfzVsL74q/YTMIxRQH1MlqjHtaQttWK
+OVLYxsaqayWzqQzQqb+bhuovgS9m0EAERG7vFEzvLNdsWHUFJ7VhU/U6XRwdmHr1
+O0oRXktFrr45DstZpaGUmdQEB8BTmKnYRR7ttBBj9ci0Q+p1nf5BjMMRwOG0yNNF
+p6izP4MzVVihVJxDY7RQsPx/Bb+0/UJnZKBJTLM62e4+7+ZV9dB0GyQyJTZXHRuU
+IhbenhwJIqJyfW08Rcjta6tCqXmAxe5tzOtDlTfU2QHnnZSRNuGY20A3g46HBqu6
+FkPK4IKw7cllbwLFmQunduCzha9IUOBvN4dso/W/934J5uqrbkvtvyLKn8OrBAQ/
+/mXqRf/3Qfrc/aML2IA0bdXyHC1xqrsvEwzY3uaxNjo=</tsl:X509Certificate>
+              </tsl:DigitalId>
+            </tsl:ServiceDigitalIdentity>
+            <tsl:ServiceStatus>http://uri.etsi.org/TrstSvc/eSigDir-1999-93-EC-TrustedList/Svcstatus/accredited</tsl:ServiceStatus>
+            <tsl:StatusStartingTime>2006-10-31T00:00:00Z</tsl:StatusStartingTime>
+            
+            <tsl:ServiceSupplyPoints>
+              <tsl:ServiceSupplyPoint> http://www.pki.mil.sk/8828/crl.php</tsl:ServiceSupplyPoint>
+              
+            </tsl:ServiceSupplyPoints>
+            <tsl:TSPServiceDefinitionURI>
+              <tsl:URI xml:lang="en">http://www.pki.mil.sk</tsl:URI>
+              <tsl:URI xml:lang="sk">http://www.pki.mil.sk</tsl:URI>
+            </tsl:TSPServiceDefinitionURI>
+            <tsl:ServiceInformationExtensions>
+              <tsl:Extension Critical="true">
+                <ecc:Qualifications>
+                  <ecc:QualificationElement>
+                    <ecc:Qualifiers>
+                      <ecc:Qualifier uri="http://uri.etsi.org/TrstSvc/eSigDir-1999-93-EC-TrustedList/SvcInfoExt/QCWithSSCD"/>
+                    </ecc:Qualifiers>
+                    <ecc:CriteriaList assert="all">
+                      <ecc:PolicySet>
+                        <ecc:PolicyIdentifier>
+                          <xades:Identifier>1.3.158.36061701.0.0.0.1.2.2</xades:Identifier>
+                          <xades:Description>EN: Only Qualified certificates with SSCD and Maintenance certificates for QES verification.
+	   SK: Iba kvalifikované certifikáty s SSCD a certifikáty na správu pre overenie ZEP</xades:Description>
+                        </ecc:PolicyIdentifier>
+                      </ecc:PolicySet>
+                    </ecc:CriteriaList>
+                  </ecc:QualificationElement>
+                </ecc:Qualifications>
+              </tsl:Extension>
+              
+            </tsl:ServiceInformationExtensions>
+          </tsl:ServiceInformation>
+        </tsl:TSPService>
+      </tsl:TSPServices>
+    </tsl:TrustServiceProvider>
+    <tsl:TrustServiceProvider>
+      <tsl:TSPInformation>
+        <tsl:TSPName>
+          <tsl:Name xml:lang="en">The First Slovak Certification Aurhority</tsl:Name>
+          <tsl:Name xml:lang="sk">Prvá slovenská certifikačná autorita (PSCA)</tsl:Name>
+        </tsl:TSPName>
+        <tsl:TSPTradeName>
+          <tsl:Name xml:lang="en">Viasec, s.r.o.</tsl:Name>
+          <tsl:Name xml:lang="sk">Viasec, s.r.o.</tsl:Name>
+        </tsl:TSPTradeName>
+        <tsl:TSPAddress>
+          <tsl:PostalAddresses>
+            <tsl:PostalAddress xml:lang="en">
+              <tsl:StreetAddress>Borska 6</tsl:StreetAddress>
+              <tsl:Locality>Bratislava 4</tsl:Locality>
+              
+              <tsl:PostalCode>841 04</tsl:PostalCode>
+              <tsl:CountryName>SK</tsl:CountryName>
+            </tsl:PostalAddress>
+            <tsl:PostalAddress xml:lang="sk">
+              <tsl:StreetAddress>Borská 6</tsl:StreetAddress>
+              <tsl:Locality>Bratislava 4</tsl:Locality>
+              
+              <tsl:PostalCode>841 04</tsl:PostalCode>
+              <tsl:CountryName>SK</tsl:CountryName>
+            </tsl:PostalAddress>
+          </tsl:PostalAddresses>
+          <tsl:ElectronicAddress>
+            <tsl:URI>mailto:info@viasec.sk</tsl:URI>
+            <tsl:URI>http://www.psca.sk/aca/index.html</tsl:URI>
+            <tsl:URI>tel:+421-2-35-000-100</tsl:URI>
+            <tsl:URI>fax:+421-2-35-000-799</tsl:URI>
+          </tsl:ElectronicAddress>
+        </tsl:TSPAddress>
+        <tsl:TSPInformationURI>
+          <tsl:URI xml:lang="en">http://www.psca.sk/aca/vseobecne_en.html</tsl:URI>
+          <tsl:URI xml:lang="sk">http://www.psca.sk/aca/vseobecne.html</tsl:URI>
+        </tsl:TSPInformationURI>
+      </tsl:TSPInformation>
+      <tsl:TSPServices>
+        <tsl:TSPService>
+          <tsl:ServiceInformation>
+            <tsl:ServiceTypeIdentifier>http://uri.etsi.org/TrstSvc/Svctype/CA/QC</tsl:ServiceTypeIdentifier>
+            <tsl:ServiceName>
+              <tsl:Name xml:lang="en">PSCA</tsl:Name>
+              <tsl:Name xml:lang="sk">PSCA</tsl:Name>
+            </tsl:ServiceName>
+            <tsl:ServiceDigitalIdentity>
+              <tsl:DigitalId>
+                <tsl:X509Certificate>MIIFwTCCBKmgAwIBAgICEaYwDQYJKoZIhvcNAQEFBQAwcTELMAkGA1UEBhMCU0sx
+EzARBgNVBAcMCkJyYXRpc2xhdmExIjAgBgNVBAoMGU5hcm9kbnkgYmV6cGVjbm9z
+dG55IHVyYWQxFDASBgNVBAsMC1Nla2NpYSBJQkVQMRMwEQYDVQQDDApLQ0EgTkJV
+IFNSMB4XDTA1MDcyNzA2Mjk0OFoXDTE0MDcyNzA2MjgzOFowVzELMAkGA1UEBhMC
+U0sxEzARBgNVBAcMCkJyYXRpc2xhdmExFjAUBgNVBAoMDVZpYXNlYyBzLnIuby4x
+DDAKBgNVBAsMA0FDQTENMAsGA1UEAwwEUFNDQTCCASIwDQYJKoZIhvcNAQEBBQAD
+ggEPADCCAQoCggEBALCxQiILxjxWCCtUNluVLNwSgDfg+vAlo5OGfq7a0yFKGGg1
+5o5KN6YeASDSf5TOnsgUYMjZyKcNDIRELGoWubZGGJdGwKulCj3ipoBaPYxFM/gd
+QHr06mOoi7+QVadpu85rhGd8YxsLILmUYnyabk0YIpXICd6VOTgs3ByJsGPesA86
+fYG687GciYa/CHyhL2uz+uyTR01+TYfxxEv7kyPfiuoezkvEKvogtXqJ0pTkhemP
+U+NLEsPFwi5AP5fiiKqIU06fIw9ZTtjoW8UmywfLFnzSlNqL7lCCBrEmjr4x923i
+//MdNpZW90s9HaZhsmhZPjp8Q8V/OvjyiwaxEmcCAwEAAaOCAnswggJ3MBIGA1Ud
+EwEB/wQIMAYBAf8CAQEwXwYDVR0gBFgwVjBKBg0rgR6RmYQFAAAAAQICMDkwNwYI
+KwYBBQUHAgEWK2h0dHA6Ly9lcC5uYnVzci5zay9rY2EvZG9jL2tjYXFfY3AxXzNf
+My5wZGYwCAYGBACORgEBMIHYBggrBgEFBQcBAQSByzCByDA7BggrBgEFBQcwAoYv
+aHR0cDovL2VwLm5idXNyLnNrL2tjYS9jZXJ0cy9rY2EyL2tjYW5idXNyMi5jZXIw
+gYgGCCsGAQUFBzAChnxsZGFwOi8vZXAubmJ1c3Iuc2svY249S0NBJTIwTkJVJTIw
+U1Isb3U9U2VrY2lhJTIwSUJFUCxvPU5hcm9kbnklMjBiZXpwZWNub3N0bnklMjB1
+cmFkLGw9QnJhdGlzbGF2YSxjPVNLP2NhQ2VydGlmaWNhdGU7YmluYXJ5MA4GA1Ud
+DwEB/wQEAwIBBjAfBgNVHSMEGDAWgBQG2onn045TOnl36ev5prYyZT9GJDCB1AYD
+VR0fBIHMMIHJMDCgLqAshipodHRwOi8vZXAubmJ1c3Iuc2sva2NhL2NybHMyL2tj
+YW5idXNyMi5jcmwwgZSggZGggY6GgYtsZGFwOi8vZXAubmJ1c3Iuc2svY24lM2RL
+Q0ElMjBOQlUlMjBTUixvdSUzZFNla2NpYSUyMElCRVAsbyUzZE5hcm9kbnklMjBi
+ZXpwZWNub3N0bnklMjB1cmFkLGwlM2RCcmF0aXNsYXZhLGMlM2RTSz9jZXJ0aWZp
+Y2F0ZVJldm9jYXRpb25MaXN0MB0GA1UdDgQWBBRvTLCzMcGZ/CeIWmH2QK+6igbg
+JjANBgkqhkiG9w0BAQUFAAOCAQEAYsZcB2jE4XPhIXM4LJitZd+iZofbu6EJwF6A
+/v9K3JtVmzxT1cSoMFkO7O5LJ27kiCDSqQo0x8lA4SwjYj6J1ph4fJ0qWUEznf6h
+jpmw7mbHxNFW4+pUB4N+LtaAJ1Ptlosy5cqf+RI24W71fLjd9k/6lI1I/iDZJJl4
+gq2E/XB7535a375Psn4otxVC9MA754E6pSjJ3i6uWiSsUl8wJkHLFxcDyiI/HMms
+PdC5YvP8u6TMLqRIcDK1MI0cX503XpplNMJoGI8vbFXP7CBcXnWER4KR+GvfyRcO
+dA9Hz3SfyoMUfIvHTzPoMjgKihI2UPdmvBmLAlaEwf12JDV8Cg==</tsl:X509Certificate>
+              </tsl:DigitalId>
+            </tsl:ServiceDigitalIdentity>
+            <tsl:ServiceStatus>http://uri.etsi.org/TrstSvc/eSigDir-1999-93-EC-TrustedList/Svcstatus/accredited</tsl:ServiceStatus>
+            <tsl:StatusStartingTime>2005-06-15T00:00:00Z</tsl:StatusStartingTime>
+            
+            <tsl:ServiceSupplyPoints>
+              <tsl:ServiceSupplyPoint>http://www.psca.sk/aca/vyhladavanie.html</tsl:ServiceSupplyPoint>
+              <tsl:ServiceSupplyPoint>http://www.psca.sk/aca/zoznam.html</tsl:ServiceSupplyPoint>
+            </tsl:ServiceSupplyPoints>
+            <tsl:TSPServiceDefinitionURI>
+              <tsl:URI xml:lang="en">http://www.psca.sk/aca/vseobecne_en.html</tsl:URI>
+              <tsl:URI xml:lang="sk">http://www.psca.sk/aca/vseobecne.html</tsl:URI>
+            </tsl:TSPServiceDefinitionURI>
+            <tsl:ServiceInformationExtensions>
+              <tsl:Extension Critical="true">
+                <ecc:Qualifications>
+                  <ecc:QualificationElement>
+                    <ecc:Qualifiers>
+                      <ecc:Qualifier uri="http://uri.etsi.org/TrstSvc/eSigDir-1999-93-EC-TrustedList/SvcInfoExt/QCWithSSCD"/>
+                    </ecc:Qualifiers>
+                    <ecc:CriteriaList assert="all">
+                      <ecc:PolicySet>
+                        <ecc:PolicyIdentifier>
+                          <xades:Identifier>1.3.158.36061701.0.0.0.1.2.2</xades:Identifier>
+                          <xades:Description>EN: Only Qualified certificates with SSCD and Maintenance certificates for QES verification.
+	   SK: Iba kvalifikované certifikáty s SSCD a certifikáty na správu pre overenie ZEP</xades:Description>
+                        </ecc:PolicyIdentifier>
+                      </ecc:PolicySet>
+                    </ecc:CriteriaList>
+                  </ecc:QualificationElement>
+                </ecc:Qualifications>
+              </tsl:Extension>
+              
+            </tsl:ServiceInformationExtensions>
+          </tsl:ServiceInformation>
+        </tsl:TSPService>
+        <tsl:TSPService>
+          <tsl:ServiceInformation>
+            <tsl:ServiceTypeIdentifier>http://uri.etsi.org/TrstSvc/Svctype/CA/QC</tsl:ServiceTypeIdentifier>
+            <tsl:ServiceName>
+              <tsl:Name xml:lang="en">PSCA2</tsl:Name>
+              <tsl:Name xml:lang="sk">PSCA2</tsl:Name>
+            </tsl:ServiceName>
+            <tsl:ServiceDigitalIdentity>
+              <tsl:DigitalId>
+                <tsl:X509Certificate>MIIH9TCCBd2gAwIBAgICARIwDQYJKoZIhvcNAQELBQAwbTELMAkGA1UEBhMCU0sx
+EzARBgNVBAcMCkJyYXRpc2xhdmExIjAgBgNVBAoMGU5hcm9kbnkgYmV6cGVjbm9z
+dG55IHVyYWQxDjAMBgNVBAsMBVNJQkVQMRUwEwYDVQQDDAxLQ0EgTkJVIFNSIDMw
+HhcNMDkxMjIyMDg0MjQ1WhcNMTkxMjIyMDg0MjIwWjBYMQswCQYDVQQGEwJTSzET
+MBEGA1UEBwwKQnJhdGlzbGF2YTEWMBQGA1UECgwNVmlhc2VjIHMuci5vLjEMMAoG
+A1UECwwDQUNBMQ4wDAYDVQQDDAVQU0NBMjCCASIwDQYJKoZIhvcNAQEBBQADggEP
+ADCCAQoCggEBAJxsRpf2m2DLD21mpFJxbmyLGvNa8PY8TX1Kp2vEUAtWIdSX0miU
+QTO1ZF8NoeFehovepQFlToaK23vz4JFO7rLXRLf8/zjmmJGLYlZQlaXSLPKvbHRw
+uqKRDffPh/QKMsJHMjnNG859rYnpGnafRREbzBmSsUqBJuiZ7NTCE0wWuhOc6V2x
+pMC7G8X5IIw6KQC8mL5oSa4NEJ1g/YzWvss5lQ9iUvhvdIEMp5Q0AcccB2f6BOJC
+PEgTdQpSxkUorc41JT+8dCohsUAt/qWozX6JnFa2VrUu121ZSo6OoEvcR/GlFTbm
+03Y5TSQjTpzctlx2K1EcX6f1QgBetLHLVOECAwEAAaOCA7IwggOuMBIGA1UdEwEB
+/wQIMAYBAf8CAQEwUwYDVR0gAQH/BEkwRzBFBg0rgR6RmYQFAAAAAQICMDQwMgYI
+KwYBBQUHAgEWJmh0dHA6Ly9lcC5uYnVzci5zay9rY2EvZG9jL2tjYV9jcHMucGRm
+MEIGA1UdIQQ7MDkwFwYNK4EekZmEBQAAAAECAgYGBACLMAEBMB4GDSuBHpGZhAUA
+AAABAgIGDSuBHpGZhAUAAAABAgIwDwYDVR0kAQH/BAUwA4ABADCCAUAGCCsGAQUF
+BwEBBIIBMjCCAS4wPwYIKwYBBQUHMAKGM2h0dHA6Ly9lcC5uYnVzci5zay9rY2Ev
+Y2VydHMva2NhMy9rY2FuYnVzcjNfcDdjLnA3YzB6BggrBgEFBQcwAoZubGRhcDov
+L2VwLm5idXNyLnNrL2NuPUtDQSBOQlUgU1IgMyxvdT1TSUJFUCxvPU5hcm9kbnkg
+YmV6cGVjbm9zdG55IHVyYWQsbD1CcmF0aXNsYXZhLGM9U0s/Y2FDZXJ0aWZpY2F0
+ZTtiaW5hcnkwbwYIKwYBBQUHMAKGY2xkYXA6Ly8vY249S0NBIE5CVSBTUiAzLG91
+PVNJQkVQLG89TmFyb2RueSBiZXpwZWNub3N0bnkgdXJhZCxsPUJyYXRpc2xhdmEs
+Yz1TSz9jYUNlcnRpZmljYXRlO2JpbmFyeTAOBgNVHQ8BAf8EBAMCAQYwHwYDVR0j
+BBgwFoAUf/E9IcKXWi6XBw6xaYMl/SGGPgcwggFYBgNVHR8EggFPMIIBSzAwoC6g
+LIYqaHR0cDovL2VwLm5idXNyLnNrL2tjYS9jcmxzMy9rY2FuYnVzcjMuY3JsMIGQ
+oIGNoIGKhoGHbGRhcDovL2VwLm5idXNyLnNrL2NuJTNkS0NBJTIwTkJVJTIwU1Il
+MjAzLG91JTNkU0lCRVAsbyUzZE5hcm9kbnklMjBiZXpwZWNub3N0bnklMjB1cmFk
+LGwlM2RCcmF0aXNsYXZhLGMlM2RTSz9jZXJ0aWZpY2F0ZVJldm9jYXRpb25MaXN0
+MIGDoIGAoH6GfGxkYXA6Ly8vY24lM2RLQ0ElMjBOQlUlMjBTUiUyMDMsb3UlM2RT
+SUJFUCxvJTNkTmFyb2RueSUyMGJlenBlY25vc3RueSUyMHVyYWQsbCUzZEJyYXRp
+c2xhdmEsYyUzZFNLP2NlcnRpZmljYXRlUmV2b2NhdGlvbkxpc3QwHQYDVR0OBBYE
+FHBQhIP2b+t8tS8AUGIuNNJJ1k3FMA0GCSqGSIb3DQEBCwUAA4ICAQC3lEopkr0k
+n4+bopnIW7H4hDv2OjnVwiZAmTOCd9l5bzcvAYjrUqM2CSTRgvZ1/kakTkcUHBhZ
+x4V+ROb4kHrOcunpCKThIUCjzWsX7qfRXBqKDY5qC92QSW3hdO803c05LO+kA3EM
+wciix3EBpatPzyWVjb8UqxUdeMdQaVpvCIXMckUSH+Jxc+auLKQN3giJ34M+gJmr
+VWx2TdBo1Qqaf9R5ecnBPThrnBnU5FxHn47IAI6UAuJS9UOcoYai1jXhFC1WKmrt
+BPOqMOB2OlKgnpXSq83DNUzNkridJNzjQarKh+Ng9wCgrHPsu8U7rUowmhkva8TS
+4IKgdrRkwv+Unj0HHEYqPdoksTwxHWTF6UhLA3NZApwhfUrOG61Xzwh/EIKM1JPB
+6ZimVMkcMZwZOAZ2/hxoMgreT+Z56aPwG74M4g6f5dwWTCZzHo4XzIL8Kdfs6jIS
+CbhCYz7TBWU+6nC9tTnzJMWMlY6whoDSqwUBk2siHABZ4w2uwrZyUMc7zUIozNvZ
+lZb4EQ5MIwzva3SlEir5dnFS5fdZeh3audCS4OEVBH3h4tAjhSWBERV5AJprU1u5
+PacLzfyMWsdljWKxWsbx0FFNv28+gP72NBMNBkjXHMjSEWUj+ilsF7sg728vJdCL
+F8nlQktwoeaPRy5T7TmQkzXyUq/4TqRt7g==</tsl:X509Certificate>
+              </tsl:DigitalId>
+            </tsl:ServiceDigitalIdentity>
+            <tsl:ServiceStatus>http://uri.etsi.org/TrstSvc/eSigDir-1999-93-EC-TrustedList/Svcstatus/accredited</tsl:ServiceStatus>
+            <tsl:StatusStartingTime>2005-06-15T00:00:00Z</tsl:StatusStartingTime>
+            
+            
+            <tsl:TSPServiceDefinitionURI>
+              <tsl:URI xml:lang="en">http://www.psca.sk/aca/vseobecne_en.html</tsl:URI>
+              <tsl:URI xml:lang="sk">http://www.psca.sk/aca/vseobecne.html</tsl:URI>
+            </tsl:TSPServiceDefinitionURI>
+            <tsl:ServiceInformationExtensions>
+              <tsl:Extension Critical="true">
+                <ecc:Qualifications>
+                  <ecc:QualificationElement>
+                    <ecc:Qualifiers>
+                      <ecc:Qualifier uri="http://uri.etsi.org/TrstSvc/eSigDir-1999-93-EC-TrustedList/SvcInfoExt/QCWithSSCD"/>
+                    </ecc:Qualifiers>
+                    <ecc:CriteriaList assert="all">
+                      <ecc:PolicySet>
+                        <ecc:PolicyIdentifier>
+                          <xades:Identifier>1.3.158.36061701.0.0.0.1.2.2</xades:Identifier>
+                          <xades:Description>EN: Only Qualified certificates with SSCD and Maintenance certificates for QES verification.
+	   SK: Iba kvalifikované certifikáty s SSCD a certifikáty na správu pre overenie ZEP</xades:Description>
+                        </ecc:PolicyIdentifier>
+                      </ecc:PolicySet>
+                    </ecc:CriteriaList>
+                  </ecc:QualificationElement>
+                </ecc:Qualifications>
+              </tsl:Extension>
+              
+            </tsl:ServiceInformationExtensions>
+          </tsl:ServiceInformation>
+        </tsl:TSPService>
+      </tsl:TSPServices>
+    </tsl:TrustServiceProvider>
+    <tsl:TrustServiceProvider>
+      <tsl:TSPInformation>
+        <tsl:TSPName>
+          <tsl:Name xml:lang="en">First Certification Authority, a.s. (I.CA)</tsl:Name>
+          <tsl:Name xml:lang="cs">První certifikační autorita, a.s. (I.CA)</tsl:Name>
+        </tsl:TSPName>
+        <tsl:TSPTradeName>
+          <tsl:Name xml:lang="en">I.CA</tsl:Name>
+          
+        </tsl:TSPTradeName>
+        <tsl:TSPAddress>
+          <tsl:PostalAddresses>
+            <tsl:PostalAddress xml:lang="en">
+              <tsl:StreetAddress>Podvinny mlyn 2178/6</tsl:StreetAddress>
+              <tsl:Locality>Prague 9</tsl:Locality>
+              
+              <tsl:PostalCode>190 00</tsl:PostalCode>
+              <tsl:CountryName>CZ</tsl:CountryName>
+            </tsl:PostalAddress>
+            <tsl:PostalAddress xml:lang="cs">
+              <tsl:StreetAddress>Podvinný mlýn 2178/6</tsl:StreetAddress>
+              <tsl:Locality>Praha 9</tsl:Locality>
+              
+              <tsl:PostalCode>190 00</tsl:PostalCode>
+              <tsl:CountryName>CZ</tsl:CountryName>
+            </tsl:PostalAddress>
+          </tsl:PostalAddresses>
+          <tsl:ElectronicAddress>
+            <tsl:URI>mailto:info@ica.cz</tsl:URI>
+            <tsl:URI>mailto:support@ica.cz</tsl:URI>
+            <tsl:URI>http://www.ica.cz/sk/</tsl:URI>
+            <tsl:URI>tel:+420-266-198-261</tsl:URI>
+            <tsl:URI>fax:+420-266-198-221</tsl:URI>
+          </tsl:ElectronicAddress>
+        </tsl:TSPAddress>
+        <tsl:TSPInformationURI>
+          <tsl:URI xml:lang="en">http://www.ica.cz/gb/menu/1/obecne-informacie/</tsl:URI>
+          <tsl:URI xml:lang="sk">http://www.ica.cz/sk/menu/1/obecne-informacie/ </tsl:URI>
+          <tsl:URI xml:lang="sk">http://www.ica.cz/sk/menu/27/obecne-informacie/certifikacna-politika/ </tsl:URI>
+          
+        </tsl:TSPInformationURI>
+      </tsl:TSPInformation>
+      <tsl:TSPServices>
+        <tsl:TSPService>
+          <tsl:ServiceInformation>
+            <tsl:ServiceTypeIdentifier>http://uri.etsi.org/TrstSvc/Svctype/CA/QC</tsl:ServiceTypeIdentifier>
+            <tsl:ServiceName>
+              <tsl:Name xml:lang="en">(11) I.CA - issuing qualified certificates</tsl:Name>
+              <tsl:Name xml:lang="cs">(11) I.CA - vydávání kvalifikovaných certifikátů</tsl:Name>
+            </tsl:ServiceName>
+            <tsl:ServiceDigitalIdentity>
+              <tsl:DigitalId>
+                <tsl:X509Certificate>MIIGoTCCBYmgAwIBAgICJ/QwDQYJKoZIhvcNAQEFBQAwcTELMAkGA1UEBhMCU0sx
+EzARBgNVBAcMCkJyYXRpc2xhdmExIjAgBgNVBAoMGU5hcm9kbnkgYmV6cGVjbm9z
+dG55IHVyYWQxFDASBgNVBAsMC1Nla2NpYSBJQkVQMRMwEQYDVQQDDApLQ0EgTkJV
+IFNSMB4XDTA4MDczMDA4MTQyMVoXDTExMDczMDA4MTM0OFowaDELMAkGA1UEBhMC
+Q1oxKjAoBgNVBAMMIUkuQ0EgLSBRdWFsaWZpZWQgcm9vdCBjZXJ0aWZpY2F0ZTEt
+MCsGA1UECgwkUHJ2bsOtIGNlcnRpZmlrYcSNbsOtIGF1dG9yaXRhLCBhLnMuMIIB
+IjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAqwiIpPB08p/429Z3jTAZPqbF
+x4rFvd3mAq6OPVB1uK99Nqv+9e0IZ7QAipjBA2OIUfIbNol0Wi3IxILEP7mI/Wz9
+Oh0VBUSVgBqmhsshdZCFXLBwAIc0qNEfSf1sOG1qrLhFn7wU12bUIeMnCo114Fov
+Cku0535zoyq9cPGRhgiPv5CEHIep9ZklJZTB424HwUsHW1T8NMtGN5zFoSDOpqyH
+qYM8OE/AQPPp/5vXOXbkEyN1tf+hQq5chk/FTkO2mQtSUyCos8JM0wAsFdJZbAqf
+IbVzFnkehiXuGvuTnq1j8UzidjFeN+/80Kk25PkR6Xr8UOdBIwM0uH26Ds/dUwID
+AQABo4IDSjCCA0YwEgYDVR0TAQH/BAgwBgEB/wIBATAdBgNVHSABAf8EEzARMA8G
+DSuBHpGZhAUAAAABAgIwggFZBggrBgEFBQcBAQSCAUswggFHMDsGCCsGAQUFBzAC
+hi9odHRwOi8vZXAubmJ1c3Iuc2sva2NhL2NlcnRzL2tjYTIva2NhbmJ1c3IyLnA3
+YzCBiAYIKwYBBQUHMAKGfGxkYXA6Ly9lcC5uYnVzci5zay9jbj1LQ0ElMjBOQlUl
+MjBTUixvdT1TZWtjaWElMjBJQkVQLG89TmFyb2RueSUyMGJlenBlY25vc3RueSUy
+MHVyYWQsbD1CcmF0aXNsYXZhLGM9U0s/Y2FDZXJ0aWZpY2F0ZTtiaW5hcnkwfQYI
+KwYBBQUHMAKGcWxkYXA6Ly8vY249S0NBJTIwTkJVJTIwU1Isb3U9U2VrY2lhJTIw
+SUJFUCxvPU5hcm9kbnklMjBiZXpwZWNub3N0bnklMjB1cmFkLGw9QnJhdGlzbGF2
+YSxjPVNLP2NhQ2VydGlmaWNhdGU7YmluYXJ5MA4GA1UdDwEB/wQEAwIBBjAfBgNV
+HSMEGDAWgBQG2onn045TOnl36ev5prYyZT9GJDCCAWIGA1UdHwSCAVkwggFVMDCg
+LqAshipodHRwOi8vZXAubmJ1c3Iuc2sva2NhL2NybHMyL2tjYW5idXNyMi5jcmww
+gZSggZGggY6GgYtsZGFwOi8vZXAubmJ1c3Iuc2svY24lM2RLQ0ElMjBOQlUlMjBT
+UixvdSUzZFNla2NpYSUyMElCRVAsbyUzZE5hcm9kbnklMjBiZXpwZWNub3N0bnkl
+MjB1cmFkLGwlM2RCcmF0aXNsYXZhLGMlM2RTSz9jZXJ0aWZpY2F0ZVJldm9jYXRp
+b25MaXN0MIGJoIGGoIGDhoGAbGRhcDovLy9jbiUzZEtDQSUyME5CVSUyMFNSLG91
+JTNkU2VrY2lhJTIwSUJFUCxvJTNkTmFyb2RueSUyMGJlenBlY25vc3RueSUyMHVy
+YWQsbCUzZEJyYXRpc2xhdmEsYyUzZFNLP2NlcnRpZmljYXRlUmV2b2NhdGlvbkxp
+c3QwHQYDVR0OBBYEFGidftbEJTn7O6A31k/cjNF68FZZMA0GCSqGSIb3DQEBBQUA
+A4IBAQAedRvRtZoDFGYiYK8lG2mM3ozpxNzgBaFZwB3PJVAEXIWhCKKFCskmvsb4
+SPBVt2mxuBRtPKcjw2bLuDkZaf3kkLJfUZ+wDMNWzxPvMrWeQeoEVTSJbGiuP18g
+cDAOSlzDiQcrLln6KCTxqavb9TxJptgu5QuNJ/rz0j7Pu9AMNCB0kCuNxw4mehDc
+xgEViOusXcVch6CBdek8BxzIj1f3AXoIbkIKR8a3kUUmjjnDgXagko4ls8qzz3G4
+0wG3UX0nghxyMhwS9HjZoFr3/kdY2x+wLS1CE/ogCCTtJIGKZp6yGzl9Af8QvkTz
+zE36CgHZ2uyYSvih59cbjLvbtqoy</tsl:X509Certificate>
+              </tsl:DigitalId>
+            </tsl:ServiceDigitalIdentity>
+            <tsl:ServiceStatus>http://uri.etsi.org/TrstSvc/eSigDir-1999-93-EC-TrustedList/Svcstatus/accredited</tsl:ServiceStatus>
+            <tsl:StatusStartingTime>2006-09-21T00:00:00Z</tsl:StatusStartingTime>
+            
+            <tsl:ServiceSupplyPoints>
+              <tsl:ServiceSupplyPoint>http://qcrldp1.ica.cz/qica08.crl</tsl:ServiceSupplyPoint>
+              <tsl:ServiceSupplyPoint>http://www.ica.cz/sk/menu/20/praca-s-certifikatmi/zoznam-verejnych-certifikatov/</tsl:ServiceSupplyPoint>
+              <tsl:ServiceSupplyPoint>http://q.ica.cz/ca_nbusr.p7c</tsl:ServiceSupplyPoint>
+            </tsl:ServiceSupplyPoints>
+            <tsl:TSPServiceDefinitionURI>
+              <tsl:URI xml:lang="en">http://www.ica.cz/gb/menu/29/produkty-a-sluzby/certifikaty/#a1</tsl:URI>
+              <tsl:URI xml:lang="sk">http://www.ica.cz/sk/menu/5/cennik/</tsl:URI>
+              <tsl:URI xml:lang="sk">http://www.ica.cz/sk/menu/29/produkty-a-sluzby/certifikaty/#a1</tsl:URI>
+            </tsl:TSPServiceDefinitionURI>
+            <tsl:ServiceInformationExtensions>
+              <tsl:Extension Critical="true">
+                <ecc:Qualifications>
+                  <ecc:QualificationElement>
+                    <ecc:Qualifiers>
+                      <ecc:Qualifier uri="http://uri.etsi.org/TrstSvc/eSigDir-1999-93-EC-TrustedList/SvcInfoExt/QCWithSSCD"/>
+                    </ecc:Qualifiers>
+                    <ecc:CriteriaList assert="all">
+                      <ecc:PolicySet>
+                        <ecc:PolicyIdentifier>
+                          <xades:Identifier>1.3.158.36061701.0.0.0.1.2.2</xades:Identifier>
+                          <xades:Description>EN: Only Qualified certificates with SSCD and Maintenance certificates for QES verification.
+	   SK: Iba kvalifikované certifikáty s SSCD a certifikáty na správu pre overenie ZEP</xades:Description>
+                        </ecc:PolicyIdentifier>
+                      </ecc:PolicySet>
+                    </ecc:CriteriaList>
+                  </ecc:QualificationElement>
+                </ecc:Qualifications>
+              </tsl:Extension>
+              
+            </tsl:ServiceInformationExtensions>
+          </tsl:ServiceInformation>
+        </tsl:TSPService>
+        <tsl:TSPService>
+          <tsl:ServiceInformation>
+            <tsl:ServiceTypeIdentifier>http://uri.etsi.org/TrstSvc/Svctype/CA/QC</tsl:ServiceTypeIdentifier>
+            <tsl:ServiceName>
+              <tsl:Name xml:lang="en">(16) I.CA - issuing qualified certificates</tsl:Name>
+              <tsl:Name xml:lang="cs">(16) I.CA - vydávání kvalifikovaných certifikátů</tsl:Name>
+            </tsl:ServiceName>
+            <tsl:ServiceDigitalIdentity>
+              <tsl:DigitalId>
+                <tsl:X509Certificate>MIIIVTCCBj2gAwIBAgICAOAwDQYJKoZIhvcNAQELBQAwbTELMAkGA1UEBhMCU0sx
+EzARBgNVBAcMCkJyYXRpc2xhdmExIjAgBgNVBAoMGU5hcm9kbnkgYmV6cGVjbm9z
+dG55IHVyYWQxDjAMBgNVBAsMBVNJQkVQMRUwEwYDVQQDDAxLQ0EgTkJVIFNSIDMw
+HhcNMDkxMTI0MTExNDExWhcNMTkwOTAxMDAwMDAwWjCBtzELMAkGA1UEBhMCQ1ox
+OjA4BgNVBAMMMUkuQ0EgLSBRdWFsaWZpZWQgQ2VydGlmaWNhdGlvbiBBdXRob3Jp
+dHksIDA5LzIwMDkxLTArBgNVBAoMJFBydm7DrSBjZXJ0aWZpa2HEjW7DrSBhdXRv
+cml0YSwgYS5zLjE9MDsGA1UECww0SS5DQSAtIEFjY3JlZGl0ZWQgUHJvdmlkZXIg
+b2YgQ2VydGlmaWNhdGlvbiBTZXJ2aWNlczCCASIwDQYJKoZIhvcNAQEBBQADggEP
+ADCCAQoCggEBALU2hMtCgvDPZeJUmlhzLOPrFVdS8M8iWIiEDXgq79Rx5v2KRiHW
+P2euNHHmp5I0LyF+5ttwSuDkguijvJGWAN86KTs+hhQjildj7y7pG3PnNophepCx
+xL+qjQPFsYT20d8SsJRw8AdsoVs6O1d0FYA0RvN7LoKkJ7SmAty55UxmyaTT/gM+
+9oKTvQB1J/yAYRZOJLHPJWEti/RgsvQrJnSkgT+/KfcPC8e7wy6pA4Ldf8wa3FFp
+kkm+wBPwTxHjK8kFdSHSOp5RpwYVpFzmH+hknWsicPOm7bsQu74gyja26eOB40EW
+ksZ6ejt3raNceA34mHcP2GyRXuxI5MUkAcsCAwEAAaOCA7IwggOuMBIGA1UdEwEB
+/wQIMAYBAf8CAQEwUwYDVR0gAQH/BEkwRzBFBg0rgR6RmYQFAAAAAQICMDQwMgYI
+KwYBBQUHAgEWJmh0dHA6Ly9lcC5uYnVzci5zay9rY2EvZG9jL2tjYV9jcHMucGRm
+MEIGA1UdIQQ7MDkwFwYNK4EekZmEBQAAAAECAgYGBACLMAEBMB4GDSuBHpGZhAUA
+AAABAgIGDSuBHpGZhAUAAAABAgIwDwYDVR0kAQH/BAUwA4ABADCCAUAGCCsGAQUF
+BwEBBIIBMjCCAS4wPwYIKwYBBQUHMAKGM2h0dHA6Ly9lcC5uYnVzci5zay9rY2Ev
+Y2VydHMva2NhMy9rY2FuYnVzcjNfcDdjLnA3YzB6BggrBgEFBQcwAoZubGRhcDov
+L2VwLm5idXNyLnNrL2NuPUtDQSBOQlUgU1IgMyxvdT1TSUJFUCxvPU5hcm9kbnkg
+YmV6cGVjbm9zdG55IHVyYWQsbD1CcmF0aXNsYXZhLGM9U0s/Y2FDZXJ0aWZpY2F0
+ZTtiaW5hcnkwbwYIKwYBBQUHMAKGY2xkYXA6Ly8vY249S0NBIE5CVSBTUiAzLG91
+PVNJQkVQLG89TmFyb2RueSBiZXpwZWNub3N0bnkgdXJhZCxsPUJyYXRpc2xhdmEs
+Yz1TSz9jYUNlcnRpZmljYXRlO2JpbmFyeTAOBgNVHQ8BAf8EBAMCAQYwHwYDVR0j
+BBgwFoAUf/E9IcKXWi6XBw6xaYMl/SGGPgcwggFYBgNVHR8EggFPMIIBSzAwoC6g
+LIYqaHR0cDovL2VwLm5idXNyLnNrL2tjYS9jcmxzMy9rY2FuYnVzcjMuY3JsMIGQ
+oIGNoIGKhoGHbGRhcDovL2VwLm5idXNyLnNrL2NuJTNkS0NBJTIwTkJVJTIwU1Il
+MjAzLG91JTNkU0lCRVAsbyUzZE5hcm9kbnklMjBiZXpwZWNub3N0bnklMjB1cmFk
+LGwlM2RCcmF0aXNsYXZhLGMlM2RTSz9jZXJ0aWZpY2F0ZVJldm9jYXRpb25MaXN0
+MIGDoIGAoH6GfGxkYXA6Ly8vY24lM2RLQ0ElMjBOQlUlMjBTUiUyMDMsb3UlM2RT
+SUJFUCxvJTNkTmFyb2RueSUyMGJlenBlY25vc3RueSUyMHVyYWQsbCUzZEJyYXRp
+c2xhdmEsYyUzZFNLP2NlcnRpZmljYXRlUmV2b2NhdGlvbkxpc3QwHQYDVR0OBBYE
+FHnL0CPpOmdwkXRP01Hi4CD94Sj7MA0GCSqGSIb3DQEBCwUAA4ICAQCPcNjgWODd
+AuXqP/1j8rRkjYbRqWrOjEpTZD/NHWFk1L5jT5aoH2Ji+Q0UPy653bG4QeaqJSDj
+J4vT/9ghQPuNWksNsv5t8Ac3OIraXEchJWYkfioZenTOjnhpafdsG+SLFBfEtVFx
+aVc6nXweY6OD9A2bcoHB41PhxUM4iaoXpCZFFyQCxWqw+86tWD9vMuxIrXyCzU5w
+q3DWa9p0nlxc9719H4hMgiFrXRa3/s7NE5m62eM//h0ZQc6yAb6fwbRfmnkAfnfd
+gRN6jYi0BOih2tEtV0VkhaVONzKNdP8tVP1cXhZizqK+OEl+2Jt/HoJDAcWaRPbh
+ZbLgmSZ0c5HpSnhbAJLHIZ7xT5pZqkQ8fxIK55qpyN7LCU4+oPtJJpQ4BqL7XUlG
+W/O4J7oqAvfjsDKbHhHxpcghA8bqa6vSjaAIekkuWZbgNnuL8jO7BJtUPQlT3y3S
+bY1LScwY5c+D5UwCAsQZQN9KJVkX3fDJ0W0paOkWyAUAUZyEm67mKiLXp8xU15zH
+IQKlYwyxEBn1EW83ziZWMxrGXpHukfIF6JHxH/eiEoUOeXdOwHsLpsFiXUIDdAe2
+6n5bmpHI889/6UUVKTio8urFjhlAFJUw3qbERlP2M1akS4+cTuITvHtq98vQNKQK
+Q2Fm48w45iGje9TtLx6b0fwExSWruuZriw==</tsl:X509Certificate>
+              </tsl:DigitalId>
+            </tsl:ServiceDigitalIdentity>
+            <tsl:ServiceStatus>http://uri.etsi.org/TrstSvc/eSigDir-1999-93-EC-TrustedList/Svcstatus/accredited</tsl:ServiceStatus>
+            <tsl:StatusStartingTime>2006-09-21T00:00:00Z</tsl:StatusStartingTime>
+            
+            <tsl:ServiceSupplyPoints>
+              <tsl:ServiceSupplyPoint>http://www.ica.cz/sk/menu/5/cennik/</tsl:ServiceSupplyPoint>
+              
+            </tsl:ServiceSupplyPoints>
+            
+            <tsl:ServiceInformationExtensions>
+              <tsl:Extension Critical="true">
+                <ecc:Qualifications>
+                  <ecc:QualificationElement>
+                    <ecc:Qualifiers>
+                      <ecc:Qualifier uri="http://uri.etsi.org/TrstSvc/eSigDir-1999-93-EC-TrustedList/SvcInfoExt/QCWithSSCD"/>
+                    </ecc:Qualifiers>
+                    <ecc:CriteriaList assert="all">
+                      <ecc:PolicySet>
+                        <ecc:PolicyIdentifier>
+                          <xades:Identifier>1.3.158.36061701.0.0.0.1.2.2</xades:Identifier>
+                          <xades:Description>EN: Only Qualified certificates with SSCD and Maintenance certificates for QES verification.
+	   SK: Iba kvalifikované certifikáty s SSCD a certifikáty na správu pre overenie ZEP</xades:Description>
+                        </ecc:PolicyIdentifier>
+                      </ecc:PolicySet>
+                    </ecc:CriteriaList>
+                  </ecc:QualificationElement>
+                </ecc:Qualifications>
+              </tsl:Extension>
+              
+            </tsl:ServiceInformationExtensions>
+          </tsl:ServiceInformation>
+        </tsl:TSPService>
+      </tsl:TSPServices>
+    </tsl:TrustServiceProvider>
+  </tsl:TrustServiceProviderList><Signature xmlns="http://www.w3.org/2000/09/xmldsig#" xmlns:ds="http://www.w3.org/2000/09/xmldsig#" Id="Signature-185448340">
+	<SignedInfo>
+		<CanonicalizationMethod Algorithm="http://www.w3.org/2001/10/xml-exc-c14n#"/>
+		<SignatureMethod Algorithm="http://www.w3.org/2001/04/xmldsig-more#rsa-sha256"/>
+		<Reference URI="#ID01SK">
+			<Transforms>
+				<Transform Algorithm="http://www.w3.org/2000/09/xmldsig#enveloped-signature"/>
+			</Transforms>
+			<DigestMethod Algorithm="http://www.w3.org/2001/04/xmlenc#sha256"/>
+			<DigestValue>7wUrAxlnzCeGQ1mqIEVAhuPh/9Po3roNFgo+TH7YB5w=</DigestValue>
+		</Reference>
+		<Reference Type="http://uri.etsi.org/01903#SignedProperties" URI="#SignedProperties-18071400">
+			<DigestMethod Algorithm="http://www.w3.org/2001/04/xmlenc#sha256"/>
+			<DigestValue>nTjgomqTvHJQVWzSFY6WTSAucGptb6MyXMFLqVe00s0=</DigestValue>
+		</Reference>
+	</SignedInfo>
+	<SignatureValue>
+jjo58Bvq94u0enB4lLoi9BVcVjrqrj2xTDs1kvmPUDbNegnJUH3z214nN//IVoW0
+HYQSUbSJ2IKpyYAt/QV4s9kw2O+sgQed1b/dtd2cQ6nd21SnGAlzL0ChlVp1Vwq3
+nH1yLZK1TRkVrtYGx0SeNXK9Rm9uCpMpVgpUE9ZT+MEcqKXP4D0fdXhP+jnd7vKp
+ncjsAk+XFGoeGdQLbNIX9mh5XTiJbresYtGx+LwCko24AaHpuPqEIGDA4guLF941
+rEl7gqvfjY7ksoDsb9HcC5H6TdVuQXvkuG23L0cQdVDtM9yIk6SnzEcxQ9gk752d
+UW3MRszlFmtw8ChSmO2WsA==
+	</SignatureValue>
+	<KeyInfo>
+		<KeyValue>
+			<RSAKeyValue>
+				<Modulus>
+w4tfm/1x5bGO4PBjdJCs+IA1o0j/1fkoJeddXPxkUU8E6ELIThfqOgwi9aMMs7bW
+hhpFAfnfd71fxGLxYUobT56IzKJeIduvX1vsBmnz5heBhztAVpASzsOPlORQBCpG
+Tx0lL2+Kphh3vaNdLIMy3kvCMlb+L7N/FN2mPuGKrJqynBwavLQBiX/xvVzvIu0l
+tMU0uZamieHCBymUEewgAfX7e9CNSqwzjM1gDoS8VCa0PwzrOUFaC23fDGS+D2uL
+KaiEXLqCWU+UCmpDkkdc+Gfi+FNYuwW1siDEIgITcsTSsKazNwOxrw5YQtt2eYGF
+lGAB373wMbGxvIJqd3VIuQ==
+				</Modulus>
+				<Exponent>AQAB</Exponent>
+			</RSAKeyValue>
+		</KeyValue>
+		<X509Data>
+			<X509IssuerSerial>
+				<X509IssuerName>C=SK, L=Bratislava, O=Narodny bezpecnostny urad, OU=SIBEP, CN=KCA NBU SR 3</X509IssuerName>
+				<X509SerialNumber>414</X509SerialNumber>
+			</X509IssuerSerial>
+			<X509SubjectName>C=SK, L=Bratislava, O=Narodny bezpecnostny urad, OU=SIBEP, CN=PSEUDONYM - TSL and Signature Policy Signer, 2.5.4.65=TSL and Signature Policy Signer</X509SubjectName>
+			<X509Certificate>
+MIIIbzCCBlegAwIBAgICAZ4wDQYJKoZIhvcNAQELBQAwbTELMAkGA1UEBhMCU0sx
+EzARBgNVBAcMCkJyYXRpc2xhdmExIjAgBgNVBAoMGU5hcm9kbnkgYmV6cGVjbm9z
+dG55IHVyYWQxDjAMBgNVBAsMBVNJQkVQMRUwEwYDVQQDDAxLQ0EgTkJVIFNSIDMw
+HhcNMTAwNjMwMDc0ODMwWhcNMTMwNjMwMDc0NzAyWjCBtjELMAkGA1UEBhMCU0sx
+EzARBgNVBAcMCkJyYXRpc2xhdmExIjAgBgNVBAoMGU5hcm9kbnkgYmV6cGVjbm9z
+dG55IHVyYWQxDjAMBgNVBAsMBVNJQkVQMTQwMgYDVQQDDCtQU0VVRE9OWU0gLSBU
+U0wgYW5kIFNpZ25hdHVyZSBQb2xpY3kgU2lnbmVyMSgwJgYDVQRBDB9UU0wgYW5k
+IFNpZ25hdHVyZSBQb2xpY3kgU2lnbmVyMIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8A
+MIIBCgKCAQEAw4tfm/1x5bGO4PBjdJCs+IA1o0j/1fkoJeddXPxkUU8E6ELIThfq
+Ogwi9aMMs7bWhhpFAfnfd71fxGLxYUobT56IzKJeIduvX1vsBmnz5heBhztAVpAS
+zsOPlORQBCpGTx0lL2+Kphh3vaNdLIMy3kvCMlb+L7N/FN2mPuGKrJqynBwavLQB
+iX/xvVzvIu0ltMU0uZamieHCBymUEewgAfX7e9CNSqwzjM1gDoS8VCa0PwzrOUFa
+C23fDGS+D2uLKaiEXLqCWU+UCmpDkkdc+Gfi+FNYuwW1siDEIgITcsTSsKazNwOx
+rw5YQtt2eYGFlGAB373wMbGxvIJqd3VIuQIDAQABo4IDzTCCA8kwCQYDVR0TBAIw
+ADBiBgNVHSAEWzBZMEUGDSuBHpGZhAUAAAABAgIwNDAyBggrBgEFBQcCARYmaHR0
+cDovL2VwLm5idXNyLnNrL2tjYS9kb2Mva2NhX2Nwcy5wZGYwEAYOK4EekZmEBQAA
+AQoFAAEwggFABggrBgEFBQcBAQSCATIwggEuMD8GCCsGAQUFBzAChjNodHRwOi8v
+ZXAubmJ1c3Iuc2sva2NhL2NlcnRzL2tjYTMva2NhbmJ1c3IzX3A3Yy5wN2MwegYI
+KwYBBQUHMAKGbmxkYXA6Ly9lcC5uYnVzci5zay9jbj1LQ0EgTkJVIFNSIDMsb3U9
+U0lCRVAsbz1OYXJvZG55IGJlenBlY25vc3RueSB1cmFkLGw9QnJhdGlzbGF2YSxj
+PVNLP2NhQ2VydGlmaWNhdGU7YmluYXJ5MG8GCCsGAQUFBzAChmNsZGFwOi8vL2Nu
+PUtDQSBOQlUgU1IgMyxvdT1TSUJFUCxvPU5hcm9kbnkgYmV6cGVjbm9zdG55IHVy
+YWQsbD1CcmF0aXNsYXZhLGM9U0s/Y2FDZXJ0aWZpY2F0ZTtiaW5hcnkwVQYDVR0R
+BE4wTIEScG9kYXRlbG5hQG5idXNyLnNrhjZodHRwOi8vd3d3Lm5idXNyLnNrL2Vu
+L2VsZWN0cm9uaWMtc2lnbmF0dXJlL2luZGV4Lmh0bWwwDgYDVR0PAQH/BAQDAgZA
+MBEGA1UdJQQKMAgGBgQAkTcDADAfBgNVHSMEGDAWgBR/8T0hwpdaLpcHDrFpgyX9
+IYY+BzCCAVgGA1UdHwSCAU8wggFLMDCgLqAshipodHRwOi8vZXAubmJ1c3Iuc2sv
+a2NhL2NybHMzL2tjYW5idXNyMy5jcmwwgZCggY2ggYqGgYdsZGFwOi8vZXAubmJ1
+c3Iuc2svY24lM2RLQ0ElMjBOQlUlMjBTUiUyMDMsb3UlM2RTSUJFUCxvJTNkTmFy
+b2RueSUyMGJlenBlY25vc3RueSUyMHVyYWQsbCUzZEJyYXRpc2xhdmEsYyUzZFNL
+P2NlcnRpZmljYXRlUmV2b2NhdGlvbkxpc3QwgYOggYCgfoZ8bGRhcDovLy9jbiUz
+ZEtDQSUyME5CVSUyMFNSJTIwMyxvdSUzZFNJQkVQLG8lM2ROYXJvZG55JTIwYmV6
+cGVjbm9zdG55JTIwdXJhZCxsJTNkQnJhdGlzbGF2YSxjJTNkU0s/Y2VydGlmaWNh
+dGVSZXZvY2F0aW9uTGlzdDAdBgNVHQ4EFgQUpaVMW3jOaB52/hBEAGVboyonz5ww
+DQYJKoZIhvcNAQELBQADggIBAIjspf6xpioFgM+15YC3hEbc69hXBLuswXztoGb0
+dAqLT69jVeFJnyB+oeC75Yopr4VZmWz3uiGioKEYL4cxzLPLirIfoQufycZM7K0F
+50HF24G6XKpwCbdG1ilgV4moW54Bw/1i0d1I8Tv1LA6lXX4kH8hsGDdZe7h31CFn
+F8BDSWn4+4FDBwobclTshI2QNrOfY5i+8oCF4ZTpFedksj4WR2e4tUl5cxgHYoUR
+fn0AXVb5V/IPLvXtpxKcl0GSxR/6WuOREVK5/vrVmhlbTZdAwgVJnf+jFC5x9fvi
+8ZmhUqRZio5NLYiVnsu+nnPVnFsNZvjQ+BvNc/J1YsET1XehOc8ygcjZj0C6bilw
+CXH0kFGhe96BXI/z8JmL9NF4L5Mh3bqQVJULIB3BSpvXOcWVdBcY8+4Lgvczhu6E
+7pOuu76Vo7nIe1GtWryjXyfxD84X8tvwtXt43ErtPXIXBkyFp1tS2CXa+x4eFdeY
+Qu0wxhf0A/UFRAWFzGCDB8KFMwIU9kfFHyUglnbykZCDJaH9EHgDGnz8qnY6Hnta
+xnnksMAC6bPv0m+dBjZMfm0E5eFT5Oh3MYxsFJ8NxtwCEPJ26Sj7oJR8ScleLfSN
+OS+nmNKmrwgsFGRxPM2f9WqhFqi5UWWmgtjOsqVOi3eB6upN5UJ3PsWCzzx4j6cp
+GdLl
+			</X509Certificate>
+		</X509Data>
+	</KeyInfo>
+	<Object>
+		<xades:QualifyingProperties xmlns:xades="http://uri.etsi.org/01903/v1.3.2#" Target="#Signature-185448340">
+			<xades:SignedProperties Id="SignedProperties-18071400">
+				<xades:SignedSignatureProperties>
+					<xades:SigningTime>2010-08-25T14:02:11.968Z</xades:SigningTime>
+					<xades:SigningCertificate>
+						<xades:Cert>
+							<xades:CertDigest>
+								<DigestMethod Algorithm="http://www.w3.org/2001/04/xmlenc#sha256"/>
+								<DigestValue>SpQOuu0UNMvnWgR7dJRFhP9ln5uQXMdbI2bOghmVNiI=</DigestValue>
+							</xades:CertDigest>
+							<xades:IssuerSerial>
+								<X509IssuerName>C=SK, L=Bratislava, O=Narodny bezpecnostny urad, OU=SIBEP, CN=KCA NBU SR 3</X509IssuerName>
+								<X509SerialNumber>414</X509SerialNumber>
+							</xades:IssuerSerial>
+						</xades:Cert>
+					</xades:SigningCertificate>
+					<xades:SignaturePolicyIdentifier>
+						<xades:SignaturePolicyId>
+							<xades:SigPolicyId>
+								<xades:Identifier Qualifier="OIDAsURI">1.3.158.36061701.0.0.1.10.4.0.12</xades:Identifier>
+								<xades:Description>EN: Signature policy for documents signed electronically by public administrations. SK: Podpisová politika pre dokumenty podpísané ZEP v orgánoch štátnej správy. http://www.nbusr.sk/en/electronic-signature/signature-policies/index.html</xades:Description>
+								<xades:DocumentationReferences>
+									<xades:DocumentationReference>http://www.nbusr.sk/archive/20100823000000zsignaturepolicy.der</xades:DocumentationReference>
+								</xades:DocumentationReferences>
+							</xades:SigPolicyId>
+							<xades:SigPolicyHash>
+								<DigestMethod Algorithm="http://www.w3.org/2001/04/xmlenc#sha256"/>
+								<DigestValue>S6l8bl4kTCPRKb9xF5/5Onkh2SMcOPaw326KX73hDdo=</DigestValue>
+							</xades:SigPolicyHash>
+						</xades:SignaturePolicyId>
+					</xades:SignaturePolicyIdentifier>
+					<xades:SignatureProductionPlace>
+						<xades:City>Bratislava 57</xades:City>
+						<xades:PostalCode>Budatínska 30, P.O.BOX 16, 850 07</xades:PostalCode>
+						<xades:CountryName>SK</xades:CountryName>
+					</xades:SignatureProductionPlace>
+				</xades:SignedSignatureProperties>
+			</xades:SignedProperties>
+		</xades:QualifyingProperties>
+	</Object>
+</Signature>
+  
+</tsl:TrustServiceStatusList>

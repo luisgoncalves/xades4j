@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="UTF-8"?><album Id="root">
+    <title>Questions, unanswered</title>
+    <artist>Steve and the flubberblubs</artist>
+    <year>1989</year>
+    <tracks>
+        <song length="4:05" tracknumber="1">
+            <title>What do you know?</title>
+            <artist>Steve and the flubberblubs</artist>
+            <lastplayed>2006-10-17-08:31</lastplayed>
+        </song>
+        <song length="3:45" tracknumber="2">
+            <title>Who do you know?</title>
+            <artist>Steve and the flubberblubs</artist>
+            <lastplayed>2006-10-17-08:35</lastplayed>
+        </song>
+        <song length="5:14" tracknumber="3">
+            <title>When do you know?</title>
+            <artist>Steve and the flubberblubs</artist>
+            <lastplayed>2006-10-17-08:39</lastplayed>
+        </song>
+        <song length="4:19" tracknumber="4">
+            <title>Do you know?</title>
+            <artist>Steve and the flubberblubs</artist>
+            <lastplayed>2006-10-17-08:44</lastplayed>
+        </song>
+    </tracks>
+<ds:Signature xmlns:ds="http://www.w3.org/2000/09/xmldsig#" Id="xmldsig-e83276bf-8356-464c-9f9a-9271c16e55a2">
+<ds:SignedInfo>
+<ds:CanonicalizationMethod Algorithm="http://www.w3.org/TR/2001/REC-xml-c14n-20010315"/>
+<ds:SignatureMethod Algorithm="http://www.w3.org/2001/04/xmldsig-more#rsa-sha256"/>
+<ds:Reference Id="xmldsig-e83276bf-8356-464c-9f9a-9271c16e55a2-ref0" URI="#root">
+<ds:Transforms>
+<ds:Transform Algorithm="http://www.w3.org/2000/09/xmldsig#enveloped-signature"/>
+</ds:Transforms>
+<ds:DigestMethod Algorithm="http://www.w3.org/2001/04/xmlenc#sha256"/>
+<ds:DigestValue>rFhUNSbn59sfre23/DB2+uxCdaSCgsc/FFwhMiqKe7A=</ds:DigestValue>
+</ds:Reference>
+<ds:Reference Type="http://uri.etsi.org/01903#SignedProperties" URI="#xmldsig-e83276bf-8356-464c-9f9a-9271c16e55a2-signedprops">
+<ds:DigestMethod Algorithm="http://www.w3.org/2001/04/xmlenc#sha256"/>
+<ds:DigestValue>+ZAztHY8W+OIPJBSSSiJOgs4lwSr8dLMbpwGknvC8v8=</ds:DigestValue>
+</ds:Reference>
+</ds:SignedInfo>
+<ds:SignatureValue Id="xmldsig-e83276bf-8356-464c-9f9a-9271c16e55a2-sigvalue">
+AWhIJ3ylJ0rK3hwQ5+zCsKvumNIlk6wEbigY1mHgNfvpKzxwZyvG78OCwqTtJpuXa+QAJetPRXsb
+ohgOB1hs7K5gfcorRs1tJ0kJF5nn1Z1NlPKleYAEpE8o4jW6yDWiM2rlUbpCHVwk+TW+ffag5m3f
+16WsjMaKb6Kyu+uwtIk=
+</ds:SignatureValue>
+<ds:KeyInfo>
+<ds:X509Data>
+<ds:X509SubjectName>CN=User1-CP.02.01,OU=Testing,OU=DoD,O=U.S. Government,C=US</ds:X509SubjectName>
+<ds:X509IssuerSerial>
+<ds:X509IssuerName>CN=CA2-CP.02.01,OU=Testing,OU=Dod,O=U.S. Government,C=US</ds:X509IssuerName>
+<ds:X509SerialNumber>8</ds:X509SerialNumber>
+</ds:X509IssuerSerial>
+<ds:X509Certificate>
+MIIChjCCAe+gAwIBAgIBCDANBgkqhkiG9w0BAQUFADBeMQswCQYDVQQGEwJVUzEYMBYGA1UEChMP
+VS5TLiBHb3Zlcm5tZW50MQwwCgYDVQQLEwNEb2QxEDAOBgNVBAsTB1Rlc3RpbmcxFTATBgNVBAMT
+DENBMi1DUC4wMi4wMTAeFw05OTAxMDExMjAxMDBaFw00ODAxMDExMjAxMDBaMGAxCzAJBgNVBAYT
+AlVTMRgwFgYDVQQKEw9VLlMuIEdvdmVybm1lbnQxDDAKBgNVBAsTA0RvRDEQMA4GA1UECxMHVGVz
+dGluZzEXMBUGA1UEAxMOVXNlcjEtQ1AuMDIuMDEwgZ8wDQYJKoZIhvcNAQEBBQADgY0AMIGJAoGB
+AOzYq2murB5ZjQd4wReI51Lc1F5VwK90OMGRfi71YvwdRjgCudeDXZGW5ayid82y+eTDKFSzo1Li
+/BPTUXMpeqHHMCmLeefqxAWmz3aDoilF8IQ53PlejnXJdntsal44w6WdP6ssiXlwzcZDnobAfuDT
+PgsnWWfzAkr1/LqEw/QZAgMBAAGjUjBQMA4GA1UdDwEB/wQEAwIF4DAWBgNVHSAEDzANMAsGCWCG
+SAFlAwEwATARBgNVHQ4ECgQIP5tVdEyxotcwEwYDVR0jBAwwCoAIoI0mSmDmzZUwDQYJKoZIhvcN
+AQEFBQADgYEAkVx9S/20Hir8qMnfMpMGTgMKoVeWoljxim83IkNs1Xqe1oLGHdyDUA66uF8wPkoT
+qGrfDYvgBa5Mi0iJREnMWoiWvCe467+L1b2gtvRBMl9bcRj40bvelk0Wn4lBl3VuKXarP5M0PKT5
+OWvN2cPLNeXHvV6ZIrC4rmK2ISpIXX4=
+</ds:X509Certificate>
+</ds:X509Data>
+<ds:KeyValue>
+<ds:RSAKeyValue>
+<ds:Modulus>
+7Niraa6sHlmNB3jBF4jnUtzUXlXAr3Q4wZF+LvVi/B1GOAK514NdkZblrKJ3zbL55MMoVLOjUuL8
+E9NRcyl6occwKYt55+rEBabPdoOiKUXwhDnc+V6Odcl2e2xqXjjDpZ0/qyyJeXDNxkOehsB+4NM+
+CydZZ/MCSvX8uoTD9Bk=
+</ds:Modulus>
+<ds:Exponent>AQAB</ds:Exponent>
+</ds:RSAKeyValue>
+</ds:KeyValue>
+</ds:KeyInfo>
+<ds:Object><xades:QualifyingProperties xmlns:xades="http://uri.etsi.org/01903/v1.3.2#" xmlns:xades141="http://uri.etsi.org/01903/v1.4.1#" Target="#xmldsig-e83276bf-8356-464c-9f9a-9271c16e55a2"><xades:SignedProperties Id="xmldsig-e83276bf-8356-464c-9f9a-9271c16e55a2-signedprops"><xades:SignedSignatureProperties><xades:SigningTime>2010-09-21T23:15:44.855+01:00</xades:SigningTime><xades:SigningCertificate><xades:Cert><xades:CertDigest><ds:DigestMethod Algorithm="http://www.w3.org/2001/04/xmlenc#sha256"/><ds:DigestValue>yScwzjo9znhFNIxY7fl2gnK1UhFTFcjXJE8aGBgfzfk=</ds:DigestValue></xades:CertDigest><xades:IssuerSerial><ds:X509IssuerName>CN=CA2-CP.02.01,OU=Testing,OU=Dod,O=U.S. Government,C=US</ds:X509IssuerName><ds:X509SerialNumber>8</ds:X509SerialNumber></xades:IssuerSerial></xades:Cert></xades:SigningCertificate></xades:SignedSignatureProperties></xades:SignedProperties><xades:UnsignedProperties><xades:UnsignedSignatureProperties><xades:SignatureTimeStamp><ds:CanonicalizationMethod Algorithm="http://www.w3.org/TR/2001/REC-xml-c14n-20010315"/><xades:EncapsulatedTimeStamp>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</xades:EncapsulatedTimeStamp></xades:SignatureTimeStamp><xades:CompleteCertificateRefs><xades:CertRefs><xades:Cert><xades:CertDigest><ds:DigestMethod Algorithm="http://www.w3.org/2001/04/xmlenc#sha256"/><ds:DigestValue>6F5s4TtqSCTt+/C6kxSWxGiyQ/2uBQ/tQ2IFjNjna3U=</ds:DigestValue></xades:CertDigest><xades:IssuerSerial><ds:X509IssuerName>CN=CA1-CP.02.01,OU=Testing,OU=Dod,O=U.S. Government,C=US</ds:X509IssuerName><ds:X509SerialNumber>7</ds:X509SerialNumber></xades:IssuerSerial></xades:Cert><xades:Cert><xades:CertDigest><ds:DigestMethod Algorithm="http://www.w3.org/2001/04/xmlenc#sha256"/><ds:DigestValue>YvyeUickj8O9yN2JXM991ULBr5v7aQnC0Dl5yNm6HnM=</ds:DigestValue></xades:CertDigest><xades:IssuerSerial><ds:X509IssuerName>CN=Trust Anchor,OU=Testing,OU=DoD,O=U.S. Government,C=US</ds:X509IssuerName><ds:X509SerialNumber>6</ds:X509SerialNumber></xades:IssuerSerial></xades:Cert><xades:Cert><xades:CertDigest><ds:DigestMethod Algorithm="http://www.w3.org/2001/04/xmlenc#sha256"/><ds:DigestValue>3FPfkaoV1oQ0qvdahhmupFWYoIMIw0Aekh0eJz5BpH0=</ds:DigestValue></xades:CertDigest><xades:IssuerSerial><ds:X509IssuerName>CN=Trust Anchor,OU=Testing,OU=DoD,O=U.S. Government,C=US</ds:X509IssuerName><ds:X509SerialNumber>99999</ds:X509SerialNumber></xades:IssuerSerial></xades:Cert></xades:CertRefs></xades:CompleteCertificateRefs><xades:CompleteRevocationRefs><xades:CRLRefs><xades:CRLRef><xades:DigestAlgAndValue><ds:DigestMethod Algorithm="http://www.w3.org/2001/04/xmlenc#sha256"/><ds:DigestValue>i1mVIJL63tU9nnIhbS1uxiOHYSrEtMsehOKLK2hDD8U=</ds:DigestValue></xades:DigestAlgAndValue><xades:CRLIdentifier><xades:Issuer>CN=Trust Anchor,OU=Testing,OU=DoD,O=U.S. Government,C=US</xades:Issuer><xades:IssueTime>1999-01-01T12:01:00.000Z</xades:IssueTime><xades:Number>17230332161</xades:Number></xades:CRLIdentifier></xades:CRLRef><xades:CRLRef><xades:DigestAlgAndValue><ds:DigestMethod Algorithm="http://www.w3.org/2001/04/xmlenc#sha256"/><ds:DigestValue>BxdjnMvJhUPD983q3SAF8rwz+xj9kig5cqMbuQlF3Y4=</ds:DigestValue></xades:DigestAlgAndValue><xades:CRLIdentifier><xades:Issuer>CN=CA2-CP.02.01,OU=Testing,OU=Dod,O=U.S. Government,C=US</xades:Issuer><xades:IssueTime>1999-01-01T12:01:00.000Z</xades:IssueTime><xades:Number>17230332161</xades:Number></xades:CRLIdentifier></xades:CRLRef><xades:CRLRef><xades:DigestAlgAndValue><ds:DigestMethod Algorithm="http://www.w3.org/2001/04/xmlenc#sha256"/><ds:DigestValue>v4dIw4odnHNqHyAoHbc1l3C17kCF/F3Z2ii9v8n2TYA=</ds:DigestValue></xades:DigestAlgAndValue><xades:CRLIdentifier><xades:Issuer>CN=CA1-CP.02.01,OU=Testing,OU=Dod,O=U.S. Government,C=US</xades:Issuer><xades:IssueTime>1999-01-01T12:01:00.000Z</xades:IssueTime><xades:Number>17230332161</xades:Number></xades:CRLIdentifier></xades:CRLRef></xades:CRLRefs></xades:CompleteRevocationRefs></xades:UnsignedSignatureProperties></xades:UnsignedProperties></xades:QualifyingProperties></ds:Object>
+</ds:Signature></album>

@@ -1,0 +1,127 @@
+/*
+ * XAdES4j - A Java library for generation and verification of XAdES signatures.
+ * Copyright (C) 2010 Luis Goncalves.
+ * 
+ * This program is free software; you can redistribute it and/or modify it under
+ * the terms of the GNU General Public License as published by the Free Software
+ * Foundation; either version 2 of the License, or any later version.
+ * 
+ * This program is distributed in the hope that it will be useful, but WITHOUT
+ * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
+ * FOR A PARTICULAR PURPOSE. See the GNU General Public License for more details.
+ * 
+ * You should have received a copy of the GNU General Public License along with
+ * this program; if not, write to the Free Software Foundation, Inc., 59 Temple
+ * Place, Suite 330, Boston, MA 02111-1307 USA
+ */
+package xades4j.xml.marshalling;
+
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import xades4j.properties.IdentifierType;
+import xades4j.properties.ObjectIdentifier;
+import xades4j.properties.data.BaseCertRefsData;
+import xades4j.properties.data.BaseXAdESTimeStampData;
+import xades4j.properties.data.CertRef;
+import xades4j.xml.bind.xades.XmlCertIDListType;
+import xades4j.xml.bind.xades.XmlCertIDType;
+import xades4j.xml.bind.xades.XmlDigestAlgAndValueType;
+import xades4j.xml.bind.xades.XmlEncapsulatedPKIDataType;
+import xades4j.xml.bind.xades.XmlIdentifierType;
+import xades4j.xml.bind.xades.XmlObjectIdentifierType;
+import xades4j.xml.bind.xades.XmlQualifierType;
+import xades4j.xml.bind.xades.XmlXAdESTimeStampType;
+import xades4j.xml.bind.xmldsig.XmlCanonicalizationMethodType;
+import xades4j.xml.bind.xmldsig.XmlDigestMethodType;
+import xades4j.xml.bind.xmldsig.XmlX509IssuerSerialType;
+
+/**
+ *
+ * @author Luís
+ */
+class ToXmlUtils
+{
+    ToXmlUtils()
+    {
+    }
+    private static final Map<IdentifierType, XmlQualifierType> identifierTypeConv;
+
+    static
+    {
+        identifierTypeConv = new HashMap<IdentifierType, XmlQualifierType>(2);
+        identifierTypeConv.put(IdentifierType.OIDAsURI, XmlQualifierType.OID_AS_URI);
+        identifierTypeConv.put(IdentifierType.OIDAsURN, XmlQualifierType.OID_AS_URN);
+    }
+
+    static XmlObjectIdentifierType getXmlObjectId(ObjectIdentifier objId)
+    {
+        XmlObjectIdentifierType xmlObjId = new XmlObjectIdentifierType();
+
+        // Object identifier
+        XmlIdentifierType xmlId = new XmlIdentifierType();
+        xmlId.setValue(objId.getIdentifier());
+        // If it is IdentifierType.URI the converter returns null, which is the
+        // same as not specifying a qualifier.
+        xmlId.setQualifier(identifierTypeConv.get(objId.getIdentifierType()));
+        xmlObjId.setIdentifier(xmlId);
+
+        return xmlObjId;
+    }
+
+    /**/
+    static XmlXAdESTimeStampType getXmlXAdESTimeStamp(
+            BaseXAdESTimeStampData tsData)
+    {
+        XmlXAdESTimeStampType xmlTS = new XmlXAdESTimeStampType();
+
+        // Canonicalization method.
+        XmlCanonicalizationMethodType xmlCanon = new XmlCanonicalizationMethodType();
+        xmlCanon.setAlgorithm(tsData.getCanonicalizationAlgorithmUri());
+        xmlTS.setCanonicalizationMethod(xmlCanon);
+
+        // Time-stamp tokens.
+        List<byte[]> tsTokens = tsData.getTimeStampTokens();
+        List<Object> xmlTSTokens = xmlTS.getEncapsulatedTimeStampOrXMLTimeStamp();
+        for (byte[] tsToken : tsTokens)
+        {
+            XmlEncapsulatedPKIDataType xmlTSTkn = new XmlEncapsulatedPKIDataType();
+            xmlTSTkn.setValue(tsToken);
+            xmlTSTokens.add(xmlTSTkn);
+        }
+
+        return xmlTS;
+    }
+
+    /**/
+    static XmlCertIDListType getXmlCertRefList(BaseCertRefsData certRefsData)
+    {
+        XmlCertIDListType xmlCertRefListProp = new XmlCertIDListType();
+        List<XmlCertIDType> xmlCertRefList = xmlCertRefListProp.getCert();
+
+        XmlDigestAlgAndValueType certDigest;
+        XmlDigestMethodType certDigestMethod;
+        XmlX509IssuerSerialType issuerSerial;
+        XmlCertIDType certID;
+
+        for (CertRef certRef : certRefsData.getCertRefs())
+        {
+            certDigestMethod = new XmlDigestMethodType();
+            certDigestMethod.setAlgorithm(certRef.digestAlgUri);
+            certDigest = new XmlDigestAlgAndValueType();
+            certDigest.setDigestMethod(certDigestMethod);
+            certDigest.setDigestValue(certRef.digestValue);
+
+            issuerSerial = new XmlX509IssuerSerialType();
+            issuerSerial.setX509IssuerName(certRef.issuerDN);
+            issuerSerial.setX509SerialNumber(certRef.serialNumber);
+
+            certID = new XmlCertIDType();
+            certID.setCertDigest(certDigest);
+            certID.setIssuerSerial(issuerSerial);
+            xmlCertRefList.add(certID);
+        }
+
+        return xmlCertRefListProp;
+    }
+}

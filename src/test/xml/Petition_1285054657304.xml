@@ -1,0 +1,58 @@
+﻿<?xml version="1.0" encoding="UTF-8" standalone="yes"?><ns2:SignedPetition xmlns:ns2="http://signit.no-ip.org/SignIt/Petition" xmlns="http://www.w3.org/2000/09/xmldsig#" xmlns:ns4="http://uri.etsi.org/01903/v1.3.2#" xmlns:ns3="http://signit.no-ip.org/SignIt/Message"><ns2:Petition id="Petition"><ns2:Title>Cras scelerisque adipiscing semper</ns2:Title><ns2:Description>Vestibulum sed orci felis, eget mattis justo. Sed id tincidunt augue. Vivamus scelerisque molestie lacinia. Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas. Sed vitae sapien nec purus adipiscing faucibus sed a metus. Duis sed tellus orci. </ns2:Description><ns2:Content>&lt;h2 style="text-align: center;"&gt;Cras scelerisque adipiscing semper&lt;/h2&gt;
+&lt;p style="text-align: justify;"&gt;Lorem ipsum dolor sit amet, consectetur adipiscing elit. Ut hendrerit  posuere mollis. Etiam sit amet sapien ac mauris feugiat fringilla. Cras  ligula nunc, ultrices eget luctus quis, vestibulum sit amet est. Quisque  molestie risus eget diam convallis at semper metus pharetra. Vestibulum  ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia  Curae; Proin pulvinar quam eget urna commodo faucibus. Sed accumsan  lacus sit amet elit sagittis a luctus velit euismod. Maecenas at leo a  massa tristique rhoncus. Morbi scelerisque rutrum ligula, ut dignissim  eros mollis ac. Quisque rutrum varius malesuada. Nam suscipit ante nec  turpis congue viverra. Cras scelerisque adipiscing semper. Sed lacinia  massa sit amet neque dapibus molestie tempor elit elementum. Curabitur  posuere rutrum cursus. Maecenas in nisi vel lacus luctus cursus ut ac  urna.&lt;/p&gt;
+&lt;p style="text-align: justify;"&gt;Proin sed lectus sit amet sem dictum vulputate at a risus. In  condimentum tincidunt nulla at ultricies. Suspendisse consectetur ornare  nisi, in posuere lorem fringilla ut. Sed eu velit ac sapien consequat  elementum. Praesent a libero sit amet purus varius vehicula. Morbi  tempor eros a lorem egestas congue. Cras porta, enim sed pulvinar  vehicula, risus lacus porttitor eros, sit amet mattis nulla est vel  risus. Nulla luctus varius augue, nec pretium diam suscipit nec. Donec  id elit at nibh malesuada condimentum in id sem. Duis sodales tincidunt  quam nec aliquet. Aliquam sit amet mauris enim, eu eleifend arcu.  Pellentesque lectus arcu, venenatis non feugiat non, placerat quis  nulla. Proin tristique justo urna.&lt;/p&gt;
+&lt;p style="text-align: justify;"&gt;Vestibulum a lacus at odio consequat porttitor. Class aptent taciti  sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos.  Praesent sit amet porta metus. Phasellus vulputate vestibulum odio.  Vestibulum ultricies lectus commodo nibh dignissim id posuere enim  tempus. Proin convallis nibh sed neque vestibulum a adipiscing tellus  bibendum. Integer tempus condimentum mi, sed semper turpis porttitor  varius. Suspendisse urna sapien, mattis sed eleifend pretium, cursus  vitae arcu. Aenean ac mauris sapien, dignissim ultrices odio. Vivamus  dapibus est quis tellus ornare id placerat diam tempus. Aenean non nisl  augue. Mauris quam lorem, dapibus nec auctor vitae, pretium ut libero.  Ut eget mauris tortor. Suspendisse non diam id lacus laoreet auctor in  eget diam. Nam sed lacinia odio. Cras ut fermentum orci. Vestibulum eget  dui lacus, sit amet dictum nunc. Nulla leo ipsum, tristique ut porta  quis, tristique mollis leo. Aliquam vulputate rhoncus dui, quis varius  libero faucibus nec.&lt;/p&gt;</ns2:Content></ns2:Petition><dsign:Signature Id="S236-Signature" xmlns:dsign="http://www.w3.org/2000/09/xmldsig#"><dsign:SignedInfo><dsign:CanonicalizationMethod Algorithm="http://www.w3.org/TR/2001/REC-xml-c14n-20010315"/><dsign:SignatureMethod Algorithm="http://www.w3.org/2000/09/xmldsig#rsa-sha1"/><dsign:Reference URI="#Petition"><dsign:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha1"/><dsign:DigestValue>oNvpw4V6sV6arV13E81psPMe0Qk=</dsign:DigestValue></dsign:Reference><dsign:Reference Type="http://uri.etsi.org/01903#SignedProperties" URI="#S236-SignedProperties"><dsign:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha1"/><dsign:DigestValue>+1HBxmvdo47H1Yt20l3Tl2xpnTs=</dsign:DigestValue></dsign:Reference><dsign:Reference URI="#S236-KeyInfo"><dsign:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha1"/><dsign:DigestValue>tsZ1FcTBpV0T5brXDsPO0U0ILl8=</dsign:DigestValue></dsign:Reference></dsign:SignedInfo><dsign:SignatureValue Id="S236-SignatureValue">IiwxrVheV3+xTRQzP7Z9oI9Aa42kqPox55hn7cZPcVF9iiva03bT6PlxWFWCyy5rH0nQ5suowBsE
+Slc/e2c2gt+8zbClS7Slo9uQyvH7XxFLUZRlGDhp0+IBDOTeNb7SOrxR4WVlOylariusRwoTpuS5
+a1e8vQZBr2gux2iGFJQ=</dsign:SignatureValue><dsign:KeyInfo Id="S236-KeyInfo"><dsign:KeyValue><dsign:RSAKeyValue><dsign:Modulus>qPeRZsoaXhfoOVU7tFCN+FXo3eqlIHudXjrHPQiGVR5EzblC7cedQPlCVjTqyU1hIS5R4SbK47m4
+kLAX4JRp0nY90km2rRA4/0u61LlraMmIMVn7hKCHhbMDA5xbzWMEmpKTcYW3+QHQXXvSVsk8wcsB
+fzli2bbDH9QFnxYJ4hc=</dsign:Modulus><dsign:Exponent>AQAB</dsign:Exponent></dsign:RSAKeyValue></dsign:KeyValue><dsign:X509Data><dsign:X509Certificate>MIIIFzCCBv+gAwIBAgIIaYa2kixxrSowDQYJKoZIhvcNAQEFBQAwgYwxSTBHBgNVBAMMQEVDIGRl
+IEFzc2luYXR1cmEgRGlnaXRhbCBRdWFsaWZpY2FkYSBkbyBDYXJ0w6NvIGRlIENpZGFkw6NvIDAw
+MDIxFDASBgNVBAsMC3N1YkVDRXN0YWRvMRwwGgYDVQQKDBNDYXJ0w6NvIGRlIENpZGFkw6NvMQsw
+CQYDVQQGEwJQVDAeFw0wOTAyMTMxMTE2MzNaFw0xNDAyMTMwMDAwMDBaMIIBBDE1MDMGA1UEAwws
+Sk9Tw4kgUEVEUk8gTUFSUVVFUyBEQSBDUlVaIERFIFNPVVNBIE1BUlRJTlMxFDASBgNVBAUTC0JJ
+MTA1Njc0MzcwMRQwEgYDVQQqDAtKT1PDiSBQRURSTzEpMCcGA1UEBAwgTUFSUVVFUyBEQSBDUlVa
+IERFIFNPVVNBIE1BUlRJTlMxKzApBgNVBAsMIkFzc2luYXR1cmEgUXVhbGlmaWNhZGEgZG8gQ2lk
+YWTDo28xHDAaBgNVBAsME0NpZGFkw6NvIFBvcnR1Z3XDqnMxHDAaBgNVBAoME0NhcnTDo28gZGUg
+Q2lkYWTDo28xCzAJBgNVBAYTAlBUMIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBgQCo95Fmyhpe
+F+g5VTu0UI34Vejd6qUge51eOsc9CIZVHkTNuULtx51A+UJWNOrJTWEhLlHhJsrjubiQsBfglGnS
+dj3SSbatEDj/S7rUuWtoyYgxWfuEoIeFswMDnFvNYwSakpNxhbf5AdBde9JWyTzBywF/OWLZtsMf
+1AWfFgniFwIDAQABo4IEhDCCBIAwDAYDVR0TAQH/BAIwADAOBgNVHQ8BAf8EBAMCBkAwHQYDVR0O
+BBYEFDeulk6IYiBt/uSasalGPojLwouZMB8GA1UdIwQYMBaAFF2BRHXspLx65dCp/I5W5KDgOHju
+MIICngYDVR0gBIIClTCCApEwdQYMYIRsAQEBAgQBAAEBMGUwYwYIKwYBBQUHAgEWV2h0dHA6Ly9w
+a2kuY2FydGFvZGVjaWRhZGFvLnB0L3B1YmxpY28vcG9saXRpY2FzL3BjL2NjX3N1Yi1lY19jaWRh
+ZGFvX2Fzc2luYXR1cmFfcGMuaHRtbDB2BgtghGwBAQECBAEABzBnMGUGCCsGAQUFBwIBFllodHRw
+Oi8vcGtpLmNhcnRhb2RlY2lkYWRhby5wdC9wdWJsaWNvL3BvbGl0aWNhcy9kcGMvY2Nfc3ViLWVj
+X2NpZGFkYW9fYXNzaW5hdHVyYV9kcGMuaHRtbDCCAZ4GCGCEbAEBAQIKMIIBkDAoBggrBgEFBQcC
+ARYcaHR0cDovL3d3dy5zY2VlLmdvdi5wdC9wY2VydDCCAWIGCCsGAQUFBwICMIIBVB6CAVAATwAg
+AGMAZQByAHQAaQBmAGkAYwBhAGQAbwAgAGUAbQBpAHQAaQBkAG8AIABzAGUAZwB1AG4AZABvACAA
+ZQBzAHQAYQAgAHAAbwBsAO0AdABpAGMAYQAgAOkAIABlAHEAdQBpAHYAYQBsAGUAbgB0AGUAIABh
+ACAAdQBtACAAYwBlAHIAdABpAGYAaQBjAGEAZABvACAAZABpAGcAaQB0AGEAbAAgAHEAdQBhAGwA
+aQBmAGkAYwBhAGQAbwAsACAAbgBvAHMAIAB0AGUAcgBtAG8AcwAgAGQAbwAgAGQAZQBmAGkAbgBp
+AGQAbwAgAG4AYQAgAEwAZQBnAGkAcwBsAGEA5wDjAG8AIABwAG8AcgB0AHUAZwB1AGUAcwBhACwA
+IABhAHAAbABpAGMA4QB2AGUAbAAgAHAAYQByAGEAIABvACAAZQBmAGUAaQB0AG8wYwYDVR0fBFww
+WjBYoFagVIZSaHR0cDovL3BraS5jYXJ0YW9kZWNpZGFkYW8ucHQvcHVibGljby9scmMvY2Nfc3Vi
+LWVjX2NpZGFkYW9fYXNzaW5hdHVyYV9jcmwwMDAyLmNybDBpBgNVHS4EYjBgMF6gXKBahlhodHRw
+Oi8vcGtpLmNhcnRhb2RlY2lkYWRhby5wdC9wdWJsaWNvL2xyYy9jY19zdWItZWNfY2lkYWRhb19h
+c3NpbmF0dXJhX2NybDAwMDJfZGVsdGEuY3JsMEsGCCsGAQUFBwEBBD8wPTA7BggrBgEFBQcwAYYv
+aHR0cDovL29jc3AuYXNjLmNhcnRhb2RlY2lkYWRhby5wdC9wdWJsaWNvL29jc3AwEQYJYIZIAYb4
+QgEBBAQDAgAgMCQGCCsGAQUFBwEDBBgwFjAKBggrBgEFBQcLATAIBgYEAI5GAQEwKAYDVR0JBCEw
+HzAdBggrBgEFBQcJATERGA8xOTc1MDMxODEyMDAwMFowDQYJKoZIhvcNAQEFBQADggEBALIABfAj
+wBX3A1vctxf1FjOdwdHGx2uIgJ2o/hAoCl6l/2rt70qxq4IHFIkJVqxmEsNViFEgqNCrfWv9Kb5z
+qxGrBThCDgT9zcdAgrKm0lBmSxvWPOg2jM484GmamdM1CYgFeLJOkFru7CzXP0uUg6AdgxH+6/o4
+SVVv9x/jMp4hGlKsAYmi2twpXn/yF7pWSnDIlIULDUM3i3Sgedi9PzDHaWqN3HYou4Ru9N04ZU6e
+WbL+FckL2JAFkfsgQFM1Sl4f4/R2fQD0hVlqR8vtjWzygkUybflUFMULoVHE7a6ttR17IDgpHblK
+sqhztrvszNBOW9gclNtJ1BVV9eMpWDU=</dsign:X509Certificate><dsign:X509SubjectName>C=PT, O=Cartão de Cidadão, OU=Cidadão Português, OU=Assinatura Qualificada do Cidadão, OID.2.5.4.4=MARQUES DA CRUZ DE SOUSA MARTINS, OID.2.5.4.42=JOSÉ PEDRO, OID.2.5.4.5=BI105674370, CN=JOSÉ PEDRO MARQUES DA CRUZ DE SOUSA MARTINS</dsign:X509SubjectName><dsign:X509IssuerSerial><dsign:X509IssuerName>C=PT, O=Cartão de Cidadão, OU=subECEstado, CN=EC de Assinatura Digital Qualificada do Cartão de Cidadão 0002</dsign:X509IssuerName><dsign:X509SerialNumber>7603965759788789034</dsign:X509SerialNumber></dsign:X509IssuerSerial></dsign:X509Data></dsign:KeyInfo><dsign:Object><xades:QualifyingProperties Id="S236-QualifyingProperties" Target="#S236-Signature" xmlns:dsign="http://www.w3.org/2000/09/xmldsig#" xmlns:xades="http://uri.etsi.org/01903/v1.3.2#"><xades:SignedProperties Id="S236-SignedProperties"><xades:SignedSignatureProperties><xades:SigningTime>2010-09-21T08:37:30+01:00</xades:SigningTime><xades:SigningCertificate><xades:Cert><xades:CertDigest><dsign:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha1"/><dsign:DigestValue>qnR+A2/WhE9Mrvahw5tmV7kx9XI=</dsign:DigestValue></xades:CertDigest><xades:IssuerSerial><dsign:X509IssuerName>C=PT, O=Cartão de Cidadão, OU=subECEstado, CN=EC de Assinatura Digital Qualificada do Cartão de Cidadão 0002</dsign:X509IssuerName><dsign:X509SerialNumber>7603965759788789034</dsign:X509SerialNumber></xades:IssuerSerial></xades:Cert></xades:SigningCertificate></xades:SignedSignatureProperties></xades:SignedProperties><xades:UnsignedProperties><xades:UnsignedSignatureProperties><xades:SignatureTimeStamp Id="TS1-SignatureTimeStamp"><xades:EncapsulatedTimeStamp>MIIDRwYJKoZIhvcNAQcCoIIDODCCAzQCAQMxCzAJBgUrDgMCGgUAMG0GCyqGSIb3DQEJEAEEoF4E
+XDBaAgEBBg4rBgEEAZUSAgIFAgEBATAfMAcGBSsOAwIaBBSrgjgPBahGrrg4y4POBsYSwl6KSQII
+AciLClF2xE0YDzIwMTAwOTIxMDczNzM4WjAJAgEKgAEBgQEBMYICsTCCAq0CAQEwgcUwgb8xCzAJ
+BgNVBAYTAkFUMQ8wDQYDVQQIEwZTdHlyaWExDTALBgNVBAcTBEdyYXoxJjAkBgNVBAoTHUdSQVog
+VU5JVkVSU0lUWSBPRiBURUNITk9MT0dZMUgwRgYDVQQLEz9JbnN0aXR1dGUgZm9yIEFwcGxpZWQg
+SW5mb3JtYXRpb24gUHJvY2Vzc2luZyBhbmQgQ29tbXVuaWNhdGlvbnMxHjAcBgNVBAMTFUlBSUst
+VFNQIERFTU8gU2VydmljZQIBBDAJBgUrDgMCGgUAoIIBQTAaBgkqhkiG9w0BCQMxDQYLKoZIhvcN
+AQkQAQQwIwYJKoZIhvcNAQkEMRYEFO044f1tIri3L4OMfqc6JG9x1IgDMIH9BgsqhkiG9w0BCRAC
+DDGB7TCB6jCB5zCB5AQUBKMA6AYbiP4pjcaWnuAEcpUVOYMwgcswgcWkgcIwgb8xCzAJBgNVBAYT
+AkFUMQ8wDQYDVQQIEwZTdHlyaWExDTALBgNVBAcTBEdyYXoxJjAkBgNVBAoTHUdSQVogVU5JVkVS
+U0lUWSBPRiBURUNITk9MT0dZMUgwRgYDVQQLEz9JbnN0aXR1dGUgZm9yIEFwcGxpZWQgSW5mb3Jt
+YXRpb24gUHJvY2Vzc2luZyBhbmQgQ29tbXVuaWNhdGlvbnMxHjAcBgNVBAMTFUlBSUstVFNQIERF
+TU8gU2VydmljZQIBBDANBgkqhkiG9w0BAQEFAASBgOli3+0E4+gPcos5m2Qk852auTXn6dJ/orgK
+3iqzra2Bv+mUgnWdKgUrEBLkko5gnr0Gb0m4gzbUD5KKUoN11+IwLnaTU7U0WCfHz6TJNiFIHfyI
+wlkwFOg88Xh2JXz4Syr8CWTYX6pGlqm6So/rRZ0lvs46n0psXli+vw7epegx</xades:EncapsulatedTimeStamp></xades:SignatureTimeStamp></xades:UnsignedSignatureProperties></xades:UnsignedProperties></xades:QualifyingProperties></dsign:Object></dsign:Signature></ns2:SignedPetition>

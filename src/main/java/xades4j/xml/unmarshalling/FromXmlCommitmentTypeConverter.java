@@ -1,0 +1,62 @@
+/*
+ * XAdES4j - A Java library for generation and verification of XAdES signatures.
+ * Copyright (C) 2010 Luis Goncalves.
+ * 
+ * This program is free software; you can redistribute it and/or modify it under
+ * the terms of the GNU General Public License as published by the Free Software
+ * Foundation; either version 2 of the License, or any later version.
+ * 
+ * This program is distributed in the hope that it will be useful, but WITHOUT
+ * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
+ * FOR A PARTICULAR PURPOSE. See the GNU General Public License for more details.
+ * 
+ * You should have received a copy of the GNU General Public License along with
+ * this program; if not, write to the Free Software Foundation, Inc., 59 Temple
+ * Place, Suite 330, Boston, MA 02111-1307 USA
+ */
+package xades4j.xml.unmarshalling;
+
+import java.util.List;
+import xades4j.properties.CommitmentTypePropertyBase;
+import xades4j.xml.bind.xades.XmlCommitmentTypeIndicationType;
+import xades4j.xml.bind.xades.XmlSignedDataObjectPropertiesType;
+import xades4j.properties.data.CommitmentTypeData;
+
+/**
+ *
+ * @author Luís
+ */
+class FromXmlCommitmentTypeConverter implements SignedDataObjPropFromXmlConv
+{
+    @Override
+    public void convertFromObjectTree(
+            XmlSignedDataObjectPropertiesType xmlProps,
+            QualifyingPropertiesDataCollector propertyDataCollector) throws PropertyUnmarshalException
+    {
+        List<XmlCommitmentTypeIndicationType> xmlCommitments = xmlProps.getCommitmentTypeIndication();
+        if (xmlCommitments.isEmpty())
+            return;
+
+        for (XmlCommitmentTypeIndicationType xmlCommitment : xmlCommitments)
+        {
+            List<String> objsRefs = xmlCommitment.getObjectReference();
+            Object allDataObjs = xmlCommitment.getAllSignedDataObjects();
+
+            if (objsRefs.isEmpty())
+            {
+                // Should be AllSignedDataObjects.
+                objsRefs = null;
+                if (null == allDataObjs)
+                    throw new PropertyUnmarshalException("ObjectReference or AllSignedDataObjects have to be present", CommitmentTypePropertyBase.PROP_NAME);
+            } else if (allDataObjs != null)
+                throw new PropertyUnmarshalException("Both ObjectReference and AllSignedDataObjects are present", "CommitmentTypeIndication");
+
+            CommitmentTypeData commTypeData = new CommitmentTypeData(
+                    xmlCommitment.getCommitmentTypeId().getIdentifier().getValue(),
+                    xmlCommitment.getCommitmentTypeId().getDescription());
+            commTypeData.setObjReferences(objsRefs);
+
+            propertyDataCollector.addCommitmentType(commTypeData);
+        }
+    }
+}

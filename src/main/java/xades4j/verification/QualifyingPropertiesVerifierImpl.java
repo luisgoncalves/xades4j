@@ -1,0 +1,68 @@
+/*
+ * XAdES4j - A Java library for generation and verification of XAdES signatures.
+ * Copyright (C) 2010 Luis Goncalves.
+ * 
+ * This program is free software; you can redistribute it and/or modify it under
+ * the terms of the GNU General Public License as published by the Free Software
+ * Foundation; either version 2 of the License, or any later version.
+ * 
+ * This program is distributed in the hope that it will be useful, but WITHOUT
+ * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
+ * FOR A PARTICULAR PURPOSE. See the GNU General Public License for more details.
+ * 
+ * You should have received a copy of the GNU General Public License along with
+ * this program; if not, write to the Free Software Foundation, Inc., 59 Temple
+ * Place, Suite 330, Boston, MA 02111-1307 USA
+ */
+package xades4j.verification;
+
+import com.google.inject.Inject;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
+import xades4j.properties.QualifyingProperty;
+import xades4j.properties.data.PropertiesDataObjectsStructureVerifier;
+import xades4j.properties.data.PropertyDataObject;
+import xades4j.properties.data.PropertyDataStructureException;
+
+/**
+ *
+ * @author Luís
+ */
+class QualifyingPropertiesVerifierImpl implements QualifyingPropertiesVerifier
+{
+    private final QualifyingPropertyVerifiersMapper propertyVerifiersMapper;
+    private final PropertiesDataObjectsStructureVerifier dataObjectsStructureVerifier;
+
+    @Inject
+    QualifyingPropertiesVerifierImpl(
+            QualifyingPropertyVerifiersMapper propertyVerifiersMapper,
+            PropertiesDataObjectsStructureVerifier dataObjectsStructureVerifier)
+    {
+        this.propertyVerifiersMapper = propertyVerifiersMapper;
+        this.dataObjectsStructureVerifier = dataObjectsStructureVerifier;
+    }
+
+    @Override
+    public Collection<PropertyInfo> verifyProperties(
+            Collection<PropertyDataObject> unmarshalledProperties,
+            QualifyingPropertyVerificationContext ctx) throws PropertyDataStructureException, InvalidPropertyException, QualifyingPropertyVerifierNotAvailableException
+    {
+        dataObjectsStructureVerifier.verifiyPropertiesDataStructure(unmarshalledProperties);
+
+        Collection<PropertyInfo> props = new ArrayList<PropertyInfo>(unmarshalledProperties.size());
+        
+        for (PropertyDataObject propData : unmarshalledProperties)
+        {
+            QualifyingPropertyVerifier propVerifier = this.propertyVerifiersMapper.getVerifier(propData);
+
+            QualifyingProperty p = propVerifier.verify(propData, ctx);
+            if (null == p)
+                throw new PropertyVerifierErrorException(propData.getClass().getName());
+
+            props.add(new PropertyInfo(propData, p));
+        }
+
+        return Collections.unmodifiableCollection(props);
+    }
+}
