@@ -51,14 +51,13 @@ public class SignerBESTest extends SignerTestBase
         Element elemToSign = doc.getDocumentElement();
         SignerBES signer = (SignerBES)new XadesBesSigningProfile(keyingProviderMy).newSigner();
 
-        AllDataObjsTimeStampProperty globalTimeStamp = new AllDataObjsTimeStampProperty();
         IndividualDataObjsTimeStampProperty dataObjsTimeStamp = new IndividualDataObjsTimeStampProperty();
         AllDataObjsCommitmentTypeProperty globalCommitment = AllDataObjsCommitmentTypeProperty.proofOfApproval();
         CommitmentTypeProperty commitment = CommitmentTypeProperty.proofOfCreation();
 
         DataObjectDesc obj1 = new DataObjectReference('#' + elemToSign.getAttribute("Id")).withTransform(new DataObjectTransform(Transforms.TRANSFORM_ENVELOPED_SIGNATURE)).withDataObjectFormat(new DataObjectFormatProperty("text/xml", "MyEncoding").withDescription("Isto é uma descrição do elemento raiz").withDocumentationUri("http://doc1.txt").withDocumentationUri("http://doc2.txt").withIdentifier("http://elem.root")).withCommitmentType(commitment).withDataObjectTimeStamp(dataObjsTimeStamp);
         DataObjectDesc obj2 = new EnvelopedXmlObject(doc.createElement("ElemInObject"), "text/xml", null).withDataObjectFormat(new DataObjectFormatProperty("text/xml", "MyEncoding").withDescription("Isto é uma descrição do elemento dentro do object").withDocumentationUri("http://doc3.txt").withDocumentationUri("http://doc4.txt").withIdentifier("http://elem.in.object")).withCommitmentType(commitment).withDataObjectTimeStamp(dataObjsTimeStamp);
-        SignedDataObjects dataObjs = new SignedDataObjects().withSignedDataObject(obj1).withSignedDataObject(obj2).withCommitmentType(globalCommitment).withDataObjectsTimeStamp(globalTimeStamp);
+        SignedDataObjects dataObjs = new SignedDataObjects().withSignedDataObject(obj1).withSignedDataObject(obj2).withCommitmentType(globalCommitment).withDataObjectsTimeStamp();
 
         signer.sign(dataObjs, elemToSign);
 

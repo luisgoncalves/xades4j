@@ -151,6 +151,17 @@ public abstract class DataObjectDesc
     }
 
     /**
+     * Add a new IndividualDataObjectsTimeStamp signed property to the current data
+     * object description. This method is a shorcut for {@link DataObjectDesc#withDataObjectTimeStamp(xades4j.properties.IndividualDataObjsTimeStampProperty)}
+     * that can be used when the time-stamp is not applied to other data objects.
+     * @return
+     */
+    public final DataObjectDesc withDataObjectTimeStamp()
+    {
+        return addSignedDataObjProp(new IndividualDataObjsTimeStampProperty());
+    }
+
+    /**
      * Adds a custom signed property to the current data object description. The
      * purpose of this method is extensibility.
      * <p>

@@ -104,20 +104,15 @@ public final class SignedDataObjects
 
     /**
      * Adds a AllDataObjectsTimeStamp signed property applied to all data objects.
+     * This method can be invoked multiple times since multiple times-stamps can
+     * be present.
      *
-     * This method can be invoked multiple times with different properties since
-     * multiple times-stamps can be present.
-     *
-     * @param timestamp the AllDataObjectsTimeStamp property
      * @return the current instance
      *
-     * @throws PropertyTargetException if the given property (instance) is already present
-     * @throws NullPointerException if the given property is {@code null}
      */
-    public SignedDataObjects withDataObjectsTimeStamp(
-            AllDataObjsTimeStampProperty timestamp)
+    public SignedDataObjects withDataObjectsTimeStamp()
     {
-        return addSignedDataObjProp(timestamp);
+        return addSignedDataObjProp(new AllDataObjsTimeStampProperty());
     }
 
     /**
