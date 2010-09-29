@@ -116,7 +116,7 @@ public class SignerTTest extends SignerTestBase
                     "C:\\Windows\\System32\\pteidpkcs11.dll", "PT_CC",
                     new FirstCertificateSelector(), null, null, false);
 
-            SignerT signer = (SignerT)new XadesTSigningProfile(ptccKeyingDataProv).withAlgorithmsProvider(PtCcAlgorithmsProvider.class).newSigner();
+            SignerT signer = (SignerT)new XadesTSigningProfile(ptccKeyingDataProv).withAlgorithmsProvider(PtCcAlgorithmsProvider.class).withTimeStampTokenProvider(TestTimeStampTokenProvider.class).newSigner();
             new Enveloped(signer).sign(elemToSign);
 
             outputDocument(doc, "document.signed.t.bes.ptcc.xml");
