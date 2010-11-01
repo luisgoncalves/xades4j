@@ -83,7 +83,10 @@ public class SignatureServicesTestBase
     {
         TransformerFactory tf = TransformerFactory.newInstance();
         String path = toPlatformSpecificXMLDirFilePath(fileName);
-        tf.newTransformer().transform(new DOMSource(doc), new StreamResult(
-                new FileOutputStream(path)));
+        FileOutputStream out = new FileOutputStream(path);
+        tf.newTransformer().transform(
+                new DOMSource(doc),
+                new StreamResult(out));
+        out.close();
     }
 }

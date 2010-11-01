@@ -127,7 +127,7 @@ public class DefaultTimeStampTokenProvider implements TimeStampTokenProvider
     /**
      * Gets the TSA URL when the default {@code HttpTimestamper} is used. Override
      * to change the TSA in use.
-     * @return the url
+     * @return the url (default is {@code http://tss.accv.es:8318/tsa}
      */
     protected String getTSAUrl()
     {

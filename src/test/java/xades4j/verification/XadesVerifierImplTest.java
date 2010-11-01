@@ -17,7 +17,6 @@
 package xades4j.verification;
 
 import java.security.KeyStore;
-import org.apache.xml.security.utils.Constants;
 import static org.junit.Assert.*;
 import org.junit.Test;
 import org.w3c.dom.Document;
@@ -128,10 +127,13 @@ public class XadesVerifierImplTest extends VerifierTestBase
         if (!onWindowsPlatform())
             fail("Test written for Windows-ROOT certificate repository");
 
-        FileSystemDirectoryCertStore certStore = createDirectoryCertStore("pt");
+        FileSystemDirectoryCertStore ptCertStore = createDirectoryCertStore("pt");
+        FileSystemDirectoryCertStore startfieldCertStore = createDirectoryCertStore("starfield");
+
         KeyStore ks = KeyStore.getInstance("Windows-ROOT");
         ks.load(null);
-        PKIXCertificateValidationProvider cvp = new PKIXCertificateValidationProvider(ks, false, certStore.getStore());
+        PKIXCertificateValidationProvider cvp = new PKIXCertificateValidationProvider(
+                ks, false, ptCertStore.getStore(), startfieldCertStore.getStore());
 
         XAdESForm f = verifySignature("document.signed.t.bes.ptcc.xml",
                 new XadesVerificationProfile(cvp));

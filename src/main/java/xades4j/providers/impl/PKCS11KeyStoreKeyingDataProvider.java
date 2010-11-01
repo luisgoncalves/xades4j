@@ -83,6 +83,22 @@ public class PKCS11KeyStoreKeyingDataProvider extends KeyStoreKeyingDataProvider
         }, certificateSelector, keyStorePasswordProvider, entryPasswordProvider, returnFullChain);
     }
 
+    /**
+     * Shortcut for the other constructor using {@code null} for the password providers and {@code false}
+     * for the {@code returnFullChain} parameter.
+     * @param nativeLibraryPath
+     * @param providerName
+     * @param certificateSelector
+     * @throws KeyStoreException
+     */
+    public PKCS11KeyStoreKeyingDataProvider(
+            final String nativeLibraryPath,
+            final String providerName,
+            SigningCertSelector certificateSelector) throws KeyStoreException
+    {
+        this(nativeLibraryPath, providerName, certificateSelector, null, null, false);
+    }
+
     @Override
     protected final KeyStore.ProtectionParameter getKeyProtection(
             final String entryAlias,

@@ -16,8 +16,6 @@
  */
 package xades4j.providers.impl;
 
-import xades4j.providers.impl.DefaultMessageDigestProvider;
-import xades4j.providers.impl.DefaultTimeStampTokenProvider;
 import org.apache.xml.security.utils.Constants;
 import org.junit.After;
 import org.junit.AfterClass;

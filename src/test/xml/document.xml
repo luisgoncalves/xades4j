@@ -1,28 +1,30 @@
 ﻿<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<album Id="root">
-    <title>Questions, unanswered</title>
-    <artist>Steve and the flubberblubs</artist>
-    <year>1989</year>
-    <tracks>
-        <song tracknumber="1" length="4:05">
-            <title>What do you know?</title>
-            <artist>Steve and the flubberblubs</artist>
-            <lastplayed>2006-10-17-08:31</lastplayed>
-        </song>
-        <song tracknumber="2" length="3:45">
-            <title>Who do you know?</title>
-            <artist>Steve and the flubberblubs</artist>
-            <lastplayed>2006-10-17-08:35</lastplayed>
-        </song>
-        <song tracknumber="3" length="5:14">
-            <title>When do you know?</title>
-            <artist>Steve and the flubberblubs</artist>
-            <lastplayed>2006-10-17-08:39</lastplayed>
-        </song>
-        <song tracknumber="4" length="4:19">
-            <title>Do you know?</title>
-            <artist>Steve and the flubberblubs</artist>
-            <lastplayed>2006-10-17-08:44</lastplayed>
-        </song>
-    </tracks>
-</album>
+<collection Id="root">
+	<album>
+		<title>Questions, unanswered</title>
+		<artist>Steve and the flubberblubs</artist>
+		<year>1989</year>
+		<tracks>
+			<song tracknumber="1" length="4:05">
+				<title>What do you know?</title>
+				<artist>Steve and the flubberblubs</artist>
+				<lastplayed>2006-10-17-08:31</lastplayed>
+			</song>
+			<song tracknumber="2" length="3:45">
+				<title>Who do you know?</title>
+				<artist>Steve and the flubberblubs</artist>
+				<lastplayed>2006-10-17-08:35</lastplayed>
+			</song>
+			<song tracknumber="3" length="5:14">
+				<title>When do you know?</title>
+				<artist>Steve and the flubberblubs</artist>
+				<lastplayed>2006-10-17-08:39</lastplayed>
+			</song>
+			<song tracknumber="4" length="4:19">
+				<title>Do you know?</title>
+				<artist>Steve and the flubberblubs</artist>
+				<lastplayed>2006-10-17-08:44</lastplayed>
+			</song>
+		</tracks>
+	</album>
+</collection>

@@ -20,6 +20,7 @@ import com.google.inject.Inject;
 import java.security.ProviderException;
 import org.apache.xml.security.signature.XMLSignature;
 import org.junit.Test;
+import static org.junit.Assert.*;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import xades4j.UnsupportedAlgorithmException;
@@ -106,7 +107,7 @@ public class SignerTTest extends SignerTestBase
         System.out.println("signTPtCitizenCard");
 
         if (!onWindowsPlatform())
-            System.out.println(">>> Test written for the Windows platform");
+            fail("Test written for the Windows platform");
 
         Document doc = getTestDocument();
         Element elemToSign = doc.getDocumentElement();
@@ -116,13 +117,13 @@ public class SignerTTest extends SignerTestBase
                     "C:\\Windows\\System32\\pteidpkcs11.dll", "PT_CC",
                     new FirstCertificateSelector(), null, null, false);
 
-            SignerT signer = (SignerT)new XadesTSigningProfile(ptccKeyingDataProv).withAlgorithmsProvider(PtCcAlgorithmsProvider.class).withTimeStampTokenProvider(TestTimeStampTokenProvider.class).newSigner();
+            SignerT signer = (SignerT)new XadesTSigningProfile(ptccKeyingDataProv).withAlgorithmsProvider(PtCcAlgorithmsProvider.class).newSigner();
             new Enveloped(signer).sign(elemToSign);
 
             outputDocument(doc, "document.signed.t.bes.ptcc.xml");
         } catch (ProviderException ex)
         {
-            System.out.println(">>> PT CC PKCS#11 provider not configured");
+            fail("PT CC PKCS#11 provider not configured");
         }
     }
 }
