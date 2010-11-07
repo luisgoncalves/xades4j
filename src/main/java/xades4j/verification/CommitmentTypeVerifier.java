@@ -21,6 +21,7 @@ import xades4j.properties.AllDataObjsCommitmentTypeProperty;
 import xades4j.properties.CommitmentTypeProperty;
 import xades4j.properties.QualifyingProperty;
 import xades4j.properties.data.CommitmentTypeData;
+import xades4j.verification.QualifyingPropertyVerificationContext.SignedObjectsData;
 
 /**
  * XAdES section G.2.2.9
@@ -38,7 +39,10 @@ class CommitmentTypeVerifier implements QualifyingPropertyVerifier<CommitmentTyp
 
         if (objsReferences != null)
         {
-            QualifyingPropertyVerificationContext.SignedObjectsData signedObjsData = ctx.getSignedObjectsData();
+            // "Check that all the ObjectReference elements actually reference
+            // ds:Reference elements from the signature."
+            
+            SignedObjectsData signedObjsData = ctx.getSignedObjectsData();
             CommitmentTypeProperty commitmentTypeProperty = new CommitmentTypeProperty(uri, desc);
 
             for (String objRef : objsReferences)
@@ -52,7 +56,6 @@ class CommitmentTypeVerifier implements QualifyingPropertyVerifier<CommitmentTyp
             }
             return commitmentTypeProperty;
         }
-
         return new AllDataObjsCommitmentTypeProperty(uri, desc);
     }
 }

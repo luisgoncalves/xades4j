@@ -16,33 +16,31 @@
  */
 package xades4j.verification;
 
-import xades4j.properties.CounterSignatureProperty;
+import xades4j.XAdES4jException;
 
 /**
+ * Throw during validation of the {@code CounterSignature} property if the XAdES
+ * verification of the signature fails.
  * @author Luís
  */
-public class CounterSignatureVerificationException extends InvalidPropertyException
+public class CounterSignatureXadesVerificationException extends CounterSignatureVerificationException
 {
-    private String msg;
+    private final XAdES4jException cause;
 
-    public CounterSignatureVerificationException(String msg)
+    public CounterSignatureXadesVerificationException(XAdES4jException cause)
     {
-        this.msg = msg;
-    }
-
-    public CounterSignatureVerificationException()
-    {
+        this.cause = cause;
     }
 
     @Override
-    public String getPropertyName()
+    public XAdES4jException getCause()
     {
-        return CounterSignatureProperty.PROP_NAME;
+        return cause;
     }
 
     @Override
     protected String getVerificationMessage()
     {
-        return msg == null ? "" : msg;
+        return cause.getMessage();
     }
 }

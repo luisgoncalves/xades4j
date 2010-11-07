@@ -16,33 +16,17 @@
  */
 package xades4j.verification;
 
-import xades4j.properties.CounterSignatureProperty;
-
 /**
+ * Throw during validation of the {@code CounterSignature} property if the enclosed
+ * signature doesn't reference the {@code SignatureValue} element of the countersigned
+ * signature.
  * @author Luís
  */
-public class CounterSignatureVerificationException extends InvalidPropertyException
+public class CounterSignatureSigValueRefException extends CounterSignatureVerificationException
 {
-    private String msg;
-
-    public CounterSignatureVerificationException(String msg)
-    {
-        this.msg = msg;
-    }
-
-    public CounterSignatureVerificationException()
-    {
-    }
-
-    @Override
-    public String getPropertyName()
-    {
-        return CounterSignatureProperty.PROP_NAME;
-    }
-
     @Override
     protected String getVerificationMessage()
     {
-        return msg == null ? "" : msg;
+        return "the counter signature doesn't reference the SignatureValue element of the countersigned signature";
     }
 }
