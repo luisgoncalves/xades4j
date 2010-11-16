@@ -20,13 +20,13 @@ import java.security.cert.X509Certificate;
 
 /**
  * Thrown during the signature prodution if the key usage in the signing certificate
- * (if available) doesn't include <i>digitalSignature</i>.
+ * (if available) doesn't include <i>digitalSignature</i> nor <i>nonRepudiation</i>.
  * @author Luís
  */
 public class SigningCertKeyUsageException extends SigningCertRequirementException
 {
     public SigningCertKeyUsageException(X509Certificate certificate)
     {
-        super("KeyUsage on the signing certificate doesn't include 'digitalSignature'", certificate);
+        super("KeyUsage on the signing certificate doesn't include 'digitalSignature' nor 'nonRepudiation'", certificate);
     }
 }

@@ -270,9 +270,9 @@ class SignerBES implements XadesSigner
             X509Certificate signingCertificate,
             XMLSignature xmlSig) throws KeyingDataException
     {
-        // Check key usage. KeyUsage[0] = digitalSignature.
+        // Check key usage. KeyUsage[0] = digitalSignature; KeyUsage[1] = nonRepudiation.
         boolean[] keyUsage = signingCertificate.getKeyUsage();
-        if (keyUsage != null && keyUsage[0] == false)
+        if (keyUsage != null && !keyUsage[0] && !keyUsage[1])
             throw new SigningCertKeyUsageException(signingCertificate);
 
         try
