@@ -21,9 +21,13 @@ import static org.junit.Assert.*;
 import org.junit.Test;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
+import org.w3c.dom.NodeList;
 import xades4j.production.XadesFormatExtenderProfile;
 import xades4j.production.XadesSignatureFormatExtender;
+import xades4j.properties.CertificateValuesProperty;
 import xades4j.properties.QualifyingProperty;
+import xades4j.properties.RevocationValuesProperty;
+import xades4j.properties.SigAndRefsTimeStampProperty;
 import xades4j.properties.data.SigningTimeData;
 import xades4j.providers.impl.PKIXCertificateValidationProvider;
 import xades4j.utils.FileSystemDirectoryCertStore;
@@ -60,18 +64,12 @@ public class XadesVerifierImplTest extends VerifierTestBase
 
         XadesSignatureFormatExtender formExt = new XadesFormatExtenderProfile().getFormatExtender();
         XAdESVerificationResult res = verificationProfile.newVerifier().verify(signatureNode, formExt, XAdESForm.T);
-
         assertEquals(XAdESForm.BES, res.getSignatureForm());
 
-        outputDocument(doc, "document.verified.bes.t.xml");
-    }
+        res = verificationProfile.newVerifier().verify(signatureNode);
+        assertEquals(XAdESForm.T, res.getSignatureForm());
 
-    @Test
-    public void testVerifyBESEnrichedT() throws Exception
-    {
-        System.out.println("verifyBESEnrichedT");
-        XAdESForm f = verifySignature("document.verified.bes.t.xml");
-        assertEquals(XAdESForm.T, f);
+        outputDocument(doc, "document.verified.bes.t.xml");
     }
 
     @Test
@@ -163,6 +161,7 @@ public class XadesVerifierImplTest extends VerifierTestBase
         XAdESVerificationResult res = p.newVerifier().verify(signatureNode, formExt, XAdESForm.X);
 
         assertEquals(XAdESForm.C, res.getSignatureForm());
+        assertPropElementPresent(signatureNode, SigAndRefsTimeStampProperty.PROP_NAME);
 
         outputDocument(doc, "document.verified.c.x.xml");
     }
@@ -180,6 +179,9 @@ public class XadesVerifierImplTest extends VerifierTestBase
         XAdESVerificationResult res = p.newVerifier().verify(signatureNode, formExt, XAdESForm.X_L);
 
         assertEquals(XAdESForm.C, res.getSignatureForm());
+        assertPropElementPresent(signatureNode, SigAndRefsTimeStampProperty.PROP_NAME);
+        assertPropElementPresent(signatureNode, CertificateValuesProperty.PROP_NAME);
+        assertPropElementPresent(signatureNode, RevocationValuesProperty.PROP_NAME);
 
         outputDocument(doc, "document.verified.c.xl.xml");
     }
@@ -199,5 +201,13 @@ public class XadesVerifierImplTest extends VerifierTestBase
             }
         });
         verifySignature("document.signed.bes.xml");
+    }
+
+    private static void assertPropElementPresent(
+            Element sigElem,
+            String elemName)
+    {
+        NodeList props = sigElem.getElementsByTagNameNS(QualifyingProperty.XADES_XMLNS, elemName);
+        assertFalse(props.getLength() == 0);
     }
 }

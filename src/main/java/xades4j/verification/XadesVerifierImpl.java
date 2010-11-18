@@ -52,6 +52,7 @@ class XadesVerifierImpl implements XadesVerifier
     static
     {
         org.apache.xml.security.Init.init();
+        initFormExtension();
     }
     /**/
     private final CertificateValidationProvider certificateValidator;
@@ -146,41 +147,7 @@ class XadesVerifierImpl implements XadesVerifier
 
         /* Core signature verification */
 
-        boolean status;
-        try
-        {
-            status = signature.checkSignatureValue(validationCert);
-        } catch (XMLSignatureException ex)
-        {
-            throw new XAdES4jXMLSigException("Cannot verify the signature: " + ex.getMessage(), ex);
-        }
-
-        if (!status)
-            try
-            {
-                // Check if it is a failure due to the signature value or references
-                // validation.
-                status = signature.getSignedInfo().verifyReferences();
-
-                if (status)
-                    // References are OK; this is a problem on the signature value
-                    // itself.
-                    throw new SignatureValueException(signature);
-                else
-                {
-                    // References are not OK; get the first invalid Reference.
-                    SignedInfo si = signature.getSignedInfo();
-                    for (int i = 0; i < si.getLength(); i++)
-                    {
-                        Reference r = si.item(i);
-                        if (!r.verify())
-                            throw new ReferenceValueException(signature, r);
-                    }
-                }
-            } catch (XMLSecurityException ex)
-            {
-                throw new XAdES4jXMLSigException("Cannot verify the references", ex);
-            }
+        doCoreVerification(signature, validationCert);
 
         /* Umarshal the qualifying properties */
 
@@ -248,7 +215,127 @@ class XadesVerifierImpl implements XadesVerifier
         throw new QualifyingPropertiesIncorporationException(msg);
     }
 
+    private static void doCoreVerification(
+            XMLSignature signature,
+            X509Certificate validationCert) throws XAdES4jXMLSigException, InvalidSignatureException
+    {
+        try
+        {
+            if (signature.checkSignatureValue(validationCert))
+                return;
+        } catch (XMLSignatureException ex)
+        {
+            throw new XAdES4jXMLSigException("Cannot verify the signature: " + ex.getMessage(), ex);
+        }
+
+        try
+        {
+            /* Failure due to the signature value or references validation? */
+
+            if (signature.getSignedInfo().verifyReferences())
+                // References are OK; this is a problem on the signature value
+                // itself.
+                throw new SignatureValueException(signature);
+            else
+            {
+                // References are NOT OK; get the first invalid Reference.
+                SignedInfo si = signature.getSignedInfo();
+                for (int i = 0; i < si.getLength(); i++)
+                {
+                    Reference r = si.item(i);
+                    if (!r.verify())
+                        throw new ReferenceValueException(signature, r);
+                }
+            }
+        } catch (XMLSecurityException ex)
+        {
+            throw new XAdES4jXMLSigException("Cannot verify the references", ex);
+        }
+    }
+
     /*************************************************************************************/
+    private static interface FormExtensionPropsCollector
+    {
+        void addProps(Collection<UnsignedSignatureProperty> usp,
+                XAdESVerificationResult res);
+    }
+    private static FormExtensionPropsCollector[][] formsExtensionTransitions;
+
+    private static void initFormExtension()
+    {
+        XAdESForm[] forms = XAdESForm.values();
+        formsExtensionTransitions = new FormExtensionPropsCollector[forms.length][forms.length];
+
+        // BES/EPES -> T
+        FormExtensionPropsCollector tPropsCol = new FormExtensionPropsCollector()
+        {
+            @Override
+            public void addProps(
+                    Collection<UnsignedSignatureProperty> usp,
+                    XAdESVerificationResult res)
+            {
+                PropertiesUtils.addXadesTProperties(usp);
+            }
+        };
+        formsExtensionTransitions[XAdESForm.BES.ordinal()][XAdESForm.T.ordinal()] = tPropsCol;
+        formsExtensionTransitions[XAdESForm.EPES.ordinal()][XAdESForm.T.ordinal()] = tPropsCol;
+
+        // BES/EPES -> C
+        FormExtensionPropsCollector cAndTPropsCol = new FormExtensionPropsCollector()
+        {
+            @Override
+            public void addProps(
+                    Collection<UnsignedSignatureProperty> usp,
+                    XAdESVerificationResult res)
+            {
+                PropertiesUtils.addXadesCProperties(usp, res.getValidationData());
+                PropertiesUtils.addXadesTProperties(usp);
+            }
+        };
+        formsExtensionTransitions[XAdESForm.BES.ordinal()][XAdESForm.C.ordinal()] = cAndTPropsCol;
+        formsExtensionTransitions[XAdESForm.EPES.ordinal()][XAdESForm.C.ordinal()] = cAndTPropsCol;
+
+        // T -> C
+        FormExtensionPropsCollector cPropsCol = new FormExtensionPropsCollector()
+        {
+            @Override
+            public void addProps(
+                    Collection<UnsignedSignatureProperty> usp,
+                    XAdESVerificationResult res)
+            {
+                PropertiesUtils.addXadesCProperties(usp, res.getValidationData());
+            }
+        };
+        formsExtensionTransitions[XAdESForm.T.ordinal()][XAdESForm.C.ordinal()] = cPropsCol;
+
+        // C -> X
+        FormExtensionPropsCollector xPropsCol = new FormExtensionPropsCollector()
+        {
+            @Override
+            public void addProps(
+                    Collection<UnsignedSignatureProperty> usp,
+                    XAdESVerificationResult res)
+            {
+                PropertiesUtils.addXadesXProperties(usp);
+            }
+        };
+        formsExtensionTransitions[XAdESForm.C.ordinal()][XAdESForm.X.ordinal()] = xPropsCol;
+
+        // C -> X-L
+        FormExtensionPropsCollector xlAndXPropsCol = new FormExtensionPropsCollector()
+        {
+            @Override
+            public void addProps(
+                    Collection<UnsignedSignatureProperty> usp,
+                    XAdESVerificationResult res)
+            {
+                PropertiesUtils.addXadesXLProperties(usp, res.getValidationData());
+                PropertiesUtils.addXadesXProperties(usp);
+            }
+        };
+        formsExtensionTransitions[XAdESForm.C.ordinal()][XAdESForm.X_L.ordinal()] = xlAndXPropsCol;
+    }
+
     @Override
     public XAdESVerificationResult verify(
             Element signatureElem,
@@ -258,6 +345,8 @@ class XadesVerifierImpl implements XadesVerifier
         if (null == finalForm || null == formatExtender)
             throw new NullPointerException("Parameters cannot be null");
 
+        // The transitions matrix won't allow this, but this way I avoid the
+        // unnecessary processing.
         if (finalForm.before(XAdESForm.T) || finalForm.after(XAdESForm.X_L))
             throw new IllegalArgumentException("Signature format can only be extended to XAdES-T, C, X or X-L");
 
@@ -266,19 +355,6 @@ class XadesVerifierImpl implements XadesVerifier
 
         if (actualForm.before(finalForm))
         {
-            if (finalForm.after(XAdESForm.C))
-                // XAdES-X, X-L or A.
-                //
-                if (finalForm.before(XAdESForm.A))
-                {
-                    // XAdES-X or X-L
-                    if (actualForm != XAdESForm.C)
-                        throw new IllegalArgumentException("XAdES-C is required to extend to XAdES-X or X-L");
-                } else if (actualForm != XAdESForm.X_L)
-                    // XAdES-A
-                    throw new IllegalArgumentException("XAdES-X-L is required to extend to XAdES-A");
-
-
             // Valid form transitions:
             // * BES/EPES -> T
             // * BES/EPES -> C
@@ -288,27 +364,13 @@ class XadesVerifierImpl implements XadesVerifier
             // * X -> X-L (not supported with the libray defaults: X cannot be verified)
             // * X-L -> A (not supported with the libray defaults: X-L cannot be verified)
 
-            Collection<UnsignedSignatureProperty> usp = new ArrayList<UnsignedSignatureProperty>(3);
+            FormExtensionPropsCollector finalFormPropsColector = formsExtensionTransitions[actualForm.ordinal()][finalForm.ordinal()];
 
-            switch (finalForm)
-            {
-                case C:
-                    PropertiesUtils.addXadesCProperties(usp, res.getValidationData());
-                    if (actualForm == XAdESForm.T)
-                        break;
-                case T:
-                    PropertiesUtils.addXadesTProperties(usp);
-                    break;
-                case X_L:
-                    PropertiesUtils.addXadesXLProperties(usp, res.getValidationData());
-                    if (actualForm == XAdESForm.X)
-                        break;
-                case X:
-                    PropertiesUtils.addXadesXProperties(usp);
-                    break;
-                case A:
-                    PropertiesUtils.addXadesAProperties(usp);
-            }
+            if (null == finalFormPropsColector)
+                throw new InvalidFormExtensionException(actualForm, finalForm);
+
+            Collection<UnsignedSignatureProperty> usp = new ArrayList<UnsignedSignatureProperty>(3);
+            finalFormPropsColector.addProps(usp, res);
 
             formatExtender.enrichSignature(res.getXmlSignature(), new UnsignedProperties(usp));
         }
