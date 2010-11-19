@@ -16,7 +16,6 @@
  */
 package xades4j.verification;
 
-import java.security.KeyStore;
 import static org.junit.Assert.*;
 import org.junit.Test;
 import org.w3c.dom.Document;
@@ -29,8 +28,6 @@ import xades4j.properties.QualifyingProperty;
 import xades4j.properties.RevocationValuesProperty;
 import xades4j.properties.SigAndRefsTimeStampProperty;
 import xades4j.properties.data.SigningTimeData;
-import xades4j.providers.impl.PKIXCertificateValidationProvider;
-import xades4j.utils.FileSystemDirectoryCertStore;
 
 /**
  *
@@ -122,19 +119,11 @@ public class XadesVerifierImplTest extends VerifierTestBase
     {
         System.out.println("verifyTPtCC");
 
-        if (!onWindowsPlatform())
+        if (!onWindowsPlatform() || null == validationProviderPtCc)
             fail("Test written for Windows-ROOT certificate repository");
 
-        FileSystemDirectoryCertStore ptCertStore = createDirectoryCertStore("pt");
-        FileSystemDirectoryCertStore startfieldCertStore = createDirectoryCertStore("starfield");
-
-        KeyStore ks = KeyStore.getInstance("Windows-ROOT");
-        ks.load(null);
-        PKIXCertificateValidationProvider cvp = new PKIXCertificateValidationProvider(
-                ks, false, ptCertStore.getStore(), startfieldCertStore.getStore());
-
         XAdESForm f = verifySignature("document.signed.t.bes.ptcc.xml",
-                new XadesVerificationProfile(cvp));
+                new XadesVerificationProfile(validationProviderPtCc));
         assertEquals(XAdESForm.T, f);
     }
 

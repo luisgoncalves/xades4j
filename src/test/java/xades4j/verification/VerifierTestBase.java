@@ -41,6 +41,7 @@ public class VerifierTestBase extends SignatureServicesTestBase
     static SignaturePolicyDocumentProvider policyDocumentFinder;
     public static CertificateValidationProvider validationProviderMySigs;
     public static CertificateValidationProvider validationProviderNist;
+    public static CertificateValidationProvider validationProviderPtCc;
     /**/
     static protected XadesVerificationProfile verificationProfile;
 
@@ -58,7 +59,7 @@ public class VerifierTestBase extends SignatureServicesTestBase
                 }
             };
 
-            // Validation provider with certificates from "my" folder. User for
+            // Validation provider with certificates from "my" folder. Used for
             // signatures without revocation data.
             FileSystemDirectoryCertStore certStore = createDirectoryCertStore("my");
             KeyStore ks = createAndLoadJKSKeyStore("my/myStore", "mystorepass");
@@ -70,6 +71,20 @@ public class VerifierTestBase extends SignatureServicesTestBase
             FileSystemDirectoryCertStore gvaCRLStore = createDirectoryCertStore("gva");
             ks = createAndLoadJKSKeyStore("csrc.nist/trustAnchor", "password");
             validationProviderNist = new PKIXCertificateValidationProvider(ks, true, certStore.getStore(), gvaCRLStore.getStore());
+
+            // Validation provider for "pt" folder. Used for signatures produced
+            // with the PT citizen card.
+            certStore = createDirectoryCertStore("pt");
+            FileSystemDirectoryCertStore startfieldCertStore = createDirectoryCertStore("starfield");
+            try
+            {
+                ks = KeyStore.getInstance("Windows-ROOT");
+                ks.load(null);
+                validationProviderPtCc = new PKIXCertificateValidationProvider(ks, false, certStore.getStore(), startfieldCertStore.getStore());
+            } catch (Exception e)
+            {
+                // Not on windows platform...
+            }
 
             /**/
             verificationProfile = new XadesVerificationProfile(VerifierTestBase.validationProviderMySigs);
