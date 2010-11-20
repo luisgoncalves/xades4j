@@ -100,6 +100,7 @@ public class PKIXCertificateValidationProvider implements CertificateValidationP
     @Override
     public ValidationData validate(
             X509CertSelector certSelector,
+            Date validationDate,
             Collection<X509Certificate> otherCerts) throws CertificateValidationException, UnexpectedJCAException
     {
         PKIXBuilderParameters builderParams;
@@ -133,6 +134,7 @@ public class PKIXCertificateValidationProvider implements CertificateValidationP
 
             builderParams.setRevocationEnabled(revocationEnabled);
             builderParams.setMaxPathLength(maxPathLength);
+            builderParams.setDate(validationDate);
 
             builderRes = (PKIXCertPathBuilderResult)certPathBuilder.build(builderParams);
         } catch (CertPathBuilderException ex)
@@ -160,12 +162,13 @@ public class PKIXCertificateValidationProvider implements CertificateValidationP
         certPath.add(builderRes.getTrustAnchor().getTrustedCert());
 
         if (revocationEnabled)
-            return new ValidationData(certPath, getCRLsForCertPath(certPath));
+            return new ValidationData(certPath, getCRLsForCertPath(certPath, validationDate));
         return new ValidationData(certPath);
     }
 
     private Collection<X509CRL> getCRLsForCertPath(
-            List<X509Certificate> certPath) throws CertificateValidationException
+            List<X509Certificate> certPath,
+            Date validationDate) throws CertificateValidationException
     {
         // Map the issuers certificates in the chain. This is used to know the issuers
         // and later to verify the signatures in the CRLs.
@@ -188,7 +191,7 @@ public class PKIXCertificateValidationProvider implements CertificateValidationP
         // - "The specified date must be equal to or later than the value of the
         //   thisUpdate component of the X509CRL and earlier than the value of the
         //   nextUpdate component."
-        crlSelector.setDateAndTime(new Date());
+        crlSelector.setDateAndTime(validationDate);
 
         Set<X509CRL> crls = new HashSet<X509CRL>();
         try
@@ -205,8 +208,8 @@ public class PKIXCertificateValidationProvider implements CertificateValidationP
             throw new CertificateValidationException(null, "Cannot get CRLs: " + ex.getMessage());
         }
 
-        // Verify the CRLs' signatures. The certificates were validated as part
-        // of the cert path creation.
+        // Verify the CRLs' signatures. The issuers' certificates were validated
+        // as part of the cert path creation.
         for (X509CRL crl : crls)
         {
             try

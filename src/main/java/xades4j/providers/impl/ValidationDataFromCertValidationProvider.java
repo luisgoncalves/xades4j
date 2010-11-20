@@ -19,6 +19,7 @@ package xades4j.providers.impl;
 import xades4j.providers.*;
 import java.security.cert.X509CertSelector;
 import java.security.cert.X509Certificate;
+import java.util.Date;
 import java.util.List;
 import xades4j.verification.UnexpectedJCAException;
 
@@ -45,7 +46,7 @@ public class ValidationDataFromCertValidationProvider implements ValidationDataP
         {
             X509CertSelector cs = new X509CertSelector();
             cs.setCertificate(certChainFragment.get(0));
-            return this.certificateValidationProvider.validate(cs, certChainFragment);
+            return this.certificateValidationProvider.validate(cs, new Date(), certChainFragment);
         } catch (CertificateValidationException ex)
         {
             throw new ValidationDataException("Cannot validate certificate: " + ex.getMessage(), ex);

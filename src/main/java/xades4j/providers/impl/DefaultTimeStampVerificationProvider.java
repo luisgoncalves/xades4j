@@ -68,6 +68,7 @@ public class DefaultTimeStampVerificationProvider implements TimeStampVerificati
         try
         {
             token = new PKCS7(timeStampToken);
+            tstInfo = new TimeStampTokenInfo(token.getContentInfo().getContentBytes());
 
             SignerInfo[] signerInfos = token.getSignerInfos();
             if (null == signerInfos || signerInfos.length != 1)
@@ -75,19 +76,25 @@ public class DefaultTimeStampVerificationProvider implements TimeStampVerificati
                 // other than the signature of the TSA."
                 throw new TimeStampTokenStructureException("Only one signature should be present on time-stamp token");
 
+            X509Certificate[] tokenCerts = token.getCertificates();
             SignerInfo tsaSignerInfo = signerInfos[0];
+
+            /* Validate the TSA certificate */
 
             X509CertSelector tsaCertSelector = new X509CertSelector();
             tsaCertSelector.setIssuer(new X500Principal(tsaSignerInfo.getIssuerName().getName()));
             tsaCertSelector.setSerialNumber(tsaSignerInfo.getCertificateSerialNumber());
 
-            // Validate the TSA certificate.
-            X509Certificate[] tokenCerts = token.getCertificates();
             ValidationData vData = this.certificateValidationProvider.validate(
                     tsaCertSelector,
+                    tstInfo.getDate(),
                     null == tokenCerts ? null : Arrays.asList(tokenCerts));
 
-            // Verify the token's signature.
+
+            /* Verify the token's signature */
+
+            // If the token had no certificates, clone it using the certificate
+            // on the certification path. This way I can always use 'token.verify'.
             if (null == tokenCerts)
                 token = new PKCS7(
                         token.getDigestAlgorithmIds(),
@@ -98,10 +105,10 @@ public class DefaultTimeStampVerificationProvider implements TimeStampVerificati
                         },
                         signerInfos);
 
+            // Verify the signature.
             if (null == token.verify(tsaSignerInfo, null))
                 throw new TimeStampTokenSignatureException("Time-stamp token signature verification failed");
 
-            tstInfo = new TimeStampTokenInfo(token.getContentInfo().getContentBytes());
         } catch (ParsingException ex)
         {
             // new PKCS7(timeStampToken)

@@ -19,6 +19,7 @@ package xades4j.providers;
 import java.security.cert.X509CertSelector;
 import java.security.cert.X509Certificate;
 import java.util.Collection;
+import java.util.Date;
 import xades4j.verification.UnexpectedJCAException;
 
 /**
@@ -32,12 +33,14 @@ public interface CertificateValidationProvider
     /**
      *
      * @param certSelector the selector of the leaf certificate
+     * @param validationDate the time for which the validity of the certification path should be determined
      * @param otherCerts a set of certificates that can be used to validate de leaf certificate.
-     *      Might include the certificate that will be selected with {@code certSelector}. May be {@code null}.
+     *      May include the certificate that will be selected with {@code certSelector}. May be {@code null}.
      * @return the validation data that validates the certificate selected by {@code certSelector}
      * @throws CertificateValidationException if the certificate cannot be validated (see subclasses of the exception)
      */
     ValidationData validate(
             X509CertSelector certSelector,
+            Date validationDate,
             Collection<X509Certificate> otherCerts) throws CertificateValidationException, UnexpectedJCAException;
 }

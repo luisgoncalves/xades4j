@@ -88,7 +88,7 @@ public class QualifyingPropertyVerificationContext
                 XMLX509IssuerSerial validationCertIssuerSerial)
         {
             this.certificateChain = Collections.unmodifiableList(certificateChain);
-            this.crls = crls;
+            this.crls = Collections.unmodifiableCollection(crls);
             if (validationCertIssuerSerial != null)
             {
                 this.validationCertIssuer = new X500Principal(validationCertIssuerSerial.getIssuerName());

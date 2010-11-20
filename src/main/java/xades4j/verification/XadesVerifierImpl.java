@@ -17,9 +17,12 @@
 package xades4j.verification;
 
 import com.google.inject.Inject;
+import java.security.cert.X509CRL;
 import java.security.cert.X509Certificate;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Date;
+import java.util.List;
 import org.apache.xml.security.exceptions.XMLSecurityException;
 import org.apache.xml.security.signature.Reference;
 import org.apache.xml.security.signature.SignedInfo;
@@ -34,8 +37,12 @@ import xades4j.XAdES4jXMLSigException;
 import xades4j.properties.data.PropertyDataObject;
 import xades4j.properties.UnsignedProperties;
 import xades4j.production.XadesSignatureFormatExtender;
+import xades4j.properties.SignatureTimeStampProperty;
+import xades4j.properties.data.SignatureTimeStampData;
 import xades4j.providers.CertificateValidationProvider;
 import xades4j.providers.ValidationData;
+import xades4j.utils.CollectionUtils;
+import xades4j.utils.CollectionUtils.Predicate;
 import xades4j.utils.ObjectUtils;
 import xades4j.utils.PropertiesUtils;
 import xades4j.verification.SignatureUtils.KeyInfoRes;
@@ -137,10 +144,20 @@ class XadesVerifierImpl implements XadesVerifier
                 !targetValue.substring(1).equals(signatureId))
             throw new QualifyingPropertiesIncorporationException("QualifyingProperties target doesn't match the signature's Id");
 
+        /* Umarshal the qualifying properties */
+
+        QualifPropsDataCollectorImpl propsDataCollector = new QualifPropsDataCollectorImpl();
+        qualifPropsUnmarshaller.unmarshalProperties(qualifyingPropsElem, propsDataCollector);
+        Collection<PropertyDataObject> qualifPropsData = propsDataCollector.getPropertiesData();
+
         /* Certification path */
 
         KeyInfoRes keyInfoRes = SignatureUtils.processKeyInfo(signature.getKeyInfo());
-        ValidationData certValidationRes = this.certificateValidator.validate(keyInfoRes.certSelector, keyInfoRes.keyInfoCerts);
+        Date validationDate = getValidationDate(qualifPropsData, signature);
+        ValidationData certValidationRes = this.certificateValidator.validate(
+                keyInfoRes.certSelector,
+                validationDate,
+                keyInfoRes.keyInfoCerts);
         if (null == certValidationRes)
             throw new NullPointerException("Certificate validator returned null data");
         X509Certificate validationCert = certValidationRes.getCerts().get(0);
@@ -149,14 +166,8 @@ class XadesVerifierImpl implements XadesVerifier
 
         doCoreVerification(signature, validationCert);
 
-        /* Umarshal the qualifying properties */
+        /* Qualifying properties verification */
 
-        QualifPropsDataCollectorImpl propsDataCollector = new QualifPropsDataCollectorImpl();
-        qualifPropsUnmarshaller.unmarshalProperties(qualifyingPropsElem, propsDataCollector);
-
-        /* Verify the qualifying properties */
-
-        Collection<PropertyDataObject> qualifPropsData = propsDataCollector.getPropertiesData();
         // Create the verification context.
         QualifyingPropertyVerificationContext ctx = new QualifyingPropertyVerificationContext(
                 signature,
@@ -168,6 +179,7 @@ class XadesVerifierImpl implements XadesVerifier
                 new QualifyingPropertyVerificationContext.SignedObjectsData(
                 referencesRes.dataObjsReferences,
                 signature));
+
         // Verify the properties. Data structure verification is included.
         Collection<PropertyInfo> props = this.qualifyingPropertiesVerifier.verifyProperties(qualifPropsData, ctx);
 
@@ -213,6 +225,42 @@ class XadesVerifierImpl implements XadesVerifier
             msg = msg + ": " + ex.getMessage();
         }
         throw new QualifyingPropertiesIncorporationException(msg);
+    }
+
+    private Date getValidationDate(
+            Collection<PropertyDataObject> qualifPropsData,
+            XMLSignature signature) throws XAdES4jException
+    {
+        List<PropertyDataObject> sigTsData = CollectionUtils.filter(qualifPropsData, new Predicate<PropertyDataObject>()
+        {
+            @Override
+            public boolean verifiedBy(PropertyDataObject elem)
+            {
+                return elem instanceof SignatureTimeStampData;
+            }
+        });
+
+        // If no signature time-stamp is present, use the current date.
+        if (sigTsData.isEmpty())
+            return new Date();
+
+        // !!!
+        // This is a temporary solution.
+        // - Properties should probably be verified in two stages (before and after cert path creation).
+        // - Had to remove the custom structure verifier that checked if the SigningCertificate data was present.
+        QualifyingPropertyVerificationContext ctx = new QualifyingPropertyVerificationContext(
+                signature,
+                new QualifyingPropertyVerificationContext.CertificationChainData(
+                new ArrayList<X509Certificate>(0),
+                new ArrayList<X509CRL>(0),
+                null),
+                /**/
+                new QualifyingPropertyVerificationContext.SignedObjectsData(
+                new ArrayList<RawDataObjectDesc>(0),
+                signature));
+        QualifyingProperty sigTs = this.qualifyingPropertiesVerifier.verifyProperties(sigTsData, ctx).iterator().next().getProperty();
+
+        return ((SignatureTimeStampProperty)sigTs).getTime();
     }
 
     private static void doCoreVerification(

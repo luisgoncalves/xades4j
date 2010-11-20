@@ -95,15 +95,15 @@ class DefaultVerificationBindingsModule extends AbstractModule
         bind(QualifyingPropertiesVerifier.class).to(QualifyingPropertiesVerifierImpl.class);
         bind(QualifyingPropertyVerifiersMapper.class).to(QualifyingPropertyVerifiersMapperImpl.class);
 
-        customGlobalStructureVerifiers.add(new CustomPropertiesDataObjsStructureVerifier()
-        {
-            @Override
-            public void verifiy(DataGetter<PropertyDataObject> dataObjsGetter) throws PropertyDataStructureException
-            {
-                if (dataObjsGetter.getOfType(SigningCertificateData.class).isEmpty())
-                    throw new PropertyDataStructureException("property is required and isn't present", SigningCertificateProperty.PROP_NAME);
-            }
-        });
+//        customGlobalStructureVerifiers.add(new CustomPropertiesDataObjsStructureVerifier()
+//        {
+//            @Override
+//            public void verifiy(DataGetter<PropertyDataObject> dataObjsGetter) throws PropertyDataStructureException
+//            {
+//                if (dataObjsGetter.getOfType(SigningCertificateData.class).isEmpty())
+//                    throw new PropertyDataStructureException("property is required and isn't present", SigningCertificateProperty.PROP_NAME);
+//            }
+//        });
         bind(new TypeLiteral<Collection<CustomPropertiesDataObjsStructureVerifier>>()
         {
         }).toInstance(customGlobalStructureVerifiers);
