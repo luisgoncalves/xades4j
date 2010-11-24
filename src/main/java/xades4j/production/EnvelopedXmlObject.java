@@ -22,8 +22,9 @@ import org.w3c.dom.Node;
 /**
  * Represents content (tipically XML) that will be enveloped in the signature.
  * Each instance of this class will result in a {@code ds:Object} in the final
- * XAdES signature, which will contain the data. Also, this object will be covered
- * by a {@code ds:Reference} so that it is actually included in the signature.
+ * XAdES signature, which will contain the data. Also, this {@code Object} will
+ * be covered by a {@code ds:Reference} so that it is actually included in the
+ * signature.
  * 
  * <p>If one wants to add content other than XML, a text node can be used.
  *
