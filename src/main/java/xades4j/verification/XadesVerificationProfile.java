@@ -202,8 +202,24 @@ public final class XadesVerificationProfile
         return withBinding(QualifyingPropertiesUnmarshaller.class, propsUnmarshallerClass);
     }
 
+    /**
+     * Indicates whether the resulting verifiers should accept unknown properties.
+     * Actually, this is a property of the underlying {@code QualifyingPropertiesUnmarshaller}
+     * which controls if a {@code GenericDOMData} should be used when an unknown
+     * property is found.
+     * <p>
+     * The schema for signed signature and data object properties is closed; as
+     * such, this only affects the unsigned properties.
+     * <p>
+     * Note that it is also possible to implement a custom {@code QualifyingPropertiesUnmarshaller}s.
+     * <p>
+     * The {@link withElementVerifier} method can be used to register verifiers
+     * for unknown properties.
+     * {@see xades4j.unmarshalling.QualifyingPropertiesUnmarshaller}
+     */
     public XadesVerificationProfile acceptUnknownProperties(boolean accept)
     {
+        this.acceptUnknownProperties = accept;
         return this;
     }
 
