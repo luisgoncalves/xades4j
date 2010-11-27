@@ -213,9 +213,9 @@ public final class XadesVerificationProfile
      * <p>
      * Note that it is also possible to implement a custom {@code QualifyingPropertiesUnmarshaller}s.
      * <p>
-     * The {@link withElementVerifier} method can be used to register verifiers
-     * for unknown properties.
-     * {@see xades4j.unmarshalling.QualifyingPropertiesUnmarshaller}
+     * The {@link XadesVerificationProfile#withElementVerifier withElementVerifier}
+     * method can be used to register verifiers for unknown properties.
+     * @see xades4j.xml.unmarshalling.QualifyingPropertiesUnmarshaller
      */
     public XadesVerificationProfile acceptUnknownProperties(boolean accept)
     {
