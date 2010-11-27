@@ -56,13 +56,13 @@ class TimeStampUtils
     }
 
     /**
-     * Verifies the time-stamp tokne on a time-stamp property data object. Only
-     * the FIRST token is verified.
+     * Verifies the time-stamp tokens on a time-stamp property data object. All
+     * the tokens are verified, but the returned time-stamp is from the last token.
      * @param tsData the time-stamp property data object
      * @param digestInput the calculated input for the digest that will be matched with the one in the time-stamp
      * @param verifier the time-stamp verifier
      * @param propName the name of the property being verified (for exceptions)
-     * @return the time-stamp time of the first token
+     * @return the time-stamp time of the last token
      */
     static Date verifyTokens(
             BaseXAdESTimeStampData tsData,
@@ -74,19 +74,17 @@ class TimeStampUtils
         {
             byte[] data = digestInput.getBytes();
             List<byte[]> tokens = tsData.getTimeStampTokens();
-            if (tokens.size() > 1)
-                throw new TimeStampVerificationException(propName)
-                {
-                    @Override
-                    protected String getVerificationMessage()
-                    {
-                        return "multiple timestamp tokens are not supported";
-                    }
-                };
-            return verifier.verifyToken(tokens.get(0), data);
+
+            Date ts = null;
+
+            for (byte[] tkn : tokens)
+            {
+                ts = verifier.verifyToken(tkn, data);
+            }
+            return ts;
         } catch (TimeStampTokenVerificationException ex)
         {
-            throw TimeStampUtils.getEx(ex, propName);
+            throw getEx(ex, propName);
         }
     }
 }
