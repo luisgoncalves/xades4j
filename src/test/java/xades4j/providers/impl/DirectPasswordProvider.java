@@ -16,7 +16,6 @@
  */
 package xades4j.providers.impl;
 
-import xades4j.providers.impl.KeyStoreKeyingDataProvider;
 import java.security.cert.X509Certificate;
 
 /**

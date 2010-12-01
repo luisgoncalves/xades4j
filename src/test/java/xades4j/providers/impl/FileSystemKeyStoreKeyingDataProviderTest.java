@@ -16,13 +16,13 @@
  */
 package xades4j.providers.impl;
 
-import xades4j.providers.impl.FileSystemKeyStoreKeyingDataProvider;
 import java.io.FileInputStream;
 import java.security.cert.CertificateFactory;
 import java.security.cert.X509Certificate;
 import java.util.List;
 import org.junit.Before;
 import org.junit.Test;
+import xades4j.utils.SignatureServicesTestBase;
 import static org.junit.Assert.*;
 
 /**
@@ -39,13 +39,14 @@ public class FileSystemKeyStoreKeyingDataProviderTest
     {
         keyingProvider = new FileSystemKeyStoreKeyingDataProvider(
                 "pkcs12",
-                ".\\src\\test\\cert\\my\\LG.pfx",
+                SignatureServicesTestBase.toPlatformSpecificCertDirFilePath("my/LG.pfx"),
                 new FirstCertificateSelector(),
                 new DirectPasswordProvider("mykeypass"),
                 new DirectPasswordProvider("mykeypass"), true);
 
         CertificateFactory cf = CertificateFactory.getInstance("X.509");
-        signCert = (X509Certificate)cf.generateCertificate(new FileInputStream(".\\src\\test\\cert\\my\\LG.cer"));
+        signCert = (X509Certificate)cf.generateCertificate(
+                new FileInputStream(SignatureServicesTestBase.toPlatformSpecificCertDirFilePath("my/LG.cer")));
     }
 
     @Test
