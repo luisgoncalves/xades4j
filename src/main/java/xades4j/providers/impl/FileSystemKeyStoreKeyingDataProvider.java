@@ -27,6 +27,7 @@ import java.security.cert.X509Certificate;
  * A specification of {@code KeyStoreKeyingDataProvider} for file-system keystores.
  * The protection parameter to access the entry is a {@code PasswordProtection}
  * with a password obtained directly from the {@code KeyStorePasswordProvider}.
+ * @see xades4j.providers.impl.KeyStoreKeyingDataProvider
  * @author Luís
  */
 public class FileSystemKeyStoreKeyingDataProvider extends KeyStoreKeyingDataProvider

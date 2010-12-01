@@ -40,6 +40,7 @@ import javax.security.auth.callback.UnsupportedCallbackException;
  * native library. If the {@code KeyEntryPasswordProvider} is supplied, the protection
  * used to access an entry is a {@code CallbackHandlerProtection} that invokes the
  * {@code KeyEntryPasswordProvider} exactly when when the password is requested.
+ * @see xades4j.providers.impl.KeyStoreKeyingDataProvider
  * @author Luís
  */
 public class PKCS11KeyStoreKeyingDataProvider extends KeyStoreKeyingDataProvider
