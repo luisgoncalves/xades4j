@@ -22,6 +22,7 @@ import java.security.cert.X509CertSelector;
 import java.security.cert.X509Certificate;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.Date;
 import javax.security.auth.x500.X500Principal;
 import org.junit.AfterClass;
 import org.junit.BeforeClass;
@@ -66,7 +67,7 @@ public class PKIXCertificateValidationProviderTest
         Collection<X509Certificate> otherCerts = Collections.emptyList();
 
         PKIXCertificateValidationProvider instance = new PKIXCertificateValidationProvider(ks, false, certStore.getStore());
-        ValidationData result = instance.validate(certSelector, otherCerts);
+        ValidationData result = instance.validate(certSelector, new Date(), otherCerts);
         assertEquals(result.getCerts().size(), 3);
     }
 
@@ -86,7 +87,7 @@ public class PKIXCertificateValidationProviderTest
         Collection<X509Certificate> otherCerts = Collections.emptyList();
 
         PKIXCertificateValidationProvider instance = new PKIXCertificateValidationProvider(ks, true, certStore.getStore());
-        ValidationData result = instance.validate(certSelector, otherCerts);
+        ValidationData result = instance.validate(certSelector, new Date(), otherCerts);
         assertEquals(result.getCerts().size(), 4);
         assertEquals(result.getCrls().size(), 3);
     }

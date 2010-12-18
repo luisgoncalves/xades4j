@@ -136,24 +136,25 @@ public class XadesVerifierImplTest extends VerifierTestBase
                 new XadesVerificationProfile(VerifierTestBase.validationProviderNist));
         assertEquals(XAdESForm.C, f);
     }
-
+    /*
     @Test
     public void testVerifyCEnrichX() throws Exception
     {
-        System.out.println("verifyCEnrichX");
+    System.out.println("verifyCEnrichX");
 
-        Document doc = getDocument("document.signed.c.xml");
-        Element signatureNode = getSigElement(doc);
+    Document doc = getDocument("document.signed.c.xml");
+    Element signatureNode = getSigElement(doc);
 
-        XadesSignatureFormatExtender formExt = new XadesFormatExtenderProfile().getFormatExtender();
-        XadesVerificationProfile p = new XadesVerificationProfile(VerifierTestBase.validationProviderNist);
-        XAdESVerificationResult res = p.newVerifier().verify(signatureNode, formExt, XAdESForm.X);
+    XadesSignatureFormatExtender formExt = new XadesFormatExtenderProfile().getFormatExtender();
+    XadesVerificationProfile p = new XadesVerificationProfile(VerifierTestBase.validationProviderNist);
+    XAdESVerificationResult res = p.newVerifier().verify(signatureNode, formExt, XAdESForm.X);
 
-        assertEquals(XAdESForm.C, res.getSignatureForm());
-        assertPropElementPresent(signatureNode, SigAndRefsTimeStampProperty.PROP_NAME);
+    assertEquals(XAdESForm.C, res.getSignatureForm());
+    assertPropElementPresent(signatureNode, SigAndRefsTimeStampProperty.PROP_NAME);
 
-        outputDocument(doc, "document.verified.c.x.xml");
+    outputDocument(doc, "document.verified.c.x.xml");
     }
+     */
 
     @Test
     public void testVerifyCEnrichXL() throws Exception
