@@ -136,6 +136,17 @@ public class XadesVerifierImplTest extends VerifierTestBase
                 new XadesVerificationProfile(VerifierTestBase.validationProviderNist));
         assertEquals(XAdESForm.C, f);
     }
+
+    @Test
+    public void testVerifyDetachedC() throws Exception
+    {
+        System.out.println("verifyDetachedC");
+        XAdESForm f = verifySignature(
+                "detached.c.xml",
+                new XadesVerificationProfile(VerifierTestBase.validationProviderNist));
+        assertEquals(XAdESForm.C, f);
+    }
+
     /*
     @Test
     public void testVerifyCEnrichX() throws Exception
@@ -155,7 +166,6 @@ public class XadesVerifierImplTest extends VerifierTestBase
     outputDocument(doc, "document.verified.c.x.xml");
     }
      */
-
     @Test
     public void testVerifyCEnrichXL() throws Exception
     {

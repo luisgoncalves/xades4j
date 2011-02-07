@@ -16,6 +16,7 @@
  */
 package xades4j.production;
 
+import java.io.File;
 import org.junit.Test;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
@@ -42,5 +43,21 @@ public class SignerCTest extends SignerTestBase
         new Enveloped(signer).sign(elemToSign);
 
         outputDocument(doc, "document.signed.c.xml");
+    }
+
+    @Test
+    public void testSignFileDetachedC() throws Exception
+    {
+        System.out.println("signFileDetachedC");
+
+        ValidationDataProvider vdp = new ValidationDataFromCertValidationProvider(VerifierTestBase.validationProviderNist);
+        SignerC signer = (SignerC)new XadesCSigningProfile(keyingProviderNist, vdp).newSigner();
+
+        String fileUri = new File("license.txt").toURI().toString();
+        SignedDataObjects objs = new SignedDataObjects(new DataObjectReference(fileUri));
+        Document doc = getNewDocument();
+        signer.sign(objs, doc);
+
+        outputDocument(doc, "detached.c.xml");
     }
 }
