@@ -75,12 +75,11 @@ public class VerifierTestBase extends SignatureServicesTestBase
             // Validation provider for "pt" folder. Used for signatures produced
             // with the PT citizen card.
             certStore = createDirectoryCertStore("pt");
-            FileSystemDirectoryCertStore startfieldCertStore = createDirectoryCertStore("starfield");
             try
             {
                 ks = KeyStore.getInstance("Windows-ROOT");
                 ks.load(null);
-                validationProviderPtCc = new PKIXCertificateValidationProvider(ks, false, certStore.getStore(), startfieldCertStore.getStore());
+                validationProviderPtCc = new PKIXCertificateValidationProvider(ks, false, certStore.getStore());
             } catch (Exception e)
             {
                 // Not on windows platform...
