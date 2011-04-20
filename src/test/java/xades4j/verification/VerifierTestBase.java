@@ -110,7 +110,7 @@ public class VerifierTestBase extends SignatureServicesTestBase
             Element sigElem,
             XadesVerificationProfile p) throws Exception
     {
-        XAdESVerificationResult res = p.newVerifier().verify(sigElem);
+        XAdESVerificationResult res = p.newVerifier().verify(sigElem, null);
         return res.getSignatureForm();
     }
 

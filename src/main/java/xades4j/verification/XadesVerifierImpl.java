@@ -91,15 +91,18 @@ class XadesVerifierImpl implements XadesVerifier
     }
 
     @Override
-    public XAdESVerificationResult verify(Element signatureElem) throws XAdES4jException
+    public XAdESVerificationResult verify(Element signatureElem, SignatureSpecificVerificationOptions verificationOptions) throws XAdES4jException
     {
         if (null == signatureElem)
             throw new NullPointerException("Signature node not specified");
 
+        if(null == verificationOptions)
+            verificationOptions = new SignatureSpecificVerificationOptions();
+
         XMLSignature signature;
         try
         {
-            signature = new XMLSignature(signatureElem, "");
+            signature = new XMLSignature(signatureElem, verificationOptions.getBaseUri());
         } catch (XMLSignatureException ex)
         {
             throw new UnmarshalException("Bad XML Signature format", ex);
@@ -387,6 +390,7 @@ class XadesVerifierImpl implements XadesVerifier
     @Override
     public XAdESVerificationResult verify(
             Element signatureElem,
+            SignatureSpecificVerificationOptions verificationOptions,
             XadesSignatureFormatExtender formatExtender,
             XAdESForm finalForm) throws XAdES4jException
     {
@@ -398,7 +402,7 @@ class XadesVerifierImpl implements XadesVerifier
         if (finalForm.before(XAdESForm.T) || finalForm.after(XAdESForm.X_L))
             throw new IllegalArgumentException("Signature format can only be extended to XAdES-T, C, X or X-L");
 
-        XAdESVerificationResult res = this.verify(signatureElem);
+        XAdESVerificationResult res = this.verify(signatureElem, verificationOptions);
         XAdESForm actualForm = res.getSignatureForm();
 
         if (actualForm.before(finalForm))

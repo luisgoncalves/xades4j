@@ -137,7 +137,7 @@ class SignerBES implements XadesSigner
         XMLSignature signature = null;
         try
         {
-            signature = new XMLSignature(DOMHelper.getOwnerDocument(parent), "", sigAlgUri, canonAlgUri);
+            signature = new XMLSignature(DOMHelper.getOwnerDocument(parent), signedDataObjects.getBaseUri(), sigAlgUri, canonAlgUri);
             signature.setId(signatureId);
         } catch (XMLSecurityException ex)
         {

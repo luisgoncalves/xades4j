@@ -45,6 +45,7 @@ public final class SignedDataObjects
     private final Set<DataObjectDesc> dataObjs;
     private final PropertiesSet<SignedDataObjectProperty> signedDataObjsProperties;
     private final PropertiesSet<UnsignedDataObjectProperty> unsignedDataObjsProperties;
+    private String baseUriForRelativeReferences;
 
     /**
      * Creates an empty container.
@@ -54,6 +55,7 @@ public final class SignedDataObjects
         this.dataObjs = new HashSet<DataObjectDesc>();
         this.signedDataObjsProperties = new PropertiesSet<SignedDataObjectProperty>(0);
         this.unsignedDataObjsProperties = new PropertiesSet<UnsignedDataObjectProperty>(0);
+        this.baseUriForRelativeReferences = null;
     }
 
     /**
@@ -81,6 +83,25 @@ public final class SignedDataObjects
 
         }
     }
+
+    /**
+     * Sets the base URI for <b>all/b> the relative references. Fragment references
+     * (starting with '#') are not afected.
+     * @param baseUri the references' base uri
+     * @return the current instance
+     */
+    public SignedDataObjects withBaseUri(String baseUri)
+    {
+        this.baseUriForRelativeReferences = baseUri;
+        return this;
+    }
+
+    String getBaseUri()
+    {
+        return this.baseUriForRelativeReferences;
+    }
+
+    /**************************************************************************/
 
     /**
      * Adds a CommitmentType signed property shared among all data objects. The

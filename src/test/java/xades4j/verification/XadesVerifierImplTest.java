@@ -60,10 +60,10 @@ public class XadesVerifierImplTest extends VerifierTestBase
         Element signatureNode = getSigElement(doc);
 
         XadesSignatureFormatExtender formExt = new XadesFormatExtenderProfile().getFormatExtender();
-        XAdESVerificationResult res = verificationProfile.newVerifier().verify(signatureNode, formExt, XAdESForm.T);
+        XAdESVerificationResult res = verificationProfile.newVerifier().verify(signatureNode, null, formExt, XAdESForm.T);
         assertEquals(XAdESForm.BES, res.getSignatureForm());
 
-        res = verificationProfile.newVerifier().verify(signatureNode);
+        res = verificationProfile.newVerifier().verify(signatureNode, null);
         assertEquals(XAdESForm.T, res.getSignatureForm());
 
         outputDocument(doc, "document.verified.bes.t.xml");
@@ -79,11 +79,12 @@ public class XadesVerifierImplTest extends VerifierTestBase
 
         XadesSignatureFormatExtender formExt = new XadesFormatExtenderProfile().getFormatExtender();
         XadesVerificationProfile nistVerP = new XadesVerificationProfile(VerifierTestBase.validationProviderNist);
+        SignatureSpecificVerificationOptions verOptns = new SignatureSpecificVerificationOptions().useBaseUri("http://www.ietf.org/rfc/");
 
-        XAdESVerificationResult res = nistVerP.newVerifier().verify(signatureNode, formExt, XAdESForm.C);
+        XAdESVerificationResult res = nistVerP.newVerifier().verify(signatureNode, verOptns, formExt, XAdESForm.C);
         assertEquals(XAdESForm.BES, res.getSignatureForm());
 
-        res = nistVerP.newVerifier().verify(signatureNode);
+        res = nistVerP.newVerifier().verify(signatureNode, verOptns);
         assertEquals(XAdESForm.C, res.getSignatureForm());
 
         outputDocument(doc, "document.verified.bes.extres.c.xml");
@@ -176,7 +177,7 @@ public class XadesVerifierImplTest extends VerifierTestBase
 
         XadesSignatureFormatExtender formExt = new XadesFormatExtenderProfile().getFormatExtender();
         XadesVerificationProfile p = new XadesVerificationProfile(VerifierTestBase.validationProviderNist);
-        XAdESVerificationResult res = p.newVerifier().verify(signatureNode, formExt, XAdESForm.X_L);
+        XAdESVerificationResult res = p.newVerifier().verify(signatureNode, null, formExt, XAdESForm.X_L);
 
         assertEquals(XAdESForm.C, res.getSignatureForm());
         assertPropElementPresent(signatureNode, SigAndRefsTimeStampProperty.PROP_NAME);

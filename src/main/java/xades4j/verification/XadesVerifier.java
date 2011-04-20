@@ -49,12 +49,17 @@ public interface XadesVerifier
     /**
      * Verifies a signature.
      * @param signatureElem the element containing the signature; must have an Id
+     * @param verificationOptions signature verification options. If {@code null},
+     *      default options are used
      * @return the verification result
+     *
+     * @see xades4j.verification.SignatureSpecificVerificationOptions
      * @throws XAdES4jException if an error eccurs, including if signature verification fails
      * @throws NullPointerException if {@code signatureElem} is {@code null}
      */
     public XAdESVerificationResult verify(
-            Element signatureElem) throws XAdES4jException;
+            Element signatureElem,
+            SignatureSpecificVerificationOptions verificationOptions) throws XAdES4jException;
 
     /**
      * Verifies a signature and extends its format if needed.
@@ -88,6 +93,8 @@ public interface XadesVerifier
      * {@code AttrAuthoritiesCertValues} and {@code AttributeRevocationValues} properties.
      *
      * @param signatureElem the element containing the signature; must have an Id
+     * @param verificationOptions signature verification options. If {@code null},
+     *      default options are used
      * @param formatExtender the extender used to add the new unsigned properties
      * @param minForm the minimum format that the signature should have; if the
      *      original signature has a 'lower' format, the extender is used
@@ -95,11 +102,13 @@ public interface XadesVerifier
      *
      * @see xades4j.production.XadesFormatExtenderProfile
      * @see xades4j.production.XadesSignatureFormatExtender
+     * @see xades4j.verification.SignatureSpecificVerificationOptions
      * @throws XAdES4jException if an error eccurs, including if signature verification fails
      * @throws NullPointerException if any parameter is {@code null}
      */
     public XAdESVerificationResult verify(
             Element signatureElem,
+            SignatureSpecificVerificationOptions verificationOptions,
             XadesSignatureFormatExtender formatExtender,
             XAdESForm minForm) throws XAdES4jException;
 }
