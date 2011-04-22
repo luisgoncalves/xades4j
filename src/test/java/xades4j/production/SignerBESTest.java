@@ -71,8 +71,8 @@ public class SignerBESTest extends SignerTestBase
         Document doc = getNewDocument();
         SignerBES signer = (SignerBES)new XadesBesSigningProfile(keyingProviderNist).newSigner();
 
-        DataObjectDesc obj1 = new DataObjectReference("rfc3161.txt").withDataObjectFormat(new DataObjectFormatProperty("text/plain").withDescription("Internet X.509 Public Key Infrastructure Time-Stamp Protocol (TSP)")).withDataObjectTimeStamp(new IndividualDataObjsTimeStampProperty());
-        signer.sign(new SignedDataObjects(obj1).withBaseUri("http://www.ietf.org/rfc/"), doc);
+        DataObjectDesc obj1 = new DataObjectReference("http://www.ietf.org/rfc/rfc3161.txt").withDataObjectFormat(new DataObjectFormatProperty("text/plain").withDescription("Internet X.509 Public Key Infrastructure Time-Stamp Protocol (TSP)")).withDataObjectTimeStamp(new IndividualDataObjsTimeStampProperty());
+        signer.sign(new SignedDataObjects(obj1), doc);
 
         outputDocument(doc, "document.signed.bes.extres.xml");
     }

@@ -16,6 +16,7 @@
  */
 package xades4j.verification;
 
+import java.io.File;
 import static org.junit.Assert.*;
 import org.junit.Test;
 import org.w3c.dom.Document;
@@ -79,12 +80,11 @@ public class XadesVerifierImplTest extends VerifierTestBase
 
         XadesSignatureFormatExtender formExt = new XadesFormatExtenderProfile().getFormatExtender();
         XadesVerificationProfile nistVerP = new XadesVerificationProfile(VerifierTestBase.validationProviderNist);
-        SignatureSpecificVerificationOptions verOptns = new SignatureSpecificVerificationOptions().useBaseUri("http://www.ietf.org/rfc/");
 
-        XAdESVerificationResult res = nistVerP.newVerifier().verify(signatureNode, verOptns, formExt, XAdESForm.C);
+        XAdESVerificationResult res = nistVerP.newVerifier().verify(signatureNode, null, formExt, XAdESForm.C);
         assertEquals(XAdESForm.BES, res.getSignatureForm());
 
-        res = nistVerP.newVerifier().verify(signatureNode, verOptns);
+        res = nistVerP.newVerifier().verify(signatureNode, null);
         assertEquals(XAdESForm.C, res.getSignatureForm());
 
         outputDocument(doc, "document.verified.bes.extres.c.xml");
@@ -142,10 +142,16 @@ public class XadesVerifierImplTest extends VerifierTestBase
     public void testVerifyDetachedC() throws Exception
     {
         System.out.println("verifyDetachedC");
-        XAdESForm f = verifySignature(
-                "detached.c.xml",
-                new XadesVerificationProfile(VerifierTestBase.validationProviderNist));
-        assertEquals(XAdESForm.C, f);
+
+        Document doc = getDocument("detached.c.xml");
+        Element signatureNode = getSigElement(doc);
+        XadesVerifier verifier = new XadesVerificationProfile(VerifierTestBase.validationProviderNist).newVerifier();
+
+        String baseUri = new File(".").toURI().toString();
+        SignatureSpecificVerificationOptions options = new SignatureSpecificVerificationOptions().useBaseUri(baseUri);
+        XAdESVerificationResult res = verifier.verify(signatureNode, options);
+        
+        assertEquals(XAdESForm.C, res.getSignatureForm());
     }
 
     /*
