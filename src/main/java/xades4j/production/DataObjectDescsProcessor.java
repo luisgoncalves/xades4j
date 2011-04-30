@@ -63,13 +63,16 @@ class DataObjectDescsProcessor
         {
             for (DataObjectDesc dataObjDesc : dataObjsDescs)
             {
-                refType = null;
                 transforms = processTransforms(dataObjDesc, xmlSignature);
 
                 if (dataObjDesc instanceof DataObjectReference)
+                { 
                     // If the data object info is a DataObjectReference, the Reference uri
-                    // is the one specified on the object.
-                    refUri = ((DataObjectReference)dataObjDesc).getUri();
+                    // and type are the ones specified on the object.
+                    DataObjectReference dataObjRef = (DataObjectReference)dataObjDesc;
+                    refUri = dataObjRef.getUri();
+                    refType = dataObjRef.getType();
+                } 
                 else if (dataObjDesc instanceof EnvelopedXmlObject)
                 {
                     // If the data object info is a EnvelopedXmlObject we need to create a

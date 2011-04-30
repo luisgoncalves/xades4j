@@ -18,7 +18,6 @@ package xades4j.production;
 
 import xades4j.properties.DataObjectDesc;
 import java.net.URI;
-import java.net.URISyntaxException;
 
 /**
  * A reference to a signed data object. Each instance of this class will result
@@ -31,7 +30,9 @@ import java.net.URISyntaxException;
  */
 public final class DataObjectReference extends DataObjectDesc
 {
+
     private final String uri;
+    private String type;
 
     /**
      * Creates a new data object reference. Additional information is added through
@@ -45,17 +46,12 @@ public final class DataObjectReference extends DataObjectDesc
     public DataObjectReference(String uri)
     {
         if (null == uri)
+        {
             throw new NullPointerException("Reference URI cannot be null");
+        }
 
         uri = uri.trim();
-
-        try
-        {
-            new URI(uri);
-        } catch (URISyntaxException e)
-        {
-            throw new IllegalArgumentException(e.getMessage());
-        }
+        URI.create(uri.trim());
         this.uri = uri;
     }
 
@@ -66,5 +62,27 @@ public final class DataObjectReference extends DataObjectDesc
     String getUri()
     {
         return uri;
+    }
+
+    /**
+     * Defines the {@code type} of the reference.
+     * <p>
+     * "The <b>optional</b> Type attribute contains information about the type of object
+     * being signed after all {@code ds:Reference} transforms have been applied.
+     * This is represented as a URI."
+     * <p>
+     * "The Type attribute applies to the item being pointed at, not its contents."
+     * @param type the referece's type
+     * @return the current instance
+     */
+    public DataObjectReference withType(String type)
+    {
+        this.type = type;
+        return this;
+    }
+
+    String getType()
+    {
+        return type;
     }
 }
