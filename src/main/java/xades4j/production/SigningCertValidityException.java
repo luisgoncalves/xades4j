@@ -25,10 +25,11 @@ import java.security.cert.X509Certificate;
  */
 public class SigningCertValidityException extends SigningCertRequirementException
 {
+
     public SigningCertValidityException(X509Certificate certificate)
     {
         super(String.format(
-                "Signing certificate only valid between %T and %T",
+                "Signing certificate only valid between %Tc and %Tc",
                 certificate.getNotBefore(),
                 certificate.getNotAfter()),
                 certificate);
