@@ -395,7 +395,7 @@ class XadesVerifierImpl implements XadesVerifier
             XAdESForm finalForm) throws XAdES4jException
     {
         if (null == finalForm || null == formatExtender)
-            throw new NullPointerException("Parameters cannot be null");
+            throw new NullPointerException("'finalForm' and 'formatExtender' cannot be null");
 
         // The transitions matrix won't allow this, but this way I avoid the
         // unnecessary processing.
