@@ -43,16 +43,18 @@ class SignerC extends SignerT
     private final ValidationDataProvider validationDataProvider;
 
     @Inject
-    protected SignerC(KeyingDataProvider keyingProvider,
+    protected SignerC(
+            KeyingDataProvider keyingProvider,
+            AlgorithmsProvider algorithmsProvider,
+            DataObjectDescsProcessor dataObjectDescsProcessor,
             SignaturePropertiesProvider signaturePropsProvider,
             ValidationDataProvider validationDataProvider,
             DataObjectPropertiesProvider dataObjPropsProvider,
             PropertiesDataObjectsGenerator propsDataObjectsGenerator,
-            AlgorithmsProvider algorithmsProvider,
             SignedPropertiesMarshaller signedPropsMarshaller,
             UnsignedPropertiesMarshaller unsignedPropsMarshaller)
     {
-        super(keyingProvider, signaturePropsProvider, dataObjPropsProvider, propsDataObjectsGenerator, algorithmsProvider, signedPropsMarshaller, unsignedPropsMarshaller);
+        super(keyingProvider, algorithmsProvider, dataObjectDescsProcessor, signaturePropsProvider, dataObjPropsProvider, propsDataObjectsGenerator, signedPropsMarshaller, unsignedPropsMarshaller);
         if (null == validationDataProvider)
             throw new NullPointerException("ValidationDataProvider is null");
 

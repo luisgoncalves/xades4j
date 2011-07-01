@@ -30,6 +30,7 @@ import org.apache.xml.security.transforms.Transforms;
 import org.w3c.dom.Element;
 import xades4j.UnsupportedAlgorithmException;
 import xades4j.properties.DataObjectDesc;
+import xades4j.providers.AlgorithmsProvider;
 
 /**
  * Helper class that processes a ser of data object descriptions.
@@ -38,8 +39,11 @@ import xades4j.properties.DataObjectDesc;
  */
 class DataObjectDescsProcessor
 {
-    private DataObjectDescsProcessor()
+    private final AlgorithmsProvider algorithmsProvider;
+
+    DataObjectDescsProcessor(AlgorithmsProvider algorithmsProvider)
     {
+        this.algorithmsProvider = algorithmsProvider;
     }
 
     /**
@@ -49,15 +53,15 @@ class DataObjectDescsProcessor
 
      * @throws UnsupportedAlgorithmException
      */
-    static Map<DataObjectDesc, Reference> process(
+    Map<DataObjectDesc, Reference> process(
             Collection<DataObjectDesc> dataObjsDescs,
-            XMLSignature xmlSignature,
-            String digestMethodUri) throws UnsupportedAlgorithmException
+            XMLSignature xmlSignature) throws UnsupportedAlgorithmException
     {
         Map<DataObjectDesc, Reference> referenceMappings = new IdentityHashMap<DataObjectDesc, Reference>(dataObjsDescs.size());
 
         String refUri, refType;
         Transforms transforms;
+        String digestMethodUri =  this.algorithmsProvider.getDigestAlgorithmForDataObjsReferences();
         /**/
         try
         {

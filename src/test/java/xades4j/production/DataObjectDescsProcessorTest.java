@@ -30,6 +30,7 @@ import org.junit.BeforeClass;
 import org.junit.Test;
 import org.w3c.dom.Document;
 import xades4j.properties.DataObjectDesc;
+import xades4j.providers.impl.DefaultAlgorithmsProvider;
 import xades4j.utils.SignatureServicesTestBase;
 import xades4j.utils.StringUtils;
 import static org.junit.Assert.*;
@@ -79,8 +80,8 @@ public class DataObjectDescsProcessorTest
         XMLSignature xmlSignature = new XMLSignature(doc, "", XMLSignature.ALGO_ID_SIGNATURE_RSA_SHA256);
         xmlSignature.setId("sigId");
 
-        Map<DataObjectDesc, Reference> result = DataObjectDescsProcessor.process(
-                dataObjsDescs, xmlSignature, MessageDigestAlgorithm.ALGO_ID_DIGEST_SHA256);
+        DataObjectDescsProcessor processor = new DataObjectDescsProcessor(new DefaultAlgorithmsProvider());
+        Map<DataObjectDesc, Reference> result = processor.process(dataObjsDescs, xmlSignature);
 
         assertEquals(result.size(), dataObjsDescs.size());
         assertEquals(xmlSignature.getObjectLength(), 2);

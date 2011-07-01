@@ -45,14 +45,15 @@ class SignerT extends SignerBES
     @Inject
     protected SignerT(
             KeyingDataProvider keyingProvider,
+            AlgorithmsProvider algorithmsProvider,
+            DataObjectDescsProcessor dataObjectDescsProcessor,
             SignaturePropertiesProvider signaturePropsProvider,
             DataObjectPropertiesProvider dataObjPropsProvider,
             PropertiesDataObjectsGenerator propsDataObjectsGenerator,
-            AlgorithmsProvider algorithmsProvider,
             SignedPropertiesMarshaller signedPropsMarshaller,
             UnsignedPropertiesMarshaller unsignedPropsMarshaller)
     {
-        super(keyingProvider, signaturePropsProvider, dataObjPropsProvider, propsDataObjectsGenerator, algorithmsProvider, signedPropsMarshaller, unsignedPropsMarshaller);
+        super(keyingProvider, algorithmsProvider, dataObjectDescsProcessor, signaturePropsProvider, dataObjPropsProvider, propsDataObjectsGenerator, signedPropsMarshaller, unsignedPropsMarshaller);
     }
 
     @Inject(optional = true)

@@ -44,15 +44,16 @@ class SignerEPES extends SignerBES
     @Inject
     protected SignerEPES(
             KeyingDataProvider keyingProvider,
+            AlgorithmsProvider algorithmsProvider,
+            DataObjectDescsProcessor dataObjectDescsProcessor,
             SignaturePolicyInfoProvider policyInfoProvider,
             SignaturePropertiesProvider signaturePropsProvider,
             DataObjectPropertiesProvider dataObjPropsProvider,
             PropertiesDataObjectsGenerator propsDataObjectsGenerator,
-            AlgorithmsProvider algorithmsProvider,
             SignedPropertiesMarshaller signedPropsMarshaller,
             UnsignedPropertiesMarshaller unsignedPropsMarshaller)
     {
-        super(keyingProvider, signaturePropsProvider, dataObjPropsProvider, propsDataObjectsGenerator, algorithmsProvider, signedPropsMarshaller, unsignedPropsMarshaller);
+        super(keyingProvider, algorithmsProvider, dataObjectDescsProcessor, signaturePropsProvider, dataObjPropsProvider, propsDataObjectsGenerator, signedPropsMarshaller, unsignedPropsMarshaller);
         this.policyInfoProvider = policyInfoProvider;
     }
 

@@ -66,8 +66,9 @@ class SignerBES implements XadesSigner
         Init.initXMLSec();
     }
     /**/
-    private final AlgorithmsProvider algorithmsProvider;
     private final KeyingDataProvider keyingProvider;
+    private final AlgorithmsProvider algorithmsProvider;
+    private final DataObjectDescsProcessor dataObjectDescsProcessor;
     private final PropertiesDataObjectsGenerator propsDataObjectsGenerator;
     private final SignedPropertiesMarshaller signedPropsMarshaller;
     private final UnsignedPropertiesMarshaller unsignedPropsMarshaller;
@@ -77,20 +78,24 @@ class SignerBES implements XadesSigner
     @Inject
     protected SignerBES(
             KeyingDataProvider keyingProvider,
+            AlgorithmsProvider algorithmsProvider,
+            DataObjectDescsProcessor dataObjectDescsProcessor,
             SignaturePropertiesProvider signaturePropsProvider,
             DataObjectPropertiesProvider dataObjPropsProvider,
             PropertiesDataObjectsGenerator propsDataObjectsGenerator,
-            AlgorithmsProvider algorithmsProvider,
             SignedPropertiesMarshaller signedPropsMarshaller,
             UnsignedPropertiesMarshaller unsignedPropsMarshaller)
     {
         if (ObjectUtils.anyNull(
-                keyingProvider, signaturePropsProvider, dataObjPropsProvider, propsDataObjectsGenerator,
-                algorithmsProvider, signedPropsMarshaller, unsignedPropsMarshaller))
+                keyingProvider, algorithmsProvider, dataObjectDescsProcessor,
+                signaturePropsProvider, dataObjPropsProvider, propsDataObjectsGenerator,
+                signedPropsMarshaller, unsignedPropsMarshaller))
             throw new NullPointerException("One or more arguments are null");
 
-        this.algorithmsProvider = algorithmsProvider;
         this.keyingProvider = keyingProvider;
+        this.algorithmsProvider = algorithmsProvider;
+        this.dataObjectDescsProcessor = dataObjectDescsProcessor;
+
         this.propsDataObjectsGenerator = propsDataObjectsGenerator;
         this.signedPropsMarshaller = signedPropsMarshaller;
         this.unsignedPropsMarshaller = unsignedPropsMarshaller;
@@ -146,13 +151,12 @@ class SignerBES implements XadesSigner
         }
 
         /* References */
-        // Process the data object informations to get the References and mappings.
+        // Process the data object descriptions to get the References and mappings.
         // After this call all the signed data objects References and XMLObjects
         // are added to the signature.
-        Map<DataObjectDesc, Reference> referenceMappings = DataObjectDescsProcessor.process(
+        Map<DataObjectDesc, Reference> referenceMappings = this.dataObjectDescsProcessor.process(
                 signedDataObjects.getDataObjectsDescs(),
-                signature,
-                digestAlgUri);
+                signature);
 
         /* SignedProperties reference */
         // XAdES 6.3.1: "In order to protect the properties with the signature,
