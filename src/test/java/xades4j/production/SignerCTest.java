@@ -16,13 +16,12 @@
  */
 package xades4j.production;
 
-import java.io.File;
+import java.io.FileInputStream;
 import org.junit.Test;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import xades4j.providers.impl.ValidationDataFromCertValidationProvider;
 import xades4j.providers.ValidationDataProvider;
-import xades4j.verification.SignatureSpecificVerificationOptions;
 import xades4j.verification.VerifierTestBase;
 
 /**
@@ -54,8 +53,8 @@ public class SignerCTest extends SignerTestBase
         ValidationDataProvider vdp = new ValidationDataFromCertValidationProvider(VerifierTestBase.validationProviderNist);
         SignerC signer = (SignerC)new XadesCSigningProfile(keyingProviderNist, vdp).newSigner();
 
-        String baseUri = new File(".").toURI().toString();
-        SignedDataObjects objs = new SignedDataObjects(new DataObjectReference("license.txt")).withBaseUri(baseUri);
+        AnonymousDataObjectReference ref = new AnonymousDataObjectReference(new FileInputStream("license.txt"));
+        SignedDataObjects objs = new SignedDataObjects(ref);
         Document doc = getNewDocument();
         signer.sign(objs, doc);
 

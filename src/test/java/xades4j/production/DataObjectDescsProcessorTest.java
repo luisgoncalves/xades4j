@@ -16,10 +16,10 @@
  */
 package xades4j.production;
 
+import org.apache.xml.security.utils.Constants;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Map;
-import org.apache.xml.security.algorithms.MessageDigestAlgorithm;
 import org.apache.xml.security.signature.ObjectContainer;
 import org.apache.xml.security.signature.Reference;
 import org.apache.xml.security.signature.XMLSignature;
@@ -41,6 +41,7 @@ import static org.junit.Assert.*;
  */
 public class DataObjectDescsProcessorTest
 {
+
     public DataObjectDescsProcessorTest()
     {
     }
@@ -48,21 +49,7 @@ public class DataObjectDescsProcessorTest
     @BeforeClass
     public static void setUpClass() throws Exception
     {
-    }
-
-    @AfterClass
-    public static void tearDownClass() throws Exception
-    {
-    }
-
-    @Before
-    public void setUp()
-    {
-    }
-
-    @After
-    public void tearDown()
-    {
+        Init.initXMLSec();
     }
 
     @Test
@@ -70,7 +57,6 @@ public class DataObjectDescsProcessorTest
     {
         System.out.println("process");
 
-        Init.initXMLSec();
         Document doc = SignatureServicesTestBase.getNewDocument();
 
         Collection<DataObjectDesc> dataObjsDescs = new ArrayList<DataObjectDesc>(3);
@@ -83,13 +69,55 @@ public class DataObjectDescsProcessorTest
         DataObjectDescsProcessor processor = new DataObjectDescsProcessor(new DefaultAlgorithmsProvider());
         Map<DataObjectDesc, Reference> result = processor.process(dataObjsDescs, xmlSignature);
 
-        assertEquals(result.size(), dataObjsDescs.size());
-        assertEquals(xmlSignature.getObjectLength(), 2);
+        assertEquals(dataObjsDescs.size(), result.size());
+        assertEquals(2, xmlSignature.getObjectLength());
         assertEquals(xmlSignature.getSignedInfo().getLength(), dataObjsDescs.size());
 
         ObjectContainer obj = xmlSignature.getObjectItem(1);
-        assertEquals(obj.getMimeType(), "text/xml");
+        assertEquals("text/xml", obj.getMimeType());
         assertTrue(StringUtils.isNullOrEmptyString(obj.getEncoding()));
 
+    }
+
+    @Test
+    public void testAddNullReference() throws Exception
+    {
+        System.out.println("addNullReference");
+
+        Document doc = SignatureServicesTestBase.getNewDocument();
+
+        Collection<DataObjectDesc> dataObjsDescs = new ArrayList<DataObjectDesc>(3);
+        dataObjsDescs.add(new AnonymousDataObjectReference("data".getBytes()));
+
+        XMLSignature xmlSignature = new XMLSignature(doc, "", XMLSignature.ALGO_ID_SIGNATURE_RSA_SHA256);
+        xmlSignature.setId("sigId");
+
+        DataObjectDescsProcessor processor = new DataObjectDescsProcessor(new DefaultAlgorithmsProvider());
+        Map<DataObjectDesc, Reference> result = processor.process(dataObjsDescs, xmlSignature);
+
+        assertEquals(1, result.size());
+        assertEquals(0, xmlSignature.getObjectLength());
+        assertEquals(1, xmlSignature.getSignedInfo().getLength());
+
+        Reference r = xmlSignature.getSignedInfo().item(0);
+        assertNull(r.getElement().getAttributeNodeNS(Constants.SignatureSpecNS, "URI"));
+    }
+
+    @Test(expected = IllegalStateException.class)
+    public void testAddMultipleNullReferencesFails() throws Exception
+    {
+        System.out.println("addMultipleNullReferencesFails");
+
+        Document doc = SignatureServicesTestBase.getNewDocument();
+
+        Collection<DataObjectDesc> dataObjsDescs = new ArrayList<DataObjectDesc>(3);
+        dataObjsDescs.add(new AnonymousDataObjectReference("data1".getBytes()));
+        dataObjsDescs.add(new AnonymousDataObjectReference("data2".getBytes()));
+
+        XMLSignature xmlSignature = new XMLSignature(doc, "", XMLSignature.ALGO_ID_SIGNATURE_RSA_SHA256);
+        xmlSignature.setId("sigId");
+
+        DataObjectDescsProcessor processor = new DataObjectDescsProcessor(new DefaultAlgorithmsProvider());
+        Map<DataObjectDesc, Reference> result = processor.process(dataObjsDescs, xmlSignature);
     }
 }

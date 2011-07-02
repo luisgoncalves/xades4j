@@ -28,6 +28,7 @@ import org.apache.xml.security.signature.XMLSignature;
 import org.apache.xml.security.signature.XMLSignatureException;
 import org.apache.xml.security.transforms.TransformationException;
 import org.apache.xml.security.transforms.Transforms;
+import org.apache.xml.security.utils.resolver.implementations.ResolverAnonymous;
 import org.w3c.dom.Element;
 import xades4j.UnsupportedAlgorithmException;
 import xades4j.properties.DataObjectDesc;
@@ -40,6 +41,7 @@ import xades4j.providers.AlgorithmsProvider;
  */
 class DataObjectDescsProcessor
 {
+
     private final AlgorithmsProvider algorithmsProvider;
 
     @Inject
@@ -63,7 +65,8 @@ class DataObjectDescsProcessor
 
         String refUri, refType;
         Transforms transforms;
-        String digestMethodUri =  this.algorithmsProvider.getDigestAlgorithmForDataObjsReferences();
+        String digestMethodUri = this.algorithmsProvider.getDigestAlgorithmForDataObjsReferences();
+        boolean hasNullURIReference = false;
         /**/
         try
         {
@@ -72,19 +75,18 @@ class DataObjectDescsProcessor
                 transforms = processTransforms(dataObjDesc, xmlSignature);
 
                 if (dataObjDesc instanceof DataObjectReference)
-                { 
+                {
                     // If the data object info is a DataObjectReference, the Reference uri
                     // and type are the ones specified on the object.
-                    DataObjectReference dataObjRef = (DataObjectReference)dataObjDesc;
+                    DataObjectReference dataObjRef = (DataObjectReference) dataObjDesc;
                     refUri = dataObjRef.getUri();
                     refType = dataObjRef.getType();
-                } 
-                else if (dataObjDesc instanceof EnvelopedXmlObject)
+                } else if (dataObjDesc instanceof EnvelopedXmlObject)
                 {
                     // If the data object info is a EnvelopedXmlObject we need to create a
                     // XMLObject to embed it. The Reference uri will refer the new
                     // XMLObject's id.
-                    EnvelopedXmlObject envXmlObj = ((EnvelopedXmlObject)dataObjDesc);
+                    EnvelopedXmlObject envXmlObj = (EnvelopedXmlObject) dataObjDesc;
                     refUri = String.format("%s-object%d", xmlSignature.getId(), xmlSignature.getObjectLength());
                     refType = Reference.OBJECT_URI;
 
@@ -96,8 +98,22 @@ class DataObjectDescsProcessor
                     xmlSignature.appendObject(xmlObj);
 
                     refUri = '#' + refUri;
+                } else if (dataObjDesc instanceof AnonymousDataObjectReference)
+                {
+                    if (hasNullURIReference)
+                    {
+                        // This shouldn't happen because SignedDataObjects does the validation.
+                        throw new IllegalStateException("Multiple AnonymousDataObjectReference detected");
+                    }
+                    hasNullURIReference = true;
+
+                    refUri = refType = null;
+                    AnonymousDataObjectReference anonymousRef = (AnonymousDataObjectReference) dataObjDesc;
+                    xmlSignature.addResourceResolver(new ResolverAnonymous(anonymousRef.getDataStream()));
                 } else
+                {
                     throw new ClassCastException("Unsupported SignedDataObjectDesc. Must be either DataObjectReference or EnvelopedXmlObject");
+                }
 
                 // Add the Reference. References need an ID because data object
                 // properties may refer them.
@@ -138,7 +154,9 @@ class DataObjectDescsProcessor
     {
         Collection<DataObjectTransform> dObjTransfs = dataObjDesc.getTransforms();
         if (dObjTransfs.isEmpty())
+        {
             return null;
+        }
 
         Transforms transforms = new Transforms(xmlSignature.getDocument());
 
@@ -148,9 +166,12 @@ class DataObjectDescsProcessor
             {
                 Element transfParams = dObjTransf.getTransformParams();
                 if (null == transfParams)
+                {
                     transforms.addTransform(dObjTransf.getTransformUri());
-                else
+                } else
+                {
                     transforms.addTransform(dObjTransf.getTransformUri(), transfParams);
+                }
             } catch (TransformationException ex)
             {
                 throw new UnsupportedAlgorithmException(

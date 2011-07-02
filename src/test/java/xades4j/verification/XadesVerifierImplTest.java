@@ -77,14 +77,15 @@ public class XadesVerifierImplTest extends VerifierTestBase
 
         Document doc = getDocument("document.signed.bes.extres.xml");
         Element signatureNode = getSigElement(doc);
+        SignatureSpecificVerificationOptions options = new SignatureSpecificVerificationOptions().useBaseUri("http://www.ietf.org/rfc/");
 
         XadesSignatureFormatExtender formExt = new XadesFormatExtenderProfile().getFormatExtender();
         XadesVerificationProfile nistVerP = new XadesVerificationProfile(VerifierTestBase.validationProviderNist);
 
-        XAdESVerificationResult res = nistVerP.newVerifier().verify(signatureNode, null, formExt, XAdESForm.C);
+        XAdESVerificationResult res = nistVerP.newVerifier().verify(signatureNode, options, formExt, XAdESForm.C);
         assertEquals(XAdESForm.BES, res.getSignatureForm());
 
-        res = nistVerP.newVerifier().verify(signatureNode, null);
+        res = nistVerP.newVerifier().verify(signatureNode, options);
         assertEquals(XAdESForm.C, res.getSignatureForm());
 
         outputDocument(doc, "document.verified.bes.extres.c.xml");
@@ -154,25 +155,6 @@ public class XadesVerifierImplTest extends VerifierTestBase
         assertEquals(XAdESForm.C, res.getSignatureForm());
     }
 
-    /*
-    @Test
-    public void testVerifyCEnrichX() throws Exception
-    {
-    System.out.println("verifyCEnrichX");
-
-    Document doc = getDocument("document.signed.c.xml");
-    Element signatureNode = getSigElement(doc);
-
-    XadesSignatureFormatExtender formExt = new XadesFormatExtenderProfile().getFormatExtender();
-    XadesVerificationProfile p = new XadesVerificationProfile(VerifierTestBase.validationProviderNist);
-    XAdESVerificationResult res = p.newVerifier().verify(signatureNode, formExt, XAdESForm.X);
-
-    assertEquals(XAdESForm.C, res.getSignatureForm());
-    assertPropElementPresent(signatureNode, SigAndRefsTimeStampProperty.PROP_NAME);
-
-    outputDocument(doc, "document.verified.c.x.xml");
-    }
-     */
     @Test
     public void testVerifyCEnrichXL() throws Exception
     {

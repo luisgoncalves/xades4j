@@ -42,10 +42,12 @@ import xades4j.utils.PropertiesSet;
  */
 public final class SignedDataObjects
 {
+
     private final Set<DataObjectDesc> dataObjs;
     private final PropertiesSet<SignedDataObjectProperty> signedDataObjsProperties;
     private final PropertiesSet<UnsignedDataObjectProperty> unsignedDataObjsProperties;
     private String baseUriForRelativeReferences;
+    private boolean hasNullURIReference;
 
     /**
      * Creates an empty container.
@@ -56,6 +58,7 @@ public final class SignedDataObjects
         this.signedDataObjsProperties = new PropertiesSet<SignedDataObjectProperty>(0);
         this.unsignedDataObjsProperties = new PropertiesSet<UnsignedDataObjectProperty>(0);
         this.baseUriForRelativeReferences = null;
+        this.hasNullURIReference = false;
     }
 
     /**
@@ -102,7 +105,6 @@ public final class SignedDataObjects
     }
 
     /**************************************************************************/
-
     /**
      * Adds a CommitmentType signed property shared among all data objects. The
      * resulting property in the XAdES signature will contain the {@code AllSignedDataObjects}
@@ -222,19 +224,32 @@ public final class SignedDataObjects
      * Adds a data object to be signed. Each data object description will result
      * in a {@code ds:Reference} element in the final XAdES signature.
      *
-     * @param objInfo the data object
+     * @param object the data object
      * @return the current instance
      *
-     * @throws NullPointerException if {@code objInfo} is {@code null}
+     * @throws NullPointerException if {@code object} is {@code null}
      * @throws IllegalStateException if the data object description is already present
      */
-    public SignedDataObjects withSignedDataObject(DataObjectDesc objInfo)
+    public SignedDataObjects withSignedDataObject(DataObjectDesc object)
     {
-        if (null == objInfo)
+        if (null == object)
+        {
             throw new NullPointerException("Signed object description cannot be null");
+        }
 
-        if (!this.dataObjs.add(objInfo))
+        if (object instanceof AnonymousDataObjectReference)
+        {
+            if (this.hasNullURIReference)
+            {
+                throw new IllegalStateException("An AnonymousDataObjectReference is already present");
+            }
+            this.hasNullURIReference = true;
+        }
+
+        if (!this.dataObjs.add(object))
+        {
             throw new IllegalStateException("Data object description was already added");
+        }
         return this;
     }
 
