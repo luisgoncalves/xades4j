@@ -17,6 +17,7 @@
 package xades4j.verification;
 
 import com.google.inject.Inject;
+import java.io.InputStream;
 import java.security.cert.X509CRL;
 import java.security.cert.X509Certificate;
 import java.util.ArrayList;
@@ -28,6 +29,7 @@ import org.apache.xml.security.signature.Reference;
 import org.apache.xml.security.signature.SignedInfo;
 import org.apache.xml.security.signature.XMLSignature;
 import org.apache.xml.security.signature.XMLSignatureException;
+import org.apache.xml.security.utils.resolver.implementations.ResolverAnonymous;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import xades4j.properties.QualifyingProperty;
@@ -56,6 +58,7 @@ import xades4j.xml.unmarshalling.UnmarshalException;
  */
 class XadesVerifierImpl implements XadesVerifier
 {
+
     static
     {
         org.apache.xml.security.Init.init();
@@ -76,7 +79,9 @@ class XadesVerifierImpl implements XadesVerifier
     {
         if (ObjectUtils.anyNull(
                 certificateValidator, qualifPropsUnmarshaller, customSigVerifiers))
+        {
             throw new NullPointerException("One or more arguments are null");
+        }
 
         this.certificateValidator = certificateValidator;
         this.qualifyingPropertiesVerifier = qualifyingPropertiesVerifier;
@@ -94,10 +99,14 @@ class XadesVerifierImpl implements XadesVerifier
     public XAdESVerificationResult verify(Element signatureElem, SignatureSpecificVerificationOptions verificationOptions) throws XAdES4jException
     {
         if (null == signatureElem)
+        {
             throw new NullPointerException("Signature node not specified");
+        }
 
-        if(null == verificationOptions)
+        if (null == verificationOptions)
+        {
             verificationOptions = new SignatureSpecificVerificationOptions();
+        }
 
         XMLSignature signature;
         try
@@ -113,7 +122,9 @@ class XadesVerifierImpl implements XadesVerifier
 
         String signatureId = signature.getId();
         if (null == signatureId)
+        {
             throw new UnmarshalException("XML signature doesn't have an Id");
+        }
 
         /* References */
 
@@ -131,7 +142,9 @@ class XadesVerifierImpl implements XadesVerifier
         // Check if the parent of the referenced SignedProperties element is the
         // QualifyingProperties element found inside ds:Object.
         if (signedPropsNodeParent != qualifyingPropsElem)
+        {
             throw new QualifyingPropertiesIncorporationException("The referenced SignedProperties are not contained by the proper QualifyingProperties element");
+        }
 
         // Check the QualifyingProperties 'Target' attribute.
         Node targetAttr = qualifyingPropsElem.getAttributeNodeNS(null, QualifyingProperty.TARGET_ATTR);
@@ -139,13 +152,17 @@ class XadesVerifierImpl implements XadesVerifier
         {
             targetAttr = qualifyingPropsElem.getAttributeNodeNS(QualifyingProperty.XADES_XMLNS, QualifyingProperty.TARGET_ATTR);
             if (null == targetAttr)
+            {
                 throw new QualifyingPropertiesIncorporationException("QualifyingProperties Target attribute not present");
+            }
         }
         String targetValue = targetAttr.getNodeValue();
-        if (null == targetValue ||
-                !targetValue.startsWith("#") ||
-                !targetValue.substring(1).equals(signatureId))
+        if (null == targetValue
+                || !targetValue.startsWith("#")
+                || !targetValue.substring(1).equals(signatureId))
+        {
             throw new QualifyingPropertiesIncorporationException("QualifyingProperties target doesn't match the signature's Id");
+        }
 
         /* Umarshal the qualifying properties */
 
@@ -161,12 +178,20 @@ class XadesVerifierImpl implements XadesVerifier
                 keyInfoRes.certSelector,
                 validationDate,
                 keyInfoRes.keyInfoCerts);
-        if (null == certValidationRes)
-            throw new NullPointerException("Certificate validator returned null data");
+        if (null == certValidationRes || certValidationRes.getCerts().isEmpty())
+        {
+            throw new NullPointerException("Certificate validator returned null or empty data");
+        }
         X509Certificate validationCert = certValidationRes.getCerts().get(0);
 
         /* Core signature verification */
 
+        InputStream nullURIReferenceData = verificationOptions.getDataForAnonymousReference();
+        if (nullURIReferenceData != null)
+        {
+            signature.addResourceResolver(new ResolverAnonymous(nullURIReferenceData));
+        }
+        
         doCoreVerification(signature, validationCert);
 
         /* Qualifying properties verification */
@@ -210,19 +235,26 @@ class XadesVerifierImpl implements XadesVerifier
         // XML-DSIG 4.3.3.2: "a same-document reference is defined as a URI-Reference
         // that consists of a hash sign ('#') followed by a fragment"
         if (!signedPropsRef.getURI().startsWith("#"))
+        {
             throw new QualifyingPropertiesIncorporationException("Only QualifyingProperties in the signature's document are supported");
+        }
 
         String msg = "Cannot get the SignedProperties element";
         try
         {
             Node sPropsNode = signedPropsRef.getNodesetBeforeFirstCanonicalization().getSubNode();
             if (sPropsNode != null)
-                if (sPropsNode.getNodeType() != Node.ELEMENT_NODE ||
-                        !sPropsNode.getLocalName().equals(QualifyingProperty.SIGNED_PROPS_TAG) ||
-                        !sPropsNode.getNamespaceURI().equals(QualifyingProperty.XADES_XMLNS))
+            {
+                if (sPropsNode.getNodeType() != Node.ELEMENT_NODE
+                        || !sPropsNode.getLocalName().equals(QualifyingProperty.SIGNED_PROPS_TAG)
+                        || !sPropsNode.getNamespaceURI().equals(QualifyingProperty.XADES_XMLNS))
+                {
                     throw new QualifyingPropertiesIncorporationException("The supposed reference over signed properties doesn't cover a XAdES SignedProperties element.");
-                else
+                } else
+                {
                     return sPropsNode;
+                }
+            }
         } catch (XMLSignatureException ex)
         {
             msg = msg + ": " + ex.getMessage();
@@ -236,6 +268,7 @@ class XadesVerifierImpl implements XadesVerifier
     {
         List<PropertyDataObject> sigTsData = CollectionUtils.filter(qualifPropsData, new Predicate<PropertyDataObject>()
         {
+
             @Override
             public boolean verifiedBy(PropertyDataObject elem)
             {
@@ -245,7 +278,9 @@ class XadesVerifierImpl implements XadesVerifier
 
         // If no signature time-stamp is present, use the current date.
         if (sigTsData.isEmpty())
+        {
             return new Date();
+        }
 
         // !!!
         // This is a temporary solution.
@@ -263,7 +298,7 @@ class XadesVerifierImpl implements XadesVerifier
                 signature));
         QualifyingProperty sigTs = this.qualifyingPropertiesVerifier.verifyProperties(sigTsData, ctx).iterator().next().getProperty();
 
-        return ((SignatureTimeStampProperty)sigTs).getTime();
+        return ((SignatureTimeStampProperty) sigTs).getTime();
     }
 
     private static void doCoreVerification(
@@ -273,7 +308,9 @@ class XadesVerifierImpl implements XadesVerifier
         try
         {
             if (signature.checkSignatureValue(validationCert))
+            {
                 return;
+            }
         } catch (XMLSignatureException ex)
         {
             throw new XAdES4jXMLSigException("Cannot verify the signature: " + ex.getMessage(), ex);
@@ -284,10 +321,11 @@ class XadesVerifierImpl implements XadesVerifier
             /* Failure due to the signature value or references validation? */
 
             if (signature.getSignedInfo().verifyReferences())
-                // References are OK; this is a problem on the signature value
-                // itself.
+            // References are OK; this is a problem on the signature value
+            // itself.
+            {
                 throw new SignatureValueException(signature);
-            else
+            } else
             {
                 // References are NOT OK; get the first invalid Reference.
                 SignedInfo si = signature.getSignedInfo();
@@ -295,7 +333,9 @@ class XadesVerifierImpl implements XadesVerifier
                 {
                     Reference r = si.item(i);
                     if (!r.verify())
+                    {
                         throw new ReferenceValueException(signature, r);
+                    }
                 }
             }
         } catch (XMLSecurityException ex)
@@ -307,6 +347,7 @@ class XadesVerifierImpl implements XadesVerifier
     /*************************************************************************************/
     private static interface FormExtensionPropsCollector
     {
+
         void addProps(Collection<UnsignedSignatureProperty> usp,
                 XAdESVerificationResult res);
     }
@@ -320,6 +361,7 @@ class XadesVerifierImpl implements XadesVerifier
         // BES/EPES -> T
         FormExtensionPropsCollector tPropsCol = new FormExtensionPropsCollector()
         {
+
             @Override
             public void addProps(
                     Collection<UnsignedSignatureProperty> usp,
@@ -334,6 +376,7 @@ class XadesVerifierImpl implements XadesVerifier
         // BES/EPES -> C
         FormExtensionPropsCollector cAndTPropsCol = new FormExtensionPropsCollector()
         {
+
             @Override
             public void addProps(
                     Collection<UnsignedSignatureProperty> usp,
@@ -349,6 +392,7 @@ class XadesVerifierImpl implements XadesVerifier
         // T -> C
         FormExtensionPropsCollector cPropsCol = new FormExtensionPropsCollector()
         {
+
             @Override
             public void addProps(
                     Collection<UnsignedSignatureProperty> usp,
@@ -362,6 +406,7 @@ class XadesVerifierImpl implements XadesVerifier
         // C -> X
         FormExtensionPropsCollector xPropsCol = new FormExtensionPropsCollector()
         {
+
             @Override
             public void addProps(
                     Collection<UnsignedSignatureProperty> usp,
@@ -375,6 +420,7 @@ class XadesVerifierImpl implements XadesVerifier
         // C -> X-L
         FormExtensionPropsCollector xlAndXPropsCol = new FormExtensionPropsCollector()
         {
+
             @Override
             public void addProps(
                     Collection<UnsignedSignatureProperty> usp,
@@ -395,12 +441,16 @@ class XadesVerifierImpl implements XadesVerifier
             XAdESForm finalForm) throws XAdES4jException
     {
         if (null == finalForm || null == formatExtender)
+        {
             throw new NullPointerException("'finalForm' and 'formatExtender' cannot be null");
+        }
 
         // The transitions matrix won't allow this, but this way I avoid the
         // unnecessary processing.
         if (finalForm.before(XAdESForm.T) || finalForm.after(XAdESForm.X_L))
+        {
             throw new IllegalArgumentException("Signature format can only be extended to XAdES-T, C, X or X-L");
+        }
 
         XAdESVerificationResult res = this.verify(signatureElem, verificationOptions);
         XAdESForm actualForm = res.getSignatureForm();
@@ -419,7 +469,9 @@ class XadesVerifierImpl implements XadesVerifier
             FormExtensionPropsCollector finalFormPropsColector = formsExtensionTransitions[actualForm.ordinal()][finalForm.ordinal()];
 
             if (null == finalFormPropsColector)
+            {
                 throw new InvalidFormExtensionException(actualForm, finalForm);
+            }
 
             Collection<UnsignedSignatureProperty> usp = new ArrayList<UnsignedSignatureProperty>(3);
             finalFormPropsColector.addProps(usp, res);

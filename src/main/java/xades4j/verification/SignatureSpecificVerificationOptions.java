@@ -16,6 +16,9 @@
  */
 package xades4j.verification;
 
+import java.io.ByteArrayInputStream;
+import java.io.InputStream;
+
 /**
  * Represents verification options that are specific to a signature, i.e., options
  * that are not profile-wide.
@@ -30,7 +33,9 @@ package xades4j.verification;
  */
 public class SignatureSpecificVerificationOptions
 {
+
     private String baseUriForRelativeReferences;
+    private InputStream dataForAnonymousReference;
 
     /**
      * Sets the base URI to be used when resolving <b>all/b> the relative references.
@@ -47,5 +52,33 @@ public class SignatureSpecificVerificationOptions
     String getBaseUri()
     {
         return this.baseUriForRelativeReferences;
+    }
+
+    /**
+     * Sets the input stream to be used to resolve and verify a {@code null} URI
+     * {@code ds:Reference}, if present. The stream is not closed.
+     * @param data the input stream
+     * @return the current instance
+     */
+    public SignatureSpecificVerificationOptions useDataForAnonymousReference(InputStream data)
+    {
+        this.dataForAnonymousReference = data;
+        return this;
+    }
+
+    /**
+     * Sets the data to be used to resolve and verify a {@code null} URI
+     * {@code ds:Reference}, if present.
+     * @param data the data
+     * @return the current instance
+     */
+    public SignatureSpecificVerificationOptions useDataForAnonymousReference(byte[] data)
+    {
+        return this.useDataForAnonymousReference(new ByteArrayInputStream(data));
+    }
+
+    InputStream getDataForAnonymousReference()
+    {
+        return this.dataForAnonymousReference;
     }
 }
