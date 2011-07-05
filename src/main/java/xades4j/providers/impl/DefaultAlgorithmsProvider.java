@@ -32,8 +32,6 @@ import xades4j.UnsupportedAlgorithmException;
  *  <li>Canonicalization: Canonical XML 1.0 withouth comments</li>
  *  <li>Digest: SHA256 (data objs and refs properties); SHA1 (time-stamps)</li>
  * </ul>
- * Canonicalization and digest algorithms are the same for signature/references
- * and time-stamp properties.
  * @author Luís
  */
 public class DefaultAlgorithmsProvider implements AlgorithmsProvider

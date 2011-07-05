@@ -24,6 +24,7 @@ import xades4j.properties.SignedSignatureProperty;
 import xades4j.properties.UnsignedSignatureProperty;
 import xades4j.XAdES4jException;
 import xades4j.providers.AlgorithmsProvider;
+import xades4j.providers.BasicSignatureOptionsProvider;
 import xades4j.providers.DataObjectPropertiesProvider;
 import xades4j.providers.KeyingDataProvider;
 import xades4j.providers.SignaturePolicyInfoProvider;
@@ -46,14 +47,14 @@ class SignerT extends SignerBES
     protected SignerT(
             KeyingDataProvider keyingProvider,
             AlgorithmsProvider algorithmsProvider,
-            DataObjectDescsProcessor dataObjectDescsProcessor,
+            BasicSignatureOptionsProvider basicSignatureOptionsProvider,
             SignaturePropertiesProvider signaturePropsProvider,
             DataObjectPropertiesProvider dataObjPropsProvider,
             PropertiesDataObjectsGenerator propsDataObjectsGenerator,
             SignedPropertiesMarshaller signedPropsMarshaller,
             UnsignedPropertiesMarshaller unsignedPropsMarshaller)
     {
-        super(keyingProvider, algorithmsProvider, dataObjectDescsProcessor, signaturePropsProvider, dataObjPropsProvider, propsDataObjectsGenerator, signedPropsMarshaller, unsignedPropsMarshaller);
+        super(keyingProvider, algorithmsProvider, basicSignatureOptionsProvider, signaturePropsProvider, dataObjPropsProvider, propsDataObjectsGenerator, signedPropsMarshaller, unsignedPropsMarshaller);
     }
 
     @Inject(optional = true)

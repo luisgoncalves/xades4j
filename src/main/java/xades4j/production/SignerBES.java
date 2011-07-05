@@ -20,7 +20,6 @@ import xades4j.properties.QualifyingProperties;
 import xades4j.properties.DataObjectDesc;
 import com.google.inject.Inject;
 import java.security.PrivateKey;
-import java.security.cert.CertificateException;
 import java.security.cert.X509Certificate;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -28,7 +27,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 import org.apache.xml.security.exceptions.XMLSecurityException;
-import org.apache.xml.security.keys.content.X509Data;
 import org.apache.xml.security.signature.ObjectContainer;
 import org.apache.xml.security.signature.Reference;
 import org.apache.xml.security.signature.XMLSignature;
@@ -46,6 +44,7 @@ import xades4j.XAdES4jException;
 import xades4j.XAdES4jXMLSigException;
 import xades4j.properties.data.SigAndDataObjsPropertiesData;
 import xades4j.providers.AlgorithmsProvider;
+import xades4j.providers.BasicSignatureOptionsProvider;
 import xades4j.providers.DataObjectPropertiesProvider;
 import xades4j.providers.KeyingDataProvider;
 import xades4j.providers.SignaturePropertiesProvider;
@@ -68,18 +67,20 @@ class SignerBES implements XadesSigner
     /**/
     private final KeyingDataProvider keyingProvider;
     private final AlgorithmsProvider algorithmsProvider;
-    private final DataObjectDescsProcessor dataObjectDescsProcessor;
     private final PropertiesDataObjectsGenerator propsDataObjectsGenerator;
     private final SignedPropertiesMarshaller signedPropsMarshaller;
     private final UnsignedPropertiesMarshaller unsignedPropsMarshaller;
     /**/
+    private final DataObjectDescsProcessor dataObjectDescsProcessor;
+    private final KeyInfoBuilder keyInfoBuilder;
     private final QualifyingPropertiesProcessor qualifPropsProcessor;
+    
 
     @Inject
     protected SignerBES(
             KeyingDataProvider keyingProvider,
             AlgorithmsProvider algorithmsProvider,
-            DataObjectDescsProcessor dataObjectDescsProcessor,
+            BasicSignatureOptionsProvider basicSignatureOptionsProvider,
             SignaturePropertiesProvider signaturePropsProvider,
             DataObjectPropertiesProvider dataObjPropsProvider,
             PropertiesDataObjectsGenerator propsDataObjectsGenerator,
@@ -87,19 +88,19 @@ class SignerBES implements XadesSigner
             UnsignedPropertiesMarshaller unsignedPropsMarshaller)
     {
         if (ObjectUtils.anyNull(
-                keyingProvider, algorithmsProvider, dataObjectDescsProcessor,
+                keyingProvider, algorithmsProvider,
                 signaturePropsProvider, dataObjPropsProvider, propsDataObjectsGenerator,
                 signedPropsMarshaller, unsignedPropsMarshaller))
             throw new NullPointerException("One or more arguments are null");
 
         this.keyingProvider = keyingProvider;
         this.algorithmsProvider = algorithmsProvider;
-        this.dataObjectDescsProcessor = dataObjectDescsProcessor;
-
         this.propsDataObjectsGenerator = propsDataObjectsGenerator;
         this.signedPropsMarshaller = signedPropsMarshaller;
         this.unsignedPropsMarshaller = unsignedPropsMarshaller;
 
+        this.dataObjectDescsProcessor = new DataObjectDescsProcessor(algorithmsProvider);
+        this.keyInfoBuilder = new KeyInfoBuilder(basicSignatureOptionsProvider);
         this.qualifPropsProcessor = new QualifyingPropertiesProcessor(signaturePropsProvider, dataObjPropsProvider);
     }
 
@@ -225,7 +226,7 @@ class SignerBES implements XadesSigner
                 qualifyingPropsElem);
 
         /* ds:KeyInfo */
-        buildKeyInfo(signingCertificate, signature);
+        this.keyInfoBuilder.buildKeyInfo(signingCertificate, signature);
 
         /* Apply the signature */
         PrivateKey signingKey = keyingProvider.getSigningKey(signingCertificate);
@@ -268,43 +269,6 @@ class SignerBES implements XadesSigner
         }
 
         return new XadesSignatureResult(signature, qualifProps);
-    }
-
-    private static void buildKeyInfo(
-            X509Certificate signingCertificate,
-            XMLSignature xmlSig) throws KeyingDataException
-    {
-        // Check key usage. KeyUsage[0] = digitalSignature; KeyUsage[1] = nonRepudiation.
-        boolean[] keyUsage = signingCertificate.getKeyUsage();
-        if (keyUsage != null && !keyUsage[0] && !keyUsage[1])
-            throw new SigningCertKeyUsageException(signingCertificate);
-
-        try
-        {
-            // Check certifcate validity period.
-            signingCertificate.checkValidity();
-        } catch (CertificateException ce)
-        {
-            // CertificateExpiredException or CertificateNotYetValidException
-            throw new SigningCertValidityException(signingCertificate);
-        }
-
-        X509Data x509Data = new X509Data(xmlSig.getDocument());
-        x509Data.addSubjectName(signingCertificate.getSubjectX500Principal().getName());
-        x509Data.addIssuerSerial(
-                signingCertificate.getIssuerX500Principal().getName(),
-                signingCertificate.getSerialNumber());
-        try
-        {
-            x509Data.addCertificate(signingCertificate);
-
-        } catch (XMLSecurityException ex)
-        {
-            throw new KeyingDataException(ex.getMessage(), ex);
-        }
-
-        xmlSig.getKeyInfo().add(x509Data);
-        xmlSig.addKeyInfo(signingCertificate.getPublicKey());
     }
 
     /**

@@ -39,14 +39,16 @@ import xades4j.properties.SignerRoleProperty;
 import xades4j.properties.SigningCertificateProperty;
 import xades4j.properties.SigningTimeProperty;
 import xades4j.providers.AlgorithmsProvider;
+import xades4j.providers.BasicSignatureOptionsProvider;
 import xades4j.providers.DataObjectPropertiesProvider;
+import xades4j.providers.MessageDigestEngineProvider;
+import xades4j.providers.SignaturePropertiesProvider;
+import xades4j.providers.TimeStampTokenProvider;
 import xades4j.providers.impl.DefaultAlgorithmsProvider;
 import xades4j.providers.impl.DefaultMessageDigestProvider;
 import xades4j.providers.impl.DefaultSignaturePropertiesProvider;
 import xades4j.providers.impl.DefaultTimeStampTokenProvider;
-import xades4j.providers.MessageDigestEngineProvider;
-import xades4j.providers.SignaturePropertiesProvider;
-import xades4j.providers.TimeStampTokenProvider;
+import xades4j.providers.impl.DefaultBasicSignatureOptionsProvider;
 import xades4j.xml.marshalling.DefaultSignedPropertiesMarshaller;
 import xades4j.xml.marshalling.DefaultUnsignedPropertiesMarshaller;
 import xades4j.xml.marshalling.SignedPropertiesMarshaller;
@@ -74,6 +76,7 @@ class DefaultProductionBindingsModule extends AbstractModule
             }
         });
         bind(AlgorithmsProvider.class).to(DefaultAlgorithmsProvider.class);
+        bind(BasicSignatureOptionsProvider.class).to(DefaultBasicSignatureOptionsProvider.class);
         bind(MessageDigestEngineProvider.class).to(DefaultMessageDigestProvider.class);
         bind(TimeStampTokenProvider.class).to(DefaultTimeStampTokenProvider.class);
         bind(SignedPropertiesMarshaller.class).to(DefaultSignedPropertiesMarshaller.class);

@@ -16,7 +16,6 @@
  */
 package xades4j.production;
 
-import com.google.inject.Inject;
 import xades4j.properties.DataObjectTransform;
 import java.util.Collection;
 import java.util.Collections;
@@ -35,16 +34,14 @@ import xades4j.properties.DataObjectDesc;
 import xades4j.providers.AlgorithmsProvider;
 
 /**
- * Helper class that processes a ser of data object descriptions.
+ * Helper class that processes a set of data object descriptions.
  * 
  * @author Luís
  */
 class DataObjectDescsProcessor
 {
-
     private final AlgorithmsProvider algorithmsProvider;
 
-    @Inject
     DataObjectDescsProcessor(AlgorithmsProvider algorithmsProvider)
     {
         this.algorithmsProvider = algorithmsProvider;

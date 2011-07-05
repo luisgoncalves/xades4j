@@ -20,6 +20,7 @@ import xades4j.properties.QualifyingProperty;
 import xades4j.utils.XadesProfileCore;
 import xades4j.utils.XadesProfileResolutionException;
 import xades4j.providers.AlgorithmsProvider;
+import xades4j.providers.BasicSignatureOptionsProvider;
 import xades4j.providers.DataObjectPropertiesProvider;
 import xades4j.providers.KeyingDataProvider;
 import xades4j.providers.MessageDigestEngineProvider;
@@ -155,6 +156,18 @@ public abstract class XadesSigningProfile
             Class<? extends MessageDigestEngineProvider> digestProviderClass)
     {
         return withBinding(MessageDigestEngineProvider.class, digestProviderClass);
+    }
+
+        public XadesSigningProfile withBasicSignatureOptionsProvider(
+            BasicSignatureOptionsProvider optionsProvider)
+    {
+        return withBinding(BasicSignatureOptionsProvider.class, optionsProvider);
+    }
+
+    public XadesSigningProfile withBasicSignatureOptionsProvider(
+            Class<? extends BasicSignatureOptionsProvider> optionsProvider)
+    {
+        return withBinding(BasicSignatureOptionsProvider.class, optionsProvider);
     }
 
     public XadesSigningProfile withSignaturePropertiesProvider(
