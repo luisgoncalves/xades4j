@@ -24,6 +24,7 @@ import xades4j.providers.BasicSignatureOptionsProvider;
  * <ul>
  *  <li>includeSigningCertificate: true</li>
  *  <li>includePublicKey: false</li>
+ *  <li>signSigningCertificate: false</li>
  * </ul>
  * @author Luís
  */
@@ -37,6 +38,12 @@ public class DefaultBasicSignatureOptionsProvider implements BasicSignatureOptio
 
     @Override
     public boolean includePublicKey()
+    {
+        return false;
+    }
+
+    @Override
+    public boolean signSigningCertificate()
     {
         return false;
     }

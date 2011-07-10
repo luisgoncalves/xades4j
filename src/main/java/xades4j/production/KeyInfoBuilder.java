@@ -20,6 +20,9 @@ import java.security.cert.CertificateException;
 import java.security.cert.X509Certificate;
 import org.apache.xml.security.exceptions.XMLSecurityException;
 import org.apache.xml.security.signature.XMLSignature;
+import org.apache.xml.security.signature.XMLSignatureException;
+import xades4j.UnsupportedAlgorithmException;
+import xades4j.providers.AlgorithmsProvider;
 import xades4j.providers.BasicSignatureOptionsProvider;
 
 /**
@@ -31,15 +34,19 @@ class KeyInfoBuilder
 {
 
     private final BasicSignatureOptionsProvider basicSignatureOptionsProvider;
+    private final AlgorithmsProvider algorithmsProvider;
 
-    KeyInfoBuilder(BasicSignatureOptionsProvider basicSignatureOptionsProvider)
+    KeyInfoBuilder(
+            BasicSignatureOptionsProvider basicSignatureOptionsProvider,
+            AlgorithmsProvider algorithmsProvider)
     {
         this.basicSignatureOptionsProvider = basicSignatureOptionsProvider;
+        this.algorithmsProvider = algorithmsProvider;
     }
 
     void buildKeyInfo(
             X509Certificate signingCertificate,
-            XMLSignature xmlSig) throws KeyingDataException
+            XMLSignature xmlSig) throws KeyingDataException, UnsupportedAlgorithmException
     {
         // Check key usage.
         // - KeyUsage[0] = digitalSignature
@@ -64,6 +71,21 @@ class KeyInfoBuilder
             try
             {
                 xmlSig.addKeyInfo(signingCertificate);
+
+                if (this.basicSignatureOptionsProvider.signSigningCertificate())
+                {
+                    String keyInfoId = xmlSig.getId() + "-keyinfo";
+                    xmlSig.getKeyInfo().setId(keyInfoId);
+                    xmlSig.addDocument(
+                            '#' + keyInfoId,
+                            null,
+                            this.algorithmsProvider.getDigestAlgorithmForDataObjsReferences());
+                }
+            } catch (XMLSignatureException ex)
+            {
+                throw new UnsupportedAlgorithmException(
+                        "Digest algorithm not supported in the XML Signature provider: " + ex.getMessage(),
+                        this.algorithmsProvider.getDigestAlgorithmForDataObjsReferences());
             } catch (XMLSecurityException ex)
             {
                 throw new KeyingDataException(ex.getMessage(), ex);

@@ -40,4 +40,12 @@ public interface BasicSignatureOptionsProvider
      * @return {@code true} if the public key should be included; false otherwise
      */
     boolean includePublicKey();
+
+    /**
+     * Indicates whether the signature should cover the {@code ds:X509Certificate}
+     * element containing the signing certificate. This is only considered if
+     * {@link #includeSigningCertificate()} returns {@code true}.
+     * @return {@code true} if the certificate should be signed; false otherwise
+     */
+    boolean signSigningCertificate();
 }

@@ -100,7 +100,7 @@ class SignerBES implements XadesSigner
         this.unsignedPropsMarshaller = unsignedPropsMarshaller;
 
         this.dataObjectDescsProcessor = new DataObjectDescsProcessor(algorithmsProvider);
-        this.keyInfoBuilder = new KeyInfoBuilder(basicSignatureOptionsProvider);
+        this.keyInfoBuilder = new KeyInfoBuilder(basicSignatureOptionsProvider, algorithmsProvider);
         this.qualifPropsProcessor = new QualifyingPropertiesProcessor(signaturePropsProvider, dataObjPropsProvider);
     }
 
