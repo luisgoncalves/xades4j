@@ -25,7 +25,7 @@ import xades4j.XAdES4jException;
  * depend on the profile configuration.
  * <p>
  * The main purpose of {@code XadesSignatureFormatExtender} is to be used in the
- * {@link xades4j.verification.XadesVerifier#verify(org.w3c.dom.Element, xades4j.production.XadesSignatureFormatExtender, xades4j.verification.XAdESForm)  verification process}.
+ * {@link xades4j.verification.XadesVerifier#verify(org.w3c.dom.Element, xades4j.verification.SignatureSpecificVerificationOptions, xades4j.production.XadesSignatureFormatExtender, xades4j.verification.XAdESForm) verification process}.
  * However, it can also be used separately, but no checks are made on the correctness
  * of the signature. It is user's responsability to ensure that the signature has
  * the appropriate properties (form) to be extended with other properties.

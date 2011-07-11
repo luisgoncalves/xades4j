@@ -27,7 +27,7 @@ import xades4j.xml.marshalling.UnsignedPropertiesMarshaller;
 /**
  * A profile for signature format enrichment, after verification. A format extender
  * is used to add unsigned signature properties to an existing signature in order
- * augment its format. This can be done as part of the {@link xades4j.verification.XadesVerifier#verify(org.w3c.dom.Element, xades4j.production.XadesSignatureFormatExtender, xades4j.verification.XAdESForm)  verification process}.
+ * augment its format. This can be done as part of the {@link xades4j.verification.XadesVerifier#verify(org.w3c.dom.Element, xades4j.verification.SignatureSpecificVerificationOptions, xades4j.production.XadesSignatureFormatExtender, xades4j.verification.XAdESForm) verification process}.
  * The {@code XadesSignatureFormatExtender} can also be used separately, but no
  * checks are made on the correctness of the signature.
  * <p>

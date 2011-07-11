@@ -39,7 +39,7 @@ import xades4j.production.XadesSignatureFormatExtender;
  * handling by catching exceptions in the different branches/depths of the tree.
  * <p>
  * With its default configuration the library supports verification of signatures
- * up to XAdES-C. The format can be extended after verification through the {@link #verify(org.w3c.dom.Element, xades4j.production.XadesSignatureFormatExtender, xades4j.verification.XAdESForm) verify}
+ * up to XAdES-C. The format can be extended after verification through the {@link #verify(org.w3c.dom.Element, xades4j.verification.SignatureSpecificVerificationOptions, xades4j.production.XadesSignatureFormatExtender, xades4j.verification.XAdESForm)  verify}
  * method, even though extended formats cannot be validated afterwards.
  * @see XadesVerificationProfile
  * @author Luís
