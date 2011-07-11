@@ -23,9 +23,6 @@ import java.util.Map;
 import org.apache.xml.security.signature.ObjectContainer;
 import org.apache.xml.security.signature.Reference;
 import org.apache.xml.security.signature.XMLSignature;
-import org.junit.After;
-import org.junit.AfterClass;
-import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import org.w3c.dom.Document;
@@ -39,7 +36,7 @@ import static org.junit.Assert.*;
  *
  * @author Luís
  */
-public class DataObjectDescsProcessorTest
+public class DataObjectDescsProcessorTest extends SignatureServicesTestBase
 {
 
     public DataObjectDescsProcessorTest()
@@ -57,7 +54,7 @@ public class DataObjectDescsProcessorTest
     {
         System.out.println("process");
 
-        Document doc = SignatureServicesTestBase.getNewDocument();
+        Document doc = getNewDocument();
 
         Collection<DataObjectDesc> dataObjsDescs = new ArrayList<DataObjectDesc>(3);
         dataObjsDescs.add(new DataObjectReference("uri"));
