@@ -45,8 +45,9 @@ import javax.security.auth.callback.UnsupportedCallbackException;
  */
 public class PKCS11KeyStoreKeyingDataProvider extends KeyStoreKeyingDataProvider
 {
+
     /**
-     *
+     * The provider name is used has a key to search for installed providers.
      * @param nativeLibraryPath the path for the native library of the specific PKCS#11 provider
      * @param providerName this string is concatenated with the prefix SunPKCS11- to produce this provider instance's name
      * @param certificateSelector the selector of signing certificate
@@ -65,21 +66,23 @@ public class PKCS11KeyStoreKeyingDataProvider extends KeyStoreKeyingDataProvider
     {
         super(new KeyStoreBuilderCreator()
         {
+
             @Override
             public Builder getBuilder(ProtectionParameter loadProtection)
             {
-                StringBuilder config = new StringBuilder("name = ").append(providerName);
-                config.append(System.getProperty("line.separator"));
-                config.append("library = ").append(nativeLibraryPath);
-                ByteArrayInputStream configStream = new ByteArrayInputStream(config.toString().getBytes());
+                Provider p = Security.getProvider("SunPKCS11-" + providerName);
+                if (null == p)
+                {
+                    StringBuilder config = new StringBuilder("name = ").append(providerName);
+                    config.append(System.getProperty("line.separator"));
+                    config.append("library = ").append(nativeLibraryPath);
+                    ByteArrayInputStream configStream = new ByteArrayInputStream(config.toString().getBytes());
 
-                Provider p = new sun.security.pkcs11.SunPKCS11(configStream);
-                Security.addProvider(p);
+                    p = new sun.security.pkcs11.SunPKCS11(configStream);
+                    Security.addProvider(p);
+                }
 
-                return KeyStore.Builder.newInstance(
-                        "PKCS11",
-                        p,
-                        loadProtection);
+                return KeyStore.Builder.newInstance("PKCS11", p, loadProtection);
             }
         }, certificateSelector, keyStorePasswordProvider, entryPasswordProvider, returnFullChain);
     }
@@ -107,14 +110,17 @@ public class PKCS11KeyStoreKeyingDataProvider extends KeyStoreKeyingDataProvider
             final KeyEntryPasswordProvider entryPasswordProvider)
     {
         if (null == entryPasswordProvider)
+        {
             return null;
+        }
 
         return new KeyStore.CallbackHandlerProtection(new CallbackHandler()
         {
+
             @Override
             public void handle(Callback[] callbacks) throws IOException, UnsupportedCallbackException
             {
-                PasswordCallback c = (PasswordCallback)callbacks[0];
+                PasswordCallback c = (PasswordCallback) callbacks[0];
                 c.setPassword(entryPasswordProvider.getPassword(entryAlias, entryCert));
             }
         });

@@ -46,7 +46,7 @@ public class SignerTestBase extends SignatureServicesTestBase
         }
     }
 
-    static Document getTestDocument() throws Exception
+    public static Document getTestDocument() throws Exception
     {
         return getDocument("document.xml");
     }

@@ -18,17 +18,14 @@ package xades4j.production;
 
 import com.google.inject.Inject;
 import java.security.ProviderException;
-import org.apache.xml.security.signature.XMLSignature;
 import org.junit.Test;
 import static org.junit.Assert.*;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
-import xades4j.UnsupportedAlgorithmException;
 import xades4j.properties.SignaturePolicyBase;
 import xades4j.properties.SignaturePolicyImpliedProperty;
 import xades4j.providers.MessageDigestEngineProvider;
 import xades4j.providers.SignaturePolicyInfoProvider;
-import xades4j.providers.impl.DefaultAlgorithmsProvider;
 import xades4j.providers.impl.DefaultTimeStampTokenProvider;
 import xades4j.providers.impl.FirstCertificateSelector;
 import xades4j.providers.impl.PKCS11KeyStoreKeyingDataProvider;
@@ -39,7 +36,7 @@ import xades4j.providers.impl.PKCS11KeyStoreKeyingDataProvider;
  */
 public class SignerTTest extends SignerTestBase
 {
-    static class TestTimeStampTokenProvider extends DefaultTimeStampTokenProvider
+    public static class TestTimeStampTokenProvider extends DefaultTimeStampTokenProvider
     {
         @Inject
         public TestTimeStampTokenProvider(
@@ -52,16 +49,6 @@ public class SignerTTest extends SignerTestBase
         protected String getTSAUrl()
         {
             return "http://tsa.starfieldtech.com/";
-        }
-    }
-
-    static class PtCcAlgorithmsProvider extends DefaultAlgorithmsProvider
-    {
-        @Override
-        public String getSignatureAlgorithm(String keyAlgorithmName) throws UnsupportedAlgorithmException
-        {
-            // The test card didn't support RSA_SHA_256.
-            return XMLSignature.ALGO_ID_SIGNATURE_RSA_SHA1;
         }
     }
 
