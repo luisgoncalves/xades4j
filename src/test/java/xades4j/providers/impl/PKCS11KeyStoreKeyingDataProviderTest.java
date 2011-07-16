@@ -39,12 +39,13 @@ import static org.junit.Assert.*;
  */
 public class PKCS11KeyStoreKeyingDataProviderTest extends SignerTestBase
 {
-
     private static final int N_RETRIES = 3;
 
     @Test
     public void testCertAndKeyMatch() throws Exception
     {
+        System.out.println("certAndKeyMatch");
+
         if (!onWindowsPlatform())
         {
             fail("Test written for the Windows platform");
@@ -53,13 +54,11 @@ public class PKCS11KeyStoreKeyingDataProviderTest extends SignerTestBase
         try
         {
             KeyingDataProvider ptccKeyingDataProv = new PKCS11KeyStoreKeyingDataProvider(
-                    "C:\\Windows\\System32\\pteidpkcs11.dll", "PT_CC",
-                    new FirstCertificateSelector(), null, null, false);
+                    "C:\\Windows\\System32\\pteidpkcs11.dll", "PT_CC", new FirstCertificateSelector());
             doTestWithJCA(ptccKeyingDataProv);
 
             ptccKeyingDataProv = new PKCS11KeyStoreKeyingDataProvider(
-                    "C:\\Windows\\System32\\pteidpkcs11.dll", "PT_CC",
-                    new FirstCertificateSelector(), null, null, false);
+                    "C:\\Windows\\System32\\pteidpkcs11.dll", "PT_CC", new FirstCertificateSelector());
             doTestWithXades4j(ptccKeyingDataProv);
         } catch (ProviderException ex)
         {

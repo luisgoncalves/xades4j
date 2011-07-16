@@ -29,6 +29,7 @@ import javax.security.auth.callback.Callback;
 import javax.security.auth.callback.CallbackHandler;
 import javax.security.auth.callback.PasswordCallback;
 import javax.security.auth.callback.UnsupportedCallbackException;
+import sun.security.pkcs11.SunPKCS11;
 
 /**
  * A specification of {@code KeyStoreKeyingDataProvider} for PKCS#11 keystores.
@@ -45,9 +46,10 @@ import javax.security.auth.callback.UnsupportedCallbackException;
  */
 public class PKCS11KeyStoreKeyingDataProvider extends KeyStoreKeyingDataProvider
 {
-
     /**
-     * The provider name is used has a key to search for installed providers.
+     * The provider name is used has a key to search for installed providers. If a
+     * provider exists with the same name, it will be used even if it relies on a
+     * different native library.
      * @param nativeLibraryPath the path for the native library of the specific PKCS#11 provider
      * @param providerName this string is concatenated with the prefix SunPKCS11- to produce this provider instance's name
      * @param certificateSelector the selector of signing certificate
@@ -70,7 +72,7 @@ public class PKCS11KeyStoreKeyingDataProvider extends KeyStoreKeyingDataProvider
             @Override
             public Builder getBuilder(ProtectionParameter loadProtection)
             {
-                Provider p = Security.getProvider("SunPKCS11-" + providerName);
+                Provider p = (SunPKCS11) Security.getProvider("SunPKCS11-" + providerName);
                 if (null == p)
                 {
                     StringBuilder config = new StringBuilder("name = ").append(providerName);
@@ -78,7 +80,7 @@ public class PKCS11KeyStoreKeyingDataProvider extends KeyStoreKeyingDataProvider
                     config.append("library = ").append(nativeLibraryPath);
                     ByteArrayInputStream configStream = new ByteArrayInputStream(config.toString().getBytes());
 
-                    p = new sun.security.pkcs11.SunPKCS11(configStream);
+                    p = new SunPKCS11(configStream);
                     Security.addProvider(p);
                 }
 
