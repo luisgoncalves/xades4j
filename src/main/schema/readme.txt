@@ -1,6 +1,6 @@
 The default marshal and unmarshal processes use JAXB classes generated from the XAdES schema using the XJC compiler:
 
-	* xjc XAdESv141.xsd -b bindings.xjb
+	* xjc -episode sun-jaxb.episode XAdESv141.xsd -b bindings.xjb
 
 The schema for UnsignedSignatureProperties was adapted to better fit to JAXB:
 

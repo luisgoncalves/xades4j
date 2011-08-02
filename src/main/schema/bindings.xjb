@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <jaxb:bindings xmlns:jaxb="http://java.sun.com/xml/ns/jaxb"
                xmlns:xsd="http://www.w3.org/2001/XMLSchema"
-               jaxb:version="2.0">
+               jaxb:version="2.1">
   <jaxb:globalBindings>
 	 <jaxb:javaType name="byte[]" xmlType="xsd:base64Binary"
         parseMethod="xades4j.utils.Base64.decode"
