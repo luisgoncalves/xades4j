@@ -114,7 +114,7 @@ public class VerifierTestBase extends SignatureServicesTestBase
         return res.getSignatureForm();
     }
 
-    static protected Element getSigElement(Document doc) throws Exception
+    static public Element getSigElement(Document doc) throws Exception
     {
         return (Element)doc.getElementsByTagNameNS(Constants.SignatureSpecNS, Constants._TAG_SIGNATURE).item(0);
     }

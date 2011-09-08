@@ -66,9 +66,35 @@ public class PKCS11KeyStoreKeyingDataProvider extends KeyStoreKeyingDataProvider
             KeyEntryPasswordProvider entryPasswordProvider,
             boolean returnFullChain) throws KeyStoreException
     {
+        this(nativeLibraryPath, providerName, null,
+             certificateSelector, keyStorePasswordProvider, entryPasswordProvider,
+             returnFullChain);
+    }
+
+    /**
+     * The provider name is used has a key to search for installed providers. If a
+     * provider exists with the same name, it will be used even if it relies on a
+     * different native library.
+     * @param nativeLibraryPath the path for the native library of the specific PKCS#11 provider
+     * @param providerName this string is concatenated with the prefix SunPKCS11- to produce this provider instance's name
+     * @param slotId the id of the slot that this provider instance is to be associated with (can be {@code null})
+     * @param certificateSelector the selector of signing certificate
+     * @param keyStorePasswordProvider the provider of the keystore loading password (can be {@code null})
+     * @param entryPasswordProvider the provider of entry passwords (may be {@code null})
+     * @param returnFullChain indicates of the full certificate chain should be returned, if available
+     * @throws KeyStoreException
+     */
+    public PKCS11KeyStoreKeyingDataProvider(
+            final String nativeLibraryPath,
+            final String providerName,
+            final Integer slotId,
+            SigningCertSelector certificateSelector,
+            KeyStorePasswordProvider keyStorePasswordProvider,
+            KeyEntryPasswordProvider entryPasswordProvider,
+            boolean returnFullChain) throws KeyStoreException
+    {
         super(new KeyStoreBuilderCreator()
         {
-
             @Override
             public Builder getBuilder(ProtectionParameter loadProtection)
             {
@@ -78,8 +104,13 @@ public class PKCS11KeyStoreKeyingDataProvider extends KeyStoreKeyingDataProvider
                     StringBuilder config = new StringBuilder("name = ").append(providerName);
                     config.append(System.getProperty("line.separator"));
                     config.append("library = ").append(nativeLibraryPath);
-                    ByteArrayInputStream configStream = new ByteArrayInputStream(config.toString().getBytes());
+                    if(slotId != null)
+                    {
+                        config.append(System.getProperty("line.separator"));
+                        config.append("slot = ").append(slotId);
+                    }
 
+                    ByteArrayInputStream configStream = new ByteArrayInputStream(config.toString().getBytes());
                     p = new SunPKCS11(configStream);
                     Security.addProvider(p);
                 }
@@ -90,8 +121,26 @@ public class PKCS11KeyStoreKeyingDataProvider extends KeyStoreKeyingDataProvider
     }
 
     /**
-     * Shortcut for the other constructor using {@code null} for the password providers and {@code false}
-     * for the {@code returnFullChain} parameter.
+     * Shortcut constructor using {@code null} for the password providers and slot
+     * and {@code false} for the {@code returnFullChain} parameter.
+     * @param nativeLibraryPath
+     * @param providerName
+     * @param slotId
+     * @param certificateSelector
+     * @throws KeyStoreException
+     */
+    public PKCS11KeyStoreKeyingDataProvider(
+            String nativeLibraryPath,
+            String providerName,
+            Integer slotId,
+            SigningCertSelector certificateSelector) throws KeyStoreException
+    {
+        this(nativeLibraryPath, providerName, slotId, certificateSelector, null, null, false);
+    }
+
+    /**
+     * Shortcut constructor using {@code null} for the password providers and slot,
+     * and {@code false} for the {@code returnFullChain} parameter.
      * @param nativeLibraryPath
      * @param providerName
      * @param certificateSelector
@@ -102,7 +151,7 @@ public class PKCS11KeyStoreKeyingDataProvider extends KeyStoreKeyingDataProvider
             final String providerName,
             SigningCertSelector certificateSelector) throws KeyStoreException
     {
-        this(nativeLibraryPath, providerName, certificateSelector, null, null, false);
+        this(nativeLibraryPath, providerName, null, certificateSelector);
     }
 
     @Override
