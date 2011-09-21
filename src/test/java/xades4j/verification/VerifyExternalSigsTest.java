@@ -58,6 +58,15 @@ public class VerifyExternalSigsTest extends VerifierTestBase
         PKIXCertificateValidationProvider cvp = new PKIXCertificateValidationProvider(ks, false, certStore.getStore());
         verifyTSL("TSL_ES.xml", cvp);
     }
+    
+    @Test
+    public void testVerifyITTSL() throws Exception
+    {
+        KeyStore ks = createAndLoadJKSKeyStore("tsl/it/itStore", "itstorepass");
+        FileSystemDirectoryCertStore certStore = createDirectoryCertStore("tsl/it");
+        PKIXCertificateValidationProvider cvp = new PKIXCertificateValidationProvider(ks, false, certStore.getStore());
+        verifyTSL("TSL_IT.xml", cvp);
+    } 
 
 //    @Test
 //    public void testVerifySKTSL() throws Exception

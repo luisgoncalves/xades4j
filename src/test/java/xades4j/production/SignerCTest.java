@@ -16,7 +16,9 @@
  */
 package xades4j.production;
 
+import java.io.File;
 import java.io.FileInputStream;
+import java.io.InputStream;
 import org.junit.Test;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
@@ -53,11 +55,15 @@ public class SignerCTest extends SignerTestBase
         ValidationDataProvider vdp = new ValidationDataFromCertValidationProvider(VerifierTestBase.validationProviderNist);
         SignerC signer = (SignerC)new XadesCSigningProfile(keyingProviderNist, vdp).newSigner();
 
-        AnonymousDataObjectReference ref = new AnonymousDataObjectReference(new FileInputStream("license.txt"));
+        InputStream is = new FileInputStream("license.txt");
+        AnonymousDataObjectReference ref = new AnonymousDataObjectReference(is);
         SignedDataObjects objs = new SignedDataObjects(ref);
         Document doc = getNewDocument();
+
         signer.sign(objs, doc);
+        is.close();
 
         outputDocument(doc, "detached.c.xml");
     }
+
 }
