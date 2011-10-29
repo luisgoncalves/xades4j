@@ -16,9 +16,9 @@
  */
 package xades4j.production;
 
+import java.util.ArrayList;
 import java.util.Collection;
-import java.util.HashSet;
-import java.util.Set;
+import java.util.List;
 import xades4j.properties.AllDataObjsCommitmentTypeProperty;
 import xades4j.properties.AllDataObjsTimeStampProperty;
 import xades4j.properties.DataObjectDesc;
@@ -43,7 +43,7 @@ import xades4j.utils.PropertiesSet;
 public final class SignedDataObjects
 {
 
-    private final Set<DataObjectDesc> dataObjs;
+    private final List<DataObjectDesc> dataObjs;
     private final PropertiesSet<SignedDataObjectProperty> signedDataObjsProperties;
     private final PropertiesSet<UnsignedDataObjectProperty> unsignedDataObjsProperties;
     private String baseUriForRelativeReferences;
@@ -54,7 +54,7 @@ public final class SignedDataObjects
      */
     public SignedDataObjects()
     {
-        this.dataObjs = new HashSet<DataObjectDesc>();
+        this.dataObjs = new ArrayList<DataObjectDesc>();
         this.signedDataObjsProperties = new PropertiesSet<SignedDataObjectProperty>(0);
         this.unsignedDataObjsProperties = new PropertiesSet<UnsignedDataObjectProperty>(0);
         this.baseUriForRelativeReferences = null;
@@ -237,6 +237,11 @@ public final class SignedDataObjects
             throw new NullPointerException("Signed object description cannot be null");
         }
 
+        if(this.dataObjs.contains(object))
+        {
+            throw new IllegalStateException("Data object description was already added");
+        }
+
         if (object instanceof AnonymousDataObjectReference)
         {
             if (this.hasNullURIReference)
@@ -246,10 +251,7 @@ public final class SignedDataObjects
             this.hasNullURIReference = true;
         }
 
-        if (!this.dataObjs.add(object))
-        {
-            throw new IllegalStateException("Data object description was already added");
-        }
+        this.dataObjs.add(object);
         return this;
     }
 
