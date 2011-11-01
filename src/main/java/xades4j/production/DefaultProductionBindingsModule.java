@@ -49,6 +49,8 @@ import xades4j.providers.impl.DefaultMessageDigestProvider;
 import xades4j.providers.impl.DefaultSignaturePropertiesProvider;
 import xades4j.providers.impl.DefaultTimeStampTokenProvider;
 import xades4j.providers.impl.DefaultBasicSignatureOptionsProvider;
+import xades4j.xml.marshalling.DataObjectTransformParamsMarshaller;
+import xades4j.xml.marshalling.DefaultDataObjectTransformParamsMarshaller;
 import xades4j.xml.marshalling.DefaultSignedPropertiesMarshaller;
 import xades4j.xml.marshalling.DefaultUnsignedPropertiesMarshaller;
 import xades4j.xml.marshalling.SignedPropertiesMarshaller;
@@ -77,6 +79,7 @@ class DefaultProductionBindingsModule extends AbstractModule
         });
         bind(AlgorithmsProvider.class).to(DefaultAlgorithmsProvider.class);
         bind(BasicSignatureOptionsProvider.class).to(DefaultBasicSignatureOptionsProvider.class);
+        bind(DataObjectTransformParamsMarshaller.class).to(DefaultDataObjectTransformParamsMarshaller.class);
         bind(MessageDigestEngineProvider.class).to(DefaultMessageDigestProvider.class);
         bind(TimeStampTokenProvider.class).to(DefaultTimeStampTokenProvider.class);
         bind(SignedPropertiesMarshaller.class).to(DefaultSignedPropertiesMarshaller.class);

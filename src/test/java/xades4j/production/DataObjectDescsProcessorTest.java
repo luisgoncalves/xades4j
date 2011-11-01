@@ -30,6 +30,7 @@ import xades4j.properties.DataObjectDesc;
 import xades4j.providers.impl.DefaultAlgorithmsProvider;
 import xades4j.utils.SignatureServicesTestBase;
 import xades4j.utils.StringUtils;
+import xades4j.xml.marshalling.DefaultDataObjectTransformParamsMarshaller;
 import static org.junit.Assert.*;
 
 /**
@@ -63,7 +64,7 @@ public class DataObjectDescsProcessorTest extends SignatureServicesTestBase
         XMLSignature xmlSignature = new XMLSignature(doc, "", XMLSignature.ALGO_ID_SIGNATURE_RSA_SHA256);
         xmlSignature.setId("sigId");
 
-        DataObjectDescsProcessor processor = new DataObjectDescsProcessor(new DefaultAlgorithmsProvider());
+        DataObjectDescsProcessor processor = new DataObjectDescsProcessor(new DefaultAlgorithmsProvider(), new DefaultDataObjectTransformParamsMarshaller());
         Map<DataObjectDesc, Reference> result = processor.process(dataObjsDescs, xmlSignature);
 
         assertEquals(dataObjsDescs.size(), result.size());
@@ -89,7 +90,7 @@ public class DataObjectDescsProcessorTest extends SignatureServicesTestBase
         XMLSignature xmlSignature = new XMLSignature(doc, "", XMLSignature.ALGO_ID_SIGNATURE_RSA_SHA256);
         xmlSignature.setId("sigId");
 
-        DataObjectDescsProcessor processor = new DataObjectDescsProcessor(new DefaultAlgorithmsProvider());
+        DataObjectDescsProcessor processor = new DataObjectDescsProcessor(new DefaultAlgorithmsProvider(),new DefaultDataObjectTransformParamsMarshaller());
         Map<DataObjectDesc, Reference> result = processor.process(dataObjsDescs, xmlSignature);
 
         assertEquals(1, result.size());
@@ -114,7 +115,7 @@ public class DataObjectDescsProcessorTest extends SignatureServicesTestBase
         XMLSignature xmlSignature = new XMLSignature(doc, "", XMLSignature.ALGO_ID_SIGNATURE_RSA_SHA256);
         xmlSignature.setId("sigId");
 
-        DataObjectDescsProcessor processor = new DataObjectDescsProcessor(new DefaultAlgorithmsProvider());
+        DataObjectDescsProcessor processor = new DataObjectDescsProcessor(new DefaultAlgorithmsProvider(), new DefaultDataObjectTransformParamsMarshaller());
         Map<DataObjectDesc, Reference> result = processor.process(dataObjsDescs, xmlSignature);
     }
 }

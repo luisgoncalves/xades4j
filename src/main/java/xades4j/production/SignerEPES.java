@@ -47,6 +47,7 @@ class SignerEPES extends SignerBES
             KeyingDataProvider keyingProvider,
             AlgorithmsProvider algorithmsProvider,
             BasicSignatureOptionsProvider basicSignatureOptionsProvider,
+            DataObjectDescsProcessor dataObjectDescsProcessor,
             SignaturePolicyInfoProvider policyInfoProvider,
             SignaturePropertiesProvider signaturePropsProvider,
             DataObjectPropertiesProvider dataObjPropsProvider,
@@ -54,7 +55,7 @@ class SignerEPES extends SignerBES
             SignedPropertiesMarshaller signedPropsMarshaller,
             UnsignedPropertiesMarshaller unsignedPropsMarshaller)
     {
-        super(keyingProvider, algorithmsProvider, basicSignatureOptionsProvider, signaturePropsProvider, dataObjPropsProvider, propsDataObjectsGenerator, signedPropsMarshaller, unsignedPropsMarshaller);
+        super(keyingProvider, algorithmsProvider, basicSignatureOptionsProvider, dataObjectDescsProcessor, signaturePropsProvider, dataObjPropsProvider, propsDataObjectsGenerator, signedPropsMarshaller, unsignedPropsMarshaller);
         this.policyInfoProvider = policyInfoProvider;
     }
 

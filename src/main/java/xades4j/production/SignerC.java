@@ -48,6 +48,7 @@ class SignerC extends SignerT
             KeyingDataProvider keyingProvider,
             AlgorithmsProvider algorithmsProvider,
             BasicSignatureOptionsProvider basicSignatureOptionsProvider,
+            DataObjectDescsProcessor dataObjectDescsProcessor,
             SignaturePropertiesProvider signaturePropsProvider,
             ValidationDataProvider validationDataProvider,
             DataObjectPropertiesProvider dataObjPropsProvider,
@@ -55,7 +56,7 @@ class SignerC extends SignerT
             SignedPropertiesMarshaller signedPropsMarshaller,
             UnsignedPropertiesMarshaller unsignedPropsMarshaller)
     {
-        super(keyingProvider, algorithmsProvider, basicSignatureOptionsProvider, signaturePropsProvider, dataObjPropsProvider, propsDataObjectsGenerator, signedPropsMarshaller, unsignedPropsMarshaller);
+        super(keyingProvider, algorithmsProvider, basicSignatureOptionsProvider, dataObjectDescsProcessor, signaturePropsProvider, dataObjPropsProvider, propsDataObjectsGenerator, signedPropsMarshaller, unsignedPropsMarshaller);
         if (null == validationDataProvider)
             throw new NullPointerException("ValidationDataProvider is null");
 

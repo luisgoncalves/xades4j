@@ -34,7 +34,7 @@ import org.apache.xml.security.transforms.Transforms;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import xades4j.XAdES4jXMLSigException;
-import xades4j.properties.DataObjectTransform;
+import xades4j.production.GenericDataObjectTransform;
 import xades4j.properties.QualifyingProperty;
 import xades4j.providers.CertificateValidationException;
 
@@ -186,8 +186,8 @@ class SignatureUtils
                     if (transfs != null)
                         for (int j = 0; j < transfs.getLength(); ++j)
                         {
-                            dataObj.withTransform(new DataObjectTransform(
-                                    transfs.item(j).getURI(), null));
+                            dataObj.withTransform(new GenericDataObjectTransform(
+                                    transfs.item(j).getURI()));
                         }
                 } catch (XMLSecurityException ex)
                 {
@@ -217,7 +217,7 @@ class SignatureUtils
             Element objElem = signature.getObjectItem(i).getElement();
             Collection<Element> xadesElems = getXAdESChildElements(objElem);
 
-            if (xadesElems.size() != 0)
+            if (!xadesElems.isEmpty())
             {
                 // XAdES 6.3: "all instances of the QualifyingProperties and the
                 // QualifyingPropertiesReference elements MUST occur within a single

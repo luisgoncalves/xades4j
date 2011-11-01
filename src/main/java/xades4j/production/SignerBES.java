@@ -67,20 +67,20 @@ class SignerBES implements XadesSigner
     /**/
     private final KeyingDataProvider keyingProvider;
     private final AlgorithmsProvider algorithmsProvider;
+    private final DataObjectDescsProcessor dataObjectDescsProcessor;
     private final PropertiesDataObjectsGenerator propsDataObjectsGenerator;
     private final SignedPropertiesMarshaller signedPropsMarshaller;
     private final UnsignedPropertiesMarshaller unsignedPropsMarshaller;
     /**/
-    private final DataObjectDescsProcessor dataObjectDescsProcessor;
     private final KeyInfoBuilder keyInfoBuilder;
     private final QualifyingPropertiesProcessor qualifPropsProcessor;
-    
 
     @Inject
     protected SignerBES(
             KeyingDataProvider keyingProvider,
             AlgorithmsProvider algorithmsProvider,
             BasicSignatureOptionsProvider basicSignatureOptionsProvider,
+            DataObjectDescsProcessor dataObjectDescsProcessor,
             SignaturePropertiesProvider signaturePropsProvider,
             DataObjectPropertiesProvider dataObjPropsProvider,
             PropertiesDataObjectsGenerator propsDataObjectsGenerator,
@@ -99,7 +99,7 @@ class SignerBES implements XadesSigner
         this.signedPropsMarshaller = signedPropsMarshaller;
         this.unsignedPropsMarshaller = unsignedPropsMarshaller;
 
-        this.dataObjectDescsProcessor = new DataObjectDescsProcessor(algorithmsProvider);
+        this.dataObjectDescsProcessor = dataObjectDescsProcessor;
         this.keyInfoBuilder = new KeyInfoBuilder(basicSignatureOptionsProvider, algorithmsProvider);
         this.qualifPropsProcessor = new QualifyingPropertiesProcessor(signaturePropsProvider, dataObjPropsProvider);
     }

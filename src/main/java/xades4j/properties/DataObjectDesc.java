@@ -16,6 +16,7 @@
  */
 package xades4j.properties;
 
+import xades4j.production.DataObjectTransform;
 import java.util.Collection;
 import xades4j.production.DataObjectReference;
 import xades4j.production.EnvelopedXmlObject;

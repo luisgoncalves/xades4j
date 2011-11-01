@@ -14,44 +14,32 @@
  * You should have received a copy of the GNU Lesser General Public License along
  * with XAdES4j. If not, see <http://www.gnu.org/licenses/>.
  */
-package xades4j.properties;
-
-import org.w3c.dom.Element;
+package xades4j.production;
 
 /**
- * Represents a transform that is applied to a data object. Each instance of this
- * class that is applied to a data object will result in a {@code ds:Transform}
- * element within the corresponding {@code ds:Reference} in the signature.
+ * Base class for transforms that are applied to a data object. Each {@code DataObjectTransform}
+ * that is applied to a data object will result in a {@code ds:Transform} element
+ * within the corresponding {@code ds:Reference} in the signature.
  *
  * @see DataObjectDesc#withTransform(xades4j.properties.DataObjectTransform)
  *
  * @author Luís
  */
-public class DataObjectTransform
+public abstract class DataObjectTransform
 {
     private final String transformUri;
-    private final Element transformParams;
 
-    public DataObjectTransform(
-            String transformUri,
-            Element paramsElement)
+    protected DataObjectTransform(String transformUri)
     {
+        if (transformUri == null)
+        {
+            throw new NullPointerException("Transform URI cannot be null");
+        }
         this.transformUri = transformUri;
-        this.transformParams = paramsElement;
     }
 
-    public DataObjectTransform(String transformUri)
-    {
-        this(transformUri, null);
-    }
-
-    public String getTransformUri()
+    String getTransformUri()
     {
         return transformUri;
-    }
-
-    public Element getTransformParams()
-    {
-        return transformParams;
     }
 }

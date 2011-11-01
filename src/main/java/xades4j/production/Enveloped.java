@@ -17,9 +17,7 @@
 package xades4j.production;
 
 import xades4j.XAdES4jException;
-import xades4j.properties.DataObjectTransform;
 import xades4j.properties.DataObjectDesc;
-import org.apache.xml.security.transforms.Transforms;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 
@@ -65,7 +63,7 @@ public class Enveloped
             refUri = "";
         }
 
-        DataObjectDesc dataObjRef = new DataObjectReference(refUri).withTransform(new DataObjectTransform(Transforms.TRANSFORM_ENVELOPED_SIGNATURE));
+        DataObjectDesc dataObjRef = new DataObjectReference(refUri).withTransform(new EnvelopedSignatureTransform());
         signer.sign(new SignedDataObjects(dataObjRef), elementToSign);
     }
 }

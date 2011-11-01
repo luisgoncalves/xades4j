@@ -16,7 +16,7 @@
  */
 package xades4j.production;
 
-import xades4j.properties.DataObjectTransform;
+import com.google.inject.Inject;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.IdentityHashMap;
@@ -28,10 +28,12 @@ import org.apache.xml.security.signature.XMLSignatureException;
 import org.apache.xml.security.transforms.TransformationException;
 import org.apache.xml.security.transforms.Transforms;
 import org.apache.xml.security.utils.resolver.implementations.ResolverAnonymous;
-import org.w3c.dom.Element;
+import org.w3c.dom.Document;
+import org.w3c.dom.NodeList;
 import xades4j.UnsupportedAlgorithmException;
 import xades4j.properties.DataObjectDesc;
 import xades4j.providers.AlgorithmsProvider;
+import xades4j.xml.marshalling.DataObjectTransformParamsMarshaller;
 
 /**
  * Helper class that processes a set of data object descriptions.
@@ -41,10 +43,13 @@ import xades4j.providers.AlgorithmsProvider;
 class DataObjectDescsProcessor
 {
     private final AlgorithmsProvider algorithmsProvider;
+    private final DataObjectTransformParamsMarshaller transformParamsMarshaller;
 
-    DataObjectDescsProcessor(AlgorithmsProvider algorithmsProvider)
+    @Inject
+    DataObjectDescsProcessor(AlgorithmsProvider algorithmsProvider, DataObjectTransformParamsMarshaller transformParamsMarshaller)
     {
         this.algorithmsProvider = algorithmsProvider;
+        this.transformParamsMarshaller = transformParamsMarshaller;
     }
 
     /**
@@ -69,7 +74,7 @@ class DataObjectDescsProcessor
         {
             for (DataObjectDesc dataObjDesc : dataObjsDescs)
             {
-                transforms = processTransforms(dataObjDesc, xmlSignature);
+                transforms = processTransforms(dataObjDesc, xmlSignature.getDocument());
 
                 if (dataObjDesc instanceof DataObjectReference)
                 {
@@ -145,9 +150,9 @@ class DataObjectDescsProcessor
         return Collections.unmodifiableMap(referenceMappings);
     }
 
-    private static Transforms processTransforms(
+    private Transforms processTransforms(
             DataObjectDesc dataObjDesc,
-            XMLSignature xmlSignature) throws UnsupportedAlgorithmException
+            Document document) throws UnsupportedAlgorithmException
     {
         Collection<DataObjectTransform> dObjTransfs = dataObjDesc.getTransforms();
         if (dObjTransfs.isEmpty())
@@ -155,13 +160,13 @@ class DataObjectDescsProcessor
             return null;
         }
 
-        Transforms transforms = new Transforms(xmlSignature.getDocument());
+        Transforms transforms = new Transforms(document);
 
         for (DataObjectTransform dObjTransf : dObjTransfs)
         {
             try
             {
-                Element transfParams = dObjTransf.getTransformParams();
+                NodeList transfParams = this.transformParamsMarshaller.marshalParameters(dObjTransf);
                 if (null == transfParams)
                 {
                     transforms.addTransform(dObjTransf.getTransformUri());
