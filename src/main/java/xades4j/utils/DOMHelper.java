@@ -150,7 +150,7 @@ public class DOMHelper
 
     public static NodeList nodeList(Node n)
     {
-        HelperNodeList nl = new HelperNodeList(true);
+        HelperNodeList nl = new HelperNodeList();
         nl.appendChild(n);
         return nl;
     }

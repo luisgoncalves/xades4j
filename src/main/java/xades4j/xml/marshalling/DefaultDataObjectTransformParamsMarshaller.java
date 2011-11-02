@@ -18,12 +18,16 @@ package xades4j.xml.marshalling;
 
 import java.util.HashMap;
 import java.util.Map;
+import org.apache.xml.security.transforms.params.XPath2FilterContainer;
 import org.apache.xml.security.transforms.params.XPathContainer;
+import org.apache.xml.security.utils.HelperNodeList;
 import org.w3c.dom.Document;
 import org.w3c.dom.NodeList;
 import xades4j.production.DataObjectTransform;
 import xades4j.production.EnvelopedSignatureTransform;
 import xades4j.production.GenericDataObjectTransform;
+import xades4j.production.XPath2FilterTransform;
+import xades4j.production.XPath2FilterTransform.XPathFilter;
 import xades4j.production.XPathTransform;
 import xades4j.utils.DOMHelper;
 
@@ -39,9 +43,10 @@ public class DefaultDataObjectTransformParamsMarshaller implements DataObjectTra
 
     public DefaultDataObjectTransformParamsMarshaller()
     {
-        this.marshallers = new HashMap<Class<? extends DataObjectTransform>, DataObjectTransformParamsMarshaller>(3);
+        this.marshallers = new HashMap<Class<? extends DataObjectTransform>, DataObjectTransformParamsMarshaller>(4);
         this.marshallers.put(EnvelopedSignatureTransform.class, new NopDataObjectTransformParamsMarshaller());
         this.marshallers.put(XPathTransform.class, new XPathTransformParamsMarshaller());
+        this.marshallers.put(XPath2FilterTransform.class, null);
         this.marshallers.put(GenericDataObjectTransform.class, new GenericDataObjectTransformParamsMarshaller());
     }
 
@@ -72,8 +77,38 @@ class XPathTransformParamsMarshaller implements DataObjectTransformParamsMarshal
     public NodeList marshalParameters(DataObjectTransform t, Document doc)
     {
         XPathContainer xpathContainer = new XPathContainer(doc);
-        xpathContainer.setXPath(((XPathTransform)t).getXPath());
+        xpathContainer.setXPath(((XPathTransform) t).getXPath());
         return DOMHelper.nodeList(xpathContainer.getElement());
+    }
+}
+
+class XPath2FilterTransformParamsMarshaller implements DataObjectTransformParamsMarshaller
+{
+    @Override
+    public NodeList marshalParameters(DataObjectTransform t, Document doc)
+    {
+        HelperNodeList nl = new HelperNodeList();
+        XPath2FilterTransform transf = (XPath2FilterTransform) t;
+
+        for (XPathFilter filter : transf.getFilters())
+        {
+            XPath2FilterContainer c = null;
+            switch (filter.getFilterType())
+            {
+                case INTERSECT:
+                    c = XPath2FilterContainer.newInstanceIntersect(doc, filter.getXPath());
+                    break;
+                case SUBTRACT:
+                    c = XPath2FilterContainer.newInstanceSubtract(doc, filter.getXPath());
+                    break;
+                case UNION:
+                    c = XPath2FilterContainer.newInstanceUnion(doc, filter.getXPath());
+                    break;
+            }
+            nl.appendChild(c.getElement());
+        }
+
+        return nl;
     }
 }
 
