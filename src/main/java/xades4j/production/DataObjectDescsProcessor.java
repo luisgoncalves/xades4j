@@ -166,7 +166,7 @@ class DataObjectDescsProcessor
         {
             try
             {
-                NodeList transfParams = this.transformParamsMarshaller.marshalParameters(dObjTransf);
+                NodeList transfParams = this.transformParamsMarshaller.marshalParameters(dObjTransf, document);
                 if (null == transfParams)
                 {
                     transforms.addTransform(dObjTransf.getTransformUri());

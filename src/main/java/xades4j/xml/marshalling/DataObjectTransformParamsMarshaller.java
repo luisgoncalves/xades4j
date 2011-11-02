@@ -16,6 +16,7 @@
  */
 package xades4j.xml.marshalling;
 
+import org.w3c.dom.Document;
 import org.w3c.dom.NodeList;
 import xades4j.production.DataObjectTransform;
 
@@ -30,7 +31,8 @@ public interface DataObjectTransformParamsMarshaller
     /**
      * Marshals the parameters of a given {@code DataObjectTransform}.
      * @param t the transforms whose parameters whill be marshalled
+     * @param doc the document that will own the parameter nodes
      * @return the list of paramter nodes or {@code null} if none
      */
-    NodeList marshalParameters(DataObjectTransform t);
+    NodeList marshalParameters(DataObjectTransform t, Document doc);
 }

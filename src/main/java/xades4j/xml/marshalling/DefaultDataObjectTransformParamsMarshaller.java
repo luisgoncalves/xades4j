@@ -18,13 +18,19 @@ package xades4j.xml.marshalling;
 
 import java.util.HashMap;
 import java.util.Map;
+import org.apache.xml.security.transforms.params.XPathContainer;
+import org.w3c.dom.Document;
 import org.w3c.dom.NodeList;
 import xades4j.production.DataObjectTransform;
 import xades4j.production.EnvelopedSignatureTransform;
 import xades4j.production.GenericDataObjectTransform;
+import xades4j.production.XPathTransform;
+import xades4j.utils.DOMHelper;
 
 /**
+ * The default marshaller of data object transforms.
  *
+ * @see DataObjectTransform
  * @author Luís
  */
 public class DefaultDataObjectTransformParamsMarshaller implements DataObjectTransformParamsMarshaller
@@ -33,36 +39,48 @@ public class DefaultDataObjectTransformParamsMarshaller implements DataObjectTra
 
     public DefaultDataObjectTransformParamsMarshaller()
     {
-        this.marshallers = new HashMap<Class<? extends DataObjectTransform>, DataObjectTransformParamsMarshaller>(2);
+        this.marshallers = new HashMap<Class<? extends DataObjectTransform>, DataObjectTransformParamsMarshaller>(3);
         this.marshallers.put(EnvelopedSignatureTransform.class, new NopDataObjectTransformParamsMarshaller());
+        this.marshallers.put(XPathTransform.class, new XPathTransformParamsMarshaller());
         this.marshallers.put(GenericDataObjectTransform.class, new GenericDataObjectTransformParamsMarshaller());
     }
 
     @Override
-    public NodeList marshalParameters(DataObjectTransform t)
+    public NodeList marshalParameters(DataObjectTransform t, Document doc)
     {
         DataObjectTransformParamsMarshaller marshaller = this.marshallers.get(t.getClass());
         if (null == marshaller)
         {
             throw new UnsupportedOperationException("Unsupported property");
         }
-        return marshaller.marshalParameters(t);
+        return marshaller.marshalParameters(t, doc);
     }
 }
 
 class NopDataObjectTransformParamsMarshaller implements DataObjectTransformParamsMarshaller
 {
     @Override
-    public NodeList marshalParameters(DataObjectTransform t)
+    public NodeList marshalParameters(DataObjectTransform t, Document doc)
     {
         return null;
+    }
+}
+
+class XPathTransformParamsMarshaller implements DataObjectTransformParamsMarshaller
+{
+    @Override
+    public NodeList marshalParameters(DataObjectTransform t, Document doc)
+    {
+        XPathContainer xpathContainer = new XPathContainer(doc);
+        xpathContainer.setXPath(((XPathTransform)t).getXPath());
+        return DOMHelper.nodeList(xpathContainer.getElement());
     }
 }
 
 class GenericDataObjectTransformParamsMarshaller implements DataObjectTransformParamsMarshaller
 {
     @Override
-    public NodeList marshalParameters(DataObjectTransform t)
+    public NodeList marshalParameters(DataObjectTransform t, Document doc)
     {
         return ((GenericDataObjectTransform) t).getTransformParams();
     }

@@ -16,38 +16,36 @@
  */
 package xades4j.production;
 
-import org.w3c.dom.Node;
-import org.w3c.dom.NodeList;
-import xades4j.utils.DOMHelper;
+import org.apache.xml.security.transforms.Transforms;
 
 /**
- * Represents a generic data object transform with optional parameters
- *
+ * The XPath filtering transform.
  * @author Luís
  */
-public class GenericDataObjectTransform extends DataObjectTransform
+public final class XPathTransform extends DataObjectTransform
 {
-    private final NodeList transformParams;
+    private final String xpath;
 
-    public GenericDataObjectTransform(String transformUri)
+    /**
+     * Creates a new instance of the transform
+     * @param xpath the XPath filtering expression
+     */
+    public XPathTransform(String xpath)
     {
-        this(transformUri, (NodeList) null);
+        super(Transforms.TRANSFORM_XPATH);
+        if (null == xpath)
+        {
+            throw new NullPointerException("XPath expression cannot be null");
+        }
+        this.xpath = xpath;
     }
 
-    public GenericDataObjectTransform(String transformUri, NodeList transformParams)
+    /**
+     * Gets the XPath expression
+     * @return the filtering expression
+     */
+    public String getXPath()
     {
-        super(transformUri);
-        this.transformParams = transformParams;
-    }
-
-    public GenericDataObjectTransform(String transformUri, Node transformParams)
-    {
-        super(transformUri);
-        this.transformParams = DOMHelper.nodeList(transformParams);
-    }
-
-    public NodeList getTransformParams()
-    {
-        return transformParams;
+        return xpath;
     }
 }

@@ -18,9 +18,11 @@ package xades4j.utils;
 
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
+import org.apache.xml.security.utils.HelperNodeList;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
+import org.w3c.dom.NodeList;
 
 /**
  * Utility methods for DOM nodes.
@@ -144,5 +146,12 @@ public class DOMHelper
             String nameSpace, String localName)
     {
         return (Element)e.getElementsByTagNameNS(nameSpace, localName).item(0);
+    }
+
+    public static NodeList nodeList(Node n)
+    {
+        HelperNodeList nl = new HelperNodeList(true);
+        nl.appendChild(n);
+        return nl;
     }
 }
