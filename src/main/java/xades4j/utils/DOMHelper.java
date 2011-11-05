@@ -148,10 +148,13 @@ public class DOMHelper
         return (Element)e.getElementsByTagNameNS(nameSpace, localName).item(0);
     }
 
-    public static NodeList nodeList(Node n)
+    public static NodeList nodeList(Node... nodes)
     {
         HelperNodeList nl = new HelperNodeList();
-        nl.appendChild(n);
+        for (Node n : nodes)
+        {
+            nl.appendChild(n);
+        }
         return nl;
     }
 }

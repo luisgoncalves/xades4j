@@ -33,7 +33,7 @@ import org.w3c.dom.NodeList;
 import xades4j.UnsupportedAlgorithmException;
 import xades4j.properties.DataObjectDesc;
 import xades4j.providers.AlgorithmsProvider;
-import xades4j.xml.marshalling.DataObjectTransformParamsMarshaller;
+import xades4j.xml.marshalling.transforms.DataObjectTransformParamsMarshaller;
 
 /**
  * Helper class that processes a set of data object descriptions.

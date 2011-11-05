@@ -31,17 +31,17 @@ public final class XPath2FilterTransform extends DataObjectTransform
      */
     public static class XPathFilter
     {
-        public enum XPathFilterType
+        public enum FilterType
         {
             INTERSECT,
             SUBTRACT,
             UNION
         }
 
-        private final XPathFilterType filterType;
+        private final FilterType filterType;
         private final String xpath;
 
-        private XPathFilter(XPathFilterType filterType, String xpath)
+        private XPathFilter(FilterType filterType, String xpath)
         {
             if(null == xpath)
             {
@@ -52,7 +52,7 @@ public final class XPath2FilterTransform extends DataObjectTransform
             this.xpath = xpath;
         }
 
-        public XPathFilterType getFilterType()
+        public FilterType getFilterType()
         {
             return filterType;
         }
@@ -69,7 +69,7 @@ public final class XPath2FilterTransform extends DataObjectTransform
          */
         public static XPathFilter intersect(String xpath)
         {
-            return new XPathFilter(XPathFilterType.INTERSECT, xpath);
+            return new XPathFilter(FilterType.INTERSECT, xpath);
         }
 
         /**
@@ -79,7 +79,7 @@ public final class XPath2FilterTransform extends DataObjectTransform
          */
         public static XPathFilter subtract(String xpath)
         {
-            return new XPathFilter(XPathFilterType.SUBTRACT, xpath);
+            return new XPathFilter(FilterType.SUBTRACT, xpath);
         }
 
         /**
@@ -89,7 +89,7 @@ public final class XPath2FilterTransform extends DataObjectTransform
          */
         public static XPathFilter union(String xpath)
         {
-            return new XPathFilter(XPathFilterType.UNION, xpath);
+            return new XPathFilter(FilterType.UNION, xpath);
         }
     }
     /**/

@@ -16,11 +16,18 @@
  */
 package xades4j.properties;
 
+import org.w3c.dom.Document;
+import xades4j.production.XPath2FilterTransform.XPathFilter;
+import xades4j.production.DataObjectTransform;
 import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
+import xades4j.production.GenericDataObjectTransform;
+import xades4j.production.XPath2FilterTransform;
+import xades4j.production.XPathTransform;
+import xades4j.utils.SignatureServicesTestBase;
 import static org.junit.Assert.*;
 
 /**
@@ -29,10 +36,6 @@ import static org.junit.Assert.*;
  */
 public class DataObjectDescTest
 {
-    public DataObjectDescTest()
-    {
-    }
-
     @BeforeClass
     public static void setUpClass() throws Exception
     {
@@ -56,32 +59,26 @@ public class DataObjectDescTest
     /**
      * Test of withTransform method, of class DataObjectDesc.
      */
-//    @Test
-//    public void testWithTransform()
-//    {
-//        System.out.println("withTransform");
-//        DataObjectTransform transf = null;
-//        DataObjectDesc instance = new DataObjectInfoImpl();
-//        DataObjectDesc expResult = null;
-//        DataObjectDesc result = instance.withTransform(transf);
-//        assertEquals(expResult, result);
-//        // TODO review the generated test code and remove the default call to fail.
-//        fail("The test case is a prototype.");
-//    }
-    /**
-     * Test of getTransforms method, of class DataObjectDesc.
-     */
-//    @Test
-//    public void testGetTransforms()
-//    {
-//        System.out.println("getTransforms");
-//        DataObjectDesc instance = new DataObjectInfoImpl();
-//        Collection expResult = null;
-//        Collection result = instance.getTransforms();
-//        assertEquals(expResult, result);
-//        // TODO review the generated test code and remove the default call to fail.
-//        fail("The test case is a prototype.");
-//    }
+    @Test
+    public void testWithTransform() throws Exception
+    {
+        System.out.println("withTransform");
+
+        DataObjectDesc instance = new DataObjectDescTestImpl();
+        Document doc = SignatureServicesTestBase.getNewDocument();
+
+        instance.withTransform(new XPathTransform("xpath"));
+        instance.withTransform(new XPath2FilterTransform(XPathFilter.subtract("xpath")));
+        instance.withTransform(new GenericDataObjectTransform("uri", doc.createElement("param1"),doc.createElement("param2")));
+        DataObjectTransform[] transforms = instance.getTransforms().toArray(new DataObjectTransform[0]);
+
+        assertEquals(3, transforms.length);
+
+        assertTrue(transforms[0] instanceof XPathTransform);
+        assertTrue(transforms[1] instanceof XPath2FilterTransform);
+        assertTrue(transforms[2] instanceof GenericDataObjectTransform);
+    }
+
     /**
      * Test of withDataObjectFormat method, of class DataObjectDesc.
      */
@@ -91,14 +88,13 @@ public class DataObjectDescTest
         System.out.println("withDataObjectFormatRepeatedInstance");
 
         DataObjectFormatProperty format = new DataObjectFormatProperty();
-        DataObjectDesc instance = new DataObjectInfoImpl();
+        DataObjectDesc instance = new DataObjectDescTestImpl();
 
         instance.withDataObjectFormat(format);
         instance.withDataObjectFormat(format);
-
     }
 
-        /**
+    /**
      * Test of withDataObjectFormat method, of class DataObjectDesc.
      */
     public void testWithDataObjectFormatMultipleTargets()
@@ -106,8 +102,8 @@ public class DataObjectDescTest
         System.out.println("withDataObjectFormatMultipleTargets");
 
         DataObjectFormatProperty format = new DataObjectFormatProperty();
-        DataObjectDesc instance = new DataObjectInfoImpl();
-        DataObjectDesc other = new DataObjectInfoImpl();
+        DataObjectDesc instance = new DataObjectDescTestImpl();
+        DataObjectDesc other = new DataObjectDescTestImpl();
 
         other.withDataObjectFormat(format);
         instance.withDataObjectFormat(format);
@@ -124,56 +120,10 @@ public class DataObjectDescTest
         CommitmentTypeProperty commitment1 = CommitmentTypeProperty.proofOfApproval();
         CommitmentTypeProperty commitment2 = CommitmentTypeProperty.proofOfCreation();
 
-        DataObjectDesc instance = new DataObjectInfoImpl();
+        DataObjectDesc instance = new DataObjectDescTestImpl();
         instance.withCommitmentType(commitment1);
         instance.withCommitmentType(commitment2);
     }
-
-    /**
-     * Test of withDataObjectTimeStamp method, of class DataObjectDesc.
-     */
-//    @Test
-//    public void testWithDataObjectTimeStamp()
-//    {
-//        System.out.println("withDataObjectTimeStamp");
-//        DataObjectDesc instance = new DataObjectInfoImpl();
-//        DataObjectDesc expResult = null;
-//        DataObjectDesc result = instance.withDataObjectTimeStamp();
-//        assertEquals(expResult, result);
-//        // TODO review the generated test code and remove the default call to fail.
-//        fail("The test case is a prototype.");
-//    }
-    /**
-     * Test of withOtherDataObjectProperty method, of class DataObjectDesc.
-     */
-//    @Test
-//    public void testWithOtherDataObjectProperty_OtherSignedDataObjectProperty()
-//    {
-//        System.out.println("withOtherDataObjectProperty");
-//        OtherSignedDataObjectProperty otherSignedDataObjProp = null;
-//        DataObjectDesc instance = new DataObjectInfoImpl();
-//        DataObjectDesc expResult = null;
-//        DataObjectDesc result = instance.withOtherDataObjectProperty(otherSignedDataObjProp);
-//        assertEquals(expResult, result);
-//        // TODO review the generated test code and remove the default call to fail.
-//        fail("The test case is a prototype.");
-//    }
-
-    /**
-     * Test of withOtherDataObjectProperty method, of class DataObjectDesc.
-     */
-//    @Test
-//    public void testWithOtherDataObjectProperty_OtherUnsignedDataObjectProperty()
-//    {
-//        System.out.println("withOtherDataObjectProperty");
-//        OtherUnsignedDataObjectProperty otherUnsignedDataObjProp = null;
-//        DataObjectDesc instance = new DataObjectInfoImpl();
-//        DataObjectDesc expResult = null;
-//        DataObjectDesc result = instance.withOtherDataObjectProperty(otherUnsignedDataObjProp);
-//        assertEquals(expResult, result);
-//        // TODO review the generated test code and remove the default call to fail.
-//        fail("The test case is a prototype.");
-//    }
 
     /**
      * Test of hasProperties method, of class DataObjectDesc.
@@ -183,7 +133,7 @@ public class DataObjectDescTest
     {
         System.out.println("hasProperties");
 
-        DataObjectDesc instance = new DataObjectInfoImpl();
+        DataObjectDesc instance = new DataObjectDescTestImpl();
         assertEquals(instance.hasProperties(), false);
 
         instance.withDataObjectFormat(new DataObjectFormatProperty());
@@ -198,29 +148,14 @@ public class DataObjectDescTest
     {
         System.out.println("getSignedDataObjProps");
 
-        DataObjectDesc instance = new DataObjectInfoImpl();
+        DataObjectDesc instance = new DataObjectDescTestImpl();
         assertEquals(instance.getSignedDataObjProps().size(), 0);
 
         instance.withDataObjectFormat(new DataObjectFormatProperty());
         assertEquals(instance.getSignedDataObjProps().size(), 1);
     }
 
-    /**
-     * Test of getUnsignedDataObjProps method, of class DataObjectDesc.
-     */
-//    @Test
-//    public void testGetUnsignedDataObjProps()
-//    {
-//        System.out.println("getUnsignedDataObjProps");
-//        DataObjectDesc instance = new DataObjectInfoImpl();
-//        Collection expResult = null;
-//        Collection result = instance.getUnsignedDataObjProps();
-//        assertEquals(expResult, result);
-//        // TODO review the generated test code and remove the default call to fail.
-//        fail("The test case is a prototype.");
-//    }
-
-    public class DataObjectInfoImpl extends DataObjectDesc
+    public class DataObjectDescTestImpl extends DataObjectDesc
     {
     }
 }

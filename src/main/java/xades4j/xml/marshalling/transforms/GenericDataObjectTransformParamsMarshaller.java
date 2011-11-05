@@ -14,40 +14,23 @@
  * You should have received a copy of the GNU Lesser General Public License along
  * with XAdES4j. If not, see <http://www.gnu.org/licenses/>.
  */
-package xades4j.production;
 
-import org.w3c.dom.Node;
+package xades4j.xml.marshalling.transforms;
+
+import org.w3c.dom.Document;
 import org.w3c.dom.NodeList;
-import xades4j.utils.DOMHelper;
+import xades4j.production.DataObjectTransform;
+import xades4j.production.GenericDataObjectTransform;
 
 /**
- * Represents a generic data object transform with optional parameters
  *
  * @author Luís
  */
-public class GenericDataObjectTransform extends DataObjectTransform
+class GenericDataObjectTransformParamsMarshaller implements DataObjectTransformParamsMarshaller
 {
-    private final NodeList transformParams;
-
-    public GenericDataObjectTransform(String transformUri)
+    @Override
+    public NodeList marshalParameters(DataObjectTransform t, Document doc)
     {
-        this(transformUri, (NodeList) null);
-    }
-
-    public GenericDataObjectTransform(String transformUri, NodeList transformParams)
-    {
-        super(transformUri);
-        this.transformParams = transformParams;
-    }
-
-    public GenericDataObjectTransform(String transformUri, Node... transformParams)
-    {
-        super(transformUri);
-        this.transformParams = DOMHelper.nodeList(transformParams);
-    }
-
-    public NodeList getTransformParams()
-    {
-        return transformParams;
+        return ((GenericDataObjectTransform) t).getTransformParams();
     }
 }

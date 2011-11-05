@@ -14,25 +14,27 @@
  * You should have received a copy of the GNU Lesser General Public License along
  * with XAdES4j. If not, see <http://www.gnu.org/licenses/>.
  */
-package xades4j.xml.marshalling;
 
+package xades4j.xml.marshalling.transforms;
+
+import org.apache.xml.security.transforms.params.XPathContainer;
 import org.w3c.dom.Document;
 import org.w3c.dom.NodeList;
 import xades4j.production.DataObjectTransform;
+import xades4j.production.XPathTransform;
+import xades4j.utils.DOMHelper;
 
 /**
- * A marshaller for data object transforms parameters, used during reference processing
- * on signature production.
- * 
+ *
  * @author Luís
  */
-public interface DataObjectTransformParamsMarshaller
+class XPathTransformParamsMarshaller implements DataObjectTransformParamsMarshaller
 {
-    /**
-     * Marshals the parameters of a given {@code DataObjectTransform}.
-     * @param t the transforms whose parameters whill be marshalled
-     * @param doc the document that will own the parameter nodes
-     * @return the list of paramter nodes or {@code null} if none
-     */
-    NodeList marshalParameters(DataObjectTransform t, Document doc);
+    @Override
+    public NodeList marshalParameters(DataObjectTransform t, Document doc)
+    {
+        XPathContainer xpathContainer = new XPathContainer(doc);
+        xpathContainer.setXPath(((XPathTransform) t).getXPath());
+        return DOMHelper.nodeList(xpathContainer.getElement());
+    }
 }

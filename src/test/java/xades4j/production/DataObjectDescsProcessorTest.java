@@ -30,7 +30,7 @@ import xades4j.properties.DataObjectDesc;
 import xades4j.providers.impl.DefaultAlgorithmsProvider;
 import xades4j.utils.SignatureServicesTestBase;
 import xades4j.utils.StringUtils;
-import xades4j.xml.marshalling.DefaultDataObjectTransformParamsMarshaller;
+import xades4j.xml.marshalling.transforms.DefaultDataObjectTransformParamsMarshaller;
 import static org.junit.Assert.*;
 
 /**
