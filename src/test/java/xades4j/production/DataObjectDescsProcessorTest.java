@@ -16,6 +16,7 @@
  */
 package xades4j.production;
 
+import org.w3c.dom.NodeList;
 import org.apache.xml.security.utils.Constants;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -30,7 +31,6 @@ import xades4j.properties.DataObjectDesc;
 import xades4j.providers.impl.DefaultAlgorithmsProvider;
 import xades4j.utils.SignatureServicesTestBase;
 import xades4j.utils.StringUtils;
-import xades4j.xml.marshalling.transforms.DefaultDataObjectTransformParamsMarshaller;
 import static org.junit.Assert.*;
 
 /**
@@ -39,7 +39,6 @@ import static org.junit.Assert.*;
  */
 public class DataObjectDescsProcessorTest extends SignatureServicesTestBase
 {
-
     public DataObjectDescsProcessorTest()
     {
     }
@@ -64,7 +63,7 @@ public class DataObjectDescsProcessorTest extends SignatureServicesTestBase
         XMLSignature xmlSignature = new XMLSignature(doc, "", XMLSignature.ALGO_ID_SIGNATURE_RSA_SHA256);
         xmlSignature.setId("sigId");
 
-        DataObjectDescsProcessor processor = new DataObjectDescsProcessor(new DefaultAlgorithmsProvider(), new DefaultDataObjectTransformParamsMarshaller());
+        DataObjectDescsProcessor processor = new DataObjectDescsProcessor(new DefaultAlgorithmsProvider(), new DataObjectTransformParamsGeneratorTestImpl());
         Map<DataObjectDesc, Reference> result = processor.process(dataObjsDescs, xmlSignature);
 
         assertEquals(dataObjsDescs.size(), result.size());
@@ -90,7 +89,7 @@ public class DataObjectDescsProcessorTest extends SignatureServicesTestBase
         XMLSignature xmlSignature = new XMLSignature(doc, "", XMLSignature.ALGO_ID_SIGNATURE_RSA_SHA256);
         xmlSignature.setId("sigId");
 
-        DataObjectDescsProcessor processor = new DataObjectDescsProcessor(new DefaultAlgorithmsProvider(),new DefaultDataObjectTransformParamsMarshaller());
+        DataObjectDescsProcessor processor = new DataObjectDescsProcessor(new DefaultAlgorithmsProvider(),new DataObjectTransformParamsGeneratorTestImpl());
         Map<DataObjectDesc, Reference> result = processor.process(dataObjsDescs, xmlSignature);
 
         assertEquals(1, result.size());
@@ -115,7 +114,17 @@ public class DataObjectDescsProcessorTest extends SignatureServicesTestBase
         XMLSignature xmlSignature = new XMLSignature(doc, "", XMLSignature.ALGO_ID_SIGNATURE_RSA_SHA256);
         xmlSignature.setId("sigId");
 
-        DataObjectDescsProcessor processor = new DataObjectDescsProcessor(new DefaultAlgorithmsProvider(), new DefaultDataObjectTransformParamsMarshaller());
+        DataObjectDescsProcessor processor = new DataObjectDescsProcessor(new DefaultAlgorithmsProvider(), new DataObjectTransformParamsGeneratorTestImpl());
         Map<DataObjectDesc, Reference> result = processor.process(dataObjsDescs, xmlSignature);
+    }
+}
+
+class DataObjectTransformParamsGeneratorTestImpl implements DataObjectTransformParamsGenerator
+{
+    @Override
+    public NodeList getParameters(DataObjectTransform t, Document doc)
+    {
+        // Not testing params marshalling here
+        return null;
     }
 }

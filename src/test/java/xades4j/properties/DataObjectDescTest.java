@@ -64,16 +64,15 @@ public class DataObjectDescTest
     {
         System.out.println("withTransform");
 
-        DataObjectDesc instance = new DataObjectDescTestImpl();
         Document doc = SignatureServicesTestBase.getNewDocument();
+        DataObjectDesc instance = new DataObjectDescTestImpl()
+            .withTransform(new XPathTransform("xpath"))
+            .withTransform(new XPath2FilterTransform(XPathFilter.subtract("xpath")))
+            .withTransform(new GenericDataObjectTransform("uri", doc.createElement("param1"),doc.createElement("param2")));
 
-        instance.withTransform(new XPathTransform("xpath"));
-        instance.withTransform(new XPath2FilterTransform(XPathFilter.subtract("xpath")));
-        instance.withTransform(new GenericDataObjectTransform("uri", doc.createElement("param1"),doc.createElement("param2")));
         DataObjectTransform[] transforms = instance.getTransforms().toArray(new DataObjectTransform[0]);
 
         assertEquals(3, transforms.length);
-
         assertTrue(transforms[0] instanceof XPathTransform);
         assertTrue(transforms[1] instanceof XPath2FilterTransform);
         assertTrue(transforms[2] instanceof GenericDataObjectTransform);

@@ -21,12 +21,17 @@ import org.w3c.dom.NodeList;
 import xades4j.production.DataObjectTransform;
 
 /**
- * A marshaller for data object transforms parameters, used during reference processing
- * on signature production.
- * 
+ * A marshaller of parameters of a specific transform type, used during reference
+ * processing on signature production. For each type of transform (Java class)
+ * there has to be a corresponding {@code DataObjectTransformParamsMarshaller}.
+ * <p>
+ * The library includes default marshallers for the included transform types, but
+ * these may be overriden using {@link xades4j.production.XadesSigningProfile#withTransformParamsMarshaller}.
+ * Marshallers for new types of properties can also be included using those methods.
+ *
  * @author Luís
  */
-public interface DataObjectTransformParamsMarshaller
+public interface DataObjectTransformParamsMarshaller<TTransform extends DataObjectTransform>
 {
     /**
      * Marshals the parameters of a given {@code DataObjectTransform}.
@@ -34,5 +39,5 @@ public interface DataObjectTransformParamsMarshaller
      * @param doc the document that will own the parameter nodes
      * @return the list of paramter nodes or {@code null} if none
      */
-    NodeList marshalParameters(DataObjectTransform t, Document doc);
+    NodeList marshalParameters(TTransform t, Document doc);
 }

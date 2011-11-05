@@ -14,22 +14,21 @@
  * You should have received a copy of the GNU Lesser General Public License along
  * with XAdES4j. If not, see <http://www.gnu.org/licenses/>.
  */
-
 package xades4j.xml.marshalling.transforms;
 
 import org.w3c.dom.Document;
 import org.w3c.dom.NodeList;
-import xades4j.production.GenericDataObjectTransform;
+import xades4j.production.EnvelopedSignatureTransform;
 
 /**
  *
  * @author Luís
  */
-public final class GenericDataObjectTransformParamsMarshaller implements DataObjectTransformParamsMarshaller<GenericDataObjectTransform>
+public final class EnvelopedSignatureTransformParamsMarshaller implements DataObjectTransformParamsMarshaller<EnvelopedSignatureTransform>
 {
     @Override
-    public NodeList marshalParameters(GenericDataObjectTransform t, Document doc)
+    public NodeList marshalParameters(EnvelopedSignatureTransform t, Document doc)
     {
-        return t.getTransformParams();
+        return null;
     }
 }

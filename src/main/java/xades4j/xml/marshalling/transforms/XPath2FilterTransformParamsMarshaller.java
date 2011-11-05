@@ -21,7 +21,6 @@ import org.apache.xml.security.transforms.params.XPath2FilterContainer;
 import org.apache.xml.security.utils.HelperNodeList;
 import org.w3c.dom.Document;
 import org.w3c.dom.NodeList;
-import xades4j.production.DataObjectTransform;
 import xades4j.production.XPath2FilterTransform;
 import xades4j.production.XPath2FilterTransform.XPathFilter;
 
@@ -29,15 +28,14 @@ import xades4j.production.XPath2FilterTransform.XPathFilter;
  *
  * @author Luís
  */
-class XPath2FilterTransformParamsMarshaller implements DataObjectTransformParamsMarshaller
+public final class XPath2FilterTransformParamsMarshaller implements DataObjectTransformParamsMarshaller<XPath2FilterTransform>
 {
     @Override
-    public NodeList marshalParameters(DataObjectTransform t, Document doc)
+    public NodeList marshalParameters(XPath2FilterTransform t, Document doc)
     {
         HelperNodeList nl = new HelperNodeList();
-        XPath2FilterTransform transf = (XPath2FilterTransform) t;
 
-        for (XPathFilter filter : transf.getFilters())
+        for (XPathFilter filter : t.getFilters())
         {
             XPath2FilterContainer c = null;
             switch (filter.getFilterType())

@@ -28,6 +28,7 @@ import xades4j.providers.SignaturePropertiesProvider;
 import xades4j.providers.TimeStampTokenProvider;
 import xades4j.xml.marshalling.SignedPropertiesMarshaller;
 import xades4j.xml.marshalling.UnsignedPropertiesMarshaller;
+import xades4j.xml.marshalling.transforms.DataObjectTransformParamsMarshaller;
 
 /**
  * A profile for signature production. This class and its subclasses are the entry
@@ -246,6 +247,25 @@ public abstract class XadesSigningProfile
             final Class<? extends PropertyDataObjectGenerator<TProp>> propDataGenClass)
     {
         this.profileCore.addGenericBinding(PropertyDataObjectGenerator.class, propDataGenClass, propClass);
+        return this;
+    }
+
+    /*********************************/
+    /******* Custom transforms *******/
+    /*********************************/
+    public <TTransf extends DataObjectTransform> XadesSigningProfile withTransformParamsMarshaller(
+            final Class<TTransf> transfClass,
+            final DataObjectTransformParamsMarshaller<TTransf> paramsMarshaller)
+    {
+        this.profileCore.addGenericBinding(DataObjectTransformParamsMarshaller.class, paramsMarshaller, transfClass);
+        return this;
+    }
+
+        public <TTransf extends DataObjectTransform> XadesSigningProfile withTransformParamsMarshaller(
+            final Class<TTransf> transfClass,
+            final Class<? extends DataObjectTransformParamsMarshaller<TTransf>> paramsMarshallerClass)
+    {
+        this.profileCore.addGenericBinding(DataObjectTransformParamsMarshaller.class, paramsMarshallerClass, transfClass);
         return this;
     }
 }

@@ -20,7 +20,6 @@ package xades4j.xml.marshalling.transforms;
 import org.apache.xml.security.transforms.params.XPathContainer;
 import org.w3c.dom.Document;
 import org.w3c.dom.NodeList;
-import xades4j.production.DataObjectTransform;
 import xades4j.production.XPathTransform;
 import xades4j.utils.DOMHelper;
 
@@ -28,13 +27,13 @@ import xades4j.utils.DOMHelper;
  *
  * @author Luís
  */
-class XPathTransformParamsMarshaller implements DataObjectTransformParamsMarshaller
+public final class XPathTransformParamsMarshaller implements DataObjectTransformParamsMarshaller<XPathTransform>
 {
     @Override
-    public NodeList marshalParameters(DataObjectTransform t, Document doc)
+    public NodeList marshalParameters(XPathTransform t, Document doc)
     {
         XPathContainer xpathContainer = new XPathContainer(doc);
-        xpathContainer.setXPath(((XPathTransform) t).getXPath());
+        xpathContainer.setXPath(t.getXPath());
         return DOMHelper.nodeList(xpathContainer.getElement());
     }
 }

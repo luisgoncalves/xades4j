@@ -43,13 +43,13 @@ import xades4j.xml.marshalling.transforms.DataObjectTransformParamsMarshaller;
 class DataObjectDescsProcessor
 {
     private final AlgorithmsProvider algorithmsProvider;
-    private final DataObjectTransformParamsMarshaller transformParamsMarshaller;
+    private final DataObjectTransformParamsGenerator dataObjectTransformParamsGenerator;
 
     @Inject
-    DataObjectDescsProcessor(AlgorithmsProvider algorithmsProvider, DataObjectTransformParamsMarshaller transformParamsMarshaller)
+    DataObjectDescsProcessor(AlgorithmsProvider algorithmsProvider, DataObjectTransformParamsGenerator dataObjectTransformParamsGenerator)
     {
         this.algorithmsProvider = algorithmsProvider;
-        this.transformParamsMarshaller = transformParamsMarshaller;
+        this.dataObjectTransformParamsGenerator = dataObjectTransformParamsGenerator;
     }
 
     /**
@@ -166,7 +166,7 @@ class DataObjectDescsProcessor
         {
             try
             {
-                NodeList transfParams = this.transformParamsMarshaller.marshalParameters(dObjTransf, document);
+                NodeList transfParams = this.dataObjectTransformParamsGenerator.getParameters(dObjTransf, document);
                 if (null == transfParams)
                 {
                     transforms.addTransform(dObjTransf.getTransformUri());

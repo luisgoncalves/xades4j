@@ -15,21 +15,23 @@
  * with XAdES4j. If not, see <http://www.gnu.org/licenses/>.
  */
 
-package xades4j.xml.marshalling.transforms;
+package xades4j.production;
 
 import org.w3c.dom.Document;
 import org.w3c.dom.NodeList;
-import xades4j.production.DataObjectTransform;
 
 /**
- *
+ * This is just a proxy to the actual params marshallers. That's why it's named
+ * "generator".
  * @author Luís
  */
-class NopDataObjectTransformParamsMarshaller implements DataObjectTransformParamsMarshaller
+interface DataObjectTransformParamsGenerator
 {
-    @Override
-    public NodeList marshalParameters(DataObjectTransform t, Document doc)
-    {
-        return null;
-    }
+    /**
+     * Gets the node parameters for a given transform.
+     * @param t the transform
+     * @param doc the parent document
+     * @return the list of parameter nodes
+     */
+    NodeList getParameters(DataObjectTransform t, Document doc);
 }
