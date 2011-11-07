@@ -24,6 +24,7 @@ import xades4j.properties.DataObjectFormatProperty;
 import org.junit.Test;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
+import org.w3c.dom.Node;
 import xades4j.properties.CounterSignatureProperty;
 import xades4j.properties.SignerRoleProperty;
 import xades4j.providers.SignaturePropertiesCollector;
@@ -44,21 +45,22 @@ public class SignerBESTest extends SignerTestBase
     {
         System.out.println("signBES");
 
-        Document doc = getTestDocument();
-        Element elemToSign = doc.getDocumentElement();
+        Document doc1 = getTestDocument();
+        Document doc2 = getDocument("content.xml");
+        Node objectContent = doc1.importNode(doc2.getDocumentElement(), true);
+        Element elemToSign = doc1.getDocumentElement();
         SignerBES signer = (SignerBES)new XadesBesSigningProfile(keyingProviderMy).newSigner();
 
         IndividualDataObjsTimeStampProperty dataObjsTimeStamp = new IndividualDataObjsTimeStampProperty();
         AllDataObjsCommitmentTypeProperty globalCommitment = AllDataObjsCommitmentTypeProperty.proofOfApproval();
         CommitmentTypeProperty commitment = CommitmentTypeProperty.proofOfCreation();
-
         DataObjectDesc obj1 = new DataObjectReference('#' + elemToSign.getAttribute("Id")).withTransform(new EnvelopedSignatureTransform()).withDataObjectFormat(new DataObjectFormatProperty("text/xml", "MyEncoding").withDescription("Isto é uma descrição do elemento raiz").withDocumentationUri("http://doc1.txt").withDocumentationUri("http://doc2.txt").withIdentifier("http://elem.root")).withCommitmentType(commitment).withDataObjectTimeStamp(dataObjsTimeStamp);
-        DataObjectDesc obj2 = new EnvelopedXmlObject(doc.createElement("ElemInObject"), "text/xml", null).withDataObjectFormat(new DataObjectFormatProperty("text/xml", "MyEncoding").withDescription("Isto é uma descrição do elemento dentro do object").withDocumentationUri("http://doc3.txt").withDocumentationUri("http://doc4.txt").withIdentifier("http://elem.in.object")).withCommitmentType(commitment).withDataObjectTimeStamp(dataObjsTimeStamp);
+        DataObjectDesc obj2 = new EnvelopedXmlObject(objectContent, "text/xml", null).withDataObjectFormat(new DataObjectFormatProperty("text/xml", "MyEncoding").withDescription("Isto é uma descrição do elemento dentro do object").withDocumentationUri("http://doc3.txt").withDocumentationUri("http://doc4.txt").withIdentifier("http://elem.in.object")).withCommitmentType(commitment).withDataObjectTimeStamp(dataObjsTimeStamp);
         SignedDataObjects dataObjs = new SignedDataObjects(obj1, obj2).withCommitmentType(globalCommitment).withDataObjectsTimeStamp();
 
         signer.sign(dataObjs, elemToSign);
 
-        outputDocument(doc, "document.signed.bes.xml");
+        outputDocument(doc1, "document.signed.bes.xml");
     }
 
     @Test
