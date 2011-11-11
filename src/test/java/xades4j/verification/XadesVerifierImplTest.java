@@ -17,6 +17,7 @@
 package xades4j.verification;
 
 import java.io.FileInputStream;
+import java.io.InputStream;
 import static org.junit.Assert.*;
 import org.junit.Test;
 import org.w3c.dom.Document;
@@ -148,9 +149,13 @@ public class XadesVerifierImplTest extends VerifierTestBase
         Element signatureNode = getSigElement(doc);
         XadesVerifier verifier = new XadesVerificationProfile(VerifierTestBase.validationProviderNist).newVerifier();
 
-        SignatureSpecificVerificationOptions options = new SignatureSpecificVerificationOptions().useDataForAnonymousReference(new FileInputStream("license.txt"));
+        InputStream is = new FileInputStream("license.txt");
+        SignatureSpecificVerificationOptions options = new SignatureSpecificVerificationOptions().useDataForAnonymousReference(is);
         XAdESVerificationResult res = verifier.verify(signatureNode, options);
         
+        // The caller must close the stream.
+        is.close();
+
         assertEquals(XAdESForm.C, res.getSignatureForm());
     }
 
