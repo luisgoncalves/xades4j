@@ -17,7 +17,6 @@
 package xades4j.verification;
 
 import com.google.inject.Inject;
-import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.security.MessageDigest;
@@ -30,7 +29,7 @@ import xades4j.UnsupportedAlgorithmException;
 import xades4j.properties.data.SignaturePolicyData;
 import xades4j.providers.MessageDigestEngineProvider;
 import xades4j.providers.SignaturePolicyDocumentProvider;
-import xades4j.utils.StreamUtils;
+import xades4j.utils.MessageDigestUtils;
 
 /**
  *
@@ -38,6 +37,7 @@ import xades4j.utils.StreamUtils;
  */
 class SignaturePolicyVerifier implements QualifyingPropertyVerifier<SignaturePolicyData>
 {
+
     private final SignaturePolicyDocumentProvider policyDocumentProvider;
     private final MessageDigestEngineProvider messageDigestProvider;
 
@@ -57,33 +57,45 @@ class SignaturePolicyVerifier implements QualifyingPropertyVerifier<SignaturePol
     {
         ObjectIdentifier policyId = propData.getIdentifier();
         if (null == policyId)
+        {
             return new SignaturePolicyImpliedProperty();
+        }
 
-        // Get the policy document.
+        // Get the policy document
         InputStream sigDocStream = this.policyDocumentProvider.getSignaturePolicyDocumentStream(policyId);
         if (null == sigDocStream)
-            throw new SignaturePolicyNotAvailableException(policyId);
-        ByteArrayOutputStream baos = new ByteArrayOutputStream();
-        try
-        {
-            StreamUtils.readWrite(sigDocStream, baos);
-            sigDocStream.close();
-        } catch (IOException ex)
         {
             throw new SignaturePolicyNotAvailableException(policyId);
         }
-        byte[] sigDocBytes = baos.toByteArray();
 
-        // Check the document digest.
         try
         {
             MessageDigest md = this.messageDigestProvider.getEngine(propData.getDigestAlgorithm());
-            if (!Arrays.equals(md.digest(sigDocBytes), propData.getDigestValue()))
+            byte[] sigDocDigest = MessageDigestUtils.digestStream(md, sigDocStream);
+
+            // Check the document digest.
+            if (!Arrays.equals(sigDocDigest, propData.getDigestValue()))
+            {
                 throw new SignaturePolicyDigestMismatchException(policyId);
+            }
+
             return new SignaturePolicyIdentifierProperty(policyId, sigDocStream);
+        } catch (IOException ex)
+        {
+            throw new SignaturePolicyNotAvailableException(policyId);
         } catch (UnsupportedAlgorithmException ex)
         {
             throw new SignaturePolicyCannotDigestException(policyId, ex.getMessage());
+        } finally
+        {
+            try
+            {
+                sigDocStream.close();
+            } catch (IOException ex)
+            {
+                // TODO: improve this when causes are passed to xades4j exceptions
+                throw new SignaturePolicyNotAvailableException(policyId);
+            }
         }
     }
 }

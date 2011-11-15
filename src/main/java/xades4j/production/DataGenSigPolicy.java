@@ -17,14 +17,14 @@
 package xades4j.production;
 
 import com.google.inject.Inject;
-import java.io.ByteArrayOutputStream;
 import java.io.IOException;
+import java.security.MessageDigest;
 import xades4j.properties.SignaturePolicyIdentifierProperty;
 import xades4j.UnsupportedAlgorithmException;
 import xades4j.properties.data.PropertyDataObject;
 import xades4j.properties.data.SignaturePolicyData;
 import xades4j.providers.MessageDigestEngineProvider;
-import xades4j.utils.StreamUtils;
+import xades4j.utils.MessageDigestUtils;
 
 /**
  *
@@ -47,12 +47,10 @@ class DataGenSigPolicy implements PropertyDataObjectGenerator<SignaturePolicyIde
     {
         try
         {
-            // Get the policy document data.
-            ByteArrayOutputStream baos = new ByteArrayOutputStream();
-            StreamUtils.readWrite(prop.getPolicyDocumentStream(), baos);
             // Digest the policy document.
             String digestAlgUri = ctx.getAlgorithmsProvider().getDigestAlgorithmForReferenceProperties();
-            byte[] policyDigest = messageDigestProvider.getEngine(digestAlgUri).digest(baos.toByteArray());
+            MessageDigest md = messageDigestProvider.getEngine(digestAlgUri);
+            byte[] policyDigest = MessageDigestUtils.digestStream(md, prop.getPolicyDocumentStream());
 
             return new SignaturePolicyData(
                     prop.getIdentifier(),
