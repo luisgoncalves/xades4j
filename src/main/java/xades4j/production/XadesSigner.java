@@ -16,6 +16,7 @@
  */
 package xades4j.production;
 
+import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import xades4j.XAdES4jException;
 
@@ -44,4 +45,45 @@ public interface XadesSigner
     public XadesSignatureResult sign(
             SignedDataObjects signedDataObjects,
             Node parent) throws XAdES4jException;
+
+    /**
+     * A strategy to append the signature element to a document's DOM tree using
+     * a given node as reference. Examples are appending the signature as the first
+     * or last child of a node.
+     * @see SignatureAppendingStrategies
+     */
+    public interface SignatureAppendingStrategy
+    {
+        /**
+         * Appends the signature element to the DOM tree using the given node as
+         * reference.
+         * @param signatureElement the signature element
+         * @param referenceNode the reference node
+         */
+        void append(Element signatureElement, Node referenceNode);
+
+        /**
+         * Reverts the append action. Used when to remove the signature from the
+         * DOM tree when signature production fails.
+         * @param signatureElement the signature element
+         * @param referenceNode the reference node
+         */
+        void revert(Element signatureElement, Node referenceNode);
+    }
+
+    /**
+     * Applies a signature over a set of data objects and appends it to the DOM
+     * tree using the given srtategy and reference node.
+     * @param signedDataObjects the data objects to be signed
+     * @param referenceNode the node used as reference for the appending strategy
+     * @param appendingStrategy the appending strategy
+     * @return the signature result
+     * @see SignedDataObjects
+     * @see SignatureAppendingStrategies
+     * @throws XAdES4jException if an error occurs
+     */
+    public XadesSignatureResult sign(
+            SignedDataObjects signedDataObjects,
+            Node referenceNode,
+            SignatureAppendingStrategy appendingStrategy) throws XAdES4jException;
 }

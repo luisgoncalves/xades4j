@@ -28,7 +28,6 @@ import org.apache.xml.security.signature.SignedInfo;
 import org.apache.xml.security.signature.XMLSignature;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
-import org.w3c.dom.Node;
 import xades4j.XAdES4jXMLSigException;
 import xades4j.providers.AlgorithmsProvider;
 import xades4j.utils.DOMHelper;
@@ -45,7 +44,7 @@ public class PropertiesDataGenerationContext
 {
     private final List<Reference> references;
     private final Map<DataObjectDesc, Reference> referencesMappings;
-    private final Node elemInSigDoc;
+    private final Document sigDocument;
     private XMLSignature targetXmlSignature;
     /**/
     private final AlgorithmsProvider algorithmsProvider;
@@ -61,7 +60,7 @@ public class PropertiesDataGenerationContext
             AlgorithmsProvider algorithmsProvider) throws XAdES4jXMLSigException
     {
         this.targetXmlSignature = targetXmlSignature;
-        this.elemInSigDoc = targetXmlSignature.getElement();
+        this.sigDocument = DOMHelper.getOwnerDocument(targetXmlSignature.getElement());
         this.algorithmsProvider = algorithmsProvider;
         this.referencesMappings = null;
 
@@ -89,11 +88,11 @@ public class PropertiesDataGenerationContext
     PropertiesDataGenerationContext(
             Collection<DataObjectDesc> orderedDataObjs,
             Map<DataObjectDesc, Reference> referencesMappings,
-            Node elemInSigDoc,
+            Document sigDocument,
             AlgorithmsProvider algorithmsProvider)
     {
         this.referencesMappings = referencesMappings;
-        this.elemInSigDoc = elemInSigDoc;
+        this.sigDocument = sigDocument;
         this.algorithmsProvider = algorithmsProvider;
 
         List<Reference> orderedRefs = new ArrayList<Reference>(orderedDataObjs.size());
@@ -158,7 +157,6 @@ public class PropertiesDataGenerationContext
      */
     public Element createElementInSignatureDoc(String name, String prefix, String namespace)
     {
-        Document doc = DOMHelper.getOwnerDocument(elemInSigDoc);
-        return DOMHelper.createElement(doc, name, prefix, namespace);
+        return DOMHelper.createElement(this.sigDocument, name, prefix, namespace);
     }
 }

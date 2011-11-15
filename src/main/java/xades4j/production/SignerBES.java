@@ -33,6 +33,7 @@ import org.apache.xml.security.signature.XMLSignature;
 import org.apache.xml.security.signature.XMLSignatureException;
 import org.apache.xml.security.utils.Constants;
 import org.apache.xml.security.utils.ElementProxy;
+import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import xades4j.properties.QualifyingProperty;
@@ -109,8 +110,17 @@ class SignerBES implements XadesSigner
             SignedDataObjects signedDataObjects,
             Node parent) throws XAdES4jException
     {
-        if (null == parent)
-            throw new NullPointerException("Parent node cannot be null");
+        return sign(signedDataObjects, parent, SignatureAppendingStrategies.AsLastChild);
+    }
+
+    @Override
+    public final XadesSignatureResult sign(
+            SignedDataObjects signedDataObjects,
+            Node referenceNode,
+            SignatureAppendingStrategy appendingStrategy) throws XAdES4jException
+    {
+        if (null == referenceNode)
+            throw new NullPointerException("Reference node node cannot be null");
         if (null == signedDataObjects)
             throw new NullPointerException("References cannot be null");
         if (signedDataObjects.isEmpty())
@@ -141,9 +151,10 @@ class SignerBES implements XadesSigner
 
         // The XMLSignature (ds:Signature).
         XMLSignature signature = null;
+        Document signatureDocument = DOMHelper.getOwnerDocument(referenceNode);
         try
         {
-            signature = new XMLSignature(DOMHelper.getOwnerDocument(parent), signedDataObjects.getBaseUri(), sigAlgUri, canonAlgUri);
+            signature = new XMLSignature(signatureDocument, signedDataObjects.getBaseUri(), sigAlgUri, canonAlgUri);
             signature.setId(signatureId);
         } catch (XMLSecurityException ex)
         {
@@ -212,7 +223,7 @@ class SignerBES implements XadesSigner
         PropertiesDataGenerationContext propsDataGenCtx = new PropertiesDataGenerationContext(
                 signedDataObjects.getDataObjectsDescs(),
                 referenceMappings,
-                parent,
+                signatureDocument,
                 algorithmsProvider);
         // Generate the signed properties data objects. The data objects structure
         // is verifier in the process.
@@ -232,10 +243,9 @@ class SignerBES implements XadesSigner
         PrivateKey signingKey = keyingProvider.getSigningKey(signingCertificate);
         try
         {
-            parent.appendChild(signature.getElement());
+            appendingStrategy.append(signature.getElement(), referenceNode);
             try
             {
-
                 signature.sign(signingKey);
             } catch (XMLSignatureException ex)
             {
@@ -264,7 +274,7 @@ class SignerBES implements XadesSigner
                     qualifyingPropsElem);
         } catch (XAdES4jException ex)
         {
-            parent.removeChild(signature.getElement());
+            appendingStrategy.revert(signature.getElement(), referenceNode);
             throw ex;
         }
 
