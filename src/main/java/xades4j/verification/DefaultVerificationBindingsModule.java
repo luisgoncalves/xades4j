@@ -25,18 +25,14 @@ import javax.xml.namespace.QName;
 import xades4j.properties.CounterSignatureProperty;
 import xades4j.properties.ObjectIdentifier;
 import xades4j.properties.QualifyingProperty;
-import xades4j.properties.SigningCertificateProperty;
 import xades4j.properties.data.AllDataObjsTimeStampData;
 import xades4j.properties.data.CommitmentTypeData;
 import xades4j.properties.data.CompleteCertificateRefsData;
 import xades4j.properties.data.CompleteRevocationRefsData;
 import xades4j.properties.data.CustomPropertiesDataObjsStructureVerifier;
-import xades4j.utils.DataGetter;
 import xades4j.properties.data.DataObjectFormatData;
 import xades4j.properties.data.GenericDOMData;
 import xades4j.properties.data.IndividualDataObjsTimeStampData;
-import xades4j.properties.data.PropertyDataObject;
-import xades4j.properties.data.PropertyDataStructureException;
 import xades4j.properties.data.SignaturePolicyData;
 import xades4j.properties.data.SignatureProdPlaceData;
 import xades4j.properties.data.SignatureTimeStampData;
@@ -60,16 +56,19 @@ import xades4j.xml.unmarshalling.QualifyingPropertiesUnmarshaller;
 class DefaultVerificationBindingsModule extends AbstractModule
 {
     private final Collection<CustomPropertiesDataObjsStructureVerifier> customGlobalStructureVerifiers;
+    private final Collection<RawSignatureVerifier> rawSignatureVerifiers;
     private final Collection<CustomSignatureVerifier> customSignatureVerifiers;
     private final Map<QName, Class<? extends QualifyingPropertyVerifier>> unkownElemsVerifiers;
 
     DefaultVerificationBindingsModule(
             Collection<CustomPropertiesDataObjsStructureVerifier> customStructureVerifiers,
+            Collection<RawSignatureVerifier> rawSignatureVerifiers,
             Collection<CustomSignatureVerifier> customSignatureVerifiers,
             Map<QName, Class<? extends QualifyingPropertyVerifier>> unkownElemsVerifiers)
     {
 
         this.customGlobalStructureVerifiers = customStructureVerifiers;
+        this.rawSignatureVerifiers = rawSignatureVerifiers;
         this.customSignatureVerifiers = customSignatureVerifiers;
         this.unkownElemsVerifiers = unkownElemsVerifiers;
     }
@@ -174,7 +173,13 @@ class DefaultVerificationBindingsModule extends AbstractModule
         {
         }).toInstance(unkownElemsVerifiers);
 
-        // Custom global verification.
+        // Raw verification
+        bind(new TypeLiteral<Collection<RawSignatureVerifier>>()
+        {
+        }).toInstance(rawSignatureVerifiers);
+
+        // Global verification.
+        customSignatureVerifiers.add(new TimeStampCoherenceVerifier());
         bind(new TypeLiteral<Collection<CustomSignatureVerifier>>()
         {
         }).toInstance(customSignatureVerifiers);

@@ -49,11 +49,12 @@ import xades4j.xml.unmarshalling.QualifyingPropertiesUnmarshaller;
  * setters should use the {@code Inject} annotation from Guice.
  * <p>
  * Custom {@link QualifyingPropertyVerifier}s can also be configured. The principles
- * on their dependencies are the same. In addition, custom verifiers over the whole
- * signature can be configured. Finally, verifiers for specific XML elements may
- * be added. This can be usefull if one wants to handle an unsigned property that
- * is not known by the library, as the default unmarshaller will create {@code GenericDOMData}
- * instances for those properties if {@code acceptUnknownProperties} is set.
+ * on their dependencies are the same. In addition, custom verifiers that apply 
+ * over the whole on different stages of validation can be configured. Finally,
+ * verifiers for specific XML elements may be added. This can be usefull if one
+ * wants to handle an unsigned property that is not known by the library, as the
+ * default unmarshaller will create {@code GenericDOMData} instances for those
+ * properties if {@code acceptUnknownProperties} is set.
  * <p>
  * Repeated dependency bindings will not cause an immediate error. An exception
  * will be thrown when an instance of {@code XadesVerifier} is requested.
@@ -64,6 +65,7 @@ public final class XadesVerificationProfile
     private final XadesProfileCore profileCore;
     /**/
     private Collection<CustomPropertiesDataObjsStructureVerifier> customGlobalStructureVerifiers;
+    private Collection<RawSignatureVerifier> rawSignatureVerifiers;
     private Collection<CustomSignatureVerifier> customSignatureVerifiers;
     private Map<QName, Class<? extends QualifyingPropertyVerifier>> unkownElemsVerifiers;
     private boolean acceptUnknownProperties;
@@ -139,6 +141,7 @@ public final class XadesVerificationProfile
         // Injector will reflect the profile's state when the verifier is requested.
         Module defaultsModule = new DefaultVerificationBindingsModule(
                 CollectionUtils.cloneOrEmptyIfNull(customGlobalStructureVerifiers),
+                CollectionUtils.cloneOrEmptyIfNull(rawSignatureVerifiers),
                 CollectionUtils.cloneOrEmptyIfNull(customSignatureVerifiers),
                 CollectionUtils.cloneOrEmptyIfNull(unkownElemsVerifiers));
 
@@ -233,6 +236,16 @@ public final class XadesVerificationProfile
             throw new NullPointerException();
         customGlobalStructureVerifiers = CollectionUtils.newIfNull(customGlobalStructureVerifiers, 2);
         customGlobalStructureVerifiers.add(v);
+        return this;
+    }
+
+    public XadesVerificationProfile withRawSignatureVerifier(
+            RawSignatureVerifier v)
+    {
+        if (null == v)
+            throw new NullPointerException();
+        rawSignatureVerifiers = CollectionUtils.newIfNull(rawSignatureVerifiers, 2);
+        rawSignatureVerifiers.add(v);
         return this;
     }
 

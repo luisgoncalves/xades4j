@@ -19,7 +19,7 @@ package xades4j.xml.unmarshalling;
 import xades4j.XAdES4jException;
 
 /**
- * Thrown when there's an error during property data objects unmarshalling.
+ * Thrown when there's an error during signature unmarshalling.
  * @author Luís
  */
 public class UnmarshalException extends XAdES4jException

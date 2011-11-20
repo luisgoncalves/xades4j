@@ -18,7 +18,7 @@ package xades4j.verification;
 
 /**
  * Interface for custom signature verifiers. Custom verifiers may validate the
- * signature has a whole. They are invoked in the end of signature verification.
+ * signature as a whole. They are invoked in the end of signature verification.
  * <p>
  * Custom verifiers are registered through the {@link XadesVerificationProfile#withCustomSignatureVerifier(xades4j.verification.CustomSignatureVerifier)}
  * method.

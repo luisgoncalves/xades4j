@@ -19,21 +19,26 @@ package xades4j.verification;
 import xades4j.XAdES4jException;
 
 /**
- * Base exception for verification errors.
+ * Base exception for signature verification errors.
  * @see InvalidPropertyException
  * @see CoreVerificationException
  * @see QualifyingPropertiesIncorporationException
  * @see InvalidXAdESFormException
  * @author Luís
  */
-public abstract class InvalidSignatureException extends XAdES4jException
+public class InvalidSignatureException extends XAdES4jException
 {
     protected InvalidSignatureException()
     {
     }
 
-    protected InvalidSignatureException(String msg)
+    public InvalidSignatureException(String msg)
     {
         super(msg);
+    }
+
+    public InvalidSignatureException(String msg, Throwable cause)
+    {
+        super(msg, cause);
     }
 }

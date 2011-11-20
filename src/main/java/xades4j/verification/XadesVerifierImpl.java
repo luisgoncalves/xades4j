@@ -47,6 +47,7 @@ import xades4j.utils.CollectionUtils;
 import xades4j.utils.CollectionUtils.Predicate;
 import xades4j.utils.ObjectUtils;
 import xades4j.utils.PropertiesUtils;
+import xades4j.verification.RawSignatureVerifier.RawSignatureVerifierContext;
 import xades4j.verification.SignatureUtils.KeyInfoRes;
 import xades4j.verification.SignatureUtils.ReferencesRes;
 import xades4j.xml.unmarshalling.QualifyingPropertiesUnmarshaller;
@@ -68,6 +69,7 @@ class XadesVerifierImpl implements XadesVerifier
     private final CertificateValidationProvider certificateValidator;
     private final QualifyingPropertiesVerifier qualifyingPropertiesVerifier;
     private final QualifyingPropertiesUnmarshaller qualifPropsUnmarshaller;
+    private final Collection<RawSignatureVerifier> rawSigVerifiers;
     private final Collection<CustomSignatureVerifier> customSigVerifiers;
 
     @Inject
@@ -75,6 +77,7 @@ class XadesVerifierImpl implements XadesVerifier
             CertificateValidationProvider certificateValidator,
             QualifyingPropertiesVerifier qualifyingPropertiesVerifier,
             QualifyingPropertiesUnmarshaller qualifPropsUnmarshaller,
+            Collection<RawSignatureVerifier> rawSigVerifiers,
             Collection<CustomSignatureVerifier> customSigVerifiers)
     {
         if (ObjectUtils.anyNull(
@@ -86,8 +89,8 @@ class XadesVerifierImpl implements XadesVerifier
         this.certificateValidator = certificateValidator;
         this.qualifyingPropertiesVerifier = qualifyingPropertiesVerifier;
         this.qualifPropsUnmarshaller = qualifPropsUnmarshaller;
+        this.rawSigVerifiers = rawSigVerifiers;
         this.customSigVerifiers = customSigVerifiers;
-        this.customSigVerifiers.add(new TimeStampCoherenceVerifier());
     }
 
     void setAcceptUnknownProperties(boolean accept)
@@ -108,6 +111,8 @@ class XadesVerifierImpl implements XadesVerifier
             verificationOptions = new SignatureSpecificVerificationOptions();
         }
 
+        /* Unmarshal the signature */
+
         XMLSignature signature;
         try
         {
@@ -126,9 +131,15 @@ class XadesVerifierImpl implements XadesVerifier
             throw new UnmarshalException("XML signature doesn't have an Id");
         }
 
-        /* References */
-
         ReferencesRes referencesRes = SignatureUtils.processReferences(signature);
+
+        /* Apply early verifiers */
+        
+        RawSignatureVerifierContext rawCtx = new RawSignatureVerifierContext(signature);
+        for (RawSignatureVerifier rawSignatureVerifier : this.rawSigVerifiers)
+        {
+            rawSignatureVerifier.verify(rawCtx);
+        }
 
         /* Get and check the QualifyingProperties element */
 
@@ -197,7 +208,7 @@ class XadesVerifierImpl implements XadesVerifier
         /* Qualifying properties verification */
 
         // Create the verification context.
-        QualifyingPropertyVerificationContext ctx = new QualifyingPropertyVerificationContext(
+        QualifyingPropertyVerificationContext qPropsCtx = new QualifyingPropertyVerificationContext(
                 signature,
                 new QualifyingPropertyVerificationContext.CertificationChainData(
                 certValidationRes.getCerts(),
@@ -209,7 +220,7 @@ class XadesVerifierImpl implements XadesVerifier
                 signature));
 
         // Verify the properties. Data structure verification is included.
-        Collection<PropertyInfo> props = this.qualifyingPropertiesVerifier.verifyProperties(qualifPropsData, ctx);
+        Collection<PropertyInfo> props = this.qualifyingPropertiesVerifier.verifyProperties(qualifPropsData, qPropsCtx);
 
         XAdESVerificationResult res = new XAdESVerificationResult(
                 XAdESFormChecker.checkForm(props),
@@ -221,7 +232,7 @@ class XadesVerifierImpl implements XadesVerifier
         // Apply the custom signature verifiers.
         for (CustomSignatureVerifier customVer : this.customSigVerifiers)
         {
-            customVer.verify(res, ctx);
+            customVer.verify(res, qPropsCtx);
         }
 
         return res;
