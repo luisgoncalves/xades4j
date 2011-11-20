@@ -16,7 +16,14 @@
  */
 package xades4j.production;
 
+import java.util.ArrayList;
+import java.util.List;
 import org.apache.xml.security.transforms.Transforms;
+import org.apache.xml.security.transforms.params.XPath2FilterContainer;
+import org.apache.xml.security.utils.HelperNodeList;
+import org.w3c.dom.Document;
+import org.w3c.dom.NodeList;
+import sun.reflect.generics.reflectiveObjects.NotImplementedException;
 
 /**
  * The XPath 2.0 transform.
@@ -26,91 +33,101 @@ import org.apache.xml.security.transforms.Transforms;
  */
 public final class XPath2FilterTransform extends DataObjectTransform
 {
-    /**
-     * A XPath filter for the XPath 2.0 transform.
-     */
-    public static class XPathFilter
+    private interface XPath2FilterContainerCreator
     {
-        public enum FilterType
-        {
-            INTERSECT,
-            SUBTRACT,
-            UNION
-        }
-
-        private final FilterType filterType;
-        private final String xpath;
-
-        private XPathFilter(FilterType filterType, String xpath)
-        {
-            if(null == xpath)
-            {
-                throw new NullPointerException("XPath expression cannot be null");
-            }
-
-            this.filterType = filterType;
-            this.xpath = xpath;
-        }
-
-        public FilterType getFilterType()
-        {
-            return filterType;
-        }
-
-        public String getXPath()
-        {
-            return xpath;
-        }
-
-        /**
-         * Creates a new XPath intersect filter.
-         * @param xpath the filte expression
-         * @return the filter
-         */
-        public static XPathFilter intersect(String xpath)
-        {
-            return new XPathFilter(FilterType.INTERSECT, xpath);
-        }
-
-        /**
-         * Creates a new XPath subtract filter.
-         * @param xpath the filte expression
-         * @return the filter
-         */
-        public static XPathFilter subtract(String xpath)
-        {
-            return new XPathFilter(FilterType.SUBTRACT, xpath);
-        }
-
-        /**
-         * Creates a new XPath union filter.
-         * @param xpath the filte expression
-         * @return the filter
-         */
-        public static XPathFilter union(String xpath)
-        {
-            return new XPathFilter(FilterType.UNION, xpath);
-        }
+        XPath2FilterContainer create(String xpath, Document doc);
     }
-    /**/
-    private final XPathFilter[] filters;
 
-    public XPath2FilterTransform(XPathFilter... filters)
+    private static final XPath2FilterContainerCreator intersectCreator = new XPath2FilterContainerCreator()
+    {
+        @Override
+        public XPath2FilterContainer create(String xpath, Document doc)
+        {
+            return XPath2FilterContainer.newInstanceIntersect(doc, xpath);
+        }
+    };
+    private static final XPath2FilterContainerCreator subtractCreator = new XPath2FilterContainerCreator()
+    {
+        @Override
+        public XPath2FilterContainer create(String xpath, Document doc)
+        {
+            return XPath2FilterContainer.newInstanceSubtract(doc, xpath);
+        }
+    };
+    private static final XPath2FilterContainerCreator unionCreator = new XPath2FilterContainerCreator()
+    {
+        @Override
+        public XPath2FilterContainer create(String xpath, Document doc)
+        {
+            return XPath2FilterContainer.newInstanceUnion(doc, xpath);
+        }
+    };
+
+    /**************************************************************************/
+
+    private final List<XPath2FilterContainerCreator> creators;
+    private final List<String> xpaths;
+
+    /**
+     * At least <b>one filter</b> has to be specified after creating the transform instance
+     * using {@link #intersect(java.lang.String) intersect}, {@link #subtract(java.lang.String) subtract}
+     * or {@link #union(java.lang.String) union} methods.
+     *
+     */
+    public XPath2FilterTransform()
     {
         super(Transforms.TRANSFORM_XPATH2FILTER);
-        if (null == filters)
-        {
-            throw new NullPointerException("XPath filters cannot be null");
-        }
-        if (filters.length == 0)
-        {
-            throw new IllegalArgumentException("At least one XPath filter must be specified");
-        }
-        this.filters = filters;
+        this.creators = new ArrayList<XPath2FilterContainerCreator>(3);
+        this.xpaths = new ArrayList<String>(3);
     }
 
-    public XPathFilter[] getFilters()
+    private void addXPath(String xpath)
     {
-        return filters;
+        if(null == xpath)
+        {
+            throw new NullPointerException("XPath expression cannot be null");
+        }
+        this.xpaths.add(xpath);
+    }
+
+    public XPath2FilterTransform intersect(String xpath)
+    {
+        addXPath(xpath);
+        this.creators.add(intersectCreator);
+        return this;
+    }
+
+    public XPath2FilterTransform subtract(String xpath)
+    {
+        addXPath(xpath);
+        this.creators.add(subtractCreator);
+        return this;
+    }
+
+    public XPath2FilterTransform union(String xpath)
+    {
+        addXPath(xpath);
+        this.creators.add(unionCreator);
+        return this;
+    }
+
+    @Override
+    protected NodeList getParams(Document signatureDocument)
+    {
+        if(this.xpaths.isEmpty())
+        {
+            throw new NullPointerException("No filters were specified for XPath2FilterTransform");
+        }
+
+        HelperNodeList params = new HelperNodeList();
+
+        for (int i = 0; i < this.xpaths.size(); i++)
+        {
+            XPath2FilterContainerCreator c = this.creators.get(i);
+            params.appendChild(
+                    c.create(this.xpaths.get(i), signatureDocument).getElement());
+        }
+        
+        return params;
     }
 }

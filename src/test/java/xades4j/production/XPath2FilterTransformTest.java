@@ -17,9 +17,12 @@
 
 package xades4j.production;
 
+import org.apache.xml.security.transforms.params.XPath2FilterContainer;
 import org.junit.Test;
 import static org.junit.Assert.*;
-import xades4j.production.XPath2FilterTransform.XPathFilter;
+import org.w3c.dom.Node;
+import org.w3c.dom.NodeList;
+import xades4j.utils.SignatureServicesTestBase;
 
 /**
  *
@@ -28,26 +31,30 @@ import xades4j.production.XPath2FilterTransform.XPathFilter;
 public class XPath2FilterTransformTest
 {
     @Test
-    public void testGetFilters()
+    public void testGetParams() throws Exception
     {
-        System.out.println("getFilters");
+        System.out.println("getParams");
 
-        XPath2FilterTransform instance = new XPath2FilterTransform(
-                XPathFilter.intersect("intersect-xpath"),
-                XPathFilter.union("union-xpath"),
-                XPathFilter.subtract("subtract-xpath"));
+        XPath2FilterTransform instance = new XPath2FilterTransform()
+                .intersect("intersect-xpath")
+                .union("union-xpath")
+                .subtract("subtract-xpath");
 
-        XPathFilter[] result = instance.getFilters();
-        assertFilterAreEqual(result[0], XPathFilter.FilterType.INTERSECT, "intersect-xpath");
-        assertFilterAreEqual(result[1], XPathFilter.FilterType.UNION, "union-xpath");
-        assertFilterAreEqual(result[2], XPathFilter.FilterType.SUBTRACT, "subtract-xpath");
+        NodeList result = instance.getParams(SignatureServicesTestBase.getNewDocument());
+        assertFilterAreEqual(result.item(0), XPath2FilterContainer.INTERSECT, "intersect-xpath");
+        assertFilterAreEqual(result.item(1), XPath2FilterContainer.UNION, "union-xpath");
+        assertFilterAreEqual(result.item(2), XPath2FilterContainer.SUBTRACT, "subtract-xpath");
     }
 
     private static void assertFilterAreEqual(
-            XPathFilter filter,
-            XPathFilter.FilterType filterType, String xpath)
+            Node filterNode,
+            String filterType,
+            String filterXpath)
     {
-        assertEquals(filterType, filter.getFilterType());
-        assertEquals(xpath, filter.getXPath());
+        String filterNodeFilterType = filterNode.getAttributes().getNamedItem("Filter").getNodeValue();
+        String filterNodeFilterXpath = filterNode.getTextContent();
+
+        assertEquals(filterType, filterNodeFilterType);
+        assertEquals(filterXpath, filterNodeFilterXpath);
     }
 }

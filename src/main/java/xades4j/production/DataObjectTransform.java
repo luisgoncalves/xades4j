@@ -16,6 +16,11 @@
  */
 package xades4j.production;
 
+import org.w3c.dom.Document;
+import org.w3c.dom.Node;
+import org.w3c.dom.NodeList;
+import xades4j.utils.DOMHelper;
+
 /**
  * Base class for transforms that are applied to a data object. Each {@code DataObjectTransform}
  * that is applied to a data object will result in a {@code ds:Transform} element
@@ -25,21 +30,39 @@ package xades4j.production;
  *
  * @author Luís
  */
-public abstract class DataObjectTransform
+public class DataObjectTransform
 {
-    private final String transformUri;
+    private final String uri;
+    private final NodeList params;
 
-    protected DataObjectTransform(String transformUri)
+    public DataObjectTransform(String uri, NodeList params)
     {
-        if (transformUri == null)
+        if (uri == null)
         {
             throw new NullPointerException("Transform URI cannot be null");
         }
-        this.transformUri = transformUri;
+        this.uri = uri;
+        this.params = params;
+    }
+
+    public DataObjectTransform(String transformUri, Node... transformParams)
+    {
+        this(transformUri, DOMHelper.nodeList(transformParams));
     }
 
     String getTransformUri()
     {
-        return transformUri;
+        return this.uri;
+    }
+
+    /**
+     * Gets the transforms parameters. The signature document is passed because
+     * it may allow a simpler public API on subclasses.
+     * @param signatureDocument the document that owns the signature that contains the current transform
+     * @return a node list with the transform paramters or {@code null} if none
+     */
+    protected NodeList getParams(Document signatureDocument)
+    {
+        return this.params;
     }
 }

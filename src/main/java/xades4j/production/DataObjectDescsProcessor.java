@@ -42,13 +42,11 @@ import xades4j.providers.AlgorithmsProvider;
 class DataObjectDescsProcessor
 {
     private final AlgorithmsProvider algorithmsProvider;
-    private final DataObjectTransformParamsGenerator dataObjectTransformParamsGenerator;
 
     @Inject
-    DataObjectDescsProcessor(AlgorithmsProvider algorithmsProvider, DataObjectTransformParamsGenerator dataObjectTransformParamsGenerator)
+    DataObjectDescsProcessor(AlgorithmsProvider algorithmsProvider)
     {
         this.algorithmsProvider = algorithmsProvider;
-        this.dataObjectTransformParamsGenerator = dataObjectTransformParamsGenerator;
     }
 
     /**
@@ -165,11 +163,12 @@ class DataObjectDescsProcessor
         {
             try
             {
-                NodeList transfParams = this.dataObjectTransformParamsGenerator.getParameters(dObjTransf, document);
+                NodeList transfParams = dObjTransf.getParams(document);
                 if (null == transfParams)
                 {
                     transforms.addTransform(dObjTransf.getTransformUri());
-                } else
+                }
+                else
                 {
                     transforms.addTransform(dObjTransf.getTransformUri(), transfParams);
                 }

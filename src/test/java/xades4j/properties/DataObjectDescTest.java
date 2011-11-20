@@ -17,14 +17,12 @@
 package xades4j.properties;
 
 import org.w3c.dom.Document;
-import xades4j.production.XPath2FilterTransform.XPathFilter;
-import xades4j.production.DataObjectTransform;
 import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
-import xades4j.production.GenericDataObjectTransform;
+import xades4j.production.DataObjectTransform;
 import xades4j.production.XPath2FilterTransform;
 import xades4j.production.XPathTransform;
 import xades4j.utils.SignatureServicesTestBase;
@@ -67,15 +65,15 @@ public class DataObjectDescTest
         Document doc = SignatureServicesTestBase.getNewDocument();
         DataObjectDesc instance = new DataObjectDescTestImpl()
             .withTransform(new XPathTransform("xpath"))
-            .withTransform(new XPath2FilterTransform(XPathFilter.subtract("xpath")))
-            .withTransform(new GenericDataObjectTransform("uri", doc.createElement("param1"),doc.createElement("param2")));
+            .withTransform(new XPath2FilterTransform().subtract("xpath"))
+            .withTransform(new DataObjectTransform("uri", doc.createElement("param1"),doc.createElement("param2")));
 
         DataObjectTransform[] transforms = instance.getTransforms().toArray(new DataObjectTransform[0]);
 
         assertEquals(3, transforms.length);
-        assertTrue(transforms[0] instanceof XPathTransform);
-        assertTrue(transforms[1] instanceof XPath2FilterTransform);
-        assertTrue(transforms[2] instanceof GenericDataObjectTransform);
+        assertEquals(XPathTransform.class, transforms[0].getClass());
+        assertEquals(XPath2FilterTransform.class, transforms[1].getClass());
+        assertEquals(DataObjectTransform.class, transforms[2].getClass());
     }
 
     /**

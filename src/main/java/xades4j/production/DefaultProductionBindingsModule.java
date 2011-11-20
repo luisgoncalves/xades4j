@@ -53,7 +53,6 @@ import xades4j.xml.marshalling.DefaultSignedPropertiesMarshaller;
 import xades4j.xml.marshalling.DefaultUnsignedPropertiesMarshaller;
 import xades4j.xml.marshalling.SignedPropertiesMarshaller;
 import xades4j.xml.marshalling.UnsignedPropertiesMarshaller;
-import xades4j.xml.marshalling.transforms.*;
 
 /**
  * Contains the Guice bindings for the default components and the bindings for the
@@ -82,26 +81,6 @@ class DefaultProductionBindingsModule extends AbstractModule
         bind(TimeStampTokenProvider.class).to(DefaultTimeStampTokenProvider.class);
         bind(SignedPropertiesMarshaller.class).to(DefaultSignedPropertiesMarshaller.class);
         bind(UnsignedPropertiesMarshaller.class).to(DefaultUnsignedPropertiesMarshaller.class);
-
-        // DataObjectTransformParamsGeneratorImpl relies on the injector to get
-        // individual transform params marshallers.
-        bind(DataObjectTransformParamsGenerator.class).to(DataObjectTransformParamsGeneratorImpl.class);
-        // - Enveloped signature transform
-        bind(new TypeLiteral<DataObjectTransformParamsMarshaller<EnvelopedSignatureTransform>>()
-        {
-        }).to(EnvelopedSignatureTransformParamsMarshaller.class);
-        // - XPath 2.0 filter transform
-        bind(new TypeLiteral<DataObjectTransformParamsMarshaller<XPath2FilterTransform>>()
-        {
-        }).to(XPath2FilterTransformParamsMarshaller.class);
-        // - XPath transform
-        bind(new TypeLiteral<DataObjectTransformParamsMarshaller<XPathTransform>>()
-        {
-        }).to(XPathTransformParamsMarshaller.class);
-        // - Generic transform
-        bind(new TypeLiteral<DataObjectTransformParamsMarshaller<GenericDataObjectTransform>>()
-        {
-        }).to(GenericDataObjectTransformParamsMarshaller.class);
 
         // PropertiesDataObjectsGenerator is not configurable but the individual
         // generators may have dependencies.

@@ -1,23 +1,23 @@
-<?xml version="1.0" encoding="UTF-8"?><collection Id="root"><ds:Signature xmlns:ds="http://www.w3.org/2000/09/xmldsig#" Id="xmldsig-a43e9490-d7c6-445d-a742-07137376be02">
+<?xml version="1.0" encoding="UTF-8"?><collection Id="root"><ds:Signature xmlns:ds="http://www.w3.org/2000/09/xmldsig#" Id="xmldsig-61e36a79-d56e-4f8a-8d3d-c3411c267de5">
 <ds:SignedInfo>
 <ds:CanonicalizationMethod Algorithm="http://www.w3.org/TR/2001/REC-xml-c14n-20010315"/>
 <ds:SignatureMethod Algorithm="http://www.w3.org/2001/04/xmldsig-more#rsa-sha256"/>
-<ds:Reference Id="xmldsig-a43e9490-d7c6-445d-a742-07137376be02-ref0" URI="#root">
+<ds:Reference Id="xmldsig-61e36a79-d56e-4f8a-8d3d-c3411c267de5-ref0" URI="#root">
 <ds:Transforms>
 <ds:Transform Algorithm="http://www.w3.org/2000/09/xmldsig#enveloped-signature"/>
 </ds:Transforms>
 <ds:DigestMethod Algorithm="http://www.w3.org/2001/04/xmlenc#sha256"/>
 <ds:DigestValue>8iwpa9uzAyXdGbiLhQ9HvpOqYed7WOG/3n0Uwp/4fEI=</ds:DigestValue>
 </ds:Reference>
-<ds:Reference Type="http://uri.etsi.org/01903#SignedProperties" URI="#xmldsig-a43e9490-d7c6-445d-a742-07137376be02-signedprops">
+<ds:Reference Type="http://uri.etsi.org/01903#SignedProperties" URI="#xmldsig-61e36a79-d56e-4f8a-8d3d-c3411c267de5-signedprops">
 <ds:DigestMethod Algorithm="http://www.w3.org/2001/04/xmlenc#sha256"/>
-<ds:DigestValue>hIUxvnYRvMY64CjPz6HionTvJkmo4pqOF9dpq4ECdrU=</ds:DigestValue>
+<ds:DigestValue>Dfh+E99ZmpZKH6aooh5iWjc8J37n1Ut7f9wM166MXcA=</ds:DigestValue>
 </ds:Reference>
 </ds:SignedInfo>
-<ds:SignatureValue Id="xmldsig-a43e9490-d7c6-445d-a742-07137376be02-sigvalue">
-XrdM0zdoNIxfqhY8pVHhkZ4lPukYXBgur/km84O9078cKxQ+z8SVxmE8ol7bZ68oSxNwIySYcNhF
-0+iw6IJEoPdZ3PtTFnXmfv5IkFD4BGN0pq3LRf7iXh7l2hNUPNT0uldufJnIS38mlohPpnHyhrpJ
-zG+7k31i7yJaJ0+Z0ZU=
+<ds:SignatureValue Id="xmldsig-61e36a79-d56e-4f8a-8d3d-c3411c267de5-sigvalue">
+XpDaquG2AgAFgpWDReMyZ8bCBJHoGjAcmgcP4pFw1Hji04NrB2V/+FY1yoxrywlFS3zAkvFvbWap
+HdEaguHbLi1PiHpVd/4Ac6oLpregyo6AYn1mjpkY/KKVqKA73jG+EH9qAh5KFIG/ZWw2X4tInfHD
+uIcqE6M5PUItPVoPzIc=
 </ds:SignatureValue>
 <ds:KeyInfo>
 <ds:X509Data>
@@ -36,7 +36,7 @@ Ahu4PzJ6hggAlWWMy245JwIYuV0s1Oi39GVTxVNOBIX//AONZlGWO4S2Psb1mqdZ99b/MugsaA==
 </ds:X509Certificate>
 </ds:X509Data>
 </ds:KeyInfo>
-<ds:Object><xades:QualifyingProperties xmlns:xades="http://uri.etsi.org/01903/v1.3.2#" xmlns:xades141="http://uri.etsi.org/01903/v1.4.1#" Target="#xmldsig-a43e9490-d7c6-445d-a742-07137376be02"><xades:SignedProperties Id="xmldsig-a43e9490-d7c6-445d-a742-07137376be02-signedprops"><xades:SignedSignatureProperties><xades:SigningTime>2011-11-15T22:14:40.392Z</xades:SigningTime><xades:SigningCertificate><xades:Cert><xades:CertDigest><ds:DigestMethod Algorithm="http://www.w3.org/2001/04/xmlenc#sha256"/><ds:DigestValue>4btVb5gQ5cdcNhGpvDSWQZabPQrR9jf1x8e3YF9Ajss=</ds:DigestValue></xades:CertDigest><xades:IssuerSerial><ds:X509IssuerName>CN=Itermediate,OU=CC,O=ISEL,C=PT</ds:X509IssuerName><ds:X509SerialNumber>-119284162484605703133798696662099777223</ds:X509SerialNumber></xades:IssuerSerial></xades:Cert><xades:Cert><xades:CertDigest><ds:DigestMethod Algorithm="http://www.w3.org/2001/04/xmlenc#sha256"/><ds:DigestValue>vm5QpbblsWV7fCYXotPhNTeCt4nk8cLFuF36L5RJ4Ok=</ds:DigestValue></xades:CertDigest><xades:IssuerSerial><ds:X509IssuerName>CN=TestCA,OU=CC,O=ISEL,C=PT</ds:X509IssuerName><ds:X509SerialNumber>-46248926895392336918291885380930606289</ds:X509SerialNumber></xades:IssuerSerial></xades:Cert><xades:Cert><xades:CertDigest><ds:DigestMethod Algorithm="http://www.w3.org/2001/04/xmlenc#sha256"/><ds:DigestValue>AUaN+IdhKQqxIVmEOrFwq+Dn22ebTkXJqD3BoOP/x8E=</ds:DigestValue></xades:CertDigest><xades:IssuerSerial><ds:X509IssuerName>CN=TestCA,OU=CC,O=ISEL,C=PT</ds:X509IssuerName><ds:X509SerialNumber>-99704378678639105802976522062798066869</ds:X509SerialNumber></xades:IssuerSerial></xades:Cert></xades:SigningCertificate></xades:SignedSignatureProperties></xades:SignedProperties></xades:QualifyingProperties></ds:Object>
+<ds:Object><xades:QualifyingProperties xmlns:xades="http://uri.etsi.org/01903/v1.3.2#" xmlns:xades141="http://uri.etsi.org/01903/v1.4.1#" Target="#xmldsig-61e36a79-d56e-4f8a-8d3d-c3411c267de5"><xades:SignedProperties Id="xmldsig-61e36a79-d56e-4f8a-8d3d-c3411c267de5-signedprops"><xades:SignedSignatureProperties><xades:SigningTime>2011-11-20T20:56:41.223Z</xades:SigningTime><xades:SigningCertificate><xades:Cert><xades:CertDigest><ds:DigestMethod Algorithm="http://www.w3.org/2001/04/xmlenc#sha256"/><ds:DigestValue>4btVb5gQ5cdcNhGpvDSWQZabPQrR9jf1x8e3YF9Ajss=</ds:DigestValue></xades:CertDigest><xades:IssuerSerial><ds:X509IssuerName>CN=Itermediate,OU=CC,O=ISEL,C=PT</ds:X509IssuerName><ds:X509SerialNumber>-119284162484605703133798696662099777223</ds:X509SerialNumber></xades:IssuerSerial></xades:Cert><xades:Cert><xades:CertDigest><ds:DigestMethod Algorithm="http://www.w3.org/2001/04/xmlenc#sha256"/><ds:DigestValue>vm5QpbblsWV7fCYXotPhNTeCt4nk8cLFuF36L5RJ4Ok=</ds:DigestValue></xades:CertDigest><xades:IssuerSerial><ds:X509IssuerName>CN=TestCA,OU=CC,O=ISEL,C=PT</ds:X509IssuerName><ds:X509SerialNumber>-46248926895392336918291885380930606289</ds:X509SerialNumber></xades:IssuerSerial></xades:Cert><xades:Cert><xades:CertDigest><ds:DigestMethod Algorithm="http://www.w3.org/2001/04/xmlenc#sha256"/><ds:DigestValue>AUaN+IdhKQqxIVmEOrFwq+Dn22ebTkXJqD3BoOP/x8E=</ds:DigestValue></xades:CertDigest><xades:IssuerSerial><ds:X509IssuerName>CN=TestCA,OU=CC,O=ISEL,C=PT</ds:X509IssuerName><ds:X509SerialNumber>-99704378678639105802976522062798066869</ds:X509SerialNumber></xades:IssuerSerial></xades:Cert></xades:SigningCertificate></xades:SignedSignatureProperties></xades:SignedProperties></xades:QualifyingProperties></ds:Object>
 </ds:Signature>
 	<album>
 		<title>Questions, unanswered</title>
