@@ -30,6 +30,7 @@ import org.apache.xml.security.transforms.Transforms;
 import org.apache.xml.security.utils.resolver.implementations.ResolverAnonymous;
 import org.w3c.dom.Document;
 import org.w3c.dom.NodeList;
+import xades4j.Algorithm;
 import xades4j.UnsupportedAlgorithmException;
 import xades4j.properties.DataObjectDesc;
 import xades4j.providers.AlgorithmsProvider;
@@ -151,7 +152,7 @@ class DataObjectDescsProcessor
             DataObjectDesc dataObjDesc,
             Document document) throws UnsupportedAlgorithmException
     {
-        Collection<DataObjectTransform> dObjTransfs = dataObjDesc.getTransforms();
+        Collection<Algorithm> dObjTransfs = dataObjDesc.getTransforms();
         if (dObjTransfs.isEmpty())
         {
             return null;
@@ -159,24 +160,24 @@ class DataObjectDescsProcessor
 
         Transforms transforms = new Transforms(document);
 
-        for (DataObjectTransform dObjTransf : dObjTransfs)
+        for (Algorithm dObjTransf : dObjTransfs)
         {
             try
             {
                 NodeList transfParams = dObjTransf.getParams(document);
                 if (null == transfParams)
                 {
-                    transforms.addTransform(dObjTransf.getTransformUri());
+                    transforms.addTransform(dObjTransf.getUri());
                 }
                 else
                 {
-                    transforms.addTransform(dObjTransf.getTransformUri(), transfParams);
+                    transforms.addTransform(dObjTransf.getUri(), transfParams);
                 }
             } catch (TransformationException ex)
             {
                 throw new UnsupportedAlgorithmException(
                         "Unsupported transform on XML Signature provider",
-                        dObjTransf.getTransformUri());
+                        dObjTransf.getUri());
             }
         }
         return transforms;

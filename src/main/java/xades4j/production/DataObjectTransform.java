@@ -16,53 +16,40 @@
  */
 package xades4j.production;
 
-import org.w3c.dom.Document;
-import org.w3c.dom.Node;
+import org.w3c.dom.Element;
 import org.w3c.dom.NodeList;
-import xades4j.utils.DOMHelper;
+import xades4j.Algorithm;
 
 /**
- * Base class for transforms that are applied to a data object. Each {@code DataObjectTransform}
- * that is applied to a data object will result in a {@code ds:Transform} element
- * within the corresponding {@code ds:Reference} in the signature.
- *
- * @see DataObjectDesc#withTransform(xades4j.properties.DataObjectTransform)
+ * @deprecated This class is deprecated and might be removed on future releases
+ * @see xades4j.Algorithm
  *
  * @author Luís
  */
-public class DataObjectTransform
+public class DataObjectTransform extends Algorithm
 {
-    private final String uri;
-    private final NodeList params;
 
-    public DataObjectTransform(String uri, NodeList params)
+    public DataObjectTransform(String transformUri, Element paramsElement)
     {
-        if (uri == null)
-        {
-            throw new NullPointerException("Transform URI cannot be null");
+        super(transformUri, paramsElement);
+    }
+
+    public DataObjectTransform(String transformUri)
+    {
+        super(transformUri);
+    }
+
+    public String getTransformUri()
+    {
+        return getUri();
+    }
+
+    public Element getTransformParams()
+    {
+        NodeList params = getParams(null);
+        if(params == null){
+            return null;
         }
-        this.uri = uri;
-        this.params = params;
-    }
-
-    public DataObjectTransform(String transformUri, Node... transformParams)
-    {
-        this(transformUri, DOMHelper.nodeList(transformParams));
-    }
-
-    String getTransformUri()
-    {
-        return this.uri;
-    }
-
-    /**
-     * Gets the transforms parameters. The signature document is passed because
-     * it may allow a simpler public API on subclasses.
-     * @param signatureDocument the document that owns the signature that contains the current transform
-     * @return a node list with the transform paramters or {@code null} if none
-     */
-    protected NodeList getParams(Document signatureDocument)
-    {
-        return this.params;
+        return (Element)params.item(0);
     }
 }

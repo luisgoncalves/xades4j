@@ -23,7 +23,7 @@ import org.apache.xml.security.transforms.params.XPath2FilterContainer;
 import org.apache.xml.security.utils.HelperNodeList;
 import org.w3c.dom.Document;
 import org.w3c.dom.NodeList;
-import sun.reflect.generics.reflectiveObjects.NotImplementedException;
+import xades4j.Algorithm;
 
 /**
  * The XPath 2.0 transform.
@@ -31,7 +31,7 @@ import sun.reflect.generics.reflectiveObjects.NotImplementedException;
  * @see DataObjectTransform
  * @author Luís
  */
-public final class XPath2FilterTransform extends DataObjectTransform
+public final class XPath2FilterTransform extends Algorithm
 {
     private interface XPath2FilterContainerCreator
     {
@@ -112,7 +112,7 @@ public final class XPath2FilterTransform extends DataObjectTransform
     }
 
     @Override
-    protected NodeList getParams(Document signatureDocument)
+    public NodeList getParams(Document signatureDocument)
     {
         if(this.xpaths.isEmpty())
         {

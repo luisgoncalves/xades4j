@@ -20,13 +20,14 @@ import org.apache.xml.security.transforms.Transforms;
 import org.apache.xml.security.transforms.params.XPathContainer;
 import org.w3c.dom.Document;
 import org.w3c.dom.NodeList;
+import xades4j.Algorithm;
 import xades4j.utils.DOMHelper;
 
 /**
  * The XPath filtering transform.
  * @author Luís
  */
-public final class XPathTransform extends DataObjectTransform
+public final class XPathTransform extends Algorithm
 {
     private final String xpath;
 
@@ -45,7 +46,7 @@ public final class XPathTransform extends DataObjectTransform
     }
 
     @Override
-    protected NodeList getParams(Document signatureDocument)
+    public NodeList getParams(Document signatureDocument)
     {
         XPathContainer xpathContainer = new XPathContainer(signatureDocument);
         xpathContainer.setXPath(this.xpath);

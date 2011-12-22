@@ -19,57 +19,39 @@ package xades4j.providers;
 import xades4j.UnsupportedAlgorithmException;
 
 /**
- * Interface for providers of the algorithms used in the signature generation.
- * An instance of a class implementing this interface is supplied to the signer
- * which will query the instance whenever he needs an algorithm information (when
- * generating {@code ds:Reference} elements, for instance).
- * <p>
- * The methods on this classes must not return {@code null}.
- * <p>
- * This allows the customization of the different algotihms used in the signature.
- * A default implementation is provided.
- * @see xades4j.providers.impl.DefaultAlgorithmsProvider
- * @author Luís
+ * @deprecated
+ * This interface is deprecated and might be removed in future versions.
+ * @see AlgorithmsProviderEx
  */
 public interface AlgorithmsProvider
 {
     /**
-     * Gets the signature's algorithm for the given algorithm name.
-     * @param keyAlgorithmName the signing key's algorithm name as defined in JCA standard algorithm names
-     * @return the algorithm URI
+     * @deprecated
      */
     String getSignatureAlgorithm(String keyAlgorithmName) throws UnsupportedAlgorithmException;
 
     /**
-     * Gets the canonicalization algorithm to be used in the {@code Signature}.
-     * @return the algorithm URI
+     * @deprecated
      */
     String getCanonicalizationAlgorithmForSignature();
 
     /**
-     * Gets the canonicalization algorithm to be used in the qualifying
-     * properties, when needed.
-     * @return the algorithm URI
+     * @deprecated
      */
     String getCanonicalizationAlgorithmForTimeStampProperties();
 
     /**
-     * Gets the digest algorithm to be used in the data object {@code Reference}s.
-     * @return the algorithm URI
+     * @deprecated
      */
     String getDigestAlgorithmForDataObjsReferences();
 
     /**
-     * Gets the digest algorithm to be used in the qualifying properties that contain
-     * references to certificates, CRLs and so on.
-     * @return the algorithm URI
+     * @deprecated
      */
     String getDigestAlgorithmForReferenceProperties();
 
     /**
-     * Gets the digest algorithm to be used in the qualifying properties that contain
-     * time-stamps
-     * @return the algorithm URI
+     * @deprecated
      */
     String getDigestAlgorithmForTimeStampProperties();
 }

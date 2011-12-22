@@ -16,8 +16,8 @@
  */
 package xades4j.properties;
 
-import xades4j.production.DataObjectTransform;
 import java.util.Collection;
+import xades4j.Algorithm;
 import xades4j.production.DataObjectReference;
 import xades4j.production.EnvelopedXmlObject;
 import xades4j.utils.CollectionUtils;
@@ -39,7 +39,7 @@ import xades4j.utils.PropertiesSet;
  */
 public abstract class DataObjectDesc
 {
-    private Collection<DataObjectTransform> transforms;
+    private Collection<Algorithm> transforms;
     private final PropertiesSet<SignedDataObjectProperty> signedDataObjProps;
     private final PropertiesSet<UnsignedDataObjectProperty> unsignedDataObjProps;
 
@@ -62,7 +62,7 @@ public abstract class DataObjectDesc
      * @throws IllegalStateException if the transform (instance) is already
      *                                  present
      */
-    public final DataObjectDesc withTransform(DataObjectTransform transf)
+    public final DataObjectDesc withTransform(Algorithm transf)
     {
         if (null == transf)
             throw new NullPointerException("Transform cannot be null");
@@ -74,7 +74,7 @@ public abstract class DataObjectDesc
         return this;
     }
 
-    public Collection<DataObjectTransform> getTransforms()
+    public Collection<Algorithm> getTransforms()
     {
         return CollectionUtils.emptyIfNull(transforms);
     }

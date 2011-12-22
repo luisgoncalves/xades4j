@@ -22,6 +22,7 @@ import org.junit.AfterClass;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
+import xades4j.Algorithm;
 import xades4j.production.DataObjectTransform;
 import xades4j.production.XPath2FilterTransform;
 import xades4j.production.XPathTransform;
@@ -66,7 +67,7 @@ public class DataObjectDescTest
         DataObjectDesc instance = new DataObjectDescTestImpl()
             .withTransform(new XPathTransform("xpath"))
             .withTransform(new XPath2FilterTransform().subtract("xpath"))
-            .withTransform(new DataObjectTransform("uri", doc.createElement("param1"),doc.createElement("param2")));
+            .withTransform(new Algorithm("uri", doc.createElement("param1"),doc.createElement("param2")));
 
         DataObjectTransform[] transforms = instance.getTransforms().toArray(new DataObjectTransform[0]);
 
