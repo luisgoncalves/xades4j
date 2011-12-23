@@ -20,7 +20,6 @@ import org.apache.xml.security.transforms.Transforms;
 import org.apache.xml.security.transforms.params.XPathContainer;
 import org.w3c.dom.Document;
 import org.w3c.dom.NodeList;
-import xades4j.Algorithm;
 import xades4j.utils.DOMHelper;
 
 /**

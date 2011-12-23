@@ -22,7 +22,7 @@ import org.apache.xml.security.transforms.Transforms;
  * Represents an enveloped signature transform (http://www.w3.org/TR/xmldsig-core/#sec-EnvelopedSignature).
  * @author Luís
  */
-public final class EnvelopedSignatureTransform extends DataObjectTransform
+public final class EnvelopedSignatureTransform extends Algorithm
 {
     public EnvelopedSignatureTransform()
     {

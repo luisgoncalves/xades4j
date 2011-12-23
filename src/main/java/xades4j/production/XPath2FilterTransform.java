@@ -23,7 +23,6 @@ import org.apache.xml.security.transforms.params.XPath2FilterContainer;
 import org.apache.xml.security.utils.HelperNodeList;
 import org.w3c.dom.Document;
 import org.w3c.dom.NodeList;
-import xades4j.Algorithm;
 
 /**
  * The XPath 2.0 transform.

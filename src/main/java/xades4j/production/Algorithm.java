@@ -15,7 +15,7 @@
  * with XAdES4j. If not, see <http://www.gnu.org/licenses/>.
  */
 
-package xades4j;
+package xades4j.production;
 
 import org.w3c.dom.Document;
 import org.w3c.dom.Node;
@@ -36,21 +36,37 @@ public class Algorithm
     private final String uri;
     private final NodeList params;
 
+    /**
+     * Creates a new instance. If any parameter nodes are supplied, they must
+     * belong to the signature document.
+     * @param uri the algorithm's URI
+     * @param params the list of algorithm parameter nodes (can be {@code null} but not empty)
+     */
     public Algorithm(String uri, NodeList params)
     {
         if (uri == null)
         {
             throw new NullPointerException("Algorithm URI cannot be null");
         }
+
+        if(params != null && params.getLength() == 0)
+        {
+            throw new IllegalArgumentException("Algorithm parameters list cannt be empty");
+        }
+        
         this.uri = uri;
         this.params = params;
     }
 
+    /**
+     * Creates a new instance. If any parameter nodes are supplied, they must
+     * belong to the signature document.
+     * @param uri the algorithm's URI
+     * @param params the algorithm parameter nodes(optional)
+     */
     public Algorithm(String uri, Node... params)
-    {
-        // TODO if params is empty, the node list shouldn't be created
-        
-        this(uri, DOMHelper.nodeList(params));
+    {       
+        this(uri, params.length == 0 ? null : DOMHelper.nodeList(params));
     }
 
     public String getUri()
@@ -67,7 +83,7 @@ public class Algorithm
      * @param signatureDocument the document that owns the signature
      * @return a node list with the algorithm paramters or {@code null} if none
      */
-    public NodeList getParams(Document signatureDocument)
+    protected NodeList getParams(Document signatureDocument)
     {
         return this.params;
     }

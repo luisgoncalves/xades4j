@@ -30,7 +30,6 @@ import org.apache.xml.security.transforms.Transforms;
 import org.apache.xml.security.utils.resolver.implementations.ResolverAnonymous;
 import org.w3c.dom.Document;
 import org.w3c.dom.NodeList;
-import xades4j.Algorithm;
 import xades4j.UnsupportedAlgorithmException;
 import xades4j.properties.DataObjectDesc;
 import xades4j.providers.AlgorithmsProvider;
@@ -165,7 +164,7 @@ class DataObjectDescsProcessor
             try
             {
                 NodeList transfParams = dObjTransf.getParams(document);
-                if (null == transfParams)
+                if (null == transfParams || transfParams.getLength() == 0)
                 {
                     transforms.addTransform(dObjTransf.getUri());
                 }

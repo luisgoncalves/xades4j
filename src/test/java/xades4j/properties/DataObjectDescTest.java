@@ -22,8 +22,7 @@ import org.junit.AfterClass;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
-import xades4j.Algorithm;
-import xades4j.production.DataObjectTransform;
+import xades4j.production.Algorithm;
 import xades4j.production.XPath2FilterTransform;
 import xades4j.production.XPathTransform;
 import xades4j.utils.SignatureServicesTestBase;
@@ -69,12 +68,12 @@ public class DataObjectDescTest
             .withTransform(new XPath2FilterTransform().subtract("xpath"))
             .withTransform(new Algorithm("uri", doc.createElement("param1"),doc.createElement("param2")));
 
-        DataObjectTransform[] transforms = instance.getTransforms().toArray(new DataObjectTransform[0]);
+        Algorithm[] transforms = instance.getTransforms().toArray(new Algorithm[0]);
 
         assertEquals(3, transforms.length);
         assertEquals(XPathTransform.class, transforms[0].getClass());
         assertEquals(XPath2FilterTransform.class, transforms[1].getClass());
-        assertEquals(DataObjectTransform.class, transforms[2].getClass());
+        assertEquals(Algorithm.class, transforms[2].getClass());
     }
 
     /**

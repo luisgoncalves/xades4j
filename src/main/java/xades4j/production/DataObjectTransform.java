@@ -18,7 +18,6 @@ package xades4j.production;
 
 import org.w3c.dom.Element;
 import org.w3c.dom.NodeList;
-import xades4j.Algorithm;
 
 /**
  * @deprecated This class is deprecated and might be removed on future releases
