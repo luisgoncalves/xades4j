@@ -16,6 +16,7 @@
  */
 package xades4j.xml.marshalling;
 
+import org.w3c.dom.Document;
 import xades4j.properties.data.PropertyDataObject;
 
 /**
@@ -24,5 +25,5 @@ import xades4j.properties.data.PropertyDataObject;
  */
 interface QualifyingPropertyDataToXmlConverter<TXml>
 {
-    public void convertIntoObjectTree(PropertyDataObject propData, TXml xmlProps);
+    public void convertIntoObjectTree(PropertyDataObject propData, TXml xmlProps, Document doc);
 }

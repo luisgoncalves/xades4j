@@ -29,7 +29,6 @@ import org.apache.xml.security.signature.XMLSignature;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import xades4j.XAdES4jXMLSigException;
-import xades4j.providers.AlgorithmsProvider;
 import xades4j.utils.DOMHelper;
 
 /**
@@ -42,26 +41,22 @@ import xades4j.utils.DOMHelper;
  */
 public class PropertiesDataGenerationContext
 {
+
     private final List<Reference> references;
     private final Map<DataObjectDesc, Reference> referencesMappings;
     private final Document sigDocument;
     private XMLSignature targetXmlSignature;
-    /**/
-    private final AlgorithmsProvider algorithmsProvider;
 
     /**
-     * A simple constructor to be used in when only unsigned signature properties
+     * A simple constructor to be used when only unsigned signature properties
      * will be processed.
      * @param targetXmlSignature the target signature
      * @param algorithmsProvider algorithms in use
      */
-    public PropertiesDataGenerationContext(
-            XMLSignature targetXmlSignature,
-            AlgorithmsProvider algorithmsProvider) throws XAdES4jXMLSigException
+    PropertiesDataGenerationContext(XMLSignature targetXmlSignature) throws XAdES4jXMLSigException
     {
         this.targetXmlSignature = targetXmlSignature;
-        this.sigDocument = DOMHelper.getOwnerDocument(targetXmlSignature.getElement());
-        this.algorithmsProvider = algorithmsProvider;
+        this.sigDocument = targetXmlSignature.getDocument();
         this.referencesMappings = null;
 
         SignedInfo signedInfo = targetXmlSignature.getSignedInfo();
@@ -88,12 +83,10 @@ public class PropertiesDataGenerationContext
     PropertiesDataGenerationContext(
             Collection<DataObjectDesc> orderedDataObjs,
             Map<DataObjectDesc, Reference> referencesMappings,
-            Document sigDocument,
-            AlgorithmsProvider algorithmsProvider)
+            Document sigDocument)
     {
         this.referencesMappings = referencesMappings;
         this.sigDocument = sigDocument;
-        this.algorithmsProvider = algorithmsProvider;
 
         List<Reference> orderedRefs = new ArrayList<Reference>(orderedDataObjs.size());
         for (DataObjectDesc dataObjDesc : orderedDataObjs)
@@ -102,11 +95,6 @@ public class PropertiesDataGenerationContext
         }
 
         this.references = Collections.unmodifiableList(orderedRefs);
-    }
-
-    public AlgorithmsProvider getAlgorithmsProvider()
-    {
-        return algorithmsProvider;
     }
 
     /**
@@ -144,8 +132,15 @@ public class PropertiesDataGenerationContext
     void setTargetXmlSignature(XMLSignature targetXmlSignature)
     {
         if (this.targetXmlSignature != null)
+        {
             throw new IllegalStateException("TargetXMLSignature already set");
+        }
         this.targetXmlSignature = targetXmlSignature;
+    }
+
+    Document getSignatureDocument()
+    {
+        return this.sigDocument;
     }
 
     /**

@@ -17,8 +17,8 @@
 package xades4j.xml.unmarshalling;
 
 import java.util.List;
+import xades4j.Algorithm;
 import xades4j.properties.IndividualDataObjsTimeStampProperty;
-import xades4j.properties.data.BaseXAdESTimeStampData;
 import xades4j.properties.data.IndividualDataObjsTimeStampData;
 import xades4j.xml.bind.xades.XmlIncludeType;
 import xades4j.xml.bind.xades.XmlSignedDataObjectPropertiesType;
@@ -29,9 +29,15 @@ import xades4j.xml.bind.xades.XmlXAdESTimeStampType;
  * @author Luís
  */
 class FromXmlIndivDataObjsTimeStampConverter
-        extends FromXmlBaseTimeStampConverter
+        extends FromXmlBaseTimeStampConverter<IndividualDataObjsTimeStampData>
         implements SignedDataObjPropFromXmlConv
 {
+
+    FromXmlIndivDataObjsTimeStampConverter()
+    {
+        super(IndividualDataObjsTimeStampProperty.PROP_NAME);
+    }
+
     @Override
     public void convertFromObjectTree(
             XmlSignedDataObjectPropertiesType xmlProps,
@@ -39,35 +45,32 @@ class FromXmlIndivDataObjsTimeStampConverter
     {
         super.convertTimeStamps(
                 xmlProps.getIndividualDataObjectsTimeStamp(),
-                propertyDataCollector,
-                IndividualDataObjsTimeStampProperty.PROP_NAME);
+                propertyDataCollector);
     }
 
     @Override
-    protected BaseXAdESTimeStampData createTSData(String canonAlgUri)
+    protected IndividualDataObjsTimeStampData createTSData(Algorithm c14n)
     {
-        return new IndividualDataObjsTimeStampData(canonAlgUri);
+        return new IndividualDataObjsTimeStampData(c14n);
     }
 
     @Override
     protected void doSpecificConvert(
             XmlXAdESTimeStampType xmlTS,
-            BaseXAdESTimeStampData tsData) throws PropertyUnmarshalException
+            IndividualDataObjsTimeStampData tsData) throws PropertyUnmarshalException
     {
-        IndividualDataObjsTimeStampData indivDOTSData = (IndividualDataObjsTimeStampData)tsData;
-
         List<XmlIncludeType> includes = xmlTS.getInclude();
         for (XmlIncludeType xmlInc : includes)
         {
-            indivDOTSData.addInclude(xmlInc.getURI());
+            tsData.addInclude(xmlInc.getURI());
         }
     }
 
     @Override
     protected void setTSData(
-            BaseXAdESTimeStampData tsData,
+            IndividualDataObjsTimeStampData tsData,
             QualifyingPropertiesDataCollector propertyDataCollector)
     {
-        propertyDataCollector.addIndividualDataObjsTimeStamp((IndividualDataObjsTimeStampData)tsData);
+        propertyDataCollector.addIndividualDataObjsTimeStamp(tsData);
     }
 }

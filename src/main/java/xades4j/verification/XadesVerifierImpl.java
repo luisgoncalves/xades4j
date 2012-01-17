@@ -44,7 +44,6 @@ import xades4j.properties.data.SignatureTimeStampData;
 import xades4j.providers.CertificateValidationProvider;
 import xades4j.providers.ValidationData;
 import xades4j.utils.CollectionUtils;
-import xades4j.utils.CollectionUtils.Predicate;
 import xades4j.utils.ObjectUtils;
 import xades4j.utils.PropertiesUtils;
 import xades4j.verification.RawSignatureVerifier.RawSignatureVerifierContext;
@@ -277,15 +276,7 @@ class XadesVerifierImpl implements XadesVerifier
             Collection<PropertyDataObject> qualifPropsData,
             XMLSignature signature) throws XAdES4jException
     {
-        List<PropertyDataObject> sigTsData = CollectionUtils.filter(qualifPropsData, new Predicate<PropertyDataObject>()
-        {
-
-            @Override
-            public boolean verifiedBy(PropertyDataObject elem)
-            {
-                return elem instanceof SignatureTimeStampData;
-            }
-        });
+        List sigTsData = CollectionUtils.filterByType(qualifPropsData, SignatureTimeStampData.class);
 
         // If no signature time-stamp is present, use the current date.
         if (sigTsData.isEmpty())

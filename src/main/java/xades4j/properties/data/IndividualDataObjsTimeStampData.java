@@ -18,6 +18,7 @@ package xades4j.properties.data;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import xades4j.Algorithm;
 
 /**
  *
@@ -32,17 +33,17 @@ public final class IndividualDataObjsTimeStampData extends BaseXAdESTimeStampDat
      * stage.
      */
     public IndividualDataObjsTimeStampData(
-            String canonicalizationAlgorithmUri,
+            Algorithm c14n,
             Collection<String> includes,
             byte[] tsToken)
     {
-        super(canonicalizationAlgorithmUri, tsToken);
+        super(c14n, tsToken);
         this.includes = includes;
     }
 
-    public IndividualDataObjsTimeStampData(String canonicalizationAlgorithmUri)
+    public IndividualDataObjsTimeStampData(Algorithm c14n)
     {
-        super(canonicalizationAlgorithmUri);
+        super(c14n);
         this.includes = new ArrayList<String>(3);
     }
 

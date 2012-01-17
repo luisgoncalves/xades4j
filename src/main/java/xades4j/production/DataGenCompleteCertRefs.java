@@ -20,6 +20,7 @@ import com.google.inject.Inject;
 import xades4j.properties.CompleteCertificateRefsProperty;
 import xades4j.properties.data.CompleteCertificateRefsData;
 import xades4j.properties.data.PropertyDataObject;
+import xades4j.providers.AlgorithmsProviderEx;
 import xades4j.providers.MessageDigestEngineProvider;
 
 /**
@@ -32,9 +33,10 @@ class DataGenCompleteCertRefs
 {
     @Inject
     public DataGenCompleteCertRefs(
+            AlgorithmsProviderEx algorithmsProvider,
             MessageDigestEngineProvider messageDigestProvider)
     {
-        super(messageDigestProvider);
+        super(algorithmsProvider, messageDigestProvider);
     }
 
     @Override
@@ -45,7 +47,6 @@ class DataGenCompleteCertRefs
         return super.generate(
                 prop.getCertificates(),
                 new CompleteCertificateRefsData(),
-                ctx,
                 prop);
     }
 }

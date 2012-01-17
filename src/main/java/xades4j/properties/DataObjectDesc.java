@@ -17,7 +17,7 @@
 package xades4j.properties;
 
 import java.util.Collection;
-import xades4j.production.Algorithm;
+import xades4j.Algorithm;
 import xades4j.production.DataObjectReference;
 import xades4j.production.EnvelopedXmlObject;
 import xades4j.utils.CollectionUtils;

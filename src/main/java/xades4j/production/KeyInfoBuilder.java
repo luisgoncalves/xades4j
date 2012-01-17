@@ -22,7 +22,7 @@ import org.apache.xml.security.exceptions.XMLSecurityException;
 import org.apache.xml.security.signature.XMLSignature;
 import org.apache.xml.security.signature.XMLSignatureException;
 import xades4j.UnsupportedAlgorithmException;
-import xades4j.providers.AlgorithmsProvider;
+import xades4j.providers.AlgorithmsProviderEx;
 import xades4j.providers.BasicSignatureOptionsProvider;
 
 /**
@@ -34,11 +34,11 @@ class KeyInfoBuilder
 {
 
     private final BasicSignatureOptionsProvider basicSignatureOptionsProvider;
-    private final AlgorithmsProvider algorithmsProvider;
+    private final AlgorithmsProviderEx algorithmsProvider;
 
     KeyInfoBuilder(
             BasicSignatureOptionsProvider basicSignatureOptionsProvider,
-            AlgorithmsProvider algorithmsProvider)
+            AlgorithmsProviderEx algorithmsProvider)
     {
         this.basicSignatureOptionsProvider = basicSignatureOptionsProvider;
         this.algorithmsProvider = algorithmsProvider;

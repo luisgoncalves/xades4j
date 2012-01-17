@@ -33,9 +33,11 @@ import org.apache.xml.security.signature.XMLSignature;
 import org.apache.xml.security.signature.XMLSignatureException;
 import org.apache.xml.security.utils.Constants;
 import org.apache.xml.security.utils.ElementProxy;
+import org.apache.xml.security.utils.XMLUtils;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
+import xades4j.Algorithm;
 import xades4j.properties.QualifyingProperty;
 import xades4j.properties.SignedSignatureProperty;
 import xades4j.properties.SigningCertificateProperty;
@@ -44,7 +46,7 @@ import xades4j.UnsupportedAlgorithmException;
 import xades4j.XAdES4jException;
 import xades4j.XAdES4jXMLSigException;
 import xades4j.properties.data.SigAndDataObjsPropertiesData;
-import xades4j.providers.AlgorithmsProvider;
+import xades4j.providers.AlgorithmsProviderEx;
 import xades4j.providers.BasicSignatureOptionsProvider;
 import xades4j.providers.DataObjectPropertiesProvider;
 import xades4j.providers.KeyingDataProvider;
@@ -54,6 +56,7 @@ import xades4j.utils.DOMHelper;
 import xades4j.utils.ObjectUtils;
 import xades4j.xml.marshalling.SignedPropertiesMarshaller;
 import xades4j.xml.marshalling.UnsignedPropertiesMarshaller;
+import xades4j.xml.marshalling.algorithms.AlgorithmsParametersMarshallingProvider;
 
 /**
  * Base logic for producing XAdES signatures (XAdES-BES).
@@ -61,17 +64,19 @@ import xades4j.xml.marshalling.UnsignedPropertiesMarshaller;
  */
 class SignerBES implements XadesSigner
 {
+
     static
     {
         Init.initXMLSec();
     }
     /**/
     private final KeyingDataProvider keyingProvider;
-    private final AlgorithmsProvider algorithmsProvider;
+    private final AlgorithmsProviderEx algorithmsProvider;
     private final DataObjectDescsProcessor dataObjectDescsProcessor;
     private final PropertiesDataObjectsGenerator propsDataObjectsGenerator;
     private final SignedPropertiesMarshaller signedPropsMarshaller;
     private final UnsignedPropertiesMarshaller unsignedPropsMarshaller;
+    private final AlgorithmsParametersMarshallingProvider algorithmsParametersMarshaller;
     /**/
     private final KeyInfoBuilder keyInfoBuilder;
     private final QualifyingPropertiesProcessor qualifPropsProcessor;
@@ -79,26 +84,30 @@ class SignerBES implements XadesSigner
     @Inject
     protected SignerBES(
             KeyingDataProvider keyingProvider,
-            AlgorithmsProvider algorithmsProvider,
+            AlgorithmsProviderEx algorithmsProvider,
             BasicSignatureOptionsProvider basicSignatureOptionsProvider,
             DataObjectDescsProcessor dataObjectDescsProcessor,
             SignaturePropertiesProvider signaturePropsProvider,
             DataObjectPropertiesProvider dataObjPropsProvider,
             PropertiesDataObjectsGenerator propsDataObjectsGenerator,
             SignedPropertiesMarshaller signedPropsMarshaller,
-            UnsignedPropertiesMarshaller unsignedPropsMarshaller)
+            UnsignedPropertiesMarshaller unsignedPropsMarshaller,
+            AlgorithmsParametersMarshallingProvider algorithmsParametersMarshaller)
     {
         if (ObjectUtils.anyNull(
                 keyingProvider, algorithmsProvider,
                 signaturePropsProvider, dataObjPropsProvider, propsDataObjectsGenerator,
-                signedPropsMarshaller, unsignedPropsMarshaller))
+                signedPropsMarshaller, unsignedPropsMarshaller, algorithmsParametersMarshaller))
+        {
             throw new NullPointerException("One or more arguments are null");
+        }
 
         this.keyingProvider = keyingProvider;
         this.algorithmsProvider = algorithmsProvider;
         this.propsDataObjectsGenerator = propsDataObjectsGenerator;
         this.signedPropsMarshaller = signedPropsMarshaller;
         this.unsignedPropsMarshaller = unsignedPropsMarshaller;
+        this.algorithmsParametersMarshaller = algorithmsParametersMarshaller;
 
         this.dataObjectDescsProcessor = dataObjectDescsProcessor;
         this.keyInfoBuilder = new KeyInfoBuilder(basicSignatureOptionsProvider, algorithmsProvider);
@@ -120,11 +129,19 @@ class SignerBES implements XadesSigner
             SignatureAppendingStrategy appendingStrategy) throws XAdES4jException
     {
         if (null == referenceNode)
+        {
             throw new NullPointerException("Reference node node cannot be null");
+        }
         if (null == signedDataObjects)
+        {
             throw new NullPointerException("References cannot be null");
+        }
         if (signedDataObjects.isEmpty())
+        {
             throw new IllegalArgumentException("Data objects list is empty");
+        }
+
+        Document signatureDocument = DOMHelper.getOwnerDocument(referenceNode);
 
         // Generate unique identifiers for the Signature and the SignedProperties.
         String signatureId = String.format("xmldsig-%s", UUID.randomUUID());
@@ -133,34 +150,18 @@ class SignerBES implements XadesSigner
         // Signing certificate chain (may contain only the signing certificate).
         List<X509Certificate> signingCertificateChain = this.keyingProvider.getSigningCertificateChain();
         if (null == signingCertificateChain || signingCertificateChain.isEmpty())
+        {
             throw new SigningCertChainException("Signing certificate not provided");
+        }
         X509Certificate signingCertificate = signingCertificateChain.get(0);
 
-        // Get the specific signature algorithm for the key's algorithm.
-        String sigAlgUri = algorithmsProvider.getSignatureAlgorithm(signingCertificate.getPublicKey().getAlgorithm());
-        if (null == sigAlgUri)
-            throw new NullPointerException("Signature algorithm URI not provided");
-
-        String canonAlgUri = algorithmsProvider.getCanonicalizationAlgorithmForSignature();
-        if (null == canonAlgUri)
-            throw new NullPointerException("Canonicalization algorithm URI not provided");
-
-        String digestAlgUri = algorithmsProvider.getDigestAlgorithmForDataObjsReferences();
-        if (null == digestAlgUri)
-            throw new NullPointerException("Digest algorithm URI not provided");
-
         // The XMLSignature (ds:Signature).
-        XMLSignature signature = null;
-        Document signatureDocument = DOMHelper.getOwnerDocument(referenceNode);
-        try
-        {
-            signature = new XMLSignature(signatureDocument, signedDataObjects.getBaseUri(), sigAlgUri, canonAlgUri);
-            signature.setId(signatureId);
-        } catch (XMLSecurityException ex)
-        {
-            // Following the code, doesn't seem to be thrown at all.
-            throw new XAdES4jXMLSigException(ex.getMessage());
-        }
+        XMLSignature signature = createSignature(
+                signatureDocument,
+                signedDataObjects.getBaseUri(),
+                signingCertificate.getPublicKey().getAlgorithm());
+
+        signature.setId(signatureId);
 
         /* References */
         // Process the data object descriptions to get the References and mappings.
@@ -177,6 +178,13 @@ class SignerBES implements XadesSigner
         // as the input for computing its corresponding digest. Additionally,
         // (...) use the Type attribute of this particular ds:Reference element,
         // with its value set to: http://uri.etsi.org/01903#SignedProperties."
+
+        String digestAlgUri = algorithmsProvider.getDigestAlgorithmForDataObjsReferences();
+        if (null == digestAlgUri)
+        {
+            throw new NullPointerException("Digest algorithm URI not provided");
+        }
+
         try
         {
             signature.addDocument('#' + signedPropsId, null, digestAlgUri, null, QualifyingProperty.SIGNED_PROPS_TYPE_URI);
@@ -223,8 +231,7 @@ class SignerBES implements XadesSigner
         PropertiesDataGenerationContext propsDataGenCtx = new PropertiesDataGenerationContext(
                 signedDataObjects.getDataObjectsDescs(),
                 referenceMappings,
-                signatureDocument,
-                algorithmsProvider);
+                signatureDocument);
         // Generate the signed properties data objects. The data objects structure
         // is verifier in the process.
         SigAndDataObjsPropertiesData signedPropsData = this.propsDataObjectsGenerator.generateSignedPropertiesData(
@@ -279,6 +286,49 @@ class SignerBES implements XadesSigner
         }
 
         return new XadesSignatureResult(signature, qualifProps);
+    }
+
+    private XMLSignature createSignature(Document signatureDocument, String baseUri, String signingKeyAlgorithm) throws XAdES4jXMLSigException, UnsupportedAlgorithmException
+    {
+        Algorithm signatureAlg = this.algorithmsProvider.getSignatureAlgorithm(signingKeyAlgorithm);
+        if (null == signatureAlg)
+        {
+            throw new NullPointerException("Signature algorithm not provided");
+        }
+        Element signatureAlgElem = createElementForAlgorithm(signatureAlg, Constants._TAG_SIGNATUREMETHOD, signatureDocument);
+
+
+        Algorithm canonAlg = this.algorithmsProvider.getCanonicalizationAlgorithmForSignature();
+        if (null == canonAlg)
+        {
+            throw new NullPointerException("Canonicalization algorithm not provided");
+        }
+        Element canonAlgElem = createElementForAlgorithm(canonAlg, Constants._TAG_CANONICALIZATIONMETHOD, signatureDocument);
+
+        try
+        {
+            return new XMLSignature(signatureDocument, baseUri, signatureAlgElem, canonAlgElem);
+        } catch (XMLSecurityException ex)
+        {
+            // Following the code, doesn't seem to be thrown at all.
+            throw new XAdES4jXMLSigException(ex.getMessage());
+        }
+    }
+
+    private Element createElementForAlgorithm(Algorithm algorithm, String elementName, Document signatureDocument)
+    {
+        Element algorithmElem = XMLUtils.createElementInSignatureSpace(signatureDocument, elementName);
+        algorithmElem.setAttributeNS(null, Constants._ATT_ALGORITHM, algorithm.getUri());
+        
+        List<Node> algorithmParams = this.algorithmsParametersMarshaller.marshalParameters(algorithm, signatureDocument);
+        if (algorithmParams != null)
+        {
+            for (Node p : algorithmParams)
+            {
+                algorithmElem.appendChild(p);
+            }
+        }
+        return algorithmElem;
     }
 
     /**

@@ -16,8 +16,8 @@
  */
 package xades4j.xml.unmarshalling;
 
+import xades4j.Algorithm;
 import xades4j.properties.SignatureTimeStampProperty;
-import xades4j.properties.data.BaseXAdESTimeStampData;
 import xades4j.properties.data.SignatureTimeStampData;
 import xades4j.xml.bind.xades.XmlUnsignedSignaturePropertiesType;
 
@@ -26,31 +26,33 @@ import xades4j.xml.bind.xades.XmlUnsignedSignaturePropertiesType;
  * @author Luís
  */
 class FromXmlSignatureTimeStampConverter
-        extends FromXmlBaseTimeStampConverter
+        extends FromXmlBaseTimeStampConverter<SignatureTimeStampData>
         implements UnsignedSigPropFromXmlConv
 {
+    FromXmlSignatureTimeStampConverter()
+    {
+        super(SignatureTimeStampProperty.PROP_NAME);
+    }
+
     @Override
     public void convertFromObjectTree(
             XmlUnsignedSignaturePropertiesType xmlProps,
             QualifyingPropertiesDataCollector propertyDataCollector) throws PropertyUnmarshalException
     {
-        super.convertTimeStamps(
-                xmlProps.getSignatureTimeStamp(),
-                propertyDataCollector,
-                SignatureTimeStampProperty.PROP_NAME);
+        super.convertTimeStamps(xmlProps.getSignatureTimeStamp(), propertyDataCollector);
     }
 
     @Override
-    protected BaseXAdESTimeStampData createTSData(String canonAlgUri)
+    protected SignatureTimeStampData createTSData(Algorithm c14n)
     {
-        return new SignatureTimeStampData(canonAlgUri);
+        return new SignatureTimeStampData(c14n);
     }
 
     @Override
     protected void setTSData(
-            BaseXAdESTimeStampData tsData,
+            SignatureTimeStampData tsData,
             QualifyingPropertiesDataCollector propertyDataCollector)
     {
-        propertyDataCollector.addSignatureTimeStamp((SignatureTimeStampData)tsData);
+        propertyDataCollector.addSignatureTimeStamp(tsData);
     }
 }

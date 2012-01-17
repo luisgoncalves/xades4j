@@ -16,6 +16,7 @@
  */
 package xades4j.xml.marshalling;
 
+import com.google.inject.Inject;
 import xades4j.properties.data.SigAndDataObjsPropertiesData;
 import org.w3c.dom.Node;
 import xades4j.properties.QualifyingProperty;
@@ -32,6 +33,7 @@ import xades4j.xml.bind.xades.ObjectFactory;
 import xades4j.xml.bind.xades.XmlSignedDataObjectPropertiesType;
 import xades4j.xml.bind.xades.XmlSignedPropertiesType;
 import xades4j.xml.bind.xades.XmlSignedSignaturePropertiesType;
+import xades4j.xml.marshalling.algorithms.AlgorithmsParametersMarshallingProvider;
 
 /**
  * Default implementation of {@link SignedPropertiesMarshaller}. Based on JAXB.
@@ -40,38 +42,15 @@ import xades4j.xml.bind.xades.XmlSignedSignaturePropertiesType;
  * plus the {@code GenericDOMData}.
  * @author Luís
  */
-public final class DefaultSignedPropertiesMarshaller implements SignedPropertiesMarshaller
-{
-    // So that the AbstractMarshaller class is not exposed through public API.
-    private final InternalSignedPropertiesMarshaller internalMarshaller;
-
-    public DefaultSignedPropertiesMarshaller()
-    {
-        this.internalMarshaller = new InternalSignedPropertiesMarshaller();
-    }
-
-    @Override
-    public void marshal(
-            SigAndDataObjsPropertiesData signedProps,
-            String signedPropsId,
-            Node qualifyingPropsNode) throws MarshalException
-    {
-        XmlSignedPropertiesType xmlSignedProps = new XmlSignedPropertiesType();
-        xmlSignedProps.setId(signedPropsId);
-        internalMarshaller.doMarshal(signedProps, qualifyingPropsNode, xmlSignedProps);
-    }
-}
-
-/**
- * So that the AbstractMarshaller class is not exposed through public API.
- * @author Luís
- */
-class InternalSignedPropertiesMarshaller
+final class DefaultSignedPropertiesMarshaller
         extends BaseJAXBMarshaller<XmlSignedPropertiesType>
+        implements SignedPropertiesMarshaller
 {
-    InternalSignedPropertiesMarshaller()
+    @Inject
+    DefaultSignedPropertiesMarshaller(AlgorithmsParametersMarshallingProvider algorithmsParametersMarshallingProvider)
     {
-        super(8, QualifyingProperty.SIGNED_PROPS_TAG);
+        super(9, QualifyingProperty.SIGNED_PROPS_TAG);
+        
         // Signed signature properties
         super.putConverter(
                 SigningCertificateData.class,
@@ -97,14 +76,27 @@ class InternalSignedPropertiesMarshaller
                 new ToXmlCommitmentTypeConverter());
         super.putConverter(
                 IndividualDataObjsTimeStampData.class,
-                new ToXmlIndivDataObjsTimeStampConverter());
+                new ToXmlIndivDataObjsTimeStampConverter(algorithmsParametersMarshallingProvider));
         super.putConverter(
                 AllDataObjsTimeStampData.class,
-                new ToXmlAllDataObjsTimeStampConverter());
+                new ToXmlAllDataObjsTimeStampConverter(algorithmsParametersMarshallingProvider));
     }
 
-    // Methods from AbstractMarshaller
-    //
+    /* Methods from SignedPropertiesMarshaller */
+
+    @Override
+    public void marshal(
+            SigAndDataObjsPropertiesData signedProps,
+            String signedPropsId,
+            Node qualifyingPropsNode) throws MarshalException
+    {
+        XmlSignedPropertiesType xmlSignedProps = new XmlSignedPropertiesType();
+        xmlSignedProps.setId(signedPropsId);
+        doMarshal(signedProps, qualifyingPropsNode, xmlSignedProps);
+    }
+
+    /* Methods from BaseJAXBMarshaller */
+    
     @Override
     protected void prepareSigProps(XmlSignedPropertiesType xmlProps)
     {

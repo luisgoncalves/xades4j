@@ -22,6 +22,7 @@ import java.util.Map;
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBException;
 import javax.xml.bind.Marshaller;
+import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import xades4j.properties.QualifyingProperty;
@@ -62,18 +63,20 @@ abstract class BaseJAXBMarshaller<TXml>
         if (properties.isEmpty())
             return;
 
+        Document doc = qualifyingPropsNode.getOwnerDocument();
+
         Collection<PropertyDataObject> unknownSigProps = null;
         if (!properties.getSigProps().isEmpty())
         {
             prepareSigProps(xmlProps);
-            unknownSigProps = convert(properties.getSigProps(), xmlProps);
+            unknownSigProps = convert(properties.getSigProps(), xmlProps, doc);
         }
 
         Collection<PropertyDataObject> unknownDataObjProps = null;
         if (!properties.getDataObjProps().isEmpty())
         {
             prepareDataObjsProps(xmlProps);
-            unknownDataObjProps = convert(properties.getDataObjProps(), xmlProps);
+            unknownDataObjProps = convert(properties.getDataObjProps(), xmlProps, doc);
         }
 
         if (propsNotAlreadyPresent(qualifyingPropsNode))
@@ -107,7 +110,8 @@ abstract class BaseJAXBMarshaller<TXml>
 
     private Collection<PropertyDataObject> convert(
             Collection<PropertyDataObject> props,
-            TXml xmlProps) throws MarshalException
+            TXml xmlProps,
+            Document doc) throws MarshalException
     {
         Collection<PropertyDataObject> unknownProps = null;
 
@@ -124,7 +128,7 @@ abstract class BaseJAXBMarshaller<TXml>
                 unknownProps = CollectionUtils.newIfNull(unknownProps, 1);
                 unknownProps.add(p);
             } else
-                conv.convertIntoObjectTree(p, xmlProps);
+                conv.convertIntoObjectTree(p, xmlProps, doc);
         }
         return unknownProps;
     }

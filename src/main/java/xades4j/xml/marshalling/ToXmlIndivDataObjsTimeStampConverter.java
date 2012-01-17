@@ -18,27 +18,29 @@ package xades4j.xml.marshalling;
 
 import java.util.List;
 import xades4j.properties.data.IndividualDataObjsTimeStampData;
-import xades4j.properties.data.PropertyDataObject;
 import xades4j.xml.bind.xades.XmlIncludeType;
 import xades4j.xml.bind.xades.XmlSignedPropertiesType;
 import xades4j.xml.bind.xades.XmlXAdESTimeStampType;
+import xades4j.xml.marshalling.algorithms.AlgorithmsParametersMarshallingProvider;
 
 /**
- *
  * @author Luís
  */
-class ToXmlIndivDataObjsTimeStampConverter implements SignedPropertyDataToXmlConverter
+class ToXmlIndivDataObjsTimeStampConverter extends ToXmlSignedTimeStampDataConverter<IndividualDataObjsTimeStampData>
 {
-    @Override
-    public void convertIntoObjectTree(
-            PropertyDataObject propData,
-            XmlSignedPropertiesType xmlProps)
+    ToXmlIndivDataObjsTimeStampConverter(AlgorithmsParametersMarshallingProvider algorithmsParametersMarshallingProvider)
     {
-        IndividualDataObjsTimeStampData indivDObjsTStampData = (IndividualDataObjsTimeStampData)propData;
-        XmlXAdESTimeStampType xmlIndivDObjsTS = ToXmlUtils.getXmlXAdESTimeStamp(indivDObjsTStampData);
+        super(algorithmsParametersMarshallingProvider);
+    }
 
-        List<XmlIncludeType> xmlIncludes = xmlIndivDObjsTS.getInclude();
-        for (String i : indivDObjsTStampData.getIncludes())
+    @Override
+    protected void insertIntoObjectTree(
+            XmlXAdESTimeStampType xmlTimeStamp,
+            XmlSignedPropertiesType xmlProps,
+            IndividualDataObjsTimeStampData propData)
+    {
+        List<XmlIncludeType> xmlIncludes = xmlTimeStamp.getInclude();
+        for (String i : propData.getIncludes())
         {
             XmlIncludeType xmlInc = new XmlIncludeType();
             xmlInc.setURI(i);
@@ -46,6 +48,6 @@ class ToXmlIndivDataObjsTimeStampConverter implements SignedPropertyDataToXmlCon
             xmlIncludes.add(xmlInc);
         }
 
-        xmlProps.getSignedDataObjectProperties().getIndividualDataObjectsTimeStamp().add(xmlIndivDObjsTS);
+        xmlProps.getSignedDataObjectProperties().getIndividualDataObjectsTimeStamp().add(xmlTimeStamp);
     }
 }

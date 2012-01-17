@@ -16,6 +16,7 @@
  */
 package xades4j.xml.marshalling;
 
+import com.google.inject.Inject;
 import xades4j.properties.data.SigAndDataObjsPropertiesData;
 import org.w3c.dom.Node;
 import xades4j.properties.QualifyingProperty;
@@ -30,52 +31,32 @@ import xades4j.xml.bind.xades.ObjectFactory;
 import xades4j.xml.bind.xades.XmlUnsignedDataObjectPropertiesType;
 import xades4j.xml.bind.xades.XmlUnsignedPropertiesType;
 import xades4j.xml.bind.xades.XmlUnsignedSignaturePropertiesType;
+import xades4j.xml.marshalling.algorithms.AlgorithmsParametersMarshallingProvider;
 
 /**
  * Default implementation of {@link UnsignedPropertiesMarshaller}. Based on JAXB.
  * <p>
- * Supports all the property data obejcts corresponding to XAdES 1.4.1 up to XAdES-C
+ * Supports all the property data objects corresponding to XAdES 1.4.1 up to XAdES-C
  * (except attribute validation data refs) plus {@code GenericDOMData}.
  * @author Luís
  */
-public class DefaultUnsignedPropertiesMarshaller
+class DefaultUnsignedPropertiesMarshaller
+        extends BaseJAXBMarshaller<XmlUnsignedPropertiesType>
         implements UnsignedPropertiesMarshaller
 {
-    // So that the BaseJAXBMarshaller class is not exposed through public API.
-    private final InternalUnsignedPropertiesMarshaller internalMarshaller;
-
-    public DefaultUnsignedPropertiesMarshaller()
-    {
-        internalMarshaller = new InternalUnsignedPropertiesMarshaller();
-    }
-
-    @Override
-    public void marshal(SigAndDataObjsPropertiesData props, String propsId,
-            Node qualifyingPropsNode) throws MarshalException
-    {
-        XmlUnsignedPropertiesType xmlUnsignedProps = new XmlUnsignedPropertiesType();
-        internalMarshaller.doMarshal(props, qualifyingPropsNode, xmlUnsignedProps);
-    }
-}
-
-/**
- * So that the BaseJAXBMarshaller class is not exposed through public API.
- * @author Luís
- */
-class InternalUnsignedPropertiesMarshaller
-        extends BaseJAXBMarshaller<XmlUnsignedPropertiesType>
-{
-    InternalUnsignedPropertiesMarshaller()
+    @Inject
+    DefaultUnsignedPropertiesMarshaller(AlgorithmsParametersMarshallingProvider algorithmsParametersMarshallingProvider)
     {
         super(7, QualifyingProperty.UNSIGNED_PROPS_TAG);
+
         // Unsigned signature properties
-        super.putConverter(SignatureTimeStampData.class, new ToXmlSignatureTimeStampConverter());
+        super.putConverter(SignatureTimeStampData.class, new ToXmlSignatureTimeStampConverter(algorithmsParametersMarshallingProvider));
         super.putConverter(CompleteCertificateRefsData.class, new ToXmlCompleteCertRefsConverter());
         super.putConverter(CompleteRevocationRefsData.class, new ToXmlCompleteRevocRefsConverter());
-        super.putConverter(SigAndRefsTimeStampData.class, new ToXmlSigAndRefsTimeStampConverter());
+        super.putConverter(SigAndRefsTimeStampData.class, new ToXmlSigAndRefsTimeStampConverter(algorithmsParametersMarshallingProvider));
         super.putConverter(CertificateValuesData.class, new ToXmlCertificateValuesConverter());
         super.putConverter(RevocationValuesData.class, new ToXmlRevocationValuesConverter());
-        super.putConverter(ArchiveTimeStampData.class, new ToXmlArchiveTimeStampConverter());
+        super.putConverter(ArchiveTimeStampData.class, new ToXmlArchiveTimeStampConverter(algorithmsParametersMarshallingProvider));
         /* The CounterSignature property is marshalled directly using DOM because
          * it is easier that way (it is represented by a GenericDOMData instance).
          */
@@ -85,6 +66,18 @@ class InternalUnsignedPropertiesMarshaller
          * of XAdES.
          */
     }
+
+    /* Methods from UnsignedPropertiesMarshaller */
+
+    @Override
+    public void marshal(SigAndDataObjsPropertiesData props, String propsId,
+            Node qualifyingPropsNode) throws MarshalException
+    {
+        XmlUnsignedPropertiesType xmlUnsignedProps = new XmlUnsignedPropertiesType();
+        doMarshal(props, qualifyingPropsNode, xmlUnsignedProps);
+    }
+
+    /* MEthods from BaseJAXBMarshaller<XmlUnsignedPropertiesType> */
 
     @Override
     protected void prepareSigProps(XmlUnsignedPropertiesType xmlProps)

@@ -16,11 +16,8 @@
  */
 package xades4j.production;
 
+import xades4j.Algorithm;
 import org.apache.xml.security.transforms.Transforms;
-import org.apache.xml.security.transforms.params.XPathContainer;
-import org.w3c.dom.Document;
-import org.w3c.dom.NodeList;
-import xades4j.utils.DOMHelper;
 
 /**
  * The XPath filtering transform.
@@ -44,11 +41,8 @@ public final class XPathTransform extends Algorithm
         this.xpath = xpath;
     }
 
-    @Override
-    public NodeList getParams(Document signatureDocument)
+    public String getXPath()
     {
-        XPathContainer xpathContainer = new XPathContainer(signatureDocument);
-        xpathContainer.setXPath(this.xpath);
-        return DOMHelper.nodeList(xpathContainer.getElement());
+        return xpath;
     }
 }

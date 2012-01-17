@@ -16,59 +16,55 @@
  */
 package xades4j.production;
 
+import xades4j.Algorithm;
 import java.util.ArrayList;
 import java.util.List;
 import org.apache.xml.security.transforms.Transforms;
 import org.apache.xml.security.transforms.params.XPath2FilterContainer;
-import org.apache.xml.security.utils.HelperNodeList;
-import org.w3c.dom.Document;
-import org.w3c.dom.NodeList;
 
 /**
  * The XPath 2.0 transform.
  *
- * @see DataObjectTransform
  * @author Luís
  */
 public final class XPath2FilterTransform extends Algorithm
 {
-    private interface XPath2FilterContainerCreator
+    /**
+     * A XPath filter for the XPath 2.0 transform.
+     */
+    public static class XPathFilter
     {
-        XPath2FilterContainer create(String xpath, Document doc);
+
+        private final String filterType;
+        private final String xpath;
+
+        private XPathFilter(String filterType, String xpath)
+        {
+            if (null == xpath)
+            {
+                throw new NullPointerException("XPath expression cannot be null");
+            }
+
+            this.filterType = filterType;
+            this.xpath = xpath;
+        }
+
+        public String getFilterType()
+        {
+            return filterType;
+        }
+
+        public String getXPath()
+        {
+            return xpath;
+        }
     }
-
-    private static final XPath2FilterContainerCreator intersectCreator = new XPath2FilterContainerCreator()
-    {
-        @Override
-        public XPath2FilterContainer create(String xpath, Document doc)
-        {
-            return XPath2FilterContainer.newInstanceIntersect(doc, xpath);
-        }
-    };
-    private static final XPath2FilterContainerCreator subtractCreator = new XPath2FilterContainerCreator()
-    {
-        @Override
-        public XPath2FilterContainer create(String xpath, Document doc)
-        {
-            return XPath2FilterContainer.newInstanceSubtract(doc, xpath);
-        }
-    };
-    private static final XPath2FilterContainerCreator unionCreator = new XPath2FilterContainerCreator()
-    {
-        @Override
-        public XPath2FilterContainer create(String xpath, Document doc)
-        {
-            return XPath2FilterContainer.newInstanceUnion(doc, xpath);
-        }
-    };
-
     /**************************************************************************/
-
-    private final List<XPath2FilterContainerCreator> creators;
-    private final List<String> xpaths;
+    /**/
+    private final List<XPathFilter> filters;
 
     /**
-     * At least <b>one filter</b> has to be specified after creating the transform instance
+     * At least <b>one filter</b> must be specified after creating the transform instance
      * using {@link #intersect(java.lang.String) intersect}, {@link #subtract(java.lang.String) subtract}
      * or {@link #union(java.lang.String) union} methods.
      *
@@ -76,57 +72,29 @@ public final class XPath2FilterTransform extends Algorithm
     public XPath2FilterTransform()
     {
         super(Transforms.TRANSFORM_XPATH2FILTER);
-        this.creators = new ArrayList<XPath2FilterContainerCreator>(3);
-        this.xpaths = new ArrayList<String>(3);
-    }
-
-    private void addXPath(String xpath)
-    {
-        if(null == xpath)
-        {
-            throw new NullPointerException("XPath expression cannot be null");
-        }
-        this.xpaths.add(xpath);
+        this.filters = new ArrayList<XPathFilter>(3);
     }
 
     public XPath2FilterTransform intersect(String xpath)
     {
-        addXPath(xpath);
-        this.creators.add(intersectCreator);
+        this.filters.add(new XPathFilter(XPath2FilterContainer.INTERSECT, xpath));
         return this;
     }
 
     public XPath2FilterTransform subtract(String xpath)
     {
-        addXPath(xpath);
-        this.creators.add(subtractCreator);
+        this.filters.add(new XPathFilter(XPath2FilterContainer.SUBTRACT, xpath));
         return this;
     }
 
     public XPath2FilterTransform union(String xpath)
     {
-        addXPath(xpath);
-        this.creators.add(unionCreator);
+        this.filters.add(new XPathFilter(XPath2FilterContainer.UNION, xpath));
         return this;
     }
 
-    @Override
-    public NodeList getParams(Document signatureDocument)
+    public List<XPathFilter> getFilters()
     {
-        if(this.xpaths.isEmpty())
-        {
-            throw new NullPointerException("No filters were specified for XPath2FilterTransform");
-        }
-
-        HelperNodeList params = new HelperNodeList();
-
-        for (int i = 0; i < this.xpaths.size(); i++)
-        {
-            XPath2FilterContainerCreator c = this.creators.get(i);
-            params.appendChild(
-                    c.create(this.xpaths.get(i), signatureDocument).getElement());
-        }
-        
-        return params;
+        return filters;
     }
 }

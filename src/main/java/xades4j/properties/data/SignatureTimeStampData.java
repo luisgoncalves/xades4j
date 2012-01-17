@@ -16,21 +16,21 @@
  */
 package xades4j.properties.data;
 
+import xades4j.Algorithm;
+
 /**
  *
  * @author Luís
  */
 public final class SignatureTimeStampData extends BaseXAdESTimeStampData
 {
-    public SignatureTimeStampData(
-            String canonicalizationAlgorithmUri,
-            byte[] tsToken)
+    public SignatureTimeStampData(Algorithm c14n, byte[] tsToken)
     {
-        super(canonicalizationAlgorithmUri, tsToken);
+        super(c14n, tsToken);
     }
 
-    public SignatureTimeStampData(String canonicalizationAlgorithmUri)
+    public SignatureTimeStampData(Algorithm c14n)
     {
-        super(canonicalizationAlgorithmUri);
+        super(c14n);
     }
 }

@@ -32,7 +32,6 @@ import xades4j.utils.DataGetterImpl;
 import xades4j.providers.ValidationData;
 import xades4j.utils.CollectionUtils;
 import xades4j.utils.CollectionUtils.Projector;
-import xades4j.utils.CollectionUtils.Predicate;
 
 /**
  * The result of signature verification. It includes the signature form, the qualifying
@@ -86,49 +85,11 @@ public class XAdESVerificationResult
     {
         Collection<QualifyingProperty> props = this.propertiesGetter.getAll();
 
-        // Signed signature properties.
-        Collection tmp = CollectionUtils.filter(props, new Predicate<QualifyingProperty>()
-        {
-            @Override
-            public boolean verifiedBy(QualifyingProperty elem)
-            {
-                return elem instanceof SignedSignatureProperty;
-            }
-        });
-        Collection<SignedSignatureProperty> ssp = (Collection<SignedSignatureProperty>)tmp;
+        Collection<SignedSignatureProperty> ssp = CollectionUtils.filterByType(props, SignedSignatureProperty.class);
+        Collection<SignedDataObjectProperty> sdop = CollectionUtils.filterByType(props, SignedDataObjectProperty.class);
 
-        // Signed data object properties.
-        tmp = CollectionUtils.filter(props, new Predicate<QualifyingProperty>()
-        {
-            @Override
-            public boolean verifiedBy(QualifyingProperty elem)
-            {
-                return elem instanceof SignedDataObjectProperty;
-            }
-        });
-        Collection<SignedDataObjectProperty> sdop = (Collection<SignedDataObjectProperty>)tmp;
-
-        // Unsigned signature properties.
-        tmp = CollectionUtils.filter(props, new Predicate<QualifyingProperty>()
-        {
-            @Override
-            public boolean verifiedBy(QualifyingProperty elem)
-            {
-                return elem instanceof UnsignedSignatureProperty;
-            }
-        });
-        Collection<UnsignedSignatureProperty> usp = (Collection<UnsignedSignatureProperty>)tmp;
-
-        // Unsigned data object properties.
-        tmp = CollectionUtils.filter(props, new Predicate<QualifyingProperty>()
-        {
-            @Override
-            public boolean verifiedBy(QualifyingProperty elem)
-            {
-                return elem instanceof UnsignedDataObjectProperty;
-            }
-        });
-        Collection<UnsignedDataObjectProperty> udop = (Collection<UnsignedDataObjectProperty>)tmp;
+        Collection<UnsignedSignatureProperty> usp = CollectionUtils.filterByType(props, UnsignedSignatureProperty.class);
+        Collection<UnsignedDataObjectProperty> udop = CollectionUtils.filterByType(props, UnsignedDataObjectProperty.class);
 
         return new QualifyingProperties(
                 new SignedProperties(ssp, sdop),

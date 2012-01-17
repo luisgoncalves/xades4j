@@ -16,13 +16,16 @@
  */
 package xades4j.production;
 
+import java.security.MessageDigest;
 import java.security.cert.CertificateEncodingException;
 import java.security.cert.X509Certificate;
 import java.util.Collection;
 import xades4j.properties.QualifyingProperty;
 import xades4j.UnsupportedAlgorithmException;
 import xades4j.properties.data.BaseCertRefsData;
+import xades4j.properties.data.CertRef;
 import xades4j.properties.data.PropertyDataObject;
+import xades4j.providers.AlgorithmsProviderEx;
 import xades4j.providers.MessageDigestEngineProvider;
 
 /**
@@ -31,30 +34,49 @@ import xades4j.providers.MessageDigestEngineProvider;
  */
 class DataGenBaseCertRefs
 {
+    private final AlgorithmsProviderEx algorithmsProvider;
     private final MessageDigestEngineProvider messageDigestProvider;
 
-    public DataGenBaseCertRefs(MessageDigestEngineProvider messageDigestProvider)
+    protected DataGenBaseCertRefs(
+            AlgorithmsProviderEx algorithmsProvider,
+            MessageDigestEngineProvider messageDigestProvider)
     {
+        this.algorithmsProvider = algorithmsProvider;
         this.messageDigestProvider = messageDigestProvider;
     }
 
     protected PropertyDataObject generate(
             Collection<X509Certificate> certs,
             BaseCertRefsData certRefsData,
-            PropertiesDataGenerationContext ctx,
             QualifyingProperty prop) throws PropertyDataGenerationException
     {
         if (null == certs)
+        {
             throw new PropertyDataGenerationException("certificates not provided", prop);
+        }
 
         try
         {
-            CertRefUtils.createAndAddCertificateReferences(
-                    certs,
-                    certRefsData,
-                    ctx.getAlgorithmsProvider(),
-                    messageDigestProvider);
+            String digestAlgUri = this.algorithmsProvider.getDigestAlgorithmForReferenceProperties();
+            MessageDigest messageDigest = this.messageDigestProvider.getEngine(digestAlgUri);
+
+            for (X509Certificate cert : certs)
+            {
+                // "DigestValue contains the base-64 encoded value of the digest
+                // computed on the DER-encoded certificate."
+                // The base-64 encoding is done by JAXB with the configured
+                // adapter (Base64XmlAdapter).
+                // For X509 certificates the encoded form return by getEncoded is DER.
+                byte[] digestValue = messageDigest.digest(cert.getEncoded());
+
+                certRefsData.addCertRef(new CertRef(
+                        cert.getIssuerX500Principal().getName(),
+                        cert.getSerialNumber(),
+                        digestAlgUri,
+                        digestValue));
+            }
             return certRefsData;
+
         } catch (UnsupportedAlgorithmException ex)
         {
             throw new PropertyDataGenerationException(ex.getMessage(), prop);

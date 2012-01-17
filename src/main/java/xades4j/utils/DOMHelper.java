@@ -148,7 +148,7 @@ public class DOMHelper
         return (Element)e.getElementsByTagNameNS(nameSpace, localName).item(0);
     }
 
-    public static NodeList nodeList(Node... nodes)
+    public static NodeList nodeList(Iterable<Node> nodes)
     {
         HelperNodeList nl = new HelperNodeList();
         for (Node n : nodes)

@@ -27,7 +27,6 @@ import org.junit.BeforeClass;
 import org.junit.Test;
 import org.w3c.dom.Document;
 import xades4j.properties.DataObjectDesc;
-import xades4j.providers.impl.DefaultAlgorithmsProvider;
 import xades4j.utils.SignatureServicesTestBase;
 import xades4j.utils.StringUtils;
 import static org.junit.Assert.*;
@@ -38,9 +37,6 @@ import static org.junit.Assert.*;
  */
 public class DataObjectDescsProcessorTest extends SignatureServicesTestBase
 {
-    public DataObjectDescsProcessorTest()
-    {
-    }
 
     @BeforeClass
     public static void setUpClass() throws Exception
@@ -56,18 +52,24 @@ public class DataObjectDescsProcessorTest extends SignatureServicesTestBase
         Document doc = getNewDocument();
 
         Collection<DataObjectDesc> dataObjsDescs = new ArrayList<DataObjectDesc>(3);
-        dataObjsDescs.add(new DataObjectReference("uri"));
+        dataObjsDescs.add(new DataObjectReference("uri").withTransform(new EnvelopedSignatureTransform()));
         dataObjsDescs.add(new EnvelopedXmlObject(doc.createElement("test1")));
         dataObjsDescs.add(new EnvelopedXmlObject(doc.createElement("test2"), "text/xml", null));
         XMLSignature xmlSignature = new XMLSignature(doc, "", XMLSignature.ALGO_ID_SIGNATURE_RSA_SHA256);
         xmlSignature.setId("sigId");
 
-        DataObjectDescsProcessor processor = new DataObjectDescsProcessor(new DefaultAlgorithmsProvider());
+        AllwaysNullAlgsParamsMarshaller algsParamsMarshaller = new AllwaysNullAlgsParamsMarshaller();
+
+        DataObjectDescsProcessor processor = new DataObjectDescsProcessor(new TestAlgorithmsProvider(), algsParamsMarshaller);
         Map<DataObjectDesc, Reference> result = processor.process(dataObjsDescs, xmlSignature);
 
         assertEquals(dataObjsDescs.size(), result.size());
         assertEquals(2, xmlSignature.getObjectLength());
         assertEquals(xmlSignature.getSignedInfo().getLength(), dataObjsDescs.size());
+
+        assertEquals(1, algsParamsMarshaller.getInvokeCount());
+        Reference ref = xmlSignature.getSignedInfo().item(0);
+        assertEquals(1, ref.getTransforms().getLength());
 
         ObjectContainer obj = xmlSignature.getObjectItem(1);
         assertEquals("text/xml", obj.getMimeType());
@@ -88,7 +90,7 @@ public class DataObjectDescsProcessorTest extends SignatureServicesTestBase
         XMLSignature xmlSignature = new XMLSignature(doc, "", XMLSignature.ALGO_ID_SIGNATURE_RSA_SHA256);
         xmlSignature.setId("sigId");
 
-        DataObjectDescsProcessor processor = new DataObjectDescsProcessor(new DefaultAlgorithmsProvider());
+        DataObjectDescsProcessor processor = new DataObjectDescsProcessor(new TestAlgorithmsProvider(), new AllwaysNullAlgsParamsMarshaller());
         Map<DataObjectDesc, Reference> result = processor.process(dataObjsDescs, xmlSignature);
 
         assertEquals(1, result.size());
@@ -113,7 +115,7 @@ public class DataObjectDescsProcessorTest extends SignatureServicesTestBase
         XMLSignature xmlSignature = new XMLSignature(doc, "", XMLSignature.ALGO_ID_SIGNATURE_RSA_SHA256);
         xmlSignature.setId("sigId");
 
-        DataObjectDescsProcessor processor = new DataObjectDescsProcessor(new DefaultAlgorithmsProvider());
+        DataObjectDescsProcessor processor = new DataObjectDescsProcessor(new TestAlgorithmsProvider(), new AllwaysNullAlgsParamsMarshaller());
         Map<DataObjectDesc, Reference> result = processor.process(dataObjsDescs, xmlSignature);
     }
 }

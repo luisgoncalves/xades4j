@@ -17,23 +17,26 @@
 package xades4j.xml.marshalling;
 
 import xades4j.properties.data.AllDataObjsTimeStampData;
-import xades4j.properties.data.PropertyDataObject;
 import xades4j.xml.bind.xades.XmlSignedPropertiesType;
 import xades4j.xml.bind.xades.XmlXAdESTimeStampType;
+import xades4j.xml.marshalling.algorithms.AlgorithmsParametersMarshallingProvider;
 
 /**
- *
  * @author Luís
  */
-class ToXmlAllDataObjsTimeStampConverter implements SignedPropertyDataToXmlConverter
+class ToXmlAllDataObjsTimeStampConverter extends ToXmlSignedTimeStampDataConverter<AllDataObjsTimeStampData>
 {
-    @Override
-    public void convertIntoObjectTree(
-            PropertyDataObject propData,
-            XmlSignedPropertiesType xmlProps)
+    ToXmlAllDataObjsTimeStampConverter(AlgorithmsParametersMarshallingProvider algorithmsParametersMarshallingProvider)
     {
-        AllDataObjsTimeStampData allDObjsTStampData = (AllDataObjsTimeStampData)propData;
-        XmlXAdESTimeStampType xmlAllDObjsTS = ToXmlUtils.getXmlXAdESTimeStamp(allDObjsTStampData);
-        xmlProps.getSignedDataObjectProperties().getAllDataObjectsTimeStamp().add(xmlAllDObjsTS);
+        super(algorithmsParametersMarshallingProvider);
+    }
+
+    @Override
+    protected void insertIntoObjectTree(
+            XmlXAdESTimeStampType xmlTimeStamp,
+            XmlSignedPropertiesType xmlProps,
+            AllDataObjsTimeStampData propData)
+    {
+        xmlProps.getSignedDataObjectProperties().getAllDataObjectsTimeStamp().add(xmlTimeStamp);
     }
 }

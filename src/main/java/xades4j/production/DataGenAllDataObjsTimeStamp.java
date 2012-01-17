@@ -16,6 +16,7 @@
  */
 package xades4j.production;
 
+import xades4j.Algorithm;
 import com.google.inject.Inject;
 import java.util.List;
 import org.apache.xml.security.signature.Reference;
@@ -23,54 +24,48 @@ import xades4j.properties.AllDataObjsTimeStampProperty;
 import xades4j.utils.CannotAddDataToDigestInputException;
 import xades4j.utils.TimeStampDigestInput;
 import xades4j.properties.data.AllDataObjsTimeStampData;
-import xades4j.properties.data.PropertyDataObject;
-import xades4j.providers.TimeStampTokenGenerationException;
+import xades4j.properties.data.BaseXAdESTimeStampData;
+import xades4j.providers.AlgorithmsProviderEx;
 import xades4j.providers.TimeStampTokenProvider;
 import xades4j.providers.TimeStampTokenProvider.TimeStampTokenRes;
+import xades4j.utils.TimeStampDigestInputFactory;
 
 /**
  *
  * @author Luís
  */
-class DataGenAllDataObjsTimeStamp implements PropertyDataObjectGenerator<AllDataObjsTimeStampProperty>
+class DataGenAllDataObjsTimeStamp extends DataGenBaseTimeStamp<AllDataObjsTimeStampProperty>
 {
-    private final TimeStampTokenProvider timeStampTokenProvider;
-
     @Inject
     public DataGenAllDataObjsTimeStamp(
-            TimeStampTokenProvider timeStampTokenProvider)
+            TimeStampTokenProvider timeStampTokenProvider,
+            AlgorithmsProviderEx algorithmsProvider,
+            TimeStampDigestInputFactory timeStampDigestInputFactory)
     {
-        this.timeStampTokenProvider = timeStampTokenProvider;
+       super(algorithmsProvider, timeStampTokenProvider, timeStampDigestInputFactory);
     }
 
     @Override
-    public PropertyDataObject generatePropertyData(
+    protected void addPropSpecificTimeStampInput(
             AllDataObjsTimeStampProperty prop,
-            PropertiesDataGenerationContext ctx) throws PropertyDataGenerationException
+            TimeStampDigestInput digestInput,
+            PropertiesDataGenerationContext ctx) throws CannotAddDataToDigestInputException
     {
         List<Reference> refs = ctx.getReferences();
-        String canonAlgUri = ctx.getAlgorithmsProvider().getCanonicalizationAlgorithmForTimeStampProperties();
-        TimeStampDigestInput digestInput = new TimeStampDigestInput(canonAlgUri);
-
-        try
+        for (Reference r : refs)
         {
-            for (Reference r : refs)
-            {
-                digestInput.addReference(r);
-            }
-            TimeStampTokenRes tsTknRes = timeStampTokenProvider.getTimeStampToken(
-                    digestInput.getBytes(),
-                    ctx.getAlgorithmsProvider().getDigestAlgorithmForTimeStampProperties());
-            prop.setTime(tsTknRes.timeStampTime);
-            return new AllDataObjsTimeStampData(canonAlgUri, tsTknRes.encodedTimeStampToken);
-        } catch (CannotAddDataToDigestInputException ex)
-        {
-            throw new PropertyDataGenerationException("Cannot create all data objects time stamp input: " + ex.getMessage(), prop);
-        } catch (TimeStampTokenGenerationException ex)
-        {
-            throw new PropertyDataGenerationException("Cannot get a time-stamp: " + ex.getMessage(), prop);
+            digestInput.addReference(r);
         }
+    }
 
-
+    @Override
+    protected BaseXAdESTimeStampData createPropDataObj(
+            AllDataObjsTimeStampProperty prop,
+            Algorithm c14n,
+            TimeStampTokenRes tsTknRes,
+            PropertiesDataGenerationContext ctx)
+    {
+        prop.setTime(tsTknRes.timeStampTime);
+        return new AllDataObjsTimeStampData(c14n, tsTknRes.encodedTimeStampToken);
     }
 }

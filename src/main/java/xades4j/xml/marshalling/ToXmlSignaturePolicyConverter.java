@@ -16,6 +16,7 @@
  */
 package xades4j.xml.marshalling;
 
+import org.w3c.dom.Document;
 import xades4j.properties.data.PropertyDataObject;
 import xades4j.properties.data.SignaturePolicyData;
 import xades4j.xml.bind.xades.XmlDigestAlgAndValueType;
@@ -33,7 +34,8 @@ class ToXmlSignaturePolicyConverter implements SignedPropertyDataToXmlConverter
     @Override
     public void convertIntoObjectTree(
             PropertyDataObject propData,
-            XmlSignedPropertiesType xmlProps)
+            XmlSignedPropertiesType xmlProps,
+            Document doc)
     {
         SignaturePolicyData sigPolicyData = (SignaturePolicyData)propData;
         XmlSignaturePolicyIdentifierType xmlSigPolicy = new XmlSignaturePolicyIdentifierType();

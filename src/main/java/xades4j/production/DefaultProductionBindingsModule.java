@@ -49,8 +49,6 @@ import xades4j.providers.impl.DefaultMessageDigestProvider;
 import xades4j.providers.impl.DefaultSignaturePropertiesProvider;
 import xades4j.providers.impl.DefaultTimeStampTokenProvider;
 import xades4j.providers.impl.DefaultBasicSignatureOptionsProvider;
-import xades4j.xml.marshalling.DefaultSignedPropertiesMarshaller;
-import xades4j.xml.marshalling.DefaultUnsignedPropertiesMarshaller;
 import xades4j.xml.marshalling.SignedPropertiesMarshaller;
 import xades4j.xml.marshalling.UnsignedPropertiesMarshaller;
 
@@ -79,8 +77,6 @@ class DefaultProductionBindingsModule extends AbstractModule
         bind(BasicSignatureOptionsProvider.class).to(DefaultBasicSignatureOptionsProvider.class);
         bind(MessageDigestEngineProvider.class).to(DefaultMessageDigestProvider.class);
         bind(TimeStampTokenProvider.class).to(DefaultTimeStampTokenProvider.class);
-        bind(SignedPropertiesMarshaller.class).to(DefaultSignedPropertiesMarshaller.class);
-        bind(UnsignedPropertiesMarshaller.class).to(DefaultUnsignedPropertiesMarshaller.class);
 
         // PropertiesDataObjectsGenerator is not configurable but the individual
         // generators may have dependencies.

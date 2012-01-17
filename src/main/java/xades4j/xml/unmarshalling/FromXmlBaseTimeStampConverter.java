@@ -18,7 +18,11 @@ package xades4j.xml.unmarshalling;
 
 import java.util.List;
 import org.apache.xml.security.c14n.Canonicalizer;
+import org.w3c.dom.Element;
+import xades4j.Algorithm;
+import xades4j.GenericAlgorithm;
 import xades4j.properties.data.BaseXAdESTimeStampData;
+import xades4j.utils.CollectionUtils;
 import xades4j.xml.bind.xades.XmlEncapsulatedPKIDataType;
 import xades4j.xml.bind.xades.XmlXAdESTimeStampType;
 import xades4j.xml.bind.xmldsig.XmlCanonicalizationMethodType;
@@ -27,12 +31,18 @@ import xades4j.xml.bind.xmldsig.XmlCanonicalizationMethodType;
  *
  * @author Luís
  */
-abstract class FromXmlBaseTimeStampConverter
+abstract class FromXmlBaseTimeStampConverter<TPropData extends BaseXAdESTimeStampData>
 {
+    private final String propName;
+
+    protected FromXmlBaseTimeStampConverter(String propName)
+    {
+        this.propName = propName;
+    }
+
     protected void convertTimeStamps(
             List<XmlXAdESTimeStampType> xmlTimeStamps,
-            QualifyingPropertiesDataCollector propertyDataCollector,
-            String propName) throws PropertyUnmarshalException
+            QualifyingPropertiesDataCollector propertyDataCollector) throws PropertyUnmarshalException
     {
         if (null == xmlTimeStamps || xmlTimeStamps.isEmpty())
             return;
@@ -42,9 +52,18 @@ abstract class FromXmlBaseTimeStampConverter
             if(!xmlTS.getReferenceInfo().isEmpty())
                 throw new PropertyUnmarshalException("ReferenceInfo is not supported in XAdESTimeStamp", propName);
 
+            Algorithm c14n;
             XmlCanonicalizationMethodType xmlCanonMethod = xmlTS.getCanonicalizationMethod();
-            BaseXAdESTimeStampData tsData = createTSData(
-                    null == xmlCanonMethod ? Canonicalizer.ALGO_ID_C14N_OMIT_COMMENTS : xmlCanonMethod.getAlgorithm());
+            if(null == xmlCanonMethod)
+            {
+                c14n = new GenericAlgorithm(Canonicalizer.ALGO_ID_C14N_OMIT_COMMENTS);
+            }
+            else
+            {
+                List params = CollectionUtils.filterByType(xmlCanonMethod.getContent(), Element.class);
+                c14n = new GenericAlgorithm(xmlCanonMethod.getAlgorithm(), params);
+            }
+            TPropData tsData = createTSData(c14n);
 
             List<Object> tsTokens = xmlTS.getEncapsulatedTimeStampOrXMLTimeStamp();
             if (tsTokens.isEmpty())
@@ -58,25 +77,24 @@ abstract class FromXmlBaseTimeStampConverter
             }
 
             doSpecificConvert(xmlTS, tsData);
-
             setTSData(tsData, propertyDataCollector);
         }
     }
 
-    protected abstract BaseXAdESTimeStampData createTSData(String canonAlgUri);
+    protected abstract TPropData createTSData(Algorithm c14n);
 
     /**
      * Override if needed.
      */
     protected void doSpecificConvert(
             XmlXAdESTimeStampType xmlTS,
-            BaseXAdESTimeStampData tsData) throws PropertyUnmarshalException
+            TPropData tsData) throws PropertyUnmarshalException
     {
         if(!xmlTS.getInclude().isEmpty())
             throw new PropertyUnmarshalException("Includes should not be present", "");
     }
 
     protected abstract void setTSData(
-            BaseXAdESTimeStampData tsData,
+            TPropData tsData,
             QualifyingPropertiesDataCollector propertyDataCollector);
 }

@@ -23,6 +23,7 @@ import xades4j.properties.SignaturePolicyIdentifierProperty;
 import xades4j.UnsupportedAlgorithmException;
 import xades4j.properties.data.PropertyDataObject;
 import xades4j.properties.data.SignaturePolicyData;
+import xades4j.providers.AlgorithmsProviderEx;
 import xades4j.providers.MessageDigestEngineProvider;
 import xades4j.utils.MessageDigestUtils;
 
@@ -33,11 +34,15 @@ import xades4j.utils.MessageDigestUtils;
 class DataGenSigPolicy implements PropertyDataObjectGenerator<SignaturePolicyIdentifierProperty>
 {
     private final MessageDigestEngineProvider messageDigestProvider;
+    private final AlgorithmsProviderEx algorithmsProvider;
 
     @Inject
-    public DataGenSigPolicy(MessageDigestEngineProvider messageDigestProvider)
+    public DataGenSigPolicy(
+            MessageDigestEngineProvider messageDigestProvider,
+            AlgorithmsProviderEx algorithmsProvider)
     {
         this.messageDigestProvider = messageDigestProvider;
+        this.algorithmsProvider = algorithmsProvider;
     }
 
     @Override
@@ -48,8 +53,8 @@ class DataGenSigPolicy implements PropertyDataObjectGenerator<SignaturePolicyIde
         try
         {
             // Digest the policy document.
-            String digestAlgUri = ctx.getAlgorithmsProvider().getDigestAlgorithmForReferenceProperties();
-            MessageDigest md = messageDigestProvider.getEngine(digestAlgUri);
+            String digestAlgUri = this.algorithmsProvider.getDigestAlgorithmForReferenceProperties();
+            MessageDigest md = this.messageDigestProvider.getEngine(digestAlgUri);
             byte[] policyDigest = MessageDigestUtils.digestStream(md, prop.getPolicyDocumentStream());
 
             return new SignaturePolicyData(

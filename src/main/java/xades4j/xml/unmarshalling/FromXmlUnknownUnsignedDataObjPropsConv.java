@@ -61,16 +61,9 @@ class FromXmlUnknownUnsignedDataObjPropsConv implements UnsignedDataObjPropFromX
             // elements but since the UnsignedDataObjectProperty has to be present,
             // it makes sense that it has only one child.
 
-            List<Object> propElemContent = CollectionUtils.filter(
+            List<Element> propElemContent = CollectionUtils.filterByType(
                     xmlUnsignedDtaObjProp.getContent(),
-                    new CollectionUtils.Predicate()
-                    {
-                        @Override
-                        public boolean verifiedBy(Object elem)
-                        {
-                            return (elem instanceof Element);
-                        }
-                    });
+                    Element.class);
 
             if (!this.acceptUnknown)
                 throw new PropertyUnmarshalException("Unknown properties were found", "Unknown");
@@ -79,7 +72,7 @@ class FromXmlUnknownUnsignedDataObjPropsConv implements UnsignedDataObjPropFromX
                 throw new PropertyUnmarshalException("Multiple children elements in UnsignedDataObjectProperty", "Unknown");
 
             propertyDataCollector.addGenericDOMData(
-                    new GenericDOMData((Element)propElemContent.get(0)));
+                    new GenericDOMData(propElemContent.get(0)));
         }
     }
 }

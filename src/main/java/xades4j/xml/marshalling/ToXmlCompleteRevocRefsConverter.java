@@ -19,6 +19,7 @@ package xades4j.xml.marshalling;
 import java.util.List;
 import javax.xml.datatype.DatatypeConfigurationException;
 import javax.xml.datatype.DatatypeFactory;
+import org.w3c.dom.Document;
 import xades4j.properties.data.CRLRef;
 import xades4j.properties.data.CompleteRevocationRefsData;
 import xades4j.properties.data.PropertyDataObject;
@@ -39,7 +40,8 @@ class ToXmlCompleteRevocRefsConverter implements UnsignedPropertyDataToXmlConver
     @Override
     public void convertIntoObjectTree(
             PropertyDataObject propData,
-            XmlUnsignedPropertiesType xmlProps)
+            XmlUnsignedPropertiesType xmlProps,
+            Document doc)
     {
         CompleteRevocationRefsData complRevocRefsData = (CompleteRevocationRefsData)propData;
 

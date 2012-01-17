@@ -18,6 +18,7 @@ package xades4j.xml.marshalling;
 
 import java.util.Collection;
 import java.util.List;
+import org.w3c.dom.Document;
 import xades4j.properties.data.PropertyDataObject;
 import xades4j.properties.data.RevocationValuesData;
 import xades4j.xml.bind.xades.XmlCRLValuesType;
@@ -34,7 +35,8 @@ class ToXmlRevocationValuesConverter implements UnsignedPropertyDataToXmlConvert
     @Override
     public void convertIntoObjectTree(
             PropertyDataObject propData,
-            XmlUnsignedPropertiesType xmlProps)
+            XmlUnsignedPropertiesType xmlProps,
+            Document doc)
     {
         Collection<byte[]> crlValues = ((RevocationValuesData)propData).getData();
 

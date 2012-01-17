@@ -16,20 +16,21 @@
  */
 package xades4j.properties.data;
 
+import xades4j.Algorithm;
+
 /**
  *
  * @author Luís
  */
 public final class ArchiveTimeStampData extends BaseXAdESTimeStampData
 {
-    public ArchiveTimeStampData(String canonicalizationAlgorithmUri)
+    public ArchiveTimeStampData(Algorithm c14n)
     {
-        super(canonicalizationAlgorithmUri);
+        super(c14n);
     }
 
-    public ArchiveTimeStampData(String canonicalizationAlgorithmUri,
-            byte[] tsToken)
+    public ArchiveTimeStampData(Algorithm c14n, byte[] tsToken)
     {
-        super(canonicalizationAlgorithmUri, tsToken);
+        super(c14n, tsToken);
     }
 }

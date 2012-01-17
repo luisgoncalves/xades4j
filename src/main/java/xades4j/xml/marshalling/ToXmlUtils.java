@@ -16,28 +16,22 @@
  */
 package xades4j.xml.marshalling;
 
-import java.util.HashMap;
+import java.util.EnumMap;
 import java.util.List;
-import java.util.Map;
 import xades4j.properties.IdentifierType;
 import xades4j.properties.ObjectIdentifier;
 import xades4j.properties.data.BaseCertRefsData;
-import xades4j.properties.data.BaseXAdESTimeStampData;
 import xades4j.properties.data.CertRef;
 import xades4j.xml.bind.xades.XmlCertIDListType;
 import xades4j.xml.bind.xades.XmlCertIDType;
 import xades4j.xml.bind.xades.XmlDigestAlgAndValueType;
-import xades4j.xml.bind.xades.XmlEncapsulatedPKIDataType;
 import xades4j.xml.bind.xades.XmlIdentifierType;
 import xades4j.xml.bind.xades.XmlObjectIdentifierType;
 import xades4j.xml.bind.xades.XmlQualifierType;
-import xades4j.xml.bind.xades.XmlXAdESTimeStampType;
-import xades4j.xml.bind.xmldsig.XmlCanonicalizationMethodType;
 import xades4j.xml.bind.xmldsig.XmlDigestMethodType;
 import xades4j.xml.bind.xmldsig.XmlX509IssuerSerialType;
 
 /**
- *
  * @author Luís
  */
 class ToXmlUtils
@@ -45,11 +39,11 @@ class ToXmlUtils
     ToXmlUtils()
     {
     }
-    private static final Map<IdentifierType, XmlQualifierType> identifierTypeConv;
+    private static final EnumMap<IdentifierType, XmlQualifierType> identifierTypeConv;
 
     static
     {
-        identifierTypeConv = new HashMap<IdentifierType, XmlQualifierType>(2);
+        identifierTypeConv = new EnumMap(IdentifierType.class);
         identifierTypeConv.put(IdentifierType.OIDAsURI, XmlQualifierType.OID_AS_URI);
         identifierTypeConv.put(IdentifierType.OIDAsURN, XmlQualifierType.OID_AS_URN);
     }
@@ -67,30 +61,6 @@ class ToXmlUtils
         xmlObjId.setIdentifier(xmlId);
 
         return xmlObjId;
-    }
-
-    /**/
-    static XmlXAdESTimeStampType getXmlXAdESTimeStamp(
-            BaseXAdESTimeStampData tsData)
-    {
-        XmlXAdESTimeStampType xmlTS = new XmlXAdESTimeStampType();
-
-        // Canonicalization method.
-        XmlCanonicalizationMethodType xmlCanon = new XmlCanonicalizationMethodType();
-        xmlCanon.setAlgorithm(tsData.getCanonicalizationAlgorithmUri());
-        xmlTS.setCanonicalizationMethod(xmlCanon);
-
-        // Time-stamp tokens.
-        List<byte[]> tsTokens = tsData.getTimeStampTokens();
-        List<Object> xmlTSTokens = xmlTS.getEncapsulatedTimeStampOrXMLTimeStamp();
-        for (byte[] tsToken : tsTokens)
-        {
-            XmlEncapsulatedPKIDataType xmlTSTkn = new XmlEncapsulatedPKIDataType();
-            xmlTSTkn.setValue(tsToken);
-            xmlTSTokens.add(xmlTSTkn);
-        }
-
-        return xmlTS;
     }
 
     /**/

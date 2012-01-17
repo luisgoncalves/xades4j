@@ -16,9 +16,9 @@
  */
 package xades4j.xml.unmarshalling;
 
+import xades4j.Algorithm;
 import xades4j.properties.AllDataObjsTimeStampProperty;
 import xades4j.properties.data.AllDataObjsTimeStampData;
-import xades4j.properties.data.BaseXAdESTimeStampData;
 import xades4j.xml.bind.xades.XmlSignedDataObjectPropertiesType;
 
 /**
@@ -26,31 +26,34 @@ import xades4j.xml.bind.xades.XmlSignedDataObjectPropertiesType;
  * @author Luís
  */
 class FromXmlAllDataObjsTimeStampConverter
-        extends FromXmlBaseTimeStampConverter
+        extends FromXmlBaseTimeStampConverter<AllDataObjsTimeStampData>
         implements SignedDataObjPropFromXmlConv
 {
+    FromXmlAllDataObjsTimeStampConverter()
+    {
+        super(AllDataObjsTimeStampProperty.PROP_NAME);
+    }
+
+
     @Override
     public void convertFromObjectTree(
             XmlSignedDataObjectPropertiesType xmlProps,
             QualifyingPropertiesDataCollector propertyDataCollector) throws PropertyUnmarshalException
     {
-        super.convertTimeStamps(
-                xmlProps.getAllDataObjectsTimeStamp(),
-                propertyDataCollector,
-                AllDataObjsTimeStampProperty.PROP_NAME);
+        super.convertTimeStamps(xmlProps.getAllDataObjectsTimeStamp(), propertyDataCollector);
     }
 
     @Override
-    protected BaseXAdESTimeStampData createTSData(String canonAlgUri)
+    protected AllDataObjsTimeStampData createTSData(Algorithm c14n)
     {
-        return new AllDataObjsTimeStampData(canonAlgUri);
+        return new AllDataObjsTimeStampData(c14n);
     }
 
     @Override
     protected void setTSData(
-            BaseXAdESTimeStampData tsData,
+            AllDataObjsTimeStampData tsData,
             QualifyingPropertiesDataCollector propertyDataCollector)
     {
-        propertyDataCollector.addAllDataObjsTimeStamp((AllDataObjsTimeStampData)tsData);
+        propertyDataCollector.addAllDataObjsTimeStamp(tsData);
     }
 }

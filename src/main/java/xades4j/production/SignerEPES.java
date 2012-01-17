@@ -23,7 +23,7 @@ import java.util.List;
 import xades4j.properties.SignedSignatureProperty;
 import xades4j.properties.UnsignedSignatureProperty;
 import xades4j.XAdES4jException;
-import xades4j.providers.AlgorithmsProvider;
+import xades4j.providers.AlgorithmsProviderEx;
 import xades4j.providers.BasicSignatureOptionsProvider;
 import xades4j.providers.DataObjectPropertiesProvider;
 import xades4j.providers.KeyingDataProvider;
@@ -32,6 +32,7 @@ import xades4j.providers.SignaturePropertiesProvider;
 import xades4j.utils.PropertiesUtils;
 import xades4j.xml.marshalling.SignedPropertiesMarshaller;
 import xades4j.xml.marshalling.UnsignedPropertiesMarshaller;
+import xades4j.xml.marshalling.algorithms.AlgorithmsParametersMarshallingProvider;
 
 /**
  * Produces XAdES-EPES signatures.
@@ -45,7 +46,7 @@ class SignerEPES extends SignerBES
     @Inject
     protected SignerEPES(
             KeyingDataProvider keyingProvider,
-            AlgorithmsProvider algorithmsProvider,
+            AlgorithmsProviderEx algorithmsProvider,
             BasicSignatureOptionsProvider basicSignatureOptionsProvider,
             DataObjectDescsProcessor dataObjectDescsProcessor,
             SignaturePolicyInfoProvider policyInfoProvider,
@@ -53,9 +54,10 @@ class SignerEPES extends SignerBES
             DataObjectPropertiesProvider dataObjPropsProvider,
             PropertiesDataObjectsGenerator propsDataObjectsGenerator,
             SignedPropertiesMarshaller signedPropsMarshaller,
-            UnsignedPropertiesMarshaller unsignedPropsMarshaller)
+            UnsignedPropertiesMarshaller unsignedPropsMarshaller,
+            AlgorithmsParametersMarshallingProvider algorithmsParametersMarshaller)
     {
-        super(keyingProvider, algorithmsProvider, basicSignatureOptionsProvider, dataObjectDescsProcessor, signaturePropsProvider, dataObjPropsProvider, propsDataObjectsGenerator, signedPropsMarshaller, unsignedPropsMarshaller);
+        super(keyingProvider, algorithmsProvider, basicSignatureOptionsProvider, dataObjectDescsProcessor, signaturePropsProvider, dataObjPropsProvider, propsDataObjectsGenerator, signedPropsMarshaller, unsignedPropsMarshaller, algorithmsParametersMarshaller);
         this.policyInfoProvider = policyInfoProvider;
     }
 

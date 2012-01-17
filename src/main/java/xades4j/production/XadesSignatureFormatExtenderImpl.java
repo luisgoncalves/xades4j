@@ -24,7 +24,6 @@ import org.w3c.dom.Element;
 import xades4j.properties.QualifyingProperty;
 import xades4j.XAdES4jException;
 import xades4j.properties.data.SigAndDataObjsPropertiesData;
-import xades4j.providers.AlgorithmsProvider;
 import xades4j.utils.DOMHelper;
 import xades4j.xml.marshalling.UnsignedPropertiesMarshaller;
 
@@ -40,17 +39,14 @@ class XadesSignatureFormatExtenderImpl implements XadesSignatureFormatExtender
     }
     private final PropertiesDataObjectsGenerator propsDataObjectsGenerator;
     private final UnsignedPropertiesMarshaller unsignedPropsMarshaller;
-    private final AlgorithmsProvider algorithmsProvider;
 
     @Inject
     XadesSignatureFormatExtenderImpl(
             PropertiesDataObjectsGenerator propsDataObjectsGenerator,
-            UnsignedPropertiesMarshaller unsignedPropsMarshaller,
-            AlgorithmsProvider algorithmsProvider)
+            UnsignedPropertiesMarshaller unsignedPropsMarshaller)
     {
         this.propsDataObjectsGenerator = propsDataObjectsGenerator;
         this.unsignedPropsMarshaller = unsignedPropsMarshaller;
-        this.algorithmsProvider = algorithmsProvider;
     }
 
     @Override
@@ -65,7 +61,7 @@ class XadesSignatureFormatExtenderImpl implements XadesSignatureFormatExtender
 
         SigAndDataObjsPropertiesData propsData = propsDataObjectsGenerator.generateUnsignedPropertiesData(
                 props,
-                new PropertiesDataGenerationContext(sig, algorithmsProvider));
+                new PropertiesDataGenerationContext(sig));
         Element qualifProps = DOMHelper.getFirstDescendant(
                 sig.getElement(),
                 QualifyingProperty.XADES_XMLNS, QualifyingProperty.QUALIFYING_PROPS_TAG);

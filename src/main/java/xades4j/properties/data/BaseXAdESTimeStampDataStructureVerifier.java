@@ -17,6 +17,7 @@
 package xades4j.properties.data;
 
 import java.util.List;
+import xades4j.utils.ObjectUtils;
 
 /**
  *
@@ -24,6 +25,7 @@ import java.util.List;
  */
 class BaseXAdESTimeStampDataStructureVerifier implements PropertyDataObjectStructureVerifier
 {
+
     private final String propName;
 
     public BaseXAdESTimeStampDataStructureVerifier(String propName)
@@ -34,19 +36,22 @@ class BaseXAdESTimeStampDataStructureVerifier implements PropertyDataObjectStruc
     @Override
     public void verifyStructure(PropertyDataObject propData) throws PropertyDataStructureException
     {
-        BaseXAdESTimeStampData tsData = (BaseXAdESTimeStampData)propData;
+        BaseXAdESTimeStampData tsData = (BaseXAdESTimeStampData) propData;
 
-        if (null == tsData.getCanonicalizationAlgorithmUri())
+        if (null == tsData.getCanonicalizationAlgorithm())
+        {
             throw new PropertyDataStructureException("canonicalization algorithm not specified", propName);
+        }
 
         List<byte[]> tsTokens = tsData.getTimeStampTokens();
         if (tsTokens.isEmpty())
-            throw new PropertyDataStructureException("no time stamp tokens", propName);
-
-        for (byte[] tsTkn : tsTokens)
         {
-            if (null == tsTkn)
-                throw new PropertyDataStructureException("null time stamp token", propName);
+            throw new PropertyDataStructureException("no time stamp tokens", propName);
+        }
+
+        if (ObjectUtils.anyNull(tsTokens))
+        {
+            throw new PropertyDataStructureException("null time stamp token", propName);
         }
     }
 }

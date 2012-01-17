@@ -20,6 +20,7 @@ import com.google.inject.Inject;
 import xades4j.properties.SigningCertificateProperty;
 import xades4j.properties.data.PropertyDataObject;
 import xades4j.properties.data.SigningCertificateData;
+import xades4j.providers.AlgorithmsProviderEx;
 import xades4j.providers.MessageDigestEngineProvider;
 
 /**
@@ -32,9 +33,10 @@ class DataGenSigningCertificate
 {
     @Inject
     public DataGenSigningCertificate(
+            AlgorithmsProviderEx algorithmsProvider,
             MessageDigestEngineProvider messageDigestProvider)
     {
-        super(messageDigestProvider);
+        super(algorithmsProvider, messageDigestProvider);
     }
 
     @Override
@@ -45,7 +47,6 @@ class DataGenSigningCertificate
         return super.generate(
                 prop.getsigningCertificateChain(),
                 new SigningCertificateData(),
-                ctx,
                 prop);
     }
 }

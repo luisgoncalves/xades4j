@@ -16,6 +16,7 @@
  */
 package xades4j.production;
 
+import xades4j.Algorithm;
 import com.google.inject.Inject;
 import java.util.HashMap;
 import java.util.List;
@@ -33,36 +34,36 @@ import xades4j.properties.QualifyingProperty;
 import xades4j.properties.RevocationValuesProperty;
 import xades4j.properties.SignatureTimeStampProperty;
 import xades4j.properties.data.ArchiveTimeStampData;
-import xades4j.properties.data.PropertyDataObject;
-import xades4j.providers.TimeStampTokenGenerationException;
+import xades4j.properties.data.BaseXAdESTimeStampData;
+import xades4j.providers.AlgorithmsProviderEx;
 import xades4j.providers.TimeStampTokenProvider;
 import xades4j.providers.TimeStampTokenProvider.TimeStampTokenRes;
 import xades4j.utils.CannotAddDataToDigestInputException;
 import xades4j.utils.DOMHelper;
 import xades4j.utils.TimeStampDigestInput;
+import xades4j.utils.TimeStampDigestInputFactory;
 
 /**
  *
  * @author Luís
  */
-class DataGenArchiveTimeStamp implements PropertyDataObjectGenerator<ArchiveTimeStampProperty>
+class DataGenArchiveTimeStamp extends DataGenBaseTimeStamp<ArchiveTimeStampProperty>
 {
-    private final TimeStampTokenProvider timeStampTokenProvider;
-
     @Inject
-    public DataGenArchiveTimeStamp(TimeStampTokenProvider timeStampTokenProvider)
+    public DataGenArchiveTimeStamp(
+            AlgorithmsProviderEx algorithmsProvider,
+            TimeStampTokenProvider timeStampTokenProvider,
+            TimeStampDigestInputFactory timeStampDigestInputFactory)
     {
-        this.timeStampTokenProvider = timeStampTokenProvider;
+        super(algorithmsProvider, timeStampTokenProvider, timeStampDigestInputFactory);
     }
 
     @Override
-    public PropertyDataObject generatePropertyData(
+    protected void addPropSpecificTimeStampInput(
             ArchiveTimeStampProperty prop,
-            PropertiesDataGenerationContext ctx) throws PropertyDataGenerationException
+            TimeStampDigestInput digestInput,
+            PropertiesDataGenerationContext ctx) throws CannotAddDataToDigestInputException, PropertyDataGenerationException
     {
-        String canonAlgUri = ctx.getAlgorithmsProvider().getCanonicalizationAlgorithmForTimeStampProperties();
-        TimeStampDigestInput digestInput = new TimeStampDigestInput(canonAlgUri);
-
         Element unsignedSigPropsElem = DOMHelper.getFirstDescendant(
                 ctx.getTargetXmlSignature().getElement(),
                 QualifyingProperty.XADES_XMLNS, QualifyingProperty.UNSIGNED_SIGNATURE_PROPS_TAG);
@@ -131,17 +132,16 @@ class DataGenArchiveTimeStamp implements PropertyDataObjectGenerator<ArchiveTime
         {
             throw new PropertyDataGenerationException("cannot create time stamp input: " + ex.getMessage(), prop);
         }
+    }
 
-        try
-        {
-            TimeStampTokenRes tsTknRes = timeStampTokenProvider.getTimeStampToken(
-                    digestInput.getBytes(),
-                    ctx.getAlgorithmsProvider().getDigestAlgorithmForTimeStampProperties());
-            prop.setTime(tsTknRes.timeStampTime);
-            return new ArchiveTimeStampData(canonAlgUri, tsTknRes.encodedTimeStampToken);
-        } catch (TimeStampTokenGenerationException ex)
-        {
-            throw new PropertyDataGenerationException("cannot get a time-stamp: " + ex.getMessage(), prop);
-        }
+    @Override
+    protected BaseXAdESTimeStampData createPropDataObj(
+            ArchiveTimeStampProperty prop,
+            Algorithm c14n,
+            TimeStampTokenRes tsTknRes,
+            PropertiesDataGenerationContext ctx)
+    {
+        prop.setTime(tsTknRes.timeStampTime);
+        return new ArchiveTimeStampData(c14n, tsTknRes.encodedTimeStampToken);
     }
 }

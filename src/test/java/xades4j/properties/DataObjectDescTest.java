@@ -16,13 +16,14 @@
  */
 package xades4j.properties;
 
+import xades4j.GenericAlgorithm;
 import org.w3c.dom.Document;
 import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
-import xades4j.production.Algorithm;
+import xades4j.Algorithm;
 import xades4j.production.XPath2FilterTransform;
 import xades4j.production.XPathTransform;
 import xades4j.utils.SignatureServicesTestBase;
@@ -66,14 +67,14 @@ public class DataObjectDescTest
         DataObjectDesc instance = new DataObjectDescTestImpl()
             .withTransform(new XPathTransform("xpath"))
             .withTransform(new XPath2FilterTransform().subtract("xpath"))
-            .withTransform(new Algorithm("uri", doc.createElement("param1"),doc.createElement("param2")));
+            .withTransform(new GenericAlgorithm("uri", doc.createElement("param1"),doc.createElement("param2")));
 
         Algorithm[] transforms = instance.getTransforms().toArray(new Algorithm[0]);
 
         assertEquals(3, transforms.length);
         assertEquals(XPathTransform.class, transforms[0].getClass());
         assertEquals(XPath2FilterTransform.class, transforms[1].getClass());
-        assertEquals(Algorithm.class, transforms[2].getClass());
+        assertEquals(GenericAlgorithm.class, transforms[2].getClass());
     }
 
     /**

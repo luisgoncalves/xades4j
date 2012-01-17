@@ -138,15 +138,35 @@ public class CollectionUtils
         public T2 project(T1 e);
     }
 
-    public static <TSrc, TDest> Collection<TDest> project(
+    public static <TSrc, TDest> List<TDest> project(
             Collection<TSrc> c,
             Projector<TSrc, TDest> p)
     {
-        Collection<TDest> projected = new ArrayList<TDest>();
+        List<TDest> projected = new ArrayList<TDest>();
         for (TSrc e : c)
         {
             projected.add(p.project(e));
         }
         return projected;
+    }
+
+    public static<T, T1 extends T> List<T1> filterByType(Collection<T> c, final Class<T1> clazz){
+        return project(
+                filter(c,new Predicate<T>()
+                {
+                    @Override
+                    public boolean verifiedBy(T elem)
+                    {
+                        return clazz.isAssignableFrom(elem.getClass());
+                    }
+                }),
+                new Projector<T, T1>()
+                {
+                    @Override
+                    public T1 project(T e)
+                    {
+                        return (T1)e;
+                    }
+                });
     }
 }

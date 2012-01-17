@@ -16,41 +16,19 @@
  */
 package xades4j.utils;
 
-import java.io.ByteArrayOutputStream;
 import org.apache.xml.security.signature.Reference;
-import org.apache.xml.security.signature.XMLSignatureException;
-import org.apache.xml.security.signature.XMLSignatureInput;
-import org.apache.xml.security.transforms.Transform;
-import org.w3c.dom.Document;
 import org.w3c.dom.Node;
 
 /**
- * Helper class to build inputs for time-stamps. The digests for time-stamps are
- * usually calculated over a concatenations of byte-streams, resulting from nodes
- * and/or processed {@code Reference}s, with the proper canonicalization if needed.
- * This class provides methods to build a sequential input by adding DOM {@code Node}s
+ * Builder of inputs for time-stamps. The digests for time-stamps are usually
+ * calculated over a concatenations of byte-streams, resulting from nodes and/or
+ * {@code Reference}s (processed or not), with the proper canonicalization if needed.
+ * This interface provides methods to build a sequential input by adding DOM {@code Node}s
  * or {@code Reference}s.
  * @author Luís
  */
-public class TimeStampDigestInput
+public interface TimeStampDigestInput
 {
-    private final String canonMethodUri;
-    private final ByteArrayOutputStream digestInput;
-
-    /**
-     *
-     * @param canonMethodUri the canonicalization method to be used, if needed
-     * @throws NullPointerException if {@code canonMethodUri} is {@code null}
-     */
-    public TimeStampDigestInput(String canonMethodUri)
-    {
-        if (null == canonMethodUri)
-            throw new NullPointerException();
-
-        this.canonMethodUri = canonMethodUri;
-        this.digestInput = new ByteArrayOutputStream();
-    }
-
     /**
      * Adds a {@code Reference} to the input. It is processed and the result is
      * canonicalized if it is a node-set.
@@ -58,21 +36,7 @@ public class TimeStampDigestInput
      * @throws CannotAddDataToDigestInputException if there is an error adding the reference
      * @throws NullPointerException if {@code r} is {@code null}
      */
-    public void addReference(Reference r) throws CannotAddDataToDigestInputException
-    {
-        if (null == r)
-            throw new NullPointerException();
-
-        try
-        {
-            XMLSignatureInput refData = r.getContentsAfterTransformation();
-            addToDigestInput(refData, r.getDocument());
-
-        } catch (XMLSignatureException ex)
-        {
-            throw new CannotAddDataToDigestInputException(ex);
-        }
-    }
+    void addReference(Reference r) throws CannotAddDataToDigestInputException;
 
     /**
      * Adds a {@code Node} to the input. The node is canonicalized.
@@ -80,43 +44,13 @@ public class TimeStampDigestInput
      * @throws CannotAddDataToDigestInputException if there is an error adding the node
      * @throws NullPointerException if {@code n} is {@code null}
      */
-    public void addNode(Node n) throws CannotAddDataToDigestInputException
-    {
-        if (null == n)
-            throw new NullPointerException();
-
-        addToDigestInput(new XMLSignatureInput(n), n.getOwnerDocument());
-    }
-
-    private void addToDigestInput(XMLSignatureInput refData, Document doc) throws CannotAddDataToDigestInputException
-    {
-        try
-        {
-            if (refData.isNodeSet() || refData.isElement())
-            {
-                Transform t = Transform.getInstance(doc, canonMethodUri);
-                refData = t.performTransform(refData);
-                // Fall through to add the bytes resulting from the canonicalization.
-            }
-
-            if (refData.isByteArray())
-                digestInput.write(refData.getBytes());
-            else if (refData.isOctetStream())
-                StreamUtils.readWrite(refData.getOctetStream(), digestInput);
-        } catch (Exception ex)
-        {
-            throw new CannotAddDataToDigestInputException(ex);
-        }
-    }
+    void addNode(Node n) throws CannotAddDataToDigestInputException;
 
     /**
      * Gets the octet-stream corresponding to the actual state of the input.
      * @return the octet-stream (always a new instance)
      */
-    public byte[] getBytes()
-    {
-        return digestInput.toByteArray();
-    }
+    byte[] getBytes();
 }
 
 

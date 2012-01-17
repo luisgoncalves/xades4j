@@ -34,7 +34,7 @@ import org.apache.xml.security.transforms.Transforms;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import xades4j.XAdES4jXMLSigException;
-import xades4j.production.Algorithm;
+import xades4j.GenericAlgorithm;
 import xades4j.properties.QualifyingProperty;
 import xades4j.providers.CertificateValidationException;
 
@@ -186,7 +186,7 @@ class SignatureUtils
                     if (transfs != null)
                         for (int j = 0; j < transfs.getLength(); ++j)
                         {
-                            dataObj.withTransform(new Algorithm(transfs.item(j).getURI()));
+                            dataObj.withTransform(new GenericAlgorithm(transfs.item(j).getURI()));
                         }
                 } catch (XMLSecurityException ex)
                 {

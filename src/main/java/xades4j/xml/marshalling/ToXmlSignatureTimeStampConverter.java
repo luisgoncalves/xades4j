@@ -16,25 +16,29 @@
  */
 package xades4j.xml.marshalling;
 
-import xades4j.properties.data.PropertyDataObject;
 import xades4j.properties.data.SignatureTimeStampData;
 import xades4j.xml.bind.xades.XmlUnsignedPropertiesType;
 import xades4j.xml.bind.xades.XmlXAdESTimeStampType;
+import xades4j.xml.marshalling.algorithms.AlgorithmsParametersMarshallingProvider;
 
 /**
  *
  * @author Luís
  */
-class ToXmlSignatureTimeStampConverter implements UnsignedPropertyDataToXmlConverter
+class ToXmlSignatureTimeStampConverter extends ToXmlUnsignedTimeStampDataConverter<SignatureTimeStampData>
 {
-    @Override
-    public void convertIntoObjectTree(
-            PropertyDataObject propData,
-            XmlUnsignedPropertiesType xmlProps)
+    ToXmlSignatureTimeStampConverter(AlgorithmsParametersMarshallingProvider algorithmsParametersMarshallingProvider)
     {
-        SignatureTimeStampData sigTStampData = (SignatureTimeStampData)propData;
+        super(algorithmsParametersMarshallingProvider);
+    }
+    
 
-        XmlXAdESTimeStampType xmlSigTS = ToXmlUtils.getXmlXAdESTimeStamp(sigTStampData);
-        xmlProps.getUnsignedSignatureProperties().getSignatureTimeStamp().add(xmlSigTS);
+    @Override
+    protected void insertIntoObjectTree(
+            XmlXAdESTimeStampType xmlTimeStamp,
+            XmlUnsignedPropertiesType xmlProps,
+            SignatureTimeStampData propData)
+    {
+        xmlProps.getUnsignedSignatureProperties().getSignatureTimeStamp().add(xmlTimeStamp);
     }
 }

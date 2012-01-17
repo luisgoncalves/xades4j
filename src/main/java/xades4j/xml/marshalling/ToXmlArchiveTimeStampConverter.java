@@ -18,26 +18,28 @@ package xades4j.xml.marshalling;
 
 import javax.xml.bind.JAXBElement;
 import xades4j.properties.data.ArchiveTimeStampData;
-import xades4j.properties.data.PropertyDataObject;
 import xades4j.xml.bind.xades.ObjectFactory;
 import xades4j.xml.bind.xades.XmlUnsignedPropertiesType;
 import xades4j.xml.bind.xades.XmlXAdESTimeStampType;
+import xades4j.xml.marshalling.algorithms.AlgorithmsParametersMarshallingProvider;
 
 /**
- *
  * @author Luís
  */
-class ToXmlArchiveTimeStampConverter implements UnsignedPropertyDataToXmlConverter
+class ToXmlArchiveTimeStampConverter extends ToXmlUnsignedTimeStampDataConverter<ArchiveTimeStampData>
 {
-    @Override
-    public void convertIntoObjectTree(
-            PropertyDataObject propData,
-            XmlUnsignedPropertiesType xmlProps)
+    ToXmlArchiveTimeStampConverter(AlgorithmsParametersMarshallingProvider algorithmsParametersMarshallingProvider)
     {
-        ArchiveTimeStampData archiveTSData = (ArchiveTimeStampData)propData;
-        XmlXAdESTimeStampType xmlTS = ToXmlUtils.getXmlXAdESTimeStamp(archiveTSData);
+        super(algorithmsParametersMarshallingProvider);
+    }
 
-        JAXBElement<XmlXAdESTimeStampType> xmlarchTS = new ObjectFactory().createArchiveTimeStampV2(xmlTS);
-        xmlProps.getUnsignedSignatureProperties().getAny().add(xmlarchTS);
+    @Override
+    protected void insertIntoObjectTree(
+            XmlXAdESTimeStampType xmlTimeStamp,
+            XmlUnsignedPropertiesType xmlProps,
+            ArchiveTimeStampData propData)
+    {
+        JAXBElement<XmlXAdESTimeStampType> xmlArchTS = new ObjectFactory().createArchiveTimeStampV2(xmlTimeStamp);
+        xmlProps.getUnsignedSignatureProperties().getAny().add(xmlArchTS);
     }
 }

@@ -29,6 +29,7 @@ import xades4j.UnsupportedAlgorithmException;
 import xades4j.properties.data.CRLRef;
 import xades4j.properties.data.CompleteRevocationRefsData;
 import xades4j.properties.data.PropertyDataObject;
+import xades4j.providers.AlgorithmsProviderEx;
 import xades4j.providers.MessageDigestEngineProvider;
 
 /**
@@ -38,12 +39,15 @@ import xades4j.providers.MessageDigestEngineProvider;
 class DataGenCompleteRevocRefs implements PropertyDataObjectGenerator<CompleteRevocationRefsProperty>
 {
     private final MessageDigestEngineProvider messageDigestProvider;
+    private final AlgorithmsProviderEx algorithmsProvider;
 
     @Inject
     public DataGenCompleteRevocRefs(
-            MessageDigestEngineProvider messageDigestProvider)
+            MessageDigestEngineProvider messageDigestProvider,
+            AlgorithmsProviderEx algorithmsProvider)
     {
         this.messageDigestProvider = messageDigestProvider;
+        this.algorithmsProvider = algorithmsProvider;
     }
 
     @Override
@@ -53,11 +57,11 @@ class DataGenCompleteRevocRefs implements PropertyDataObjectGenerator<CompleteRe
     {
         Collection<X509CRL> crls = prop.getCrls();
         Collection<CRLRef> crlRefs = new ArrayList<CRLRef>(crls.size());
-        String digestAlgUri = ctx.getAlgorithmsProvider().getDigestAlgorithmForReferenceProperties();
+        String digestAlgUri = this.algorithmsProvider.getDigestAlgorithmForReferenceProperties();
 
         try
         {
-            MessageDigest messageDigest = messageDigestProvider.getEngine(digestAlgUri);
+            MessageDigest messageDigest = this.messageDigestProvider.getEngine(digestAlgUri);
             for (X509CRL crl : crls)
             {
                 GregorianCalendar crlTime = new GregorianCalendar();

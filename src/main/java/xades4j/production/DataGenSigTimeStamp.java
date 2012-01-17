@@ -16,61 +16,59 @@
  */
 package xades4j.production;
 
+import xades4j.Algorithm;
 import com.google.inject.Inject;
 import org.apache.xml.security.utils.Constants;
 import org.w3c.dom.Element;
 import xades4j.utils.CannotAddDataToDigestInputException;
 import xades4j.properties.SignatureTimeStampProperty;
+import xades4j.properties.data.BaseXAdESTimeStampData;
 import xades4j.utils.TimeStampDigestInput;
-import xades4j.properties.data.PropertyDataObject;
 import xades4j.properties.data.SignatureTimeStampData;
-import xades4j.providers.TimeStampTokenGenerationException;
+import xades4j.providers.AlgorithmsProviderEx;
 import xades4j.providers.TimeStampTokenProvider;
 import xades4j.providers.TimeStampTokenProvider.TimeStampTokenRes;
 import xades4j.utils.DOMHelper;
+import xades4j.utils.TimeStampDigestInputFactory;
 
 /**
  *
  * @author Luís
  */
-class DataGenSigTimeStamp implements PropertyDataObjectGenerator<SignatureTimeStampProperty>
+class DataGenSigTimeStamp extends DataGenBaseTimeStamp<SignatureTimeStampProperty>
 {
-    private final TimeStampTokenProvider timeStampTokenProvider;
-
     @Inject
-    public DataGenSigTimeStamp(TimeStampTokenProvider timeStampTokenProvider)
+    public DataGenSigTimeStamp(
+            TimeStampTokenProvider timeStampTokenProvider,
+            AlgorithmsProviderEx algorithmsProvider,
+            TimeStampDigestInputFactory timeStampDigestInputFactory)
     {
-        this.timeStampTokenProvider = timeStampTokenProvider;
+        super(algorithmsProvider, timeStampTokenProvider, timeStampDigestInputFactory);
     }
 
     @Override
-    public PropertyDataObject generatePropertyData(
+    protected void addPropSpecificTimeStampInput(
             SignatureTimeStampProperty prop,
-            PropertiesDataGenerationContext ctx) throws PropertyDataGenerationException
+            TimeStampDigestInput digestInput,
+            PropertiesDataGenerationContext ctx) throws CannotAddDataToDigestInputException
     {
         Element sigValueElem = DOMHelper.getFirstDescendant(
-                ctx.getTargetXmlSignature().getElement(),
-                Constants.SignatureSpecNS, Constants._TAG_SIGNATUREVALUE);
-        String canonAlgUri = ctx.getAlgorithmsProvider().getCanonicalizationAlgorithmForTimeStampProperties();
-        TimeStampDigestInput tsDigestInput = new TimeStampDigestInput(canonAlgUri);
-        try
-        {
-            tsDigestInput.addNode(sigValueElem);
-        } catch (CannotAddDataToDigestInputException ex)
-        {
-            throw new PropertyDataGenerationException("Cannot create signature timestamp input: " + ex.getMessage(), prop);
-        }
+            ctx.getTargetXmlSignature().getElement(),
+            Constants.SignatureSpecNS, Constants._TAG_SIGNATUREVALUE);
 
-        try
-        {
-            TimeStampTokenRes tsTknRes = timeStampTokenProvider.getTimeStampToken(
-                    tsDigestInput.getBytes(),
-                    ctx.getAlgorithmsProvider().getDigestAlgorithmForTimeStampProperties());
-            prop.setTime(tsTknRes.timeStampTime);
-            return new SignatureTimeStampData(canonAlgUri, tsTknRes.encodedTimeStampToken);
-        } catch (TimeStampTokenGenerationException ex)
-        {
-            throw new PropertyDataGenerationException("cannot get a time-stamp: " + ex.getMessage(), prop);
-        }
+        digestInput.addNode(sigValueElem);
+
+        throw new UnsupportedOperationException("Not supported yet.");
+    }
+
+    @Override
+    protected BaseXAdESTimeStampData createPropDataObj(
+            SignatureTimeStampProperty prop,
+            Algorithm c14n,
+            TimeStampTokenRes tsTknRes,
+            PropertiesDataGenerationContext ctx)
+    {
+        prop.setTime(tsTknRes.timeStampTime);
+        return new SignatureTimeStampData(c14n, tsTknRes.encodedTimeStampToken);
     }
 }

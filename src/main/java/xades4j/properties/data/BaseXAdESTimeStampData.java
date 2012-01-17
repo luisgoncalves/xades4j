@@ -18,6 +18,7 @@ package xades4j.properties.data;
 
 import java.util.ArrayList;
 import java.util.List;
+import xades4j.Algorithm;
 
 /**
  *
@@ -25,24 +26,22 @@ import java.util.List;
  */
 public abstract class BaseXAdESTimeStampData implements PropertyDataObject
 {
-    private final String canonicalizationAlgorithmUri;
+    private final Algorithm c14n;
     private final List<byte[]> timeStampTokens;
 
     /**
      * The token should NOT be encoded in base-64. This is done in the marshalling
      * stage.
      */
-    protected BaseXAdESTimeStampData(
-            String canonicalizationAlgorithmUri,
-            byte[] tsToken)
+    protected BaseXAdESTimeStampData(Algorithm c14n, byte[] tsToken)
     {
-        this(canonicalizationAlgorithmUri);
+        this(c14n);
         this.timeStampTokens.add(tsToken);
     }
 
-    protected BaseXAdESTimeStampData(String canonicalizationAlgorithmUri)
+    protected BaseXAdESTimeStampData(Algorithm c14n)
     {
-        this.canonicalizationAlgorithmUri = canonicalizationAlgorithmUri;
+        this.c14n = c14n;
         this.timeStampTokens = new ArrayList<byte[]>(1);
     }
 
@@ -56,13 +55,19 @@ public abstract class BaseXAdESTimeStampData implements PropertyDataObject
         this.timeStampTokens.add(tsToken);
     }
 
+    public Algorithm getCanonicalizationAlgorithm()
+    {
+        return this.c14n;
+    }
+
+    @Deprecated
     public String getCanonicalizationAlgorithmUri()
     {
-        return canonicalizationAlgorithmUri;
+        return this.c14n.getUri();
     }
 
     public List<byte[]> getTimeStampTokens()
     {
-        return timeStampTokens;
+        return this.timeStampTokens;
     }
 }

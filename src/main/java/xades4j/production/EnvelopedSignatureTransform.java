@@ -16,6 +16,7 @@
  */
 package xades4j.production;
 
+import xades4j.Algorithm;
 import org.apache.xml.security.transforms.Transforms;
 
 /**

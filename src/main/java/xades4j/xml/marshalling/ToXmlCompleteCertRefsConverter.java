@@ -16,6 +16,7 @@
  */
 package xades4j.xml.marshalling;
 
+import org.w3c.dom.Document;
 import xades4j.properties.data.CompleteCertificateRefsData;
 import xades4j.properties.data.PropertyDataObject;
 import xades4j.xml.bind.xades.XmlCertIDListType;
@@ -31,7 +32,8 @@ class ToXmlCompleteCertRefsConverter implements UnsignedPropertyDataToXmlConvert
     @Override
     public void convertIntoObjectTree(
             PropertyDataObject propData,
-            XmlUnsignedPropertiesType xmlProps)
+            XmlUnsignedPropertiesType xmlProps,
+            Document doc)
     {
         XmlCertIDListType xmlCertRefsList = ToXmlUtils.getXmlCertRefList((CompleteCertificateRefsData)propData);
         XmlCompleteCertificateRefsType xmlCompleteCertRefsProp = new XmlCompleteCertificateRefsType();

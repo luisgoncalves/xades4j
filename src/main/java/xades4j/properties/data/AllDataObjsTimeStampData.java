@@ -16,6 +16,8 @@
  */
 package xades4j.properties.data;
 
+import xades4j.Algorithm;
+
 /**
  *
  * @author Luís
@@ -26,15 +28,13 @@ public final class AllDataObjsTimeStampData extends BaseXAdESTimeStampData
      * The token should NOT be encoded in base-64. This is done in the marshalling
      * stage.
      */
-    public AllDataObjsTimeStampData(
-            String canonicalizationAlgorithmUri,
-            byte[] tsToken)
+    public AllDataObjsTimeStampData(Algorithm c14n, byte[] tsToken)
     {
-        super(canonicalizationAlgorithmUri, tsToken);
+        super(c14n, tsToken);
     }
 
-    public AllDataObjsTimeStampData(String canonicalizationAlgorithmUri)
+    public AllDataObjsTimeStampData(Algorithm c14n)
     {
-        super(canonicalizationAlgorithmUri);
+        super(c14n);
     }
 }

@@ -18,6 +18,7 @@ package xades4j.xml.marshalling;
 
 import xades4j.properties.data.PropertyDataObject;
 import java.util.Collection;
+import org.w3c.dom.Document;
 import xades4j.properties.ObjectIdentifier;
 import xades4j.properties.data.DataObjectFormatData;
 import xades4j.xml.bind.xades.XmlDataObjectFormatType;
@@ -34,7 +35,8 @@ class ToXmlDataObjectFormatConverter implements SignedPropertyDataToXmlConverter
     @Override
     public void convertIntoObjectTree(
             PropertyDataObject propData,
-            XmlSignedPropertiesType xmlProps)
+            XmlSignedPropertiesType xmlProps,
+            Document doc)
     {
         DataObjectFormatData dataObjFormatData = (DataObjectFormatData)propData;
 
@@ -59,7 +61,7 @@ class ToXmlDataObjectFormatConverter implements SignedPropertyDataToXmlConverter
 
         // Documentation references
         Collection<String> docsUris = dataObjFormatData.getDocumentationUris();
-        if (docsUris != null && docsUris.size() != 0)
+        if (docsUris != null && !docsUris.isEmpty())
         {
             XmlDocumentationReferencesType docRefs = new XmlDocumentationReferencesType();
             docRefs.getDocumentationReference().addAll(docsUris);

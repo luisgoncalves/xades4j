@@ -14,10 +14,10 @@
  * You should have received a copy of the GNU Lesser General Public License along
  * with XAdES4j. If not, see <http://www.gnu.org/licenses/>.
  */
-package xades4j.production;
+package xades4j.properties;
 
 import org.w3c.dom.Element;
-import org.w3c.dom.NodeList;
+import xades4j.Algorithm;
 
 /**
  * @deprecated This class is deprecated and might be removed on future releases
@@ -27,15 +27,17 @@ import org.w3c.dom.NodeList;
  */
 public class DataObjectTransform extends Algorithm
 {
+    private final Element transformParams;
 
-    public DataObjectTransform(String transformUri, Element paramsElement)
+    public DataObjectTransform(String transformUri, Element transformParams)
     {
-        super(transformUri, paramsElement);
+        super(transformUri);
+        this.transformParams = transformParams;
     }
 
     public DataObjectTransform(String transformUri)
     {
-        super(transformUri);
+        this(transformUri, null);
     }
 
     public String getTransformUri()
@@ -45,10 +47,6 @@ public class DataObjectTransform extends Algorithm
 
     public Element getTransformParams()
     {
-        NodeList params = getParams(null);
-        if(params == null){
-            return null;
-        }
-        return (Element)params.item(0);
+        return transformParams;
     }
 }
