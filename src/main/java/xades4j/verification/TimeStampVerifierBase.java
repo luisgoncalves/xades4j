@@ -19,6 +19,7 @@ package xades4j.verification;
 import java.lang.reflect.Method;
 import java.util.Date;
 import java.util.List;
+import xades4j.UnsupportedAlgorithmException;
 import xades4j.properties.QualifyingProperty;
 import xades4j.properties.data.BaseXAdESTimeStampData;
 import xades4j.providers.TimeStampTokenDigestException;
@@ -53,10 +54,10 @@ abstract class TimeStampVerifierBase<TData extends BaseXAdESTimeStampData> imple
             TData propData,
             QualifyingPropertyVerificationContext ctx) throws InvalidPropertyException
     {
-        TimeStampDigestInput digestInput = this.tsInputFactory.newTimeStampDigestInput(propData.getCanonicalizationAlgorithm());
-
         try
         {
+            TimeStampDigestInput digestInput = this.tsInputFactory.newTimeStampDigestInput(propData.getCanonicalizationAlgorithm());
+
             QualifyingProperty prop = addPropSpecificTimeStampInputAndCreateProperty(propData, digestInput, ctx);
             byte[] data = digestInput.getBytes();
             /**
@@ -75,6 +76,10 @@ abstract class TimeStampVerifierBase<TData extends BaseXAdESTimeStampData> imple
             setTimeMethod.invoke(prop, ts);
             return prop;
         }
+        catch(UnsupportedAlgorithmException ex)
+        {
+            throw getEx(ex, this.propName);
+        }
         catch (CannotAddDataToDigestInputException ex)
         {
             throw new TimeStampDigestInputException(this.propName);
@@ -86,14 +91,14 @@ abstract class TimeStampVerifierBase<TData extends BaseXAdESTimeStampData> imple
         catch (Exception ex)
         {
             // Exceptions related to setTimeMethod.invoke(...)
-            throw getEx(ex, propName);
+            throw getEx(ex, this.propName);
         }
     }
 
     protected abstract QualifyingProperty addPropSpecificTimeStampInputAndCreateProperty(
             TData propData,
             TimeStampDigestInput digestInput,
-            QualifyingPropertyVerificationContext ctx) throws CannotAddDataToDigestInputException, TimeStampVerificationException;
+            QualifyingPropertyVerificationContext ctx) throws CannotAddDataToDigestInputException;
 
     private static TimeStampVerificationException getEx(
             final Exception ex,

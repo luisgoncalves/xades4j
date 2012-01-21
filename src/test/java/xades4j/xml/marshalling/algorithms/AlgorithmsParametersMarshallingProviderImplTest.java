@@ -20,7 +20,6 @@ import xades4j.production.EnvelopedSignatureTransform;
 import org.w3c.dom.Node;
 import java.util.List;
 import xades4j.GenericAlgorithm;
-import xades4j.production.XPath2FilterTransform;
 import xades4j.production.XPathTransform;
 import xades4j.Algorithm;
 import com.google.inject.Injector;
@@ -48,7 +47,6 @@ public class AlgorithmsParametersMarshallingProviderImplTest
         Algorithm[] algorithms = new Algorithm[]
         {
             new XPathTransform("xpath"),
-            new XPath2FilterTransform().subtract("xpath"),
             new GenericAlgorithm("uri", doc.createElement("param1"), doc.createElement("param2"))
         };
 

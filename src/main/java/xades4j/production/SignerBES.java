@@ -315,7 +315,7 @@ class SignerBES implements XadesSigner
         }
     }
 
-    private Element createElementForAlgorithm(Algorithm algorithm, String elementName, Document signatureDocument)
+    private Element createElementForAlgorithm(Algorithm algorithm, String elementName, Document signatureDocument) throws UnsupportedAlgorithmException
     {
         Element algorithmElem = XMLUtils.createElementInSignatureSpace(signatureDocument, elementName);
         algorithmElem.setAttributeNS(null, Constants._ATT_ALGORITHM, algorithm.getUri());

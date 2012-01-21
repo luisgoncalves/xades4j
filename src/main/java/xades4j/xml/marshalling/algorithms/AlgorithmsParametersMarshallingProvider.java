@@ -20,6 +20,7 @@ import java.util.List;
 import org.w3c.dom.Document;
 import org.w3c.dom.Node;
 import xades4j.Algorithm;
+import xades4j.UnsupportedAlgorithmException;
 
 /**
  * Marshaller of parameters of any algorithm. It it responsible for finding and
@@ -32,5 +33,11 @@ import xades4j.Algorithm;
  */
 public interface AlgorithmsParametersMarshallingProvider
 {
-    List<Node> marshalParameters(Algorithm alg, Document doc);
+    /**
+     * @param alg the algorithm
+     * @param doc the XML document where the nodes will be appended
+     * @return the list os parameter nodes (can be {@code null but not empty)
+     * @throws UnsupportedAlgorithmException if {@code alg} is not recognized
+     */
+    List<Node> marshalParameters(Algorithm alg, Document doc) throws UnsupportedAlgorithmException;
 }

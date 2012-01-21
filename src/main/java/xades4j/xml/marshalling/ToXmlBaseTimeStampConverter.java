@@ -20,6 +20,7 @@ import java.util.List;
 import org.w3c.dom.Document;
 import org.w3c.dom.Node;
 import xades4j.Algorithm;
+import xades4j.UnsupportedAlgorithmException;
 import xades4j.properties.data.BaseXAdESTimeStampData;
 import xades4j.properties.data.PropertyDataObject;
 import xades4j.xml.bind.xades.XmlEncapsulatedPKIDataType;
@@ -69,17 +70,25 @@ abstract class ToXmlBaseTimeStampConverter<TData extends BaseXAdESTimeStampData,
 
         // Canonicalization method
 
-        Algorithm c14n = tsData.getCanonicalizationAlgorithm();
         XmlCanonicalizationMethodType xmlCanon = new XmlCanonicalizationMethodType();
-        xmlCanon.setAlgorithm(c14n.getUri());
-
-        List<Node> c14nParams = this.algorithmsParametersMarshallingProvider.marshalParameters(c14n, doc);
-        if (c14nParams != null)
-        {
-            xmlCanon.getContent().addAll(c14nParams);
-        }
-
         xmlTimeStamp.setCanonicalizationMethod(xmlCanon);
+
+        Algorithm c14n = tsData.getCanonicalizationAlgorithm();
+        xmlCanon.setAlgorithm(c14n.getUri());
+        try
+        {
+            List<Node> c14nParams = this.algorithmsParametersMarshallingProvider.marshalParameters(c14n, doc);
+            if (c14nParams != null)
+            {
+                xmlCanon.getContent().addAll(c14nParams);
+            }
+        }
+        catch (UnsupportedAlgorithmException ex)
+        {
+            // In the current implementation the algorithm was already used before.
+            // Do not throw any specific exception for now.
+            throw new IllegalArgumentException("Cannot marshall algorithm parameters", ex);
+        }
 
         // Time-stamp tokens
 

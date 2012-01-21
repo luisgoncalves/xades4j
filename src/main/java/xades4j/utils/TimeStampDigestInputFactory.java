@@ -17,6 +17,7 @@
 package xades4j.utils;
 
 import xades4j.Algorithm;
+import xades4j.UnsupportedAlgorithmException;
 
 /**
  * Factory for builders of timestamp inputs.
@@ -35,7 +36,8 @@ public interface TimeStampDigestInputFactory
      * @param c14n the canonicalization method to be used by the timestamp input when
      *              adding XML node-sets
      * @return the timestamp input builder
+     * @throws UnsupportedAlgorithmException if {@code c14n} is not recognized
      * @see TimeStampDigestInput
      */
-    TimeStampDigestInput newTimeStampDigestInput(Algorithm c14n);
+    TimeStampDigestInput newTimeStampDigestInput(Algorithm c14n) throws UnsupportedAlgorithmException;
 }

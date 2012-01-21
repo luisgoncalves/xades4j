@@ -26,6 +26,7 @@ import java.util.List;
 import org.w3c.dom.Document;
 import org.w3c.dom.Node;
 import xades4j.Algorithm;
+import xades4j.UnsupportedAlgorithmException;
 
 /**
  * @author Luís
@@ -41,18 +42,23 @@ final class AlgorithmsParametersMarshallingProviderImpl implements AlgorithmsPar
     }
 
     @Override
-    public List<Node> marshalParameters(Algorithm alg, Document doc)
+    public List<Node> marshalParameters(Algorithm alg, Document doc) throws UnsupportedAlgorithmException
     {
-        ParameterizedType pt = Types.newParameterizedType(AlgorithmParametersMarshaller.class, alg.getClass());
-        AlgorithmParametersMarshaller marshaller = (AlgorithmParametersMarshaller) injector.getInstance(Key.get(TypeLiteral.get(pt)));
-        
+        AlgorithmParametersMarshaller marshaller;
+        try
+        {
+            ParameterizedType pt = Types.newParameterizedType(AlgorithmParametersMarshaller.class, alg.getClass());
+            marshaller = (AlgorithmParametersMarshaller) injector.getInstance(Key.get(TypeLiteral.get(pt)));
+        } catch (RuntimeException ex)
+        {
+            throw new UnsupportedAlgorithmException(alg.getUri());
+        }
+
         List<Node> params = marshaller.marshalParameters(alg, doc);
         if (params != null && params.isEmpty())
         {
             throw new IllegalArgumentException(String.format("Parameter marshaller returned empty parameter list for algorithm %s", alg.getUri()));
         }
         return params;
-
-        // TODO: throw appropriate exception? (RuntimeException is thrown here)
     }
 }

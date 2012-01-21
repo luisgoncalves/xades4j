@@ -20,6 +20,7 @@ import com.google.inject.Inject;
 import org.apache.xml.security.c14n.Canonicalizer;
 import org.apache.xml.security.c14n.InvalidCanonicalizerException;
 import xades4j.Algorithm;
+import xades4j.UnsupportedAlgorithmException;
 import xades4j.xml.marshalling.algorithms.AlgorithmsParametersMarshallingProvider;
 
 /**
@@ -36,7 +37,7 @@ class TimeStampDigestInputFactoryImpl implements TimeStampDigestInputFactory
     }
 
     @Override
-    public TimeStampDigestInput newTimeStampDigestInput(Algorithm c14n)
+    public TimeStampDigestInput newTimeStampDigestInput(Algorithm c14n) throws UnsupportedAlgorithmException
     {
         if (null == c14n)
         {
@@ -51,8 +52,7 @@ class TimeStampDigestInputFactoryImpl implements TimeStampDigestInputFactory
         }
         catch (InvalidCanonicalizerException ex)
         {
-            // TODO: change this?
-            throw new IllegalArgumentException(ex);
+            throw new UnsupportedAlgorithmException(ex.getMessage(), c14n.getUri());
         }
 
         return new TimeStampDigestInputImpl(c14n, this.parametersMarshallingProvider);

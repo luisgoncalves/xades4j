@@ -16,6 +16,7 @@
  */
 package xades4j.properties;
 
+import xades4j.production.XPath2FilterTransform.XPath2Filter;
 import xades4j.GenericAlgorithm;
 import org.w3c.dom.Document;
 import org.junit.After;
@@ -55,18 +56,15 @@ public class DataObjectDescTest
     {
     }
 
-    /**
-     * Test of withTransform method, of class DataObjectDesc.
-     */
     @Test
     public void testWithTransform() throws Exception
     {
         System.out.println("withTransform");
-
+        
         Document doc = SignatureServicesTestBase.getNewDocument();
         DataObjectDesc instance = new DataObjectDescTestImpl()
             .withTransform(new XPathTransform("xpath"))
-            .withTransform(new XPath2FilterTransform().subtract("xpath"))
+            .withTransform(XPath2Filter.subtract("xpath1").intersect("xpath2"))
             .withTransform(new GenericAlgorithm("uri", doc.createElement("param1"),doc.createElement("param2")));
 
         Algorithm[] transforms = instance.getTransforms().toArray(new Algorithm[0]);
@@ -77,9 +75,6 @@ public class DataObjectDescTest
         assertEquals(GenericAlgorithm.class, transforms[2].getClass());
     }
 
-    /**
-     * Test of withDataObjectFormat method, of class DataObjectDesc.
-     */
     @Test(expected = IllegalStateException.class)
     public void testWithDataObjectFormatRepeatedInstance()
     {

@@ -22,7 +22,7 @@ import org.apache.xml.security.transforms.params.XPath2FilterContainer;
 import org.w3c.dom.Document;
 import org.w3c.dom.Node;
 import xades4j.production.XPath2FilterTransform;
-import xades4j.production.XPath2FilterTransform.XPathFilter;
+import xades4j.production.XPath2FilterTransform.XPath2Filter;
 
 /**
  *
@@ -33,10 +33,10 @@ final class XPath2FilterTransformParamsMarshaller implements AlgorithmParameters
     @Override
     public List<Node> marshalParameters(XPath2FilterTransform alg, Document doc)
     {
-        List<XPathFilter> filters = alg.getFilters();
+        List<XPath2Filter> filters = alg.getFilters();
         List<Node> params = new ArrayList<Node>(filters.size());
 
-        for (XPathFilter filter : filters)
+        for (XPath2Filter filter : filters)
         {
             XPath2FilterContainer c = null;
             String filterType = filter.getFilterType();
