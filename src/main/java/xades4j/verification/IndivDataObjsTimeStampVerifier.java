@@ -44,7 +44,7 @@ class IndivDataObjsTimeStampVerifier extends TimeStampVerifierBase<IndividualDat
     protected QualifyingProperty addPropSpecificTimeStampInputAndCreateProperty(
             IndividualDataObjsTimeStampData propData,
             TimeStampDigestInput digestInput,
-            QualifyingPropertyVerificationContext ctx) throws CannotAddDataToDigestInputException, TimeStampDigestInputException
+            QualifyingPropertyVerificationContext ctx) throws CannotAddDataToDigestInputException, TimeStampVerificationException
     {
         SignedObjectsData dataObjsData = ctx.getSignedObjectsData();
         IndividualDataObjsTimeStampProperty prop = new IndividualDataObjsTimeStampProperty();

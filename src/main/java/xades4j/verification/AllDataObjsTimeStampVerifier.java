@@ -42,7 +42,7 @@ class AllDataObjsTimeStampVerifier extends TimeStampVerifierBase<AllDataObjsTime
     }
 
     @Override
-    protected QualifyingProperty addPropSpecificTimeStampInputAndCreateProperty(AllDataObjsTimeStampData propData, TimeStampDigestInput digestInput, QualifyingPropertyVerificationContext ctx) throws CannotAddDataToDigestInputException, TimeStampVerificationException
+    protected QualifyingProperty addPropSpecificTimeStampInputAndCreateProperty(AllDataObjsTimeStampData propData, TimeStampDigestInput digestInput, QualifyingPropertyVerificationContext ctx) throws CannotAddDataToDigestInputException
     {
         Collection<RawDataObjectDesc> dataObjs = ctx.getSignedObjectsData().getAllDataObjects();
 

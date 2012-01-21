@@ -98,7 +98,7 @@ abstract class TimeStampVerifierBase<TData extends BaseXAdESTimeStampData> imple
     protected abstract QualifyingProperty addPropSpecificTimeStampInputAndCreateProperty(
             TData propData,
             TimeStampDigestInput digestInput,
-            QualifyingPropertyVerificationContext ctx) throws CannotAddDataToDigestInputException;
+            QualifyingPropertyVerificationContext ctx) throws CannotAddDataToDigestInputException, TimeStampVerificationException;
 
     private static TimeStampVerificationException getEx(
             final Exception ex,
