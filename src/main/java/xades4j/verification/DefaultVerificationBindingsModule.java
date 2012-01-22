@@ -44,8 +44,6 @@ import xades4j.providers.impl.DefaultTimeStampVerificationProvider;
 import xades4j.providers.MessageDigestEngineProvider;
 import xades4j.providers.SignaturePolicyDocumentProvider;
 import xades4j.providers.TimeStampVerificationProvider;
-import xades4j.xml.unmarshalling.DefaultQualifyingPropertiesUnmarshaller;
-import xades4j.xml.unmarshalling.QualifyingPropertiesUnmarshaller;
 
 /**
  * Contains the Guice bindings for the default components and the bindings for the
@@ -77,7 +75,6 @@ class DefaultVerificationBindingsModule extends AbstractModule
     protected void configure()
     {
         bind(MessageDigestEngineProvider.class).to(DefaultMessageDigestProvider.class);
-        bind(QualifyingPropertiesUnmarshaller.class).to(DefaultQualifyingPropertiesUnmarshaller.class);
         bind(TimeStampVerificationProvider.class).to(DefaultTimeStampVerificationProvider.class);
         bind(SignaturePolicyDocumentProvider.class).toInstance(new SignaturePolicyDocumentProvider()
         {

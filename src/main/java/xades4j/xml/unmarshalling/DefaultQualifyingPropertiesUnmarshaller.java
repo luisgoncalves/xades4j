@@ -30,7 +30,7 @@ import xades4j.xml.bind.xades.XmlQualifyingPropertiesType;
  * and attributes validation data properties.
  * @author Luís
  */
-public final class DefaultQualifyingPropertiesUnmarshaller
+final class DefaultQualifyingPropertiesUnmarshaller
         implements QualifyingPropertiesUnmarshaller
 {
     private final UnmarshallerModule[] modules;

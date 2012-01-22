@@ -29,10 +29,11 @@ import xades4j.properties.data.SigAndDataObjsPropertiesData;
  * need to be marshalled before the signature and most of the times they can't be,
  * because they use information that results from the signature generation.
  * <p>
- * Default implementations of signed and unsigned properties data objects marshallers
- * are supplied.
- * @see DefaultSignedPropertiesMarshaller
- * @see DefaultUnsignedPropertiesMarshaller
+ * Built-in implementations of signed and unsigned properties data objects marshallers
+ * are based on JAXB and support all the signed properties data objects in the library
+ * (XAdES 1.4.1) plus the {@code GenericDOMData}.
+ * @see SignedPropertiesMarshaller
+ * @see UnsignedPropertiesMarshaller
  * @author Luís
  */
 public interface PropertiesMarshaller

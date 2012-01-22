@@ -49,8 +49,6 @@ import xades4j.providers.impl.DefaultMessageDigestProvider;
 import xades4j.providers.impl.DefaultSignaturePropertiesProvider;
 import xades4j.providers.impl.DefaultTimeStampTokenProvider;
 import xades4j.providers.impl.DefaultBasicSignatureOptionsProvider;
-import xades4j.xml.marshalling.SignedPropertiesMarshaller;
-import xades4j.xml.marshalling.UnsignedPropertiesMarshaller;
 
 /**
  * Contains the Guice bindings for the default components and the bindings for the

@@ -29,7 +29,10 @@ import xades4j.providers.MessageDigestEngineProvider;
 import xades4j.providers.SignaturePolicyDocumentProvider;
 import xades4j.providers.TimeStampVerificationProvider;
 import xades4j.utils.CollectionUtils;
+import xades4j.utils.UtilsBindingsModule;
+import xades4j.xml.marshalling.algorithms.AlgorithmParametersBindingsModule;
 import xades4j.xml.unmarshalling.QualifyingPropertiesUnmarshaller;
+import xades4j.xml.unmarshalling.UnmarshallingBindingsModule;
 
 /**
  * A profile for signature verification. This class is the entry point for verifying
@@ -127,6 +130,12 @@ public final class XadesVerificationProfile
         return this;
     }
 
+    private static final Module[] sealedModules =
+    {
+        new UtilsBindingsModule(),
+        new AlgorithmParametersBindingsModule()
+    };
+
     /**
      * Creates a new {@code XadesVerifier} based on the current state of the profile.
      * If any changes are made after this call, the previously returned verifier will
@@ -145,7 +154,9 @@ public final class XadesVerificationProfile
                 CollectionUtils.cloneOrEmptyIfNull(customSignatureVerifiers),
                 CollectionUtils.cloneOrEmptyIfNull(unkownElemsVerifiers));
 
-        XadesVerifierImpl v = profileCore.getInstance(XadesVerifierImpl.class, defaultsModule);
+        Module[] overridableModules = { defaultsModule, new UnmarshallingBindingsModule() };
+
+        XadesVerifierImpl v = profileCore.getInstance(XadesVerifierImpl.class, overridableModules, sealedModules);
         v.setAcceptUnknownProperties(acceptUnknownProperties);
         return v;
     }

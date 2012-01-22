@@ -16,6 +16,7 @@
  */
 package xades4j.production;
 
+import com.google.inject.Module;
 import xades4j.properties.QualifyingProperty;
 import xades4j.utils.XadesProfileCore;
 import xades4j.utils.XadesProfileResolutionException;
@@ -26,8 +27,11 @@ import xades4j.providers.KeyingDataProvider;
 import xades4j.providers.MessageDigestEngineProvider;
 import xades4j.providers.SignaturePropertiesProvider;
 import xades4j.providers.TimeStampTokenProvider;
+import xades4j.utils.UtilsBindingsModule;
+import xades4j.xml.marshalling.MarshallingBindingsModule;
 import xades4j.xml.marshalling.SignedPropertiesMarshaller;
 import xades4j.xml.marshalling.UnsignedPropertiesMarshaller;
+import xades4j.xml.marshalling.algorithms.AlgorithmParametersBindingsModule;
 
 /**
  * A profile for signature production. This class and its subclasses are the entry
@@ -83,6 +87,18 @@ public abstract class XadesSigningProfile
         withBinding(KeyingDataProvider.class, keyingProviderClass);
     }
 
+    private static final Module[] overridableModules =
+    {
+        new DefaultProductionBindingsModule(),
+        new MarshallingBindingsModule()
+    };
+
+    private static final Module[] sealedModules =
+    {
+        new UtilsBindingsModule(),
+        new AlgorithmParametersBindingsModule()
+    };
+
     /**
      * Creates a new {@code XadesSigner} based on the current state of the profile.
      * If any changes are made after this call, the previously returned signer will
@@ -92,7 +108,7 @@ public abstract class XadesSigningProfile
      */
     public final XadesSigner newSigner() throws XadesProfileResolutionException
     {
-        return this.profileCore.getInstance(getSignerClass(), new DefaultProductionBindingsModule());
+        return this.profileCore.getInstance(getSignerClass(), overridableModules, sealedModules);
     }
 
     protected abstract Class<? extends XadesSigner> getSignerClass();

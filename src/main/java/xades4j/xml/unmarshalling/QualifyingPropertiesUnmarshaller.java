@@ -20,6 +20,10 @@ import org.w3c.dom.Element;
 
 /**
  * Interface for unmarshallers of property data objects.
+ * <p>
+ * Built-in implementation is based on JAXB and supports all the unsigned properties
+ * data objects up to XAdES-C, except {@code SignerRole} and attributes validation
+ * data properties.
  * @author Luís
  */
 public interface QualifyingPropertiesUnmarshaller

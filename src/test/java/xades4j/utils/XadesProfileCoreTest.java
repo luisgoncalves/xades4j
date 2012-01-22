@@ -106,7 +106,7 @@ public class XadesProfileCoreTest
     public void testGetInstance() throws XadesProfileResolutionException
     {
         System.out.println("getInstance");
-        Module defaultsModule = new AbstractModule()
+        Module module = new AbstractModule()
         {
             @Override
             protected void configure()
@@ -115,7 +115,7 @@ public class XadesProfileCoreTest
             }
         };
         XadesProfileCore instance = new XadesProfileCore();
-        A a = instance.getInstance(A.class, defaultsModule);
+        A a = instance.getInstance(A.class, new Module[] {module}, new Module[0]);
         assertNotNull(a);
         assertTrue(a instanceof AImpl1);
     }
@@ -124,7 +124,7 @@ public class XadesProfileCoreTest
     public void testGetInstanceException() throws XadesProfileResolutionException
     {
         System.out.println("getInstance_Exception");
-        Module defaultsModule = new AbstractModule()
+        Module module = new AbstractModule()
         {
             @Override
             protected void configure()
@@ -132,14 +132,14 @@ public class XadesProfileCoreTest
             }
         };
         XadesProfileCore instance = new XadesProfileCore();
-        instance.getInstance(A.class, defaultsModule);
+        instance.getInstance(A.class,  new Module[] {module}, new Module[0]);
     }
 
     @Test
     public void testWithBinding() throws XadesProfileResolutionException
     {
         System.out.println("withBinding");
-        Module defaultsModule = new AbstractModule()
+        Module module = new AbstractModule()
         {
             @Override
             protected void configure()
@@ -149,13 +149,13 @@ public class XadesProfileCoreTest
         };
         XadesProfileCore instance = new XadesProfileCore();
         instance.addBinding(A.class, AImpl2.class);
-        A a = instance.getInstance(A.class, defaultsModule);
+        A a = instance.getInstance(A.class,  new Module[] {module}, new Module[0]);
         assertNotNull(a);
         assertTrue(a instanceof AImpl2);
 
         B b1 = new BImpl();
         instance.addBinding(B.class, b1);
-        B b2 = instance.getInstance(B.class, defaultsModule);
+        B b2 = instance.getInstance(B.class,  new Module[] {module}, new Module[0]);
         assertNotNull(a);
         assertEquals(b1, b2);
     }
@@ -164,7 +164,7 @@ public class XadesProfileCoreTest
     public void testWithGenericBinding() throws XadesProfileResolutionException
     {
         System.out.println("withGenericBinding");
-        Module defaultsModule = new AbstractModule()
+        Module module = new AbstractModule()
         {
             @Override
             protected void configure()
@@ -173,7 +173,7 @@ public class XadesProfileCoreTest
         };
         XadesProfileCore instance = new XadesProfileCore();
         instance.addGenericBinding(Action.class, ActionOfA.class, A.class);
-        C c = instance.getInstance(C.class, defaultsModule);
+        C c = instance.getInstance(C.class,  new Module[] {module}, new Module[0]);
         assertTrue(c.action instanceof ActionOfA);
     }
 }

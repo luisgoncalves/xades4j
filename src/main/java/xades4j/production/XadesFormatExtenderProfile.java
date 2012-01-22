@@ -16,13 +16,17 @@
  */
 package xades4j.production;
 
+import com.google.inject.Module;
 import xades4j.properties.QualifyingProperty;
 import xades4j.utils.XadesProfileCore;
 import xades4j.utils.XadesProfileResolutionException;
 import xades4j.providers.AlgorithmsProvider;
 import xades4j.providers.MessageDigestEngineProvider;
 import xades4j.providers.TimeStampTokenProvider;
+import xades4j.utils.UtilsBindingsModule;
+import xades4j.xml.marshalling.MarshallingBindingsModule;
 import xades4j.xml.marshalling.UnsignedPropertiesMarshaller;
+import xades4j.xml.marshalling.algorithms.AlgorithmParametersBindingsModule;
 
 /**
  * A profile for signature format enrichment, after verification. A format extender
@@ -59,9 +63,21 @@ public class XadesFormatExtenderProfile
         return this;
     }
 
+    private static final Module[] overridableModules =
+    {
+        new DefaultProductionBindingsModule(),
+        new MarshallingBindingsModule()
+    };
+
+    private static final Module[] sealedModules =
+    {
+        new UtilsBindingsModule(),
+        new AlgorithmParametersBindingsModule()
+    };
+
     public final XadesSignatureFormatExtender getFormatExtender() throws XadesProfileResolutionException
     {
-        return this.profileCore.getInstance(getFormatExtenderClass(), new DefaultProductionBindingsModule());
+        return this.profileCore.getInstance(getFormatExtenderClass(),overridableModules, sealedModules);
     }
 
     protected Class<? extends XadesSignatureFormatExtender> getFormatExtenderClass()

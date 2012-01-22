@@ -29,6 +29,7 @@ import com.google.inject.util.Types;
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
 
 /**
@@ -130,7 +131,10 @@ public final class XadesProfileCore
         });
     }
 
-    public <T> T getInstance(Class<T> clazz, Module defaultsModule) throws XadesProfileResolutionException
+    public <T> T getInstance(
+            Class<T> clazz,
+            Module[] overridableModules,
+            Module[] sealedModules) throws XadesProfileResolutionException
     {
         Module userBindingsModule = new Module()
         {
@@ -143,17 +147,23 @@ public final class XadesProfileCore
                 }
             }
         };
-        Module finalBindingsModule = Modules.override(defaultsModule).with(userBindingsModule);
+        Module overridesModule = Modules.override(overridableModules).with(userBindingsModule);
+        // Concat sealed modules with overrides module
+        Module[] finalModules = Arrays.copyOf(sealedModules, sealedModules.length + 1);
+        finalModules[finalModules.length - 1] = overridesModule;
         try
         {
-            return Guice.createInjector(finalBindingsModule).getInstance(clazz);
-        } catch (CreationException ex)
+            return Guice.createInjector(finalModules).getInstance(clazz);
+        }
+        catch (CreationException ex)
         {
             throw new XadesProfileResolutionException(ex.getMessage());
-        } catch (ConfigurationException ex)
+        }
+        catch (ConfigurationException ex)
         {
             throw new XadesProfileResolutionException(ex.getMessage());
-        } catch (ProvisionException ex)
+        }
+        catch (ProvisionException ex)
         {
             throw new XadesProfileResolutionException(ex.getMessage());
         }
