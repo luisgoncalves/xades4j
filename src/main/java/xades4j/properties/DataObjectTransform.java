@@ -17,7 +17,7 @@
 package xades4j.properties;
 
 import org.w3c.dom.Element;
-import xades4j.Algorithm;
+import xades4j.algorithms.Algorithm;
 
 /**
  * @deprecated This class is deprecated and might be removed on future releases

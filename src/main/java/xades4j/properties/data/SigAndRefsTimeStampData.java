@@ -16,7 +16,7 @@
  */
 package xades4j.properties.data;
 
-import xades4j.Algorithm;
+import xades4j.algorithms.Algorithm;
 
 /**
  *

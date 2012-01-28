@@ -37,7 +37,7 @@ import org.apache.xml.security.utils.XMLUtils;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
-import xades4j.Algorithm;
+import xades4j.algorithms.Algorithm;
 import xades4j.properties.QualifyingProperty;
 import xades4j.properties.SignedSignatureProperty;
 import xades4j.properties.SigningCertificateProperty;

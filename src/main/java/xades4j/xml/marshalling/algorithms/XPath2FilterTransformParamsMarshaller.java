@@ -21,8 +21,8 @@ import java.util.List;
 import org.apache.xml.security.transforms.params.XPath2FilterContainer;
 import org.w3c.dom.Document;
 import org.w3c.dom.Node;
-import xades4j.production.XPath2FilterTransform;
-import xades4j.production.XPath2FilterTransform.XPath2Filter;
+import xades4j.algorithms.XPath2FilterTransform;
+import xades4j.algorithms.XPath2FilterTransform.XPath2Filter;
 
 /**
  *

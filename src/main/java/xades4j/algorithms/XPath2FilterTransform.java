@@ -14,15 +14,15 @@
  * You should have received a copy of the GNU Lesser General Public License along
  * with XAdES4j. If not, see <http://www.gnu.org/licenses/>.
  */
-package xades4j.production;
+package xades4j.algorithms;
 
-import xades4j.Algorithm;
+import xades4j.algorithms.Algorithm;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import org.apache.xml.security.transforms.Transforms;
 import org.apache.xml.security.transforms.params.XPath2FilterContainer;
-import xades4j.production.XPath2FilterTransform.XPath2Filter;
+import xades4j.algorithms.XPath2FilterTransform.XPath2Filter;
 
 /**
  * The XPath 2.0 transform. Instances of the transform can be initially created

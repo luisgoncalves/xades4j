@@ -16,8 +16,9 @@
  */
 package xades4j.production;
 
+import xades4j.algorithms.XPath2FilterTransform;
 import java.util.List;
-import xades4j.production.XPath2FilterTransform.XPath2Filter;
+import xades4j.algorithms.XPath2FilterTransform.XPath2Filter;
 import org.junit.Test;
 import static org.junit.Assert.*;
 

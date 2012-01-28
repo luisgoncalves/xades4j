@@ -16,6 +16,7 @@
  */
 package xades4j.production;
 
+import xades4j.algorithms.EnvelopedSignatureTransform;
 import xades4j.properties.DataObjectDesc;
 import xades4j.properties.AllDataObjsCommitmentTypeProperty;
 import xades4j.properties.CommitmentTypeProperty;

@@ -16,6 +16,7 @@
  */
 package xades4j.production;
 
+import xades4j.algorithms.EnvelopedSignatureTransform;
 import org.apache.xml.security.utils.Constants;
 import java.util.ArrayList;
 import java.util.Collection;

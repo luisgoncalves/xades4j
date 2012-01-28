@@ -14,35 +14,34 @@
  * You should have received a copy of the GNU Lesser General Public License along
  * with XAdES4j. If not, see <http://www.gnu.org/licenses/>.
  */
-package xades4j.production;
 
-import xades4j.Algorithm;
-import org.apache.xml.security.transforms.Transforms;
+package xades4j.algorithms;
 
 /**
- * The XPath filtering transform.
+ * Represents algorithms used on the signature, such as data object transforms,
+ * signature algorithms or canonicalization algorithms. Subclasses are provided
+ * for some common algorithms.
+ *
+ * @see xades4j.providers.AlgorithmsProviderEx
+ * @see xades4j.properties.DataObjectDesc#withTransform(Algorithm)
+ *
  * @author Luís
  */
-public final class XPathTransform extends Algorithm
+public abstract class Algorithm
 {
-    private final String xpath;
+    private final String uri;
 
     /**
-     * Creates a new instance of the transform
-     * @param xpath the XPath filtering expression
+     * @param uri the algorithm's URI
+     * @param params the algorithm parameter nodes(optional)
      */
-    public XPathTransform(String xpath)
+    protected Algorithm(String uri)
     {
-        super(Transforms.TRANSFORM_XPATH);
-        if (null == xpath)
-        {
-            throw new NullPointerException("XPath expression cannot be null");
-        }
-        this.xpath = xpath;
+        this.uri = uri;
     }
 
-    public String getXPath()
+    public String getUri()
     {
-        return xpath;
+        return this.uri;
     }
 }

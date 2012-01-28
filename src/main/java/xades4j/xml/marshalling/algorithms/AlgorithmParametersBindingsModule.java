@@ -18,11 +18,11 @@ package xades4j.xml.marshalling.algorithms;
 
 import com.google.inject.AbstractModule;
 import com.google.inject.TypeLiteral;
-import xades4j.production.EnvelopedSignatureTransform;
-import xades4j.GenericAlgorithm;
+import xades4j.algorithms.EnvelopedSignatureTransform;
+import xades4j.algorithms.GenericAlgorithm;
 import xades4j.properties.DataObjectTransform;
-import xades4j.production.XPath2FilterTransform;
-import xades4j.production.XPathTransform;
+import xades4j.algorithms.XPath2FilterTransform;
+import xades4j.algorithms.XPathTransform;
 
 /**
  * Contains the Guice bindings for the components on this package.

@@ -34,7 +34,7 @@ import org.apache.xml.security.transforms.Transforms;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import xades4j.XAdES4jXMLSigException;
-import xades4j.GenericAlgorithm;
+import xades4j.algorithms.GenericAlgorithm;
 import xades4j.properties.QualifyingProperty;
 import xades4j.providers.CertificateValidationException;
 

@@ -16,7 +16,7 @@
  */
 package xades4j.providers;
 
-import xades4j.Algorithm;
+import xades4j.algorithms.Algorithm;
 import xades4j.UnsupportedAlgorithmException;
 
 /**

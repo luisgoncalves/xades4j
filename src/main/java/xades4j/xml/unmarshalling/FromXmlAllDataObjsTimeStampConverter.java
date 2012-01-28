@@ -16,7 +16,7 @@
  */
 package xades4j.xml.unmarshalling;
 
-import xades4j.Algorithm;
+import xades4j.algorithms.Algorithm;
 import xades4j.properties.AllDataObjsTimeStampProperty;
 import xades4j.properties.data.AllDataObjsTimeStampData;
 import xades4j.xml.bind.xades.XmlSignedDataObjectPropertiesType;

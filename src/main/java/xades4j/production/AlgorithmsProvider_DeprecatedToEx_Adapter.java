@@ -16,8 +16,8 @@
  */
 package xades4j.production;
 
-import xades4j.GenericAlgorithm;
-import xades4j.Algorithm;
+import xades4j.algorithms.GenericAlgorithm;
+import xades4j.algorithms.Algorithm;
 import com.google.inject.Inject;
 import xades4j.UnsupportedAlgorithmException;
 import xades4j.providers.AlgorithmsProvider;

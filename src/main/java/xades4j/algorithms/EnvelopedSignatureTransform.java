@@ -14,34 +14,19 @@
  * You should have received a copy of the GNU Lesser General Public License along
  * with XAdES4j. If not, see <http://www.gnu.org/licenses/>.
  */
+package xades4j.algorithms;
 
-package xades4j;
+import xades4j.algorithms.Algorithm;
+import org.apache.xml.security.transforms.Transforms;
 
 /**
- * Represents algorithms used on the signature, such as data object transforms,
- * signature algorithms or canonicalization algorithms. Subclasses are provided
- * for some common algorithms.
- *
- * @see xades4j.providers.AlgorithmsProviderEx
- * @see xades4j.properties.DataObjectDesc#withTransform(Algorithm)
- *
+ * Represents an enveloped signature transform (http://www.w3.org/TR/xmldsig-core/#sec-EnvelopedSignature).
  * @author Luís
  */
-public abstract class Algorithm
+public final class EnvelopedSignatureTransform extends Algorithm
 {
-    private final String uri;
-
-    /**
-     * @param uri the algorithm's URI
-     * @param params the algorithm parameter nodes(optional)
-     */
-    protected Algorithm(String uri)
+    public EnvelopedSignatureTransform()
     {
-        this.uri = uri;
-    }
-
-    public String getUri()
-    {
-        return this.uri;
+        super(Transforms.TRANSFORM_ENVELOPED_SIGNATURE);
     }
 }

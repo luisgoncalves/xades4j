@@ -16,17 +16,17 @@
  */
 package xades4j.properties;
 
-import xades4j.production.XPath2FilterTransform.XPath2Filter;
-import xades4j.GenericAlgorithm;
+import xades4j.algorithms.XPath2FilterTransform.XPath2Filter;
+import xades4j.algorithms.GenericAlgorithm;
 import org.w3c.dom.Document;
 import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
-import xades4j.Algorithm;
-import xades4j.production.XPath2FilterTransform;
-import xades4j.production.XPathTransform;
+import xades4j.algorithms.Algorithm;
+import xades4j.algorithms.XPath2FilterTransform;
+import xades4j.algorithms.XPathTransform;
 import xades4j.utils.SignatureServicesTestBase;
 import static org.junit.Assert.*;
 

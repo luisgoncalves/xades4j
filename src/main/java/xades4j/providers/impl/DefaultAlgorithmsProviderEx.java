@@ -21,8 +21,8 @@ import java.util.Map;
 import org.apache.xml.security.algorithms.MessageDigestAlgorithm;
 import org.apache.xml.security.c14n.Canonicalizer;
 import org.apache.xml.security.signature.XMLSignature;
-import xades4j.Algorithm;
-import xades4j.GenericAlgorithm;
+import xades4j.algorithms.Algorithm;
+import xades4j.algorithms.GenericAlgorithm;
 import xades4j.UnsupportedAlgorithmException;
 import xades4j.providers.AlgorithmsProviderEx;
 

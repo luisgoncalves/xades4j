@@ -19,7 +19,7 @@ package xades4j.production;
 
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import xades4j.Algorithm;
+import xades4j.algorithms.Algorithm;
 import xades4j.UnsupportedAlgorithmException;
 import xades4j.properties.QualifyingProperty;
 import xades4j.properties.data.BaseXAdESTimeStampData;

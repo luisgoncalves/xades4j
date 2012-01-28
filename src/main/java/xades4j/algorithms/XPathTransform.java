@@ -14,19 +14,34 @@
  * You should have received a copy of the GNU Lesser General Public License along
  * with XAdES4j. If not, see <http://www.gnu.org/licenses/>.
  */
-package xades4j.production;
+package xades4j.algorithms;
 
-import xades4j.Algorithm;
 import org.apache.xml.security.transforms.Transforms;
 
 /**
- * Represents an enveloped signature transform (http://www.w3.org/TR/xmldsig-core/#sec-EnvelopedSignature).
+ * The XPath filtering transform.
  * @author Luís
  */
-public final class EnvelopedSignatureTransform extends Algorithm
+public final class XPathTransform extends Algorithm
 {
-    public EnvelopedSignatureTransform()
+    private final String xpath;
+
+    /**
+     * Creates a new instance of the transform
+     * @param xpath the XPath filtering expression
+     */
+    public XPathTransform(String xpath)
     {
-        super(Transforms.TRANSFORM_ENVELOPED_SIGNATURE);
+        super(Transforms.TRANSFORM_XPATH);
+        if (null == xpath)
+        {
+            throw new NullPointerException("XPath expression cannot be null");
+        }
+        this.xpath = xpath;
+    }
+
+    public String getXPath()
+    {
+        return xpath;
     }
 }

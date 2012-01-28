@@ -16,12 +16,12 @@
  */
 package xades4j.xml.marshalling.algorithms;
 
-import xades4j.production.EnvelopedSignatureTransform;
+import xades4j.algorithms.EnvelopedSignatureTransform;
 import org.w3c.dom.Node;
 import java.util.List;
-import xades4j.GenericAlgorithm;
-import xades4j.production.XPathTransform;
-import xades4j.Algorithm;
+import xades4j.algorithms.GenericAlgorithm;
+import xades4j.algorithms.XPathTransform;
+import xades4j.algorithms.Algorithm;
 import com.google.inject.Injector;
 import com.google.inject.Guice;
 import org.w3c.dom.Document;

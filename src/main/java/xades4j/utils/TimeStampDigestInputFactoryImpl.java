@@ -19,7 +19,7 @@ package xades4j.utils;
 import com.google.inject.Inject;
 import org.apache.xml.security.c14n.Canonicalizer;
 import org.apache.xml.security.c14n.InvalidCanonicalizerException;
-import xades4j.Algorithm;
+import xades4j.algorithms.Algorithm;
 import xades4j.UnsupportedAlgorithmException;
 import xades4j.xml.marshalling.algorithms.AlgorithmsParametersMarshallingProvider;
 

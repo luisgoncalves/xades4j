@@ -16,6 +16,7 @@
  */
 package xades4j.production;
 
+import xades4j.algorithms.EnvelopedSignatureTransform;
 import xades4j.XAdES4jException;
 import xades4j.properties.DataObjectDesc;
 import org.w3c.dom.Element;

@@ -22,7 +22,7 @@ import java.util.List;
 import org.apache.xml.security.transforms.params.XPathContainer;
 import org.w3c.dom.Document;
 import org.w3c.dom.Node;
-import xades4j.production.XPathTransform;
+import xades4j.algorithms.XPathTransform;
 
 /**
  * @author Luís

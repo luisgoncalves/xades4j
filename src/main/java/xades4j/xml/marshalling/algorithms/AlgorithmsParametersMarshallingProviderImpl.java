@@ -25,7 +25,7 @@ import java.lang.reflect.ParameterizedType;
 import java.util.List;
 import org.w3c.dom.Document;
 import org.w3c.dom.Node;
-import xades4j.Algorithm;
+import xades4j.algorithms.Algorithm;
 import xades4j.UnsupportedAlgorithmException;
 
 /**

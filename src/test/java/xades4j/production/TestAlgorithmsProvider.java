@@ -18,7 +18,7 @@
 package xades4j.production;
 
 import org.apache.xml.security.algorithms.MessageDigestAlgorithm;
-import xades4j.Algorithm;
+import xades4j.algorithms.Algorithm;
 import xades4j.UnsupportedAlgorithmException;
 import xades4j.providers.AlgorithmsProviderEx;
 

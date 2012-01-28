@@ -19,7 +19,7 @@ package xades4j.production;
 import java.util.List;
 import org.w3c.dom.Document;
 import org.w3c.dom.Node;
-import xades4j.Algorithm;
+import xades4j.algorithms.Algorithm;
 import xades4j.xml.marshalling.algorithms.AlgorithmsParametersMarshallingProvider;
 
 /**
