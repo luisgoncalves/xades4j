@@ -17,15 +17,17 @@
 package xades4j.production;
 
 import org.apache.xml.security.signature.XMLSignature;
+import xades4j.Algorithm;
+import xades4j.GenericAlgorithm;
 import xades4j.UnsupportedAlgorithmException;
-import xades4j.providers.impl.DefaultAlgorithmsProvider;
+import xades4j.providers.impl.DefaultAlgorithmsProviderEx;
 
-public class PtCcAlgorithmsProvider extends DefaultAlgorithmsProvider
+public class PtCcAlgorithmsProvider extends DefaultAlgorithmsProviderEx
 {
     @Override
-    public String getSignatureAlgorithm(String keyAlgorithmName) throws UnsupportedAlgorithmException
+    public Algorithm getSignatureAlgorithm(String keyAlgorithmName) throws UnsupportedAlgorithmException
     {
         // The test card didn't support RSA_SHA_256.
-        return XMLSignature.ALGO_ID_SIGNATURE_RSA_SHA1;
+        return new GenericAlgorithm(XMLSignature.ALGO_ID_SIGNATURE_RSA_SHA1);
     }
 }

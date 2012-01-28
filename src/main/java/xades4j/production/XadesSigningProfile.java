@@ -21,6 +21,7 @@ import xades4j.properties.QualifyingProperty;
 import xades4j.utils.XadesProfileCore;
 import xades4j.utils.XadesProfileResolutionException;
 import xades4j.providers.AlgorithmsProvider;
+import xades4j.providers.AlgorithmsProviderEx;
 import xades4j.providers.BasicSignatureOptionsProvider;
 import xades4j.providers.DataObjectPropertiesProvider;
 import xades4j.providers.KeyingDataProvider;
@@ -150,16 +151,40 @@ public abstract class XadesSigningProfile
     }
 
     /**************************************************************************/
+    /**
+     * @deprecated This method is deprecated and might be removed on future versions
+     * @see #withAlgorithmsProviderEx(xades4j.providers.AlgorithmsProviderEx)
+     */
     public XadesSigningProfile withAlgorithmsProvider(
             AlgorithmsProvider algsProvider)
     {
+        // Adapt AlgorithmsProviderEx to the AlgorithmsProvider being registered
+        withBinding(AlgorithmsProviderEx.class, AlgorithmsProvider_DeprecatedToEx_Adapter.class);
         return withBinding(AlgorithmsProvider.class, algsProvider);
     }
 
+    /**
+     * @deprecated this method is deprecated and might be removed on future versions
+     * @see #withAlgorithmsProviderEx(java.lang.Class)
+     */
     public XadesSigningProfile withAlgorithmsProvider(
             Class<? extends AlgorithmsProvider> algsProviderClass)
     {
+        // Adapt AlgorithmsProviderEx to the AlgorithmsProvider being registered
+        withBinding(AlgorithmsProviderEx.class, AlgorithmsProvider_DeprecatedToEx_Adapter.class);
         return withBinding(AlgorithmsProvider.class, algsProviderClass);
+    }
+
+    public XadesSigningProfile withAlgorithmsProviderEx(
+            AlgorithmsProviderEx algsProvider)
+    {
+        return withBinding(AlgorithmsProviderEx.class, algsProvider);
+    }
+
+    public XadesSigningProfile withAlgorithmsProviderEx(
+            Class<? extends AlgorithmsProviderEx> algsProviderClass)
+    {
+        return withBinding(AlgorithmsProviderEx.class, algsProviderClass);
     }
 
     public XadesSigningProfile withDigestEngineProvider(

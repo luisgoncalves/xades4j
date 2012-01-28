@@ -21,8 +21,8 @@ import xades4j.UnsupportedAlgorithmException;
 
 /**
  * Interface for providers of algorithms information for signature production.
- * An instance of a class implementing this interface is supplied to the signer
- * which will query the instance whenever it needs information on the algorithms
+ * An instance of a class implementing this interface is supplied to inner components
+ * which will query the instance whenever they need information on the algorithms
  * to use (when generating {@code ds:Reference} elements, for example).
  * <p>
  * This allows the customization of the different algotihms used in the signature.
@@ -30,7 +30,7 @@ import xades4j.UnsupportedAlgorithmException;
  * The methods on this classes must not return {@code null}.
  * <p>
  * A default implementation is provided.
- * @see xades4j.providers.impl.DefaultAlgorithmsProvider
+ * @see xades4j.providers.impl.DefaultAlgorithmsProviderEx
  * 
  * @author Luís
  */
