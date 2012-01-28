@@ -94,7 +94,7 @@ public class PKCS11KeyStoreKeyingDataProviderTest extends SignerTestBase
 
     private void doTestWithXades4j(KeyingDataProvider keyingDataProvider) throws Exception
     {
-        XadesSigner signer = new XadesBesSigningProfile(keyingDataProvider).withAlgorithmsProvider(PtCcAlgorithmsProvider.class).newSigner();
+        XadesSigner signer = new XadesBesSigningProfile(keyingDataProvider).withAlgorithmsProviderEx(PtCcAlgorithmsProvider.class).newSigner();
 
         for (int i = 0; i < N_RETRIES; i++)
         {

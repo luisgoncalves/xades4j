@@ -152,8 +152,13 @@ public abstract class XadesSigningProfile
 
     /**************************************************************************/
     /**
-     * @deprecated This method is deprecated and might be removed on future versions
-     * @see #withAlgorithmsProviderEx(xades4j.providers.AlgorithmsProviderEx)
+     * @deprecated
+     * <p>
+     * This method is deprecated and might be removed on future versions. Classes
+     * registered using this method will be adapted to the new {@link AlgorithmsProviderEx}
+     * interface. {@link AlgorithmsProvider} and {@link AlgorithmsProviderEx} cannot be
+     * registered simultaneously on the same profile.
+     * @see #withAlgorithmsProviderEx(java.lang.Class)
      */
     public XadesSigningProfile withAlgorithmsProvider(
             AlgorithmsProvider algsProvider)
@@ -164,7 +169,12 @@ public abstract class XadesSigningProfile
     }
 
     /**
-     * @deprecated this method is deprecated and might be removed on future versions
+     * @deprecated
+     * <p>
+     * This method is deprecated and might be removed on future versions. Classes
+     * registered using this method will be adapted to the new {@link AlgorithmsProviderEx}
+     * interface. {@link AlgorithmsProvider} and {@link AlgorithmsProviderEx} cannot be
+     * registered simultaneously on the same profile.
      * @see #withAlgorithmsProviderEx(java.lang.Class)
      */
     public XadesSigningProfile withAlgorithmsProvider(
