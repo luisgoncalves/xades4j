@@ -1,6 +1,6 @@
 /*
  * XAdES4j - A Java library for generation and verification of XAdES signatures.
- * Copyright (C) 2011 Luis Goncalves.
+ * Copyright (C) 2012 Luis Goncalves.
  * 
  * XAdES4j is free software; you can redistribute it and/or modify it under
  * the terms of the GNU Lesser General Public License as published by the Free
@@ -16,16 +16,24 @@
  */
 package xades4j.algorithms;
 
-import org.apache.xml.security.transforms.Transforms;
+import java.util.Set;
+import org.apache.xml.security.c14n.Canonicalizer;
 
 /**
- * Represents an enveloped signature transform (http://www.w3.org/TR/xmldsig-core/#sec-EnvelopedSignature).
+ * The <a HREF="http://www.w3.org/TR/2002/REC-xml-exc-c14n-20020718/"> Exclusive
+ * XML Canonicalization 1.0</a> <b>without</b> comments.
+ * @see ExclusiveCanonicalXMLWithComments
  * @author Luís
  */
-public final class EnvelopedSignatureTransform extends Algorithm
+public final class ExclusiveCanonicalXMLWithoutComments extends ExclusiveCanonicalXML
 {
-    public EnvelopedSignatureTransform()
+    public ExclusiveCanonicalXMLWithoutComments(String... inclusiveNamespacePrefixes)
     {
-        super(Transforms.TRANSFORM_ENVELOPED_SIGNATURE);
+        super(Canonicalizer.ALGO_ID_C14N_EXCL_OMIT_COMMENTS, inclusiveNamespacePrefixes);
+    }
+
+    public ExclusiveCanonicalXMLWithoutComments(Set<String> inclusiveNamespacePrefixes)
+    {
+        super(Canonicalizer.ALGO_ID_C14N_EXCL_OMIT_COMMENTS, inclusiveNamespacePrefixes);
     }
 }

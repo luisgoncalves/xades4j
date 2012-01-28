@@ -16,12 +16,9 @@
  */
 package xades4j.xml.marshalling.algorithms;
 
-import xades4j.algorithms.EnvelopedSignatureTransform;
 import org.w3c.dom.Node;
 import java.util.List;
-import xades4j.algorithms.GenericAlgorithm;
-import xades4j.algorithms.XPathTransform;
-import xades4j.algorithms.Algorithm;
+import xades4j.algorithms.*;
 import com.google.inject.Injector;
 import com.google.inject.Guice;
 import org.w3c.dom.Document;
@@ -47,6 +44,7 @@ public class AlgorithmsParametersMarshallingProviderImplTest
         Algorithm[] algorithms = new Algorithm[]
         {
             new XPathTransform("xpath"),
+            new ExclusiveCanonicalXMLWithComments("ds foo bar"),
             new GenericAlgorithm("uri", doc.createElement("param1"), doc.createElement("param2"))
         };
 
@@ -59,6 +57,7 @@ public class AlgorithmsParametersMarshallingProviderImplTest
         algorithms = new Algorithm[]
         {
             new EnvelopedSignatureTransform(),
+            new CanonicalXMLWithoutComments(),
             new GenericAlgorithm("uri")
         };
 

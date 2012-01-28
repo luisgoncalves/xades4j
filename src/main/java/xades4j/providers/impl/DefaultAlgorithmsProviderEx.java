@@ -19,11 +19,11 @@ package xades4j.providers.impl;
 import java.util.HashMap;
 import java.util.Map;
 import org.apache.xml.security.algorithms.MessageDigestAlgorithm;
-import org.apache.xml.security.c14n.Canonicalizer;
 import org.apache.xml.security.signature.XMLSignature;
 import xades4j.algorithms.Algorithm;
 import xades4j.algorithms.GenericAlgorithm;
 import xades4j.UnsupportedAlgorithmException;
+import xades4j.algorithms.CanonicalXMLWithoutComments;
 import xades4j.providers.AlgorithmsProviderEx;
 
 /**
@@ -62,7 +62,7 @@ public class DefaultAlgorithmsProviderEx implements AlgorithmsProviderEx
     @Override
     public Algorithm getCanonicalizationAlgorithmForSignature()
     {
-        return new GenericAlgorithm(Canonicalizer.ALGO_ID_C14N_OMIT_COMMENTS);
+        return new CanonicalXMLWithoutComments();
     }
 
     @Override

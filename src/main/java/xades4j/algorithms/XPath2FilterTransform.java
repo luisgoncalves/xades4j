@@ -16,7 +16,6 @@
  */
 package xades4j.algorithms;
 
-import xades4j.algorithms.Algorithm;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;

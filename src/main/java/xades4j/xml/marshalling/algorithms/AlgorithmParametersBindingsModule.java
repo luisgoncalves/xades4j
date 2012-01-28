@@ -18,11 +18,11 @@ package xades4j.xml.marshalling.algorithms;
 
 import com.google.inject.AbstractModule;
 import com.google.inject.TypeLiteral;
-import xades4j.algorithms.EnvelopedSignatureTransform;
-import xades4j.algorithms.GenericAlgorithm;
+import java.util.List;
+import org.w3c.dom.Document;
+import org.w3c.dom.Node;
+import xades4j.algorithms.*;
 import xades4j.properties.DataObjectTransform;
-import xades4j.algorithms.XPath2FilterTransform;
-import xades4j.algorithms.XPathTransform;
 
 /**
  * Contains the Guice bindings for the components on this package.
@@ -33,13 +33,9 @@ public final class AlgorithmParametersBindingsModule extends AbstractModule
     @Override
     protected void configure()
     {
-        bind(AlgorithmsParametersMarshallingProvider.class)
-                .to(AlgorithmsParametersMarshallingProviderImpl.class);
+        bind(AlgorithmsParametersMarshallingProvider.class).to(AlgorithmsParametersMarshallingProviderImpl.class);
 
-
-        bind(new TypeLiteral<AlgorithmParametersMarshaller<EnvelopedSignatureTransform>>()
-        {
-        }).to(EnvelopedSignatureTransformParamsMarshaller.class);
+        // Algorithms with parameters
 
         bind(new TypeLiteral<AlgorithmParametersMarshaller<XPath2FilterTransform>>()
         {
@@ -49,6 +45,14 @@ public final class AlgorithmParametersBindingsModule extends AbstractModule
         {
         }).to(XPathTransformParamsMarshaller.class);
 
+        bind(new TypeLiteral<AlgorithmParametersMarshaller<ExclusiveCanonicalXMLWithComments>>()
+        {
+        }).to(ExclusiveCanonicalXMLWithCommentsParamsMarshaller.class);
+
+        bind(new TypeLiteral<AlgorithmParametersMarshaller<ExclusiveCanonicalXMLWithoutComments>>()
+        {
+        }).to(ExclusiveCanonicalXMLWithoutCommentsParamsMarshaller.class);
+
         bind(new TypeLiteral<AlgorithmParametersMarshaller<GenericAlgorithm>>()
         {
         }).to(GenericAlgorithmParamsMarshaller.class);
@@ -56,5 +60,40 @@ public final class AlgorithmParametersBindingsModule extends AbstractModule
         bind(new TypeLiteral<AlgorithmParametersMarshaller<DataObjectTransform>>()
         {
         }).to(DeprecatedDataObjectTransformParamsMarshaller.class);
+
+        // Algorithms without parameters
+
+        bind(new TypeLiteral<AlgorithmParametersMarshaller<EnvelopedSignatureTransform>>()
+        {
+        }).toInstance(new AlgorithmParametersMarshaller<EnvelopedSignatureTransform>()
+        {
+            @Override
+            public List<Node> marshalParameters(EnvelopedSignatureTransform alg, Document doc)
+            {
+                return null;
+            }
+        });
+
+        bind(new TypeLiteral<AlgorithmParametersMarshaller<CanonicalXMLWithComments>>()
+        {
+        }).toInstance(new AlgorithmParametersMarshaller<CanonicalXMLWithComments>()
+        {
+            @Override
+            public List<Node> marshalParameters(CanonicalXMLWithComments alg, Document doc)
+            {
+                return null;
+            }
+        });
+
+        bind(new TypeLiteral<AlgorithmParametersMarshaller<CanonicalXMLWithoutComments>>()
+        {
+        }).toInstance(new AlgorithmParametersMarshaller<CanonicalXMLWithoutComments>()
+        {
+            @Override
+            public List<Node> marshalParameters(CanonicalXMLWithoutComments alg, Document doc)
+            {
+                return null;
+            }
+        });
     }
 }
