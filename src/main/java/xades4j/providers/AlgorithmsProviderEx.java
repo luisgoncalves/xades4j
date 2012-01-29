@@ -40,40 +40,40 @@ public interface AlgorithmsProviderEx
     /**
      * Gets the signature's algorithm for the given algorithm name.
      * @param keyAlgorithmName the signing key's algorithm name as defined in JCA standard algorithm names
-     * @return the algorithm URI
+     * @return the algorithm
      */
     Algorithm getSignatureAlgorithm(String keyAlgorithmName) throws UnsupportedAlgorithmException;
 
     /**
      * Gets the canonicalization algorithm to be used in the {@code Signature}.
-     * @return the algorithm URI
+     * @return the algorithm 
      */
     Algorithm getCanonicalizationAlgorithmForSignature();
 
     /**
      * Gets the canonicalization algorithm to be used in the qualifying
      * properties, when needed.
-     * @return the algorithm URI
+     * @return the algorithm
      */
     Algorithm getCanonicalizationAlgorithmForTimeStampProperties();
 
     /**
      * Gets the digest algorithm to be used in the data object {@code Reference}s.
-     * @return the algorithm URI
+     * @return the algorithm
      */
     String getDigestAlgorithmForDataObjsReferences();
 
     /**
      * Gets the digest algorithm to be used in the qualifying properties that contain
      * references to certificates, CRLs and so on.
-     * @return the algorithm URI
+     * @return the algorithm
      */
     String getDigestAlgorithmForReferenceProperties();
 
     /**
      * Gets the digest algorithm to be used in the qualifying properties that contain
      * time-stamps
-     * @return the algorithm URI
+     * @return the algorithm
      */
     String getDigestAlgorithmForTimeStampProperties();
 }

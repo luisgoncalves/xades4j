@@ -86,7 +86,8 @@ class DataObjectDescsProcessor
                     DataObjectReference dataObjRef = (DataObjectReference) dataObjDesc;
                     refUri = dataObjRef.getUri();
                     refType = dataObjRef.getType();
-                } else if (dataObjDesc instanceof EnvelopedXmlObject)
+                }
+                else if (dataObjDesc instanceof EnvelopedXmlObject)
                 {
                     // If the data object info is a EnvelopedXmlObject we need to create a
                     // XMLObject to embed it. The Reference uri will refer the new
@@ -103,7 +104,8 @@ class DataObjectDescsProcessor
                     xmlSignature.appendObject(xmlObj);
 
                     refUri = '#' + refUri;
-                } else if (dataObjDesc instanceof AnonymousDataObjectReference)
+                }
+                else if (dataObjDesc instanceof AnonymousDataObjectReference)
                 {
                     if (hasNullURIReference)
                     {
@@ -115,9 +117,10 @@ class DataObjectDescsProcessor
                     refUri = refType = null;
                     AnonymousDataObjectReference anonymousRef = (AnonymousDataObjectReference) dataObjDesc;
                     xmlSignature.addResourceResolver(new ResolverAnonymous(anonymousRef.getDataStream()));
-                } else
+                }
+                else
                 {
-                    throw new ClassCastException("Unsupported SignedDataObjectDesc. Must be either DataObjectReference or EnvelopedXmlObject");
+                    throw new ClassCastException("Unsupported SignedDataObjectDesc. Must be one of DataObjectReference, EnvelopedXmlObject and AnonymousDataObjectReference");
                 }
 
                 // Add the Reference. References need an ID because data object
