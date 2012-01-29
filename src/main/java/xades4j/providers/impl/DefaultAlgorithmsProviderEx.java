@@ -68,7 +68,7 @@ public class DefaultAlgorithmsProviderEx implements AlgorithmsProviderEx
     @Override
     public Algorithm getCanonicalizationAlgorithmForTimeStampProperties()
     {
-        return getCanonicalizationAlgorithmForSignature();
+        return new CanonicalXMLWithoutComments();
     }
 
     @Override
@@ -80,7 +80,7 @@ public class DefaultAlgorithmsProviderEx implements AlgorithmsProviderEx
     @Override
     public String getDigestAlgorithmForReferenceProperties()
     {
-        return getDigestAlgorithmForDataObjsReferences();
+        return MessageDigestAlgorithm.ALGO_ID_DIGEST_SHA256;
     }
 
     @Override

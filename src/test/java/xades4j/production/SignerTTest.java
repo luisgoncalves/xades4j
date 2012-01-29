@@ -22,10 +22,13 @@ import org.junit.Test;
 import static org.junit.Assert.*;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
+import xades4j.algorithms.Algorithm;
+import xades4j.algorithms.ExclusiveCanonicalXMLWithoutComments;
 import xades4j.properties.SignaturePolicyBase;
 import xades4j.properties.SignaturePolicyImpliedProperty;
 import xades4j.providers.MessageDigestEngineProvider;
 import xades4j.providers.SignaturePolicyInfoProvider;
+import xades4j.providers.impl.DefaultAlgorithmsProviderEx;
 import xades4j.providers.impl.DefaultTimeStampTokenProvider;
 import xades4j.providers.impl.FirstCertificateSelector;
 import xades4j.providers.impl.PKCS11KeyStoreKeyingDataProvider;
@@ -36,8 +39,9 @@ import xades4j.providers.impl.PKCS11KeyStoreKeyingDataProvider;
  */
 public class SignerTTest extends SignerTestBase
 {
-    public static class TestTimeStampTokenProvider extends DefaultTimeStampTokenProvider
+    static class TestTimeStampTokenProvider extends DefaultTimeStampTokenProvider
     {
+
         @Inject
         public TestTimeStampTokenProvider(
                 MessageDigestEngineProvider messageDigestProvider)
@@ -52,15 +56,33 @@ public class SignerTTest extends SignerTestBase
         }
     }
 
-    @Test
-    public void testSignTWithoutPolicy() throws Exception
+    static class ExclusiveC14nForTimeStampsAlgorithmsProvider extends DefaultAlgorithmsProviderEx
     {
-        System.out.println("signTWithoutPolicy");
+        @Override
+        public Algorithm getCanonicalizationAlgorithmForTimeStampProperties()
+        {
+            return new ExclusiveCanonicalXMLWithoutComments("ds", "xades");
+        }
+
+        @Override
+        public Algorithm getCanonicalizationAlgorithmForSignature()
+        {
+            return new ExclusiveCanonicalXMLWithoutComments();
+        }
+    }
+
+    @Test
+    public void testSignTExclusiveC14NWithoutPolicy() throws Exception
+    {
+        System.out.println("signTExclusiveC14NWithoutPolicy");
 
         Document doc = getTestDocument();
         Element elemToSign = doc.getDocumentElement();
 
-        SignerT signer = (SignerT)new XadesTSigningProfile(keyingProviderMy).withTimeStampTokenProvider(TestTimeStampTokenProvider.class).newSigner();
+        SignerT signer = (SignerT) new XadesTSigningProfile(keyingProviderMy)
+                .withTimeStampTokenProvider(TestTimeStampTokenProvider.class)
+                .withAlgorithmsProviderEx(ExclusiveC14nForTimeStampsAlgorithmsProvider.class)
+                .newSigner();
         new Enveloped(signer).sign(elemToSign);
 
         outputDocument(doc, "document.signed.t.bes.xml");
@@ -74,8 +96,9 @@ public class SignerTTest extends SignerTestBase
         Document doc = getTestDocument();
         Element elemToSign = doc.getDocumentElement();
 
-        SignerT signer = (SignerT)new XadesTSigningProfile(keyingProviderMy).withPolicyProvider(new SignaturePolicyInfoProvider()
+        SignerT signer = (SignerT) new XadesTSigningProfile(keyingProviderMy).withPolicyProvider(new SignaturePolicyInfoProvider()
         {
+
             @Override
             public SignaturePolicyBase getSignaturePolicy()
             {
@@ -94,7 +117,9 @@ public class SignerTTest extends SignerTestBase
         System.out.println("signTPtCitizenCard");
 
         if (!onWindowsPlatform())
+        {
             fail("Test written for the Windows platform");
+        }
 
         Document doc = getTestDocument();
         Element elemToSign = doc.getDocumentElement();
@@ -104,7 +129,7 @@ public class SignerTTest extends SignerTestBase
                     "C:\\Windows\\System32\\pteidpkcs11.dll", "PT_CC",
                     new FirstCertificateSelector(), null, null, false);
 
-            SignerT signer = (SignerT)new XadesTSigningProfile(ptccKeyingDataProv).withAlgorithmsProviderEx(PtCcAlgorithmsProvider.class).newSigner();
+            SignerT signer = (SignerT) new XadesTSigningProfile(ptccKeyingDataProv).withAlgorithmsProviderEx(PtCcAlgorithmsProvider.class).newSigner();
             new Enveloped(signer).sign(elemToSign);
 
             outputDocument(doc, "document.signed.t.bes.ptcc.xml");

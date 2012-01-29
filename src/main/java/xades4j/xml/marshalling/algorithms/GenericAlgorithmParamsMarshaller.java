@@ -14,9 +14,9 @@
  * You should have received a copy of the GNU Lesser General Public License along
  * with XAdES4j. If not, see <http://www.gnu.org/licenses/>.
  */
-
 package xades4j.xml.marshalling.algorithms;
 
+import java.util.ArrayList;
 import java.util.List;
 import org.w3c.dom.Document;
 import org.w3c.dom.Node;
@@ -28,9 +28,21 @@ import xades4j.algorithms.GenericAlgorithm;
  */
 final class GenericAlgorithmParamsMarshaller implements AlgorithmParametersMarshaller<GenericAlgorithm>
 {
+
     @Override
     public List<Node> marshalParameters(GenericAlgorithm alg, Document doc)
     {
-        return alg.getParameters();
+        List<Node> originalParams = alg.getParameters();
+        if (null == originalParams)
+        {
+            return null;
+        }
+
+        List<Node> result = new ArrayList<Node>(originalParams.size());
+        for (Node node : originalParams)
+        {
+            result.add(node.getOwnerDocument() == doc ? node : doc.importNode(node, true));
+        }
+        return result;
     }
 }

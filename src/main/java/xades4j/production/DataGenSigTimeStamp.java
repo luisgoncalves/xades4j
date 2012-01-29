@@ -57,8 +57,6 @@ class DataGenSigTimeStamp extends DataGenBaseTimeStamp<SignatureTimeStampPropert
             Constants.SignatureSpecNS, Constants._TAG_SIGNATUREVALUE);
 
         digestInput.addNode(sigValueElem);
-
-        throw new UnsupportedOperationException("Not supported yet.");
     }
 
     @Override
