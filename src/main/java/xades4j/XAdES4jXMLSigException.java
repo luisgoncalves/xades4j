@@ -18,27 +18,11 @@ package xades4j;
 
 /**
  * Thrown during sugnature production or verification when an error occurs that
- * is relted to the core XML-DSIg processing and couldn't be further detailed.
+ * is related to the core XML-DSIG processing and couldn't be further detailed.
  * @author Luís
  */
 public class XAdES4jXMLSigException extends XAdES4jException
 {
-    /**
-     * Creates a new instance of <code>XAdES4jXMLSigException</code> without detail message.
-     */
-    public XAdES4jXMLSigException()
-    {
-    }
-
-    /**
-     * Constructs an instance of <code>XAdES4jXMLSigException</code> with the specified detail message.
-     * @param msg the detail message.
-     */
-    public XAdES4jXMLSigException(String msg)
-    {
-        super(msg);
-    }
-
     /**
      * Constructs an instance of <code>XAdES4jXMLSigException</code> with the specified detail message and cause.
      * @param message the detail message.

@@ -29,11 +29,19 @@ public abstract class InvalidPropertyException extends InvalidSignatureException
         message = null;
     }
 
+    protected InvalidPropertyException(Throwable cause)
+    {
+        super(cause);
+        message = null;
+    }
+
     @Override
     public String getMessage()
     {
         if (null == message)
+        {
             message = String.format("Verification failed for property '%s': %s", getPropertyName(), getVerificationMessage());
+        }
         return message;
     }
 

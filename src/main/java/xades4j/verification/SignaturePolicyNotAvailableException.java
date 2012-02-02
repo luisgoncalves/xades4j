@@ -27,9 +27,9 @@ import xades4j.properties.ObjectIdentifier;
 public class SignaturePolicyNotAvailableException extends SignaturePolicyVerificationException
 {
     public SignaturePolicyNotAvailableException(
-            ObjectIdentifier signaturePolicyId)
+            ObjectIdentifier signaturePolicyId, Throwable cause)
     {
-        super(signaturePolicyId);
+        super(signaturePolicyId, cause);
     }
 
     @Override

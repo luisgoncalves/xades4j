@@ -30,11 +30,6 @@ public class PropertyUnmarshalException extends UnmarshalException
         this.propertyName = propertyName;
     }
 
-    public PropertyUnmarshalException(String propertyName)
-    {
-        this.propertyName = propertyName;
-    }
-
     public String getPropertyName()
     {
         return propertyName;

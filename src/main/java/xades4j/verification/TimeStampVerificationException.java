@@ -24,6 +24,12 @@ public abstract class TimeStampVerificationException extends InvalidPropertyExce
 {
     private String propName;
 
+    protected TimeStampVerificationException(String propName, Throwable cause)
+    {
+        super(cause);
+        this.propName = propName;
+    }
+
     protected TimeStampVerificationException(String propName)
     {
         this.propName = propName;

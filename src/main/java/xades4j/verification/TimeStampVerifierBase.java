@@ -82,7 +82,7 @@ abstract class TimeStampVerifierBase<TData extends BaseXAdESTimeStampData> imple
         }
         catch (CannotAddDataToDigestInputException ex)
         {
-            throw new TimeStampDigestInputException(this.propName);
+            throw new TimeStampDigestInputException(this.propName, ex);
         }
         catch (TimeStampTokenVerificationException ex)
         {
@@ -111,17 +111,16 @@ abstract class TimeStampVerifierBase<TData extends BaseXAdESTimeStampData> imple
 
         if (ex instanceof TimeStampTokenSignatureException)
         {
-            return new TimeStampInvalidSignatureException(propName, ex.getMessage());
+            return new TimeStampInvalidSignatureException(propName, ex);
         }
 
         if (ex instanceof TimeStampTokenStructureException)
         {
-            return new TimeStampInvalidTokenException(propName, ex.getMessage());
+            return new TimeStampInvalidTokenException(propName, ex);
         }
 
-        return new TimeStampVerificationException(propName)
+        return new TimeStampVerificationException(propName, ex)
         {
-
             @Override
             protected String getVerificationMessage()
             {

@@ -34,8 +34,4 @@ public class SigningCertChainException extends KeyingDataException
     {
         super(msg);
     }
-
-    public SigningCertChainException()
-    {
-    }
 }

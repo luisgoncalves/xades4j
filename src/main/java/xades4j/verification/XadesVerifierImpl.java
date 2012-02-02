@@ -116,12 +116,9 @@ class XadesVerifierImpl implements XadesVerifier
         try
         {
             signature = new XMLSignature(signatureElem, verificationOptions.getBaseUri());
-        } catch (XMLSignatureException ex)
-        {
-            throw new UnmarshalException("Bad XML Signature format", ex);
         } catch (XMLSecurityException ex)
         {
-            throw new UnmarshalException(ex.getMessage(), ex.getOriginalException());
+            throw new UnmarshalException("Bad XML signature", ex);
         }
 
         String signatureId = signature.getId();
@@ -249,7 +246,7 @@ class XadesVerifierImpl implements XadesVerifier
             throw new QualifyingPropertiesIncorporationException("Only QualifyingProperties in the signature's document are supported");
         }
 
-        String msg = "Cannot get the SignedProperties element";
+        Throwable cause = null;
         try
         {
             Node sPropsNode = signedPropsRef.getNodesetBeforeFirstCanonicalization().getSubNode();
@@ -260,16 +257,15 @@ class XadesVerifierImpl implements XadesVerifier
                         || !sPropsNode.getNamespaceURI().equals(QualifyingProperty.XADES_XMLNS))
                 {
                     throw new QualifyingPropertiesIncorporationException("The supposed reference over signed properties doesn't cover a XAdES SignedProperties element.");
-                } else
-                {
-                    return sPropsNode;
                 }
+
+                return sPropsNode;
             }
         } catch (XMLSignatureException ex)
         {
-            msg = msg + ": " + ex.getMessage();
+            cause = ex;
         }
-        throw new QualifyingPropertiesIncorporationException(msg);
+        throw new QualifyingPropertiesIncorporationException("Cannot get the SignedProperties element", cause);
     }
 
     private Date getValidationDate(
@@ -315,7 +311,7 @@ class XadesVerifierImpl implements XadesVerifier
             }
         } catch (XMLSignatureException ex)
         {
-            throw new XAdES4jXMLSigException("Cannot verify the signature: " + ex.getMessage(), ex);
+            throw new XAdES4jXMLSigException("Error verifying the signature", ex);
         }
 
         try
@@ -342,7 +338,7 @@ class XadesVerifierImpl implements XadesVerifier
             }
         } catch (XMLSecurityException ex)
         {
-            throw new XAdES4jXMLSigException("Cannot verify the references", ex);
+            throw new XAdES4jXMLSigException("Error verifying the references", ex);
         }
     }
 

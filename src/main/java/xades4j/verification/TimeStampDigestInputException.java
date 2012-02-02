@@ -28,6 +28,11 @@ public class TimeStampDigestInputException extends TimeStampVerificationExceptio
         super(propName);
     }
 
+    public TimeStampDigestInputException(String propName, Throwable cause)
+    {
+        super(propName, cause);
+    }
+
     @Override
     protected String getVerificationMessage()
     {

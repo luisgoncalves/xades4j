@@ -23,16 +23,14 @@ package xades4j.verification;
  */
 public class TimeStampInvalidSignatureException extends TimeStampVerificationException
 {
-    private String message;
-    public TimeStampInvalidSignatureException(String propName, String message)
+    public TimeStampInvalidSignatureException(String propName, Throwable cause)
     {
-        super(propName);
-        this.message = message;
+        super(propName, cause);
     }
 
     @Override
     protected String getVerificationMessage()
     {
-        return message;
+        return "invalid token signature";
     }
 }

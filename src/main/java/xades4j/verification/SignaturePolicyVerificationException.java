@@ -31,6 +31,13 @@ public abstract class SignaturePolicyVerificationException extends InvalidProper
     protected SignaturePolicyVerificationException(
             ObjectIdentifier signaturePolicyId)
     {
+        this(signaturePolicyId, null);
+    }
+
+    protected SignaturePolicyVerificationException(
+            ObjectIdentifier signaturePolicyId, Throwable cause)
+    {
+        super(cause);
         this.signaturePolicyId = signaturePolicyId;
     }
 

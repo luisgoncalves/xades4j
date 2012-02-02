@@ -80,7 +80,7 @@ class SigningCertificateVerifier implements QualifyingPropertyVerifier<SigningCe
             CertRefUtils.checkCertRef(signingCertRef, signingCert, messageDigestProvider);
         } catch (CertRefUtils.InvalidCertRefException ex)
         {
-            throw new SigningCertificateReferenceException(signingCert, signingCertRef, ex.getMessage());
+            throw new SigningCertificateReferenceException(signingCert, signingCertRef, ex);
         }
 
         /* Check the other certificates in the certification path */
@@ -102,7 +102,7 @@ class SigningCertificateVerifier implements QualifyingPropertyVerifier<SigningCe
                 CertRefUtils.checkCertRef(certRef, cert, messageDigestProvider);
             } catch (CertRefUtils.InvalidCertRefException ex)
             {
-                throw new SigningCertificateReferenceException(cert, certRef, ex.getMessage());
+                throw new SigningCertificateReferenceException(cert, certRef, ex);
             }
         }
 

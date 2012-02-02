@@ -22,8 +22,15 @@ package xades4j.providers;
  */
 public class TimeStampTokenStructureException extends TimeStampTokenVerificationException
 {
-    public TimeStampTokenStructureException(String msg)
+    public TimeStampTokenStructureException(String message)
     {
-        super(msg);
+        super(message);
     }
+
+    public TimeStampTokenStructureException(String message, Throwable cause)
+    {
+        super(message, cause);
+    }
+
+
 }

@@ -23,17 +23,14 @@ package xades4j.verification;
  */
 public class TimeStampInvalidTokenException extends TimeStampVerificationException
 {
-    private String message;
-
-    public TimeStampInvalidTokenException(String propName, String message)
+    public TimeStampInvalidTokenException(String propName, Throwable cause)
     {
-        super(propName);
-        this.message = message;
+        super(propName, cause);
     }
 
     @Override
     protected String getVerificationMessage()
     {
-        return message;
+        return "invalid token";
     }
 }

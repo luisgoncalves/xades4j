@@ -25,8 +25,8 @@ import xades4j.XAdES4jException;
  */
 public class XadesProfileResolutionException extends XAdES4jException
 {
-    public XadesProfileResolutionException(String msg)
+    public XadesProfileResolutionException(String message, Throwable cause)
     {
-        super(msg);
+        super(message, cause);
     }
 }

@@ -109,10 +109,10 @@ public class PKIXCertificateValidationProvider implements CertificateValidationP
             builderParams = new PKIXBuilderParameters(trustAnchors, certSelector);
         } catch (KeyStoreException ex)
         {
-            throw new CannotBuildCertificationPathException(certSelector, "Trust anchors KeyStore is not initialized");
+            throw new CannotBuildCertificationPathException(certSelector, "Trust anchors KeyStore is not initialized", ex);
         } catch (InvalidAlgorithmParameterException ex)
         {
-            throw new CannotBuildCertificationPathException(certSelector, "Trust anchors KeyStore has no trusted certificate entries");
+            throw new CannotBuildCertificationPathException(certSelector, "Trust anchors KeyStore has no trusted certificate entries", ex);
         }
 
         PKIXCertPathBuilderResult builderRes;
@@ -139,13 +139,13 @@ public class PKIXCertificateValidationProvider implements CertificateValidationP
             builderRes = (PKIXCertPathBuilderResult)certPathBuilder.build(builderParams);
         } catch (CertPathBuilderException ex)
         {
-            throw new CannotBuildCertificationPathException(certSelector, ex.getMessage());
+            throw new CannotBuildCertificationPathException(certSelector, ex.getMessage(), ex);
         } catch (InvalidAlgorithmParameterException ex)
         {
             // SHOULD NOT be thrown due to wrong type of parameters.
             // Seems to be thrown when the CertSelector (in builderParams) criteria
             // cannot be applied.
-            throw new CannotSelectCertificateException(certSelector, ex.getMessage());
+            throw new CannotSelectCertificateException(certSelector, ex);
         } catch (NoSuchAlgorithmException ex)
         {
             // SHOULD NOT be thrown.
@@ -205,7 +205,7 @@ public class PKIXCertificateValidationProvider implements CertificateValidationP
             }
         } catch (CertStoreException ex)
         {
-            throw new CertificateValidationException(null, "Cannot get CRLs: " + ex.getMessage());
+            throw new CertificateValidationException(null, "Cannot get CRLs", ex);
         }
 
         // Verify the CRLs' signatures. The issuers' certificates were validated
@@ -218,7 +218,7 @@ public class PKIXCertificateValidationProvider implements CertificateValidationP
                 crl.verify(crlIssuerCert.getPublicKey());
             } catch (Exception ex)
             {
-                throw new CertificateValidationException(null, "Invalid CRL signature: " + crl.getIssuerX500Principal().getName());
+                throw new CertificateValidationException(null, "Invalid CRL signature from " + crl.getIssuerX500Principal().getName(), ex);
             }
         }
         return crls;

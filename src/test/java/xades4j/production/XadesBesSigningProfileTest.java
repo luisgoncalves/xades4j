@@ -27,9 +27,6 @@ import org.junit.Test;
 import static org.junit.Assert.*;
 import xades4j.utils.XadesProfileResolutionException;
 import xades4j.providers.KeyingDataProvider;
-import xades4j.providers.SigningCertChainException;
-import xades4j.providers.SigningKeyException;
-import xades4j.verification.UnexpectedJCAException;
 
 /**
  *
@@ -67,13 +64,13 @@ public class XadesBesSigningProfileTest
         XadesSigner s = new XadesBesSigningProfile(new KeyingDataProvider()
         {
             @Override
-            public List<X509Certificate> getSigningCertificateChain() throws SigningCertChainException, UnexpectedJCAException
+            public List<X509Certificate> getSigningCertificateChain()
             {
                 throw new UnsupportedOperationException();
             }
 
             @Override
-            public PrivateKey getSigningKey(X509Certificate signingCert) throws SigningKeyException, UnexpectedJCAException
+            public PrivateKey getSigningKey(X509Certificate signingCert)
             {
                 throw new UnsupportedOperationException();
             }

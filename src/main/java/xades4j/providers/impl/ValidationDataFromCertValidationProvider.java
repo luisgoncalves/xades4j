@@ -21,7 +21,7 @@ import java.security.cert.X509CertSelector;
 import java.security.cert.X509Certificate;
 import java.util.Date;
 import java.util.List;
-import xades4j.verification.UnexpectedJCAException;
+import xades4j.XAdES4jException;
 
 /**
  * An implementation of {@code ValidationDataProvider} that obtains the validation
@@ -47,12 +47,9 @@ public class ValidationDataFromCertValidationProvider implements ValidationDataP
             X509CertSelector cs = new X509CertSelector();
             cs.setCertificate(certChainFragment.get(0));
             return this.certificateValidationProvider.validate(cs, new Date(), certChainFragment);
-        } catch (CertificateValidationException ex)
+        } catch (XAdES4jException ex)
         {
-            throw new ValidationDataException("Cannot validate certificate: " + ex.getMessage(), ex);
-        } catch (UnexpectedJCAException ex)
-        {
-            throw new ValidationDataException("Cannot validate certificate: " + ex.getMessage(), ex);
+            throw new ValidationDataException("Cannot validate certificate to obtain validation data", ex);
         }
     }
 }

@@ -25,7 +25,7 @@ public class TimeStampTokenDigestException extends TimeStampTokenVerificationExc
 
     public TimeStampTokenDigestException()
     {
-        super("Message imprint doesn't match the input");
+        super("Token imprint doesn't match the input");
     }
 
 }

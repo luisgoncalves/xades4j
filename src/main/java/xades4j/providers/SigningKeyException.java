@@ -29,13 +29,4 @@ public class SigningKeyException extends KeyingDataException
     {
         super(message, cause);
     }
-
-    public SigningKeyException(String msg)
-    {
-        super(msg);
-    }
-
-    public SigningKeyException()
-    {
-    }
 }

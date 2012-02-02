@@ -25,7 +25,7 @@ public abstract class XAdES4jException extends Exception
     /**
      * Creates a new instance of <code>XAdES4jException</code> without detail message.
      */
-    public XAdES4jException()
+    protected XAdES4jException()
     {
     }
 
@@ -33,9 +33,18 @@ public abstract class XAdES4jException extends Exception
      * Constructs an instance of <code>XAdES4jException</code> with the specified detail message.
      * @param msg the detail message.
      */
-    public XAdES4jException(String msg)
+    protected XAdES4jException(String msg)
     {
         super(msg);
+    }
+
+    /**
+     * Constructs an instance of <code>XAdES4jException</code> with the specified cause.
+     * @param cause the cause.
+     */
+    protected XAdES4jException(Throwable cause)
+    {
+        super(cause);
     }
 
     /**
@@ -44,7 +53,7 @@ public abstract class XAdES4jException extends Exception
      * @param message the detail message
      * @param cause the cause
      */
-    public XAdES4jException(String message, Throwable cause)
+    protected XAdES4jException(String message, Throwable cause)
     {
         super(message, cause);
     }

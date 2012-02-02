@@ -17,6 +17,7 @@
 package xades4j.xml.unmarshalling;
 
 import xades4j.properties.ObjectIdentifier;
+import xades4j.properties.SignaturePolicyBase;
 import xades4j.properties.data.SignaturePolicyData;
 import xades4j.xml.bind.xades.XmlSignaturePolicyIdType;
 import xades4j.xml.bind.xades.XmlSignaturePolicyIdentifierType;
@@ -47,7 +48,7 @@ class FromXmlSignaturePolicyConverter implements SignedSigPropFromXmlConv
         XmlSignaturePolicyIdType xmlPolicyId = xmlSigPolicy.getSignaturePolicyId();
 
         if (xmlPolicyId.getTransforms() != null)
-            throw new PropertyUnmarshalException("Signature policy transforms are not supported", "SignaturePolicyIdentifier");
+            throw new PropertyUnmarshalException("Signature policy transforms are not supported", SignaturePolicyBase.PROP_NAME);
 
         ObjectIdentifier policyId = FromXmlUtils.getObjectIdentifier(xmlPolicyId.getSigPolicyId());
         propertyDataCollector.setSignaturePolicy(new SignaturePolicyData(

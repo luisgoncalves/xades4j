@@ -65,7 +65,7 @@ class SignaturePolicyVerifier implements QualifyingPropertyVerifier<SignaturePol
         InputStream sigDocStream = this.policyDocumentProvider.getSignaturePolicyDocumentStream(policyId);
         if (null == sigDocStream)
         {
-            throw new SignaturePolicyNotAvailableException(policyId);
+            throw new SignaturePolicyNotAvailableException(policyId, null);
         }
 
         try
@@ -82,10 +82,10 @@ class SignaturePolicyVerifier implements QualifyingPropertyVerifier<SignaturePol
             return new SignaturePolicyIdentifierProperty(policyId, sigDocStream);
         } catch (IOException ex)
         {
-            throw new SignaturePolicyNotAvailableException(policyId);
+            throw new SignaturePolicyNotAvailableException(policyId, ex);
         } catch (UnsupportedAlgorithmException ex)
         {
-            throw new SignaturePolicyCannotDigestException(policyId, ex.getMessage());
+            throw new SignaturePolicyCannotDigestException(policyId, ex);
         } finally
         {
             try
@@ -93,8 +93,7 @@ class SignaturePolicyVerifier implements QualifyingPropertyVerifier<SignaturePol
                 sigDocStream.close();
             } catch (IOException ex)
             {
-                // TODO: improve this when causes are passed to xades4j exceptions
-                throw new SignaturePolicyNotAvailableException(policyId);
+                throw new SignaturePolicyNotAvailableException(policyId, ex);
             }
         }
     }

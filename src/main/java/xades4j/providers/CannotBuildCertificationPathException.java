@@ -24,8 +24,8 @@ import java.security.cert.X509CertSelector;
  */
 public class CannotBuildCertificationPathException extends CertificateValidationException
 {
-    public CannotBuildCertificationPathException(X509CertSelector s, String msg)
+    public CannotBuildCertificationPathException(X509CertSelector s, String msg, Throwable cause)
     {
-        super(s, msg);
+        super(s, msg, cause);
     }
 }

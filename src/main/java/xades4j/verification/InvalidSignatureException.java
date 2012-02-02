@@ -41,4 +41,9 @@ public class InvalidSignatureException extends XAdES4jException
     {
         super(msg, cause);
     }
+
+    public InvalidSignatureException(Throwable cause)
+    {
+        super(cause);
+    }
 }

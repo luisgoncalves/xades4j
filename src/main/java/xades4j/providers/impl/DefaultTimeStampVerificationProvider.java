@@ -18,18 +18,17 @@ package xades4j.providers.impl;
 
 import com.google.inject.Inject;
 import java.io.IOException;
+import java.security.GeneralSecurityException;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
-import java.security.SignatureException;
 import java.security.cert.X509CertSelector;
 import java.security.cert.X509Certificate;
 import java.util.Arrays;
 import java.util.Date;
 import javax.security.auth.x500.X500Principal;
 import sun.security.pkcs.PKCS7;
-import sun.security.pkcs.ParsingException;
 import sun.security.pkcs.SignerInfo;
-import xades4j.providers.CertificateValidationException;
+import xades4j.XAdES4jException;
 import xades4j.providers.CertificateValidationProvider;
 import xades4j.providers.TimeStampTokenDigestException;
 import xades4j.providers.TimeStampTokenSignatureException;
@@ -39,7 +38,6 @@ import xades4j.providers.TimeStampTokenVerificationException;
 import xades4j.providers.TimeStampVerificationProvider;
 import xades4j.providers.ValidationData;
 import xades4j.utils.TimeStampTokenInfo;
-import xades4j.verification.UnexpectedJCAException;
 
 /**
  * Default implementation of {@code TimeStampVerificationProvider}. It verifies
@@ -51,11 +49,11 @@ import xades4j.verification.UnexpectedJCAException;
  */
 public class DefaultTimeStampVerificationProvider implements TimeStampVerificationProvider
 {
+
     private final CertificateValidationProvider certificateValidationProvider;
 
     @Inject
-    public DefaultTimeStampVerificationProvider(
-            CertificateValidationProvider certificateValidationProvider)
+    public DefaultTimeStampVerificationProvider(CertificateValidationProvider certificateValidationProvider)
     {
         this.certificateValidationProvider = certificateValidationProvider;
     }
@@ -69,81 +67,86 @@ public class DefaultTimeStampVerificationProvider implements TimeStampVerificati
         {
             token = new PKCS7(timeStampToken);
             tstInfo = new TimeStampTokenInfo(token.getContentInfo().getContentBytes());
+        } catch (IOException ex)
+        {
+            throw new TimeStampTokenStructureException("Invalid token", ex);
+        }
 
-            SignerInfo[] signerInfos = token.getSignerInfos();
-            if (null == signerInfos || signerInfos.length != 1)
-                // RFC 3161: "The time-stamp token MUST NOT contain any signatures
-                // other than the signature of the TSA."
-                throw new TimeStampTokenStructureException("Only one signature should be present on time-stamp token");
+        SignerInfo[] signerInfos = token.getSignerInfos();
+        // RFC 3161: "The time-stamp token MUST NOT contain any signatures
+        // other than the signature of the TSA."
+        if (null == signerInfos || signerInfos.length != 1)
+        {
+            throw new TimeStampTokenStructureException("Only one signature should be present on time-stamp token");
+        }
 
-            X509Certificate[] tokenCerts = token.getCertificates();
-            SignerInfo tsaSignerInfo = signerInfos[0];
+        X509Certificate[] tokenCerts = token.getCertificates();
+        SignerInfo tsaSignerInfo = signerInfos[0];
 
-            /* Validate the TSA certificate */
+        /* Validate the TSA certificate */
 
-            X509CertSelector tsaCertSelector = new X509CertSelector();
-            tsaCertSelector.setIssuer(new X500Principal(tsaSignerInfo.getIssuerName().getName()));
-            tsaCertSelector.setSerialNumber(tsaSignerInfo.getCertificateSerialNumber());
+        X509CertSelector tsaCertSelector = new X509CertSelector();
+        tsaCertSelector.setIssuer(new X500Principal(tsaSignerInfo.getIssuerName().getName()));
+        tsaCertSelector.setSerialNumber(tsaSignerInfo.getCertificateSerialNumber());
 
-            ValidationData vData = this.certificateValidationProvider.validate(
+        ValidationData vData;
+        try
+        {
+            vData = this.certificateValidationProvider.validate(
                     tsaCertSelector,
                     tstInfo.getDate(),
                     null == tokenCerts ? null : Arrays.asList(tokenCerts));
-
-
-            /* Verify the token's signature */
-
-            // If the token had no certificates, clone it using the certificate
-            // on the certification path. This way I can always use 'token.verify'.
-            if (null == tokenCerts)
-                token = new PKCS7(
-                        token.getDigestAlgorithmIds(),
-                        token.getContentInfo(),
-                        new X509Certificate[]
-                        {
-                            vData.getCerts().get(0)
-                        },
-                        signerInfos);
-
-            // Verify the signature.
-            if (null == token.verify(tsaSignerInfo, null))
-                throw new TimeStampTokenSignatureException("Time-stamp token signature verification failed");
-
-        } catch (ParsingException ex)
+        } catch (XAdES4jException ex)
         {
-            // new PKCS7(timeStampToken)
-            throw new TimeStampTokenStructureException("Token cannot be parsed");
-        } catch (NoSuchAlgorithmException ex)
-        {
-            // token.verify(signerInfos[0], null))
-            throw new TimeStampTokenSignatureException(ex.getMessage());
-        } catch (SignatureException ex)
-        {
-            // token.verify(signerInfos[0], null))
-            throw new TimeStampTokenSignatureException(ex.getMessage());
-        } catch (CertificateValidationException ex)
-        {
-            throw new TimeStampTokenTSACertException("cannot validate TSA certificate: " + ex.getMessage(), ex);
-        } catch (UnexpectedJCAException ex)
-        {
-            throw new TimeStampTokenTSACertException("cannot validate TSA certificate: " + ex.getMessage(), ex);
-        } catch (IOException ex)
-        {
-            throw new TimeStampTokenStructureException("Token content info is invalid");
+            throw new TimeStampTokenTSACertException("cannot validate TSA certificate", ex);
         }
 
-        MessageDigest md;
+        /* Verify the token's signature */
+
+        // If the token had no certificates, clone it using the certificate
+        // on the certification path. This way 'token.verify' can always be used.
+        if (null == tokenCerts)
+        {
+            token = new PKCS7(
+                    token.getDigestAlgorithmIds(),
+                    token.getContentInfo(),
+                    new X509Certificate[]
+                    {
+                        vData.getCerts().get(0)
+                    },
+                    signerInfos);
+        }
         try
         {
-            md = MessageDigest.getInstance(tstInfo.getHashAlgorithm().getName());
-        } catch (NoSuchAlgorithmException ex)
+            // Verify the signature.
+            if (null == token.verify(tsaSignerInfo, null))
+            {
+                throw new TimeStampTokenSignatureException("Time-stamp token signature is not valid");
+            }
+
+        } catch (GeneralSecurityException ex)
         {
-            throw new TimeStampTokenVerificationException(ex.getMessage());
+            // NoSuchAlgorithmException
+            // SignatureException
+            throw new TimeStampTokenSignatureException("Time-stamp token signature is not valid", ex);
         }
 
-        if (!Arrays.equals(md.digest(tsDigestInput), tstInfo.getHashedMessage()))
-            throw new TimeStampTokenDigestException();
+        /* Verify the token's input digest */
 
+        try
+        {
+            
+            MessageDigest md = MessageDigest.getInstance(tstInfo.getHashAlgorithm().getName());
+            if (!Arrays.equals(md.digest(tsDigestInput), tstInfo.getHashedMessage()))
+            {
+                throw new TimeStampTokenDigestException();
+            }
+
+        } catch (NoSuchAlgorithmException ex)
+        {
+            throw new TimeStampTokenVerificationException("The token's digest algorithm is not supported", ex);
+        }
+        
         return tstInfo.getDate();
     }
 }

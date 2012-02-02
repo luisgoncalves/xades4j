@@ -26,17 +26,14 @@ import xades4j.properties.ObjectIdentifier;
  */
 public class SignaturePolicyCannotDigestException extends SignaturePolicyVerificationException
 {
-    private final String message;
-
-    public SignaturePolicyCannotDigestException(ObjectIdentifier sigPolicyId, String message)
+    public SignaturePolicyCannotDigestException(ObjectIdentifier sigPolicyId, Throwable cause)
     {
-        super(sigPolicyId);
-        this.message = message;
+        super(sigPolicyId, cause);
     }
 
     @Override
     protected String getVerificationMessage()
     {
-        return "The signature policy document cannot be digested: " + message;
+        return "The signature policy document cannot be digested";
     }
 }

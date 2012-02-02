@@ -23,11 +23,6 @@ package xades4j.providers;
  */
 public class TimeStampTokenTSACertException extends TimeStampTokenSignatureException
 {
-    public TimeStampTokenTSACertException(String msg)
-    {
-        super(msg);
-    }
-
     public TimeStampTokenTSACertException(String message, Throwable cause)
     {
         super(message, cause);

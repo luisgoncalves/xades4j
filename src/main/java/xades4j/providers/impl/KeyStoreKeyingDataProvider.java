@@ -168,7 +168,8 @@ public abstract class KeyStoreKeyingDataProvider implements KeyingDataProvider
                         }
                     });
                 this.keyStore = builderCreator.getBuilder(storeLoadProtec).getKeyStore();
-            } catch (KeyStoreException ex)
+            }
+            catch (KeyStoreException ex)
             {
                 throw new UnexpectedJCAException("The keystore couldn't be initialized", ex);
             }
@@ -239,11 +240,12 @@ public abstract class KeyStoreKeyingDataProvider implements KeyingDataProvider
                     entryAlias,
                     getKeyProtection(entryAlias, signingCert, entryPasswordProvider));
             return entry.getPrivateKey();
-
-        } catch (UnrecoverableKeyException ex)
+        }
+        catch (UnrecoverableKeyException ex)
         {
             throw new SigningKeyException("Invalid key entry password", ex);
-        } catch (GeneralSecurityException ex)
+        }
+        catch (GeneralSecurityException ex)
         {
             // NoSuchAlgorithmException
             // UnrecoverableEntryException

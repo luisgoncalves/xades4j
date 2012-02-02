@@ -24,6 +24,15 @@ import xades4j.properties.SigningCertificateProperty;
  */
 public abstract class SigningCertificateVerificationException extends InvalidPropertyException
 {
+    protected SigningCertificateVerificationException(Throwable cause)
+    {
+        super(cause);
+    }
+
+    protected SigningCertificateVerificationException()
+    {
+    }
+
     @Override
     public String getPropertyName()
     {

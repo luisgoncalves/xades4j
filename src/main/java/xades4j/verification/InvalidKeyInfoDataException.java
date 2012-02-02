@@ -23,11 +23,15 @@ import xades4j.providers.CertificateValidationException;
  * include the needed data to identify the signing certificate.
  * @author Luís
  */
-public class InvalidKeyInfoDataException extends CertificateValidationException {
+public class InvalidKeyInfoDataException extends CertificateValidationException
+{
+    public InvalidKeyInfoDataException(String message, Throwable cause)
+    {
+        super(null, message, cause);
+    }
 
     public InvalidKeyInfoDataException(String message)
     {
         super(null, message);
     }
-
 }

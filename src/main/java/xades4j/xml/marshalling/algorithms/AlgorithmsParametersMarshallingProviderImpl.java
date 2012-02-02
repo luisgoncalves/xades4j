@@ -51,7 +51,7 @@ final class AlgorithmsParametersMarshallingProviderImpl implements AlgorithmsPar
             marshaller = (AlgorithmParametersMarshaller) injector.getInstance(Key.get(TypeLiteral.get(pt)));
         } catch (RuntimeException ex)
         {
-            throw new UnsupportedAlgorithmException(alg.getUri());
+            throw new UnsupportedAlgorithmException("AlgorithmParametersMarshaller not available", alg.getUri(), ex);
         }
 
         List<Node> params = marshaller.marshalParameters(alg, doc);

@@ -57,7 +57,7 @@ class FromXmlIndivDataObjsTimeStampConverter
     @Override
     protected void doSpecificConvert(
             XmlXAdESTimeStampType xmlTS,
-            IndividualDataObjsTimeStampData tsData) throws PropertyUnmarshalException
+            IndividualDataObjsTimeStampData tsData)
     {
         List<XmlIncludeType> includes = xmlTS.getInclude();
         for (XmlIncludeType xmlInc : includes)

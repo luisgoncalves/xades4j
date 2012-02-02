@@ -67,7 +67,7 @@ public class DefaultTimeStampTokenProvider implements TimeStampTokenProvider
             md = messageDigestProvider.getEngine(digestAlgUri);
         } catch (UnsupportedAlgorithmException ex)
         {
-            throw new TimeStampTokenGenerationException(ex.getMessage());
+            throw new TimeStampTokenGenerationException("Digest algorithm not supported", ex);
         }
 
         byte[] digest = md.digest(tsDigestInput);
@@ -80,13 +80,13 @@ public class DefaultTimeStampTokenProvider implements TimeStampTokenProvider
             tsRes = getTimestamper().generateTimestamp(tsReq);
         } catch (IOException ex)
         {
-            throw new TimeStampTokenGenerationException("no TSA response");
+            throw new TimeStampTokenGenerationException("No TSA response", ex);
         }
 
         PKCS7 token = tsRes.getToken();
         if (null == token)
             // Time-stamp not granted.
-            throw new TimeStampTokenGenerationException(tsRes.getFailureCodeAsText());
+            throw new TimeStampTokenGenerationException("Time stamp token not granted: " + tsRes.getFailureCodeAsText());
 
         SignerInfo[] signerInfos = token.getSignerInfos();
         if (null == signerInfos || signerInfos.length != 1)
@@ -102,16 +102,14 @@ public class DefaultTimeStampTokenProvider implements TimeStampTokenProvider
                 throw new TimeStampTokenGenerationException("TSA certificate wasn't included in the time-stamp response");
         }
 
-        TimeStampTokenInfo tstInfo;
         try
         {
-            tstInfo = new TimeStampTokenInfo(token.getContentInfo().getContentBytes());
+            TimeStampTokenInfo tstInfo = new TimeStampTokenInfo(token.getContentInfo().getContentBytes());
+            return new TimeStampTokenRes(tsRes.getEncodedToken(), tstInfo.getDate());
         } catch (IOException ex)
         {
-            throw new TimeStampTokenGenerationException(ex.getMessage());
+            throw new TimeStampTokenGenerationException("Invalid token structure", ex);
         }
-
-        return new TimeStampTokenRes(tsRes.getEncodedToken(), tstInfo.getDate());
     }
 
     /**

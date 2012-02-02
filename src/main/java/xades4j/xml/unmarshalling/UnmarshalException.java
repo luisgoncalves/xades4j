@@ -33,8 +33,4 @@ public class UnmarshalException extends XAdES4jException
     {
         super(msg);
     }
-
-    public UnmarshalException()
-    {
-    }
 }

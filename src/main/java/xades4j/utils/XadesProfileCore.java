@@ -17,12 +17,9 @@
 package xades4j.utils;
 
 import com.google.inject.Binder;
-import com.google.inject.ConfigurationException;
-import com.google.inject.CreationException;
 import com.google.inject.Guice;
 import com.google.inject.Key;
 import com.google.inject.Module;
-import com.google.inject.ProvisionException;
 import com.google.inject.TypeLiteral;
 import com.google.inject.util.Modules;
 import com.google.inject.util.Types;
@@ -155,17 +152,9 @@ public final class XadesProfileCore
         {
             return Guice.createInjector(finalModules).getInstance(clazz);
         }
-        catch (CreationException ex)
+        catch (RuntimeException ex)
         {
-            throw new XadesProfileResolutionException(ex.getMessage());
-        }
-        catch (ConfigurationException ex)
-        {
-            throw new XadesProfileResolutionException(ex.getMessage());
-        }
-        catch (ProvisionException ex)
-        {
-            throw new XadesProfileResolutionException(ex.getMessage());
+            throw new XadesProfileResolutionException(ex.getMessage(), ex);
         }
     }
 }

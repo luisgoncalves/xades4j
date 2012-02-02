@@ -25,15 +25,24 @@ public class UnsupportedAlgorithmException extends XAdES4jException
 {
     private final String algorithm;
 
-    public UnsupportedAlgorithmException(String algorithm)
-    {
-        this(null, algorithm);
-    }
-
     public UnsupportedAlgorithmException(String msg, String algorithm)
     {
-        super(msg);
+        this(msg, algorithm, null);
+    }
+
+    public UnsupportedAlgorithmException(String msg, String algorithm, Throwable cause)
+    {
+        super(msg, cause);
         this.algorithm = algorithm;
+    }
+
+    @Override
+    public String getMessage()
+    {
+        String msg = super.getMessage();
+        if(null == msg)
+            msg = "Unsupported algorithm";
+        return String.format("%s (%s)", msg, this.getAlgorithm());
     }
 
     public String getAlgorithm()

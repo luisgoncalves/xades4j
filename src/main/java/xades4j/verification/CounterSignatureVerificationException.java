@@ -23,15 +23,14 @@ import xades4j.properties.CounterSignatureProperty;
  */
 public class CounterSignatureVerificationException extends InvalidPropertyException
 {
-    private String msg;
-
-    public CounterSignatureVerificationException(String msg)
+    protected CounterSignatureVerificationException()
     {
-        this.msg = msg;
+        super(null);
     }
 
-    public CounterSignatureVerificationException()
+    public CounterSignatureVerificationException(Throwable cause)
     {
+        super(cause);
     }
 
     @Override
@@ -43,6 +42,6 @@ public class CounterSignatureVerificationException extends InvalidPropertyExcept
     @Override
     protected String getVerificationMessage()
     {
-        return msg == null ? "" : msg;
+        return getCause().getMessage();
     }
 }

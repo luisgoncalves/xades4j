@@ -194,8 +194,8 @@ class SignerBES implements XadesSigner
             // this case, if it wasn't thrown when processing the data objects it
             // shouldn't be thrown now!
             throw new UnsupportedAlgorithmException(
-                    "Digest algorithm not supported in the XML Signature provider: " + ex.getMessage(),
-                    digestAlgUri);
+                    "Digest algorithm not supported in the XML Signature provider",
+                    digestAlgUri, ex);
         }
 
         /* QualifyingProperties element */
@@ -311,7 +311,7 @@ class SignerBES implements XadesSigner
         } catch (XMLSecurityException ex)
         {
             // Following the code, doesn't seem to be thrown at all.
-            throw new XAdES4jXMLSigException(ex.getMessage());
+            throw new XAdES4jXMLSigException(ex.getMessage(), ex);
         }
     }
 

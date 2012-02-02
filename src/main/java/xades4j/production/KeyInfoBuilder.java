@@ -84,8 +84,8 @@ class KeyInfoBuilder
             } catch (XMLSignatureException ex)
             {
                 throw new UnsupportedAlgorithmException(
-                        "Digest algorithm not supported in the XML Signature provider: " + ex.getMessage(),
-                        this.algorithmsProvider.getDigestAlgorithmForDataObjsReferences());
+                        "Digest algorithm not supported in the XML Signature provider",
+                        this.algorithmsProvider.getDigestAlgorithmForDataObjsReferences(), ex);
             } catch (XMLSecurityException ex)
             {
                 throw new KeyingDataException(ex.getMessage(), ex);

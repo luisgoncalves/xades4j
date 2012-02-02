@@ -49,7 +49,7 @@ class FromXmlCommitmentTypeConverter implements SignedDataObjPropFromXmlConv
                 if (null == allDataObjs)
                     throw new PropertyUnmarshalException("ObjectReference or AllSignedDataObjects have to be present", CommitmentTypePropertyBase.PROP_NAME);
             } else if (allDataObjs != null)
-                throw new PropertyUnmarshalException("Both ObjectReference and AllSignedDataObjects are present", "CommitmentTypeIndication");
+                throw new PropertyUnmarshalException("Both ObjectReference and AllSignedDataObjects are present", CommitmentTypePropertyBase.PROP_NAME);
 
             CommitmentTypeData commTypeData = new CommitmentTypeData(
                     xmlCommitment.getCommitmentTypeId().getIdentifier().getValue(),

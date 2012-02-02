@@ -47,12 +47,12 @@ class CertRefUtils
                 certRefIssuerPrincipal = new X500Principal(certRef.issuerDN);
             } catch (IllegalArgumentException ex)
             {
-                throw new SigningCertificateVerificationException()
+                throw new SigningCertificateVerificationException(ex)
                 {
                     @Override
                     protected String getVerificationMessage()
                     {
-                        return String.format("Issuer %s has some unrecognized elements", certRef.issuerDN);
+                        return String.format("Invalid issue name: %s", certRef.issuerDN);
                     }
                 };
             }

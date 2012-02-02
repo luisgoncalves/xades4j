@@ -80,7 +80,7 @@ class CounterSignatureVerifier implements QualifyingPropertyVerifier<GenericDOMD
         } catch (XMLSecurityException e)
         {
             // Shouldn't happen because the signature was already verified.
-            throw new CounterSignatureVerificationException(e.getMessage());
+            throw new CounterSignatureVerificationException(e);
         }
     }
 }

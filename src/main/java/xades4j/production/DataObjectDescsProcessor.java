@@ -144,8 +144,8 @@ class DataObjectDescsProcessor
             // -> xmlSignature.addDocument(...): appears to be thrown when the digest
             //      algorithm is not supported.
             throw new UnsupportedAlgorithmException(
-                    "Digest algorithm not supported in the XML Signature provider: " + ex.getMessage(),
-                    digestMethodUri);
+                    "Digest algorithm not supported in the XML Signature provider",
+                    digestMethodUri, ex);
         } catch (org.apache.xml.security.exceptions.XMLSecurityException ex)
         {
             // -> xmlSignature.getSignedInfo().item(...): shouldn't be thrown
@@ -186,7 +186,7 @@ class DataObjectDescsProcessor
             {
                 throw new UnsupportedAlgorithmException(
                         "Unsupported transform on XML Signature provider",
-                        dObjTransf.getUri());
+                        dObjTransf.getUri(), ex);
             }
         }
         return transforms;

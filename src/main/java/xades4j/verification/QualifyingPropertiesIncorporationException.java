@@ -30,4 +30,9 @@ public class QualifyingPropertiesIncorporationException extends InvalidSignature
     {
         super(msg);
     }
+
+    public QualifyingPropertiesIncorporationException(String msg, Throwable cause)
+    {
+        super(msg, cause);
+    }
 }

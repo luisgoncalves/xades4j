@@ -25,8 +25,8 @@ import java.security.cert.X509CertSelector;
  */
 public class CannotSelectCertificateException extends CertificateValidationException
 {
-    public CannotSelectCertificateException(X509CertSelector s, String msg)
+    public CannotSelectCertificateException(X509CertSelector s, Throwable cause)
     {
-        super(s, msg);
+        super(s, "The available certificate selector didn't match any certificates", cause);
     }
 }

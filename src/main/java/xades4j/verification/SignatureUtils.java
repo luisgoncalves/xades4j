@@ -120,7 +120,7 @@ class SignatureUtils
                 }
         } catch (XMLSecurityException ex)
         {
-            throw new InvalidKeyInfoDataException("Cannot process X509Data: " + ex.getMessage());
+            throw new InvalidKeyInfoDataException("Cannot process X509Data", ex);
         }
 
         return new KeyInfoRes(keyInfoCerts, certSelector, issuerSerial);

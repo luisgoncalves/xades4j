@@ -52,7 +52,7 @@ class TimeStampDigestInputFactoryImpl implements TimeStampDigestInputFactory
         }
         catch (InvalidCanonicalizerException ex)
         {
-            throw new UnsupportedAlgorithmException(ex.getMessage(), c14n.getUri());
+            throw new UnsupportedAlgorithmException("Unsupported canonicalization method", c14n.getUri(), ex);
         }
 
         return new TimeStampDigestInputImpl(c14n, this.parametersMarshallingProvider);

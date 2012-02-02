@@ -25,13 +25,6 @@ import xades4j.XAdES4jException;
 public class KeyingDataException extends XAdES4jException
 {
     /**
-     * Creates a new instance of <code>KeyingDataException</code> without detail message.
-     */
-    public KeyingDataException()
-    {
-    }
-
-    /**
      * Constructs an instance of <code>KeyingDataException</code> with the specified detail message.
      * @param msg the detail message.
      */

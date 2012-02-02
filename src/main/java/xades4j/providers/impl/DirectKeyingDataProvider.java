@@ -21,9 +21,6 @@ import java.security.cert.X509Certificate;
 import java.util.Collections;
 import java.util.List;
 import xades4j.providers.KeyingDataProvider;
-import xades4j.providers.SigningCertChainException;
-import xades4j.providers.SigningKeyException;
-import xades4j.verification.UnexpectedJCAException;
 
 /**
  * An implementation of {@code KeyingDataProvider} that allows direct specification
@@ -44,13 +41,13 @@ public class DirectKeyingDataProvider implements KeyingDataProvider
     }
 
     @Override
-    public List<X509Certificate> getSigningCertificateChain() throws SigningCertChainException, UnexpectedJCAException
+    public List<X509Certificate> getSigningCertificateChain()
     {
         return this.certificates;
     }
 
     @Override
-    public PrivateKey getSigningKey(X509Certificate signingCert) throws SigningKeyException, UnexpectedJCAException
+    public PrivateKey getSigningKey(X509Certificate signingCert)
     {
         return this.key;
     }

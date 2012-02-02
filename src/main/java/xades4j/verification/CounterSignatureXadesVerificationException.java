@@ -25,22 +25,14 @@ import xades4j.XAdES4jException;
  */
 public class CounterSignatureXadesVerificationException extends CounterSignatureVerificationException
 {
-    private final XAdES4jException cause;
-
     public CounterSignatureXadesVerificationException(XAdES4jException cause)
     {
-        this.cause = cause;
-    }
-
-    @Override
-    public XAdES4jException getCause()
-    {
-        return cause;
+        super(cause);
     }
 
     @Override
     protected String getVerificationMessage()
     {
-        return cause.getMessage();
+        return getCause().getMessage();
     }
 }
