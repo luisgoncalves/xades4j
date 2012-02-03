@@ -26,6 +26,6 @@ public class PropertyDataGeneratorErrorException extends PropertyDataGenerationE
 {
     public PropertyDataGeneratorErrorException(QualifyingProperty sourceProperty)
     {
-        super("data object generator returned a null", sourceProperty);
+        super(sourceProperty, "data object generator returned a null");
     }
 }

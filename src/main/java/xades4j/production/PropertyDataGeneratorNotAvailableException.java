@@ -26,8 +26,8 @@ import xades4j.properties.QualifyingProperty;
 public class PropertyDataGeneratorNotAvailableException extends PropertyDataGenerationException
 {
     public PropertyDataGeneratorNotAvailableException(
-            QualifyingProperty sourceProperty)
+            QualifyingProperty sourceProperty, Throwable cause)
     {
-        super("data object generator cannot be created", sourceProperty);
+        super(sourceProperty, "data object generator cannot be created", cause);
     }
 }

@@ -85,10 +85,10 @@ class DataGenCompleteRevocRefs implements PropertyDataObjectGenerator<CompleteRe
             return new CompleteRevocationRefsData(crlRefs);
         } catch (CRLException ex)
         {
-            throw new PropertyDataGenerationException("Cannot encode CRL to be digested", prop);
+            throw new PropertyDataGenerationException(prop, "cannot get encoded CRL", ex);
         } catch (UnsupportedAlgorithmException ex)
         {
-            throw new PropertyDataGenerationException(ex.getMessage(), prop);
+            throw new PropertyDataGenerationException(prop, ex.getMessage(), ex);
         }
     }
 }

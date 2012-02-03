@@ -62,7 +62,7 @@ class DataGenSigAndRefsTimeStamp extends DataGenBaseTimeStamp<SigAndRefsTimeStam
             ctx.getTargetXmlSignature().getElement(),
             QualifyingProperty.XADES_XMLNS, QualifyingProperty.UNSIGNED_SIGNATURE_PROPS_TAG);
         if (null == unsignedSigPropsElem)
-            throw new PropertyDataGenerationException("no unsigned signature properties to get inputs", prop);
+            throw new PropertyDataGenerationException(prop, "no unsigned signature properties to get inputs");
 
         /**
          * This property contains a time-stamp token that covers the following data
@@ -103,19 +103,19 @@ class DataGenSigAndRefsTimeStamp extends DataGenBaseTimeStamp<SigAndRefsTimeStam
 
             // SignatureTimeStamp has to be present.
             if (elegiblePropsCnt.get(SignatureTimeStampProperty.PROP_NAME) == 0)
-                throw new PropertyDataGenerationException("no signature time-stamps for input", prop);
+                throw new PropertyDataGenerationException(prop, "no signature time-stamps for input");
 
             // CompleteCertificateRefs has to be present.
             if (elegiblePropsCnt.get(CompleteCertificateRefsProperty.PROP_NAME) != 1)
-                throw new PropertyDataGenerationException("no CompleteCertificateRefs for input", prop);
+                throw new PropertyDataGenerationException(prop, "no CompleteCertificateRefs for input");
 
             // CompleteRevocationRefs has to be present.
             if (elegiblePropsCnt.get(CompleteRevocationRefsProperty.PROP_NAME) != 1)
-                throw new PropertyDataGenerationException("no CompleteRevocationRefs for input", prop);
+                throw new PropertyDataGenerationException(prop, "no CompleteRevocationRefs for input");
 
         } catch (CannotAddDataToDigestInputException ex)
         {
-            throw new PropertyDataGenerationException("cannot create timestamp input: " + ex.getMessage(), prop);
+            throw new PropertyDataGenerationException(prop, "cannot create timestamp input", ex);
         }
     }
 

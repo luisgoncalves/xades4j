@@ -29,7 +29,7 @@ class DataGenCommitmentTypeAllDataObjs implements PropertyDataObjectGenerator<Al
     @Override
     public PropertyDataObject generatePropertyData(
             AllDataObjsCommitmentTypeProperty prop,
-            PropertiesDataGenerationContext ctx) throws PropertyDataGenerationException
+            PropertiesDataGenerationContext ctx)
     {
         return new CommitmentTypeData(
                 prop.getUri(),

@@ -30,7 +30,7 @@ class DataGenDataObjFormat implements PropertyDataObjectGenerator<DataObjectForm
     @Override
     public PropertyDataObject generatePropertyData(
             DataObjectFormatProperty prop,
-            PropertiesDataGenerationContext ctx) throws PropertyDataGenerationException
+            PropertiesDataGenerationContext ctx)
     {
         // DataObjectFormat applies to a single data object. The mandatory ObjectReference
         // attribute MUST reference the ds:Reference element of the ds:Signature

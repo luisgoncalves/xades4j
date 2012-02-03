@@ -42,7 +42,7 @@ class DataGenRevocationValues implements PropertyDataObjectGenerator<RevocationV
             }
         } catch (CRLException ex)
         {
-            throw new PropertyDataGenerationException(ex.getMessage(), prop);
+            throw new PropertyDataGenerationException(prop, "cannot get encoded CRL", ex);
         }
         return revocValuesData;
     }

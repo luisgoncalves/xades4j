@@ -27,11 +27,14 @@ public class PropertyDataGenerationException extends XAdES4jException
 {
     private final QualifyingProperty sourceProperty;
 
-    public PropertyDataGenerationException(
-            String message,
-            QualifyingProperty sourceProperty)
+    public PropertyDataGenerationException(QualifyingProperty sourceProperty, String message)
     {
-        super(message);
+        this(sourceProperty, message, null);
+    }
+
+    public PropertyDataGenerationException(QualifyingProperty sourceProperty, String message, Throwable cause)
+    {
+        super(message, cause);
         this.sourceProperty = sourceProperty;
     }
 

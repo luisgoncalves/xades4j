@@ -29,7 +29,7 @@ class DataGenSigPolicyImplied implements PropertyDataObjectGenerator<SignaturePo
     @Override
     public PropertyDataObject generatePropertyData(
             SignaturePolicyImpliedProperty prop,
-            PropertiesDataGenerationContext ctx) throws PropertyDataGenerationException
+            PropertiesDataGenerationContext ctx)
     {
         return new SignaturePolicyData();
     }

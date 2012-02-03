@@ -29,7 +29,7 @@ class DataGenSignerRole implements PropertyDataObjectGenerator<SignerRolePropert
     @Override
     public PropertyDataObject generatePropertyData(
             SignerRoleProperty prop,
-            PropertiesDataGenerationContext ctx) throws PropertyDataGenerationException
+            PropertiesDataGenerationContext ctx)
     {
         return new SignerRoleData(prop.getClaimedRoles());
     }

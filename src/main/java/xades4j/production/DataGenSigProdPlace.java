@@ -29,7 +29,7 @@ class DataGenSigProdPlace implements PropertyDataObjectGenerator<SignatureProduc
     @Override
     public PropertyDataObject generatePropertyData(
             SignatureProductionPlaceProperty prop,
-            PropertiesDataGenerationContext ctx) throws PropertyDataGenerationException
+            PropertiesDataGenerationContext ctx)
     {
         return new SignatureProdPlaceData(
                 prop.getCity(),

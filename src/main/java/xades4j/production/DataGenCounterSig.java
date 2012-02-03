@@ -76,7 +76,7 @@ class DataGenCounterSig implements PropertyDataObjectGenerator<CounterSignatureP
 
             XadesSigner counterSigner = prop.getCounterSigSigner();
             if (null == counterSigner)
-                throw new PropertyDataGenerationException("signer not specified", prop);
+                throw new PropertyDataGenerationException(prop, "signer not specified");
 
             try
             {
@@ -85,7 +85,7 @@ class DataGenCounterSig implements PropertyDataObjectGenerator<CounterSignatureP
                         counterSigElem);
             } catch (XAdES4jException ex)
             {
-                throw new PropertyDataGenerationException("cannot apply counter signature - " + ex.getMessage(), prop);
+                throw new PropertyDataGenerationException(prop, "cannot apply counter signature", ex);
             }
         } finally
         {

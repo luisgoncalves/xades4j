@@ -33,7 +33,7 @@ class DataGenCommitmentType implements PropertyDataObjectGenerator<CommitmentTyp
     @Override
     public PropertyDataObject generatePropertyData(
             CommitmentTypeProperty prop,
-            PropertiesDataGenerationContext ctx) throws PropertyDataGenerationException
+            PropertiesDataGenerationContext ctx)
     {
         CommitmentTypeData commTypeData = new CommitmentTypeData(
                 prop.getUri(),

@@ -17,8 +17,6 @@
 
 package xades4j.production;
 
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import xades4j.algorithms.Algorithm;
 import xades4j.UnsupportedAlgorithmException;
 import xades4j.properties.QualifyingProperty;
@@ -66,15 +64,15 @@ abstract class DataGenBaseTimeStamp<TProp extends QualifyingProperty> implements
         }
         catch (UnsupportedAlgorithmException ex)
         {
-            throw new PropertyDataGenerationException(ex.getMessage(), prop);
+            throw new PropertyDataGenerationException(prop, ex.getMessage(), ex);
         }
         catch (CannotAddDataToDigestInputException ex)
         {
-            throw new PropertyDataGenerationException("Cannot create time stamp input: " + ex.getMessage(), prop);
+            throw new PropertyDataGenerationException(prop, "cannot create time stamp input", ex);
         }
         catch (TimeStampTokenGenerationException ex)
         {
-            throw new PropertyDataGenerationException("Cannot get a time-stamp: " + ex.getMessage(), prop);
+            throw new PropertyDataGenerationException(prop, "cannot get a time-stamp", ex);
         }
     }
 

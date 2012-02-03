@@ -48,7 +48,7 @@ class PropertyDataGeneratorsMapperImpl implements PropertyDataGeneratorsMapper
             return (PropertyDataObjectGenerator)injector.getInstance(Key.get(TypeLiteral.get(pt)));
         } catch (RuntimeException ex)
         {
-            throw new PropertyDataGeneratorNotAvailableException(p);
+            throw new PropertyDataGeneratorNotAvailableException(p, ex);
         }
     }
 }

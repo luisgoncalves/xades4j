@@ -68,7 +68,7 @@ class DataGenArchiveTimeStamp extends DataGenBaseTimeStamp<ArchiveTimeStampPrope
                 ctx.getTargetXmlSignature().getElement(),
                 QualifyingProperty.XADES_XMLNS, QualifyingProperty.UNSIGNED_SIGNATURE_PROPS_TAG);
         if (null == unsignedSigPropsElem)
-            throw new PropertyDataGenerationException("no unsigned signature properties to get inputs", prop);
+            throw new PropertyDataGenerationException(prop, "no unsigned signature properties to get inputs");
 
         try
         {
@@ -117,7 +117,7 @@ class DataGenArchiveTimeStamp extends DataGenBaseTimeStamp<ArchiveTimeStampPrope
             for (Map.Entry<String, Integer> entry : propsCnt.entrySet())
             {
                 if (entry.getValue() == 0)
-                    throw new PropertyDataGenerationException(String.format("no %s for input", entry.getKey()), prop);
+                    throw new PropertyDataGenerationException(prop, String.format("no %s for input", entry.getKey()));
             }
 
             // Objects, except the one containing the qualifying properties.
@@ -130,7 +130,7 @@ class DataGenArchiveTimeStamp extends DataGenBaseTimeStamp<ArchiveTimeStampPrope
 
         } catch (CannotAddDataToDigestInputException ex)
         {
-            throw new PropertyDataGenerationException("cannot create time stamp input: " + ex.getMessage(), prop);
+            throw new PropertyDataGenerationException(prop, "cannot create time stamp input", ex);
         }
     }
 

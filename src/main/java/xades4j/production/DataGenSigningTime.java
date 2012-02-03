@@ -29,7 +29,7 @@ class DataGenSigningTime implements PropertyDataObjectGenerator<SigningTimePrope
     @Override
     public PropertyDataObject generatePropertyData(
             SigningTimeProperty prop,
-            PropertiesDataGenerationContext ctx) throws PropertyDataGenerationException
+            PropertiesDataGenerationContext ctx)
     {
         return new SigningTimeData(prop.getSigningTime());
     }

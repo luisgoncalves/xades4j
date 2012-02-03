@@ -42,7 +42,7 @@ class DataGenCertificateValues implements PropertyDataObjectGenerator<Certificat
             }
         } catch (CertificateEncodingException ex)
         {
-            throw new PropertyDataGenerationException(ex.getMessage(), prop);
+            throw new PropertyDataGenerationException(prop, "cannot get encoded certificate", ex);
         }
         return certValuesData;
     }

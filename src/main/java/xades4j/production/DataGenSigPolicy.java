@@ -64,10 +64,10 @@ class DataGenSigPolicy implements PropertyDataObjectGenerator<SignaturePolicyIde
 
         } catch (IOException ex)
         {
-            throw new PropertyDataGenerationException("Cannot digest signature policy: " + ex.getMessage(), prop);
+            throw new PropertyDataGenerationException(prop, "Cannot digest signature policy", ex);
         } catch (UnsupportedAlgorithmException ex)
         {
-            throw new PropertyDataGenerationException(ex.getMessage(), prop);
+            throw new PropertyDataGenerationException(prop, ex.getMessage(), ex);
         }
     }
 }

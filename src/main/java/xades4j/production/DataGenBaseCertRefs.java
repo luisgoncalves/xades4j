@@ -52,7 +52,7 @@ class DataGenBaseCertRefs
     {
         if (null == certs)
         {
-            throw new PropertyDataGenerationException("certificates not provided", prop);
+            throw new PropertyDataGenerationException(prop, "certificates not provided");
         }
 
         try
@@ -79,10 +79,10 @@ class DataGenBaseCertRefs
 
         } catch (UnsupportedAlgorithmException ex)
         {
-            throw new PropertyDataGenerationException(ex.getMessage(), prop);
+            throw new PropertyDataGenerationException(prop, ex.getMessage(), ex);
         } catch (CertificateEncodingException ex)
         {
-            throw new PropertyDataGenerationException(ex.getMessage(), prop);
+            throw new PropertyDataGenerationException(prop, "cannot get encoded certificate", ex);
         }
     }
 }
