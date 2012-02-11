@@ -32,6 +32,7 @@ class DeprecatedDataObjectTransformParamsMarshaller implements AlgorithmParamete
     @Override
     public List<Node> marshalParameters(DataObjectTransform alg, Document doc)
     {
-        return Collections.singletonList((Node) alg.getTransformParams());
+        Node param = alg.getTransformParams();
+        return param == null ? null : Collections.singletonList(param);
     }
 }
