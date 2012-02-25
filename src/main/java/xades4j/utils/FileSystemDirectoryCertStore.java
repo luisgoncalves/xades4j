@@ -21,6 +21,7 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.security.InvalidAlgorithmParameterException;
 import java.security.NoSuchAlgorithmException;
+import java.security.NoSuchProviderException;
 import java.security.cert.CRLException;
 import java.security.cert.CertStore;
 import java.security.cert.CertificateException;
@@ -34,11 +35,15 @@ import java.util.Collection;
 /**
  * Creates a {@code CertStore} from the contents of a file-system directory. The
  * directories are recusively searched for X509 certificates or CRLs files that
- * have one of the specified extensions.
+ * have one of the specified extensions. If the JCE provider is not supplied, the
+ * CertificateFactory is obtained without specifying a provider.
  * @author Luís
  */
 public class FileSystemDirectoryCertStore
 {
+    private static final String[] DEFAULT_CERT_FILE_EXT = { "cer", "crt" };
+    private static final String[] DEFAULT_CRL_FILE_EXT = { "crl" };
+
     private final CertStore content;
 
     /**
@@ -50,13 +55,7 @@ public class FileSystemDirectoryCertStore
      */
     public FileSystemDirectoryCertStore(String dirPath) throws CertificateException, CRLException
     {
-        this(dirPath, new String[]
-                {
-                    "cer", "crt"
-                }, new String[]
-                {
-                    "crl"
-                });
+        this(dirPath, DEFAULT_CERT_FILE_EXT, DEFAULT_CRL_FILE_EXT);
     }
 
     /**
@@ -72,13 +71,67 @@ public class FileSystemDirectoryCertStore
             final String[] certsFilesExts,
             final String[] crlsFilesExts) throws CertificateException, CRLException
     {
+        this(dirPath, certsFilesExts, crlsFilesExts, CertificateFactory.getInstance("X.509"));
+    }
+
+    /**
+     * Creates a new instance over a directory using the specified JCE provider.
+     * The {@code cer} and {@code crt} extesions are considered for certificates
+     * and {@code crl} for CRLs.
+     * @param dirPath the path for the base directory
+     * @param certFactoryProvider the JCE provider for the CertificateFactory used
+     *                        to generate certificates and CRLs
+     * @throws CertificateException if there's an error reading the certificates
+     * @throws CRLException if there's an error reading the CRLs
+     * @throws NoSuchProviderException if {@code certFactoryProvider} doesn't exist
+     */
+    public FileSystemDirectoryCertStore(
+            String dirPath,
+            String certFactoryProvider) throws CertificateException, CRLException, NoSuchProviderException
+    {
+        this(dirPath, DEFAULT_CERT_FILE_EXT, DEFAULT_CRL_FILE_EXT, certFactoryProvider);
+    }
+
+    /**
+     * Creates a new instance over a directory using the specified extensions and
+     * JCE provider.
+     * @param dirPath the path for the base directory
+     * @param certsFilesExts extensions for included certificate files
+     * @param crlsFilesExts  extensions for included CRL files
+     * @param certFactoryProvider the JCE provider for the CertificateFactory used
+     *                        to generate certificates and CRLs
+     * @throws CertificateException if there's an error reading the certificates
+     * @throws CRLException if there's an error reading the CRLs
+     * @throws NoSuchProviderException if {@code certFactoryProvider} doesn't exist
+     */
+    public FileSystemDirectoryCertStore(
+            String dirPath,
+            String[] certsFilesExts,
+            String[] crlsFilesExts,
+            String certFactoryProvider) throws CertificateException, CRLException, NoSuchProviderException
+    {
+        this(dirPath, certsFilesExts, crlsFilesExts, CertificateFactory.getInstance("X.509", certFactoryProvider));
+    }
+
+    /**
+     * Creates a new instance over a directory using the specified extensions
+     * @param dirPath the path for the base directory
+     * @param certsFilesExts extensions for included certificate files
+     * @param crlsFilesExts  extensions for included CRL files
+     * @throws CertificateException if there's an error reading the certificates
+     * @throws CRLException if there's an error reading the CRLs
+     */
+    protected FileSystemDirectoryCertStore(
+            String dirPath,
+            final String[] certsFilesExts,
+            final String[] crlsFilesExts,
+            CertificateFactory cf) throws CertificateException, CRLException
+    {
         File dir = new File(dirPath);
         if (!dir.exists() || !dir.isDirectory())
             throw new IllegalArgumentException("Specified path doesn't exist or doesn't refer a directory");
 
         Collection contentList = new ArrayList();
-        CertificateFactory cf = CertificateFactory.getInstance("X.509");
-
         transverseDirToFindContent(dir, contentList, certsFilesExts, crlsFilesExts, cf);
 
         try
@@ -140,6 +193,6 @@ public class FileSystemDirectoryCertStore
      */
     public CertStore getStore()
     {
-        return content;
+        return this.content;
     }
 }
