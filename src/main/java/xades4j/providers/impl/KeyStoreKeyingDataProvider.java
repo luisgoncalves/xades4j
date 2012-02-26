@@ -40,7 +40,7 @@ import xades4j.verification.UnexpectedJCAException;
 
 /**
  * A KeyStore-based implementation of {@code KeyingDataProvider}. The keystore is
- * loaded on first access.
+ * loaded on first access (thread-safe).
  * <p>
  * The following procedure is done to get the signing certificate:
  * <ol>
@@ -104,12 +104,15 @@ public abstract class KeyStoreKeyingDataProvider implements KeyingDataProvider
     }
     /**/
     /**/
-    private KeyStore keyStore;
+    
     private final KeyStoreBuilderCreator builderCreator;
     private final SigningCertSelector certificateSelector;
     private final KeyStorePasswordProvider storePasswordProvider;
     private final KeyEntryPasswordProvider entryPasswordProvider;
     private final boolean returnFullChain;
+
+    private KeyStore keyStore;
+    private final Object lockObj;
     private boolean initialized;
 
     /**
@@ -119,61 +122,64 @@ public abstract class KeyStoreKeyingDataProvider implements KeyingDataProvider
      * @param storePasswordProvider
      * @param entryPasswordProvider
      * @param returnFullChain return the full certificate chain, if available
-     * @throws KeyStoreException
      */
     protected KeyStoreKeyingDataProvider(
             KeyStoreBuilderCreator builderCreator,
             SigningCertSelector certificateSelector,
             KeyStorePasswordProvider storePasswordProvider,
             KeyEntryPasswordProvider entryPasswordProvider,
-            boolean returnFullChain) throws KeyStoreException
+            boolean returnFullChain)
     {
         this.builderCreator = builderCreator;
-        this.keyStore = null;
         this.certificateSelector = certificateSelector;
         this.storePasswordProvider = storePasswordProvider;
         this.entryPasswordProvider = entryPasswordProvider;
         this.returnFullChain = returnFullChain;
+
+        this.lockObj = new Object();
         this.initialized = false;
     }
 
     private void ensureInitialized() throws UnexpectedJCAException
     {
-        if (!this.initialized)
+        synchronized(this.lockObj)
         {
-            try
+            if (!this.initialized)
             {
-                KeyStore.CallbackHandlerProtection storeLoadProtec = null;
-                if (storePasswordProvider != null)
-                    // Create the load protection with callback.
-                    storeLoadProtec = new KeyStore.CallbackHandlerProtection(new CallbackHandler()
-                    {
-                        @Override
-                        public void handle(Callback[] callbacks) throws IOException, UnsupportedCallbackException
+                try
+                {
+                    KeyStore.CallbackHandlerProtection storeLoadProtec = null;
+                    if (storePasswordProvider != null)
+                        // Create the load protection with callback.
+                        storeLoadProtec = new KeyStore.CallbackHandlerProtection(new CallbackHandler()
                         {
-                            PasswordCallback c = (PasswordCallback)callbacks[0];
-                            c.setPassword(storePasswordProvider.getPassword());
-                        }
-                    });
-                else
-                    // If no load password provider is supplied is because it shouldn't
-                    // be needed. Create a dummy protection because the keystore
-                    // builder needs it to be non-null.
-                    storeLoadProtec = new KeyStore.CallbackHandlerProtection(new CallbackHandler()
-                    {
-                        @Override
-                        public void handle(Callback[] callbacks) throws IOException, UnsupportedCallbackException
+                            @Override
+                            public void handle(Callback[] callbacks) throws IOException, UnsupportedCallbackException
+                            {
+                                PasswordCallback c = (PasswordCallback)callbacks[0];
+                                c.setPassword(storePasswordProvider.getPassword());
+                            }
+                        });
+                    else
+                        // If no load password provider is supplied is because it shouldn't
+                        // be needed. Create a dummy protection because the keystore
+                        // builder needs it to be non-null.
+                        storeLoadProtec = new KeyStore.CallbackHandlerProtection(new CallbackHandler()
                         {
-                            throw new UnsupportedOperationException("No KeyStorePasswordProvider");
-                        }
-                    });
-                this.keyStore = builderCreator.getBuilder(storeLoadProtec).getKeyStore();
+                            @Override
+                            public void handle(Callback[] callbacks) throws IOException, UnsupportedCallbackException
+                            {
+                                throw new UnsupportedOperationException("No KeyStorePasswordProvider");
+                            }
+                        });
+                    this.keyStore = builderCreator.getBuilder(storeLoadProtec).getKeyStore();
+                }
+                catch (KeyStoreException ex)
+                {
+                    throw new UnexpectedJCAException("The keystore couldn't be initialized", ex);
+                }
+                this.initialized = true;
             }
-            catch (KeyStoreException ex)
-            {
-                throw new UnexpectedJCAException("The keystore couldn't be initialized", ex);
-            }
-            this.initialized = true;
         }
     }
 
@@ -200,13 +206,13 @@ public abstract class KeyStoreKeyingDataProvider implements KeyingDataProvider
                 throw new SigningCertChainException("No certificates available in the key store");
 
             // Select the signing certificate from the available certificates.
-            X509Certificate signingCert = certificateSelector.selectCertificate(availableSignCerts);
+            X509Certificate signingCert = this.certificateSelector.selectCertificate(availableSignCerts);
 
-            String signingCertAlias = keyStore.getCertificateAlias(signingCert);
+            String signingCertAlias = this.keyStore.getCertificateAlias(signingCert);
             if (null == signingCertAlias)
                 throw new SigningCertChainException("Selected certificate not present in the key store");
 
-            Certificate[] signingCertChain = keyStore.getCertificateChain(signingCertAlias);
+            Certificate[] signingCertChain = this.keyStore.getCertificateChain(signingCertAlias);
             if (null == signingCertChain)
                 throw new SigningCertChainException("Selected certificate doesn't match a key and corresponding certificate chain");
 
@@ -235,10 +241,10 @@ public abstract class KeyStoreKeyingDataProvider implements KeyingDataProvider
             // in the chain supplied by getSigningCertificateChain, which means
             // that an entry will always be present. Also, this entry is always
             // a PrivateKeyEntry.
-            String entryAlias = keyStore.getCertificateAlias(signingCert);
-            KeyStore.PrivateKeyEntry entry = (KeyStore.PrivateKeyEntry)keyStore.getEntry(
+            String entryAlias = this.keyStore.getCertificateAlias(signingCert);
+            KeyStore.PrivateKeyEntry entry = (KeyStore.PrivateKeyEntry)this.keyStore.getEntry(
                     entryAlias,
-                    getKeyProtection(entryAlias, signingCert, entryPasswordProvider));
+                    getKeyProtection(entryAlias, signingCert, this.entryPasswordProvider));
             return entry.getPrivateKey();
         }
         catch (UnrecoverableKeyException ex)
