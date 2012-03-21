@@ -32,10 +32,13 @@ public interface CertificateValidationProvider
 {
     /**
      *
-     * @param certSelector the selector of the leaf certificate
+     * @param certSelector the selector of the leaf certificate, created using information
+     *      from a {@code X509Data} element within {@code KeyInfo}
+     *      data on {@code KeyInfo}
      * @param validationDate the time for which the validity of the certification path should be determined
-     * @param otherCerts a set of certificates that can be used to validate de leaf certificate.
-     *      May include the certificate that will be selected with {@code certSelector}. May be {@code null}.
+     * @param otherCerts a set of certificates that can be used to validate de leaf
+     *      certificate, collected from {@code KeyInfo}. May include the certificate
+     *      that will be selected with {@code certSelector}. May be {@code null}
      * @return the validation data that validates the certificate selected by {@code certSelector}
      * @throws CertificateValidationException if the certificate cannot be validated (see subclasses of the exception)
      */

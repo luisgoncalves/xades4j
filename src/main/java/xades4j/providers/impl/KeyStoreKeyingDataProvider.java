@@ -72,7 +72,7 @@ public abstract class KeyStoreKeyingDataProvider implements KeyingDataProvider
     }
 
     /**
-     * Provides a password to access a keystore entry.
+     * Provides a password to access a keystore entry. Must be thread-safe.
      */
     public interface KeyEntryPasswordProvider
     {

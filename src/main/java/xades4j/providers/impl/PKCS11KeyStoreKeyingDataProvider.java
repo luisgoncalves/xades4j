@@ -72,7 +72,7 @@ public class PKCS11KeyStoreKeyingDataProvider extends KeyStoreKeyingDataProvider
     }
 
     /**
-     * The provider name is used has a key to search for installed providers. If a
+     * The provider name is used as a key to search for installed providers. If a
      * provider exists with the same name, it will be used even if it relies on a
      * different native library.
      * @param nativeLibraryPath the path for the native library of the specific PKCS#11 provider
