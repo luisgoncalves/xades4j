@@ -71,4 +71,56 @@
     nbproject/build-impl.xml file. 
 
     -->
+	
+	<!-- 
+	Couldn't get Doclava to work using the 'additionalparam' argument on javadoc.
+	This section was copied from build-impl.xml and adapted to use Doclava.
+	-->
+	<target depends="init" if="have.sources" name="-javadoc-build">
+        <mkdir dir="${dist.javadoc.dir}"/>
+		<echo message="Java home variables:" />
+		<echo message="$JAVA_HOME" />
+		<echo message="${java.home}" />
+		<echo message="${javahome}" />
+        <javadoc 
+			additionalparam="${javadoc.additionalparam}"
+			author="${javadoc.author}"
+			destdir="${dist.javadoc.dir}"
+			encoding="${javadoc.encoding.used}"
+			failonerror="true"
+			noindex="${javadoc.noindex}"
+			nonavbar="${javadoc.nonavbar}"
+			notree="${javadoc.notree}"
+			private="${javadoc.private}"
+			source="${javac.source}"
+			useexternalfile="true"
+			version="${javadoc.version}"
+			
+			bootclasspath="${java.home}\\lib\\rt.jar"
+			docletpath="lib\\Doclava\\doclava-1.0.5.jar" 
+		>
+			<doclet name="com.google.doclava.Doclava">
+				<param name="-title " value="XAdES4j" />
+			</doclet>
+            <classpath>
+                <path path="${javac.classpath}"/>
+				<path path="${java.home}\\lib\\jce.jar"/>
+            </classpath>
+            <fileset dir="${src.dir}" excludes="${excludes}" includes="${includes}">
+                <filename name="**/*.java"/>
+            </fileset>
+            <fileset dir="${build.generated.sources.dir}" erroronmissingdir="false">
+                <include name="**/*.java"/>
+            </fileset>
+        </javadoc>
+        <copy todir="${dist.javadoc.dir}">
+            <fileset dir="${src.dir}" excludes="${excludes}" includes="${includes}">
+                <filename name="**/doc-files/**"/>
+            </fileset>
+            <fileset dir="${build.generated.sources.dir}" erroronmissingdir="false">
+                <include name="**/doc-files/**"/>
+            </fileset>
+        </copy>
+    </target>	
+
 </project>
