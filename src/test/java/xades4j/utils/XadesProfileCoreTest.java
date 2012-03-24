@@ -16,13 +16,10 @@
  */
 package xades4j.utils;
 
+import java.util.Set;
 import com.google.inject.AbstractModule;
 import com.google.inject.Inject;
 import com.google.inject.Module;
-import org.junit.After;
-import org.junit.AfterClass;
-import org.junit.Before;
-import org.junit.BeforeClass;
 import org.junit.Test;
 import static org.junit.Assert.*;
 
@@ -72,36 +69,23 @@ class C
     }
 }
 
+class D
+{
+    public Set<A> as;
+    @Inject
+    public D(Set<A> as)
+    {
+        this.as = as;
+    }
+
+}
+
 /**
  *
  * @author Luís
  */
 public class XadesProfileCoreTest
 {
-    public XadesProfileCoreTest()
-    {
-    }
-
-    @BeforeClass
-    public static void setUpClass() throws Exception
-    {
-    }
-
-    @AfterClass
-    public static void tearDownClass() throws Exception
-    {
-    }
-
-    @Before
-    public void setUp()
-    {
-    }
-
-    @After
-    public void tearDown()
-    {
-    }
-
     @Test
     public void testGetInstance() throws XadesProfileResolutionException
     {
@@ -136,9 +120,9 @@ public class XadesProfileCoreTest
     }
 
     @Test
-    public void testWithBinding() throws XadesProfileResolutionException
+    public void testAddBinding() throws XadesProfileResolutionException
     {
-        System.out.println("withBinding");
+        System.out.println("addBinding");
         Module module = new AbstractModule()
         {
             @Override
@@ -161,9 +145,9 @@ public class XadesProfileCoreTest
     }
 
     @Test
-    public void testWithGenericBinding() throws XadesProfileResolutionException
+    public void testAddGenericBinding() throws XadesProfileResolutionException
     {
-        System.out.println("withGenericBinding");
+        System.out.println("addGenericBinding");
         Module module = new AbstractModule()
         {
             @Override
@@ -175,5 +159,27 @@ public class XadesProfileCoreTest
         instance.addGenericBinding(Action.class, ActionOfA.class, A.class);
         C c = instance.getInstance(C.class,  new Module[] {module}, new Module[0]);
         assertTrue(c.action instanceof ActionOfA);
+    }
+
+    @Test
+    public void testAddMultibinding() throws Exception
+    {
+        System.out.println("addMultibinding");
+
+        Module module = new AbstractModule()
+        {
+            @Override
+            protected void configure()
+            {
+            }
+        };
+
+        XadesProfileCore instance = new XadesProfileCore();
+        instance.addMultibinding(A.class, AImpl1.class);
+        instance.addMultibinding(A.class, new AImpl1());
+        instance.addMultibinding(A.class, AImpl2.class);
+
+        D d = instance.getInstance(D.class,  new Module[] {module}, new Module[0]);
+        assertEquals(3, d.as.size());
     }
 }

@@ -21,6 +21,7 @@ import com.google.inject.Guice;
 import com.google.inject.Key;
 import com.google.inject.Module;
 import com.google.inject.TypeLiteral;
+import com.google.inject.multibindings.Multibinder;
 import com.google.inject.util.Modules;
 import com.google.inject.util.Types;
 import java.lang.reflect.ParameterizedType;
@@ -124,6 +125,38 @@ public final class XadesProfileCore
                 ParameterizedType pt = Types.newParameterizedType(genericClass, genericClassParams);
                 Key k = Key.get(TypeLiteral.get(pt));
                 b.bind(k).toInstance(to);
+            }
+        });
+    }
+
+    public <T> void addMultibinding(final Class<T> from, final Class<? extends T> to)
+    {
+        if (null == from || null == to)
+            throw new NullPointerException();
+
+        this.bindings.add(new BindingAction()
+        {
+            @Override
+            public void bind(Binder b)
+            {
+                Multibinder multibinder = Multibinder.newSetBinder(b, from);
+                multibinder.addBinding().to(to);
+            }
+        });
+    }
+
+    public <T> void addMultibinding(final Class<T> from, final T to)
+    {
+        if (null == from || null == to)
+            throw new NullPointerException();
+
+        this.bindings.add(new BindingAction()
+        {
+            @Override
+            public void bind(Binder b)
+            {
+                Multibinder multibinder = Multibinder.newSetBinder(b, from);
+                multibinder.addBinding().toInstance(to);
             }
         });
     }
