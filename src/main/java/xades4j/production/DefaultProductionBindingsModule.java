@@ -18,6 +18,7 @@ package xades4j.production;
 
 import com.google.inject.AbstractModule;
 import com.google.inject.TypeLiteral;
+import com.google.inject.multibindings.Multibinder;
 import xades4j.properties.AllDataObjsCommitmentTypeProperty;
 import xades4j.properties.AllDataObjsTimeStampProperty;
 import xades4j.properties.ArchiveTimeStampProperty;
@@ -38,6 +39,7 @@ import xades4j.properties.SignatureTimeStampProperty;
 import xades4j.properties.SignerRoleProperty;
 import xades4j.properties.SigningCertificateProperty;
 import xades4j.properties.SigningTimeProperty;
+import xades4j.properties.data.CustomPropertiesDataObjsStructureVerifier;
 import xades4j.providers.AlgorithmsProvider;
 import xades4j.providers.AlgorithmsProviderEx;
 import xades4j.providers.BasicSignatureOptionsProvider;
@@ -83,6 +85,8 @@ class DefaultProductionBindingsModule extends AbstractModule
         // generators may have dependencies.
         bind(PropertiesDataObjectsGenerator.class).to(PropertiesDataObjectsGeneratorImpl.class);
         bind(PropertyDataGeneratorsMapper.class).to(PropertyDataGeneratorsMapperImpl.class);
+        // Ensure empty set when no bindings are defined
+        Multibinder.newSetBinder(binder(), CustomPropertiesDataObjsStructureVerifier.class);
 
         // PropertyDataGeneratorsMapperImpl relies on the injector to get
         // the individual generators, so they need to be bound.

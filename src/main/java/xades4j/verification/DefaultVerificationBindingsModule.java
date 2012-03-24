@@ -18,9 +18,9 @@ package xades4j.verification;
 
 import com.google.inject.AbstractModule;
 import com.google.inject.TypeLiteral;
+import com.google.inject.multibindings.MapBinder;
+import com.google.inject.multibindings.Multibinder;
 import java.io.InputStream;
-import java.util.Collection;
-import java.util.Map;
 import javax.xml.namespace.QName;
 import xades4j.properties.CounterSignatureProperty;
 import xades4j.properties.ObjectIdentifier;
@@ -53,24 +53,6 @@ import xades4j.providers.TimeStampVerificationProvider;
  */
 class DefaultVerificationBindingsModule extends AbstractModule
 {
-    private final Collection<CustomPropertiesDataObjsStructureVerifier> customGlobalStructureVerifiers;
-    private final Collection<RawSignatureVerifier> rawSignatureVerifiers;
-    private final Collection<CustomSignatureVerifier> customSignatureVerifiers;
-    private final Map<QName, Class<? extends QualifyingPropertyVerifier>> unkownElemsVerifiers;
-
-    DefaultVerificationBindingsModule(
-            Collection<CustomPropertiesDataObjsStructureVerifier> customStructureVerifiers,
-            Collection<RawSignatureVerifier> rawSignatureVerifiers,
-            Collection<CustomSignatureVerifier> customSignatureVerifiers,
-            Map<QName, Class<? extends QualifyingPropertyVerifier>> unkownElemsVerifiers)
-    {
-
-        this.customGlobalStructureVerifiers = customStructureVerifiers;
-        this.rawSignatureVerifiers = rawSignatureVerifiers;
-        this.customSignatureVerifiers = customSignatureVerifiers;
-        this.unkownElemsVerifiers = unkownElemsVerifiers;
-    }
-
     @Override
     protected void configure()
     {
@@ -100,9 +82,6 @@ class DefaultVerificationBindingsModule extends AbstractModule
 //                    throw new PropertyDataStructureException("property is required and isn't present", SigningCertificateProperty.PROP_NAME);
 //            }
 //        });
-        bind(new TypeLiteral<Collection<CustomPropertiesDataObjsStructureVerifier>>()
-        {
-        }).toInstance(customGlobalStructureVerifiers);
 
         // QualifyingPropertyVerifiersMapperImpl relies on the injector to get
         // the individual verifiers, so they need to be bound.
@@ -157,28 +136,19 @@ class DefaultVerificationBindingsModule extends AbstractModule
         {
         }).to(CompleteRevocRefsVerifier.class);
 
-        unkownElemsVerifiers.put(
-                new QName(QualifyingProperty.XADES_XMLNS, CounterSignatureProperty.PROP_NAME),
-                CounterSignatureVerifier.class);
+        MapBinder<QName, QualifyingPropertyVerifier> unkownElemsBinder = MapBinder.newMapBinder(binder(), QName.class, QualifyingPropertyVerifier.class);
+        unkownElemsBinder
+                .addBinding(new QName(QualifyingProperty.XADES_XMLNS, CounterSignatureProperty.PROP_NAME))
+                .to(CounterSignatureVerifier.class);
 
         // Verification based on XML elements names.
         bind(new TypeLiteral<QualifyingPropertyVerifier<GenericDOMData>>()
         {
         }).to(GenericDOMDataVerifier.class);
 
-        bind(new TypeLiteral<Map<QName, Class<? extends QualifyingPropertyVerifier>>>()
-        {
-        }).toInstance(unkownElemsVerifiers);
-
-        // Raw verification
-        bind(new TypeLiteral<Collection<RawSignatureVerifier>>()
-        {
-        }).toInstance(rawSignatureVerifiers);
-
-        // Global verification.
-        customSignatureVerifiers.add(new TimeStampCoherenceVerifier());
-        bind(new TypeLiteral<Collection<CustomSignatureVerifier>>()
-        {
-        }).toInstance(customSignatureVerifiers);
+        // Ensure empty sets when no bindings are defined
+        Multibinder.newSetBinder(binder(), RawSignatureVerifier.class);
+        Multibinder.newSetBinder(binder(), CustomSignatureVerifier.class);
+        Multibinder.newSetBinder(binder(), CustomPropertiesDataObjsStructureVerifier.class);
     }
 }

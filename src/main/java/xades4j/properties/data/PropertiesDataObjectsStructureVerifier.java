@@ -20,9 +20,9 @@ import xades4j.utils.DataGetterImpl;
 import xades4j.utils.DataGetter;
 import com.google.inject.Inject;
 import java.util.Collection;
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Set;
 import xades4j.properties.AllDataObjsTimeStampProperty;
 import xades4j.properties.ArchiveTimeStampProperty;
 import xades4j.properties.CertificateValuesProperty;
@@ -97,18 +97,13 @@ public class PropertiesDataObjectsStructureVerifier
     }
     /**/
     /**/
-    private final Collection<CustomPropertiesDataObjsStructureVerifier> customGlobalVerifiers;
+    private final Set<CustomPropertiesDataObjsStructureVerifier> customGlobalVerifiers;
 
     @Inject
     public PropertiesDataObjectsStructureVerifier(
-            Collection<CustomPropertiesDataObjsStructureVerifier> customVerifiers)
+            Set<CustomPropertiesDataObjsStructureVerifier> customVerifiers)
     {
         this.customGlobalVerifiers = customVerifiers;
-    }
-
-    public PropertiesDataObjectsStructureVerifier()
-    {
-        this.customGlobalVerifiers = Collections.emptyList();
     }
 
     public void verifiyPropertiesDataStructure(

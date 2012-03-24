@@ -39,11 +39,12 @@ class PropertiesDataObjectsGeneratorImpl implements PropertiesDataObjectsGenerat
 
     @Inject
     PropertiesDataObjectsGeneratorImpl(
-            PropertyDataGeneratorsMapper propsDataGensMapper)
+            PropertyDataGeneratorsMapper propsDataGensMapper,
+            PropertiesDataObjectsStructureVerifier dataObjectsStructureVerifier)
     {
 
         this.propsDataGensMapper = propsDataGensMapper;
-        this.dataObjectsStructureVerifier = new PropertiesDataObjectsStructureVerifier();
+        this.dataObjectsStructureVerifier = dataObjectsStructureVerifier;
     }
 
     @Override

@@ -17,7 +17,6 @@
 package xades4j.verification;
 
 import com.google.inject.Module;
-import java.util.Collection;
 import java.util.Map;
 import javax.xml.namespace.QName;
 import xades4j.utils.XadesProfileCore;
@@ -67,10 +66,6 @@ public final class XadesVerificationProfile
 {
     private final XadesProfileCore profileCore;
     /**/
-    private Collection<CustomPropertiesDataObjsStructureVerifier> customGlobalStructureVerifiers;
-    private Collection<RawSignatureVerifier> rawSignatureVerifiers;
-    private Collection<CustomSignatureVerifier> customSignatureVerifiers;
-    private Map<QName, Class<? extends QualifyingPropertyVerifier>> unkownElemsVerifiers;
     private boolean acceptUnknownProperties;
 
     private XadesVerificationProfile()
@@ -130,6 +125,12 @@ public final class XadesVerificationProfile
         return this;
     }
 
+    private static final Module[] overridableModules =
+    {
+        new DefaultVerificationBindingsModule(),
+        new UnmarshallingBindingsModule()
+    };
+
     private static final Module[] sealedModules =
     {
         new UtilsBindingsModule(),
@@ -145,17 +146,6 @@ public final class XadesVerificationProfile
      */
     public final XadesVerifier newVerifier() throws XadesProfileResolutionException
     {
-        // Clone the collections because I want the module to bind to the current
-        // state of the collections. If the same profile is cumulatively used, each
-        // Injector will reflect the profile's state when the verifier is requested.
-        Module defaultsModule = new DefaultVerificationBindingsModule(
-                CollectionUtils.cloneOrEmptyIfNull(customGlobalStructureVerifiers),
-                CollectionUtils.cloneOrEmptyIfNull(rawSignatureVerifiers),
-                CollectionUtils.cloneOrEmptyIfNull(customSignatureVerifiers),
-                CollectionUtils.cloneOrEmptyIfNull(unkownElemsVerifiers));
-
-        Module[] overridableModules = { defaultsModule, new UnmarshallingBindingsModule() };
-
         XadesVerifierImpl v = profileCore.getInstance(XadesVerifierImpl.class, overridableModules, sealedModules);
         v.setAcceptUnknownProperties(acceptUnknownProperties);
         return v;
@@ -245,8 +235,18 @@ public final class XadesVerificationProfile
     {
         if (null == v)
             throw new NullPointerException();
-        customGlobalStructureVerifiers = CollectionUtils.newIfNull(customGlobalStructureVerifiers, 2);
-        customGlobalStructureVerifiers.add(v);
+
+        this.profileCore.addMultibinding(CustomPropertiesDataObjsStructureVerifier.class, v);
+        return this;
+    }
+
+    public XadesVerificationProfile withGlobalDataObjsStructureVerifier(
+            Class<? extends CustomPropertiesDataObjsStructureVerifier> customVerifierClass)
+    {
+        if (null == customVerifierClass)
+            throw new NullPointerException();
+
+        this.profileCore.addMultibinding(CustomPropertiesDataObjsStructureVerifier.class, customVerifierClass);
         return this;
     }
 
@@ -255,8 +255,18 @@ public final class XadesVerificationProfile
     {
         if (null == v)
             throw new NullPointerException();
-        rawSignatureVerifiers = CollectionUtils.newIfNull(rawSignatureVerifiers, 2);
-        rawSignatureVerifiers.add(v);
+
+        this.profileCore.addMultibinding(RawSignatureVerifier.class, v);
+        return this;
+    }
+
+    public XadesVerificationProfile withRawSignatureVerifier(
+            Class<? extends RawSignatureVerifier> rawVerifierClass)
+    {
+        if (null == rawVerifierClass)
+            throw new NullPointerException();
+
+        this.profileCore.addMultibinding(RawSignatureVerifier.class, rawVerifierClass);
         return this;
     }
 
@@ -265,8 +275,18 @@ public final class XadesVerificationProfile
     {
         if (null == v)
             throw new NullPointerException();
-        customSignatureVerifiers = CollectionUtils.newIfNull(customSignatureVerifiers, 2);
-        customSignatureVerifiers.add(v);
+
+        this.profileCore.addMultibinding(CustomSignatureVerifier.class, v);
+        return this;
+    }
+
+    public XadesVerificationProfile withCustomSignatureVerifier(
+            Class<? extends CustomSignatureVerifier> customVerifierClass)
+    {
+        if (null == customVerifierClass)
+            throw new NullPointerException();
+
+        this.profileCore.addMultibinding(CustomSignatureVerifier.class, customVerifierClass);
         return this;
     }
 
@@ -275,8 +295,8 @@ public final class XadesVerificationProfile
     {
         if (null == elemName || null == vClass)
             throw new NullPointerException();
-        unkownElemsVerifiers = CollectionUtils.newIfNull(unkownElemsVerifiers, 2);
-        unkownElemsVerifiers.put(elemName, vClass);
+
+        this.profileCore.addMapBinding(QualifyingPropertyVerifier.class, elemName, vClass);
         return this;
     }
 

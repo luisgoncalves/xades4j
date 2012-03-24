@@ -17,7 +17,6 @@
 package xades4j.verification;
 
 import com.google.inject.Inject;
-import com.google.inject.Injector;
 import java.util.Map;
 import javax.xml.namespace.QName;
 import org.w3c.dom.Element;
@@ -30,15 +29,11 @@ import xades4j.properties.data.GenericDOMData;
  */
 class GenericDOMDataVerifier implements QualifyingPropertyVerifier<GenericDOMData>
 {
-    private final Injector injector;
-    private final Map<QName, Class<? extends QualifyingPropertyVerifier>> customElemVerifiers;
+    private final Map<QName,QualifyingPropertyVerifier> customElemVerifiers;
 
     @Inject
-    GenericDOMDataVerifier(
-            Injector injector,
-            Map<QName, Class<? extends QualifyingPropertyVerifier>> customElemVerifiers)
+    GenericDOMDataVerifier(Map<QName, QualifyingPropertyVerifier> customElemVerifiers)
     {
-        this.injector = injector;
         this.customElemVerifiers = customElemVerifiers;
     }
 
@@ -50,7 +45,7 @@ class GenericDOMDataVerifier implements QualifyingPropertyVerifier<GenericDOMDat
         final Element propElem = propData.getPropertyElement();
         QName propElemQName = new QName(propElem.getNamespaceURI(), propElem.getLocalName());
 
-        Class<? extends QualifyingPropertyVerifier> propVerifier = customElemVerifiers.get(propElemQName);
+        QualifyingPropertyVerifier propVerifier = customElemVerifiers.get(propElemQName);
         if (null == propVerifier)
             throw new InvalidPropertyException()
             {
@@ -67,6 +62,6 @@ class GenericDOMDataVerifier implements QualifyingPropertyVerifier<GenericDOMDat
                 }
             };
 
-        return injector.getInstance(propVerifier).verify(propData, ctx);
+        return propVerifier.verify(propData, ctx);
     }
 }

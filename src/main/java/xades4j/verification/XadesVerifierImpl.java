@@ -24,6 +24,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Date;
 import java.util.List;
+import java.util.Set;
 import org.apache.xml.security.exceptions.XMLSecurityException;
 import org.apache.xml.security.signature.Reference;
 import org.apache.xml.security.signature.SignedInfo;
@@ -68,19 +69,19 @@ class XadesVerifierImpl implements XadesVerifier
     private final CertificateValidationProvider certificateValidator;
     private final QualifyingPropertiesVerifier qualifyingPropertiesVerifier;
     private final QualifyingPropertiesUnmarshaller qualifPropsUnmarshaller;
-    private final Collection<RawSignatureVerifier> rawSigVerifiers;
-    private final Collection<CustomSignatureVerifier> customSigVerifiers;
+    private final Set<RawSignatureVerifier> rawSigVerifiers;
+    private final Set<CustomSignatureVerifier> customSigVerifiers;
 
     @Inject
     protected XadesVerifierImpl(
             CertificateValidationProvider certificateValidator,
             QualifyingPropertiesVerifier qualifyingPropertiesVerifier,
             QualifyingPropertiesUnmarshaller qualifPropsUnmarshaller,
-            Collection<RawSignatureVerifier> rawSigVerifiers,
-            Collection<CustomSignatureVerifier> customSigVerifiers)
+            Set<RawSignatureVerifier> rawSigVerifiers,
+            Set<CustomSignatureVerifier> customSigVerifiers)
     {
         if (ObjectUtils.anyNull(
-                certificateValidator, qualifPropsUnmarshaller, customSigVerifiers))
+                certificateValidator, qualifyingPropertiesVerifier, qualifPropsUnmarshaller, rawSigVerifiers, customSigVerifiers))
         {
             throw new NullPointerException("One or more arguments are null");
         }

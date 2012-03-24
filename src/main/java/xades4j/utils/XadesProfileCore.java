@@ -21,6 +21,7 @@ import com.google.inject.Guice;
 import com.google.inject.Key;
 import com.google.inject.Module;
 import com.google.inject.TypeLiteral;
+import com.google.inject.multibindings.MapBinder;
 import com.google.inject.multibindings.Multibinder;
 import com.google.inject.util.Modules;
 import com.google.inject.util.Types;
@@ -157,6 +158,38 @@ public final class XadesProfileCore
             {
                 Multibinder multibinder = Multibinder.newSetBinder(b, from);
                 multibinder.addBinding().toInstance(to);
+            }
+        });
+    }
+
+    public <T, TV extends T> void addMapBinding(final Class<T> valueClass, final Object key, final TV value)
+    {
+        if (null == key || null == value)
+            throw new NullPointerException();
+
+        this.bindings.add(new BindingAction()
+        {
+            @Override
+            public void bind(Binder b)
+            {
+                MapBinder mapBinder = MapBinder.newMapBinder(b, key.getClass(), valueClass);
+                mapBinder.addBinding(key).toInstance(value);
+            }
+        });
+    }
+
+    public <T> void addMapBinding(final Class<T> valueClass, final Object key, final Class<? extends T> to)
+    {
+        if (null == key || null == to)
+            throw new NullPointerException();
+
+        this.bindings.add(new BindingAction()
+        {
+            @Override
+            public void bind(Binder b)
+            {
+                MapBinder mapBinder = MapBinder.newMapBinder(b, key.getClass(), valueClass);
+                mapBinder.addBinding(key).to(to);
             }
         });
     }

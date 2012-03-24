@@ -16,8 +16,6 @@
  */
 package xades4j.verification;
 
-import com.google.inject.Guice;
-import com.google.inject.Injector;
 import java.util.HashMap;
 import java.util.Map;
 import javax.xml.namespace.QName;
@@ -38,9 +36,8 @@ import xades4j.properties.data.GenericDOMData;
  */
 public class GenericDOMDataVerifierTest
 {
-    private static Map<QName, Class<?  extends QualifyingPropertyVerifier>> customElemVerifiers;
+    private static Map<QName, QualifyingPropertyVerifier> customElemVerifiers;
     private static Document testDocument;
-    private static Injector injector;
 
     public GenericDOMDataVerifierTest()
     {
@@ -49,14 +46,12 @@ public class GenericDOMDataVerifierTest
     @BeforeClass
     public static void setUpClass() throws Exception
     {
-        customElemVerifiers = new HashMap<QName, Class<?  extends QualifyingPropertyVerifier>>(1);
-        customElemVerifiers.put(new QName("http://test.generic.dom", "Elem"), TestElemDOMVerifier.class);
+        customElemVerifiers = new HashMap<QName, QualifyingPropertyVerifier>(1);
+        customElemVerifiers.put(new QName("http://test.generic.dom", "Elem"), new TestElemDOMVerifier());
 
         DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
         dbf.setNamespaceAware(true);
         testDocument = dbf.newDocumentBuilder().newDocument();
-
-        injector = Guice.createInjector();
     }
 
     @AfterClass
@@ -79,7 +74,7 @@ public class GenericDOMDataVerifierTest
     {
         GenericDOMData propData = new GenericDOMData(testDocument.createElementNS("http://test.generic.dom", "Elem"));
         QualifyingPropertyVerificationContext ctx = null;
-        GenericDOMDataVerifier instance = new GenericDOMDataVerifier(injector, customElemVerifiers);
+        GenericDOMDataVerifier instance = new GenericDOMDataVerifier(customElemVerifiers);
 
         QualifyingProperty result = instance.verify(propData, ctx);
         assertEquals(result.getName(), "Elem");
@@ -90,7 +85,7 @@ public class GenericDOMDataVerifierTest
     {
         GenericDOMData propData = new GenericDOMData(testDocument.createElementNS("http://test.generic.dom", "Elem"));
         QualifyingPropertyVerificationContext ctx = null;
-        GenericDOMDataVerifier instance = new GenericDOMDataVerifier(injector, new HashMap<QName, Class<? extends QualifyingPropertyVerifier>>(0));
+        GenericDOMDataVerifier instance = new GenericDOMDataVerifier(new HashMap<QName, QualifyingPropertyVerifier>(0));
 
         instance.verify(propData, ctx);
     }
