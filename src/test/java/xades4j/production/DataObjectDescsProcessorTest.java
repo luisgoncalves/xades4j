@@ -52,10 +52,11 @@ public class DataObjectDescsProcessorTest extends SignatureServicesTestBase
 
         Document doc = getNewDocument();
 
-        Collection<DataObjectDesc> dataObjsDescs = new ArrayList<DataObjectDesc>(3);
-        dataObjsDescs.add(new DataObjectReference("uri").withTransform(new EnvelopedSignatureTransform()));
-        dataObjsDescs.add(new EnvelopedXmlObject(doc.createElement("test1")));
-        dataObjsDescs.add(new EnvelopedXmlObject(doc.createElement("test2"), "text/xml", null));
+        SignedDataObjects dataObjsDescs = new SignedDataObjects()
+            .withSignedDataObject(new DataObjectReference("uri").withTransform(new EnvelopedSignatureTransform()))
+            .withSignedDataObject(new EnvelopedXmlObject(doc.createElement("test1")))
+            .withSignedDataObject(new EnvelopedXmlObject(doc.createElement("test2"), "text/xml", null));
+
         XMLSignature xmlSignature = new XMLSignature(doc, "", XMLSignature.ALGO_ID_SIGNATURE_RSA_SHA256);
         xmlSignature.setId("sigId");
 
@@ -64,9 +65,9 @@ public class DataObjectDescsProcessorTest extends SignatureServicesTestBase
         DataObjectDescsProcessor processor = new DataObjectDescsProcessor(new TestAlgorithmsProvider(), algsParamsMarshaller);
         Map<DataObjectDesc, Reference> result = processor.process(dataObjsDescs, xmlSignature);
 
-        assertEquals(dataObjsDescs.size(), result.size());
+        assertEquals(dataObjsDescs.getDataObjectsDescs().size(), result.size());
         assertEquals(2, xmlSignature.getObjectLength());
-        assertEquals(xmlSignature.getSignedInfo().getLength(), dataObjsDescs.size());
+        assertEquals(xmlSignature.getSignedInfo().getLength(), dataObjsDescs.getDataObjectsDescs().size());
 
         assertEquals(1, algsParamsMarshaller.getInvokeCount());
         Reference ref = xmlSignature.getSignedInfo().item(0);
@@ -85,8 +86,8 @@ public class DataObjectDescsProcessorTest extends SignatureServicesTestBase
 
         Document doc = SignatureServicesTestBase.getNewDocument();
 
-        Collection<DataObjectDesc> dataObjsDescs = new ArrayList<DataObjectDesc>(3);
-        dataObjsDescs.add(new AnonymousDataObjectReference("data".getBytes()));
+        SignedDataObjects dataObjsDescs = new SignedDataObjects()
+            .withSignedDataObject(new AnonymousDataObjectReference("data".getBytes()));
 
         XMLSignature xmlSignature = new XMLSignature(doc, "", XMLSignature.ALGO_ID_SIGNATURE_RSA_SHA256);
         xmlSignature.setId("sigId");
@@ -109,9 +110,9 @@ public class DataObjectDescsProcessorTest extends SignatureServicesTestBase
 
         Document doc = SignatureServicesTestBase.getNewDocument();
 
-        Collection<DataObjectDesc> dataObjsDescs = new ArrayList<DataObjectDesc>(3);
-        dataObjsDescs.add(new AnonymousDataObjectReference("data1".getBytes()));
-        dataObjsDescs.add(new AnonymousDataObjectReference("data2".getBytes()));
+        SignedDataObjects dataObjsDescs = new SignedDataObjects()
+            .withSignedDataObject(new AnonymousDataObjectReference("data1".getBytes()))
+            .withSignedDataObject(new AnonymousDataObjectReference("data2".getBytes()));
 
         XMLSignature xmlSignature = new XMLSignature(doc, "", XMLSignature.ALGO_ID_SIGNATURE_RSA_SHA256);
         xmlSignature.setId("sigId");

@@ -34,6 +34,7 @@ import org.apache.xml.security.signature.XMLSignatureException;
 import org.apache.xml.security.utils.Constants;
 import org.apache.xml.security.utils.ElementProxy;
 import org.apache.xml.security.utils.XMLUtils;
+import org.apache.xml.security.utils.resolver.ResourceResolver;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
@@ -168,7 +169,7 @@ class SignerBES implements XadesSigner
         // After this call all the signed data objects References and XMLObjects
         // are added to the signature.
         Map<DataObjectDesc, Reference> referenceMappings = this.dataObjectDescsProcessor.process(
-                signedDataObjects.getDataObjectsDescs(),
+                signedDataObjects,
                 signature);
 
         /* SignedProperties reference */

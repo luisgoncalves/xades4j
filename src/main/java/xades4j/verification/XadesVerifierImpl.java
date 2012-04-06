@@ -30,6 +30,7 @@ import org.apache.xml.security.signature.Reference;
 import org.apache.xml.security.signature.SignedInfo;
 import org.apache.xml.security.signature.XMLSignature;
 import org.apache.xml.security.signature.XMLSignatureException;
+import org.apache.xml.security.utils.resolver.ResourceResolver;
 import org.apache.xml.security.utils.resolver.implementations.ResolverAnonymous;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
@@ -192,19 +193,12 @@ class XadesVerifierImpl implements XadesVerifier
         }
         X509Certificate validationCert = certValidationRes.getCerts().get(0);
 
-        /* Core signature verification */
+        /* Signature verification */
 
-        InputStream nullURIReferenceData = verificationOptions.getDataForAnonymousReference();
-        if (nullURIReferenceData != null)
-        {
-            signature.addResourceResolver(new ResolverAnonymous(nullURIReferenceData));
-        }
-        
-        doCoreVerification(signature, validationCert);
+        // Core XML-DSIG verification.
+        doCoreVerification(signature, verificationOptions, validationCert);
 
-        /* Qualifying properties verification */
-
-        // Create the verification context.
+        // Create theproperties verification context.
         QualifyingPropertyVerificationContext qPropsCtx = new QualifyingPropertyVerificationContext(
                 signature,
                 new QualifyingPropertyVerificationContext.CertificationChainData(
@@ -302,15 +296,32 @@ class XadesVerifierImpl implements XadesVerifier
 
     private static void doCoreVerification(
             XMLSignature signature,
+            SignatureSpecificVerificationOptions verificationOptions,
             X509Certificate validationCert) throws XAdES4jXMLSigException, InvalidSignatureException
     {
+        List<ResourceResolver> resolvers = verificationOptions.getResolvers();
+        if(!CollectionUtils.nullOrEmpty(resolvers))
+        {
+            for (ResourceResolver resolver : resolvers)
+            {
+                signature.addResourceResolver(resolver);
+            }
+        }
+
+        InputStream nullURIReferenceData = verificationOptions.getDataForAnonymousReference();
+        if (nullURIReferenceData != null)
+        {
+            signature.addResourceResolver(new ResolverAnonymous(nullURIReferenceData));
+        }
+
         try
         {
             if (signature.checkSignatureValue(validationCert))
             {
                 return;
             }
-        } catch (XMLSignatureException ex)
+        }
+        catch (XMLSignatureException ex)
         {
             throw new XAdES4jXMLSigException("Error verifying the signature", ex);
         }
@@ -337,7 +348,8 @@ class XadesVerifierImpl implements XadesVerifier
                     }
                 }
             }
-        } catch (XMLSecurityException ex)
+        }
+        catch (XMLSecurityException ex)
         {
             throw new XAdES4jXMLSigException("Error verifying the references", ex);
         }

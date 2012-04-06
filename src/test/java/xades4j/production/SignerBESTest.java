@@ -65,23 +65,6 @@ public class SignerBESTest extends SignerTestBase
     }
 
     @Test
-    public void testSignBESAndAppendAsFirstChild() throws Exception
-    {
-        System.out.println("signBESAndAppendAsFirstChild");
-
-        Document doc = getTestDocument();
-        Element root = doc.getDocumentElement();
-        SignerBES signer = (SignerBES)new XadesBesSigningProfile(keyingProviderMy).newSigner();
-
-        DataObjectDesc obj1 = new DataObjectReference('#' + root.getAttribute("Id")).withTransform(new EnvelopedSignatureTransform());
-        SignedDataObjects dataObjs = new SignedDataObjects(obj1);
-
-        signer.sign(dataObjs, root, SignatureAppendingStrategies.AsFirstChild);
-
-        outputDocument(doc, "document.signed.bes.firstchild.xml");
-    }
-
-    @Test
     public void testSignBESExtrnlRes() throws Exception
     {
         System.out.println("signBESExtrnlRes");

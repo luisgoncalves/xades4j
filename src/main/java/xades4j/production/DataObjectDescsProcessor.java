@@ -29,6 +29,7 @@ import org.apache.xml.security.signature.XMLSignature;
 import org.apache.xml.security.signature.XMLSignatureException;
 import org.apache.xml.security.transforms.TransformationException;
 import org.apache.xml.security.transforms.Transforms;
+import org.apache.xml.security.utils.resolver.ResourceResolver;
 import org.apache.xml.security.utils.resolver.implementations.ResolverAnonymous;
 import org.w3c.dom.Document;
 import org.w3c.dom.Node;
@@ -63,9 +64,15 @@ class DataObjectDescsProcessor
      * @throws UnsupportedAlgorithmException
      */
     Map<DataObjectDesc, Reference> process(
-            Collection<DataObjectDesc> dataObjsDescs,
+            SignedDataObjects signedDataObjects,
             XMLSignature xmlSignature) throws UnsupportedAlgorithmException
     {
+        for (ResourceResolver resolver : signedDataObjects.getResourceResolvers())
+        {
+            xmlSignature.addResourceResolver(resolver);
+        }
+
+        Collection<DataObjectDesc> dataObjsDescs = signedDataObjects.getDataObjectsDescs();
         Map<DataObjectDesc, Reference> referenceMappings = new IdentityHashMap<DataObjectDesc, Reference>(dataObjsDescs.size());
 
         String refUri, refType;

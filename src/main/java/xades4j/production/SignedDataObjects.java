@@ -1,6 +1,6 @@
 /*
  * XAdES4j - A Java library for generation and verification of XAdES signatures.
- * Copyright (C) 2010 Luis Goncalves.
+ * Copyright (C) 2011 Luis Goncalves.
  *
  * XAdES4j is free software; you can redistribute it and/or modify it under
  * the terms of the GNU Lesser General Public License as published by the Free
@@ -18,6 +18,7 @@ package xades4j.production;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.LinkedList;
 import java.util.List;
 import xades4j.properties.AllDataObjsCommitmentTypeProperty;
 import xades4j.properties.AllDataObjsTimeStampProperty;
@@ -28,8 +29,19 @@ import xades4j.properties.PropertyTargetException;
 import xades4j.properties.SignedDataObjectProperty;
 import xades4j.properties.UnsignedDataObjectProperty;
 import xades4j.utils.PropertiesSet;
+import org.apache.xml.security.utils.resolver.ResourceResolver;
 
 /**
+ * Represents a set of data objects to be signed. Besides the data objects themselves,
+ * this class can be used to specify:
+ * <ul>
+ *  <li>Properties that apply to ALL the signed data objects</li>
+ *  <li>A base URI for the data object references</li>
+ *  <li>{@link ResourceResolver}s to be used when processing the current set of
+ *      data objects, in addition to the globally registered resolvers
+ *  </li>
+ * </ul>
+ *
  * A set of objects to be signed. Properties that apply to ALL the signed data
  * objects can be specified via this class. This class checks for duplicate
  * data object descriptions (not allowed).
@@ -44,10 +56,12 @@ public final class SignedDataObjects
 {
 
     private final List<DataObjectDesc> dataObjs;
-    private final PropertiesSet<SignedDataObjectProperty> signedDataObjsProperties;
-    private final PropertiesSet<UnsignedDataObjectProperty> unsignedDataObjsProperties;
     private String baseUriForRelativeReferences;
     private boolean hasNullURIReference;
+    private final List<ResourceResolver> resourceResolvers;
+
+    private final PropertiesSet<SignedDataObjectProperty> signedDataObjsProperties;
+    private final PropertiesSet<UnsignedDataObjectProperty> unsignedDataObjsProperties;
 
     /**
      * Creates an empty container.
@@ -55,10 +69,12 @@ public final class SignedDataObjects
     public SignedDataObjects()
     {
         this.dataObjs = new ArrayList<DataObjectDesc>();
-        this.signedDataObjsProperties = new PropertiesSet<SignedDataObjectProperty>(0);
-        this.unsignedDataObjsProperties = new PropertiesSet<UnsignedDataObjectProperty>(0);
         this.baseUriForRelativeReferences = null;
         this.hasNullURIReference = false;
+        this.resourceResolvers = new ArrayList<ResourceResolver>(0);
+
+        this.signedDataObjsProperties = new PropertiesSet<SignedDataObjectProperty>(0);
+        this.unsignedDataObjsProperties = new PropertiesSet<UnsignedDataObjectProperty>(0);
     }
 
     /**
@@ -87,6 +103,7 @@ public final class SignedDataObjects
         }
     }
 
+    /**************************************************************************/
     /**
      * Sets the base URI for <b>all/b> the relative references. Fragment references
      * (starting with '#') are not afected.
@@ -263,5 +280,32 @@ public final class SignedDataObjects
     Collection<DataObjectDesc> getDataObjectsDescs()
     {
         return this.dataObjs;
+    }
+
+    /**************************************************************************/
+    /**
+     * Registers a {@link ResourceResolver} to be used when signing the current
+     * set of data objects. The resolvers are considered in the same order they
+     * are added and have priority over the globally registered resolvers.
+     *
+     * @param resolver the resolver
+     * @return the current instance
+     *
+     * @throws NullPointerException if {@code resolver} is {@code null}
+     */
+    public SignedDataObjects withResourceResolver(ResourceResolver resolver)
+    {
+        if (null == resolver)
+        {
+            throw new NullPointerException("Resolver cannot be null");
+        }
+        
+        this.resourceResolvers.add(resolver);
+        return this;
+    }
+
+    List<ResourceResolver> getResourceResolvers()
+    {
+        return resourceResolvers;
     }
 }

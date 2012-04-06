@@ -25,7 +25,7 @@ import org.apache.xml.security.signature.XMLSignature;
  * <p>
  * Usages of {@code RawSignatureVerifier}s might include rejecting signatures with
  * more than a specific number of transforms on each data object reference and
- * signatures that use unsafe data obejct transforms.
+ * signatures that use unsafe data object transforms.
  *
  * @see xades4j.verification.XadesVerificationProfile#withRawSignatureVerifier
  *

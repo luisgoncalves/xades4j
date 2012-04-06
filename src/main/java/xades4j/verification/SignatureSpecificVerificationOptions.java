@@ -18,15 +18,13 @@ package xades4j.verification;
 
 import java.io.ByteArrayInputStream;
 import java.io.InputStream;
+import java.util.ArrayList;
+import java.util.List;
+import org.apache.xml.security.utils.resolver.ResourceResolver;
 
 /**
  * Represents verification options that are specific to a signature, i.e., options
  * that are not profile-wide.
- * <p>
- * Defaults are:
- * <ul>
- *  <li>References base URI: none</li>
- * </ul>
  *
  * @see xades4j.verification.XadesVerifier
  * @author Luís
@@ -36,6 +34,7 @@ public class SignatureSpecificVerificationOptions
 
     private String baseUriForRelativeReferences;
     private InputStream dataForAnonymousReference;
+    private final List<ResourceResolver> resolvers = new ArrayList<ResourceResolver>(0);
 
     /**
      * Sets the base URI to be used when resolving <b>all/b> the relative references.
@@ -80,5 +79,31 @@ public class SignatureSpecificVerificationOptions
     InputStream getDataForAnonymousReference()
     {
         return this.dataForAnonymousReference;
+    }
+
+    /**
+     * Registers a {@link ResourceResolver} to be used when verifying the signature
+     * The resolvers are considered in the same order they are added and have priority
+     * over the globally registered resolvers.
+     *
+     * @param resolver the resolver
+     * @return the current instance
+     *
+     * @throws NullPointerException if {@code resolver} is {@code null}
+     */
+    public SignatureSpecificVerificationOptions useResourceResolver(ResourceResolver resolver)
+    {
+        if (null == resolver)
+        {
+            throw new NullPointerException("Resolver cannot be null");
+        }
+        
+        this.resolvers.add(resolver);
+        return this;
+    }
+
+    List<ResourceResolver> getResolvers()
+    {
+        return this.resolvers;
     }
 }
