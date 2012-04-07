@@ -25,9 +25,6 @@ import java.security.cert.X509CRL;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.GregorianCalendar;
-import org.bouncycastle.asn1.DERInteger;
-import org.bouncycastle.asn1.x509.X509Extension;
-import org.bouncycastle.x509.extension.X509ExtensionUtil;
 import xades4j.properties.CompleteRevocationRefsProperty;
 import xades4j.UnsupportedAlgorithmException;
 import xades4j.properties.data.CRLRef;
@@ -35,6 +32,7 @@ import xades4j.properties.data.CompleteRevocationRefsData;
 import xades4j.properties.data.PropertyDataObject;
 import xades4j.providers.AlgorithmsProviderEx;
 import xades4j.providers.MessageDigestEngineProvider;
+import xades4j.utils.CrlExtensionsUtils;
 
 /**
  *
@@ -70,18 +68,9 @@ class DataGenCompleteRevocRefs implements PropertyDataObjectGenerator<CompleteRe
             {
                 GregorianCalendar crlTime = new GregorianCalendar();
                 crlTime.setTime(crl.getThisUpdate());
-
                 byte[] digest = messageDigest.digest(crl.getEncoded());
-
-                // XAdES 7.4.2: "The 'number' element is an optional hint ..."
-                byte[] crlNumEnc = crl.getExtensionValue(X509Extension.cRLNumber.getId());
-                BigInteger crlNum = null;
-                if (crlNumEnc != null)
-                {
-                    DERInteger derCrlNum = (DERInteger)X509ExtensionUtil.fromExtensionValue(crlNumEnc);
-                    crlNum = derCrlNum.getValue();
-                }
-                
+                BigInteger crlNum = CrlExtensionsUtils.getCrlNumber(crl);
+               
                 crlRefs.add(new CRLRef(
                         crl.getIssuerX500Principal().getName(),
                         crlNum,

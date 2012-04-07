@@ -17,6 +17,7 @@
 package xades4j.verification;
 
 import com.google.inject.Inject;
+import java.io.IOException;
 import java.math.BigInteger;
 import java.security.MessageDigest;
 import java.security.cert.CRLException;
@@ -31,6 +32,7 @@ import xades4j.UnsupportedAlgorithmException;
 import xades4j.properties.data.CRLRef;
 import xades4j.properties.data.CompleteRevocationRefsData;
 import xades4j.providers.MessageDigestEngineProvider;
+import xades4j.utils.CrlExtensionsUtils;
 
 /**
  * XAdES G.2.2.13
@@ -72,28 +74,34 @@ class CompleteRevocRefsVerifier implements QualifyingPropertyVerifier<CompleteRe
                 if (!crl.getIssuerX500Principal().equals(new X500Principal(crlRef.issuerDN)) ||
                         !crl.getThisUpdate().equals(crlRef.issueTime.getTime()))
                     continue;
-
-                // Check CRL number, if present.
-                if (crlRef.serialNumber != null)
-                {
-                    byte[] crlNumberEnc = crl.getExtensionValue("2.5.29.20");
-                    if (crlNumberEnc != null && !crlRef.serialNumber.equals(new BigInteger(crlNumberEnc)))
-                        continue;
-                }
-
-                // Check digest value.
+                
                 try
                 {
+                    // Check CRL number, if present.
+                    if (crlRef.serialNumber != null)
+                    {
+                        BigInteger crlNum = CrlExtensionsUtils.getCrlNumber(crl);
+                        if (crlNum != null && !crlRef.serialNumber.equals(crlNum))
+                            continue;
+                    }
+
+                    // Check digest value.
                     MessageDigest md = this.digestEngineProvider.getEngine(crlRef.digestAlgUri);
                     if (Arrays.equals(md.digest(crl.getEncoded()), crlRef.digestValue))
                     {
                         match = crlRef;
                         break;
                     }
-                } catch (CRLException ex)
+                } 
+                catch(IOException ex)
                 {
                     throw new CompleteRevocRefsReferenceException(crl, ex.getMessage());
-                } catch (UnsupportedAlgorithmException ex)
+                }
+                catch (CRLException ex)
+                {
+                    throw new CompleteRevocRefsReferenceException(crl, ex.getMessage());
+                }
+                catch (UnsupportedAlgorithmException ex)
                 {
                     throw new CompleteRevocRefsReferenceException(crl, ex.getMessage());
                 }
