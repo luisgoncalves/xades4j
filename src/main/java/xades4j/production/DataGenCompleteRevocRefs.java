@@ -17,6 +17,7 @@
 package xades4j.production;
 
 import com.google.inject.Inject;
+import java.io.IOException;
 import java.math.BigInteger;
 import java.security.MessageDigest;
 import java.security.cert.CRLException;
@@ -24,6 +25,9 @@ import java.security.cert.X509CRL;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.GregorianCalendar;
+import org.bouncycastle.asn1.DERInteger;
+import org.bouncycastle.asn1.x509.X509Extension;
+import org.bouncycastle.x509.extension.X509ExtensionUtil;
 import xades4j.properties.CompleteRevocationRefsProperty;
 import xades4j.UnsupportedAlgorithmException;
 import xades4j.properties.data.CRLRef;
@@ -69,11 +73,15 @@ class DataGenCompleteRevocRefs implements PropertyDataObjectGenerator<CompleteRe
 
                 byte[] digest = messageDigest.digest(crl.getEncoded());
 
-                byte[] crlNumEnc = crl.getExtensionValue("2.5.29.20");
+                // XAdES 7.4.2: "The 'number' element is an optional hint ..."
+                byte[] crlNumEnc = crl.getExtensionValue(X509Extension.cRLNumber.getId());
                 BigInteger crlNum = null;
                 if (crlNumEnc != null)
-                    crlNum = new BigInteger(crlNumEnc);
-
+                {
+                    DERInteger derCrlNum = (DERInteger)X509ExtensionUtil.fromExtensionValue(crlNumEnc);
+                    crlNum = derCrlNum.getValue();
+                }
+                
                 crlRefs.add(new CRLRef(
                         crl.getIssuerX500Principal().getName(),
                         crlNum,
@@ -83,10 +91,16 @@ class DataGenCompleteRevocRefs implements PropertyDataObjectGenerator<CompleteRe
             }
 
             return new CompleteRevocationRefsData(crlRefs);
-        } catch (CRLException ex)
+        }
+        catch (CRLException ex)
         {
             throw new PropertyDataGenerationException(prop, "cannot get encoded CRL", ex);
-        } catch (UnsupportedAlgorithmException ex)
+        }
+        catch(IOException ex)
+        {
+            throw new PropertyDataGenerationException(prop, "cannot parse CRL number extension", ex);
+        }
+        catch (UnsupportedAlgorithmException ex)
         {
             throw new PropertyDataGenerationException(prop, ex.getMessage(), ex);
         }
