@@ -1,6 +1,6 @@
 /*
  * XAdES4j - A Java library for generation and verification of XAdES signatures.
- * Copyright (C) 2010 Luis Goncalves.
+ * Copyright (C) 2012 Luis Goncalves.
  *
  * XAdES4j is free software; you can redistribute it and/or modify it under
  * the terms of the GNU Lesser General Public License as published by the Free
@@ -17,43 +17,69 @@
 package xades4j.providers.impl;
 
 import com.google.inject.Inject;
+import java.io.BufferedInputStream;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
+import java.math.BigInteger;
+import java.net.HttpURLConnection;
+import java.net.URL;
 import java.security.MessageDigest;
-import java.security.cert.X509Certificate;
-import sun.security.pkcs.PKCS7;
-import sun.security.pkcs.SignerInfo;
-import sun.security.timestamp.HttpTimestamper;
-import sun.security.timestamp.TSRequest;
-import sun.security.timestamp.TSResponse;
-import sun.security.timestamp.Timestamper;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
+import org.apache.xml.security.algorithms.MessageDigestAlgorithm;
+import org.bouncycastle.asn1.ASN1ObjectIdentifier;
+import org.bouncycastle.asn1.cmp.PKIStatus;
+import org.bouncycastle.cms.CMSSignedGenerator;
+import org.bouncycastle.tsp.TSPAlgorithms;
+import org.bouncycastle.tsp.TSPException;
+import org.bouncycastle.tsp.TimeStampRequest;
+import org.bouncycastle.tsp.TimeStampRequestGenerator;
+import org.bouncycastle.tsp.TimeStampResponse;
+import org.bouncycastle.tsp.TimeStampToken;
 import xades4j.UnsupportedAlgorithmException;
 import xades4j.providers.MessageDigestEngineProvider;
 import xades4j.providers.TimeStampTokenGenerationException;
 import xades4j.providers.TimeStampTokenProvider;
 import xades4j.providers.TimeStampTokenProvider.TimeStampTokenRes;
-import xades4j.utils.TimeStampTokenInfo;
 
 /**
- * Default implementation of {@code TimeStampTokenProvider}. It uses the SUN proprietary
- * API in the {@code sun.security.timestamp} and {@code sun.security.pkcs} packages.
- * By default it used simple HTTP to get the time-stamp token from the TSA at
- * {@code http://tss.accv.es:8318/tsa}. Both the {@code Timestamper} and the TSA
- * URL can be overriden.
- * <p>
- * The TSA certificate is requested. If the token is granted with mods, a check
- * is made to ensure that the mod wasn't not providing the certificate. If so, an
- * exception is thrown.
+ * Default implementation of {@code TimeStampTokenProvider}. Issues time-stamp
+ * requests (with {@code certReq} set to {@code true}) over HTTP. The TSA URL can
+ * be overriden.
  * @author Luís
  */
 public class DefaultTimeStampTokenProvider implements TimeStampTokenProvider
 {
+    private static final Map<String, ASN1ObjectIdentifier> digestUriToOidMappings;
+    static
+    {
+        digestUriToOidMappings = new HashMap<String, ASN1ObjectIdentifier>(5);
+        digestUriToOidMappings.put(MessageDigestAlgorithm.ALGO_ID_DIGEST_NOT_RECOMMENDED_MD5, TSPAlgorithms.MD5);
+        digestUriToOidMappings.put(MessageDigestAlgorithm.ALGO_ID_DIGEST_RIPEMD160, TSPAlgorithms.RIPEMD160);
+        digestUriToOidMappings.put(MessageDigestAlgorithm.ALGO_ID_DIGEST_SHA1, TSPAlgorithms.SHA1);
+        digestUriToOidMappings.put(MessageDigestAlgorithm.ALGO_ID_DIGEST_SHA256, TSPAlgorithms.SHA256);
+        digestUriToOidMappings.put(MessageDigestAlgorithm.ALGO_ID_DIGEST_SHA384, TSPAlgorithms.SHA384);
+        digestUriToOidMappings.put(MessageDigestAlgorithm.ALGO_ID_DIGEST_SHA512, TSPAlgorithms.SHA512);
+    }
+
+    // TODO this probably should be a provider to avoid being dependent on a fixed set of algorithms
+    private static ASN1ObjectIdentifier identifierForDigest(String digestAlgUri)
+    {
+        return digestUriToOidMappings.get(digestAlgUri);
+    }
+    /****/
     private final MessageDigestEngineProvider messageDigestProvider;
+    private final TimeStampRequestGenerator tsRequestGenerator;
 
     @Inject
     public DefaultTimeStampTokenProvider(
             MessageDigestEngineProvider messageDigestProvider)
     {
         this.messageDigestProvider = messageDigestProvider;
+        this.tsRequestGenerator = new TimeStampRequestGenerator();
+        this.tsRequestGenerator.setCertReq(true);
     }
 
     @Override
@@ -61,69 +87,72 @@ public class DefaultTimeStampTokenProvider implements TimeStampTokenProvider
             byte[] tsDigestInput,
             String digestAlgUri) throws TimeStampTokenGenerationException
     {
-        MessageDigest md;
         try
         {
-            md = messageDigestProvider.getEngine(digestAlgUri);
-        } catch (UnsupportedAlgorithmException ex)
+            MessageDigest md = messageDigestProvider.getEngine(digestAlgUri);
+            byte[] digest = md.digest(tsDigestInput);
+
+            TimeStampRequest tsRequest = this.tsRequestGenerator.generate(
+                    identifierForDigest(digestAlgUri),
+                    digest,
+                    BigInteger.valueOf(new Date().getTime()));
+            InputStream responseStream = getResponse(tsRequest.getEncoded());
+            TimeStampResponse tsResponse = new TimeStampResponse(responseStream);
+
+            if(tsResponse.getStatus() != PKIStatus.GRANTED &&
+               tsResponse.getStatus() != PKIStatus.GRANTED_WITH_MODS)
+            {
+                throw new TimeStampTokenGenerationException("Time stamp token not granted. " + tsResponse.getStatusString());
+            }
+            tsResponse.validate(tsRequest);
+
+            TimeStampToken tsToken = tsResponse.getTimeStampToken();
+            return new TimeStampTokenRes(tsToken.getEncoded(), tsToken.getTimeStampInfo().getGenTime());
+        }
+        catch (UnsupportedAlgorithmException ex)
         {
             throw new TimeStampTokenGenerationException("Digest algorithm not supported", ex);
-        }
-
-        byte[] digest = md.digest(tsDigestInput);
-
-        TSRequest tsReq = new TSRequest(digest, md.getAlgorithm());
-        tsReq.requestCertificate(true);
-        TSResponse tsRes;
-        try
+        } catch (TSPException ex)
         {
-            tsRes = getTimestamper().generateTimestamp(tsReq);
+            throw new TimeStampTokenGenerationException("Invalid time stamp response", ex);
         } catch (IOException ex)
         {
-            throw new TimeStampTokenGenerationException("No TSA response", ex);
-        }
-
-        PKCS7 token = tsRes.getToken();
-        if (null == token)
-            // Time-stamp not granted.
-            throw new TimeStampTokenGenerationException("Time stamp token not granted: " + tsRes.getFailureCodeAsText());
-
-        SignerInfo[] signerInfos = token.getSignerInfos();
-        if (null == signerInfos || signerInfos.length != 1)
-            // RFC 3161: "The time-stamp token MUST NOT contain any signatures
-            // other than the signature of the TSA."
-            throw new TimeStampTokenGenerationException("Only one signature should be present on time-stamp token");
-
-        if (tsRes.getStatusCode() == TSResponse.GRANTED_WITH_MODS)
-        {
-            // Check that the TSA certificate is present despite the modification.
-            X509Certificate[] certs = token.getCertificates();
-            if (null == certs || certs.length == 0)
-                throw new TimeStampTokenGenerationException("TSA certificate wasn't included in the time-stamp response");
-        }
-
-        try
-        {
-            TimeStampTokenInfo tstInfo = new TimeStampTokenInfo(token.getContentInfo().getContentBytes());
-            return new TimeStampTokenRes(tsRes.getEncodedToken(), tstInfo.getDate());
-        } catch (IOException ex)
-        {
-            throw new TimeStampTokenGenerationException("Invalid token structure", ex);
+            throw new TimeStampTokenGenerationException("Encoding error", ex);
         }
     }
 
-    /**
-     * Gets the {@code Timestamper to be used}. Override to change this behaviour.
-     * By default, this method invokes {@code getTSAUrl} to create an {@code HttpTimestamper}.
-     * @return the timestamper
-     */
-    protected Timestamper getTimestamper()
+    private InputStream getResponse(byte[] encodedRequest) throws TimeStampTokenGenerationException
     {
-        return new HttpTimestamper(getTSAUrl());
+        try
+        {
+            URL url = new URL(getTSAUrl());
+            HttpURLConnection connection = (HttpURLConnection) url.openConnection();
+
+            connection.setDoInput(true);
+            connection.setDoOutput(true);
+            connection.setRequestMethod("POST");
+            connection.setRequestProperty("Content-type", "application/timestamp-query");
+            connection.setRequestProperty("Content-length", String.valueOf(encodedRequest.length));
+
+            OutputStream out = connection.getOutputStream();
+            out.write(encodedRequest);
+            out.flush();
+
+            if (connection.getResponseCode() != HttpURLConnection.HTTP_OK)
+            {
+                throw new TimeStampTokenGenerationException(String.format("TSA returned HTTP %d %s", connection.getResponseCode(), connection.getResponseMessage()));
+            }
+
+            // TODO do we need to invoke connection.disconnect()?
+            return new BufferedInputStream(connection.getInputStream());
+        } catch (IOException ex)
+        {
+            throw new TimeStampTokenGenerationException("Error when connecting to the TSA", ex);
+        }
     }
 
     /**
-     * Gets the TSA URL when the default {@code HttpTimestamper} is used. Override
+     * Gets the TSA URL. Override
      * to change the TSA in use.
      * @return the url (default is {@code http://tss.accv.es:8318/tsa}
      */

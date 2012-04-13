@@ -16,12 +16,9 @@
  */
 package xades4j.providers.impl;
 
-import org.apache.xml.security.utils.Constants;
-import org.junit.After;
-import org.junit.AfterClass;
-import org.junit.Before;
-import org.junit.BeforeClass;
+import org.apache.xml.security.algorithms.MessageDigestAlgorithm;
 import org.junit.Test;
+import static org.junit.Assert.*;
 import xades4j.providers.TimeStampTokenProvider.TimeStampTokenRes;
 
 /**
@@ -30,41 +27,20 @@ import xades4j.providers.TimeStampTokenProvider.TimeStampTokenRes;
  */
 public class DefaultTimeStampTokenProviderTest
 {
-    public DefaultTimeStampTokenProviderTest()
-    {
-    }
-
-    @BeforeClass
-    public static void setUpClass() throws Exception
-    {
-    }
-
-    @AfterClass
-    public static void tearDownClass() throws Exception
-    {
-    }
-
-    @Before
-    public void setUp()
-    {
-    }
-
-    @After
-    public void tearDown()
-    {
-    }
-
     @Test
     public void testGetTimeStampToken() throws Exception
     {
         System.out.println("getTimeStampToken");
         byte[] tsDigestInput = "TestDigestInput".getBytes();
-        String digestAlgUri = Constants.ALGO_ID_DIGEST_SHA1;
+        String digestAlgUri = MessageDigestAlgorithm.ALGO_ID_DIGEST_SHA1;
 
         DefaultTimeStampTokenProvider instance = new DefaultTimeStampTokenProvider(new DefaultMessageDigestProvider());
+
         TimeStampTokenRes result = instance.getTimeStampToken(tsDigestInput, digestAlgUri);
 
+        assertNotNull(result);
+        assertNotNull(result.encodedTimeStampToken);
+        assertNotNull(result.timeStampTime);
         System.out.println(result.timeStampTime);
-
     }
 }
