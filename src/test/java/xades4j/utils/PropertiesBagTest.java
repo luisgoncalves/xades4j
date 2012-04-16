@@ -162,18 +162,4 @@ public class PropertiesBagTest
         instance.add(prop);
         assertFalse(instance.isEmpty());
     }
-    /**
-     * Test of getProperties method, of class PropertiesSet.
-     */
-//    @Test
-//    public void testGetProperties()
-//    {
-//        System.out.println("getProperties");
-//        PropertiesSet instance = null;
-//        Collection expResult = null;
-//        Collection result = instance.getProperties();
-//        assertEquals(expResult, result);
-//        // TODO review the generated test code and remove the default call to fail.
-//        fail("The test case is a prototype.");
-//    }
 }

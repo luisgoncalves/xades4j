@@ -32,14 +32,14 @@ public class StreamUtils
 
     /**
      * Reads the content of an input stream and writes it into an output stream.
-     * The copy is made in chunks of 512 bytes.
+     * The copy is made in chunks of 1 KB.
      * @param is the input
      * @param os the output
      * @throws IOException thrown by the {@code read} and {@code write} methods of the streams
      */
     public static void readWrite(InputStream is, OutputStream os) throws IOException
     {
-        byte[] buf = new byte[512];
+        byte[] buf = new byte[1024];
         int nRead;
         while ((nRead = is.read(buf)) != -1)
         {

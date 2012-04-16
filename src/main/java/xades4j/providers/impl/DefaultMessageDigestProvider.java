@@ -22,7 +22,7 @@ import java.security.NoSuchAlgorithmException;
 import java.security.NoSuchProviderException;
 import java.security.Security;
 import java.util.HashMap;
-import javax.xml.crypto.dsig.DigestMethod;
+import org.apache.xml.security.algorithms.MessageDigestAlgorithm;
 import xades4j.UnsupportedAlgorithmException;
 
 /**
@@ -43,10 +43,10 @@ public class DefaultMessageDigestProvider implements MessageDigestEngineProvider
     static
     {
         algorithmMapper = new HashMap<String, String>(4);
-        algorithmMapper.put(DigestMethod.SHA1, "SHA-1");
-        algorithmMapper.put(DigestMethod.SHA256, "SHA-256");
-        algorithmMapper.put("http://www.w3.org/2001/04/xmldsig-more#sha384", "SHA-384");
-        algorithmMapper.put(DigestMethod.SHA512, "SHA-512");
+        algorithmMapper.put(MessageDigestAlgorithm.ALGO_ID_DIGEST_SHA1, "SHA-1");
+        algorithmMapper.put(MessageDigestAlgorithm.ALGO_ID_DIGEST_SHA256, "SHA-256");
+        algorithmMapper.put(MessageDigestAlgorithm.ALGO_ID_DIGEST_SHA384, "SHA-384");
+        algorithmMapper.put(MessageDigestAlgorithm.ALGO_ID_DIGEST_SHA512, "SHA-512");
     }
 
     private final String messageDigestProvider;

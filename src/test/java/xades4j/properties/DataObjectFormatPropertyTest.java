@@ -101,21 +101,6 @@ public class DataObjectFormatPropertyTest
 //        instance.withIdentifier(identifier, null);
 //    }
 
-//    /**
-//     * Test of withDescription method, of class DataObjectFormatProperty.
-//     */
-//    @Test
-//    public void testWithDescription()
-//    {
-//        System.out.println("withDescription");
-//        String description = null;
-//        DataObjectFormatProperty instance = new DataObjectFormatProperty();
-//        DataObjectFormatProperty expResult = null;
-//        DataObjectFormatProperty result = instance.withDescription(description);
-//        assertEquals(expResult, result);
-//        // TODO review the generated test code and remove the default call to fail.
-//        fail("The test case is a prototype.");
-//    }
     /**
      * Test of withDocumentationUri method, of class DataObjectFormatProperty.
      */

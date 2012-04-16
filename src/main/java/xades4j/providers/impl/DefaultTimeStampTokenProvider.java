@@ -25,13 +25,11 @@ import java.math.BigInteger;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.security.MessageDigest;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 import org.apache.xml.security.algorithms.MessageDigestAlgorithm;
 import org.bouncycastle.asn1.ASN1ObjectIdentifier;
 import org.bouncycastle.asn1.cmp.PKIStatus;
-import org.bouncycastle.cms.CMSSignedGenerator;
 import org.bouncycastle.tsp.TSPAlgorithms;
 import org.bouncycastle.tsp.TSPException;
 import org.bouncycastle.tsp.TimeStampRequest;
@@ -55,7 +53,7 @@ public class DefaultTimeStampTokenProvider implements TimeStampTokenProvider
     private static final Map<String, ASN1ObjectIdentifier> digestUriToOidMappings;
     static
     {
-        digestUriToOidMappings = new HashMap<String, ASN1ObjectIdentifier>(5);
+        digestUriToOidMappings = new HashMap<String, ASN1ObjectIdentifier>(6);
         digestUriToOidMappings.put(MessageDigestAlgorithm.ALGO_ID_DIGEST_NOT_RECOMMENDED_MD5, TSPAlgorithms.MD5);
         digestUriToOidMappings.put(MessageDigestAlgorithm.ALGO_ID_DIGEST_RIPEMD160, TSPAlgorithms.RIPEMD160);
         digestUriToOidMappings.put(MessageDigestAlgorithm.ALGO_ID_DIGEST_SHA1, TSPAlgorithms.SHA1);
@@ -95,7 +93,7 @@ public class DefaultTimeStampTokenProvider implements TimeStampTokenProvider
             TimeStampRequest tsRequest = this.tsRequestGenerator.generate(
                     identifierForDigest(digestAlgUri),
                     digest,
-                    BigInteger.valueOf(new Date().getTime()));
+                    BigInteger.valueOf(System.currentTimeMillis()));
             InputStream responseStream = getResponse(tsRequest.getEncoded());
             TimeStampResponse tsResponse = new TimeStampResponse(responseStream);
 
@@ -127,7 +125,7 @@ public class DefaultTimeStampTokenProvider implements TimeStampTokenProvider
         {
             URL url = new URL(getTSAUrl());
             HttpURLConnection connection = (HttpURLConnection) url.openConnection();
-
+            
             connection.setDoInput(true);
             connection.setDoOutput(true);
             connection.setRequestMethod("POST");
