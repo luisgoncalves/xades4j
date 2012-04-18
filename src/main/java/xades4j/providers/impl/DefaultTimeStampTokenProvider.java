@@ -70,12 +70,18 @@ public class DefaultTimeStampTokenProvider implements TimeStampTokenProvider
     /****/
     private final MessageDigestEngineProvider messageDigestProvider;
     private final TimeStampRequestGenerator tsRequestGenerator;
+    private final String tsaUrl;
 
     @Inject
-    public DefaultTimeStampTokenProvider(
-            MessageDigestEngineProvider messageDigestProvider)
+    public DefaultTimeStampTokenProvider(MessageDigestEngineProvider messageDigestProvider)
+    {
+        this(messageDigestProvider, "http://tss.accv.es:8318/tsa");
+    }
+
+    DefaultTimeStampTokenProvider(MessageDigestEngineProvider messageDigestProvider, String tsaUrl)
     {
         this.messageDigestProvider = messageDigestProvider;
+        this.tsaUrl = tsaUrl;
         this.tsRequestGenerator = new TimeStampRequestGenerator();
         this.tsRequestGenerator.setCertReq(true);
     }
@@ -123,9 +129,7 @@ public class DefaultTimeStampTokenProvider implements TimeStampTokenProvider
     {
         try
         {
-            URL url = new URL(getTSAUrl());
-            HttpURLConnection connection = (HttpURLConnection) url.openConnection();
-            
+            HttpURLConnection connection = getHttpConnection();
             connection.setDoInput(true);
             connection.setDoOutput(true);
             connection.setRequestMethod("POST");
@@ -143,10 +147,17 @@ public class DefaultTimeStampTokenProvider implements TimeStampTokenProvider
 
             // TODO do we need to invoke connection.disconnect()?
             return new BufferedInputStream(connection.getInputStream());
-        } catch (IOException ex)
+        }
+        catch (IOException ex)
         {
             throw new TimeStampTokenGenerationException("Error when connecting to the TSA", ex);
         }
+    }
+
+    HttpURLConnection getHttpConnection() throws IOException
+    {
+        URL url = new URL(getTSAUrl());
+        return (HttpURLConnection) url.openConnection();
     }
 
     /**
@@ -156,6 +167,6 @@ public class DefaultTimeStampTokenProvider implements TimeStampTokenProvider
      */
     protected String getTSAUrl()
     {
-        return "http://tss.accv.es:8318/tsa";
+        return this.tsaUrl;
     }
 }
