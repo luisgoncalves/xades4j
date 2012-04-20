@@ -19,6 +19,7 @@ package xades4j.verification;
 import java.security.KeyStore;
 import org.junit.Test;
 import static org.junit.Assert.*;
+import org.junit.Before;
 import xades4j.providers.CannotSelectCertificateException;
 import xades4j.providers.impl.PKIXCertificateValidationProvider;
 
@@ -28,12 +29,21 @@ import xades4j.providers.impl.PKIXCertificateValidationProvider;
  */
 public class XadesVerifierErrorsTest extends VerifierTestBase
 {
+    XadesVerificationProfile mySigsVerificationProfile;
+    XadesVerificationProfile nistVerificationProfile;
+
+    @Before
+    public void initialize()
+    {
+        mySigsVerificationProfile = new XadesVerificationProfile(VerifierTestBase.validationProviderMySigs);
+        nistVerificationProfile = new XadesVerificationProfile(VerifierTestBase.validationProviderNist);
+    }
+
     @Test(expected = QualifyingPropertiesIncorporationException.class)
     public void testErrVerifySignedPropsIncorp() throws Exception
     {
         System.out.println("errVerifySignedPropsIncorp");
-        verifySignature("bad/document.signed.t.bes.badsignedprops.xml",
-                new XadesVerificationProfile(validationProviderMySigs));
+        verifySignature("bad/document.signed.t.bes.badsignedprops.xml", mySigsVerificationProfile);
     }
 
     @Test(expected = QualifyingPropertiesIncorporationException.class)
@@ -45,15 +55,14 @@ public class XadesVerifierErrorsTest extends VerifierTestBase
             fail("Test written for Windows-ROOT certificate repository");
 
         verifySignature("bad/document.signed.bes.signedpropsrefnotype.xml",
-                new XadesVerificationProfile(validationProviderMySigs));
+                new XadesVerificationProfile(validationProviderPtCc));
     }
 
     @Test(expected = InvalidXAdESFormException.class)
     public void testErrVerifyIncorrectC() throws Exception
     {
         System.out.println("errVerifyIncorrectC");
-        verifySignature("bad/document.signed.c.bad.xml",
-                new XadesVerificationProfile(validationProviderNist));
+        verifySignature("bad/document.signed.c.bad.xml",nistVerificationProfile);
     }
 
     @Test(expected = CannotSelectCertificateException.class)
@@ -70,24 +79,21 @@ public class XadesVerifierErrorsTest extends VerifierTestBase
     public void testErrVerifyChangedDataObj() throws Exception
     {
         System.out.println("errVerifyChangedDataObj");
-        verifySignature("bad/document.signed.bes.invaliddataobj.xml",
-                new XadesVerificationProfile(validationProviderMySigs));
+        verifySignature("bad/document.signed.bes.invaliddataobj.xml", mySigsVerificationProfile);
     }
 
     @Test(expected = SignatureValueException.class)
     public void testErrVerifyChangedSigValue() throws Exception
     {
         System.out.println("errVerifyChangedSigValue");
-        verifySignature("bad/document.signed.bes.invalidsigvalue.xml",
-                new XadesVerificationProfile(validationProviderMySigs));
+        verifySignature("bad/document.signed.bes.invalidsigvalue.xml", mySigsVerificationProfile);
     }
 
     @Test(expected = CompleteCertRefsCertNotFoundException.class)
     public void testErrVerifyCMissingCertRef() throws Exception
     {
         System.out.println("errVerifyCMissingCertRef");
-        verifySignature("bad/document.signed.c.missingcertref.xml",
-                new XadesVerificationProfile(validationProviderNist));
+        verifySignature("bad/document.signed.c.missingcertref.xml", nistVerificationProfile);
     }
 
     @Test(expected = TimeStampDigestMismatchException.class)
@@ -102,7 +108,6 @@ public class XadesVerifierErrorsTest extends VerifierTestBase
 //        outputDocument(doc, "bad/document.signed.t.bes.badtsdigest.xml");
 
         System.out.println("errVerifyUnmatchSigTSDigest");
-        verifySignature("bad/document.signed.t.bes.badtsdigest.xml",
-                new XadesVerificationProfile(validationProviderMySigs));
+        verifySignature("bad/document.signed.t.bes.badtsdigest.xml", mySigsVerificationProfile);
     }
 }

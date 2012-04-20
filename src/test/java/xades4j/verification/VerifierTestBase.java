@@ -42,8 +42,6 @@ public class VerifierTestBase extends SignatureServicesTestBase
     public static CertificateValidationProvider validationProviderMySigs;
     public static CertificateValidationProvider validationProviderNist;
     public static CertificateValidationProvider validationProviderPtCc;
-    /**/
-    static protected XadesVerificationProfile verificationProfile;
 
     static
     {
@@ -84,9 +82,6 @@ public class VerifierTestBase extends SignatureServicesTestBase
             {
                 // Not on windows platform...
             }
-
-            /**/
-            verificationProfile = new XadesVerificationProfile(VerifierTestBase.validationProviderMySigs);
         } catch (Exception ex)
         {
             throw new NullPointerException("VerifierTestBase init failed: " + ex.getMessage());
@@ -95,7 +90,7 @@ public class VerifierTestBase extends SignatureServicesTestBase
 
     protected static XAdESForm verifySignature(String sigFileName) throws Exception
     {
-        return verifySignature(sigFileName, verificationProfile);
+        return verifySignature(sigFileName, new XadesVerificationProfile(VerifierTestBase.validationProviderMySigs));
     }
 
     protected static XAdESForm verifySignature(

@@ -19,6 +19,7 @@ package xades4j.verification;
 import java.io.FileInputStream;
 import java.io.InputStream;
 import static org.junit.Assert.*;
+import org.junit.Before;
 import org.junit.Test;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
@@ -29,7 +30,6 @@ import xades4j.properties.CertificateValuesProperty;
 import xades4j.properties.QualifyingProperty;
 import xades4j.properties.RevocationValuesProperty;
 import xades4j.properties.SigAndRefsTimeStampProperty;
-import xades4j.properties.data.SigningTimeData;
 
 /**
  *
@@ -37,6 +37,16 @@ import xades4j.properties.data.SigningTimeData;
  */
 public class XadesVerifierImplTest extends VerifierTestBase
 {
+    XadesVerificationProfile verificationProfile;
+    XadesVerificationProfile nistVerificationProfile;
+
+    @Before
+    public void initialize()
+    {
+        verificationProfile = new XadesVerificationProfile(VerifierTestBase.validationProviderMySigs);
+        nistVerificationProfile = new XadesVerificationProfile(VerifierTestBase.validationProviderNist);
+    }
+
     @Test
     public void testVerifyBES() throws Exception
     {
@@ -49,18 +59,17 @@ public class XadesVerifierImplTest extends VerifierTestBase
     public void testVerifyWithCustomRawVerifier() throws Exception
     {
         System.out.println("verifyWithCustomRawVerifier");
-        XadesVerificationProfile p = new XadesVerificationProfile(VerifierTestBase.validationProviderMySigs)
-                .withRawSignatureVerifier(new RawSignatureVerifier()
-                    {
-                        @Override
-                        public void verify(RawSignatureVerifierContext ctx) throws InvalidSignatureException
-                        {
-                            // Do something usefull with the signature
-                            // ctx.getSignature().getSignedInfo().item(0)...
-                            throw new InvalidSignatureException("Rejected by RawSignatureVerifier");
-                        }
-                    });
-        XAdESForm f = verifySignature("document.signed.bes.xml", p);
+        verificationProfile.withRawSignatureVerifier(new RawSignatureVerifier()
+        {
+            @Override
+            public void verify(RawSignatureVerifierContext ctx) throws InvalidSignatureException
+            {
+                // Do something usefull with the signature
+                // ctx.getSignature().getSignedInfo().item(0)...
+                throw new InvalidSignatureException("Rejected by RawSignatureVerifier");
+            }
+        });
+        XAdESForm f = verifySignature("document.signed.bes.xml", verificationProfile);
         assertEquals(XAdESForm.BES, f);
     }
 
@@ -100,12 +109,11 @@ public class XadesVerifierImplTest extends VerifierTestBase
         SignatureSpecificVerificationOptions options = new SignatureSpecificVerificationOptions().useBaseUri("http://www.ietf.org/rfc/");
 
         XadesSignatureFormatExtender formExt = new XadesFormatExtenderProfile().getFormatExtender();
-        XadesVerificationProfile nistVerP = new XadesVerificationProfile(VerifierTestBase.validationProviderNist);
 
-        XAdESVerificationResult res = nistVerP.newVerifier().verify(signatureNode, options, formExt, XAdESForm.C);
+        XAdESVerificationResult res = nistVerificationProfile.newVerifier().verify(signatureNode, options, formExt, XAdESForm.C);
         assertEquals(XAdESForm.BES, res.getSignatureForm());
 
-        res = nistVerP.newVerifier().verify(signatureNode, options);
+        res = nistVerificationProfile.newVerifier().verify(signatureNode, options);
         assertEquals(XAdESForm.C, res.getSignatureForm());
 
         outputDocument(doc, "document.verified.bes.extres.c.xml");
@@ -124,7 +132,7 @@ public class XadesVerifierImplTest extends VerifierTestBase
     {
         System.out.println("verifyEPES");
         verificationProfile.withPolicyDocumentProvider(VerifierTestBase.policyDocumentFinder);
-        XAdESForm f = verifySignature("document.signed.epes.xml");
+        XAdESForm f = verifySignature("document.signed.epes.xml", verificationProfile);
         assertEquals(XAdESForm.EPES, f);
     }
 
@@ -155,7 +163,7 @@ public class XadesVerifierImplTest extends VerifierTestBase
         System.out.println("verifyC");
         XAdESForm f = verifySignature(
                 "document.signed.c.xml",
-                new XadesVerificationProfile(VerifierTestBase.validationProviderNist));
+                nistVerificationProfile);
         assertEquals(XAdESForm.C, f);
     }
 
@@ -166,7 +174,7 @@ public class XadesVerifierImplTest extends VerifierTestBase
 
         Document doc = getDocument("detached.c.xml");
         Element signatureNode = getSigElement(doc);
-        XadesVerifier verifier = new XadesVerificationProfile(VerifierTestBase.validationProviderNist).newVerifier();
+        XadesVerifier verifier = nistVerificationProfile.newVerifier();
 
         InputStream is = new FileInputStream("license.txt");
         SignatureSpecificVerificationOptions options = new SignatureSpecificVerificationOptions().useDataForAnonymousReference(is);
@@ -187,8 +195,7 @@ public class XadesVerifierImplTest extends VerifierTestBase
         Element signatureNode = getSigElement(doc);
 
         XadesSignatureFormatExtender formExt = new XadesFormatExtenderProfile().getFormatExtender();
-        XadesVerificationProfile p = new XadesVerificationProfile(VerifierTestBase.validationProviderNist);
-        XAdESVerificationResult res = p.newVerifier().verify(signatureNode, null, formExt, XAdESForm.X_L);
+        XAdESVerificationResult res = nistVerificationProfile.newVerifier().verify(signatureNode, null, formExt, XAdESForm.X_L);
 
         assertEquals(XAdESForm.C, res.getSignatureForm());
         assertPropElementPresent(signatureNode, SigAndRefsTimeStampProperty.PROP_NAME);
@@ -196,23 +203,6 @@ public class XadesVerifierImplTest extends VerifierTestBase
         assertPropElementPresent(signatureNode, RevocationValuesProperty.PROP_NAME);
 
         outputDocument(doc, "document.verified.c.xl.xml");
-    }
-
-    @Test(expected = UnsupportedOperationException.class)
-    public void testVerifyBESCustomPropVer() throws Exception
-    {
-        System.out.println("verifyBESCustomPropVer");
-        verificationProfile.withQualifyingPropertyVerifier(SigningTimeData.class, new QualifyingPropertyVerifier<SigningTimeData>()
-        {
-            @Override
-            public QualifyingProperty verify(
-                    SigningTimeData propData,
-                    QualifyingPropertyVerificationContext ctx) throws InvalidPropertyException
-            {
-                throw new UnsupportedOperationException("Yeah!");
-            }
-        });
-        verifySignature("document.signed.bes.xml");
     }
 
     private static void assertPropElementPresent(

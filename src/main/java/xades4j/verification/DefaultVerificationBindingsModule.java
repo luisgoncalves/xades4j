@@ -20,7 +20,9 @@ import com.google.inject.AbstractModule;
 import com.google.inject.TypeLiteral;
 import com.google.inject.multibindings.MapBinder;
 import com.google.inject.multibindings.Multibinder;
+import com.google.inject.util.Types;
 import java.io.InputStream;
+import java.lang.reflect.ParameterizedType;
 import javax.xml.namespace.QName;
 import xades4j.properties.CounterSignatureProperty;
 import xades4j.properties.ObjectIdentifier;
@@ -33,6 +35,7 @@ import xades4j.properties.data.CustomPropertiesDataObjsStructureVerifier;
 import xades4j.properties.data.DataObjectFormatData;
 import xades4j.properties.data.GenericDOMData;
 import xades4j.properties.data.IndividualDataObjsTimeStampData;
+import xades4j.properties.data.PropertyDataObject;
 import xades4j.properties.data.SignaturePolicyData;
 import xades4j.properties.data.SignatureProdPlaceData;
 import xades4j.properties.data.SignatureTimeStampData;
@@ -44,6 +47,7 @@ import xades4j.providers.impl.DefaultTimeStampVerificationProvider;
 import xades4j.providers.MessageDigestEngineProvider;
 import xades4j.providers.SignaturePolicyDocumentProvider;
 import xades4j.providers.TimeStampVerificationProvider;
+import xades4j.utils.BuiltIn;
 
 /**
  * Contains the Guice bindings for the default components and the bindings for the
@@ -53,6 +57,17 @@ import xades4j.providers.TimeStampVerificationProvider;
  */
 class DefaultVerificationBindingsModule extends AbstractModule
 {
+    private <TData extends PropertyDataObject> void bindBuiltInVerifier(
+            Class<TData> dataObjectClass,
+            Class<? extends QualifyingPropertyVerifier<TData>> verifierClass)
+    {
+        ParameterizedType pt = Types.newParameterizedType(QualifyingPropertyVerifier.class, dataObjectClass);
+        TypeLiteral<QualifyingPropertyVerifier<TData>> tl = (TypeLiteral<QualifyingPropertyVerifier<TData>>)TypeLiteral.get(pt);
+        
+        bind(tl).to(verifierClass);
+        bind(tl).annotatedWith(BuiltIn.class).to(verifierClass);
+    }
+
     @Override
     protected void configure()
     {
@@ -86,56 +101,21 @@ class DefaultVerificationBindingsModule extends AbstractModule
         // QualifyingPropertyVerifiersMapperImpl relies on the injector to get
         // the individual verifiers, so they need to be bound.
         // - SignedSignatureProperties
-        bind(new TypeLiteral<QualifyingPropertyVerifier<SigningTimeData>>()
-        {
-        }).to(SigningTimeVerifier.class);
-
-        bind(new TypeLiteral<QualifyingPropertyVerifier<SignerRoleData>>()
-        {
-        }).to(SignerRoleVerifier.class);
-
-        bind(new TypeLiteral<QualifyingPropertyVerifier<SignatureProdPlaceData>>()
-        {
-        }).to(SigProdPlaceVerifier.class);
-
-        bind(new TypeLiteral<QualifyingPropertyVerifier<SigningCertificateData>>()
-        {
-        }).to(SigningCertificateVerifier.class);
-
-        bind(new TypeLiteral<QualifyingPropertyVerifier<SignaturePolicyData>>()
-        {
-        }).to(SignaturePolicyVerifier.class);
-
+        bindBuiltInVerifier(SigningTimeData.class, SigningTimeVerifier.class);
+        bindBuiltInVerifier(SignerRoleData.class, SignerRoleVerifier.class);
+        bindBuiltInVerifier(SignatureProdPlaceData.class, SigProdPlaceVerifier.class);
+        bindBuiltInVerifier(SigningCertificateData.class, SigningCertificateVerifier.class);
+        bindBuiltInVerifier(SignaturePolicyData.class, SignaturePolicyVerifier.class);
         // - SignedDataObjectProperties
-        bind(new TypeLiteral<QualifyingPropertyVerifier<CommitmentTypeData>>()
-        {
-        }).to(CommitmentTypeVerifier.class);
-
-        bind(new TypeLiteral<QualifyingPropertyVerifier<DataObjectFormatData>>()
-        {
-        }).to(DataObjFormatVerifier.class);
-
-        bind(new TypeLiteral<QualifyingPropertyVerifier<AllDataObjsTimeStampData>>()
-        {
-        }).to(AllDataObjsTimeStampVerifier.class);
-
-        bind(new TypeLiteral<QualifyingPropertyVerifier<IndividualDataObjsTimeStampData>>()
-        {
-        }).to(IndivDataObjsTimeStampVerifier.class);
-
+        bindBuiltInVerifier(CommitmentTypeData.class, CommitmentTypeVerifier.class);
+        bindBuiltInVerifier(DataObjectFormatData.class, DataObjFormatVerifier.class);
+        bindBuiltInVerifier(AllDataObjsTimeStampData.class, AllDataObjsTimeStampVerifier.class);
+        bindBuiltInVerifier(IndividualDataObjsTimeStampData.class, IndivDataObjsTimeStampVerifier.class);
         // - UnsignedSignatureProperties
-        bind(new TypeLiteral<QualifyingPropertyVerifier<SignatureTimeStampData>>()
-        {
-        }).to(SignatureTimeStampVerifier.class);
-
-        bind(new TypeLiteral<QualifyingPropertyVerifier<CompleteCertificateRefsData>>()
-        {
-        }).to(CompleteCertRefsVerifier.class);
-
-        bind(new TypeLiteral<QualifyingPropertyVerifier<CompleteRevocationRefsData>>()
-        {
-        }).to(CompleteRevocRefsVerifier.class);
-
+        bindBuiltInVerifier(SignatureTimeStampData.class, SignatureTimeStampVerifier.class);
+        bindBuiltInVerifier(CompleteCertificateRefsData.class, CompleteCertRefsVerifier.class);
+        bindBuiltInVerifier(CompleteRevocationRefsData.class, CompleteRevocRefsVerifier.class);
+        
         MapBinder<QName, QualifyingPropertyVerifier> unkownElemsBinder = MapBinder.newMapBinder(binder(), QName.class, QualifyingPropertyVerifier.class);
         unkownElemsBinder
                 .addBinding(new QName(QualifyingProperty.XADES_XMLNS, CounterSignatureProperty.PROP_NAME))
