@@ -25,7 +25,9 @@ import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.transform.TransformerFactory;
 import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.stream.StreamResult;
+import org.w3c.dom.Attr;
 import org.w3c.dom.Document;
+import org.w3c.dom.Element;
 
 /**
  *
@@ -33,6 +35,7 @@ import org.w3c.dom.Document;
  */
 public class SignatureServicesTestBase
 {
+
     static private DocumentBuilder db;
 
     static
@@ -68,10 +71,18 @@ public class SignatureServicesTestBase
         return System.getProperty("os.name").contains("Windows");
     }
 
+    /**
+     * Gets a XML document from the src/test/xml folder. If the root element of
+     * the document has an "Id" attribute it is set to be its XML ID.
+     */
     public static Document getDocument(String fileName) throws Exception
     {
         String path = toPlatformSpecificXMLDirFilePath(fileName);
-        return db.parse(new FileInputStream(path));
+        Document doc = db.parse(new FileInputStream(path));
+        // Apache Santuario now uses Document.getElementById; use this convention for tests.
+        Element elem = doc.getDocumentElement();
+        DOMHelper.useIdAsXmlId(elem);
+        return doc;
     }
 
     public static Document getNewDocument() throws Exception

@@ -188,13 +188,13 @@ public class QualifyingPropertyVerificationContext
                 return null;
 
             // A little workaround to be able to use the ResourceResolver.
-            Attr refAttr = signatureDoc.createAttributeNS(null, "ref");
+            Attr refAttr = this.signatureDoc.createAttributeNS(null, "ref");
             refAttr.setNodeValue(objReference);
-            signatureDoc.createElementNS(null, "dummy").setAttributeNodeNS(refAttr);
+            this.signatureDoc.createElementNS(null, "dummy").setAttributeNodeNS(refAttr);
 
             try
             {
-                XMLSignatureInput refData = ResourceResolver.resolveStatic(refAttr, "");
+                XMLSignatureInput refData = ResourceResolver.getInstance(refAttr, "").resolve(refAttr, "");
                 // This has to be a NodeSet data because it is a same-document reference.
                 Node refNode = refData.getSubNode();
                 if (refNode.getNodeType() != Node.ELEMENT_NODE)

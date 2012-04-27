@@ -30,6 +30,7 @@ import org.apache.xml.security.keys.content.x509.XMLX509IssuerSerial;
 import org.apache.xml.security.signature.Reference;
 import org.apache.xml.security.signature.SignedInfo;
 import org.apache.xml.security.signature.XMLSignature;
+import org.apache.xml.security.signature.XMLSignatureException;
 import org.apache.xml.security.transforms.Transforms;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
@@ -37,6 +38,7 @@ import xades4j.XAdES4jXMLSigException;
 import xades4j.algorithms.GenericAlgorithm;
 import xades4j.properties.QualifyingProperty;
 import xades4j.providers.CertificateValidationException;
+import xades4j.utils.DOMHelper;
 
 /**
  *
@@ -44,6 +46,7 @@ import xades4j.providers.CertificateValidationException;
  */
 class SignatureUtils
 {
+
     private SignatureUtils()
     {
     }
@@ -51,6 +54,7 @@ class SignatureUtils
 
     static class KeyInfoRes
     {
+
         List<X509Certificate> keyInfoCerts;
         X509CertSelector certSelector;
         XMLX509IssuerSerial issuerSerial;
@@ -70,7 +74,9 @@ class SignatureUtils
             KeyInfo keyInfo) throws CertificateValidationException
     {
         if (null == keyInfo || !keyInfo.containsX509Data())
+        {
             throw new InvalidKeyInfoDataException("No X509Data to identify the leaf certificate");
+        }
 
         List<X509Certificate> keyInfoCerts = new ArrayList<X509Certificate>(1);
         XMLX509IssuerSerial issuerSerial = null;
@@ -102,22 +108,28 @@ class SignatureUtils
                 certSelector.setIssuer(new X500Principal(issuerSerial.getIssuerName()));
                 certSelector.setSerialNumber(issuerSerial.getSerialNumber());
             } else if (x509Data.containsSubjectName())
+            {
                 certSelector.setSubject(new X500Principal(x509Data.itemSubjectName(0).getSubjectName()));
-            else if (x509Data.containsCertificate())
+            } else if (x509Data.containsCertificate())
+            {
                 certSelector.setCertificate(x509Data.itemCertificate(0).getX509Certificate());
-            else
-                // No criteria to select the leaf certificate.
-                // Improvement: search the SigningCertiticate property and try to
-                // find the "bottom" certificate.
+            } else
+            // No criteria to select the leaf certificate.
+            // Improvement: search the SigningCertiticate property and try to
+            // find the "bottom" certificate.
+            {
                 throw new InvalidKeyInfoDataException("No criteria to select the leaf certificate");
+            }
 
             // Even if certificates are not used as selection criteria, they have
             // to be collected because they may be needed to build the cert path.
             if (x509Data.containsCertificate())
+            {
                 for (int j = 0; j < x509Data.lengthCertificate(); ++j)
                 {
                     keyInfoCerts.add(x509Data.itemCertificate(j).getX509Certificate());
                 }
+            }
         } catch (XMLSecurityException ex)
         {
             throw new InvalidKeyInfoDataException("Cannot process X509Data", ex);
@@ -129,6 +141,7 @@ class SignatureUtils
     /**************************************************************************/
     static class ReferencesRes
     {
+
         /**
          * In signature order.
          */
@@ -174,7 +187,9 @@ class SignatureUtils
             if (QualifyingProperty.SIGNED_PROPS_TYPE_URI.equals(refTypeUri))
             {
                 if (signedPropsRef != null)
+                {
                     throw new QualifyingPropertiesIncorporationException("Multiple references to SignedProperties");
+                }
                 signedPropsRef = ref;
             } else
             {
@@ -184,10 +199,12 @@ class SignatureUtils
                 {
                     Transforms transfs = ref.getTransforms();
                     if (transfs != null)
+                    {
                         for (int j = 0; j < transfs.getLength(); ++j)
                         {
                             dataObj.withTransform(new GenericAlgorithm(transfs.item(j).getURI()));
                         }
+                    }
                 } catch (XMLSecurityException ex)
                 {
                     throw new XAdES4jXMLSigException("Cannot process transfroms", ex);
@@ -197,10 +214,12 @@ class SignatureUtils
         }
 
         if (null == signedPropsRef)
-            // !!!
-            // Still may be a XAdES signature, if the signing certificate is
-            // protected. For now, that scenario is not suported.
+        // !!!
+        // Still may be a XAdES signature, if the signing certificate is
+        // protected. For now, that scenario is not suported.
+        {
             throw new QualifyingPropertiesIncorporationException("SignedProperties reference not found");
+        }
 
         return new ReferencesRes(dataObjsReferences, signedPropsRef);
     }
@@ -224,7 +243,9 @@ class SignatureUtils
                 // because I'm only supporting QualifyingProperties. Anyway, the
                 // exception message is more specific this way.
                 if (foundXAdESContainerObject)
+                {
                     throw new QualifyingPropertiesIncorporationException("All instances of the QualifyingProperties element must occur within a single ds:Object element");
+                }
 
                 // If this Object had XAdES elements, it is "the Object". The for
                 // cycle over the Objects is not interrupted because I need to
@@ -238,19 +259,25 @@ class SignatureUtils
                         // XAdES 6.3: "at most one instance of the QualifyingProperties
                         // element MAY occur within this ds:Object element".
                         if (qualifyingPropsElem != null)
+                        {
                             throw new QualifyingPropertiesIncorporationException("Only a single QualifyingProperties element is allowed inside the ds:Object element");
+                        }
                         qualifyingPropsElem = e;
 
                     } else
-                        // QualifyingPropertiesReference is not supported, so
-                        // nothing else on this namespace should appear.
+                    // QualifyingPropertiesReference is not supported, so
+                    // nothing else on this namespace should appear.
+                    {
                         throw new QualifyingPropertiesIncorporationException("Only the QualifyingProperties element is supported");
+                    }
                 }
             }
         }
 
         if (!foundXAdESContainerObject)
+        {
             throw new QualifyingPropertiesIncorporationException("Couldn't find any XAdES elements");
+        }
 
         return qualifyingPropsElem;
     }
@@ -264,10 +291,52 @@ class SignatureUtils
         while (child != null)
         {
             if (child.getNodeType() == Node.ELEMENT_NODE && QualifyingProperty.XADES_XMLNS.equals(child.getNamespaceURI()))
-                xadesElems.add((Element)child);
+            {
+                xadesElems.add((Element) child);
+            }
             child = child.getNextSibling();
         }
 
         return xadesElems;
+    }
+
+    static void checkSignedPropertiesIncorporation(Element qualifyingPropsElem, Reference signedPropsRef) throws QualifyingPropertiesIncorporationException
+    {
+        Element signedPropsElem = DOMHelper.getFirstChildElement(qualifyingPropsElem);
+        if (signedPropsElem == null
+                || !signedPropsElem.getLocalName().equals(QualifyingProperty.SIGNED_PROPS_TAG)
+                || !signedPropsElem.getNamespaceURI().equals(QualifyingProperty.XADES_XMLNS))
+        {
+            throw new QualifyingPropertiesIncorporationException("SignedProperties not found as the first child of QualifyingProperties.");
+        }
+
+        DOMHelper.useIdAsXmlId(signedPropsElem);
+
+        // Only QualifyingProperties in the signature's document are supported.
+        // XML-DSIG 4.3.3.2: "a same-document reference is defined as a URI-Reference
+        // that consists of a hash sign ('#') followed by a fragment"
+        if (!signedPropsRef.getURI().startsWith("#"))
+        {
+            throw new QualifyingPropertiesIncorporationException("Only QualifyingProperties in the signature's document are supported");
+        }
+
+        try
+        {
+            Node sPropsNode = signedPropsRef.getNodesetBeforeFirstCanonicalization().getSubNode();
+            if (sPropsNode == null || sPropsNode.getNodeType() != Node.ELEMENT_NODE)
+            {
+                throw new QualifyingPropertiesIncorporationException("The supposed reference over signed properties doesn't cover an element.");
+            }
+
+            // The referenced signed properties element must be the child of qualifying properties.
+            Element referencedSignedPropsElem = (Element) sPropsNode;
+            if (referencedSignedPropsElem != signedPropsElem)
+            {
+                throw new QualifyingPropertiesIncorporationException("The referenced SignedProperties are not contained by the proper QualifyingProperties element");
+            }
+        } catch (XMLSignatureException ex)
+        {
+            throw new QualifyingPropertiesIncorporationException("Cannot get the referenced SignedProperties", ex);
+        }
     }
 }

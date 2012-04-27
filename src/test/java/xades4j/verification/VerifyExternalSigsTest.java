@@ -19,8 +19,11 @@ package xades4j.verification;
 import java.security.KeyStore;
 import static org.junit.Assert.*;
 import org.junit.Test;
+import org.w3c.dom.Document;
+import org.w3c.dom.Element;
 import xades4j.providers.CertificateValidationProvider;
 import xades4j.providers.impl.PKIXCertificateValidationProvider;
+import xades4j.utils.DOMHelper;
 import xades4j.utils.FileSystemDirectoryCertStore;
 
 /**
@@ -122,7 +125,13 @@ public class VerifyExternalSigsTest extends VerifierTestBase
         KeyStore ks = createAndLoadJKSKeyStore("petition/signitStore", "signitstorepass");
         PKIXCertificateValidationProvider cvp = new PKIXCertificateValidationProvider(ks, false, certStore.getStore());
 
-        XAdESForm f = verifySignature("Petition_1285054657304.xml", new XadesVerificationProfile(cvp));
+        Document doc = getDocument("Petition_1285054657304.xml");
+
+        // Set the XML ID of the Petition element.
+        Element petitionElem = DOMHelper.getFirstChildElement(doc.getDocumentElement());
+        petitionElem.setIdAttribute("id", true);
+
+        XAdESForm f = verifySignature(getSigElement(doc), new XadesVerificationProfile(cvp));
         assertEquals(f, XAdESForm.T);
     }
 }

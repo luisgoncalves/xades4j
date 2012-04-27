@@ -34,7 +34,6 @@ import org.apache.xml.security.signature.XMLSignatureException;
 import org.apache.xml.security.utils.Constants;
 import org.apache.xml.security.utils.ElementProxy;
 import org.apache.xml.security.utils.XMLUtils;
-import org.apache.xml.security.utils.resolver.ResourceResolver;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
@@ -164,6 +163,9 @@ class SignerBES implements XadesSigner
 
         signature.setId(signatureId);
 
+        /* ds:KeyInfo */
+        this.keyInfoBuilder.buildKeyInfo(signingCertificate, signature);
+
         /* References */
         // Process the data object descriptions to get the References and mappings.
         // After this call all the signed data objects References and XMLObjects
@@ -171,33 +173,6 @@ class SignerBES implements XadesSigner
         Map<DataObjectDesc, Reference> referenceMappings = this.dataObjectDescsProcessor.process(
                 signedDataObjects,
                 signature);
-
-        /* SignedProperties reference */
-        // XAdES 6.3.1: "In order to protect the properties with the signature,
-        // a ds:Reference element MUST be added to the XMLDSIG signature (...)
-        // composed in such a way that it uses the SignedProperties element (...)
-        // as the input for computing its corresponding digest. Additionally,
-        // (...) use the Type attribute of this particular ds:Reference element,
-        // with its value set to: http://uri.etsi.org/01903#SignedProperties."
-
-        String digestAlgUri = algorithmsProvider.getDigestAlgorithmForDataObjsReferences();
-        if (null == digestAlgUri)
-        {
-            throw new NullPointerException("Digest algorithm URI not provided");
-        }
-
-        try
-        {
-            signature.addDocument('#' + signedPropsId, null, digestAlgUri, null, QualifyingProperty.SIGNED_PROPS_TYPE_URI);
-        } catch (XMLSignatureException ex)
-        {
-            // Seems to be thrown when the digest algorithm is not supported. In
-            // this case, if it wasn't thrown when processing the data objects it
-            // shouldn't be thrown now!
-            throw new UnsupportedAlgorithmException(
-                    "Digest algorithm not supported in the XML Signature provider",
-                    digestAlgUri, ex);
-        }
 
         /* QualifyingProperties element */
         // Create the QualifyingProperties element
@@ -227,46 +202,71 @@ class SignerBES implements XadesSigner
         QualifyingProperties qualifProps = qualifPropsProcessor.getQualifyingProperties(
                 signedDataObjects, fsssp, fsusp);
 
-        /* Marshal the signed properties */
-        // Create the context for signed properties data objects generation.
-        PropertiesDataGenerationContext propsDataGenCtx = new PropertiesDataGenerationContext(
-                signedDataObjects.getDataObjectsDescs(),
-                referenceMappings,
-                signatureDocument);
-        // Generate the signed properties data objects. The data objects structure
-        // is verifier in the process.
-        SigAndDataObjsPropertiesData signedPropsData = this.propsDataObjectsGenerator.generateSignedPropertiesData(
-                qualifProps.getSignedProperties(),
-                propsDataGenCtx);
-        // Marshal the signed properties data to the QualifyingProperties node.
-        this.signedPropsMarshaller.marshal(
-                signedPropsData,
-                signedPropsId,
-                qualifyingPropsElem);
-
-        /* ds:KeyInfo */
-        this.keyInfoBuilder.buildKeyInfo(signingCertificate, signature);
-
-        /* Apply the signature */
-        PrivateKey signingKey = keyingProvider.getSigningKey(signingCertificate);
         try
         {
+            // The signature needs to be appended to the document from now on because
+            // property data generation may need to dereference same-document data
+            // object references.
             appendingStrategy.append(signature.getElement(), referenceNode);
+
+            /* Signed properties */
+            // Create the context for signed properties data objects generation.
+            PropertiesDataGenerationContext propsDataGenCtx = new PropertiesDataGenerationContext(
+                    signedDataObjects.getDataObjectsDescs(),
+                    referenceMappings,
+                    signatureDocument);
+            // Generate the signed properties data objects. The data objects structure
+            // is verifier in the process.
+            SigAndDataObjsPropertiesData signedPropsData = this.propsDataObjectsGenerator.generateSignedPropertiesData(
+                    qualifProps.getSignedProperties(),
+                    propsDataGenCtx);
+            // Marshal the signed properties data to the QualifyingProperties node.
+            this.signedPropsMarshaller.marshal(signedPropsData, qualifyingPropsElem);
+            Element signedPropsElem = DOMHelper.getFirstChildElement(qualifyingPropsElem);
+            DOMHelper.setIdAsXmlId(signedPropsElem, signedPropsId);
+
+            // SignedProperties reference
+            // XAdES 6.3.1: "In order to protect the properties with the signature,
+            // a ds:Reference element MUST be added to the XMLDSIG signature (...)
+            // composed in such a way that it uses the SignedProperties element (...)
+            // as the input for computing its corresponding digest. Additionally,
+            // (...) use the Type attribute of this particular ds:Reference element,
+            // with its value set to: http://uri.etsi.org/01903#SignedProperties."
+
+            String digestAlgUri = algorithmsProvider.getDigestAlgorithmForDataObjsReferences();
+            if (null == digestAlgUri)
+            {
+                throw new NullPointerException("Digest algorithm URI not provided");
+            }
+
             try
             {
-                signature.sign(signingKey);
+                signature.addDocument('#' + signedPropsId, null, digestAlgUri, null, QualifyingProperty.SIGNED_PROPS_TYPE_URI);
             } catch (XMLSignatureException ex)
             {
+                // Seems to be thrown when the digest algorithm is not supported. In
+                // this case, if it wasn't thrown when processing the data objects it
+                // shouldn't be thrown now!
+                throw new UnsupportedAlgorithmException(
+                        "Digest algorithm not supported in the XML Signature provider",
+                        digestAlgUri, ex);
+            }
 
+            // Apply the signature
+            try
+            {
+                PrivateKey signingKey = keyingProvider.getSigningKey(signingCertificate);
+                signature.sign(signingKey);
+            }
+            catch (XMLSignatureException ex)
+            {
                 throw new XAdES4jXMLSigException(ex.getMessage(), ex);
             }
             // Set the ds:SignatureValue id.
             Element sigValueElem = DOMHelper.getFirstDescendant(
                     signature.getElement(),
                     Constants.SignatureSpecNS, Constants._TAG_SIGNATUREVALUE);
-            sigValueElem.setAttributeNS(
-                    null, Constants._ATT_ID,
-                    String.format("%s-sigvalue", signatureId));
+            DOMHelper.setIdAsXmlId(sigValueElem, String.format("%s-sigvalue", signatureId));
 
             /* Marshal unsigned properties */
             // Generate the unsigned properties data objects. The data objects structure
@@ -276,11 +276,9 @@ class SignerBES implements XadesSigner
                     qualifProps.getUnsignedProperties(),
                     propsDataGenCtx);
             // Marshal the unsigned properties to the final QualifyingProperties node.
-            this.unsignedPropsMarshaller.marshal(
-                    unsignedPropsData,
-                    String.format("%s-unsignedprops", signatureId),
-                    qualifyingPropsElem);
-        } catch (XAdES4jException ex)
+            this.unsignedPropsMarshaller.marshal(unsignedPropsData, qualifyingPropsElem);
+        }
+        catch (XAdES4jException ex)
         {
             appendingStrategy.revert(signature.getElement(), referenceNode);
             throw ex;
@@ -320,7 +318,7 @@ class SignerBES implements XadesSigner
     {
         Element algorithmElem = XMLUtils.createElementInSignatureSpace(signatureDocument, elementName);
         algorithmElem.setAttributeNS(null, Constants._ATT_ALGORITHM, algorithm.getUri());
-        
+
         List<Node> algorithmParams = this.algorithmsParametersMarshaller.marshalParameters(algorithm, signatureDocument);
         if (algorithmParams != null)
         {

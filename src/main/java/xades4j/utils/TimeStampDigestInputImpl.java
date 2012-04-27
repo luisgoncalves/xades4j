@@ -91,11 +91,11 @@ class TimeStampDigestInputImpl implements TimeStampDigestInput
                 Transform t;
                 if (null == c14nParams)
                 {
-                    t = Transform.getInstance(doc, this.c14n.getUri());
-                } else
+                    t = new Transform(doc, this.c14n.getUri());
+                }
+                else
                 {
-
-                    t = Transform.getInstance(doc, this.c14n.getUri(), DOMHelper.nodeList(c14nParams));
+                    t = new Transform(doc, this.c14n.getUri(), DOMHelper.nodeList(c14nParams));
                 }
                 refData = t.performTransform(refData);
                 // Fall through to add the bytes resulting from the canonicalization.

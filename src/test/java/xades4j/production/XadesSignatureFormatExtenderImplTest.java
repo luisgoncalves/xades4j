@@ -21,10 +21,6 @@ import java.util.ArrayList;
 import java.util.Collection;
 import org.apache.xml.security.signature.XMLSignature;
 import org.apache.xml.security.utils.Constants;
-import org.junit.After;
-import org.junit.AfterClass;
-import org.junit.Before;
-import org.junit.BeforeClass;
 import org.junit.Test;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
@@ -38,30 +34,6 @@ import xades4j.properties.UnsignedSignatureProperty;
  */
 public class XadesSignatureFormatExtenderImplTest extends SignerTestBase
 {
-    public XadesSignatureFormatExtenderImplTest() throws Exception
-    {
-    }
-
-    @BeforeClass
-    public static void setUpClass() throws Exception
-    {
-    }
-
-    @AfterClass
-    public static void tearDownClass() throws Exception
-    {
-    }
-
-    @Before
-    public void setUp()
-    {
-    }
-
-    @After
-    public void tearDown()
-    {
-    }
-
     @Test
     public void testEnrichSignatureWithT() throws Exception
     {

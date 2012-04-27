@@ -18,6 +18,7 @@ package xades4j.utils;
 
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
+import org.apache.xml.security.utils.Constants;
 import org.apache.xml.security.utils.HelperNodeList;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
@@ -156,5 +157,28 @@ public class DOMHelper
             nl.appendChild(n);
         }
         return nl;
+    }
+
+    /**
+     * Sets the "Id" attribute of an element and sets it as the element's XML ID.
+     * @param e the element where the ID should be set
+     * @param id the id
+     */
+    public static void setIdAsXmlId(Element e, String id)
+    {
+        e.setAttributeNS(null, Constants._ATT_ID, id);
+        e.setIdAttributeNS(null, Constants._ATT_ID, true);
+    }
+
+    /**
+     * Defines the element's "Id" atribute as its XML ID, if present.
+     * @param e the element
+     */
+    public static void useIdAsXmlId(Element e)
+    {
+        if(e.hasAttributeNS(null, Constants._ATT_ID))
+        {
+            e.setIdAttributeNS(null, Constants._ATT_ID, true);
+        }
     }
 }

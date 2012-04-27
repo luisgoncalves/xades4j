@@ -141,19 +141,8 @@ class XadesVerifierImpl implements XadesVerifier
 
         /* Get and check the QualifyingProperties element */
 
-        // Get the referenced SignedProperties
-        Node signedPropsNode = getSignedPropertiesNode(referencesRes.signedPropsReference);
-        // Get the supposed final QualifyingProperties node.
-        Node signedPropsNodeParent = signedPropsNode.getParentNode();
-        // Get the QualifyingProperties node from whithin a ds:Object (and check
-        // correct incorporation).
         Element qualifyingPropsElem = SignatureUtils.getQualifyingPropertiesElement(signature);
-        // Check if the parent of the referenced SignedProperties element is the
-        // QualifyingProperties element found inside ds:Object.
-        if (signedPropsNodeParent != qualifyingPropsElem)
-        {
-            throw new QualifyingPropertiesIncorporationException("The referenced SignedProperties are not contained by the proper QualifyingProperties element");
-        }
+        SignatureUtils.checkSignedPropertiesIncorporation(qualifyingPropsElem, referencesRes.signedPropsReference);
 
         // Check the QualifyingProperties 'Target' attribute.
         Node targetAttr = qualifyingPropsElem.getAttributeNodeNS(null, QualifyingProperty.TARGET_ATTR);
@@ -228,40 +217,9 @@ class XadesVerifierImpl implements XadesVerifier
 
         return res;
     }
-
+    
     /*************************************************************************************/
     /**/
-    private static Node getSignedPropertiesNode(Reference signedPropsRef) throws QualifyingPropertiesIncorporationException
-    {
-        // Only QualifyingProperties in the signature's document are supported.
-        // XML-DSIG 4.3.3.2: "a same-document reference is defined as a URI-Reference
-        // that consists of a hash sign ('#') followed by a fragment"
-        if (!signedPropsRef.getURI().startsWith("#"))
-        {
-            throw new QualifyingPropertiesIncorporationException("Only QualifyingProperties in the signature's document are supported");
-        }
-
-        Throwable cause = null;
-        try
-        {
-            Node sPropsNode = signedPropsRef.getNodesetBeforeFirstCanonicalization().getSubNode();
-            if (sPropsNode != null)
-            {
-                if (sPropsNode.getNodeType() != Node.ELEMENT_NODE
-                        || !sPropsNode.getLocalName().equals(QualifyingProperty.SIGNED_PROPS_TAG)
-                        || !sPropsNode.getNamespaceURI().equals(QualifyingProperty.XADES_XMLNS))
-                {
-                    throw new QualifyingPropertiesIncorporationException("The supposed reference over signed properties doesn't cover a XAdES SignedProperties element.");
-                }
-
-                return sPropsNode;
-            }
-        } catch (XMLSignatureException ex)
-        {
-            cause = ex;
-        }
-        throw new QualifyingPropertiesIncorporationException("Cannot get the SignedProperties element", cause);
-    }
 
     private Date getValidationDate(
             Collection<PropertyDataObject> qualifPropsData,

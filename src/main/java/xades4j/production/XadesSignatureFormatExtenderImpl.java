@@ -59,17 +59,31 @@ class XadesSignatureFormatExtenderImpl implements XadesSignatureFormatExtender
         if (!props.getDataObjProps().isEmpty())
             throw new NullPointerException();
 
-        SigAndDataObjsPropertiesData propsData = propsDataObjectsGenerator.generateUnsignedPropertiesData(
-                props,
-                new PropertiesDataGenerationContext(sig));
         Element qualifProps = DOMHelper.getFirstDescendant(
                 sig.getElement(),
                 QualifyingProperty.XADES_XMLNS, QualifyingProperty.QUALIFYING_PROPS_TAG);
+        if(null == qualifProps)
+        {
+            throw new IllegalArgumentException("Couldn't find XAdES QualifyingProperties");
+        }
 
+        Element signedProps = DOMHelper.getFirstChildElement(qualifProps);
+        if (signedProps != null
+            && signedProps.getLocalName().equals(QualifyingProperty.SIGNED_PROPS_TAG)
+            && signedProps.getNamespaceURI().equals(QualifyingProperty.XADES_XMLNS))
+        {
+            // Register the SignedProperties XML ID.
+            DOMHelper.useIdAsXmlId(signedProps);
+        }
+
+        SigAndDataObjsPropertiesData propsData = propsDataObjectsGenerator.generateUnsignedPropertiesData(
+                props,
+                new PropertiesDataGenerationContext(sig));
+        
         // A little style trick to have nice prefixes.
         if(null == sig.getDocument().lookupPrefix(QualifyingProperty.XADESV141_XMLNS))
             qualifProps.setAttributeNS(Constants.NamespaceSpecNS, "xmlns:xades141", QualifyingProperty.XADESV141_XMLNS);
 
-        unsignedPropsMarshaller.marshal(propsData, null, qualifProps);
+        unsignedPropsMarshaller.marshal(propsData, qualifProps);
     }
 }

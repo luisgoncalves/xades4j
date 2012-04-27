@@ -44,12 +44,10 @@ public interface PropertiesMarshaller
      * DOM structure below {@code SignedProperties} or {@code UnsignedProperties},
      * inclusive.
      * @param props the data objects to be marshalled
-     * @param propsId the identifier to be set on the top-most property container ({@code SignedProperties} or {@code UnsignedProperties})
      * @param qualifyingPropsNode the destination node
      * @throws MarshalException if there's an error
      */
     public void marshal(
             SigAndDataObjsPropertiesData props,
-            String propsId,
             Node qualifyingPropsNode) throws MarshalException;
 }

@@ -70,8 +70,7 @@ class DefaultUnsignedPropertiesMarshaller
     /* Methods from UnsignedPropertiesMarshaller */
 
     @Override
-    public void marshal(SigAndDataObjsPropertiesData props, String propsId,
-            Node qualifyingPropsNode) throws MarshalException
+    public void marshal(SigAndDataObjsPropertiesData props, Node qualifyingPropsNode) throws MarshalException
     {
         XmlUnsignedPropertiesType xmlUnsignedProps = new XmlUnsignedPropertiesType();
         doMarshal(props, qualifyingPropsNode, xmlUnsignedProps);

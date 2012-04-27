@@ -85,13 +85,9 @@ final class DefaultSignedPropertiesMarshaller
     /* Methods from SignedPropertiesMarshaller */
 
     @Override
-    public void marshal(
-            SigAndDataObjsPropertiesData signedProps,
-            String signedPropsId,
-            Node qualifyingPropsNode) throws MarshalException
+    public void marshal(SigAndDataObjsPropertiesData signedProps, Node qualifyingPropsNode) throws MarshalException
     {
         XmlSignedPropertiesType xmlSignedProps = new XmlSignedPropertiesType();
-        xmlSignedProps.setId(signedPropsId);
         doMarshal(signedProps, qualifyingPropsNode, xmlSignedProps);
     }
 

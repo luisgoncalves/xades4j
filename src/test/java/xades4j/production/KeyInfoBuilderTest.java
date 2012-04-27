@@ -149,6 +149,7 @@ public class KeyInfoBuilderTest extends SignatureServicesTestBase
         Document doc = getNewDocument();
         XMLSignature xmlSignature = new XMLSignature(doc, "", XMLSignature.ALGO_ID_SIGNATURE_RSA_SHA256);
         xmlSignature.setId("sigId");
+        doc.appendChild(xmlSignature.getElement());
         return xmlSignature;
     }
 }
