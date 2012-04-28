@@ -18,7 +18,6 @@ package xades4j.production;
 
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.LinkedList;
 import java.util.List;
 import xades4j.properties.AllDataObjsCommitmentTypeProperty;
 import xades4j.properties.AllDataObjsTimeStampProperty;

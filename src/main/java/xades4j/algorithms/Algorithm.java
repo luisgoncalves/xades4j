@@ -33,7 +33,6 @@ public abstract class Algorithm
 
     /**
      * @param uri the algorithm's URI
-     * @param params the algorithm parameter nodes(optional)
      */
     protected Algorithm(String uri)
     {

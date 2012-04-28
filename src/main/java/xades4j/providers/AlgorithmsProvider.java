@@ -26,32 +26,32 @@ import xades4j.UnsupportedAlgorithmException;
 public interface AlgorithmsProvider
 {
     /**
-     * @deprecated
+     * @deprecated the interface is deprecated
      */
     String getSignatureAlgorithm(String keyAlgorithmName) throws UnsupportedAlgorithmException;
 
     /**
-     * @deprecated
+     * @deprecated the interface is deprecated
      */
     String getCanonicalizationAlgorithmForSignature();
 
     /**
-     * @deprecated
+     * @deprecated the interface is deprecated
      */
     String getCanonicalizationAlgorithmForTimeStampProperties();
 
     /**
-     * @deprecated
+     * @deprecated the interface is deprecated
      */
     String getDigestAlgorithmForDataObjsReferences();
 
     /**
-     * @deprecated
+     * @deprecated the interface is deprecated
      */
     String getDigestAlgorithmForReferenceProperties();
 
     /**
-     * @deprecated
+     * @deprecated the interface is deprecated
      */
     String getDigestAlgorithmForTimeStampProperties();
 }

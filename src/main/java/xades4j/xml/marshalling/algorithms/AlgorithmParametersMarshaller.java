@@ -32,7 +32,7 @@ public interface AlgorithmParametersMarshaller<TAlgorithm extends Algorithm>
 {
     /**
      * Marshals the parameters of a given {@code Algorithm}.
-     * @param t the algorithm whose parameters whill be marshalled
+     * @param alg the algorithm whose parameters whill be marshalled
      * @param doc the document that will own the parameter nodes
      * @return the list of paramter nodes or {@code null} if none
      */
