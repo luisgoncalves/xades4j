@@ -44,14 +44,14 @@ public class FileSystemDirectoryCertStoreTest {
     @Test
     public void testGetStoreMy() throws Exception
     {
-        FileSystemDirectoryCertStore certStore = new FileSystemDirectoryCertStore(".\\src\\test\\cert\\my");
+        FileSystemDirectoryCertStore certStore = new FileSystemDirectoryCertStore("./src/test/cert/my");
         Collection certs = certStore.getStore().getCertificates(null);
         assertEquals(certs.size(), 3);
     }
     @Test
     public void testGetStoreNist() throws Exception
     {
-        FileSystemDirectoryCertStore certStore = new FileSystemDirectoryCertStore(".\\src\\test\\cert\\csrc.nist");
+        FileSystemDirectoryCertStore certStore = new FileSystemDirectoryCertStore("./src/test/cert/csrc.nist");
         Collection certs = certStore.getStore().getCertificates(null);
         assertEquals(certs.size(), 4);
         Collection crls = certStore.getStore().getCRLs(null);

@@ -56,9 +56,9 @@ public class PKIXCertificateValidationProviderTest
     {
         System.out.println("validateMy");
 
-        FileSystemDirectoryCertStore certStore = new FileSystemDirectoryCertStore(".\\src\\test\\cert\\my");
+        FileSystemDirectoryCertStore certStore = new FileSystemDirectoryCertStore("./src/test/cert/my");
         KeyStore ks = KeyStore.getInstance("jks");
-        FileInputStream fis = new FileInputStream(".\\src\\test\\cert\\my\\myStore");
+        FileInputStream fis = new FileInputStream("./src/test/cert/my/myStore");
         ks.load(fis, "mystorepass".toCharArray());
         fis.close();
 
@@ -76,9 +76,9 @@ public class PKIXCertificateValidationProviderTest
     {
         System.out.println("validateNist");
 
-        FileSystemDirectoryCertStore certStore = new FileSystemDirectoryCertStore(".\\src\\test\\cert\\csrc.nist");
+        FileSystemDirectoryCertStore certStore = new FileSystemDirectoryCertStore("./src/test/cert/csrc.nist");
         KeyStore ks = KeyStore.getInstance("jks");
-        FileInputStream fis = new FileInputStream(".\\src\\test\\cert\\csrc.nist\\trustAnchor");
+        FileInputStream fis = new FileInputStream("./src/test/cert/csrc.nist/trustAnchor");
         ks.load(fis, "password".toCharArray());
         fis.close();
 
