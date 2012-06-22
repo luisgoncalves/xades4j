@@ -33,6 +33,19 @@ import xades4j.xml.bind.xades.XmlQualifyingPropertiesType;
 final class DefaultQualifyingPropertiesUnmarshaller
         implements QualifyingPropertiesUnmarshaller
 {
+    private static final JAXBContext jaxbContext;
+    static
+    {
+        try
+        {
+            jaxbContext = JAXBContext.newInstance(XmlQualifyingPropertiesType.class);
+        }
+        catch(JAXBException e)
+        {
+            throw new UnsupportedOperationException(e);
+        }
+    }
+
     private final UnmarshallerModule[] modules;
 
     public DefaultQualifyingPropertiesUnmarshaller()
@@ -52,8 +65,6 @@ final class DefaultQualifyingPropertiesUnmarshaller
         XmlQualifyingPropertiesType xmlQualifyingProps = null;
         try
         {
-            // Create the JAXB unmarshaller.
-            JAXBContext jaxbContext = JAXBContext.newInstance(XmlQualifyingPropertiesType.class);
             // Create the JAXB unmarshaller and unmarshalProperties the root JAXB element
             Unmarshaller unmarshaller = jaxbContext.createUnmarshaller();
             JAXBElement<XmlQualifyingPropertiesType> qualifPropsElem = (JAXBElement<XmlQualifyingPropertiesType>)unmarshaller.unmarshal(qualifyingProps);
