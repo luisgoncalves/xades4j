@@ -58,7 +58,7 @@ public interface RawSignatureVerifier
     /**
      * Verifies the signature accordingly to this {@code RawSignatureVerifier}.
      * @param ctx the verification context
-     * @throws InvalidSignatureExceptionif the signature is deemed invalid
+     * @throws InvalidSignatureException if the signature is deemed invalid
      */
     void verify(RawSignatureVerifierContext ctx) throws InvalidSignatureException;
 }

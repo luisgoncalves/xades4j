@@ -109,7 +109,7 @@ class XadesVerifierImpl implements XadesVerifier
 
         if (null == verificationOptions)
         {
-            verificationOptions = new SignatureSpecificVerificationOptions();
+            verificationOptions = SignatureSpecificVerificationOptions.empty;
         }
 
         /* Unmarshal the signature */
@@ -162,7 +162,7 @@ class XadesVerifierImpl implements XadesVerifier
             throw new QualifyingPropertiesIncorporationException("QualifyingProperties target doesn't match the signature's Id");
         }
 
-        /* Umarshal the qualifying properties */
+        /* Unmarshal the qualifying properties */
 
         QualifPropsDataCollectorImpl propsDataCollector = new QualifPropsDataCollectorImpl();
         qualifPropsUnmarshaller.unmarshalProperties(qualifyingPropsElem, propsDataCollector);
@@ -187,7 +187,7 @@ class XadesVerifierImpl implements XadesVerifier
         // Core XML-DSIG verification.
         doCoreVerification(signature, verificationOptions, validationCert);
 
-        // Create theproperties verification context.
+        // Create the properties verification context.
         QualifyingPropertyVerificationContext qPropsCtx = new QualifyingPropertyVerificationContext(
                 signature,
                 new QualifyingPropertyVerificationContext.CertificationChainData(
@@ -233,7 +233,7 @@ class XadesVerifierImpl implements XadesVerifier
             return new Date();
         }
 
-        // !!!
+        // TODO support multiple SignatureTimeStamps (section 7.3 last paragraph of Standard v.1.4.2)
         // This is a temporary solution.
         // - Properties should probably be verified in two stages (before and after cert path creation).
         // - Had to remove the custom structure verifier that checked if the SigningCertificate data was present.
@@ -432,8 +432,8 @@ class XadesVerifierImpl implements XadesVerifier
             // * T -> C
             // * C -> X
             // * C -> X-L
-            // * X -> X-L (not supported with the libray defaults: X cannot be verified)
-            // * X-L -> A (not supported with the libray defaults: X-L cannot be verified)
+            // * X -> X-L (not supported with the library defaults: X cannot be verified)
+            // * X-L -> A (not supported with the library defaults: X-L cannot be verified)
 
             FormExtensionPropsCollector finalFormPropsColector = formsExtensionTransitions[actualForm.ordinal()][finalForm.ordinal()];
 

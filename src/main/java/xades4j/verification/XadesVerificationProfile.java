@@ -41,7 +41,7 @@ import xades4j.xml.unmarshalling.UnmarshallingBindingsModule;
  * verify signatures using the configured components.
  * <p>
  * The minimum configuration is a {@link xades4j.providers.CertificateValidationProvider}
- * because the validation data (trust-achors, CRLs, etc) has to be properly selected. All the other components
+ * because the validation data (trust-anchors, CRLs, etc) has to be properly selected. All the other components
  * have default implementations that are used if no other actions are taken. However,
  * all of them can be replaced through the corresponding methods, either by an instance
  * or a class. When a class is used it may have dependencies on other components,
@@ -53,7 +53,7 @@ import xades4j.xml.unmarshalling.UnmarshallingBindingsModule;
  * Custom {@link QualifyingPropertyVerifier}s can also be configured. The principles
  * on their dependencies are the same. In addition, custom verifiers that apply 
  * over the whole on different stages of validation can be configured. Finally,
- * verifiers for specific XML elements may be added. This can be usefull if one
+ * verifiers for specific XML elements may be added. This can be useful if one
  * wants to handle an unsigned property that is not known by the library, as the
  * default unmarshaller will create {@code GenericDOMData} instances for those
  * properties if {@code acceptUnknownProperties} is set.
@@ -91,7 +91,7 @@ public final class XadesVerificationProfile
 
     /***/
     /**
-     * Adds a type dependency mapping to the profile. This is tipically done from an
+     * Adds a type dependency mapping to the profile. This is typically done from an
      * interface to a type that implements that interface. When a dependency to
      * {@code from} is found, the {@code to} class is used. The {@code to} class
      * may in turn have its own dependencies.
@@ -140,7 +140,7 @@ public final class XadesVerificationProfile
     /**
      * Creates a new {@code XadesVerifier} based on the current state of the profile.
      * If any changes are made after this call, the previously returned verifier will
-     * not be afected. Other verifiers can be created, accumulating the profile changes.
+     * not be affected. Other verifiers can be created, accumulating the profile changes.
      * @return a {@code XadesVerifier} accordingly to this profile.
      * @throws XadesProfileResolutionException if the dependencies of the signer (direct and indirect) cannot be resolved
      */

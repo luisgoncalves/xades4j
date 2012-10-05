@@ -31,6 +31,7 @@ import org.apache.xml.security.utils.resolver.ResourceResolver;
  */
 public class SignatureSpecificVerificationOptions
 {
+    static final SignatureSpecificVerificationOptions empty = new SignatureSpecificVerificationOptions();
 
     private String baseUriForRelativeReferences;
     private InputStream dataForAnonymousReference;

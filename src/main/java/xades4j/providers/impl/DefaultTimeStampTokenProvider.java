@@ -45,7 +45,7 @@ import xades4j.providers.TimeStampTokenProvider.TimeStampTokenRes;
 /**
  * Default implementation of {@code TimeStampTokenProvider}. Issues time-stamp
  * requests (with {@code certReq} set to {@code true}) over HTTP. The TSA URL can
- * be overriden.
+ * be overridden.
  * @author Luís
  */
 public class DefaultTimeStampTokenProvider implements TimeStampTokenProvider

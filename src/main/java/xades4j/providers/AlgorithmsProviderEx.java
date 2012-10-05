@@ -25,7 +25,7 @@ import xades4j.UnsupportedAlgorithmException;
  * which will query the instance whenever they need information on the algorithms
  * to use (when generating {@code ds:Reference} elements, for example).
  * <p>
- * This allows the customization of the different algotihms used in the signature.
+ * This allows the customization of the different algorithms used in the signature.
  * <p>
  * The methods on this classes must not return {@code null}.
  * <p>
