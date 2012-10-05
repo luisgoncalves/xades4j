@@ -21,7 +21,6 @@ import java.util.Collections;
 import java.util.List;
 import org.apache.xml.security.transforms.Transforms;
 import org.apache.xml.security.transforms.params.XPath2FilterContainer;
-import xades4j.algorithms.XPath2FilterTransform.XPath2Filter;
 
 /**
  * The XPath 2.0 transform. Instances of the transform can be initially created

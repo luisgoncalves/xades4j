@@ -40,7 +40,6 @@ import xades4j.UnsupportedAlgorithmException;
 import xades4j.providers.MessageDigestEngineProvider;
 import xades4j.providers.TimeStampTokenGenerationException;
 import xades4j.providers.TimeStampTokenProvider;
-import xades4j.providers.TimeStampTokenProvider.TimeStampTokenRes;
 
 /**
  * Default implementation of {@code TimeStampTokenProvider}. Issues time-stamp

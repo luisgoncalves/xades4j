@@ -18,8 +18,6 @@ package xades4j.production;
 
 import xades4j.algorithms.EnvelopedSignatureTransform;
 import org.apache.xml.security.utils.Constants;
-import java.util.ArrayList;
-import java.util.Collection;
 import java.util.Map;
 import org.apache.xml.security.signature.ObjectContainer;
 import org.apache.xml.security.signature.Reference;
@@ -118,6 +116,6 @@ public class DataObjectDescsProcessorTest extends SignatureServicesTestBase
         xmlSignature.setId("sigId");
 
         DataObjectDescsProcessor processor = new DataObjectDescsProcessor(new TestAlgorithmsProvider(), new AllwaysNullAlgsParamsMarshaller());
-        Map<DataObjectDesc, Reference> result = processor.process(dataObjsDescs, xmlSignature);
+        processor.process(dataObjsDescs, xmlSignature);
     }
 }

@@ -16,13 +16,9 @@
  */
 package xades4j.xml.unmarshalling;
 
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
-import xades4j.properties.IdentifierType;
 import xades4j.xml.bind.xades.XmlDataObjectFormatType;
 import xades4j.xml.bind.xades.XmlDocumentationReferencesType;
-import xades4j.xml.bind.xades.XmlQualifierType;
 import xades4j.xml.bind.xades.XmlSignedDataObjectPropertiesType;
 import xades4j.properties.data.DataObjectFormatData;
 import xades4j.xml.bind.xades.XmlObjectIdentifierType;

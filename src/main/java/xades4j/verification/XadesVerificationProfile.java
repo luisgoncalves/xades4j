@@ -17,7 +17,6 @@
 package xades4j.verification;
 
 import com.google.inject.Module;
-import java.util.Map;
 import javax.xml.namespace.QName;
 import xades4j.utils.XadesProfileCore;
 import xades4j.utils.XadesProfileResolutionException;
@@ -27,7 +26,6 @@ import xades4j.providers.CertificateValidationProvider;
 import xades4j.providers.MessageDigestEngineProvider;
 import xades4j.providers.SignaturePolicyDocumentProvider;
 import xades4j.providers.TimeStampVerificationProvider;
-import xades4j.utils.CollectionUtils;
 import xades4j.utils.UtilsBindingsModule;
 import xades4j.xml.marshalling.algorithms.AlgorithmParametersBindingsModule;
 import xades4j.xml.unmarshalling.QualifyingPropertiesUnmarshaller;

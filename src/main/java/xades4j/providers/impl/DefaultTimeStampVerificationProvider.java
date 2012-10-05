@@ -107,7 +107,9 @@ public class DefaultTimeStampVerificationProvider implements TimeStampVerificati
         TimeStampToken tsToken;
         try
         {
-            ContentInfo tsContentInfo = ContentInfo.getInstance(new ASN1InputStream(timeStampToken).readObject());
+            ASN1InputStream asn1is = new ASN1InputStream(timeStampToken);
+            ContentInfo tsContentInfo = ContentInfo.getInstance(asn1is.readObject());
+            asn1is.close();
             tsToken = new TimeStampToken(tsContentInfo);
         } catch (IOException ex)
         {
