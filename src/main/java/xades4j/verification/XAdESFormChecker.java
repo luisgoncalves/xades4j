@@ -47,7 +47,7 @@ class XAdESFormChecker
             availablePropsNames.add(propInfo.getProperty().getName());
         }
 
-        XAdESFormDesc formDesc = XADES_C_DESC;
+        XAdESFormDesc formDesc = XADES_X_L_DESC;
         do
         {
             if (formDesc.check(availablePropsNames))

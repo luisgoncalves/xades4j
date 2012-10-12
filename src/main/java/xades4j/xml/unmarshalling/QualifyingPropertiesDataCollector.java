@@ -17,6 +17,7 @@
 package xades4j.xml.unmarshalling;
 
 import xades4j.properties.data.AllDataObjsTimeStampData;
+import xades4j.properties.data.SigAndRefsTimeStampData;
 import xades4j.properties.data.SigningTimeData;
 import xades4j.properties.data.SigningCertificateData;
 import xades4j.properties.data.SignatureProdPlaceData;
@@ -33,7 +34,7 @@ import xades4j.properties.data.SignerRoleData;
 
 /**
  * Passed to a {@link QualifyingPropertiesUnmarshaller} to collect the property
- * data obejcts. This is used instead of a collection that is returned by the unmarshaller
+ * data objects. This is used instead of a collection that is returned by the unmarshaller
  * because it allows controlling the number of occurrences of each property.
  * <p>
  * All the methods will throw {@code PropertyTargetException} if an attempt is made
@@ -74,4 +75,6 @@ public interface QualifyingPropertiesDataCollector
     public void addGenericDOMData(GenericDOMData domData);
 
     public void addOther(OtherPropertyData otherData);
+
+    public void addSigAndRefsTimeStamp(SigAndRefsTimeStampData tsData);
 }

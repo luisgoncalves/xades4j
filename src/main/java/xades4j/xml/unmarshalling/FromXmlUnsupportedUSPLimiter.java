@@ -38,7 +38,6 @@ class FromXmlUnsupportedUSPLimiter implements UnsignedSigPropFromXmlConv
                 xmlProps.getAttrAuthoritiesCertValues(),
                 xmlProps.getAttributeRevocationValues(),
                 xmlProps.getAttributeCertificateRefs()) ||
-                !xmlProps.getSigAndRefsTimeStamp().isEmpty() ||
                 !xmlProps.getRefsOnlyTimeStamp().isEmpty() ||
                 !xmlProps.getArchiveTimeStamp().isEmpty())
             throw new PropertyUnmarshalException("Unsupported properties were found", "Unsupported");

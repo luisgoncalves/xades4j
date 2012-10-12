@@ -23,6 +23,7 @@ import xades4j.properties.data.CompleteRevocationRefsData;
 import xades4j.properties.data.GenericDOMData;
 import xades4j.properties.data.IndividualDataObjsTimeStampData;
 import xades4j.properties.data.OtherPropertyData;
+import xades4j.properties.data.SigAndRefsTimeStampData;
 import xades4j.properties.data.SignaturePolicyData;
 import xades4j.properties.data.SignatureTimeStampData;
 import xades4j.properties.data.SignerRoleData;
@@ -96,6 +97,12 @@ class QualifPropsDataCollectorImpl implements QualifyingPropertiesDataCollector
     public void addSignatureTimeStamp(SignatureTimeStampData sigTSData)
     {
         propsData.add(sigTSData);
+    }
+
+    @Override
+    public void addSigAndRefsTimeStamp(SigAndRefsTimeStampData tsData)
+    {
+        propsData.add(tsData);
     }
 
     @Override
