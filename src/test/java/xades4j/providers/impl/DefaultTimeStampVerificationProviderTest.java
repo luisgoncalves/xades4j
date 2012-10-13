@@ -21,6 +21,7 @@ import java.io.FileInputStream;
 import java.security.KeyStore;
 import org.junit.Test;
 import xades4j.providers.TimeStampTokenDigestException;
+import xades4j.providers.TimeStampTokenVerificationException;
 import xades4j.utils.StreamUtils;
 import xades4j.verification.VerifierTestBase;
 
@@ -36,7 +37,7 @@ public class DefaultTimeStampVerificationProviderTest extends VerifierTestBase
         System.out.println("verifyTokenSucceeds");
 
         byte[] tsDigestInput = "TestDigestInput".getBytes();
-        doVerifyToken(tsDigestInput);
+        doVerifyToken(tsDigestInput, getTestToken());
     }
 
     @Test(expected = TimeStampTokenDigestException.class)
@@ -45,10 +46,28 @@ public class DefaultTimeStampVerificationProviderTest extends VerifierTestBase
         System.out.println("terifyTokenFailsWithDifferentDigestInput");
 
         byte[] tsDigestInput = "Invalid".getBytes();
-        doVerifyToken(tsDigestInput);
+        doVerifyToken(tsDigestInput, getTestToken());
     }
 
-    public void doVerifyToken(byte[] tsDigestInput) throws Exception
+    @Test(expected = TimeStampTokenVerificationException.class)
+    public void testVerifyTokenFailsWithTamperedToken() throws Exception
+    {
+        System.out.println("verifyTokenFailsWithTamperedToken");
+
+        byte[] tsDigestInput = "TestDigestInput".getBytes();
+        byte[] tsToken = getTestToken();
+
+        for (int i = 0; i < tsToken.length; i++)
+        {
+            if(i % 10 == 1){
+                tsToken[i] = tsToken[i-1];
+            }
+        }
+
+        doVerifyToken(tsDigestInput, tsToken);
+    }
+
+    private byte[] getTestToken() throws Exception
     {
         // The 'tstoken' file contains an encoded time stamp token issued by
         // http://tss.accv.es:8318/tsa. The input was "TestDigestInput"
@@ -58,8 +77,11 @@ public class DefaultTimeStampVerificationProviderTest extends VerifierTestBase
         StreamUtils.readWrite(is, bos);
         is.close();
 
-        byte[] tsToken = bos.toByteArray();
+        return bos.toByteArray();
+    }
 
+    private void doVerifyToken(byte[] tsDigestInput, byte[] tsToken) throws Exception
+    {
         KeyStore ks = createAndLoadJKSKeyStore("gva/trustAnchor", "password");
         PKIXCertificateValidationProvider certificateValidationProvider = new PKIXCertificateValidationProvider(ks, false);
 
