@@ -8,6 +8,7 @@
 
 package xades4j.xml.bind;
 
+import java.io.IOException;
 import javax.xml.bind.annotation.adapters.XmlAdapter;
 
 public class Base64XmlAdapter
@@ -21,8 +22,8 @@ public class Base64XmlAdapter
     }
 
     @Override
-    public String marshal(byte[] value) {
-        return (xades4j.utils.Base64.encodeBytes(value));
+    public String marshal(byte[] value) throws IOException {
+        return (xades4j.utils.Base64.encodeBytes(value, xades4j.utils.Base64.DO_BREAK_LINES));
     }
 
 }
