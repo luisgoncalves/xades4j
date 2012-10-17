@@ -92,7 +92,7 @@ public class SignatureServicesTestBase
     protected static void outputDocument(Document doc, String fileName) throws Exception
     {
         TransformerFactory tf = TransformerFactory.newInstance();
-        String path = toPlatformSpecificXMLDirFilePath(fileName);
+        String path = toPlatformSpecificXMLDirFilePath("out/" + fileName);
         FileOutputStream out = new FileOutputStream(path);
         tf.newTransformer().transform(
                 new DOMSource(doc),

@@ -43,7 +43,7 @@ public class XadesVerifierErrorsTest extends VerifierTestBase
     public void testErrVerifySignedPropsIncorp() throws Exception
     {
         System.out.println("errVerifySignedPropsIncorp");
-        verifySignature("bad/document.signed.t.bes.badsignedprops.xml", mySigsVerificationProfile);
+        verifyBadSignature("document.signed.t.bes.badsignedprops.xml", mySigsVerificationProfile);
     }
 
     @Test(expected = QualifyingPropertiesIncorporationException.class)
@@ -54,7 +54,7 @@ public class XadesVerifierErrorsTest extends VerifierTestBase
         if (!onWindowsPlatform() || null == validationProviderPtCc)
             fail("Test written for Windows-ROOT certificate repository");
 
-        verifySignature("bad/document.signed.bes.signedpropsrefnotype.xml",
+        verifyBadSignature("document.signed.bes.signedpropsrefnotype.xml",
                 new XadesVerificationProfile(validationProviderPtCc));
     }
 
@@ -62,7 +62,7 @@ public class XadesVerifierErrorsTest extends VerifierTestBase
     public void testErrVerifyIncorrectC() throws Exception
     {
         System.out.println("errVerifyIncorrectC");
-        verifySignature("bad/document.signed.c.bad.xml",nistVerificationProfile);
+        verifyBadSignature("document.signed.c.bad.xml",nistVerificationProfile);
     }
 
     @Test(expected = CannotSelectCertificateException.class)
@@ -72,28 +72,28 @@ public class XadesVerifierErrorsTest extends VerifierTestBase
 
         KeyStore ks = createAndLoadJKSKeyStore("tsl/be/beStore", "bestorepass");
         PKIXCertificateValidationProvider cvp = new PKIXCertificateValidationProvider(ks, false);
-        verifySignature("bad/TSL_BE.nocert.xml", new XadesVerificationProfile(cvp));
+        verifyBadSignature("TSL_BE.nocert.xml", new XadesVerificationProfile(cvp));
     }
 
     @Test(expected = ReferenceValueException.class)
     public void testErrVerifyChangedDataObj() throws Exception
     {
         System.out.println("errVerifyChangedDataObj");
-        verifySignature("bad/document.signed.bes.invaliddataobj.xml", mySigsVerificationProfile);
+        verifyBadSignature("document.signed.bes.invaliddataobj.xml", mySigsVerificationProfile);
     }
 
     @Test(expected = SignatureValueException.class)
     public void testErrVerifyChangedSigValue() throws Exception
     {
         System.out.println("errVerifyChangedSigValue");
-        verifySignature("bad/document.signed.bes.invalidsigvalue.xml", mySigsVerificationProfile);
+        verifyBadSignature("document.signed.bes.invalidsigvalue.xml", mySigsVerificationProfile);
     }
 
     @Test(expected = CompleteCertRefsCertNotFoundException.class)
     public void testErrVerifyCMissingCertRef() throws Exception
     {
         System.out.println("errVerifyCMissingCertRef");
-        verifySignature("bad/document.signed.c.missingcertref.xml", nistVerificationProfile);
+        verifyBadSignature("document.signed.c.missingcertref.xml", nistVerificationProfile);
     }
 
     @Test(expected = TimeStampDigestMismatchException.class)
@@ -108,6 +108,11 @@ public class XadesVerifierErrorsTest extends VerifierTestBase
 //        outputDocument(doc, "bad/document.signed.t.bes.badtsdigest.xml");
 
         System.out.println("errVerifyUnmatchSigTSDigest");
-        verifySignature("bad/document.signed.t.bes.badtsdigest.xml", mySigsVerificationProfile);
+        verifyBadSignature("document.signed.t.bes.badtsdigest.xml", mySigsVerificationProfile);
+    }
+
+    private static void verifyBadSignature(String sigFileName, XadesVerificationProfile p) throws Exception
+    {
+        verifySignature("bad/" + sigFileName, p);
     }
 }

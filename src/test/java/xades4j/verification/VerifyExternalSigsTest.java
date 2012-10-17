@@ -111,7 +111,7 @@ public class VerifyExternalSigsTest extends VerifierTestBase
     {
         System.out.println("verify " + fileName);
 
-        XAdESForm f = verifySignature(fileName, p);
+        XAdESForm f = verifySignature("external/" + fileName, p);
 
         System.out.println("form: " + f.toString());
     }
@@ -125,7 +125,7 @@ public class VerifyExternalSigsTest extends VerifierTestBase
         KeyStore ks = createAndLoadJKSKeyStore("petition/signitStore", "signitstorepass");
         PKIXCertificateValidationProvider cvp = new PKIXCertificateValidationProvider(ks, false, certStore.getStore());
 
-        Document doc = getDocument("Petition_1285054657304.xml");
+        Document doc = getDocument("external/Petition_1285054657304.xml");
 
         // Set the XML ID of the Petition element.
         Element petitionElem = DOMHelper.getFirstChildElement(doc.getDocumentElement());
