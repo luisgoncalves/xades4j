@@ -25,6 +25,8 @@ import org.apache.xml.security.utils.resolver.ResourceResolver;
 /**
  * Represents verification options that are specific to a signature, i.e., options
  * that are not profile-wide.
+ * <p>
+ * It includes base URI, data for anonymous references or resource resolvers
  *
  * @see xades4j.verification.XadesVerifier
  * @author Luís
@@ -39,7 +41,7 @@ public class SignatureSpecificVerificationOptions
 
     /**
      * Sets the base URI to be used when resolving <b>all/b> the relative references.
-     * Fragment references (starting with '#') are not afected.
+     * Fragment references (starting with '#') are not affected.
      * @param baseUri the references' base uri
      * @return the current instance
      */

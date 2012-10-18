@@ -38,7 +38,7 @@ public class SigningCertificateReferenceException extends SigningCertificateVeri
         super(cause);
         this.certificate = certificate;
         this.certificateRef = certificateRef;
-        this.msg = "cannot verify reference for certificate %s" + certificate.getSubjectX500Principal().getName();
+        this.msg = "cannot verify reference for certificate " + certificate.getSubjectX500Principal().getName();
     }
 
     public X509Certificate getCertificate()

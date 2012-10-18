@@ -42,7 +42,7 @@ class TimeStampDigestInputImpl implements TimeStampDigestInput
     {
         // It would be better to have a Canonicalizer passed on the constructor
         // but it doesn't have a method that receives a XMlSignatureInput. Apache's
-        // C14N transforms have some bug circunvent checks when mapping XMLSignatureInput
+        // C14N transforms have some bug circumvent checks when mapping XMLSignatureInput
         // to the Canonicalizer methods, so it's better to keep using C14N via Transform.
 
         this.c14n = c14n;

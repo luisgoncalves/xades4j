@@ -94,7 +94,7 @@ class DataGenArchiveTimeStamp extends DataGenBaseTimeStamp<ArchiveTimeStampPrope
             if (ki != null)
                 digestInput.addNode(ki.getElement());
 
-            // Unsigned properties, in order of appearence.
+            // Unsigned properties, in order of appearance.
             Map<String, Integer> propsCnt = new HashMap<String, Integer>(5);
             propsCnt.put(CertificateValuesProperty.PROP_NAME, 0);
             propsCnt.put(RevocationValuesProperty.PROP_NAME, 0);

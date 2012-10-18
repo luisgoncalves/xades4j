@@ -18,8 +18,8 @@
 package xades4j.providers.impl;
 
 /**
- * Configuration to access a TSA using HTTP authentication. This class is tipically
- * used with {@link AuthenticatedTimeStampTokenProvider} by regestering an instance
+ * Configuration to access a TSA using HTTP authentication. This class is typically
+ * used with {@link AuthenticatedTimeStampTokenProvider} by registering an instance
  * with the appropriate URL, username and password on the signing/verification profile.
  * @author Luís
  */

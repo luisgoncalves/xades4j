@@ -73,7 +73,7 @@ public class PKIXCertificateValidationProvider implements CertificateValidationP
      * and Signature.
      * @param trustAnchors the keystore with the trust-anchors ({@code TrustedCertificateEntry})
      * @param revocationEnabled whether revocation is enabled
-     * @param maxPathLength the maximum length of thecertification paths
+     * @param maxPathLength the maximum length of the certification paths
      * @param certPathBuilderProvider the CertPathBuilder provider
      * @param signatureProvider the Signature provider
      * @param intermCertsAndCrls a set of {@code CertStore}s that contain certificates to be
@@ -131,7 +131,7 @@ public class PKIXCertificateValidationProvider implements CertificateValidationP
      * CertPathBuilder and Signature.
      * @param trustAnchors the keystore with the trust-anchors ({@code TrustedCertificateEntry})
      * @param revocationEnabled whether revocation is enabled
-     * @param maxPathLength the maximum length of thecertification paths
+     * @param maxPathLength the maximum length of the certification paths
      * @param jceProvider the CertPathBuilder and Signature provider
      * @param intermCertsAndCrls a set of {@code CertStore}s that contain certificates to be
      *      used in the construction of the certification path. May contain CRLs to be used
@@ -175,7 +175,7 @@ public class PKIXCertificateValidationProvider implements CertificateValidationP
      * and Signature.
      * @param trustAnchors the keystore with the trust-anchors ({@code TrustedCertificateEntry})
      * @param revocationEnabled whether revocation is enabled
-     * @param maxPathLength the maximum length of thecertification paths
+     * @param maxPathLength the maximum length of the certification paths
      * @param intermCertsAndCrls a set of {@code CertStore}s that contain certificates to be
      *      used in the construction of the certification path. May contain CRLs to be used
      *      if revocation is enabled

@@ -54,7 +54,7 @@ class UnsignedSigPropsModule extends UnmarshallerModule<XmlUnsignedSignatureProp
     @Override
     protected Element getProps(Element qualifProps)
     {
-        // This method is invoked only if the specifi properties element is present.
+        // This method is invoked only if the specific properties element is present.
         return DOMHelper.getLastChildElement(DOMHelper.getLastChildElement(qualifProps));
     }
 

@@ -216,7 +216,7 @@ class SignatureUtils
         if (null == signedPropsRef)
         // !!!
         // Still may be a XAdES signature, if the signing certificate is
-        // protected. For now, that scenario is not suported.
+        // protected. For now, that scenario is not supported.
         {
             throw new QualifyingPropertiesIncorporationException("SignedProperties reference not found");
         }

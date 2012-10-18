@@ -29,7 +29,7 @@ import org.w3c.dom.Element;
 public interface QualifyingPropertiesUnmarshaller
 {
     /**
-     * Indicates if unknown unsigend properties should be accepted. If so, they
+     * Indicates if unknown unsigned properties should be accepted. If so, they
      * should be returned with instances of {@code GenericDOMData}.
      * @param accept {@code true} if unknown properties should be accepted
      */
