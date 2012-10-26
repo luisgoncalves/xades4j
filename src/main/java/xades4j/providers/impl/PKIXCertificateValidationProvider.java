@@ -21,10 +21,12 @@ import java.security.KeyStore;
 import java.security.KeyStoreException;
 import java.security.NoSuchAlgorithmException;
 import java.security.NoSuchProviderException;
+import java.security.PublicKey;
 import java.security.cert.CertPathBuilder;
 import java.security.cert.CertPathBuilderException;
 import java.security.cert.CertStore;
 import java.security.cert.CertStoreException;
+import java.security.cert.Certificate;
 import java.security.cert.CollectionCertStoreParameters;
 import java.security.cert.PKIXBuilderParameters;
 import java.security.cert.PKIXCertPathBuilderResult;
@@ -33,6 +35,7 @@ import java.security.cert.X509CRLSelector;
 import java.security.cert.X509CertSelector;
 import java.security.cert.X509Certificate;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Date;
@@ -42,6 +45,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import javax.security.auth.x500.X500Principal;
+
 import xades4j.providers.CannotBuildCertificationPathException;
 import xades4j.providers.CannotSelectCertificateException;
 import xades4j.providers.CertificateValidationException;
@@ -64,7 +68,7 @@ public class PKIXCertificateValidationProvider implements CertificateValidationP
     private final KeyStore trustAnchors;
     private final boolean revocationEnabled;
     private final int maxPathLength;
-    private final CertStore[] intermCertsAndCrls;
+    private       CertStore[] intermCertsAndCrls;
     private final CertPathBuilder certPathBuilder;
     private final String signatureProvider;
 
@@ -347,5 +351,172 @@ public class PKIXCertificateValidationProvider implements CertificateValidationP
             }
         }
         return crls;
+    }
+
+    @Override
+    public void addCRLs(Collection<X509CRL> crls, Date now)
+    {
+        Collection<X509CRL> validCRLs = new ArrayList<X509CRL>();
+
+        for(X509CRL crl : crls)
+        {
+            // check if it's not CRL from "future"
+            if (crl.getThisUpdate().getTime() > now.getTime())
+                continue;
+
+            // TODO check algorithms used in CRL
+
+            X509CertSelector certSel = new X509CertSelector();
+            certSel.setSubject(crl.getIssuerX500Principal());
+
+            PKIXBuilderParameters params;
+            try
+            {
+                params = new PKIXBuilderParameters(trustAnchors, certSel);
+            } catch (Exception e)
+            {
+                // parameters are invalid, ignore CRL
+                continue;
+            }
+            params.setDate(now);
+            params.setRevocationEnabled(false);
+            for (int i=0; i < intermCertsAndCrls.length; i++)
+            {
+                params.addCertStore(intermCertsAndCrls[i]);
+            }
+
+            PKIXCertPathBuilderResult res;
+            try
+            {
+                res = (PKIXCertPathBuilderResult) this.certPathBuilder.build(params);
+            } catch (Exception ex)
+            {
+                // CRL is invalid, ignore
+                continue;
+            }
+
+            List certs = new ArrayList(res.getCertPath().getCertificates());
+            // TODO check algorithms used in this cert path
+            PublicKey crlSigningKey;
+            if (certs.size() != 0)
+                crlSigningKey = ((Certificate)certs.get(0)).getPublicKey();
+            else
+                crlSigningKey = res.getTrustAnchor().getCAPublicKey();
+            if (crlSigningKey == null)
+                crlSigningKey = res.getTrustAnchor().getTrustedCert().getPublicKey();
+
+            try
+            {
+                crl.verify(crlSigningKey);
+            } catch (Exception ex)
+            {
+                // invalid CRL, ignore
+                continue;
+            }
+
+            validCRLs.add(crl);
+        }
+
+        // don't create empty CertStores
+        if (validCRLs.size() == 0)
+            return;
+
+        CollectionCertStoreParameters ccsp = new CollectionCertStoreParameters(validCRLs);
+        CertStore crlsCertStore;
+        try
+        {
+            crlsCertStore = CertStore.getInstance("Collection", ccsp);
+        } catch (Exception e)
+        {
+            throw new RuntimeException("General crypto failure", e);
+        }
+
+        CertStore[] newIntermCertsAndCrls;
+        newIntermCertsAndCrls = Arrays.copyOf(intermCertsAndCrls, intermCertsAndCrls.length + 1);
+        newIntermCertsAndCrls[intermCertsAndCrls.length] = crlsCertStore;
+
+        intermCertsAndCrls = newIntermCertsAndCrls;
+    }
+
+    @Override
+    public void addCertificates(Collection<X509Certificate> otherCerts, Date now)
+    {
+        Collection<X509Certificate> validCerts = new ArrayList<X509Certificate>();
+
+        /*
+         * To validate certificates we need to have all issuer certificates.
+         * Needed issuer certificates can be among otherCerts.
+         *
+         * To work around this problem, we include otherCerts in PKIXBuilderParameters
+         * but add them to intermCertsAndCrls only if they validate successfully.
+         */
+        CollectionCertStoreParameters ccsp = new CollectionCertStoreParameters(otherCerts);
+        CertStore otherCertsCertStore;
+        try
+        {
+            otherCertsCertStore = CertStore.getInstance("Collection", ccsp);
+        } catch (Exception ex)
+        {
+            throw new RuntimeException("General crypto failure", ex);
+        }
+
+        // find good certificates
+        for (X509Certificate cert : otherCerts)
+        {
+            // TODO check algorithms used in certificate creation
+
+            // TODO iff certificate matches entry in TSL, add them to trustAnchors
+
+            X509CertSelector certSel = new X509CertSelector();
+            certSel.setCertificate(cert);
+
+            PKIXBuilderParameters params;
+            try {
+                params = new PKIXBuilderParameters(trustAnchors, certSel);
+            } catch (Exception e)
+            {
+                // parameters are invalid, ignore certificate
+                continue;
+            }
+            params.setDate(now);
+            params.setRevocationEnabled(false);
+            for (int i=0; i < intermCertsAndCrls.length; i++)
+            {
+                params.addCertStore(intermCertsAndCrls[i]);
+            }
+            params.addCertStore(otherCertsCertStore);
+
+            PKIXCertPathBuilderResult res;
+            try
+            {
+                res = (PKIXCertPathBuilderResult)this.certPathBuilder.build(params);
+            } catch (Exception ex)
+            {
+                // certificate or certificates invalid, ignore
+                continue;
+            }
+
+            List certs = res.getCertPath().getCertificates();
+            if (certs.size() == 0) // cert is a trustAnchor, we can ignore it
+                continue;
+
+            validCerts.add(cert);
+        }
+
+        ccsp = new CollectionCertStoreParameters(validCerts);
+        CertStore validCertCertStore;
+        try
+        {
+            validCertCertStore = CertStore.getInstance("Collection", ccsp);
+        } catch (Exception e)
+        {
+            throw new RuntimeException("General crypto failure", e);
+        }
+
+        CertStore[] newIntermCertsAndCrls;
+        newIntermCertsAndCrls = Arrays.copyOf(intermCertsAndCrls, intermCertsAndCrls.length + 1);
+        newIntermCertsAndCrls[intermCertsAndCrls.length] = validCertCertStore;
+
+        intermCertsAndCrls = newIntermCertsAndCrls;
     }
 }

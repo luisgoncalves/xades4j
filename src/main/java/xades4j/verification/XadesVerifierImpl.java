@@ -34,11 +34,16 @@ import org.apache.xml.security.utils.resolver.ResourceResolver;
 import org.apache.xml.security.utils.resolver.implementations.ResolverAnonymous;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
+
+import xades4j.properties.CertificateValuesProperty;
 import xades4j.properties.QualifyingProperty;
+import xades4j.properties.RevocationValuesProperty;
 import xades4j.properties.UnsignedSignatureProperty;
 import xades4j.XAdES4jException;
 import xades4j.XAdES4jXMLSigException;
+import xades4j.properties.data.CertificateValuesData;
 import xades4j.properties.data.PropertyDataObject;
+import xades4j.properties.data.RevocationValuesData;
 import xades4j.properties.UnsignedProperties;
 import xades4j.production.XadesSignatureFormatExtender;
 import xades4j.properties.SignatureTimeStampProperty;
@@ -168,6 +173,12 @@ class XadesVerifierImpl implements XadesVerifier
         qualifPropsUnmarshaller.unmarshalProperties(qualifyingPropsElem, propsDataCollector);
         Collection<PropertyDataObject> qualifPropsData = propsDataCollector.getPropertiesData();
 
+        /* Read certificates and revocation values from extended forms */
+        Collection<X509CRL> crls = getRevocationValues(qualifPropsData, signature);
+        Collection<X509Certificate> otherCerts = getCertificateValues(qualifPropsData, signature);
+        this.certificateValidator.addCRLs(crls, new Date());
+        this.certificateValidator.addCertificates(otherCerts, new Date());
+
         /* Certification path */
 
         KeyInfoRes keyInfoRes = SignatureUtils.processKeyInfo(signature.getKeyInfo());
@@ -217,7 +228,7 @@ class XadesVerifierImpl implements XadesVerifier
 
         return res;
     }
-    
+
     /*************************************************************************************/
     /**/
 
@@ -250,6 +261,64 @@ class XadesVerifierImpl implements XadesVerifier
         QualifyingProperty sigTs = this.qualifyingPropertiesVerifier.verifyProperties(sigTsData, ctx).iterator().next().getProperty();
 
         return ((SignatureTimeStampProperty) sigTs).getTime();
+    }
+
+    private Collection<X509Certificate> getCertificateValues(
+            Collection<PropertyDataObject> qualifPropsData,
+            XMLSignature signature) throws XAdES4jException
+    {
+        List certValData = CollectionUtils.filterByType(qualifPropsData, CertificateValuesData.class);
+
+        // If no signature time-stamp is present, use the current date.
+        if (certValData.isEmpty())
+        {
+            return new ArrayList<X509Certificate>();
+        }
+
+        // This is a temporary solution.
+        // - Properties should probably be verified in two stages (before and after cert path creation).
+        QualifyingPropertyVerificationContext ctx = new QualifyingPropertyVerificationContext(
+                signature,
+                new QualifyingPropertyVerificationContext.CertificationChainData(
+                new ArrayList<X509Certificate>(0),
+                new ArrayList<X509CRL>(0),
+                null),
+                /**/
+                new QualifyingPropertyVerificationContext.SignedObjectsData(
+                new ArrayList<RawDataObjectDesc>(0),
+                signature));
+        QualifyingProperty certVal = this.qualifyingPropertiesVerifier.verifyProperties(certValData, ctx).iterator().next().getProperty();
+
+        return ((CertificateValuesProperty) certVal).getCertificates();
+    }
+
+    private Collection<X509CRL> getRevocationValues(
+            Collection<PropertyDataObject> qualifPropsData,
+            XMLSignature signature) throws XAdES4jException
+    {
+        List revValData = CollectionUtils.filterByType(qualifPropsData, RevocationValuesData.class);
+
+        // If no signature time-stamp is present, use the current date.
+        if (revValData.isEmpty())
+        {
+            return new ArrayList<X509CRL>();
+        }
+
+        // This is a temporary solution.
+        // - Properties should probably be verified in two stages (before and after cert path creation).
+        QualifyingPropertyVerificationContext ctx = new QualifyingPropertyVerificationContext(
+                signature,
+                new QualifyingPropertyVerificationContext.CertificationChainData(
+                new ArrayList<X509Certificate>(0),
+                new ArrayList<X509CRL>(0),
+                null),
+                /**/
+                new QualifyingPropertyVerificationContext.SignedObjectsData(
+                new ArrayList<RawDataObjectDesc>(0),
+                signature));
+        QualifyingProperty revVal = this.qualifyingPropertiesVerifier.verifyProperties(revValData, ctx).iterator().next().getProperty();
+
+        return ((RevocationValuesProperty) revVal).getCrls();
     }
 
     private static void doCoreVerification(
