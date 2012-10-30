@@ -14,33 +14,11 @@
  * You should have received a copy of the GNU Lesser General Public License along
  * with XAdES4j. If not, see <http://www.gnu.org/licenses/>.
  */
-package xades4j.verification;
-
-import java.security.cert.X509Certificate;
-import java.util.Collection;
-
-import com.google.inject.Inject;
-
-import xades4j.properties.CertificateValuesProperty;
-import xades4j.properties.QualifyingProperty;
-import xades4j.properties.data.CertificateValuesData;
+package xades4j.properties.data;
 
 /**
- *
  * @author Hubert Kario
- *
  */
-public class CertificateValuesVerifier extends EncapsulatedPKIDataVerifierBase<CertificateValuesData>
+public class AttrAuthoritiesCertValuesData extends BaseEncapsulatedPKIData
 {
-    @Inject
-    public CertificateValuesVerifier(String propName)
-    {
-        super(propName);
-    }
-
-    @Override
-    public QualifyingProperty createProperty(Collection<X509Certificate> certs)
-    {
-        return new CertificateValuesProperty(certs);
-    }
 }

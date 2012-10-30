@@ -83,6 +83,8 @@ public class PropertiesUtils
     {
         usp.add(new CertificateValuesProperty(vData.getCerts()));
         usp.add(new RevocationValuesProperty(vData.getCrls()));
+        // TODO add AttrAuthoritiesCertValues
+        // TODO add AttributeRevocationValues
     }
 
     public static void addXadesAProperties(

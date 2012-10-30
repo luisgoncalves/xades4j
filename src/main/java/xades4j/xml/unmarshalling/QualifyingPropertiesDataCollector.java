@@ -17,6 +17,8 @@
 package xades4j.xml.unmarshalling;
 
 import xades4j.properties.data.AllDataObjsTimeStampData;
+import xades4j.properties.data.AttrAuthoritiesCertValuesData;
+import xades4j.properties.data.AttributeRevocationValuesData;
 import xades4j.properties.data.CertificateValuesData;
 import xades4j.properties.data.RevocationValuesData;
 import xades4j.properties.data.SigAndRefsTimeStampData;
@@ -83,4 +85,10 @@ public interface QualifyingPropertiesDataCollector
     public void setCertificateValues(CertificateValuesData certificateValuesData);
 
     public void setRevocationValues(RevocationValuesData revocationValuesData);
+
+    public void setAttrAuthoritiesCertValues(
+            AttrAuthoritiesCertValuesData attrAuthoritiesCertValuesData);
+
+    public void setAttributeRevocationValues(
+            AttributeRevocationValuesData attrRevocValData);
 }

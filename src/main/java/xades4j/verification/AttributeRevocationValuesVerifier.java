@@ -16,31 +16,27 @@
  */
 package xades4j.verification;
 
-import java.security.cert.X509Certificate;
+import java.security.cert.X509CRL;
 import java.util.Collection;
 
 import com.google.inject.Inject;
 
-import xades4j.properties.CertificateValuesProperty;
+import xades4j.properties.AttributeRevocationValuesProperty;
 import xades4j.properties.QualifyingProperty;
-import xades4j.properties.data.CertificateValuesData;
+import xades4j.properties.data.AttributeRevocationValuesData;
 
-/**
- *
- * @author Hubert Kario
- *
- */
-public class CertificateValuesVerifier extends EncapsulatedPKIDataVerifierBase<CertificateValuesData>
+public class AttributeRevocationValuesVerifier
+        extends EncapsulatedPKIRevocationDataVerifierBase<AttributeRevocationValuesData>
 {
     @Inject
-    public CertificateValuesVerifier(String propName)
+    public AttributeRevocationValuesVerifier(String propName)
     {
         super(propName);
     }
 
     @Override
-    public QualifyingProperty createProperty(Collection<X509Certificate> certs)
+    public QualifyingProperty createProperty(Collection<X509CRL> crls)
     {
-        return new CertificateValuesProperty(certs);
+        return new AttributeRevocationValuesProperty(crls);
     }
 }

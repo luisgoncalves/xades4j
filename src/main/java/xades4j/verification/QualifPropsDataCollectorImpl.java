@@ -18,6 +18,8 @@ package xades4j.verification;
 
 import java.util.Collection;
 import xades4j.properties.data.AllDataObjsTimeStampData;
+import xades4j.properties.data.AttrAuthoritiesCertValuesData;
+import xades4j.properties.data.AttributeRevocationValuesData;
 import xades4j.properties.data.CertificateValuesData;
 import xades4j.properties.data.CompleteCertificateRefsData;
 import xades4j.properties.data.CompleteRevocationRefsData;
@@ -114,9 +116,21 @@ class QualifPropsDataCollectorImpl implements QualifyingPropertiesDataCollector
     }
 
     @Override
+    public void setAttrAuthoritiesCertValues(AttrAuthoritiesCertValuesData attrAuthoritiesCertValuesData)
+    {
+        propsData.add(attrAuthoritiesCertValuesData);
+    }
+
+    @Override
     public void setRevocationValues(RevocationValuesData revocationValuesData)
     {
         propsData.add(revocationValuesData);
+    }
+
+    @Override
+    public void setAttributeRevocationValues(AttributeRevocationValuesData attrRevocValData)
+    {
+        propsData.add(attrRevocValData);
     }
 
     @Override

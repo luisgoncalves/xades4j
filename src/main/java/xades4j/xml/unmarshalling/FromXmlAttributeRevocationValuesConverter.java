@@ -18,13 +18,14 @@ package xades4j.xml.unmarshalling;
 
 import java.util.List;
 
-import xades4j.properties.data.RevocationValuesData;
+import xades4j.properties.data.AttributeRevocationValuesData;
 import xades4j.xml.bind.xades.XmlCRLValuesType;
 import xades4j.xml.bind.xades.XmlEncapsulatedPKIDataType;
 import xades4j.xml.bind.xades.XmlRevocationValuesType;
 import xades4j.xml.bind.xades.XmlUnsignedSignaturePropertiesType;
 
-public class FromXmlRevocationValuesConverter implements UnsignedSigPropFromXmlConv
+public class FromXmlAttributeRevocationValuesConverter
+        implements UnsignedSigPropFromXmlConv
 {
     @Override
     public void convertFromObjectTree(
@@ -32,26 +33,27 @@ public class FromXmlRevocationValuesConverter implements UnsignedSigPropFromXmlC
             QualifyingPropertiesDataCollector propertyDataCollector)
             throws PropertyUnmarshalException
     {
-        XmlRevocationValuesType xmlRevocationValues = xmlProps.getRevocationValues();
+        XmlRevocationValuesType xmlRevocationValues = xmlProps.getAttributeRevocationValues();
         if (null == xmlRevocationValues)
             return;
 
-        RevocationValuesData revocationValuesData = new RevocationValuesData();
+        AttributeRevocationValuesData attrRevocationValuesData =
+                new AttributeRevocationValuesData();
         XmlCRLValuesType values = xmlRevocationValues.getCRLValues();
         List<XmlEncapsulatedPKIDataType> crls = values.getEncapsulatedCRLValue();
         for (XmlEncapsulatedPKIDataType crl : crls)
         {
-            revocationValuesData.addData(crl.getValue());
+            attrRevocationValuesData.addData(crl.getValue());
         }
 
         // handle unsupported data
         if (xmlRevocationValues.getOCSPValues() != null)
             throw new PropertyUnmarshalException("OCSP responses are unsupported",
-                    "RevocationValues");
+                    "AttributeRevocationValues");
         if (xmlRevocationValues.getOtherValues() != null)
             throw new PropertyUnmarshalException("Other (not CRL and not OCSP) " +
-                    "certificate revocation values unsupported", "RevocationValues");
+                    "certificate revocation values unsupported", "AttributeRevocationValues");
 
-        propertyDataCollector.setRevocationValues(revocationValuesData);
+        propertyDataCollector.setAttributeRevocationValues(attrRevocationValuesData);
     }
 }

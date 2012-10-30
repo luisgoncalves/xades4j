@@ -16,31 +16,28 @@
  */
 package xades4j.verification;
 
-import java.security.cert.X509Certificate;
-import java.util.Collection;
-
-import com.google.inject.Inject;
-
-import xades4j.properties.CertificateValuesProperty;
-import xades4j.properties.QualifyingProperty;
-import xades4j.properties.data.CertificateValuesData;
-
-/**
- *
- * @author Hubert Kario
- *
- */
-public class CertificateValuesVerifier extends EncapsulatedPKIDataVerifierBase<CertificateValuesData>
+public class EncapsulatedPKIRevocationDataVerificationException extends
+        InvalidPropertyException
 {
-    @Inject
-    public CertificateValuesVerifier(String propName)
+    private static final long serialVersionUID = 1L;
+    private final String propName;
+
+    public EncapsulatedPKIRevocationDataVerificationException(Exception ex, String propName)
     {
-        super(propName);
+        super(ex);
+        this.propName = propName;
     }
 
     @Override
-    public QualifyingProperty createProperty(Collection<X509Certificate> certs)
+    protected String getVerificationMessage()
     {
-        return new CertificateValuesProperty(certs);
+        return "Can't verify revocation information";
     }
+
+    @Override
+    public String getPropertyName()
+    {
+        return propName;
+    }
+
 }

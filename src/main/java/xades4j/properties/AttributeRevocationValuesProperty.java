@@ -14,33 +14,42 @@
  * You should have received a copy of the GNU Lesser General Public License along
  * with XAdES4j. If not, see <http://www.gnu.org/licenses/>.
  */
-package xades4j.verification;
+package xades4j.properties;
 
 import java.security.cert.X509CRL;
 import java.util.Collection;
 
-import xades4j.properties.QualifyingProperty;
-import xades4j.properties.RevocationValuesProperty;
-import xades4j.properties.data.RevocationValuesData;
-
-import com.google.inject.Inject;
-
 /**
+ * The {@code AttributeRevocationValues} property is an optional unsigned property and
+ * qualifies the XML signature. There is at most one occurrence of this property in the
+ * signature.
+ * <p>
+ * The {@code AttributeRevocationValues} property is used to hold the values of revocation
+ * information which are needed to check validity of TSA certificates in TimeStamps.
  *
  * @author Hubert Kario
  *
  */
-public class RevocationValuesVerifier extends EncapsulatedPKIRevocationDataVerifierBase<RevocationValuesData>
+public class AttributeRevocationValuesProperty extends
+        UnsignedSignatureProperty
 {
-    @Inject
-    public RevocationValuesVerifier(String propName)
+    public static final String PROP_NAME = "AttributeRevocationValues";
+    private final Collection<X509CRL> crls;
+
+    public AttributeRevocationValuesProperty(Collection<X509CRL> crls)
     {
-        super(propName);
+        if (crls == null)
+            throw new NullPointerException();
+        this.crls = crls;
+    }
+    public Collection<X509CRL> getCrls()
+    {
+        return crls;
     }
 
     @Override
-    public QualifyingProperty createProperty(Collection<X509CRL> crls)
+    public String getName()
     {
-        return new RevocationValuesProperty(crls);
+        return PROP_NAME;
     }
 }

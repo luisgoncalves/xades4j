@@ -18,13 +18,15 @@ package xades4j.verification;
 
 import java.security.cert.CertificateException;
 
-public class CertificateValuesVerificationException extends InvalidPropertyException
+public class EncapsulatedPKIDataVerificationException extends InvalidPropertyException
 {
     private static final long serialVersionUID = 1L;
+    private final String propName;
 
-    public CertificateValuesVerificationException(CertificateException ex)
+    public EncapsulatedPKIDataVerificationException(CertificateException ex, String propName)
     {
         super(ex);
+        this.propName = propName;
     }
 
     @Override
@@ -36,7 +38,7 @@ public class CertificateValuesVerificationException extends InvalidPropertyExcep
     @Override
     public String getPropertyName()
     {
-        return "CertificateValues";
+        return propName;
     }
 
 }

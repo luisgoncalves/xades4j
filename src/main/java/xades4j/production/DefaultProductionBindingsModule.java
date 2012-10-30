@@ -22,6 +22,8 @@ import com.google.inject.multibindings.Multibinder;
 import xades4j.properties.AllDataObjsCommitmentTypeProperty;
 import xades4j.properties.AllDataObjsTimeStampProperty;
 import xades4j.properties.ArchiveTimeStampProperty;
+import xades4j.properties.AttrAuthoritiesCertValuesProperty;
+import xades4j.properties.AttributeRevocationValuesProperty;
 import xades4j.properties.CertificateValuesProperty;
 import xades4j.properties.CommitmentTypeProperty;
 import xades4j.properties.CompleteCertificateRefsProperty;
@@ -161,9 +163,17 @@ class DefaultProductionBindingsModule extends AbstractModule
         {
         }).to(DataGenCertificateValues.class);
 
+        bind(new TypeLiteral<PropertyDataObjectGenerator<AttrAuthoritiesCertValuesProperty>>()
+        {
+        }).to(DataGenAttrAuthoritiesCertValues.class);
+
         bind(new TypeLiteral<PropertyDataObjectGenerator<RevocationValuesProperty>>()
         {
         }).to(DataGenRevocationValues.class);
+
+        bind(new TypeLiteral<PropertyDataObjectGenerator<AttributeRevocationValuesProperty>>()
+        {
+        }).to(DataGenAttributeRevocationValues.class);
 
         bind(new TypeLiteral<PropertyDataObjectGenerator<ArchiveTimeStampProperty>>()
         {
