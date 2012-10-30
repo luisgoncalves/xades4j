@@ -81,6 +81,7 @@ class XadesVerifierImpl implements XadesVerifier
     @Inject
     protected XadesVerifierImpl(
             CertificateValidationProvider certificateValidator,
+            CertificateValidationProvider timestampCertificateValidator,
             QualifyingPropertiesVerifier qualifyingPropertiesVerifier,
             QualifyingPropertiesUnmarshaller qualifPropsUnmarshaller,
             Set<RawSignatureVerifier> rawSigVerifiers,
@@ -217,6 +218,7 @@ class XadesVerifierImpl implements XadesVerifier
                 XAdESFormChecker.checkForm(props),
                 signature,
                 certValidationRes,
+                qPropsCtx.getAttributeValidationData(),
                 props,
                 referencesRes.dataObjsReferences);
 
@@ -464,7 +466,8 @@ class XadesVerifierImpl implements XadesVerifier
                     Collection<UnsignedSignatureProperty> usp,
                     XAdESVerificationResult res)
             {
-                PropertiesUtils.addXadesXLProperties(usp, res.getValidationData());
+                PropertiesUtils.addXadesXLProperties(usp, res.getValidationData(),
+                        res.getAttributeValidationData());
                 PropertiesUtils.addXadesXProperties(usp);
             }
         };

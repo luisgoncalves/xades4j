@@ -52,6 +52,7 @@ import xades4j.providers.TimeStampTokenTSACertException;
 import xades4j.providers.TimeStampTokenVerificationException;
 import xades4j.providers.TimeStampVerificationProvider;
 import xades4j.providers.ValidationData;
+import xades4j.verification.QualifyingPropertyVerificationContext;
 
 /**
  * Default implementation of {@code TimeStampVerificationProvider}. It verifies
@@ -102,7 +103,9 @@ public class DefaultTimeStampVerificationProvider implements TimeStampVerificati
     }
 
     @Override
-    public Date verifyToken(byte[] timeStampToken, byte[] tsDigestInput) throws TimeStampTokenVerificationException
+    public Date verifyToken(byte[] timeStampToken, byte[] tsDigestInput,
+                QualifyingPropertyVerificationContext ctx)
+                        throws TimeStampTokenVerificationException
     {
         TimeStampToken tsToken;
         try
@@ -137,6 +140,10 @@ public class DefaultTimeStampVerificationProvider implements TimeStampVerificati
                     null == tsaCert ? null : Collections.singletonList(tsaCert));
 
             tsaCert = vData.getCerts().get(0);
+
+            // XXX should we really add validation data /before/ token validation?
+            if (ctx != null)
+                ctx.addAttributeValidationData(vData);
         }
         catch (CertificateException ex)
         {

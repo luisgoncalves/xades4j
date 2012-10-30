@@ -17,6 +17,7 @@
 package xades4j.verification;
 
 import java.security.cert.X509Certificate;
+import java.util.ArrayList;
 import java.util.Collection;
 import org.apache.xml.security.signature.XMLSignature;
 import xades4j.properties.QualifyingProperties;
@@ -48,11 +49,13 @@ public class XAdESVerificationResult
     /**/
     private final DataGetter<QualifyingProperty> propertiesGetter;
     private final QualifyingProperties qualifyingProperties;
+    private final Collection<ValidationData> attributeValidationData;
 
     XAdESVerificationResult(
             XAdESForm signatureForm,
             XMLSignature xmlSignature,
             ValidationData validationData,
+            Collection<ValidationData> attributeValidationData,
             Collection<PropertyInfo> properties,
             Collection<RawDataObjectDesc> signedDataObjects)
     {
@@ -64,6 +67,8 @@ public class XAdESVerificationResult
 
         this.propertiesGetter = createPropsGetter(properties);
         this.qualifyingProperties = createQualifProps();
+
+        this.attributeValidationData = attributeValidationData;
     }
 
     private DataGetter<QualifyingProperty> createPropsGetter(
@@ -173,5 +178,14 @@ public class XAdESVerificationResult
     public Collection<RawDataObjectDesc> getSignedDataObjects()
     {
         return signedDataObjects;
+    }
+
+    /**
+     * returns validation data (certs and CRLs used to verify time stamps
+     * @return
+     */
+    public Collection<ValidationData> getAttributeValidationData()
+    {
+        return attributeValidationData;
     }
 }

@@ -19,6 +19,7 @@ package xades4j.verification;
 import java.math.BigInteger;
 import java.security.cert.X509CRL;
 import java.security.cert.X509Certificate;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
@@ -36,6 +37,8 @@ import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 
+import xades4j.providers.ValidationData;
+
 /**
  * The context available during the verification of the qualifying properties.
  * @see QualifyingPropertyVerifier
@@ -46,6 +49,7 @@ public class QualifyingPropertyVerificationContext
     private final XMLSignature signature;
     private final CertificationChainData certChainData;
     private final SignedObjectsData signedObjectsData;
+    private Collection<ValidationData> attributeValidationData;
 
     QualifyingPropertyVerificationContext(
             XMLSignature signature,
@@ -55,6 +59,17 @@ public class QualifyingPropertyVerificationContext
         this.signature = signature;
         this.certChainData = certChainData;
         this.signedObjectsData = signedObjectsData;
+        attributeValidationData = new ArrayList<ValidationData>();
+    }
+
+    public Collection<ValidationData> getAttributeValidationData()
+    {
+        return attributeValidationData;
+    }
+
+    public void addAttributeValidationData(ValidationData validationData)
+    {
+        attributeValidationData.add(validationData);
     }
 
     public XMLSignature getSignature()

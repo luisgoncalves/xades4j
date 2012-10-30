@@ -16,11 +16,14 @@
  */
 package xades4j.utils;
 
+import java.security.cert.X509CRL;
 import java.security.cert.X509Certificate;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 import xades4j.properties.ArchiveTimeStampProperty;
+import xades4j.properties.AttrAuthoritiesCertValuesProperty;
+import xades4j.properties.AttributeRevocationValuesProperty;
 import xades4j.properties.CertificateValuesProperty;
 import xades4j.properties.CompleteCertificateRefsProperty;
 import xades4j.properties.CompleteRevocationRefsProperty;
@@ -79,12 +82,23 @@ public class PropertiesUtils
 
     public static void addXadesXLProperties(
             Collection<UnsignedSignatureProperty> usp,
-            ValidationData vData)
+            ValidationData vData,
+            Collection<ValidationData> tstValData)
     {
         usp.add(new CertificateValuesProperty(vData.getCerts()));
         usp.add(new RevocationValuesProperty(vData.getCrls()));
         // TODO add AttrAuthoritiesCertValues
         // TODO add AttributeRevocationValues
+        Collection<X509Certificate> allTSACerts = new ArrayList<X509Certificate>();
+        Collection<X509CRL> allTSACRLs = new ArrayList<X509CRL>();
+        for (ValidationData valData : tstValData)
+        {
+            allTSACerts.addAll(valData.getCerts());
+            allTSACRLs.addAll(valData.getCrls());
+        }
+        usp.add(new AttrAuthoritiesCertValuesProperty(allTSACerts));
+
+        usp.add(new AttributeRevocationValuesProperty(allTSACRLs));
     }
 
     public static void addXadesAProperties(

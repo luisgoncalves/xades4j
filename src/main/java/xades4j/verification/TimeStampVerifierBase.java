@@ -68,7 +68,7 @@ abstract class TimeStampVerifierBase<TData extends BaseXAdESTimeStampData> imple
             Date ts = null;
             for (byte[] tkn : tokens)
             {
-                ts = this.tsVerifier.verifyToken(tkn, data);
+                ts = this.tsVerifier.verifyToken(tkn, data, ctx);
             }
 
             // By convention all timestamp property types have a setTime(Date) method

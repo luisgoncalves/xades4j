@@ -20,6 +20,7 @@ import java.io.ByteArrayOutputStream;
 import java.io.FileInputStream;
 import java.security.KeyStore;
 import org.junit.Test;
+
 import xades4j.providers.TimeStampTokenDigestException;
 import xades4j.providers.TimeStampTokenVerificationException;
 import xades4j.utils.StreamUtils;
@@ -89,6 +90,6 @@ public class DefaultTimeStampVerificationProviderTest extends VerifierTestBase
                 certificateValidationProvider,
                 new DefaultMessageDigestProvider());
 
-        timeStampVerificationProvider.verifyToken(tsToken, tsDigestInput);
+        timeStampVerificationProvider.verifyToken(tsToken, tsDigestInput, null);
     }
 }
