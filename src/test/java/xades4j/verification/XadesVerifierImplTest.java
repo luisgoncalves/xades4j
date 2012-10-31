@@ -26,6 +26,8 @@ import org.w3c.dom.Element;
 import org.w3c.dom.NodeList;
 import xades4j.production.XadesFormatExtenderProfile;
 import xades4j.production.XadesSignatureFormatExtender;
+import xades4j.properties.AttrAuthoritiesCertValuesProperty;
+import xades4j.properties.AttributeRevocationValuesProperty;
 import xades4j.properties.CertificateValuesProperty;
 import xades4j.properties.QualifyingProperty;
 import xades4j.properties.RevocationValuesProperty;
@@ -219,6 +221,8 @@ public class XadesVerifierImplTest extends VerifierTestBase
         assertPropElementPresent(signatureNode, SigAndRefsTimeStampProperty.PROP_NAME);
         assertPropElementPresent(signatureNode, CertificateValuesProperty.PROP_NAME);
         assertPropElementPresent(signatureNode, RevocationValuesProperty.PROP_NAME);
+        assertPropElementPresent(signatureNode, AttrAuthoritiesCertValuesProperty.PROP_NAME);
+        assertPropElementPresent(signatureNode, AttributeRevocationValuesProperty.PROP_NAME);
 
         outputDocument(doc, "document.verified.c.xl.xml");
     }
