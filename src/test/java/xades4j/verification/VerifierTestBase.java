@@ -27,8 +27,10 @@ import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import xades4j.properties.ObjectIdentifier;
 import xades4j.providers.CertificateValidationProvider;
+import xades4j.providers.TSACertificateValidationProvider;
 import xades4j.utils.FileSystemDirectoryCertStore;
 import xades4j.providers.impl.PKIXCertificateValidationProvider;
+import xades4j.providers.impl.PKIXTSACertificateValidationProvider;
 import xades4j.providers.SignaturePolicyDocumentProvider;
 import xades4j.utils.SignatureServicesTestBase;
 
@@ -40,7 +42,9 @@ public class VerifierTestBase extends SignatureServicesTestBase
 {
     static SignaturePolicyDocumentProvider policyDocumentFinder;
     public static CertificateValidationProvider validationProviderMySigs;
+    public static TSACertificateValidationProvider tsaValidationProviderMySigs;
     public static CertificateValidationProvider validationProviderNist;
+    public static TSACertificateValidationProvider tsaValidationProviderNist;
     public static CertificateValidationProvider validationProviderPtCc;
 
     static
@@ -61,14 +65,26 @@ public class VerifierTestBase extends SignatureServicesTestBase
             // signatures without revocation data.
             FileSystemDirectoryCertStore certStore = createDirectoryCertStore("my");
             KeyStore ks = createAndLoadJKSKeyStore("my/myStore", "mystorepass");
-            validationProviderMySigs = new PKIXCertificateValidationProvider(ks, false, certStore.getStore());
+            validationProviderMySigs = new PKIXCertificateValidationProvider(ks,
+                                                    false,
+                                                    certStore.getStore());
+            tsaValidationProviderMySigs = new PKIXTSACertificateValidationProvider(ks,
+                                                    false,
+                                                    certStore.getStore());
 
             // Validation provider with certificates/CRL from "csrc.nist" folder
             // and TSA CRL. Used for signatures with complete validation data.
             certStore = createDirectoryCertStore("csrc.nist");
             FileSystemDirectoryCertStore gvaCRLStore = createDirectoryCertStore("gva");
             ks = createAndLoadJKSKeyStore("csrc.nist/trustAnchor", "password");
-            validationProviderNist = new PKIXCertificateValidationProvider(ks, true, certStore.getStore(), gvaCRLStore.getStore());
+            validationProviderNist = new PKIXCertificateValidationProvider(ks,
+                                                    true,
+                                                    certStore.getStore(),
+                                                    gvaCRLStore.getStore());
+            tsaValidationProviderNist = new PKIXTSACertificateValidationProvider(ks,
+                                                    true,
+                                                    certStore.getStore(),
+                                                    gvaCRLStore.getStore());
 
             // Validation provider for "pt" folder. Used for signatures produced
             // with the PT citizen card.
@@ -90,7 +106,8 @@ public class VerifierTestBase extends SignatureServicesTestBase
 
     protected static XAdESForm verifySignature(String sigFileName) throws Exception
     {
-        return verifySignature(sigFileName, new XadesVerificationProfile(VerifierTestBase.validationProviderMySigs));
+        return verifySignature(sigFileName, new XadesVerificationProfile(VerifierTestBase.validationProviderMySigs,
+                VerifierTestBase.tsaValidationProviderMySigs));
     }
 
     protected static XAdESForm verifySignature(

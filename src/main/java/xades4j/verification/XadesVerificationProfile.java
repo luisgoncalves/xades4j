@@ -25,6 +25,7 @@ import xades4j.properties.data.PropertyDataObject;
 import xades4j.providers.CertificateValidationProvider;
 import xades4j.providers.MessageDigestEngineProvider;
 import xades4j.providers.SignaturePolicyDocumentProvider;
+import xades4j.providers.TSACertificateValidationProvider;
 import xades4j.providers.TimeStampVerificationProvider;
 import xades4j.utils.UtilsBindingsModule;
 import xades4j.xml.marshalling.algorithms.AlgorithmParametersBindingsModule;
@@ -73,6 +74,11 @@ public final class XadesVerificationProfile
         withBinding(XadesVerifier.class, XadesVerifierImpl.class);
     }
 
+    /**
+     * Certificate validation profile to be used only with signatures lacking time stamps
+     *
+     * @param certificateValidationProvider
+     */
     public XadesVerificationProfile(
             CertificateValidationProvider certificateValidationProvider)
     {
@@ -80,11 +86,38 @@ public final class XadesVerificationProfile
         withBinding(CertificateValidationProvider.class, certificateValidationProvider);
     }
 
+    /**
+     * Certificate validation profile that can be used to validate both signature and
+     * time stamps in Advanced Electronic Signatures.
+     *
+     * @param certificateValidationProvider validation data and provider to be used for
+     * validation Signature only
+     * @param tsaCertificateValidationProvider validation data and provider to be used for
+     * validation of time stamps in signature
+     */
+    public XadesVerificationProfile(
+            CertificateValidationProvider certificateValidationProvider,
+            TSACertificateValidationProvider tsaCertificateValidationProvider)
+    {
+        this();
+        withBinding(CertificateValidationProvider.class, certificateValidationProvider);
+        withBinding(TSACertificateValidationProvider.class, tsaCertificateValidationProvider);
+    }
+
     public XadesVerificationProfile(
             Class<? extends CertificateValidationProvider> certificateValidationProviderClass)
     {
         this();
         withBinding(CertificateValidationProvider.class, certificateValidationProviderClass);
+    }
+
+    public XadesVerificationProfile(
+            Class<? extends CertificateValidationProvider> certificateValidationProviderClass,
+            Class<? extends TSACertificateValidationProvider> tsaCertificateValProvClass)
+    {
+        this();
+        withBinding(CertificateValidationProvider.class, certificateValidationProviderClass);
+        withBinding(TSACertificateValidationProvider.class, tsaCertificateValProvClass);
     }
 
     /***/

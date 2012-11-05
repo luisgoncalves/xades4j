@@ -22,7 +22,9 @@ import org.junit.Test;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import xades4j.providers.CertificateValidationProvider;
+import xades4j.providers.TSACertificateValidationProvider;
 import xades4j.providers.impl.PKIXCertificateValidationProvider;
+import xades4j.providers.impl.PKIXTSACertificateValidationProvider;
 import xades4j.utils.DOMHelper;
 import xades4j.utils.FileSystemDirectoryCertStore;
 
@@ -41,16 +43,22 @@ public class VerifyExternalSigsTest extends VerifierTestBase
         FileSystemDirectoryCertStore certStore = createDirectoryCertStore("tsl/pt");
         KeyStore ks = KeyStore.getInstance("Windows-ROOT");
         ks.load(null);
-        PKIXCertificateValidationProvider cvp = new PKIXCertificateValidationProvider(ks, false, certStore.getStore());
-        verifyTSL("TSL_PT.xml", cvp);
+        PKIXCertificateValidationProvider cvp =
+                new PKIXCertificateValidationProvider(ks, false, certStore.getStore());
+        PKIXTSACertificateValidationProvider tcvp =
+                new PKIXTSACertificateValidationProvider(ks, false, certStore.getStore());
+        verifyTSL("TSL_PT.xml", cvp, tcvp);
     }
 
     @Test
     public void testVerifyBETSL() throws Exception
     {
         KeyStore ks = createAndLoadJKSKeyStore("tsl/be/beStore", "bestorepass");
-        PKIXCertificateValidationProvider cvp = new PKIXCertificateValidationProvider(ks, false);
-        verifyTSL("TSL_BE.xml", cvp);
+        PKIXCertificateValidationProvider cvp =
+                new PKIXCertificateValidationProvider(ks, false);
+        PKIXTSACertificateValidationProvider tcvp =
+                new PKIXTSACertificateValidationProvider(ks, false);
+        verifyTSL("TSL_BE.xml", cvp, tcvp);
     }
 
     @Test
@@ -58,8 +66,11 @@ public class VerifyExternalSigsTest extends VerifierTestBase
     {
         KeyStore ks = createAndLoadJKSKeyStore("tsl/es/esStore", "esstorepass");
         FileSystemDirectoryCertStore certStore = createDirectoryCertStore("tsl/es");
-        PKIXCertificateValidationProvider cvp = new PKIXCertificateValidationProvider(ks, false, certStore.getStore());
-        verifyTSL("TSL_ES.xml", cvp);
+        PKIXCertificateValidationProvider cvp =
+                new PKIXCertificateValidationProvider(ks, false, certStore.getStore());
+        PKIXTSACertificateValidationProvider tcvp =
+                new PKIXTSACertificateValidationProvider(ks, false, certStore.getStore());
+        verifyTSL("TSL_ES.xml", cvp, tcvp);
     }
     
     @Test
@@ -67,8 +78,11 @@ public class VerifyExternalSigsTest extends VerifierTestBase
     {
         KeyStore ks = createAndLoadJKSKeyStore("tsl/it/itStore", "itstorepass");
         FileSystemDirectoryCertStore certStore = createDirectoryCertStore("tsl/it");
-        PKIXCertificateValidationProvider cvp = new PKIXCertificateValidationProvider(ks, false, certStore.getStore());
-        verifyTSL("TSL_IT.xml", cvp);
+        PKIXCertificateValidationProvider cvp =
+                new PKIXCertificateValidationProvider(ks, false, certStore.getStore());
+        PKIXTSACertificateValidationProvider tcvp =
+                new PKIXTSACertificateValidationProvider(ks, false, certStore.getStore());
+        verifyTSL("TSL_IT.xml", cvp, tcvp);
     } 
 
 //    @Test
@@ -102,9 +116,11 @@ public class VerifyExternalSigsTest extends VerifierTestBase
 //        };
 //        verifyTSL("TSL_SK.xml", new XadesVerificationProfile(cvp).withPolicyDocumentProvider(spp));
 //    }
-    private void verifyTSL(String fileName, CertificateValidationProvider cvp) throws Exception
+    private void verifyTSL(String fileName,
+            CertificateValidationProvider cvp,
+            TSACertificateValidationProvider tcvp) throws Exception
     {
-        verifyTSL(fileName, new XadesVerificationProfile(cvp));
+        verifyTSL(fileName, new XadesVerificationProfile(cvp, tcvp));
     }
 
     private void verifyTSL(String fileName, XadesVerificationProfile p) throws Exception
@@ -123,7 +139,10 @@ public class VerifyExternalSigsTest extends VerifierTestBase
 
         FileSystemDirectoryCertStore certStore = createDirectoryCertStore("petition");
         KeyStore ks = createAndLoadJKSKeyStore("petition/signitStore", "signitstorepass");
-        PKIXCertificateValidationProvider cvp = new PKIXCertificateValidationProvider(ks, false, certStore.getStore());
+        PKIXCertificateValidationProvider cvp =
+                new PKIXCertificateValidationProvider(ks, false, certStore.getStore());
+        PKIXTSACertificateValidationProvider tcvp =
+                new PKIXTSACertificateValidationProvider(ks, false, certStore.getStore());
 
         Document doc = getDocument("external/Petition_1285054657304.xml");
 
@@ -131,7 +150,8 @@ public class VerifyExternalSigsTest extends VerifierTestBase
         Element petitionElem = DOMHelper.getFirstChildElement(doc.getDocumentElement());
         petitionElem.setIdAttribute("id", true);
 
-        XAdESForm f = verifySignature(getSigElement(doc), new XadesVerificationProfile(cvp));
+        XAdESForm f = verifySignature(getSigElement(doc),
+                new XadesVerificationProfile(cvp, tcvp));
         assertEquals(f, XAdESForm.T);
     }
 }

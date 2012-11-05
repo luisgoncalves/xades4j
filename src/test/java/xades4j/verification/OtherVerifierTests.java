@@ -53,7 +53,9 @@ public class OtherVerifierTests extends VerifierTestBase
     @Before
     public void initialize()
     {
-        mySigsVerificationProfile = new XadesVerificationProfile(VerifierTestBase.validationProviderMySigs);
+        mySigsVerificationProfile =
+                new XadesVerificationProfile(VerifierTestBase.validationProviderMySigs,
+                        VerifierTestBase.tsaValidationProviderMySigs);
     }
 
     @Test(expected = UnsupportedOperationException.class)

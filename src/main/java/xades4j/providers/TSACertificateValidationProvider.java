@@ -1,6 +1,6 @@
 /*
  * XAdES4j - A Java library for generation and verification of XAdES signatures.
- * Copyright (C) 2010 Luis Goncalves.
+ * Copyright (C) 2012 Hubert Kario -QBS.
  *
  * XAdES4j is free software; you can redistribute it and/or modify it under
  * the terms of the GNU Lesser General Public License as published by the Free
@@ -14,26 +14,21 @@
  * You should have received a copy of the GNU Lesser General Public License along
  * with XAdES4j. If not, see <http://www.gnu.org/licenses/>.
  */
-package xades4j.verification;
-
-import org.junit.Test;
-import static org.junit.Assert.*;
-import xades4j.utils.XadesProfileResolutionException;
+package xades4j.providers;
 
 /**
+ * {@link CertificateValidationProvider} made specifically for validating certificates
+ * used by Time Stamping Authorities.
+ * <p>
+ * verify() method should gracefully handle certificates with time stamping extended
+ * critical key usage extension.
+ * <p>
+ * <small>interface made specifically to differentiate verifiers used for signature
+ * verification and used for attribute verification (TimeStamps)</small>
+ * @author Hubert Kario
  *
- * @author Luís
  */
-public class XadesVerificationProfileTest
+public interface TSACertificateValidationProvider extends
+        CertificateValidationProvider
 {
-    @Test
-    public void testGetVerifier() throws XadesProfileResolutionException
-    {
-        System.out.println("getVerifier");
-        XadesVerificationProfile instance =
-                new XadesVerificationProfile(VerifierTestBase.validationProviderMySigs,
-                        VerifierTestBase.tsaValidationProviderMySigs);
-        XadesVerifier result = instance.newVerifier();
-        assertNotNull(result);
-    }
 }

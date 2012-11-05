@@ -35,8 +35,12 @@ public class XadesVerifierErrorsTest extends VerifierTestBase
     @Before
     public void initialize()
     {
-        mySigsVerificationProfile = new XadesVerificationProfile(VerifierTestBase.validationProviderMySigs);
-        nistVerificationProfile = new XadesVerificationProfile(VerifierTestBase.validationProviderNist);
+        mySigsVerificationProfile = new XadesVerificationProfile(
+                                        VerifierTestBase.validationProviderMySigs,
+                                        VerifierTestBase.tsaValidationProviderMySigs);
+        nistVerificationProfile = new XadesVerificationProfile(
+                                        VerifierTestBase.validationProviderNist,
+                                        VerifierTestBase.tsaValidationProviderMySigs);
     }
 
     @Test(expected = QualifyingPropertiesIncorporationException.class)
@@ -55,7 +59,8 @@ public class XadesVerifierErrorsTest extends VerifierTestBase
             fail("Test written for Windows-ROOT certificate repository");
 
         verifyBadSignature("document.signed.bes.signedpropsrefnotype.xml",
-                new XadesVerificationProfile(validationProviderPtCc));
+                new XadesVerificationProfile(validationProviderPtCc,
+                        tsaValidationProviderMySigs));
     }
 
     @Test(expected = InvalidXAdESFormException.class)
@@ -72,7 +77,8 @@ public class XadesVerifierErrorsTest extends VerifierTestBase
 
         KeyStore ks = createAndLoadJKSKeyStore("tsl/be/beStore", "bestorepass");
         PKIXCertificateValidationProvider cvp = new PKIXCertificateValidationProvider(ks, false);
-        verifyBadSignature("TSL_BE.nocert.xml", new XadesVerificationProfile(cvp));
+        verifyBadSignature("TSL_BE.nocert.xml", new XadesVerificationProfile(cvp,
+                tsaValidationProviderMySigs));
     }
 
     @Test(expected = ReferenceValueException.class)

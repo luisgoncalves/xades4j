@@ -45,6 +45,7 @@ import xades4j.UnsupportedAlgorithmException;
 import xades4j.XAdES4jException;
 import xades4j.providers.CertificateValidationProvider;
 import xades4j.providers.MessageDigestEngineProvider;
+import xades4j.providers.TSACertificateValidationProvider;
 import xades4j.providers.TimeStampTokenDigestException;
 import xades4j.providers.TimeStampTokenSignatureException;
 import xades4j.providers.TimeStampTokenStructureException;
@@ -82,7 +83,7 @@ public class DefaultTimeStampVerificationProvider implements TimeStampVerificati
     {
         return digestOidToUriMappings.get(digestalgOid);
     }
-    private final CertificateValidationProvider certificateValidationProvider;
+    private final TSACertificateValidationProvider certificateValidationProvider;
     private final MessageDigestEngineProvider messageDigestProvider;
     private final JcaSimpleSignerInfoVerifierBuilder signerInfoVerifierBuilder;
     private final JcaX509CertificateConverter x509CertificateConverter;
@@ -90,7 +91,7 @@ public class DefaultTimeStampVerificationProvider implements TimeStampVerificati
 
     @Inject
     public DefaultTimeStampVerificationProvider(
-            CertificateValidationProvider certificateValidationProvider,
+            TSACertificateValidationProvider certificateValidationProvider,
             MessageDigestEngineProvider messageDigestProvider)
     {
         this.certificateValidationProvider = certificateValidationProvider;

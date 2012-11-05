@@ -45,8 +45,12 @@ public class XadesVerifierImplTest extends VerifierTestBase
     @Before
     public void initialize()
     {
-        verificationProfile = new XadesVerificationProfile(VerifierTestBase.validationProviderMySigs);
-        nistVerificationProfile = new XadesVerificationProfile(VerifierTestBase.validationProviderNist);
+        verificationProfile = new XadesVerificationProfile(
+                                    VerifierTestBase.validationProviderMySigs,
+                                    VerifierTestBase.tsaValidationProviderMySigs);
+        nistVerificationProfile = new XadesVerificationProfile(
+                                    VerifierTestBase.validationProviderNist,
+                                    VerifierTestBase.tsaValidationProviderNist);
     }
 
     @Test
@@ -155,7 +159,8 @@ public class XadesVerifierImplTest extends VerifierTestBase
             fail("Test written for Windows-ROOT certificate repository");
 
         XAdESForm f = verifySignature("document.signed.t.bes.ptcc.xml",
-                new XadesVerificationProfile(validationProviderPtCc));
+                new XadesVerificationProfile(validationProviderPtCc,
+                        tsaValidationProviderMySigs));
         assertEquals(XAdESForm.T, f);
     }
 
