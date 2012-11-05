@@ -33,8 +33,6 @@ class FromXmlUnsupportedUSPLimiter implements UnsignedSigPropFromXmlConv
         if (!ObjectUtils.allNull(
                 xmlProps.getAttributeCertificateRefs(),
                 xmlProps.getAttributeRevocationRefs(),
-                xmlProps.getCertificateValues(),
-                xmlProps.getRevocationValues(),
                 xmlProps.getAttrAuthoritiesCertValues(),
                 xmlProps.getAttributeRevocationValues(),
                 xmlProps.getAttributeCertificateRefs()) ||

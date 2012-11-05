@@ -233,6 +233,16 @@ public class XadesVerifierImplTest extends VerifierTestBase
         assertEquals(XAdESForm.X, f);
     }
 
+    @Test
+    public void testVerifyXL() throws Exception
+    {
+        System.out.println("verifyXL");
+        XAdESForm f = verifySignature(
+                "out/document.verified.c.xl.xml",
+                nistVerificationProfile);
+        assertEquals(XAdESForm.X_L, f);
+    }
+
     private static void assertPropElementPresent(
             Element sigElem,
             String elemName)

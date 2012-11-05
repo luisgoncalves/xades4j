@@ -28,6 +28,7 @@ import xades4j.properties.CounterSignatureProperty;
 import xades4j.properties.ObjectIdentifier;
 import xades4j.properties.QualifyingProperty;
 import xades4j.properties.data.AllDataObjsTimeStampData;
+import xades4j.properties.data.CertificateValuesData;
 import xades4j.properties.data.CommitmentTypeData;
 import xades4j.properties.data.CompleteCertificateRefsData;
 import xades4j.properties.data.CompleteRevocationRefsData;
@@ -36,6 +37,7 @@ import xades4j.properties.data.DataObjectFormatData;
 import xades4j.properties.data.GenericDOMData;
 import xades4j.properties.data.IndividualDataObjsTimeStampData;
 import xades4j.properties.data.PropertyDataObject;
+import xades4j.properties.data.RevocationValuesData;
 import xades4j.properties.data.SigAndRefsTimeStampData;
 import xades4j.properties.data.SignaturePolicyData;
 import xades4j.properties.data.SignatureProdPlaceData;
@@ -117,7 +119,9 @@ class DefaultVerificationBindingsModule extends AbstractModule
         bindBuiltInVerifier(CompleteCertificateRefsData.class, CompleteCertRefsVerifier.class);
         bindBuiltInVerifier(CompleteRevocationRefsData.class, CompleteRevocRefsVerifier.class);
         bindBuiltInVerifier(SigAndRefsTimeStampData.class, SigAndRefsTimeStampVerifier.class);
-        
+        bindBuiltInVerifier(CertificateValuesData.class, CertificateValuesVerifier.class);
+        bindBuiltInVerifier(RevocationValuesData.class, RevocationValuesVerifier.class);
+
         MapBinder<QName, QualifyingPropertyVerifier> unkownElemsBinder = MapBinder.newMapBinder(binder(), QName.class, QualifyingPropertyVerifier.class);
         unkownElemsBinder
                 .addBinding(new QName(QualifyingProperty.XADES_XMLNS, CounterSignatureProperty.PROP_NAME))
