@@ -34,7 +34,7 @@ public class AlgorithmsParametersMarshallingProviderImplTest
 {
 
     @Test
-    public void testMarshalParameters() throws Exception
+    public void testMarshalParametersWithDefaultConfiguration() throws Exception
     {
         Document doc = SignatureServicesTestBase.getNewDocument();
         Injector injector = Guice.createInjector(new AlgorithmParametersBindingsModule());
@@ -57,6 +57,7 @@ public class AlgorithmsParametersMarshallingProviderImplTest
         algorithms = new Algorithm[]
         {
             new EnvelopedSignatureTransform(),
+            new ExclusiveCanonicalXMLWithComments(), // Can also be used without parameters
             new CanonicalXMLWithoutComments(),
             new GenericAlgorithm("uri")
         };
@@ -67,4 +68,5 @@ public class AlgorithmsParametersMarshallingProviderImplTest
             assertNull(params);
         }
     }
+    
 }
