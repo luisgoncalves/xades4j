@@ -21,6 +21,9 @@ import java.security.cert.X509Certificate;
 import java.util.Collection;
 import java.util.Iterator;
 import javax.security.auth.x500.X500Principal;
+
+import org.w3c.dom.Element;
+
 import xades4j.properties.QualifyingProperty;
 import xades4j.properties.SigningCertificateProperty;
 import xades4j.properties.data.CertRef;
@@ -113,5 +116,13 @@ class SigningCertificateVerifier implements QualifyingPropertyVerifier<SigningCe
             throw new SigningCertificateCertsNotInCertPathException();
 
         return new SigningCertificateProperty(certChainData.getCertificateChain());
+    }
+
+    @Override
+    public QualifyingProperty verify(SigningCertificateData propData,
+            Element elem, QualifyingPropertyVerificationContext ctx)
+            throws InvalidPropertyException
+    {
+        return verify(propData, ctx);
     }
 }

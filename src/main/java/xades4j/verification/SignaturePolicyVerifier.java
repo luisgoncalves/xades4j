@@ -21,6 +21,9 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.security.MessageDigest;
 import java.util.Arrays;
+
+import org.w3c.dom.Element;
+
 import xades4j.properties.ObjectIdentifier;
 import xades4j.properties.QualifyingProperty;
 import xades4j.properties.SignaturePolicyIdentifierProperty;
@@ -96,5 +99,13 @@ class SignaturePolicyVerifier implements QualifyingPropertyVerifier<SignaturePol
                 throw new SignaturePolicyNotAvailableException(policyId, ex);
             }
         }
+    }
+
+    @Override
+    public QualifyingProperty verify(SignaturePolicyData propData,
+            Element elem, QualifyingPropertyVerificationContext ctx)
+            throws InvalidPropertyException
+    {
+        return verify(propData, ctx);
     }
 }

@@ -215,6 +215,7 @@ public class HybridQualifPropsDataCollectorImpl implements
         return unsignedSigProperties.getProperties();
     }
 
+    @Override
     public List<PropertyDataObject> getPropertiesData()
     {
         List<PropertyDataObject> ret = new ArrayList<PropertyDataObject>();
@@ -231,15 +232,10 @@ public class HybridQualifPropsDataCollectorImpl implements
         unsignedSigPropertiesElements.add(node);
     }
 
-    /**
-     * Returns XML DOM Node that was parsed from provided PropertyDataObject
-     * @param pdo
-     * @return {@code null} if property is not part of UnsignedSignaturePoperties or was
-     * not present in unmarshalled Signature
-     */
+    @Override
     public Node getPropertyNode(PropertyDataObject pdo)
     {
-        int index = unsignedSigPropertiesElements.indexOf(pdo);
+        int index = unsignedSigProperties.getProperties().indexOf(pdo);
         if (index == -1)
             return null;
 

@@ -22,6 +22,7 @@ import org.junit.Before;
 import xades4j.properties.QualifyingProperty;
 import xades4j.properties.data.SigningTimeData;
 import org.junit.Test;
+import org.w3c.dom.Element;
 
 class SigningTimeVerifierThatDependsOnBuiltInVerifier implements QualifyingPropertyVerifier<SigningTimeData>
 {
@@ -36,6 +37,15 @@ class SigningTimeVerifierThatDependsOnBuiltInVerifier implements QualifyingPrope
 
     @Override
     public QualifyingProperty verify(SigningTimeData propData, QualifyingPropertyVerificationContext ctx) throws InvalidPropertyException
+    {
+        builtInVerifier.verify(propData, ctx);
+        throw new SigningTimeVerificationException(null, null);
+    }
+
+    @Override
+    public QualifyingProperty verify(SigningTimeData propData, Element elem,
+            QualifyingPropertyVerificationContext ctx)
+            throws InvalidPropertyException
     {
         builtInVerifier.verify(propData, ctx);
         throw new SigningTimeVerificationException(null, null);
@@ -71,6 +81,15 @@ public class OtherVerifierTests extends VerifierTestBase
                     QualifyingPropertyVerificationContext ctx) throws InvalidPropertyException
             {
                 throw new UnsupportedOperationException("Yeah!");
+            }
+
+            @Override
+            public QualifyingProperty verify(SigningTimeData propData,
+                    Element elem, QualifyingPropertyVerificationContext ctx)
+                    throws InvalidPropertyException
+            {
+                throw new UnsupportedOperationException("Yeah!");
+
             }
         });
         verifySignature("document.signed.bes.xml", mySigsVerificationProfile);

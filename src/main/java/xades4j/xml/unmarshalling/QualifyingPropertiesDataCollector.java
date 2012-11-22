@@ -16,12 +16,16 @@
  */
 package xades4j.xml.unmarshalling;
 
+import java.util.List;
+
 import org.w3c.dom.Element;
+import org.w3c.dom.Node;
 
 import xades4j.properties.data.AllDataObjsTimeStampData;
 import xades4j.properties.data.AttrAuthoritiesCertValuesData;
 import xades4j.properties.data.AttributeRevocationValuesData;
 import xades4j.properties.data.CertificateValuesData;
+import xades4j.properties.data.PropertyDataObject;
 import xades4j.properties.data.RevocationValuesData;
 import xades4j.properties.data.SigAndRefsTimeStampData;
 import xades4j.properties.data.SigningTimeData;
@@ -95,4 +99,23 @@ public interface QualifyingPropertiesDataCollector
             AttributeRevocationValuesData attrRevocValData);
 
     public void linkPropertyToElem(Element node);
+
+    /**
+     * return all properties in Signature in following order:
+     * SignedSignatureProperties, SignedDataObjectProperties, UnsignedSignatureProperties
+     * and UnsignedDataObjectProperties.
+     * <p>
+     * Properties in each of the groups are returned in order in which they are present
+     * in Signature
+     * @return
+     */
+    public List<PropertyDataObject> getPropertiesData();
+
+    /**
+     * Returns XML DOM Node that was parsed to from provided PropertyDataObject
+     * @param pdo
+     * @return {@code null} if property is not part of UnsignedSignaturePoperties or was
+     * not present in unmarshalled Signature
+     */
+    public Node getPropertyNode(PropertyDataObject pdo);
 }

@@ -26,6 +26,9 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 import javax.security.auth.x500.X500Principal;
+
+import org.w3c.dom.Element;
+
 import xades4j.properties.CompleteRevocationRefsProperty;
 import xades4j.properties.QualifyingProperty;
 import xades4j.UnsupportedAlgorithmException;
@@ -74,7 +77,7 @@ class CompleteRevocRefsVerifier implements QualifyingPropertyVerifier<CompleteRe
                 if (!crl.getIssuerX500Principal().equals(new X500Principal(crlRef.issuerDN)) ||
                         !crl.getThisUpdate().equals(crlRef.issueTime.getTime()))
                     continue;
-                
+
                 try
                 {
                     // Check CRL number, if present.
@@ -114,5 +117,13 @@ class CompleteRevocRefsVerifier implements QualifyingPropertyVerifier<CompleteRe
         }
 
         return new CompleteRevocationRefsProperty(crls);
+    }
+
+    @Override
+    public QualifyingProperty verify(CompleteRevocationRefsData propData,
+            Element elem, QualifyingPropertyVerificationContext ctx)
+            throws InvalidPropertyException
+    {
+        return verify(propData, ctx);
     }
 }

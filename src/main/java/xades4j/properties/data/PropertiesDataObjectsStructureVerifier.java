@@ -121,6 +121,12 @@ public class PropertiesDataObjectsStructureVerifier
         verifiyPropertiesDataStructure(propsData.getDataObjProps());
     }
 
+    /**
+     * Checks if internal structure and included parameters of the property are present
+     * and sane
+     * @param propsData properties to check
+     * @throws PropertyDataStructureException
+     */
     public void verifiyPropertiesDataStructure(
             Collection<PropertyDataObject> propsData) throws PropertyDataStructureException
     {

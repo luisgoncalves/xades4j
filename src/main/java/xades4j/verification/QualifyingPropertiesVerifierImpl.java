@@ -20,10 +20,13 @@ import com.google.inject.Inject;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.List;
+
 import xades4j.properties.QualifyingProperty;
 import xades4j.properties.data.PropertiesDataObjectsStructureVerifier;
 import xades4j.properties.data.PropertyDataObject;
 import xades4j.properties.data.PropertyDataStructureException;
+import xades4j.xml.unmarshalling.QualifyingPropertiesDataCollector;
 
 /**
  *
@@ -45,16 +48,28 @@ class QualifyingPropertiesVerifierImpl implements QualifyingPropertiesVerifier
 
     @Override
     public Collection<PropertyInfo> verifyProperties(
-            Collection<PropertyDataObject> unmarshalledProperties,
+            QualifyingPropertiesDataCollector dataCollector,
             QualifyingPropertyVerificationContext ctx) throws PropertyDataStructureException, InvalidPropertyException, QualifyingPropertyVerifierNotAvailableException
+    {
+        List<PropertyDataObject> unmarshalledProperties = dataCollector.getPropertiesData();
+        return verifyProperties(unmarshalledProperties, ctx);
+    }
+
+    @Override
+    public Collection<PropertyInfo> verifyProperties(
+            List<PropertyDataObject> unmarshalledProperties,
+            QualifyingPropertyVerificationContext ctx)
+            throws PropertyDataStructureException, InvalidPropertyException,
+            QualifyingPropertyVerifierNotAvailableException
     {
         dataObjectsStructureVerifier.verifiyPropertiesDataStructure(unmarshalledProperties);
 
         Collection<PropertyInfo> props = new ArrayList<PropertyInfo>(unmarshalledProperties.size());
-        
+
         for (PropertyDataObject propData : unmarshalledProperties)
         {
-            QualifyingPropertyVerifier propVerifier = this.propertyVerifiersMapper.getVerifier(propData);
+            QualifyingPropertyVerifier<PropertyDataObject> propVerifier =
+                    this.propertyVerifiersMapper.getVerifier(propData);
 
             QualifyingProperty p = propVerifier.verify(propData, ctx);
             if (null == p)

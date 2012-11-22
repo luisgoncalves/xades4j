@@ -25,7 +25,8 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
-import xades4j.properties.CertificateValuesProperty;
+import org.w3c.dom.Element;
+
 import xades4j.properties.QualifyingProperty;
 import xades4j.properties.data.BaseEncapsulatedPKIData;
 
@@ -37,6 +38,14 @@ public abstract class EncapsulatedPKIDataVerifierBase<PKIData extends BaseEncaps
     public EncapsulatedPKIDataVerifierBase(String propName)
     {
         this.propName = propName;
+    }
+
+    public QualifyingProperty verify(BaseEncapsulatedPKIData propData,
+            Element elem,
+            QualifyingPropertyVerificationContext ctx)
+            throws InvalidPropertyException
+    {
+        return verify(propData, ctx);
     }
 
     public QualifyingProperty verify(BaseEncapsulatedPKIData propData,

@@ -19,6 +19,9 @@ package xades4j.verification;
 import java.lang.reflect.Method;
 import java.util.Date;
 import java.util.List;
+
+import org.w3c.dom.Element;
+
 import xades4j.UnsupportedAlgorithmException;
 import xades4j.properties.QualifyingProperty;
 import xades4j.properties.data.BaseXAdESTimeStampData;
@@ -47,6 +50,16 @@ abstract class TimeStampVerifierBase<TData extends BaseXAdESTimeStampData> imple
         this.tsVerifier = tsVerifier;
         this.tsInputFactory = tsInputFactory;
         this.propName = propName;
+    }
+
+    @Override
+    public final QualifyingProperty verify(
+            TData propData,
+            Element elem,
+            QualifyingPropertyVerificationContext ctx) throws InvalidPropertyException
+    {
+        // TODO check order of Elements in signature (literal XML), probably in addPropSpecificTimeStampInput()
+        return verify(propData, ctx);
     }
 
     @Override
@@ -121,6 +134,8 @@ abstract class TimeStampVerifierBase<TData extends BaseXAdESTimeStampData> imple
 
         return new TimeStampVerificationException(propName, ex)
         {
+            private static final long serialVersionUID = 1L;
+
             @Override
             protected String getVerificationMessage()
             {

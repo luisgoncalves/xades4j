@@ -17,6 +17,9 @@
 package xades4j.verification;
 
 import java.util.Collection;
+
+import org.w3c.dom.Element;
+
 import xades4j.properties.AllDataObjsCommitmentTypeProperty;
 import xades4j.properties.CommitmentTypeProperty;
 import xades4j.properties.QualifyingProperty;
@@ -41,7 +44,7 @@ class CommitmentTypeVerifier implements QualifyingPropertyVerifier<CommitmentTyp
         {
             // "Check that all the ObjectReference elements actually reference
             // ds:Reference elements from the signature."
-            
+
             SignedObjectsData signedObjsData = ctx.getSignedObjectsData();
             CommitmentTypeProperty commitmentTypeProperty = new CommitmentTypeProperty(uri, desc);
 
@@ -57,5 +60,13 @@ class CommitmentTypeVerifier implements QualifyingPropertyVerifier<CommitmentTyp
             return commitmentTypeProperty;
         }
         return new AllDataObjsCommitmentTypeProperty(uri, desc);
+    }
+
+    @Override
+    public QualifyingProperty verify(CommitmentTypeData propData, Element elem,
+            QualifyingPropertyVerificationContext ctx)
+            throws InvalidPropertyException
+    {
+        return verify(propData, ctx);
     }
 }

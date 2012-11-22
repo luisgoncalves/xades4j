@@ -211,7 +211,7 @@ class XadesVerifierImpl implements XadesVerifier
                 signature));
 
         // Verify the properties. Data structure verification is included.
-        Collection<PropertyInfo> props = this.qualifyingPropertiesVerifier.verifyProperties(qualifPropsData, qPropsCtx);
+        Collection<PropertyInfo> props = this.qualifyingPropertiesVerifier.verifyProperties(propsDataCollector, qPropsCtx);
 
         XAdESVerificationResult res = new XAdESVerificationResult(
                 XAdESFormChecker.checkForm(props),

@@ -16,9 +16,10 @@
  */
 package xades4j.verification;
 
-import java.util.Collection;
+import java.util.List;
 
 import org.w3c.dom.Element;
+import org.w3c.dom.Node;
 
 import xades4j.properties.data.AllDataObjsTimeStampData;
 import xades4j.properties.data.AttrAuthoritiesCertValuesData;
@@ -174,7 +175,7 @@ class QualifPropsDataCollectorImpl implements QualifyingPropertiesDataCollector
     }
 
     /**/
-    Collection<PropertyDataObject> getPropertiesData()
+    public List<PropertyDataObject> getPropertiesData()
     {
         return propsData.getProperties();
     }
@@ -183,6 +184,13 @@ class QualifPropsDataCollectorImpl implements QualifyingPropertiesDataCollector
     public void linkPropertyToElem(Element node)
     {
         //noop
+    }
+
+    @Override
+    public Node getPropertyNode(PropertyDataObject pdo)
+    {
+        throw new UnsupportedOperationException("QualifPropsDataCollectorImpl does not"+
+                    " support getPropertyNode() method. Use HybridQualifPropsDataCollectorImpl.");
     }
 
 }

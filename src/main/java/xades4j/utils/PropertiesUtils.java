@@ -87,8 +87,7 @@ public class PropertiesUtils
     {
         usp.add(new CertificateValuesProperty(vData.getCerts()));
         usp.add(new RevocationValuesProperty(vData.getCrls()));
-        // TODO add AttrAuthoritiesCertValues
-        // TODO add AttributeRevocationValues
+
         Collection<X509Certificate> allTSACerts = new ArrayList<X509Certificate>();
         Collection<X509CRL> allTSACRLs = new ArrayList<X509CRL>();
         for (ValidationData valData : tstValData)
@@ -97,7 +96,6 @@ public class PropertiesUtils
             allTSACRLs.addAll(valData.getCrls());
         }
         usp.add(new AttrAuthoritiesCertValuesProperty(allTSACerts));
-
         usp.add(new AttributeRevocationValuesProperty(allTSACRLs));
     }
 

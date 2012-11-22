@@ -17,8 +17,11 @@
 package xades4j.verification;
 
 import java.util.Collection;
+import java.util.List;
+
 import xades4j.properties.data.PropertyDataObject;
 import xades4j.properties.data.PropertyDataStructureException;
+import xades4j.xml.unmarshalling.QualifyingPropertiesDataCollector;
 
 /**
  *
@@ -30,6 +33,17 @@ interface QualifyingPropertiesVerifier
      * Verifies the data objects' structure and the XAdES rules.
      */
     Collection<PropertyInfo> verifyProperties(
-            Collection<PropertyDataObject> unmarshalledProperties,
+           QualifyingPropertiesDataCollector unmarshalledProperties,
             QualifyingPropertyVerificationContext ctx) throws PropertyDataStructureException, InvalidPropertyException, QualifyingPropertyVerifierNotAvailableException;
+
+    /**
+     * Verifies the data objects' structure and the XAdES rules.
+     * Use {@link QualifyingPropertiesVerifier#verifyProperties(QualifyingPropertiesDataCollector, QualifyingPropertyVerificationContext)}
+     * TODO left because legacy parts of verifiers need to verify only some properties,
+     * for example just SignatureTimeStamp
+     */
+    @Deprecated
+    Collection<PropertyInfo> verifyProperties(
+            List<PropertyDataObject> unmarshalledProperties,
+             QualifyingPropertyVerificationContext ctx) throws PropertyDataStructureException, InvalidPropertyException, QualifyingPropertyVerifierNotAvailableException;
 }

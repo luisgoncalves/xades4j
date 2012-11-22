@@ -90,7 +90,7 @@ class DefaultVerificationBindingsModule extends AbstractModule
 
         // QualifyingPropertiesVerifier is not configurable but the individual
         // verifiers may have dependencies.
-        bind(QualifyingPropertiesVerifier.class).to(QualifyingPropertiesVerifierImpl.class);
+        bind(QualifyingPropertiesVerifier.class).to(HybridQualifyingPropertiesVerifierImpl.class);
         bind(QualifyingPropertyVerifiersMapper.class).to(QualifyingPropertyVerifiersMapperImpl.class);
 
 //        customGlobalStructureVerifiers.add(new CustomPropertiesDataObjsStructureVerifier()

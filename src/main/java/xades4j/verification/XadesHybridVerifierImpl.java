@@ -177,7 +177,7 @@ public class XadesHybridVerifierImpl implements XadesVerifier
                 signature));
 
         // Verify the properties. Data structure verification is included.
-        Collection<PropertyInfo> props = this.qualifyingPropertiesVerifier.verifyProperties(qualifPropsData, qPropsCtx);
+        Collection<PropertyInfo> props = this.qualifyingPropertiesVerifier.verifyProperties(propsDataCollector, qPropsCtx);
 
         XAdESVerificationResult res = new XAdESVerificationResult(
                 XAdESFormChecker.checkForm(props),
@@ -343,8 +343,7 @@ public class XadesHybridVerifierImpl implements XadesVerifier
 
     public void setAcceptUnknownProperties(boolean acceptUnknownProperties)
     {
-        // TODO Auto-generated method stub
-
+        this.qualifPropsUnmarshaller.setAcceptUnknownProperties(acceptUnknownProperties);
     }
 
     private static void doCoreVerification(

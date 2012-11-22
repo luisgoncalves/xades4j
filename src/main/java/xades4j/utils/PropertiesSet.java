@@ -18,10 +18,10 @@ package xades4j.utils;
 
 import xades4j.properties.PropertyTargetException;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
@@ -34,7 +34,7 @@ import java.util.Set;
  */
 public class PropertiesSet<T>
 {
-    private final Map<Class, Set<T>> properties;
+    private final Map<Class<?>, Set<T>> properties;
 
     /**
      * Initializes the property bag with the given initial diferent property types.
@@ -42,7 +42,7 @@ public class PropertiesSet<T>
      */
     public PropertiesSet(int initialNPropTypes)
     {
-        this.properties = new HashMap<Class, Set<T>>(initialNPropTypes);
+        this.properties = new HashMap<Class<?>, Set<T>>(initialNPropTypes);
     }
 
     /**
@@ -132,12 +132,12 @@ public class PropertiesSet<T>
      * Gets the properties in the bag.
      * @return un unmodifiable collection of properties
      */
-    public Collection<T> getProperties()
+    public List<T> getProperties()
     {
         if (properties.isEmpty())
             return Collections.emptyList();
 
-        Collection<T> props = new ArrayList<T>(properties.size() + 3);
+        List<T> props = new ArrayList<T>(properties.size() + 3);
         for (Set<T> propsOfType : properties.values())
         {
             props.addAll(propsOfType);
