@@ -18,6 +18,9 @@ package xades4j.verification;
 
 import com.google.inject.Inject;
 import java.util.Collection;
+
+import org.w3c.dom.Element;
+
 import xades4j.properties.AllDataObjsTimeStampProperty;
 import xades4j.utils.CannotAddDataToDigestInputException;
 import xades4j.properties.QualifyingProperty;
@@ -42,7 +45,12 @@ class AllDataObjsTimeStampVerifier extends TimeStampVerifierBase<AllDataObjsTime
     }
 
     @Override
-    protected QualifyingProperty addPropSpecificTimeStampInputAndCreateProperty(AllDataObjsTimeStampData propData, TimeStampDigestInput digestInput, QualifyingPropertyVerificationContext ctx) throws CannotAddDataToDigestInputException
+    protected QualifyingProperty addPropSpecificTimeStampInputAndCreateProperty(
+            AllDataObjsTimeStampData propData,
+            Element location,
+            TimeStampDigestInput digestInput,
+            QualifyingPropertyVerificationContext ctx)
+                    throws CannotAddDataToDigestInputException
     {
         Collection<RawDataObjectDesc> dataObjs = ctx.getSignedObjectsData().getAllDataObjects();
 

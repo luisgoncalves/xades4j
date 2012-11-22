@@ -54,77 +54,195 @@ public class SigAndRefsTimeStampVerifier extends
 
     @Override
     protected QualifyingProperty addPropSpecificTimeStampInputAndCreateProperty(
-            SigAndRefsTimeStampData propData, TimeStampDigestInput digestInput,
+            SigAndRefsTimeStampData propData, Element location,
+            TimeStampDigestInput digestInput,
             QualifyingPropertyVerificationContext ctx)
             throws CannotAddDataToDigestInputException,
             TimeStampVerificationException
     {
-        /*
-         * "Take each one of the signed properties and not property elements in the
-         * signature that the normative part dictates that must be time-stamped, in the
-         * order specified in the normative clause defining the time-stamp token
-         * container type. Canonicalize them and concatenate the resulting bytes in one
-         * octet stream. If the CanonicalizationMethod element of the property is
-         * present, use it for canonicalizing. Otherwise, use the standard
-         * canonicalization method as specified by XMLDSIG."
-         */
-
         // TimeStamp is taken over SignatureValue element
-        Element sigValueElem = DOMHelper.getFirstDescendant(
-                ctx.getSignature().getElement(),
-                Constants.SignatureSpecNS,
+        Element sigValueElem = DOMHelper.getFirstDescendant(ctx.getSignature()
+                .getElement(), Constants.SignatureSpecNS,
                 Constants._TAG_SIGNATUREVALUE);
         digestInput.addNode(sigValueElem);
 
-        // next elements that should have been timestamped are all SignatureTimeStamps
-        // there may be no SignatureTimeStamps
-        // TODO write test for document with SigAndRefsTimeStamp but no SignatureTimeStamp
-        NodeList signatureTimeStamps = ctx.getSignature().getElement().getElementsByTagNameNS(
-                SignatureTimeStampProperty.XADES_XMLNS,
-                SignatureTimeStampProperty.PROP_NAME);
-        for (int i=0; i < signatureTimeStamps.getLength(); i++)
+        /*
+         * "Take each one of the signed properties and not property elements in
+         * the signature that the normative part dictates that must be
+         * time-stamped, in the order specified in the normative clause defining
+         * the time-stamp token container type. Canonicalize them and
+         * concatenate the resulting bytes in one octet stream. If the
+         * CanonicalizationMethod element of the property is present, use it for
+         * canonicalizing. Otherwise, use the standard canonicalization method
+         * as specified by XMLDSIG."
+         *
+         * XAdES 1.4.2, section G.2.2.16.2.3, Implicit mechanism: "
+         * 1) In step 4) the verifier should check that the CompleteCertificateRefs and
+         *    CompleteRevocationRefs properties are present in the signature. She
+         *    should also check that they and, if present, SignatureTimeStamp,
+         *    AttributeCertificateRefs and AttributeRevocationRefs, appear before
+         *    SigAndRefsTimeStamp.
+         * 2) In step 5), the verifier should take the aforementioned properties in
+         *    their order of appearance within the signature."
+         */
+
+        if (location == null) // use fallback mechanism
         {
-            Element timeStampElem = (Element) signatureTimeStamps.item(i);
-            digestInput.addNode(timeStampElem);
+            // XXX legacy code, to be removed when whole library is using new
+            // hybrid verifier
+
+            // next elements that should have been timestamped are all
+            // SignatureTimeStamps
+            // there may be no SignatureTimeStamps
+            NodeList signatureTimeStamps = ctx
+                    .getSignature()
+                    .getElement()
+                    .getElementsByTagNameNS(
+                            SignatureTimeStampProperty.XADES_XMLNS,
+                            SignatureTimeStampProperty.PROP_NAME);
+            for (int i = 0; i < signatureTimeStamps.getLength(); i++)
+            {
+                Element timeStampElem = (Element) signatureTimeStamps.item(i);
+                digestInput.addNode(timeStampElem);
+            }
+
+            // then CompleteCertificateRefs
+            Element completeCertificateRefsElem = DOMHelper.getFirstDescendant(
+                    ctx.getSignature().getElement(),
+                    CompleteCertificateRefsProperty.XADES_XMLNS,
+                    CompleteCertificateRefsProperty.PROP_NAME);
+            digestInput.addNode(completeCertificateRefsElem);
+
+            // ...and CompleteRevocationRefs
+            Element completeRevocationRefsElem = DOMHelper.getFirstDescendant(
+                    ctx.getSignature().getElement(),
+                    CompleteRevocationRefsProperty.XADES_XMLNS,
+                    CompleteRevocationRefsProperty.PROP_NAME);
+            digestInput.addNode(completeRevocationRefsElem);
+
+            // AttributeCertificateRefs are optional
+            Element attributeCertificateRefs = DOMHelper.getFirstDescendant(ctx
+                    .getSignature().getElement(),
+                    CompleteRevocationRefsProperty.XADES_XMLNS,
+                    "AttributeCertificateRefs");
+            if (attributeCertificateRefs != null)
+                throw new CannotAddDataToDigestInputException(new Exception(
+                        "Can't verify SigAndRefsTimeStamp: "
+                                + "AttributeCertificateRefs is unsupported"));
+
+            // AttributeRevocationRefs are optional
+            Element attributeRevocationRefs = DOMHelper.getFirstDescendant(ctx
+                    .getSignature().getElement(),
+                    CompleteRevocationRefsProperty.XADES_XMLNS,
+                    "AttributeRevocationRefs");
+            if (attributeRevocationRefs != null)
+                throw new CannotAddDataToDigestInputException(new Exception(
+                        "Can't verify SigAndRefsTimeStamp: "
+                                + "AttributeRevocationRefs is unsupported"));
+
+            return new SigAndRefsTimeStampProperty();
+        } else {
+            // TODO write test for document with SigAndRefsTimeStamp but no
+            // SignatureTimeStamp
+
+            // remember whatever we found mandatory elements
+            boolean foundCompleteRevocRefs = false;
+            boolean foundCompleteCertRefs = false;
+
+            // iterate over elements in order in which they are present in XML
+            for (Element elem = DOMHelper.getFirstChildElement(location
+                    .getParentNode()); elem != location; elem = DOMHelper
+                    .getNextSiblingElement(elem))
+            {
+                if (isElementMatchingProperty(elem,
+                        SignatureTimeStampProperty.class))
+                {
+                    // there are no specific requirements for SignatureTimeStamp
+                    // so just add them
+                    digestInput.addNode(elem);
+                    // TODO check if there are no SignatureTimestamps *after*
+                    // SigAndRefsTimeStamp
+                } else if (isElementMatchingProperty(elem,
+                        CompleteCertificateRefsProperty.class))
+                {
+                    // there must be exactly one CompleteCertificateRefs element
+                    if (foundCompleteCertRefs)
+                        throw new CannotAddDataToDigestInputException(
+                                new Exception(
+                                        "Duplicate CompleteCertificateRefs property"
+                                                + " in Signature"));
+                    foundCompleteCertRefs = true;
+                    digestInput.addNode(elem);
+                    // TODO check if there are no CompleteCertificateRefs
+                    // *after* SigAndRefsTimeStamp
+                } else if (isElementMatchingProperty(elem,
+                        CompleteRevocationRefsProperty.class))
+                {
+                    // there must be exactly one CompleteRevocationRefs element
+                    if (foundCompleteRevocRefs)
+                        throw new CannotAddDataToDigestInputException(
+                                new Exception(
+                                        "Duplicate CompleteRevocationRefs property"
+                                                + " in Singature"));
+                    foundCompleteRevocRefs = true;
+                    digestInput.addNode(elem);
+                    // TODO check if there are no CompleteRevocationRefs *after*
+                    // SigAndRefsTimeStamp
+                } else if (elem.getLocalName().equalsIgnoreCase(
+                        "AttributeCertificateRefs")
+                        && elem.getNamespaceURI().equalsIgnoreCase(
+                                QualifyingProperty.XADES_XMLNS))
+                {
+                    // TODO implement AttributeCertificateRefs support
+                    throw new CannotAddDataToDigestInputException(
+                            new Exception("Can't verify SigAndRefsTimeStamp: "
+                                    + "AttributeCertificateRefs is unsupported"));
+                } else if (elem.getLocalName().equalsIgnoreCase(
+                        "AttributeRevocationRefs")
+                        && elem.getNamespaceURI().equalsIgnoreCase(
+                                QualifyingProperty.XADES_XMLNS))
+                {
+                    // TODO implement AttributeRevocationRefs support
+                    throw new CannotAddDataToDigestInputException(
+                            new Exception("Can't verify SigAndRefsTimeStamp: "
+                                    + "AttributeRevocationRefs is unsupported"));
+                } // else: ignore other properties
+            }
+
+            if (foundCompleteRevocRefs && foundCompleteCertRefs)
+                return new SigAndRefsTimeStampProperty();
+            else
+                throw new CannotAddDataToDigestInputException(new Exception(
+                        "Missing mandatory properties: CompleteCertificateRefs"
+                                + " or CompleteRevocationRefs"));
         }
-
-        // then CompleteCertificateRefs
-        Element completeCertificateRefsElem = DOMHelper.getFirstDescendant(
-                ctx.getSignature().getElement(),
-                CompleteCertificateRefsProperty.XADES_XMLNS,
-                CompleteCertificateRefsProperty.PROP_NAME);
-        digestInput.addNode(completeCertificateRefsElem);
-
-        // ...and CompleteRevocationRefs
-        Element completeRevocationRefsElem = DOMHelper.getFirstDescendant(
-                ctx.getSignature().getElement(),
-                CompleteRevocationRefsProperty.XADES_XMLNS,
-                CompleteRevocationRefsProperty.PROP_NAME);
-        digestInput.addNode(completeRevocationRefsElem);
-
-        // AttributeCertificateRefs are optional
-        // TODO implement missing classes
-        Element attributeCertificateRefs = DOMHelper.getFirstDescendant(
-                ctx.getSignature().getElement(),
-                CompleteRevocationRefsProperty.XADES_XMLNS,
-                "AttributeCertificateRefs");
-        if (attributeCertificateRefs != null)
-            throw new CannotAddDataToDigestInputException(
-                    new Exception("Can't verify SigAndRefsTimeStamp: " +
-            "AttributeCertificateRefs is unsupported"));
-
-        // AttributeRevocationRefs are optional
-        // TODO implement missing classes
-        Element attributeRevocationRefs = DOMHelper.getFirstDescendant(
-                ctx.getSignature().getElement(),
-                CompleteRevocationRefsProperty.XADES_XMLNS,
-                "AttributeRevocationRefs");
-        if (attributeRevocationRefs != null)
-            throw new CannotAddDataToDigestInputException(
-                    new Exception("Can't verify SigAndRefsTimeStamp: " +
-            "AttributeRevocationRefs is unsupported"));
-
-        return new SigAndRefsTimeStampProperty();
     }
 
+    private boolean isElementMatchingProperty(Element elem,
+            Class<? extends QualifyingProperty> prop)
+    {
+        try
+        {
+            return elem.getLocalName().equalsIgnoreCase(
+                    (String) prop.getField("PROP_NAME").get(null))
+                    && elem.getNamespaceURI().equalsIgnoreCase(
+                            (String) prop.getField("XADES_XMLNS").get(null));
+        } catch (IllegalArgumentException e)
+        {
+            e.printStackTrace();
+            throw new InternalError("Wrong property class");
+        } catch (SecurityException e)
+        {
+            e.printStackTrace();
+            throw new InternalError("Wrong property class");
+        } catch (IllegalAccessException e)
+        {
+            e.printStackTrace();
+            throw new InternalError("Wrong property class");
+        } catch (NoSuchFieldException e)
+        {
+            e.printStackTrace();
+            throw new InternalError("Wrong property class");
+        }
+    }
 }

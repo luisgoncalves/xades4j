@@ -45,6 +45,7 @@ class SignatureTimeStampVerifier extends TimeStampVerifierBase<SignatureTimeStam
     @Override
     protected QualifyingProperty addPropSpecificTimeStampInputAndCreateProperty(
             SignatureTimeStampData propData,
+            Element location,
             TimeStampDigestInput digestInput,
             QualifyingPropertyVerificationContext ctx) throws CannotAddDataToDigestInputException
     {

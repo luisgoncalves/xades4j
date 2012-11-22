@@ -58,20 +58,15 @@ abstract class TimeStampVerifierBase<TData extends BaseXAdESTimeStampData> imple
             Element elem,
             QualifyingPropertyVerificationContext ctx) throws InvalidPropertyException
     {
-        // TODO check order of Elements in signature (literal XML), probably in addPropSpecificTimeStampInput()
-        return verify(propData, ctx);
-    }
-
-    @Override
-    public final QualifyingProperty verify(
-            TData propData,
-            QualifyingPropertyVerificationContext ctx) throws InvalidPropertyException
-    {
         try
         {
             TimeStampDigestInput digestInput = this.tsInputFactory.newTimeStampDigestInput(propData.getCanonicalizationAlgorithm());
 
-            QualifyingProperty prop = addPropSpecificTimeStampInputAndCreateProperty(propData, digestInput, ctx);
+            QualifyingProperty prop = addPropSpecificTimeStampInputAndCreateProperty(
+                    propData,
+                    elem,
+                    digestInput,
+                    ctx);
             byte[] data = digestInput.getBytes();
             /**
              * Verify the time-stamp tokens on a time-stamp property data object. All
@@ -108,8 +103,17 @@ abstract class TimeStampVerifierBase<TData extends BaseXAdESTimeStampData> imple
         }
     }
 
+    @Override
+    public final QualifyingProperty verify(
+            TData propData,
+            QualifyingPropertyVerificationContext ctx) throws InvalidPropertyException
+    {
+        return verify(propData, null, ctx);
+    }
+
     protected abstract QualifyingProperty addPropSpecificTimeStampInputAndCreateProperty(
             TData propData,
+            Element location,
             TimeStampDigestInput digestInput,
             QualifyingPropertyVerificationContext ctx) throws CannotAddDataToDigestInputException, TimeStampVerificationException;
 
