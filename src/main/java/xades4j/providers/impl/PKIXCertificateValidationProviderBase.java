@@ -23,6 +23,8 @@ import java.security.KeyStoreException;
 import java.security.NoSuchAlgorithmException;
 import java.security.NoSuchProviderException;
 import java.security.PublicKey;
+import java.security.cert.CRL;
+import java.security.cert.CRLSelector;
 import java.security.cert.CertPathBuilder;
 import java.security.cert.CertPathBuilderException;
 import java.security.cert.CertStore;
@@ -32,7 +34,6 @@ import java.security.cert.CollectionCertStoreParameters;
 import java.security.cert.PKIXBuilderParameters;
 import java.security.cert.PKIXCertPathBuilderResult;
 import java.security.cert.X509CRL;
-import java.security.cert.X509CRLSelector;
 import java.security.cert.X509CertSelector;
 import java.security.cert.X509Certificate;
 import java.util.ArrayList;
@@ -203,30 +204,28 @@ public abstract class PKIXCertificateValidationProviderBase
             issuersCerts.put(certPath.get(i).getIssuerX500Principal(), certPath.get(i + 1));
         }
 
-        // Select all the CRLs from the issuers involved in the certification path
-        // that are valid at the moment.
-        X509CRLSelector crlSelector = new X509CRLSelector();
-        for (X500Principal issuer : issuersCerts.keySet())
-        {
-            // - "The issuer distinguished name in the X509CRL must match at least
-            //   one of the specified distinguished names."
-            crlSelector.addIssuer(issuer);
-        }
-        // - "The specified date must be equal to or later than the value of the
-        //   thisUpdate component of the X509CRL and earlier than the value of the
-        //   nextUpdate component."
-        crlSelector.setDateAndTime(validationDate);
-
         Set<X509CRL> crls = new HashSet<X509CRL>();
         try
         {
-            // Get the CRLs on each CertStore.
-            for (int i = 0; i < intermCertsAndCrls.length; i++)
+            for (int i = 0; i < certPath.size() - 1; i++)
             {
-                @SuppressWarnings("unchecked")
-                Collection<X509CRL> storeCRLs =
-                        (Collection<X509CRL>) intermCertsAndCrls[i].getCRLs(crlSelector);
-                crls.addAll(Collections.checkedCollection(storeCRLs, X509CRL.class));
+                X509Certificate cert = certPath.get(i);
+
+                /*
+                 * because the Sun X509CRLSelector is broken (won't find CRLs published
+                 *  in "future") we need to use our own or we won't be able to create
+                 *  C form from T form
+                 */
+                CRLSelector crlSelector = new CustomCRLSelector(cert, validationDate);
+
+                // Get the CRLs on each CertStore.
+                for (int j = 0; j < intermCertsAndCrls.length; j++)
+                {
+                    @SuppressWarnings("unchecked")
+                    Collection<X509CRL> storeCRLs =
+                            (Collection<X509CRL>) intermCertsAndCrls[j].getCRLs(crlSelector);
+                    crls.addAll(Collections.checkedCollection(storeCRLs, X509CRL.class));
+                }
             }
         } catch (CertStoreException ex)
         {
@@ -426,6 +425,47 @@ public abstract class PKIXCertificateValidationProviderBase
         newIntermCertsAndCrls[intermCertsAndCrls.length] = validCertCertStore;
 
         intermCertsAndCrls = newIntermCertsAndCrls;
+    }
+
+
+    private class CustomCRLSelector implements CRLSelector
+    {
+        private X509Certificate subjectCert;
+        private Date now;
+
+        public CustomCRLSelector(X509Certificate subjectCertificate, Date checkingDate)
+        {
+            subjectCert = subjectCertificate;
+            now = checkingDate;
+        }
+
+        public Object clone()
+        {
+            return new CustomCRLSelector(subjectCert, now);
+        }
+
+        @Override
+        public boolean match(CRL crl)
+        {
+            if (!(crl instanceof X509CRL))
+                return false;
+            X509CRL x509crl = (X509CRL) crl;
+
+            // check if issuer of CRL is the same as the issuer of the certificate
+            X500Principal principal = x509crl.getIssuerX500Principal();
+            if (!subjectCert.getIssuerX500Principal().equals(principal))
+                return false;
+
+            // CRL has to be valid for current time (but it can come from "future")
+            if (x509crl.getNextUpdate().getTime() < now.getTime())
+                return false;
+
+            // CRL must be published before certificate looses its validity
+            if (x509crl.getThisUpdate().getTime() >= subjectCert.getNotAfter().getTime())
+                return false;
+
+            return true;
+        }
     }
 
     /**
