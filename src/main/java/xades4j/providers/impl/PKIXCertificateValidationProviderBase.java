@@ -265,10 +265,6 @@ public abstract class PKIXCertificateValidationProviderBase
 
         for(X509CRL crl : crls)
         {
-            // check if it's not CRL from "future"
-            if (crl.getThisUpdate().getTime() > now.getTime())
-                continue;
-
             // TODO check algorithms used in CRL
 
             X509CertSelector certSel = new X509CertSelector();
