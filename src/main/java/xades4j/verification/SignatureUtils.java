@@ -53,6 +53,9 @@ class SignatureUtils
     }
     /**/
 
+    /**
+     * Unique identifier of key used for Signature
+     */
     static class KeyInfoRes
     {
 
