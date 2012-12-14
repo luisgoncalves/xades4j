@@ -261,6 +261,8 @@ public abstract class PKIXCertificateValidationProviderBase
 
     public void addCRLs(Collection<X509CRL> crls, Date now)
     {
+        if (crls == null)
+            return;
         Collection<X509CRL> validCRLs = new ArrayList<X509CRL>();
 
         for(X509CRL crl : crls)
@@ -343,6 +345,8 @@ public abstract class PKIXCertificateValidationProviderBase
 
     public void addCertificates(Collection<X509Certificate> otherCerts, Date now)
     {
+        if (otherCerts == null)
+            return;
         Collection<X509Certificate> validCerts = new ArrayList<X509Certificate>();
 
         /*
