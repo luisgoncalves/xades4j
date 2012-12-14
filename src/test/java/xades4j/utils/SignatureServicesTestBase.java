@@ -19,6 +19,8 @@ package xades4j.utils;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
+import java.security.Security;
+
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
@@ -41,6 +43,7 @@ public class SignatureServicesTestBase
     {
         try
         {
+            Security.addProvider(new org.bouncycastle.jce.provider.BouncyCastleProvider());
             DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
             dbf.setNamespaceAware(true);
             db = dbf.newDocumentBuilder();

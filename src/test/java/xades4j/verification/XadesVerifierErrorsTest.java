@@ -20,7 +20,8 @@ import java.security.KeyStore;
 import org.junit.Test;
 import static org.junit.Assert.*;
 import org.junit.Before;
-import xades4j.providers.CannotSelectCertificateException;
+
+import xades4j.providers.CannotBuildCertificationPathException;
 import xades4j.providers.impl.PKIXCertificateValidationProvider;
 
 /**
@@ -70,7 +71,7 @@ public class XadesVerifierErrorsTest extends VerifierTestBase
         verifyBadSignature("document.signed.c.bad.xml",nistVerificationProfile);
     }
 
-    @Test(expected = CannotSelectCertificateException.class)
+    @Test(expected = CannotBuildCertificationPathException.class)
     public void testErrVerifyNoSignCert() throws Exception
     {
         System.out.println("ErrVerifyNoSignCert");

@@ -102,7 +102,7 @@ public abstract class PKIXCertificateValidationProviderBase
         this.maxPathLength = maxPathLength;
         this.certPathBuilder =
                 certPathBuilderProvider == null ?
-                        CertPathBuilder.getInstance("PKIX") :
+                        CertPathBuilder.getInstance("PKIX", "BC") :
                             CertPathBuilder.getInstance("PKIX", certPathBuilderProvider);
         this.signatureProvider = signatureProvider;
         this.intermCertsAndCrls = intermCertsAndCrls;
