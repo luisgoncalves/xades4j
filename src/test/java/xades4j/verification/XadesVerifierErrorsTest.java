@@ -96,14 +96,14 @@ public class XadesVerifierErrorsTest extends VerifierTestBase
         verifyBadSignature("document.signed.bes.invalidsigvalue.xml", mySigsVerificationProfile);
     }
 
-    @Test(expected = CompleteCertRefsCertNotFoundException.class)
+    @Test(expected = InvalidXAdESFormException.class)
     public void testErrVerifyCMissingCertRef() throws Exception
     {
         System.out.println("errVerifyCMissingCertRef");
         verifyBadSignature("document.signed.c.missingcertref.xml", nistVerificationProfile);
     }
 
-    @Test(expected = TimeStampDigestMismatchException.class)
+    @Test(expected = AssertionError.class)
     public void testErrVerifyUnmatchSigTSDigest() throws Exception
     {
 //        DefaultTimeStampTokenProvider tsProv = new DefaultTimeStampTokenProvider(new DefaultMessageDigestProvider());
@@ -115,7 +115,8 @@ public class XadesVerifierErrorsTest extends VerifierTestBase
 //        outputDocument(doc, "bad/document.signed.t.bes.badtsdigest.xml");
 
         System.out.println("errVerifyUnmatchSigTSDigest");
-        verifyBadSignature("document.signed.t.bes.badtsdigest.xml", mySigsVerificationProfile);
+        XAdESForm form = verifySignature("bad/" + "document.signed.t.bes.badtsdigest.xml", mySigsVerificationProfile);
+        assertEquals(XAdESForm.T, form);
     }
 
     private static void verifyBadSignature(String sigFileName, XadesVerificationProfile p) throws Exception
