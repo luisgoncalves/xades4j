@@ -26,6 +26,7 @@ import xades4j.properties.SignerRoleProperty;
 import xades4j.properties.SigningTimeProperty;
 import xades4j.properties.UnsignedSignatureProperty;
 import xades4j.providers.SignaturePropertiesCollector;
+import xades4j.utils.PropertiesList;
 import xades4j.utils.PropertiesSet;
 
 /**
@@ -34,13 +35,13 @@ import xades4j.utils.PropertiesSet;
 class SignaturePropertiesCollectorImpl implements SignaturePropertiesCollector
 {
     private final PropertiesSet<SignedSignatureProperty> signedSigProps;
-    private final PropertiesSet<UnsignedSignatureProperty> unsignedSigProps;
+    private final PropertiesList<UnsignedSignatureProperty> unsignedSigProps;
 
     public SignaturePropertiesCollectorImpl()
     {
 
         this.signedSigProps = new PropertiesSet<SignedSignatureProperty>(2);
-        this.unsignedSigProps = new PropertiesSet<UnsignedSignatureProperty>(0);
+        this.unsignedSigProps = new PropertiesList<UnsignedSignatureProperty>(0);
     }
 
     /***** Signed signature properties *****/

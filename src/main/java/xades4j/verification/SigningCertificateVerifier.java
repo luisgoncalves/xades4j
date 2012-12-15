@@ -27,6 +27,7 @@ import org.w3c.dom.Element;
 import xades4j.properties.QualifyingProperty;
 import xades4j.properties.SigningCertificateProperty;
 import xades4j.properties.data.CertRef;
+import xades4j.providers.CertificateValidationProvider;
 import xades4j.providers.MessageDigestEngineProvider;
 import xades4j.properties.data.SigningCertificateData;
 import xades4j.verification.QualifyingPropertyVerificationContext.CertificationChainData;
@@ -41,7 +42,8 @@ class SigningCertificateVerifier implements QualifyingPropertyVerifier<SigningCe
 
     @Inject
     public SigningCertificateVerifier(
-            MessageDigestEngineProvider messageDigestProvider)
+            MessageDigestEngineProvider messageDigestProvider,
+            CertificateValidationProvider certificateValidator)
     {
         this.messageDigestProvider = messageDigestProvider;
     }

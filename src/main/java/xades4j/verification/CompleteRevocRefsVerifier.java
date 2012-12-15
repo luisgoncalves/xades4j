@@ -17,6 +17,7 @@
 package xades4j.verification;
 
 import com.google.inject.Inject;
+
 import java.io.IOException;
 import java.math.BigInteger;
 import java.security.MessageDigest;
@@ -34,6 +35,7 @@ import xades4j.properties.QualifyingProperty;
 import xades4j.UnsupportedAlgorithmException;
 import xades4j.properties.data.CRLRef;
 import xades4j.properties.data.CompleteRevocationRefsData;
+import xades4j.providers.CertificateValidationProvider;
 import xades4j.providers.MessageDigestEngineProvider;
 import xades4j.utils.CrlExtensionsUtils;
 
@@ -47,7 +49,8 @@ class CompleteRevocRefsVerifier implements QualifyingPropertyVerifier<CompleteRe
 
     @Inject
     public CompleteRevocRefsVerifier(
-            MessageDigestEngineProvider digestEngineProvider)
+            MessageDigestEngineProvider digestEngineProvider,
+            CertificateValidationProvider certificateValidator)
     {
         this.digestEngineProvider = digestEngineProvider;
     }

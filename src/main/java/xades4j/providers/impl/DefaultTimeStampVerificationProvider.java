@@ -43,7 +43,6 @@ import org.bouncycastle.tsp.TSPValidationException;
 import org.bouncycastle.tsp.TimeStampToken;
 import xades4j.UnsupportedAlgorithmException;
 import xades4j.XAdES4jException;
-import xades4j.providers.CertificateValidationProvider;
 import xades4j.providers.MessageDigestEngineProvider;
 import xades4j.providers.TSACertificateValidationProvider;
 import xades4j.providers.TimeStampTokenDigestException;
@@ -83,7 +82,7 @@ public class DefaultTimeStampVerificationProvider implements TimeStampVerificati
     {
         return digestOidToUriMappings.get(digestalgOid);
     }
-    private final TSACertificateValidationProvider certificateValidationProvider;
+    private final TSACertificateValidationProvider tsaCertificateValidationProvider;
     private final MessageDigestEngineProvider messageDigestProvider;
     private final JcaSimpleSignerInfoVerifierBuilder signerInfoVerifierBuilder;
     private final JcaX509CertificateConverter x509CertificateConverter;
@@ -94,7 +93,7 @@ public class DefaultTimeStampVerificationProvider implements TimeStampVerificati
             TSACertificateValidationProvider certificateValidationProvider,
             MessageDigestEngineProvider messageDigestProvider)
     {
-        this.certificateValidationProvider = certificateValidationProvider;
+        this.tsaCertificateValidationProvider = certificateValidationProvider;
         this.messageDigestProvider = messageDigestProvider;
 
         Provider bcProv = new BouncyCastleProvider();
@@ -124,27 +123,31 @@ public class DefaultTimeStampVerificationProvider implements TimeStampVerificati
         }
 
         X509Certificate tsaCert = null;
+        ValidationData vData = null;
         try
         {
             /* Validate the TSA certificate */
 
             // TODO should extract all certificates from the token
-            Iterator certsIt = tsToken.getCertificates().getMatches(tsToken.getSID()).iterator();
+            Iterator<?> certsIt = tsToken.getCertificates().getMatches(tsToken.getSID()).iterator();
             if (certsIt.hasNext())
             {
                 tsaCert = this.x509CertificateConverter.getCertificate((X509CertificateHolder) certsIt.next());
             }
+            if (ctx != null)
+            {
+                tsaCertificateValidationProvider.addCertificates(
+                        ctx.getAttributeCertificates(), ctx.getCurrentTime());
+                tsaCertificateValidationProvider.addCRLs(
+                        ctx.getAttributeCRLs(), ctx.getCurrentTime());
+            }
 
-            ValidationData vData = this.certificateValidationProvider.validate(
+            vData = this.tsaCertificateValidationProvider.validate(
                     x509CertSelectorConverter.getCertSelector(tsToken.getSID()),
-                    tsToken.getTimeStampInfo().getGenTime(),
+                    (ctx == null) ? null : ctx.getCurrentTime(), // unit tests provision
                     null == tsaCert ? null : Collections.singletonList(tsaCert));
 
             tsaCert = vData.getCerts().get(0);
-
-            // XXX should we really add validation data /before/ token validation?
-            if (ctx != null)
-                ctx.addAttributeValidationData(vData);
         }
         catch (CertificateException ex)
         {
@@ -184,6 +187,11 @@ public class DefaultTimeStampVerificationProvider implements TimeStampVerificati
         {
             throw new TimeStampTokenVerificationException("The token's digest algorithm is not supported", ex);
         }
+
+        // token verified successfully, remember the validation data used for its
+        // verification
+        if (ctx != null)
+            ctx.addAttributeValidationData(vData);
 
         return tsTokenInfo.getGenTime();
     }

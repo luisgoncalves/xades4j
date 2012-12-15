@@ -17,7 +17,6 @@
 package xades4j.verification;
 
 import java.io.InputStream;
-import java.security.cert.X509CRL;
 import java.security.cert.X509Certificate;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -39,12 +38,12 @@ import com.google.inject.Inject;
 import xades4j.XAdES4jException;
 import xades4j.XAdES4jXMLSigException;
 import xades4j.production.XadesSignatureFormatExtender;
+import xades4j.properties.ArchiveTimeStampProperty;
 import xades4j.properties.QualifyingProperty;
+import xades4j.properties.SigAndRefsTimeStampProperty;
 import xades4j.properties.SignatureTimeStampProperty;
 import xades4j.properties.UnsignedProperties;
 import xades4j.properties.UnsignedSignatureProperty;
-import xades4j.properties.data.PropertyDataObject;
-import xades4j.properties.data.SignatureTimeStampData;
 import xades4j.providers.CertificateValidationProvider;
 import xades4j.providers.ValidationData;
 import xades4j.utils.CollectionUtils;
@@ -86,6 +85,15 @@ public class XadesHybridVerifierImpl implements XadesVerifier
     @Override
     public XAdESVerificationResult verify(Element signatureElem,
             SignatureSpecificVerificationOptions verificationOptions)
+            throws XAdES4jException
+    {
+        Date now = new Date();
+        return verify(signatureElem, verificationOptions, now);
+    }
+
+    protected XAdESVerificationResult verify(Element signatureElem,
+            SignatureSpecificVerificationOptions verificationOptions,
+            Date now)
             throws XAdES4jException
     {
         if (signatureElem == null)
@@ -140,15 +148,48 @@ public class XadesHybridVerifierImpl implements XadesVerifier
                 referencesRes.signedPropsReference);
         SignatureUtils.checkQualifyingPropertiesTarget(signatureId, qualifyingPropsElem);
 
-        /* Unmarshal the qualifying properties */
-        HybridQualifPropsDataCollectorImpl propsDataCollector = new HybridQualifPropsDataCollectorImpl();
+        /* Unmarshal the qualifying (XAdES, both signed and unsigned) properties */
+        HybridQualifPropsDataCollectorImpl propsDataCollector =
+                new HybridQualifPropsDataCollectorImpl();
         qualifPropsUnmarshaller.unmarshalProperties(qualifyingPropsElem, propsDataCollector);
-        Collection<PropertyDataObject> qualifPropsData = propsDataCollector.getPropertiesData();
 
-        /* there be dragons (that is, wrong, bad, and so-on code)*/
-        /* create certification path */
+        /*
+         * extract data that uniquely identifies the key and/or certificate used for
+         * Signature signing from basic XML signature (XMLdsig)
+         */
         KeyInfoRes keyInfoRes = SignatureUtils.processKeyInfo(signature.getKeyInfo());
-        Date validationDate = getValidationDate(qualifPropsData, signature);
+
+        /*
+         * Create the object which the property verifiers will use to get and save
+         * the status (context) of verification
+         */
+        QualifyingPropertyVerificationContext qPropsCtx = new QualifyingPropertyVerificationContext(
+                signature,
+                keyInfoRes,
+                /**/
+                new QualifyingPropertyVerificationContext.SignedObjectsData(
+                referencesRes.dataObjsReferences,
+                signature),
+                now);
+
+        /*
+         * go over all qualified properties in reverse order, verify the properties,
+         * ignore invalid and return only successfully verified.
+         * Data structure verification is included.
+         *
+         * This is the first verification that ignores certificate and CRL references
+         * (as we know which certificates are needed and which CRLs are used only after
+         * verification of Signature)
+         */
+        List<PropertyInfo> props =
+                this.qualifyingPropertiesVerifier.verifyProperties(propsDataCollector, qPropsCtx);
+
+        /* create certification path */
+        Date validationDate = getValidationDate(props, now);
+        this.certificateValidator.addCertificates(qPropsCtx.getSignatureCertificates(),
+                validationDate);
+        this.certificateValidator.addCRLs(qPropsCtx.getSignatureCRLs(), validationDate);
+
         ValidationData certValidationRes = this.certificateValidator.validate(
                 keyInfoRes.certSelector,
                 validationDate,
@@ -159,25 +200,25 @@ public class XadesHybridVerifierImpl implements XadesVerifier
             throw new NullPointerException("Certificate validator returned null or empty data");
         }
         X509Certificate validationCert = certValidationRes.getCerts().get(0);
+
         /* Signature verification */
 
         // Core XML-DSIG verification.
         doCoreVerification(signature, verificationOptions, validationCert);
 
-        // Create the properties verification context.
-        QualifyingPropertyVerificationContext qPropsCtx = new QualifyingPropertyVerificationContext(
-                signature,
-                new QualifyingPropertyVerificationContext.CertificationChainData(
-                certValidationRes.getCerts(),
-                certValidationRes.getCrls(),
-                keyInfoRes.issuerSerial),
-                /**/
-                new QualifyingPropertyVerificationContext.SignedObjectsData(
-                referencesRes.dataObjsReferences,
-                signature));
 
-        // Verify the properties. Data structure verification is included.
-        Collection<PropertyInfo> props = this.qualifyingPropertiesVerifier.verifyProperties(propsDataCollector, qPropsCtx);
+        if (null == certValidationRes || certValidationRes.getCerts().isEmpty())
+        {
+            throw new NullPointerException("Certificate validator returned null or empty data");
+        }
+
+        // perform verification of references to certificates and CRLs (revocation data)
+        qPropsCtx.setCertificationChainData(
+                new QualifyingPropertyVerificationContext.CertificationChainData(
+                        certValidationRes.getCerts(),
+                        certValidationRes.getCrls(),
+                        keyInfoRes.issuerSerial));
+        props = this.qualifyingPropertiesVerifier.verifyProperties(propsDataCollector, qPropsCtx, props);
 
         XAdESVerificationResult res = new XAdESVerificationResult(
                 XAdESFormChecker.checkForm(props),
@@ -202,6 +243,15 @@ public class XadesHybridVerifierImpl implements XadesVerifier
             XadesSignatureFormatExtender formatExtender, XAdESForm finalForm)
             throws XAdES4jException
     {
+        Date now = new Date();
+        return verify(signatureElem, verificationOptions, formatExtender, finalForm, now);
+    }
+
+    protected XAdESVerificationResult verify(Element signatureElem,
+            SignatureSpecificVerificationOptions verificationOptions,
+            XadesSignatureFormatExtender formatExtender, XAdESForm finalForm, Date now)
+            throws XAdES4jException
+    {
         if (null == finalForm || null == formatExtender)
         {
             throw new NullPointerException("'finalForm' and 'formatExtender' cannot be null");
@@ -214,7 +264,7 @@ public class XadesHybridVerifierImpl implements XadesVerifier
             throw new IllegalArgumentException("Signature format can only be extended to XAdES-T, C, X or X-L");
         }
 
-        XAdESVerificationResult res = this.verify(signatureElem, verificationOptions);
+        XAdESVerificationResult res = this.verify(signatureElem, verificationOptions, now);
         XAdESForm actualForm = res.getSignatureForm();
 
         if (actualForm.before(finalForm))
@@ -225,8 +275,8 @@ public class XadesHybridVerifierImpl implements XadesVerifier
             // * T -> C
             // * C -> X
             // * C -> X-L
-            // * X -> X-L (not supported with the library defaults: X cannot be verified)
-            // * X-L -> A (not supported with the library defaults: X-L cannot be verified)
+            // * X -> X-L
+            // * X-L -> A (not supported, A can't be created)
 
             FormExtensionPropsCollector finalFormPropsColector = formsExtensionTransitions[actualForm.ordinal()][finalForm.ordinal()];
 
@@ -241,15 +291,6 @@ public class XadesHybridVerifierImpl implements XadesVerifier
             formatExtender.enrichSignature(res.getXmlSignature(), new UnsignedProperties(usp));
         }
         return res;
-    }
-
-    // used only for tests
-    protected XAdESVerificationResult verify(Element signatureNode,
-            SignatureSpecificVerificationOptions verificationOptions,
-            XadesSignatureFormatExtender formExt, XAdESForm c, Date date)
-    {
-        // TODO Auto-generated method stub
-        return null;
     }
 
     private static interface FormExtensionPropsCollector
@@ -289,8 +330,8 @@ public class XadesHybridVerifierImpl implements XadesVerifier
                     Collection<UnsignedSignatureProperty> usp,
                     XAdESVerificationResult res)
             {
-                PropertiesUtils.addXadesCProperties(usp, res.getValidationData());
                 PropertiesUtils.addXadesTProperties(usp);
+                PropertiesUtils.addXadesCProperties(usp, res.getValidationData());
             }
         };
         formsExtensionTransitions[XAdESForm.BES.ordinal()][XAdESForm.C.ordinal()] = cAndTPropsCol;
@@ -333,12 +374,27 @@ public class XadesHybridVerifierImpl implements XadesVerifier
                     Collection<UnsignedSignatureProperty> usp,
                     XAdESVerificationResult res)
             {
+                PropertiesUtils.addXadesXProperties(usp);
                 PropertiesUtils.addXadesXLProperties(usp, res.getValidationData(),
                         res.getAttributeValidationData());
-                PropertiesUtils.addXadesXProperties(usp);
             }
         };
         formsExtensionTransitions[XAdESForm.C.ordinal()][XAdESForm.X_L.ordinal()] = xlAndXPropsCol;
+
+        // X -> X-L
+        FormExtensionPropsCollector xlPropsCol = new FormExtensionPropsCollector()
+        {
+            @Override
+            public void addProps(Collection<UnsignedSignatureProperty> usp,
+                    XAdESVerificationResult res)
+            {
+                PropertiesUtils.addXadesXLProperties(
+                        usp,
+                        res.getValidationData(),
+                        res.getAttributeValidationData());
+            }
+        };
+        formsExtensionTransitions[XAdESForm.X.ordinal()][XAdESForm.X_L.ordinal()] = xlPropsCol;
     }
 
     public void setAcceptUnknownProperties(boolean acceptUnknownProperties)
@@ -408,34 +464,40 @@ public class XadesHybridVerifierImpl implements XadesVerifier
     }
 
     private Date getValidationDate(
-            Collection<PropertyDataObject> qualifPropsData,
-            XMLSignature signature) throws XAdES4jException
+            List<PropertyInfo> props, Date now)
+                    throws XAdES4jException
     {
-        List sigTsData = CollectionUtils.filterByType(qualifPropsData, SignatureTimeStampData.class);
-
-        // If no signature time-stamp is present, use the current date.
-        if (sigTsData.isEmpty())
+        Date earliestDate = now;
+        for (PropertyInfo p : props)
         {
-            return new Date();
+            QualifyingProperty qp = p.getProperty();
+            if (qp instanceof SignatureTimeStampProperty)
+            {
+                Date timeStampDate = ((SignatureTimeStampProperty)qp).getTime();
+                if (earliestDate == null)
+                    earliestDate = timeStampDate;
+                else if (earliestDate.getTime() > timeStampDate.getTime())
+                    earliestDate = timeStampDate;
+            } else if (qp instanceof SigAndRefsTimeStampProperty)
+            {
+                Date timeStampDate = ((SigAndRefsTimeStampProperty)qp).getTime();
+                if (earliestDate == null)
+                    earliestDate = timeStampDate;
+                else if (earliestDate.getTime() > timeStampDate.getTime())
+                    earliestDate = timeStampDate;
+            } else if (qp instanceof ArchiveTimeStampProperty)
+            {
+                Date timeStampDate = ((ArchiveTimeStampProperty)qp).getTime();
+                if (earliestDate == null)
+                    earliestDate = timeStampDate;
+                else if (earliestDate.getTime() > timeStampDate.getTime())
+                    earliestDate = timeStampDate;
+            }
         }
+        if (earliestDate == null)
+            earliestDate = new Date();
 
-        // TODO support multiple SignatureTimeStamps (section 7.3 last paragraph of Standard v.1.4.2)
-        // This is a temporary solution.
-        // - Properties should probably be verified in two stages (before and after cert path creation).
-        // - Had to remove the custom structure verifier that checked if the SigningCertificate data was present.
-        QualifyingPropertyVerificationContext ctx = new QualifyingPropertyVerificationContext(
-                signature,
-                new QualifyingPropertyVerificationContext.CertificationChainData(
-                new ArrayList<X509Certificate>(0),
-                new ArrayList<X509CRL>(0),
-                null),
-                /**/
-                new QualifyingPropertyVerificationContext.SignedObjectsData(
-                new ArrayList<RawDataObjectDesc>(0),
-                signature));
-        QualifyingProperty sigTs = this.qualifyingPropertiesVerifier.verifyProperties(sigTsData, ctx).iterator().next().getProperty();
-
-        return ((SignatureTimeStampProperty) sigTs).getTime();
+        return earliestDate;
     }
 
 }

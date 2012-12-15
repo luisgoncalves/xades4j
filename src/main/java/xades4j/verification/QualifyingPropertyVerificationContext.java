@@ -22,6 +22,7 @@ import java.security.cert.X509Certificate;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
@@ -41,6 +42,7 @@ import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 
 import xades4j.providers.ValidationData;
+import xades4j.verification.SignatureUtils.KeyInfoRes;
 
 /**
  * The context available during the verification of the qualifying properties.
@@ -50,23 +52,52 @@ import xades4j.providers.ValidationData;
 public class QualifyingPropertyVerificationContext
 {
     private final XMLSignature signature;
-    private final CertificationChainData certChainData;
+    private CertificationChainData certChainData;
     private final SignedObjectsData signedObjectsData;
+    private final KeyInfoRes keyInfoRes;
+    // validation data collected during verification of attributes (trusted)
     private Collection<ValidationData> attributeValidationData;
+    // validation data collected during verification of signature (trusted)
+    private Collection<ValidationData> signatureValidationData;
     private final Set<X509Certificate> untrustedAttributeCertificates;
     private final Set<X509CRL> untrustedAttributeCRLs;
     private final Set<X509Certificate> untrustedSignatureCertificates;
     private final Set<X509CRL> untrustedSignatureCRLs;
 
+    private Date currentTime;
+
     QualifyingPropertyVerificationContext(
             XMLSignature signature,
             CertificationChainData certChainData,
-            SignedObjectsData signedObjectsData)
+            SignedObjectsData signedObjectsData,
+            Date currentTime)
     {
         this.signature = signature;
         this.certChainData = certChainData;
         this.signedObjectsData = signedObjectsData;
         attributeValidationData = new ArrayList<ValidationData>();
+        signatureValidationData = new ArrayList<ValidationData>();
+        this.keyInfoRes = null;
+        this.currentTime = currentTime;
+        untrustedAttributeCertificates = new HashSet<X509Certificate>();
+        untrustedAttributeCRLs = new HashSet<X509CRL>();
+        untrustedSignatureCertificates = new HashSet<X509Certificate>();
+        untrustedSignatureCRLs = new HashSet<X509CRL>();
+    }
+
+    public QualifyingPropertyVerificationContext(
+            XMLSignature signature,
+            KeyInfoRes keyInfoRes,
+            SignedObjectsData signedObjectsData,
+            Date currentTime)
+    {
+        this.signature = signature;
+        this.signedObjectsData = signedObjectsData;
+        this.certChainData = null;
+        this.keyInfoRes = keyInfoRes;
+        attributeValidationData = new ArrayList<ValidationData>();
+        signatureValidationData = new ArrayList<ValidationData>();
+        this.currentTime = currentTime;
         untrustedAttributeCertificates = new HashSet<X509Certificate>();
         untrustedAttributeCRLs = new HashSet<X509CRL>();
         untrustedSignatureCertificates = new HashSet<X509Certificate>();
@@ -83,6 +114,39 @@ public class QualifyingPropertyVerificationContext
         attributeValidationData.add(validationData);
     }
 
+    public Collection<ValidationData> getSignatureValidationData()
+    {
+        return signatureValidationData;
+    }
+
+    public void addSignatureValidationData(ValidationData validationData)
+    {
+        signatureValidationData.add(validationData);
+    }
+
+    /**
+     * Changes the time at which subsequent verifications take place, used to ensure
+     * monotonicity of time in time stamps.
+     *
+     * @param currentTime new time at which subsequent verifications should happen
+     * @throws IllegalArgumentException when currentTime is <b>later</b> (in future)
+     * than time saved in this context
+     * ({@code currentTime.getTime() > this.currentTime.getTime()})
+     */
+    public void setCurrentTime(Date currentTime)
+    throws IllegalArgumentException
+    {
+        if (this.currentTime.getTime() < currentTime.getTime())
+            throw new IllegalArgumentException("New time from TimeStamp is in the future");
+
+        this.currentTime = new Date(currentTime.getTime());
+    }
+
+    public Date getCurrentTime()
+    {
+        return currentTime;
+    }
+
     public XMLSignature getSignature()
     {
         return signature;
@@ -96,6 +160,11 @@ public class QualifyingPropertyVerificationContext
     public SignedObjectsData getSignedObjectsData()
     {
         return signedObjectsData;
+    }
+
+    public KeyInfoRes getKeyInfoRes()
+    {
+        return keyInfoRes;
     }
 
     /**
@@ -234,6 +303,13 @@ public class QualifyingPropertyVerificationContext
             }
         }
     }
+
+    public void setCertificationChainData(
+            CertificationChainData certificationChainData)
+    {
+        this.certChainData = certificationChainData;
+    }
+
     /**
      * Remember the untrusted certificates found in properties.
      * The same certificate can be provided multiple times and it will be saved only once.

@@ -208,7 +208,8 @@ class XadesVerifierImpl implements XadesVerifier
                 /**/
                 new QualifyingPropertyVerificationContext.SignedObjectsData(
                 referencesRes.dataObjsReferences,
-                signature));
+                signature),
+                new Date());
 
         // Verify the properties. Data structure verification is included.
         Collection<PropertyInfo> props = this.qualifyingPropertiesVerifier.verifyProperties(propsDataCollector, qPropsCtx);
@@ -258,7 +259,8 @@ class XadesVerifierImpl implements XadesVerifier
                 /**/
                 new QualifyingPropertyVerificationContext.SignedObjectsData(
                 new ArrayList<RawDataObjectDesc>(0),
-                signature));
+                signature),
+                new Date());
         QualifyingProperty sigTs = this.qualifyingPropertiesVerifier.verifyProperties(sigTsData, ctx).iterator().next().getProperty();
 
         return ((SignatureTimeStampProperty) sigTs).getTime();
@@ -287,7 +289,8 @@ class XadesVerifierImpl implements XadesVerifier
                 /**/
                 new QualifyingPropertyVerificationContext.SignedObjectsData(
                 new ArrayList<RawDataObjectDesc>(0),
-                signature));
+                signature),
+                new Date());
         QualifyingProperty certVal = this.qualifyingPropertiesVerifier.verifyProperties(certValData, ctx).iterator().next().getProperty();
 
         return ((CertificateValuesProperty) certVal).getCertificates();
@@ -316,7 +319,8 @@ class XadesVerifierImpl implements XadesVerifier
                 /**/
                 new QualifyingPropertyVerificationContext.SignedObjectsData(
                 new ArrayList<RawDataObjectDesc>(0),
-                signature));
+                signature),
+                new Date());
         QualifyingProperty revVal = this.qualifyingPropertiesVerifier.verifyProperties(revValData, ctx).iterator().next().getProperty();
 
         return ((RevocationValuesProperty) revVal).getCrls();

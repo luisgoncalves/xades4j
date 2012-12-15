@@ -47,7 +47,7 @@ class QualifyingPropertiesVerifierImpl implements QualifyingPropertiesVerifier
     }
 
     @Override
-    public Collection<PropertyInfo> verifyProperties(
+    public List<PropertyInfo> verifyProperties(
             QualifyingPropertiesDataCollector dataCollector,
             QualifyingPropertyVerificationContext ctx) throws PropertyDataStructureException, InvalidPropertyException, QualifyingPropertyVerifierNotAvailableException
     {
@@ -56,7 +56,7 @@ class QualifyingPropertiesVerifierImpl implements QualifyingPropertiesVerifier
     }
 
     @Override
-    public Collection<PropertyInfo> verifyProperties(
+    public List<PropertyInfo> verifyProperties(
             List<PropertyDataObject> unmarshalledProperties,
             QualifyingPropertyVerificationContext ctx)
             throws PropertyDataStructureException, InvalidPropertyException,
@@ -64,7 +64,7 @@ class QualifyingPropertiesVerifierImpl implements QualifyingPropertiesVerifier
     {
         dataObjectsStructureVerifier.verifiyPropertiesDataStructure(unmarshalledProperties);
 
-        Collection<PropertyInfo> props = new ArrayList<PropertyInfo>(unmarshalledProperties.size());
+        List<PropertyInfo> props = new ArrayList<PropertyInfo>(unmarshalledProperties.size());
 
         for (PropertyDataObject propData : unmarshalledProperties)
         {
@@ -78,6 +78,15 @@ class QualifyingPropertiesVerifierImpl implements QualifyingPropertiesVerifier
             props.add(new PropertyInfo(propData, p));
         }
 
-        return Collections.unmodifiableCollection(props);
+        return Collections.unmodifiableList(props);
+    }
+
+    @Override
+    public List<PropertyInfo> verifyProperties(
+            HybridQualifPropsDataCollectorImpl propsDataCollector,
+            QualifyingPropertyVerificationContext qPropsCtx,
+            List<PropertyInfo> props)
+    {
+        throw new UnsupportedOperationException("Use HybridQualifyingPropertiesVerifierImpl");
     }
 }
