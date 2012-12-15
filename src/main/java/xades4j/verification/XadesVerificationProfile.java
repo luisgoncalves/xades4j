@@ -71,7 +71,7 @@ public final class XadesVerificationProfile
     {
         this.profileCore = new XadesProfileCore();
         this.acceptUnknownProperties = false;
-        withBinding(XadesVerifier.class, XadesVerifierImpl.class);
+        withBinding(XadesVerifier.class, XadesHybridVerifierImpl.class);
     }
 
     /**
@@ -177,7 +177,7 @@ public final class XadesVerificationProfile
      */
     public final XadesVerifier newVerifier() throws XadesProfileResolutionException
     {
-        XadesVerifierImpl v = profileCore.getInstance(XadesVerifierImpl.class, overridableModules, sealedModules);
+        XadesHybridVerifierImpl v = profileCore.getInstance(XadesHybridVerifierImpl.class, overridableModules, sealedModules);
         v.setAcceptUnknownProperties(acceptUnknownProperties);
         return v;
     }

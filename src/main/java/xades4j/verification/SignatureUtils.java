@@ -1,6 +1,7 @@
 /*
  * XAdES4j - A Java library for generation and verification of XAdES signatures.
  * Copyright (C) 2010 Luis Goncalves.
+ * Copyrigth (C) 2012 Hubert Kario - QBS.
  *
  * XAdES4j is free software; you can redistribute it and/or modify it under
  * the terms of the GNU Lesser General Public License as published by the Free
@@ -337,6 +338,39 @@ class SignatureUtils
         } catch (XMLSignatureException ex)
         {
             throw new QualifyingPropertiesIncorporationException("Cannot get the referenced SignedProperties", ex);
+        }
+    }
+
+    /**
+     * Checks if QualifyingProperties references provided Signature
+     * @param signatureId
+     * @param qualifyingPropsElem
+     * @throws QualifyingPropertiesIncorporationException
+     */
+    public static void checkQualifyingPropertiesTarget(String signatureId,
+            Element qualifyingPropsElem)
+            throws QualifyingPropertiesIncorporationException
+    {
+        Node targetAttr = qualifyingPropsElem.getAttributeNodeNS(null,
+                QualifyingProperty.TARGET_ATTR);
+        if (null == targetAttr)
+        {
+            targetAttr = qualifyingPropsElem.getAttributeNodeNS(
+                    QualifyingProperty.XADES_XMLNS,
+                    QualifyingProperty.TARGET_ATTR);
+            if (null == targetAttr)
+            {
+                throw new QualifyingPropertiesIncorporationException(
+                        "QualifyingProperties Target attribute not present");
+            }
+        }
+        String targetValue = targetAttr.getNodeValue();
+        if (null == targetValue
+                || !targetValue.startsWith("#")
+                || !targetValue.substring(1).equals(signatureId))
+        {
+            throw new QualifyingPropertiesIncorporationException(
+                    "QualifyingProperties target doesn't match the signature's Id");
         }
     }
 }
