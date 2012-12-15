@@ -19,11 +19,15 @@ package xades4j.verification;
 import java.security.cert.X509Certificate;
 import java.util.Collection;
 
+import org.w3c.dom.Element;
+
 import com.google.inject.Inject;
 
 import xades4j.properties.CertificateValuesProperty;
 import xades4j.properties.QualifyingProperty;
 import xades4j.properties.data.CertificateValuesData;
+import xades4j.providers.CertificateValidationProvider;
+import xades4j.providers.TSACertificateValidationProvider;
 
 /**
  *
@@ -42,5 +46,13 @@ public class CertificateValuesVerifier extends EncapsulatedPKIDataVerifierBase<C
     public QualifyingProperty createProperty(Collection<X509Certificate> certs)
     {
         return new CertificateValuesProperty(certs);
+    }
+
+    @Override
+    public void addCertificatesToValidationProvider(
+            Collection<X509Certificate> certificates,
+            QualifyingPropertyVerificationContext ctx)
+    {
+        ctx.addSignatureCertificates(certificates);
     }
 }

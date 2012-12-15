@@ -77,8 +77,14 @@ public abstract class EncapsulatedPKIRevocationDataVerifierBase<PKIData extends 
             }
         }
 
+        addCRLsToValidationProvider(crls, ctx);
+
         return createProperty(crls);
     }
 
     public abstract QualifyingProperty createProperty(Collection<X509CRL> crls);
+
+    public abstract void addCRLsToValidationProvider(
+            Collection<X509CRL> crls,
+            QualifyingPropertyVerificationContext ctx);
 }

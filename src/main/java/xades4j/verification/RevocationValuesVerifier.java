@@ -43,4 +43,14 @@ public class RevocationValuesVerifier extends EncapsulatedPKIRevocationDataVerif
     {
         return new RevocationValuesProperty(crls);
     }
+
+    @Override
+    public void addCRLsToValidationProvider(
+            Collection<X509CRL> crls,
+            QualifyingPropertyVerificationContext ctx)
+    {
+        ctx.addSignatureCRLs(crls);
+    }
+
+    // TODO verify if the values in this property are matching the CompleteRevocationRefs
 }

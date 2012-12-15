@@ -24,6 +24,7 @@ import com.google.inject.Inject;
 import xades4j.properties.AttrAuthoritiesCertValuesProperty;
 import xades4j.properties.QualifyingProperty;
 import xades4j.properties.data.AttrAuthoritiesCertValuesData;
+import xades4j.providers.TSACertificateValidationProvider;
 
 /**
  *
@@ -44,4 +45,10 @@ public class AttrAuthoritiesCertValuesVerifier extends EncapsulatedPKIDataVerifi
         return new AttrAuthoritiesCertValuesProperty(certs);
     }
 
+    public void addCertificatesToValidationProvider(
+            Collection<X509Certificate> certificates,
+            QualifyingPropertyVerificationContext ctx)
+    {
+        ctx.addAttributeCertificates(certificates);
+    }
 }

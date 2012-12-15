@@ -23,8 +23,11 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
+
 import javax.security.auth.x500.X500Principal;
 import org.apache.xml.security.keys.content.x509.XMLX509IssuerSerial;
 import org.apache.xml.security.signature.ObjectContainer;
@@ -50,6 +53,10 @@ public class QualifyingPropertyVerificationContext
     private final CertificationChainData certChainData;
     private final SignedObjectsData signedObjectsData;
     private Collection<ValidationData> attributeValidationData;
+    private final Set<X509Certificate> untrustedAttributeCertificates;
+    private final Set<X509CRL> untrustedAttributeCRLs;
+    private final Set<X509Certificate> untrustedSignatureCertificates;
+    private final Set<X509CRL> untrustedSignatureCRLs;
 
     QualifyingPropertyVerificationContext(
             XMLSignature signature,
@@ -60,6 +67,10 @@ public class QualifyingPropertyVerificationContext
         this.certChainData = certChainData;
         this.signedObjectsData = signedObjectsData;
         attributeValidationData = new ArrayList<ValidationData>();
+        untrustedAttributeCertificates = new HashSet<X509Certificate>();
+        untrustedAttributeCRLs = new HashSet<X509CRL>();
+        untrustedSignatureCertificates = new HashSet<X509Certificate>();
+        untrustedSignatureCRLs = new HashSet<X509CRL>();
     }
 
     public Collection<ValidationData> getAttributeValidationData()
@@ -222,5 +233,65 @@ public class QualifyingPropertyVerificationContext
                 return null;
             }
         }
+    }
+    /**
+     * Remember the untrusted certificates found in properties.
+     * The same certificate can be provided multiple times and it will be saved only once.
+     * @param certificates found properties
+     */
+    public void addAttributeCertificates(Collection<X509Certificate> certificates)
+    {
+        untrustedAttributeCertificates.addAll(certificates);
+    }
+
+    /**
+     * Remember the untrusted attribute certificates found in properties.
+     * The same CRL can be provided multiple times and it will be saved only once.
+     * @param crls found crls
+     */
+    public void addAttributeCRLs(Collection<X509CRL> crls)
+    {
+        untrustedAttributeCRLs.addAll(crls);
+    }
+
+    public Collection<X509CRL> getAttributeCRLs()
+    {
+        return untrustedAttributeCRLs;
+    }
+
+    public Collection<X509Certificate> getAttributeCertificates()
+    {
+        return untrustedAttributeCertificates;
+    }
+
+    /**
+     * Remember the untrusted signature certificates found in properties.
+     * The same certificates can be provided multiple times and it will be saved only
+     * once.
+     * @param certificates certificates to save
+     */
+    public void addSignatureCertificates(Collection<X509Certificate> certificates)
+    {
+        untrustedSignatureCertificates.addAll(certificates);
+    }
+
+    /**
+     * Remember the untrusted signature revocation data (CRLs) found in properties.
+     * The same CRL can be provided multiple times and it will be save only one.
+     * @param crls CRLs to save
+     */
+    public void addSignatureCRLs(Collection<X509CRL> crls)
+    {
+        untrustedSignatureCRLs.addAll(crls);
+    }
+
+    public Collection<X509CRL> getSignatureCRLs()
+    {
+        return untrustedSignatureCRLs;
+    }
+
+    public Collection<X509Certificate> getSignatureCertificates()
+    {
+        return untrustedSignatureCertificates;
     }
 }

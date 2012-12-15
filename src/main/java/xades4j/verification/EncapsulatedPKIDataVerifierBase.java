@@ -76,8 +76,13 @@ public abstract class EncapsulatedPKIDataVerifierBase<PKIData extends BaseEncaps
             }
         }
 
+        addCertificatesToValidationProvider(certificates, ctx);
+
         return createProperty(certificates);
     }
 
     public abstract QualifyingProperty createProperty(Collection<X509Certificate> certs);
+
+    public abstract void addCertificatesToValidationProvider(Collection<X509Certificate> certificates,
+            QualifyingPropertyVerificationContext ctx);
 }

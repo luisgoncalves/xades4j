@@ -24,6 +24,7 @@ import com.google.inject.Inject;
 import xades4j.properties.AttributeRevocationValuesProperty;
 import xades4j.properties.QualifyingProperty;
 import xades4j.properties.data.AttributeRevocationValuesData;
+import xades4j.providers.TSACertificateValidationProvider;
 
 public class AttributeRevocationValuesVerifier
         extends EncapsulatedPKIRevocationDataVerifierBase<AttributeRevocationValuesData>
@@ -38,5 +39,13 @@ public class AttributeRevocationValuesVerifier
     public QualifyingProperty createProperty(Collection<X509CRL> crls)
     {
         return new AttributeRevocationValuesProperty(crls);
+    }
+
+    @Override
+    public void addCRLsToValidationProvider(
+            Collection<X509CRL> crls,
+            QualifyingPropertyVerificationContext ctx)
+    {
+        ctx.addAttributeCRLs(crls);
     }
 }
