@@ -34,6 +34,13 @@ public class FromXmlAttributeRevocationValuesConverter
             throws PropertyUnmarshalException
     {
         XmlRevocationValuesType xmlRevocationValues = xmlProps.getAttributeRevocationValues();
+        convertFromObject(xmlRevocationValues, propertyDataCollector);
+    }
+
+    public void convertFromObject(XmlRevocationValuesType xmlRevocationValues,
+            QualifyingPropertiesDataCollector propertyDataCollector)
+                    throws PropertyUnmarshalException
+    {
         if (null == xmlRevocationValues)
             return;
 

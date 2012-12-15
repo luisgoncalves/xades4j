@@ -35,6 +35,12 @@ class FromXmlCompleteCertRefsConverter implements UnsignedSigPropFromXmlConv
         if (null == xmlCompleteCertRefs)
             return;
 
+        convertFromObject(xmlCompleteCertRefs, propertyDataCollector);
+    }
+
+    public void convertFromObject(XmlCompleteCertificateRefsType xmlCompleteCertRefs,
+            QualifyingPropertiesDataCollector propertyDataCollector)
+    {
         CompleteCertificateRefsData completeCertRefsData = new CompleteCertificateRefsData();
         FromXmlUtils.createAndCertificateRefs(xmlCompleteCertRefs.getCertRefs(), completeCertRefsData);
 

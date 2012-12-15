@@ -17,6 +17,9 @@
 package xades4j.verification;
 
 import java.util.Collection;
+
+import org.w3c.dom.Element;
+
 import xades4j.properties.data.AllDataObjsTimeStampData;
 import xades4j.properties.data.AttrAuthoritiesCertValuesData;
 import xades4j.properties.data.AttributeRevocationValuesData;
@@ -174,6 +177,12 @@ class QualifPropsDataCollectorImpl implements QualifyingPropertiesDataCollector
     Collection<PropertyDataObject> getPropertiesData()
     {
         return propsData.getProperties();
+    }
+
+    @Override
+    public void linkPropertyToElem(Element node)
+    {
+        //noop
     }
 
 }

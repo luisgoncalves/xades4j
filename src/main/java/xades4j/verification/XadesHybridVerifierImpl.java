@@ -141,7 +141,7 @@ public class XadesHybridVerifierImpl implements XadesVerifier
         SignatureUtils.checkQualifyingPropertiesTarget(signatureId, qualifyingPropsElem);
 
         /* Unmarshal the qualifying properties */
-        QualifPropsDataCollectorImpl propsDataCollector = new QualifPropsDataCollectorImpl();
+        HybridQualifPropsDataCollectorImpl propsDataCollector = new HybridQualifPropsDataCollectorImpl();
         qualifPropsUnmarshaller.unmarshalProperties(qualifyingPropsElem, propsDataCollector);
         Collection<PropertyDataObject> qualifPropsData = propsDataCollector.getPropertiesData();
 

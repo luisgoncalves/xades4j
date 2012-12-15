@@ -158,6 +158,14 @@ class SignatureUtils
         }
     }
 
+    /**
+     * Extracts references to signed properties and signed data objects from provided
+     * signature.
+     * @param signature
+     * @return
+     * @throws QualifyingPropertiesIncorporationException
+     * @throws XAdES4jXMLSigException
+     */
     static ReferencesRes processReferences(
             XMLSignature signature) throws QualifyingPropertiesIncorporationException, XAdES4jXMLSigException
     {
@@ -301,6 +309,12 @@ class SignatureUtils
         return xadesElems;
     }
 
+    /**
+     * Check if signedProperties are properly embedded in qualifying properties element
+     * @param qualifyingPropsElem
+     * @param signedPropsRef
+     * @throws QualifyingPropertiesIncorporationException
+     */
     static void checkSignedPropertiesIncorporation(Element qualifyingPropsElem, Reference signedPropsRef) throws QualifyingPropertiesIncorporationException
     {
         Element signedPropsElem = DOMHelper.getFirstChildElement(qualifyingPropsElem);

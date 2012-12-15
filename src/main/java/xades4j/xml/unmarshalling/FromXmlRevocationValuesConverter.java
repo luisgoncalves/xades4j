@@ -33,6 +33,13 @@ public class FromXmlRevocationValuesConverter implements UnsignedSigPropFromXmlC
             throws PropertyUnmarshalException
     {
         XmlRevocationValuesType xmlRevocationValues = xmlProps.getRevocationValues();
+        convertFromObject(xmlRevocationValues, propertyDataCollector);
+    }
+
+    public void convertFromObject(XmlRevocationValuesType xmlRevocationValues,
+            QualifyingPropertiesDataCollector propertyDataCollector)
+                    throws PropertyUnmarshalException
+    {
         if (null == xmlRevocationValues)
             return;
 

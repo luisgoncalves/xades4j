@@ -33,6 +33,14 @@ public class FromXmlCertificateValuesConverter implements UnsignedSigPropFromXml
             throws PropertyUnmarshalException
     {
         XmlCertificateValuesType xmlCertificateValues = xmlProps.getCertificateValues();
+
+        convertFromObject(xmlCertificateValues, propertyDataCollector);
+    }
+
+    public void convertFromObject(XmlCertificateValuesType xmlCertificateValues,
+            QualifyingPropertiesDataCollector propertyDataCollector)
+                    throws PropertyUnmarshalException
+    {
         if (null == xmlCertificateValues)
             return;
 

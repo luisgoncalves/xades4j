@@ -35,6 +35,13 @@ public class FromXmlAttrAuthoritiesCertValuesConverter implements
             throws PropertyUnmarshalException
     {
         XmlCertificateValuesType xmlCertificateValues = xmlProps.getAttrAuthoritiesCertValues();
+        convertFromObject(xmlCertificateValues, propertyDataCollector);
+    }
+
+    public void convertFromObject(XmlCertificateValuesType xmlCertificateValues,
+            QualifyingPropertiesDataCollector propertyDataCollector)
+                    throws PropertyUnmarshalException
+    {
         if (null == xmlCertificateValues)
             return;
 
