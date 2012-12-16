@@ -28,11 +28,8 @@ import org.apache.xml.security.utils.Constants;
 import org.w3c.dom.Element;
 import xades4j.properties.ArchiveTimeStampProperty;
 import xades4j.properties.CertificateValuesProperty;
-import xades4j.properties.CompleteCertificateRefsProperty;
-import xades4j.properties.CompleteRevocationRefsProperty;
 import xades4j.properties.QualifyingProperty;
 import xades4j.properties.RevocationValuesProperty;
-import xades4j.properties.SignatureTimeStampProperty;
 import xades4j.properties.data.ArchiveTimeStampData;
 import xades4j.properties.data.BaseXAdESTimeStampData;
 import xades4j.providers.AlgorithmsProviderEx;
@@ -94,13 +91,10 @@ class DataGenArchiveTimeStamp extends DataGenBaseTimeStamp<ArchiveTimeStampPrope
             if (ki != null)
                 digestInput.addNode(ki.getElement());
 
-            // Unsigned properties, in order of appearance.
-            Map<String, Integer> propsCnt = new HashMap<String, Integer>(5);
+            // Required properties, in order of appearance.
+            Map<String, Integer> propsCnt = new HashMap<String, Integer>(2);
             propsCnt.put(CertificateValuesProperty.PROP_NAME, 0);
             propsCnt.put(RevocationValuesProperty.PROP_NAME, 0);
-            propsCnt.put(CompleteCertificateRefsProperty.PROP_NAME, 0);
-            propsCnt.put(CompleteRevocationRefsProperty.PROP_NAME, 0);
-            propsCnt.put(SignatureTimeStampProperty.PROP_NAME, 0);
 
             e = DOMHelper.getFirstChildElement(unsignedSigPropsElem);
             // UnsignedProperties shouldn't be empty!
