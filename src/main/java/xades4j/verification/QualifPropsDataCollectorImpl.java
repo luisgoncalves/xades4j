@@ -22,6 +22,7 @@ import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 
 import xades4j.properties.data.AllDataObjsTimeStampData;
+import xades4j.properties.data.ArchiveTimeStampData;
 import xades4j.properties.data.AttrAuthoritiesCertValuesData;
 import xades4j.properties.data.AttributeRevocationValuesData;
 import xades4j.properties.data.CertificateValuesData;
@@ -191,6 +192,12 @@ class QualifPropsDataCollectorImpl implements QualifyingPropertiesDataCollector
     {
         throw new UnsupportedOperationException("QualifPropsDataCollectorImpl does not"+
                     " support getPropertyNode() method. Use HybridQualifPropsDataCollectorImpl.");
+    }
+
+    @Override
+    public void addArchiveTimeStamp(ArchiveTimeStampData tsData)
+    {
+        propsData.add(tsData);
     }
 
 }

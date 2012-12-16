@@ -23,6 +23,7 @@ import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 
 import xades4j.properties.data.AllDataObjsTimeStampData;
+import xades4j.properties.data.ArchiveTimeStampData;
 import xades4j.properties.data.AttrAuthoritiesCertValuesData;
 import xades4j.properties.data.AttributeRevocationValuesData;
 import xades4j.properties.data.CertificateValuesData;
@@ -208,6 +209,15 @@ public class HybridQualifPropsDataCollectorImpl implements
             throw new IllegalStateException("No Element linked to previous property!");
 
         unsignedSigProperties.put(attrRevocValData);
+    }
+
+    @Override
+    public void addArchiveTimeStamp(ArchiveTimeStampData tsData)
+    {
+        if (unsignedSigProperties.size() != unsignedSigPropertiesElements.size())
+            throw new IllegalStateException("No Element linked to previous property!");
+
+        unsignedSigProperties.add(tsData);
     }
 
     List<PropertyDataObject> getUnsignedPropertiesData()

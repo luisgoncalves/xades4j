@@ -22,6 +22,7 @@ import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 
 import xades4j.properties.data.AllDataObjsTimeStampData;
+import xades4j.properties.data.ArchiveTimeStampData;
 import xades4j.properties.data.AttrAuthoritiesCertValuesData;
 import xades4j.properties.data.AttributeRevocationValuesData;
 import xades4j.properties.data.CertificateValuesData;
@@ -97,6 +98,8 @@ public interface QualifyingPropertiesDataCollector
 
     public void setAttributeRevocationValues(
             AttributeRevocationValuesData attrRevocValData);
+
+    public void addArchiveTimeStamp(ArchiveTimeStampData tsData);
 
     public void linkPropertyToElem(Element node);
 

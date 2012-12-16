@@ -140,6 +140,7 @@ public class HybridQualifyingPropertiesVerifierImpl implements
                 // similar situation as with sigAndRefsTimeStamp but for SignatureTimeStamp
                 if (signedProperties.contains(propData.getClass()))
                     setDateFromSignatureTimeStamp(ctx, props);
+                // verificator of ArchiveTimeStamp changes time itself
 
                 /*
                  * To verify those three properties we need result of Signature

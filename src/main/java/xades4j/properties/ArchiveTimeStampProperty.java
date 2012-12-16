@@ -51,6 +51,6 @@ public final class ArchiveTimeStampProperty extends UnsignedSignatureProperty
     @Override
     public String getName()
     {
-        throw new UnsupportedOperationException("Not supported yet.");
+        return PROP_NAME;
     }
 }
