@@ -26,6 +26,7 @@ import org.w3c.dom.Element;
 import org.w3c.dom.NodeList;
 import xades4j.production.XadesFormatExtenderProfile;
 import xades4j.production.XadesSignatureFormatExtender;
+import xades4j.properties.ArchiveTimeStampProperty;
 import xades4j.properties.AttrAuthoritiesCertValuesProperty;
 import xades4j.properties.AttributeRevocationValuesProperty;
 import xades4j.properties.CertificateValuesProperty;
@@ -252,11 +253,49 @@ public class XadesVerifierImplTest extends VerifierTestBase
         assertEquals(XAdESForm.X_L, f);
     }
 
+    @Test
+    public void testVerifyXLEnrichA() throws Exception
+    {
+        System.out.println("testVerifyXLEnrichA");
+
+        Document doc = getDocument("out/document.verified.c.xl.xml");
+        Element signatureNode = getSigElement(doc);
+
+        XadesSignatureFormatExtender formExt =
+                new XadesFormatExtenderProfile().getFormatExtender();
+        XAdESVerificationResult res = nistVerificationProfile.newVerifier().verify(
+                signatureNode, null, formExt, XAdESForm.A);
+
+        assertEquals(XAdESForm.X_L, res.getSignatureForm());
+        assertPropXAdES141ElementPresent(signatureNode, ArchiveTimeStampProperty.PROP_NAME);
+
+        outputDocument(doc, "document.verified.c.xl.a.xml");
+    }
+
+    @Test
+    public void testVerifyA() throws Exception
+    {
+        System.out.println("testVerifyA");
+        XAdESForm f = verifySignature(
+                "out/document.verified.c.xl.a.xml",
+                nistVerificationProfile);
+        assertEquals(XAdESForm.A, f);
+    }
+
     private static void assertPropElementPresent(
             Element sigElem,
             String elemName)
     {
         NodeList props = sigElem.getElementsByTagNameNS(QualifyingProperty.XADES_XMLNS, elemName);
+        assertFalse(props.getLength() == 0);
+    }
+
+    private static void assertPropXAdES141ElementPresent(
+            Element sigElem,
+            String elemName)
+    {
+        NodeList props = sigElem.getElementsByTagNameNS(
+                QualifyingProperty.XADESV141_XMLNS, elemName);
         assertFalse(props.getLength() == 0);
     }
 }
