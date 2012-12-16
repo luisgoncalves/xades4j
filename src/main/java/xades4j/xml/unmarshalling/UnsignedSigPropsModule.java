@@ -41,6 +41,7 @@ class UnsignedSigPropsModule extends UnmarshallerModule<XmlUnsignedSignatureProp
         super.addConverter(new FromXmlRevocationValuesConverter());
         super.addConverter(new FromXmlAttrAuthoritiesCertValuesConverter());
         super.addConverter(new FromXmlAttributeRevocationValuesConverter());
+        super.addConverter(new FromXmlArchiveTimeStampConverter());
         this.unknownUnsignedSigPropsConv = new FromXmlUnknownUnsignedSigPropsConverter();
         super.addConverter(unknownUnsignedSigPropsConv);
         super.addConverter(new FromXmlUnsupportedUSPLimiter());

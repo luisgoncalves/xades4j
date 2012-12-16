@@ -347,6 +347,19 @@ public final class HybridQualifyingPropertiesUnmarshaller implements
 
                 // TODO counter signature not supported
                 continue;
+            } else if (isNodeTheProperty(node, ArchiveTimeStampProperty.class))
+            {
+                JAXBElement<XmlXAdESTimeStampType> xmlArchiveTimeStampElem =
+                        unmarshallElement(node, XmlXAdESTimeStampType.class);
+
+                List<XmlXAdESTimeStampType> archivalTimeStamps =
+                        new ArrayList<XmlXAdESTimeStampType>();
+                archivalTimeStamps.add(xmlArchiveTimeStampElem.getValue());
+
+                FromXmlArchiveTimeStampConverter archTSConv =
+                        new FromXmlArchiveTimeStampConverter();
+
+                archTSConv.convertTimeStamps(archivalTimeStamps , propertyDataCollector);
 
             } else if (!acceptUnknown) // not recognized property
                 throw new UnmarshalException("Unknown unsigned signature property: "
