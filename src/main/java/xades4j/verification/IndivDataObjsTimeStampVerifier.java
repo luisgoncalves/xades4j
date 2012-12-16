@@ -66,4 +66,11 @@ class IndivDataObjsTimeStampVerifier extends TimeStampVerifierBase<IndividualDat
         }
         return prop;
     }
+
+    @Override
+    protected void updateContextAfterVerification(QualifyingProperty prop,
+            QualifyingPropertyVerificationContext ctx)
+    {
+        // noop
+    }
 }

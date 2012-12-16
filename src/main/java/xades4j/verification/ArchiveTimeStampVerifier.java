@@ -258,4 +258,16 @@ public class ArchiveTimeStampVerifier extends
             throw new InternalError("Wrong property class");
         }
     }
+
+    @Override
+    protected void updateContextAfterVerification(QualifyingProperty prop,
+            QualifyingPropertyVerificationContext ctx)
+    {
+        if (!(prop instanceof ArchiveTimeStampProperty))
+            throw new RuntimeException("Can't update time after verification"
+                        + " of ArchiveTimeStamp");
+
+        ArchiveTimeStampProperty archivTS = (ArchiveTimeStampProperty) prop;
+        ctx.setCurrentTime(archivTS.getTime());
+    }
 }

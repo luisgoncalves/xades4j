@@ -61,4 +61,11 @@ class AllDataObjsTimeStampVerifier extends TimeStampVerifierBase<AllDataObjsTime
 
         return new AllDataObjsTimeStampProperty();
     }
+
+    @Override
+    protected void updateContextAfterVerification(QualifyingProperty prop,
+            QualifyingPropertyVerificationContext ctx)
+    {
+        // noop
+    }
 }

@@ -82,6 +82,9 @@ abstract class TimeStampVerifierBase<TData extends BaseXAdESTimeStampData> imple
             // By convention all timestamp property types have a setTime(Date) method
             Method setTimeMethod = prop.getClass().getMethod("setTime", Date.class);
             setTimeMethod.invoke(prop, ts);
+            // should be a noop, only ArchiveTimeStamp should use it to change the
+            // verification time for all subsequent TimeStamps
+            updateContextAfterVerification(prop,ctx);
             return prop;
         }
         catch(UnsupportedAlgorithmException ex)
@@ -116,6 +119,10 @@ abstract class TimeStampVerifierBase<TData extends BaseXAdESTimeStampData> imple
             Element location,
             TimeStampDigestInput digestInput,
             QualifyingPropertyVerificationContext ctx) throws CannotAddDataToDigestInputException, TimeStampVerificationException;
+
+    protected abstract void updateContextAfterVerification(
+            QualifyingProperty prop,
+            QualifyingPropertyVerificationContext ctx);
 
     private static TimeStampVerificationException getEx(
             final Exception ex,

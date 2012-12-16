@@ -245,4 +245,14 @@ public class SigAndRefsTimeStampVerifier extends
             throw new InternalError("Wrong property class");
         }
     }
+
+    @Override
+    protected void updateContextAfterVerification(QualifyingProperty prop,
+            QualifyingPropertyVerificationContext ctx)
+    {
+        /*
+         * noop, we can set time only after *all* sigAndRefsTimeStamps have been verified
+         * this is done in QualifyingPropertiesVerifier
+         */
+    }
 }

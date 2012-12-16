@@ -55,4 +55,14 @@ class SignatureTimeStampVerifier extends TimeStampVerifierBase<SignatureTimeStam
         digestInput.addNode(sigValueElem);
         return new SignatureTimeStampProperty();
     }
+
+    @Override
+    protected void updateContextAfterVerification(QualifyingProperty prop,
+            QualifyingPropertyVerificationContext ctx)
+    {
+        /*
+        * noop, we can set time only after *all* SignatureTimeStamps have been verified
+        * this is done in QualifyingPropertiesVerifier
+        */
+    }
 }
