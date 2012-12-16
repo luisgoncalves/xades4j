@@ -39,7 +39,7 @@ class ToXmlArchiveTimeStampConverter extends ToXmlUnsignedTimeStampDataConverter
             XmlUnsignedPropertiesType xmlProps,
             ArchiveTimeStampData propData)
     {
-        JAXBElement<XmlXAdESTimeStampType> xmlArchTS = new ObjectFactory().createArchiveTimeStampV2(xmlTimeStamp);
+        JAXBElement<XmlXAdESTimeStampType> xmlArchTS = new ObjectFactory().createArchiveTimeStampV1_4_1(xmlTimeStamp);
         xmlProps.getUnsignedSignatureProperties().getAny().add(xmlArchTS);
     }
 }

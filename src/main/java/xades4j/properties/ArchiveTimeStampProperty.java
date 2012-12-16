@@ -25,7 +25,8 @@ import java.util.Date;
  */
 public final class ArchiveTimeStampProperty extends UnsignedSignatureProperty
 {
-    public static final String PROP_NAME = "xadesv141:ArchiveTimeStamp";
+    // it's in "xades141" namespace though!
+    public static final String PROP_NAME = "ArchiveTimeStamp";
     /**/
     private Date time;
 
