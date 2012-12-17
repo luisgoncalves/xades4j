@@ -1212,7 +1212,7 @@ public class AgedTimeStampTest
 
     // extend X-L form to A form
     @Test
-    public void test03_X_sig4() throws Exception
+    public void test03_A_sig4() throws Exception
     {
         System.out.println(Thread.currentThread().getStackTrace()[1].getMethodName());
 
@@ -1265,6 +1265,32 @@ public class AgedTimeStampTest
         assertEquals(XAdESForm.A, f);
     }
 
+    // add validation info to A form
+    @Test
+    public void test03_A_sig5() throws Exception
+    {
+        System.out.println(Thread.currentThread().getStackTrace()[1].getMethodName());
+
+        Document doc = getDocument("document.aged.test03_A_sig4.xml");
+        Element signatureNode = getSigElement(doc);
+
+        XadesFormatExtenderProfile formExtProfile = new XadesFormatExtenderProfile();
+        formExtProfile.withTimeStampTokenProvider(SurrogateTimeStampTokenProvider.class);
+        XadesSignatureFormatExtender formExt = formExtProfile.getFormatExtender();
+        XadesVerificationProfile verProfile = new XadesVerificationProfile(
+                        test03_userCertValidationDataProviderXCreation,
+                        test03_tsaCertValidationDataProviderAnow);
+        XadesHybridVerifierImpl verifier = (XadesHybridVerifierImpl) verProfile.newVerifier();
+
+        // extend A to A-VD
+        XAdESVerificationResult res = verifier.verify(signatureNode, null, formExt,
+                        XAdESForm.A_VD);
+
+        assertEquals(res.getSignatureForm(), XAdESForm.A);
+
+        outputDocument(doc, "document.aged.test03_A_sig5.xml");
+    }
+
     // verify A form using minimal validators
     @Test
     public void test03_A_ver2() throws Exception
@@ -1272,7 +1298,7 @@ public class AgedTimeStampTest
         System.out.println(Thread.currentThread().getStackTrace()[1].getMethodName());
 
         // verify using minimal data (just CA certificates)
-        XAdESForm f = verifySignature("document.aged.test03_A_sig4.xml",
+        XAdESForm f = verifySignature("document.aged.test03_A_sig5.xml",
                 new XadesVerificationProfile(test03_userCertMinimalValidationDataProvider,
                         test03_tsaCertMinimalValidationDataProvider));
 
