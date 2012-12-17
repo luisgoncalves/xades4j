@@ -36,6 +36,7 @@ import xades4j.properties.QualifyingProperty;
 import xades4j.properties.RevocationValuesProperty;
 import xades4j.properties.SigAndRefsTimeStampProperty;
 import xades4j.properties.SignatureTimeStampProperty;
+import xades4j.properties.TimeStampValidationDataProperty;
 import xades4j.properties.data.ArchiveTimeStampData;
 import xades4j.providers.TimeStampVerificationProvider;
 import xades4j.utils.CannotAddDataToDigestInputException;
@@ -218,8 +219,11 @@ public class ArchiveTimeStampVerifier extends
                     ArchiveTimeStampProperty.class))
             {
                 digestInput.addNode(elem);
-            } // else: ignore other properties
-            // TODO add TimeStampDataValidation property
+            } else if (isElementMatchingProperty(elem,
+                    TimeStampValidationDataProperty.class))
+            {
+                digestInput.addNode(elem);
+            }// else: ignore other properties
         }
 
         if (certificateValuesPresent && revocationValuesPresent)
@@ -236,7 +240,14 @@ public class ArchiveTimeStampVerifier extends
     {
         try
         {
-            return elem.getLocalName().equalsIgnoreCase(
+            if (prop.equals(ArchiveTimeStampProperty.class) ||
+                    prop.equals(TimeStampValidationDataProperty.class))
+                return elem.getLocalName().equalsIgnoreCase(
+                        (String) prop.getField("PROP_NAME").get(null))
+                        && elem.getNamespaceURI().equalsIgnoreCase(
+                                (String) prop.getField("XADESV141_XMLNS").get(null));
+            else
+                return elem.getLocalName().equalsIgnoreCase(
                     (String) prop.getField("PROP_NAME").get(null))
                     && elem.getNamespaceURI().equalsIgnoreCase(
                             (String) prop.getField("XADES_XMLNS").get(null));
