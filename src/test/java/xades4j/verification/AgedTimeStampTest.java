@@ -54,6 +54,8 @@ import javax.xml.transform.stream.StreamResult;
 
 import org.apache.xml.security.utils.Constants;
 import org.bouncycastle.asn1.x509.CRLReason;
+import org.bouncycastle.bcpg.sig.RevocationReason;
+import org.bouncycastle.bcpg.sig.RevocationReasonTags;
 import org.bouncycastle.cert.jcajce.JcaCertStore;
 import org.bouncycastle.util.Store;
 import org.junit.Test;
@@ -134,7 +136,6 @@ public class AgedTimeStampTest
     private static FullCert test02_X_tsa2Cert;
     private static X509CRL  test02_X_tsaCRL_1;
     private static X509CRL  test02_X_tsaCRL_2;
-    //private static X509CRL  test02_X_tsaCRL_3;
     private static Store    test02_X_userCaStore;
     private static KeyStore test02_X_userTrustAnchors;
     private static KeyStore test02_X_tsaTrustAnchors;
@@ -145,6 +146,32 @@ public class AgedTimeStampTest
     private static TSACertificateValidationProvider test02_tsaCertValidationDataProviderNow;
     private static CertificateValidationProvider test02_userCertMinimalValidationDataProvider;
     private static TSACertificateValidationProvider test02_tsaCertMinimalValidationDataProvider;
+
+    /*
+     * data for XAdES-A (ArchiveTimeStamp) tests
+     */
+    private static FullCert test03_userCaCert;
+    private static FullCert test03_userCert;
+    private static FullCert test03_X_tsaCaCert;
+    private static FullCert test03_A_tsaCaCert;
+    private static FullCert test03_T_tsa1Cert;
+    private static FullCert test03_X_tsa2Cert;
+    private static FullCert test03_A_tsa3Cert;
+    private static X509CRL  test03_X_tsaCRL_1;
+    private static X509CRL  test03_X_tsaCRL_2;
+    private static X509CRL  test03_A_tsaCRL_3;
+    private static Store    test03_userCaStore;
+    private static KeyStore test03_userTrustAnchors;
+    private static KeyStore test03_X_tsaTrustAnchors;
+    private static KeyStore test03_A_tsaTrustAnchors;
+
+    private static KeyingDataProvider test03_signatureCreationKeyingDataprovider;
+    private static CertificateValidationProvider test03_userCertValidationDataProviderXCreation;
+    private static TSACertificateValidationProvider test03_tsaCertValidationDataProviderXCreation;
+    private static TSACertificateValidationProvider test03_tsaCertValidationDataProviderACreation;
+    private static TSACertificateValidationProvider test03_tsaCertValidationDataProviderAnow;
+    private static CertificateValidationProvider test03_userCertMinimalValidationDataProvider;
+    private static TSACertificateValidationProvider test03_tsaCertMinimalValidationDataProvider;
 
     private static final long ONE_HOUR_IN_MS = 60 * 60 * 1000;
     static
@@ -172,6 +199,14 @@ public class AgedTimeStampTest
          * *****************************************************************************/
 
         createXadesXCerts(now);
+
+        /* ******************************************************************************
+         *
+         * Create certs and CRLs for XAdES-A tests
+         *
+         * *****************************************************************************/
+
+        createXadesACerts(now);
 
         } catch (Exception ex)
         {
@@ -503,6 +538,195 @@ public class AgedTimeStampTest
                         emptyCertStore);
         test02_tsaCertMinimalValidationDataProvider =
                 new PKIXTSACertificateValidationProvider(test02_X_tsaTrustAnchors,
+                        true,
+                        emptyCertStore);
+    }
+
+    private static void createXadesACerts(Date now)
+            throws Exception, CertificateEncodingException, KeyStoreException,
+            IOException, NoSuchAlgorithmException, CertificateException,
+            InvalidAlgorithmParameterException, NoSuchProviderException
+    {
+        test03_userCaCert = FullCert.getCACert(
+                "RSA",
+                1024,
+                "CN=XAdES-A testing User CA",
+                new Date(now.getTime() - 24 * ONE_HOUR_IN_MS),
+                new Date(now.getTime() - 17 * ONE_HOUR_IN_MS),
+                "SHA256withRSA");
+
+        test03_X_tsaCaCert = FullCert.getCACert(
+                "RSA",
+                1024,
+                "CN=XAdES-A testing X form TSA CA",
+                new Date(now.getTime() - 23 * ONE_HOUR_IN_MS),
+                new Date(now.getTime() - 9 * ONE_HOUR_IN_MS),
+                "SHA256withRSA");
+
+        test03_userCert = test03_userCaCert.createUserCert(
+                "RSA",
+                1024,
+                "CN=XAdes-A testing User cert",
+                new Date(now.getTime() - 22 * ONE_HOUR_IN_MS),
+                new Date(now.getTime() + ONE_HOUR_IN_MS),
+                new BigInteger("2"),
+                "SHA256withRSA");
+
+        test03_T_tsa1Cert = test03_X_tsaCaCert.createTSACert(
+                "RSA",
+                1024,
+                "CN=XAdES-A testing T form TSA",
+                new Date(now.getTime() - 21 * ONE_HOUR_IN_MS),
+                new Date(now.getTime() - 12 * ONE_HOUR_IN_MS),
+                new BigInteger("2"),
+                "SHA256withRSA");
+
+        CRLEntries tsaCaCrlEntries = test03_X_tsaCaCert.new CRLEntries();
+        test03_X_tsaCRL_1 = test03_X_tsaCaCert.createCRL(
+                "SHA256withRSA",
+                new Date(now.getTime() - 19 * ONE_HOUR_IN_MS),
+                new Date(now.getTime() - 13 * ONE_HOUR_IN_MS),
+                new BigInteger("1"),
+                tsaCaCrlEntries);
+
+        CRLEntries userCaCrlEntries = test03_userCaCert.new CRLEntries();
+        userCaCrlEntries.addEntry(
+                test03_userCert.getCertificate().getSerialNumber(),
+                new Date(now.getTime() - 18 * ONE_HOUR_IN_MS),
+                CRLReason.affiliationChanged);
+        X509CRL userCaCrl = test03_userCaCert.createCRL(
+                "SHA256withRSA",
+                new Date(now.getTime() - 18 * ONE_HOUR_IN_MS),
+                new Date(now.getTime() - 17 * ONE_HOUR_IN_MS),
+                new BigInteger("1"),
+                userCaCrlEntries);
+
+        test03_X_tsa2Cert = test03_X_tsaCaCert.createTSACert(
+                "RSA",
+                1024,
+                "CN=XAdES-A testing X form TSA",
+                new Date(now.getTime() - 15 * ONE_HOUR_IN_MS),
+                new Date(now.getTime() - 9 * ONE_HOUR_IN_MS),
+                new BigInteger("3"),
+                "SHA256withRSA");
+
+        tsaCaCrlEntries.addEntry(
+                test03_T_tsa1Cert.getCertificate().getSerialNumber(),
+                new Date(now.getTime() - 13 * ONE_HOUR_IN_MS),
+                CRLReason.affiliationChanged);
+        test03_X_tsaCRL_2 = test03_X_tsaCaCert.createCRL("SHA256withRSA",
+                new Date(now.getTime() - 13 * ONE_HOUR_IN_MS),
+                new Date(now.getTime() - 9 * ONE_HOUR_IN_MS),
+                new BigInteger("3"),
+                tsaCaCrlEntries);
+
+        test03_A_tsaCaCert = FullCert.getCACert(
+                "RSA",
+                1024,
+                "CN=XAdES-A testing A form TSA CA",
+                new Date(now.getTime() - 12 * ONE_HOUR_IN_MS),
+                new Date(now.getTime() + ONE_HOUR_IN_MS),
+                "SHA256withRSA");
+
+        test03_A_tsa3Cert = test03_A_tsaCaCert.createTSACert(
+                "RSA",
+                1024,
+                "CN=XAdES-A testing A form TSA",
+                new Date(now.getTime() - 11 * ONE_HOUR_IN_MS),
+                new Date(now.getTime() + ONE_HOUR_IN_MS),
+                new BigInteger("1"),
+                "SHA256withRSA");
+
+        tsaCaCrlEntries = test03_A_tsaCaCert.new CRLEntries();
+        test03_A_tsaCRL_3 = test03_A_tsaCaCert.createCRL(
+                "SHA256withRSA",
+                new Date(now.getTime() - 1 * ONE_HOUR_IN_MS),
+                new Date(now.getTime() + ONE_HOUR_IN_MS),
+                new BigInteger("1"),
+                tsaCaCrlEntries);
+
+        test03_signatureCreationKeyingDataprovider = new DirectKeyingDataProvider(
+                test03_userCert.getCertificate(),
+                test03_userCert.getPrivateKey());
+
+        test03_userTrustAnchors = KeyStore.getInstance(KeyStore.getDefaultType());
+        test03_userTrustAnchors.load(null);
+        TrustedCertificateEntry ca = new TrustedCertificateEntry(test03_userCaCert.getCertificate());
+        test03_userTrustAnchors.setEntry("ca", ca, null);
+
+        List<Object> content = new ArrayList<Object>();
+        content.add(userCaCrl);
+        CertStore userIntermCertsAndCrlsXCreation = CertStore.getInstance(
+                "Collection",
+                new CollectionCertStoreParameters(content));
+
+        test03_userCertValidationDataProviderXCreation =
+                new PKIXCertificateValidationProvider(test03_userTrustAnchors,
+                        true,
+                        userIntermCertsAndCrlsXCreation);
+
+        test03_X_tsaTrustAnchors = KeyStore.getInstance(KeyStore.getDefaultType());
+        test03_X_tsaTrustAnchors.load(null);
+        ca = new TrustedCertificateEntry(test03_X_tsaCaCert.getCertificate());
+        test03_X_tsaTrustAnchors.setEntry("ca", ca, null);
+
+        content = new ArrayList<Object>();
+        content.add(test03_T_tsa1Cert.getCertificate());
+        content.add(test03_X_tsaCRL_1);
+        CertStore xTsaIntermCertsAndCrlsXCreation = CertStore.getInstance(
+                "Collection",
+                new CollectionCertStoreParameters(content));
+
+        test03_tsaCertValidationDataProviderXCreation =
+                new PKIXTSACertificateValidationProvider(
+                        test03_X_tsaTrustAnchors,
+                        true,
+                        xTsaIntermCertsAndCrlsXCreation);
+
+        test03_A_tsaTrustAnchors = KeyStore.getInstance(KeyStore.getDefaultType());
+        test03_A_tsaTrustAnchors.load(null);
+        ca = new TrustedCertificateEntry(test03_X_tsaCaCert.getCertificate());
+        test03_A_tsaTrustAnchors.setEntry("ca", ca, null);
+        ca = new TrustedCertificateEntry(test03_A_tsaCaCert.getCertificate());
+        test03_A_tsaTrustAnchors.setEntry("newCA", ca, null);
+
+        content = new ArrayList<Object>();
+        content.add(test03_T_tsa1Cert.getCertificate());
+        content.add(test03_X_tsa2Cert.getCertificate());
+        content.add(test03_X_tsaCRL_1);
+        content.add(test03_X_tsaCRL_2);
+        CertStore aTsaIntermCertsAndCrlsACreation = CertStore.getInstance(
+                "Collection",
+                new CollectionCertStoreParameters(content));
+        test03_tsaCertValidationDataProviderACreation =
+                new PKIXTSACertificateValidationProvider(
+                        test03_A_tsaTrustAnchors,
+                        true,
+                        aTsaIntermCertsAndCrlsACreation);
+
+        content = new ArrayList<Object>();
+        content.add(test03_A_tsa3Cert.getCertificate());
+        content.add(test03_A_tsaCRL_3);
+
+        CertStore aValidationCertsAndCrls = CertStore.getInstance(
+                "Collection",
+                new CollectionCertStoreParameters(content));
+
+        test03_tsaCertValidationDataProviderAnow =
+                new PKIXTSACertificateValidationProvider(
+                        test03_A_tsaTrustAnchors,
+                        true,
+                        aValidationCertsAndCrls);
+
+        test03_userCertMinimalValidationDataProvider =
+                new PKIXCertificateValidationProvider(
+                        test03_userTrustAnchors,
+                        true,
+                        emptyCertStore);
+
+        test03_tsaCertMinimalValidationDataProvider =
+                new PKIXTSACertificateValidationProvider(
+                        test03_A_tsaTrustAnchors,
                         true,
                         emptyCertStore);
     }
@@ -861,6 +1085,198 @@ public class AgedTimeStampTest
                         test02_tsaCertMinimalValidationDataProvider));
 
         assertEquals(XAdESForm.X_L, f);
+    }
+
+    /*  t
+     * -24 .User CA validity
+     * -23 | .TSA CA validity
+     * -22 | | .User cert validity
+     * -21 | | | .TSA1 cert validity
+     *     | | | |
+     * -20 | | | | <---- XAdES-T time stamp (TSA1)
+     *     | | | |
+     * -19 | | | |   .TSA CA 1st CRL
+     * -18 | | | |   | .User CA 1st CRL (user cert revocation)
+     *     | | | |   | |
+     * -17 ' | ' |   | '
+     * -15   |   |   |   .TSA2 cert validity
+     *       |   |   |   |
+     * -14   |   |   |   | <---- XAdES-X time stamp (TSA2)
+     *       |   |   |   |
+     * -13   |   |   '   |   .TSA CA 2nd CRL (TSA1 cert revocation)
+     * -12   |   '       |   | .Arch-TSA CA validity
+     * -11   |           |   | | .Arch-TSA3 validity
+     *       |           |   | | |
+     * -10   |           |   | | | <---- first XAdES-A time stamp (Arch-TSA1)
+     *  -9   '           '   ' | |
+     *  -1                     | | .Arch-TSA CA 1st CRL
+     *                         | | |
+     *   0                     | | | <--- (now) validaiton
+     *                         | | |
+     *   1                     ' ' '
+     */
+
+    // create basic XAdES-T signed document
+    @Test
+    public void test03_T_sig1() throws Exception
+    {
+        System.out.println(Thread.currentThread().getStackTrace()[1].getMethodName());
+
+        SurrogateTimeStampTokenProvider.setTSACert(test03_T_tsa1Cert, test03_userCaStore);
+        SurrogateTimeStampTokenProvider.setTimeAndSerial(
+                new Date(new Date().getTime() - ONE_HOUR_IN_MS * 20),
+                new BigInteger("1"));
+        System.out.println("SignatureTimeStamp creation date is "
+                + new Date(new Date().getTime() - ONE_HOUR_IN_MS * 20));
+
+        Document doc = getDocument("document.xml");
+        Element elemToSign = doc.getDocumentElement();
+        XadesSigningProfile signer = new XadesTSigningProfile(test03_signatureCreationKeyingDataprovider);
+        signer.withTimeStampTokenProvider(SurrogateTimeStampTokenProvider.class);
+        new Enveloped(signer.newSigner()).sign(elemToSign);
+
+        outputDocument(doc, "document.aged.test03_T_sig1.xml");
+    }
+
+    // extend T form to X form
+    @Test
+    public void test03_X_sig2() throws Exception
+    {
+        System.out.println(Thread.currentThread().getStackTrace()[1].getMethodName());
+
+        SurrogateTimeStampTokenProvider.setTSACert(test03_X_tsa2Cert, test02_X_userCaStore);
+        SurrogateTimeStampTokenProvider.setTimeAndSerial(
+                new Date(new Date().getTime() - ONE_HOUR_IN_MS * 14),
+                new BigInteger("2"));
+
+        System.out.println("SigAndRefsTimeStamp creation date is "
+                + new Date(new Date().getTime() - ONE_HOUR_IN_MS * 14));
+
+        Document doc = getDocument("document.aged.test03_T_sig1.xml");
+        Element signatureNode = getSigElement(doc);
+
+        /*
+         * extension of signature to X form must be performed in two steps, first we have
+         * to create the XML with needed Properties (CompleteRevocationRefs and
+         * CompleteCertificateRefs, that is, C form) and only after that we can add the
+         * X form time stamp
+         */
+        XadesFormatExtenderProfile formExtProfile = new XadesFormatExtenderProfile();
+        formExtProfile.withTimeStampTokenProvider(SurrogateTimeStampTokenProvider.class);
+        XadesSignatureFormatExtender formExt = formExtProfile.getFormatExtender();
+        XadesVerificationProfile verProfile = new XadesVerificationProfile(
+                        test03_userCertValidationDataProviderXCreation,
+                        test03_tsaCertValidationDataProviderXCreation);
+        XadesHybridVerifierImpl verifier = (XadesHybridVerifierImpl) verProfile.newVerifier();
+
+        // extend T to C
+        XAdESVerificationResult res = verifier.verify(signatureNode, null, formExt,
+                        XAdESForm.C,
+                        new Date(new Date().getTime() - ONE_HOUR_IN_MS * 14));
+
+        assertEquals(res.getSignatureForm(), XAdESForm.T);
+
+        // extend C to X
+        res = verifier.verify(signatureNode, null, formExt, XAdESForm.X,
+                        new Date(new Date().getTime() - ONE_HOUR_IN_MS * 14));
+
+        assertEquals(res.getSignatureForm(), XAdESForm.C);
+
+        outputDocument(doc, "document.aged.test03_X_sig2.xml");
+    }
+
+    // extend X to X-L form
+    @Test
+    public void test03_X_sig3() throws Exception
+    {
+        System.out.println(Thread.currentThread().getStackTrace()[1].getMethodName());
+
+        Document doc = getDocument("document.aged.test03_X_sig2.xml");
+        Element signatureNode = getSigElement(doc);
+
+        XadesFormatExtenderProfile formExtProfile = new XadesFormatExtenderProfile();
+        XadesSignatureFormatExtender formExt = formExtProfile.getFormatExtender();
+        XadesVerificationProfile verProfile = new XadesVerificationProfile(
+                        test03_userCertValidationDataProviderXCreation,
+                        test03_tsaCertValidationDataProviderACreation);
+        XadesHybridVerifierImpl verifier = (XadesHybridVerifierImpl) verProfile.newVerifier();
+
+        // extend X to X-L
+        XAdESVerificationResult res = verifier.verify(signatureNode, null, formExt,
+                XAdESForm.X_L, new Date(new Date().getTime() - 10 * ONE_HOUR_IN_MS));
+
+        assertEquals(res.getSignatureForm(), XAdESForm.X);
+
+        outputDocument(doc, "document.aged.test03_X_sig3.xml");
+    }
+
+    // extend X-L form to A form
+    @Test
+    public void test03_X_sig4() throws Exception
+    {
+        System.out.println(Thread.currentThread().getStackTrace()[1].getMethodName());
+
+        SurrogateTimeStampTokenProvider.setTSACert(test03_A_tsa3Cert, test02_X_userCaStore);
+        SurrogateTimeStampTokenProvider.setTimeAndSerial(
+                new Date(new Date().getTime() - ONE_HOUR_IN_MS * 10),
+                new BigInteger("2"));
+
+        System.out.println("SigAndRefsTimeStamp creation date is "
+                + new Date(new Date().getTime() - ONE_HOUR_IN_MS * 10));
+
+        Document doc = getDocument("document.aged.test03_X_sig3.xml");
+        Element signatureNode = getSigElement(doc);
+
+        /*
+         * extension of signature to X form must be performed in two steps, first we have
+         * to create the XML with needed Properties (CompleteRevocationRefs and
+         * CompleteCertificateRefs, that is, C form) and only after that we can add the
+         * X form time stamp
+         */
+        XadesFormatExtenderProfile formExtProfile = new XadesFormatExtenderProfile();
+        formExtProfile.withTimeStampTokenProvider(SurrogateTimeStampTokenProvider.class);
+        XadesSignatureFormatExtender formExt = formExtProfile.getFormatExtender();
+        XadesVerificationProfile verProfile = new XadesVerificationProfile(
+                        test03_userCertValidationDataProviderXCreation,
+                        test03_tsaCertValidationDataProviderAnow);
+        XadesHybridVerifierImpl verifier = (XadesHybridVerifierImpl) verProfile.newVerifier();
+
+        // extend X-L to A
+        XAdESVerificationResult res = verifier.verify(signatureNode, null, formExt,
+                        XAdESForm.A,
+                        new Date(new Date().getTime() - ONE_HOUR_IN_MS * 14));
+
+        assertEquals(res.getSignatureForm(), XAdESForm.X_L);
+
+        outputDocument(doc, "document.aged.test03_A_sig4.xml");
+    }
+
+    // verify A form
+    @Test
+    public void test03_A_ver1() throws Exception
+    {
+        System.out.println(Thread.currentThread().getStackTrace()[1].getMethodName());
+
+        // test verification
+        XAdESForm f = verifySignature("document.aged.test03_A_sig4.xml",
+                new XadesVerificationProfile(test03_userCertValidationDataProviderXCreation,
+                        test03_tsaCertValidationDataProviderAnow));
+
+        assertEquals(XAdESForm.A, f);
+    }
+
+    // verify A form using minimal validators
+    @Test
+    public void test03_A_ver2() throws Exception
+    {
+        System.out.println(Thread.currentThread().getStackTrace()[1].getMethodName());
+
+        // verify using minimal data (just CA certificates)
+        XAdESForm f = verifySignature("document.aged.test03_A_sig4.xml",
+                new XadesVerificationProfile(test03_userCertMinimalValidationDataProvider,
+                        test03_tsaCertMinimalValidationDataProvider));
+
+        assertEquals(XAdESForm.A, f);
     }
 
     /*
