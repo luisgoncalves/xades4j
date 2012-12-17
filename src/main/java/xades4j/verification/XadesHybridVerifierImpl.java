@@ -259,7 +259,7 @@ public class XadesHybridVerifierImpl implements XadesVerifier
 
         // The transitions matrix won't allow this, but this way I avoid the
         // unnecessary processing.
-        if (finalForm.before(XAdESForm.T) || finalForm.after(XAdESForm.A))
+        if (finalForm.before(XAdESForm.T) || finalForm.after(XAdESForm.A_VD))
         {
             throw new IllegalArgumentException("Signature format can only be extended to XAdES-T or above");
         }
@@ -277,6 +277,7 @@ public class XadesHybridVerifierImpl implements XadesVerifier
             // * C -> X-L
             // * X -> X-L
             // * X-L -> A
+            // * A -> A-VD
 
             FormExtensionPropsCollector finalFormPropsColector = formsExtensionTransitions[actualForm.ordinal()][finalForm.ordinal()];
 
@@ -407,6 +408,18 @@ public class XadesHybridVerifierImpl implements XadesVerifier
             }
         };
         formsExtensionTransitions[XAdESForm.X_L.ordinal()][XAdESForm.A.ordinal()] = aPropsCol;
+
+        // A -> A-VD
+        FormExtensionPropsCollector avdPropsCol = new FormExtensionPropsCollector()
+        {
+            @Override
+            public void addProps(Collection<UnsignedSignatureProperty> usp,
+                    XAdESVerificationResult res)
+            {
+                PropertiesUtils.addXadesAVDProperties(usp, res.getAttributeValidationData());
+            }
+        };
+        formsExtensionTransitions[XAdESForm.A.ordinal()][XAdESForm.A_VD.ordinal()] = avdPropsCol;
     }
 
     public void setAcceptUnknownProperties(boolean acceptUnknownProperties)

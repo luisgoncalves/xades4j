@@ -28,6 +28,7 @@ import xades4j.properties.SigAndRefsTimeStampProperty;
 import xades4j.properties.SignaturePolicyBase;
 import xades4j.properties.SignatureTimeStampProperty;
 import xades4j.properties.SigningCertificateProperty;
+import xades4j.properties.TimeStampValidationDataProperty;
 
 /**
  *
@@ -281,7 +282,8 @@ class XAdESFormChecker
         @Override
         protected boolean checkProps(Set<String> availablePropsNames) throws InvalidXAdESFormException
         {
-            return availablePropsNames.contains(ArchiveTimeStampProperty.PROP_NAME);
+            return availablePropsNames.contains(ArchiveTimeStampProperty.PROP_NAME) ||
+                    availablePropsNames.contains(TimeStampValidationDataProperty.PROP_NAME);
         }
 
         @Override
