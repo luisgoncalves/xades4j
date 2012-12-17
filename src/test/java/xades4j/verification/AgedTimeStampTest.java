@@ -1280,6 +1280,66 @@ public class AgedTimeStampTest
     }
 
     /*
+     * TODO missing grace period support
+     * The library should support enforcing grace period, but what's more important, it
+     * should add only necessary CRLs when creating revocation information related
+     * properties. If that's not performed, then CRLs that don't help in later
+     * validation will be added causing the file size to grow needlessly.
+
+  time
+    .
+    |   <- Signature creation time
+    |
+    |   <- SignatureTimeStamp creation time (XAdES-T)
+    | +
+    | |
+    | | grace period for Signature
+    | |
+    | +
+    |   <- earliest time a CRL will make the Signature non-repudiable
+    |
+    |   <- publishing of CRL for Signature certificate
+    |   <- earliest time a usable XAdES-C can be created
+    /
+    /
+    |   <- SigAndRefsTimeStamp creation time (XAdES-X)
+    | +
+    | |
+    | | grace period for SignatureTimeStamp
+    | |
+    | +
+    |   <- earliest time a CRL will make SignatureTimeStamp non-repudiable
+    |
+    |   <- publishing of CRL for SignatureTimeStamp certificate
+    |   <- earliest time a usable XAdES-X-L can be created
+    /
+    /
+    |   <- 1st ArchiveTimeStamp creation time (XAdES-A)
+    | +
+    | |
+    | | grace period for SigAndRefsTimeSamp
+    | |
+    | +
+    |  <- earliest time a CRL will make SigAndRefsTimeStamp non-repudiable
+    |
+    |  <- publishing of CRL for SigAndRefsTimeStamp
+    |  <- earliest time TimeStampValidationData can be created (XAdES-A-VD)
+    /
+    /
+    |  <- 2nd ArchiveTimeStamp creation time (XAdES-A)
+    | +
+    | |
+    | | grace period for 1st ArchiveTimeStamp
+    | |
+    | +
+    |  <- earliest time a CRL will make 1st ArchiveTimeStamp non-repudiable
+    |
+    |  <- publishing of CRL for 1st ArchiveTimeStamp
+    |  <- earliest time TimeStampValidationData for 1st ArchiveTimeStamp can be created
+    '
+
+     */
+    /*
      * end of tests
      */
 
