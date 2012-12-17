@@ -16,10 +16,21 @@
  */
 package xades4j.properties.data;
 
+import java.util.Collection;
+
 /**
  *
  * @author Luís
  */
 public final class CertificateValuesData extends BaseEncapsulatedPKIData
 {
+    public CertificateValuesData()
+    {
+        super();
+    }
+
+    public CertificateValuesData(Collection<byte[]> certificates)
+    {
+        super(certificates);
+    }
 }
