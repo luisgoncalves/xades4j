@@ -29,6 +29,7 @@ import xades4j.properties.data.CompleteRevocationRefsData;
 import xades4j.properties.data.RevocationValuesData;
 import xades4j.properties.data.SigAndRefsTimeStampData;
 import xades4j.properties.data.SignatureTimeStampData;
+import xades4j.properties.data.TimeStampValidationDataData;
 import xades4j.xml.bind.xades.ObjectFactory;
 import xades4j.xml.bind.xades.XmlUnsignedDataObjectPropertiesType;
 import xades4j.xml.bind.xades.XmlUnsignedPropertiesType;
@@ -61,6 +62,7 @@ class DefaultUnsignedPropertiesMarshaller
         super.putConverter(RevocationValuesData.class, new ToXmlRevocationValuesConverter());
         super.putConverter(AttributeRevocationValuesData.class, new ToXmlAttributeRevocationValuesConverter());
         super.putConverter(ArchiveTimeStampData.class, new ToXmlArchiveTimeStampConverter(algorithmsParametersMarshallingProvider));
+        super.putConverter(TimeStampValidationDataData.class, new ToXmlTimeStampValidationDataConverter());
         /* The CounterSignature property is marshalled directly using DOM because
          * it is easier that way (it is represented by a GenericDOMData instance).
          */
