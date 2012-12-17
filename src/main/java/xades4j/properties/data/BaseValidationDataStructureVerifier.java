@@ -19,7 +19,7 @@ public class BaseValidationDataStructureVerifier implements
         BaseValidationDataData validationData = (BaseValidationDataData) propData;
 
         Collection<byte[]> certData = validationData.getCertificateData();
-        Collection<byte[]> revocData = validationData.getRevocationData();
+        Collection<byte[]> revocData = validationData.getCRLData();
         if ((certData == null || certData.isEmpty()) && (revocData == null || revocData.isEmpty()))
             throw new PropertyDataStructureException(
                     "Neither certificate nor revocation data provided", propName);

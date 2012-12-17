@@ -21,20 +21,20 @@ import java.util.Collection;
 public class BaseValidationDataData implements PropertyDataObject
 {
     private final CertificateValuesData certificateValues;
-    private final RevocationValuesData revocationData;
+    private final RevocationValuesData crlData;
 
     public BaseValidationDataData(
             Collection<byte[]> certificates,
-            Collection<byte[]> revocationData)
+            Collection<byte[]> crlData)
     {
         this.certificateValues = new CertificateValuesData(certificates);
-        this.revocationData = new RevocationValuesData(revocationData);
+        this.crlData = new RevocationValuesData(crlData);
     }
 
     public BaseValidationDataData()
     {
         this.certificateValues = new CertificateValuesData();
-        this.revocationData = new RevocationValuesData();
+        this.crlData = new RevocationValuesData();
     }
 
     public void addCertificateData(byte[] d)
@@ -42,9 +42,9 @@ public class BaseValidationDataData implements PropertyDataObject
         this.certificateValues.addData(d);
     }
 
-    public void addRevocationData(byte[] d)
+    public void addCRLData(byte[] d)
     {
-        this.revocationData.addData(d);
+        this.crlData.addData(d);
     }
 
     public Collection<byte[]> getCertificateData()
@@ -52,8 +52,8 @@ public class BaseValidationDataData implements PropertyDataObject
         return certificateValues.getData();
     }
 
-    public Collection<byte[]> getRevocationData()
+    public Collection<byte[]> getCRLData()
     {
-        return revocationData.getData();
+        return crlData.getData();
     }
 }

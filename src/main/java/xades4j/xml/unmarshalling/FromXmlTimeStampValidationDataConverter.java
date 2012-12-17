@@ -74,7 +74,7 @@ public class FromXmlTimeStampValidationDataConverter implements
             List<XmlEncapsulatedPKIDataType> crls = crlValues.getEncapsulatedCRLValue();
             for (XmlEncapsulatedPKIDataType crl : crls)
             {
-                timeStampValidationDataData.addRevocationData(crl.getValue());
+                timeStampValidationDataData.addCRLData(crl.getValue());
             }
 
             // check for unsupported data
