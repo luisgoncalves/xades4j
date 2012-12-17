@@ -33,6 +33,7 @@ import xades4j.properties.CertificateValuesProperty;
 import xades4j.properties.QualifyingProperty;
 import xades4j.properties.RevocationValuesProperty;
 import xades4j.properties.SigAndRefsTimeStampProperty;
+import xades4j.properties.TimeStampValidationDataProperty;
 
 /**
  *
@@ -281,6 +282,26 @@ public class XadesVerifierImplTest extends VerifierTestBase
                 nistVerificationProfile);
         assertEquals(XAdESForm.A, f);
     }
+
+    @Test
+    public void testVerifyAEnrichAVD() throws Exception
+    {
+        System.out.println("testVerifyXLEnrichA");
+
+        Document doc = getDocument("out/document.verified.c.xl.a.xml");
+        Element signatureNode = getSigElement(doc);
+
+        XadesSignatureFormatExtender formExt =
+                new XadesFormatExtenderProfile().getFormatExtender();
+        XAdESVerificationResult res = nistVerificationProfile.newVerifier().verify(
+                signatureNode, null, formExt, XAdESForm.A_VD);
+
+        assertEquals(XAdESForm.A, res.getSignatureForm());
+        assertPropXAdES141ElementPresent(signatureNode, TimeStampValidationDataProperty.PROP_NAME);
+
+        outputDocument(doc, "document.verified.c.xl.avd.xml");
+    }
+
 
     private static void assertPropElementPresent(
             Element sigElem,
