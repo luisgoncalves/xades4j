@@ -43,6 +43,7 @@ import xades4j.properties.data.SignatureTimeStampData;
 import xades4j.properties.data.SignerRoleData;
 import xades4j.properties.data.SigningCertificateData;
 import xades4j.properties.data.SigningTimeData;
+import xades4j.properties.data.TimeStampValidationDataData;
 import xades4j.utils.PropertiesList;
 import xades4j.utils.PropertiesSet;
 import xades4j.xml.unmarshalling.QualifyingPropertiesDataCollector;
@@ -218,6 +219,16 @@ public class HybridQualifPropsDataCollectorImpl implements
             throw new IllegalStateException("No Element linked to previous property!");
 
         unsignedSigProperties.add(tsData);
+    }
+
+    @Override
+    public void addTimeStampValidationDataData(
+            TimeStampValidationDataData timeStampValidationDataData)
+    {
+        if (unsignedSigProperties.size() != unsignedSigPropertiesElements.size())
+            throw new IllegalStateException("No Element linked to previous property");
+
+        unsignedSigProperties.add(timeStampValidationDataData);
     }
 
     List<PropertyDataObject> getUnsignedPropertiesData()

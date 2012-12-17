@@ -41,6 +41,7 @@ import xades4j.properties.QualifyingProperty;
 import xades4j.properties.RevocationValuesProperty;
 import xades4j.properties.SigAndRefsTimeStampProperty;
 import xades4j.properties.SignatureTimeStampProperty;
+import xades4j.properties.TimeStampValidationDataProperty;
 import xades4j.properties.UnsignedSignatureProperty;
 import xades4j.xml.bind.xades.XmlCertificateValuesType;
 import xades4j.xml.bind.xades.XmlCompleteCertificateRefsType;
@@ -48,6 +49,7 @@ import xades4j.xml.bind.xades.XmlCompleteRevocationRefsType;
 import xades4j.xml.bind.xades.XmlCounterSignatureType;
 import xades4j.xml.bind.xades.XmlQualifyingPropertiesType;
 import xades4j.xml.bind.xades.XmlRevocationValuesType;
+import xades4j.xml.bind.xades.XmlValidationDataType;
 import xades4j.xml.bind.xades.XmlXAdESTimeStampType;
 
 public final class HybridQualifyingPropertiesUnmarshaller implements
@@ -188,7 +190,8 @@ public final class HybridQualifyingPropertiesUnmarshaller implements
         Field namespaceField;
         try {
             propNameField = clazz.getField("PROP_NAME");
-            if (!clazz.equals(ArchiveTimeStampProperty.class)) // TODO insert Archive version property info
+            if (!clazz.equals(ArchiveTimeStampProperty.class) &&
+                    !clazz.equals(TimeStampValidationDataProperty.class))
                 namespaceField = clazz.getField("XADES_XMLNS");
             else
                 namespaceField = clazz.getField("XADESV141_XMLNS");
@@ -361,6 +364,19 @@ public final class HybridQualifyingPropertiesUnmarshaller implements
 
                 archTSConv.convertTimeStamps(archivalTimeStamps , propertyDataCollector);
 
+            } else if (isNodeTheProperty(node, TimeStampValidationDataProperty.class))
+            {
+                JAXBElement<XmlValidationDataType> xmlTimeStampValidationDataElem =
+                        unmarshallElement(node, XmlValidationDataType.class);
+
+                FromXmlTimeStampValidationDataConverter tsValidationDataConverter =
+                        new FromXmlTimeStampValidationDataConverter();
+
+                List<XmlValidationDataType> xmlTimeStampValidationData =
+                        new ArrayList<XmlValidationDataType>();
+                xmlTimeStampValidationData.add(xmlTimeStampValidationDataElem.getValue());
+                tsValidationDataConverter.convertFromObject(xmlTimeStampValidationData ,
+                        propertyDataCollector);
             } else if (!acceptUnknown) // not recognized property
                 throw new UnmarshalException("Unknown unsigned signature property: "
                         + node.getLocalName());

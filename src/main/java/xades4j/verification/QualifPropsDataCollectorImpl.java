@@ -36,6 +36,7 @@ import xades4j.properties.data.SigAndRefsTimeStampData;
 import xades4j.properties.data.SignaturePolicyData;
 import xades4j.properties.data.SignatureTimeStampData;
 import xades4j.properties.data.SignerRoleData;
+import xades4j.properties.data.TimeStampValidationDataData;
 import xades4j.utils.PropertiesSet;
 import xades4j.properties.data.CommitmentTypeData;
 import xades4j.properties.data.DataObjectFormatData;
@@ -200,4 +201,10 @@ class QualifPropsDataCollectorImpl implements QualifyingPropertiesDataCollector
         propsData.add(tsData);
     }
 
+    @Override
+    public void addTimeStampValidationDataData(
+            TimeStampValidationDataData timeStampValidationDataData)
+    {
+        propsData.add(timeStampValidationDataData);
+    }
 }

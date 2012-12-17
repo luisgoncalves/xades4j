@@ -42,6 +42,7 @@ import xades4j.properties.data.OtherPropertyData;
 import xades4j.properties.data.SignaturePolicyData;
 import xades4j.properties.data.SignatureTimeStampData;
 import xades4j.properties.data.SignerRoleData;
+import xades4j.properties.data.TimeStampValidationDataData;
 
 /**
  * Passed to a {@link QualifyingPropertiesUnmarshaller} to collect the property
@@ -100,6 +101,9 @@ public interface QualifyingPropertiesDataCollector
             AttributeRevocationValuesData attrRevocValData);
 
     public void addArchiveTimeStamp(ArchiveTimeStampData tsData);
+
+    public void addTimeStampValidationDataData(
+            TimeStampValidationDataData timeStampValidationDataData);
 
     public void linkPropertyToElem(Element node);
 
