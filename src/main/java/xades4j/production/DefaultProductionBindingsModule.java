@@ -41,6 +41,7 @@ import xades4j.properties.SignatureTimeStampProperty;
 import xades4j.properties.SignerRoleProperty;
 import xades4j.properties.SigningCertificateProperty;
 import xades4j.properties.SigningTimeProperty;
+import xades4j.properties.TimeStampValidationDataProperty;
 import xades4j.properties.data.CustomPropertiesDataObjsStructureVerifier;
 import xades4j.providers.AlgorithmsProvider;
 import xades4j.providers.AlgorithmsProviderEx;
@@ -178,5 +179,9 @@ class DefaultProductionBindingsModule extends AbstractModule
         bind(new TypeLiteral<PropertyDataObjectGenerator<ArchiveTimeStampProperty>>()
         {
         }).to(DataGenArchiveTimeStamp.class);
+
+        bind(new TypeLiteral<PropertyDataObjectGenerator<TimeStampValidationDataProperty>>()
+        {
+        }).to(DataGenTimeStampValidationData.class);
     }
 }
