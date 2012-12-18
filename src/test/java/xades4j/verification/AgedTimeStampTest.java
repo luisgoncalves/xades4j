@@ -1221,7 +1221,7 @@ public class AgedTimeStampTest
                 new Date(new Date().getTime() - ONE_HOUR_IN_MS * 10),
                 new BigInteger("2"));
 
-        System.out.println("SigAndRefsTimeStamp creation date is "
+        System.out.println("ArchiveTimeStamp creation date is "
                 + new Date(new Date().getTime() - ONE_HOUR_IN_MS * 10));
 
         Document doc = getDocument("document.aged.test03_X_sig3.xml");
