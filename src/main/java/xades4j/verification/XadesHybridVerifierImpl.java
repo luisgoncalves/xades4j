@@ -267,7 +267,7 @@ public class XadesHybridVerifierImpl implements XadesVerifier
         XAdESVerificationResult res = this.verify(signatureElem, verificationOptions, now);
         XAdESForm actualForm = res.getSignatureForm();
 
-        if (actualForm.before(finalForm))
+        if (!finalForm.before(actualForm))
         {
             // Valid form transitions:
             // * BES/EPES -> T
@@ -277,7 +277,9 @@ public class XadesHybridVerifierImpl implements XadesVerifier
             // * C -> X-L
             // * X -> X-L
             // * X-L -> A
-            // * A -> A-VD
+            // * A -> A
+            // * A -> A-VD (A-VD is not a real form, it's used to tell library to create
+            //              TimesStampValidationData element)
 
             FormExtensionPropsCollector finalFormPropsColector = formsExtensionTransitions[actualForm.ordinal()][finalForm.ordinal()];
 
@@ -408,6 +410,8 @@ public class XadesHybridVerifierImpl implements XadesVerifier
             }
         };
         formsExtensionTransitions[XAdESForm.X_L.ordinal()][XAdESForm.A.ordinal()] = aPropsCol;
+        // A -> A
+        formsExtensionTransitions[XAdESForm.A.ordinal()][XAdESForm.A.ordinal()] = aPropsCol;
 
         // A -> A-VD
         FormExtensionPropsCollector avdPropsCol = new FormExtensionPropsCollector()
