@@ -69,7 +69,7 @@ public class ObjectFactory {
     private final static QName _SigAndRefsTimeStamp_QNAME = new QName("http://uri.etsi.org/01903/v1.3.2#", "SigAndRefsTimeStamp");
     private final static QName _DataObjectFormat_QNAME = new QName("http://uri.etsi.org/01903/v1.3.2#", "DataObjectFormat");
     private final static QName _AttributeCertificateRefs_QNAME = new QName("http://uri.etsi.org/01903/v1.3.2#", "AttributeCertificateRefs");
-    private final static QName _TimeStampValidationData_QNAME = new QName("http://uri.etsi.org/01903/v1.4.1#", "TimeStampValidationData");
+    private final static QName _TimeStampValidationDataV1_4_1_QNAME = new QName("http://uri.etsi.org/01903/v1.4.1#", "TimeStampValidationData");
     private final static QName _SignedProperties_QNAME = new QName("http://uri.etsi.org/01903/v1.3.2#", "SignedProperties");
     private final static QName _CompleteCertificateRefs_QNAME = new QName("http://uri.etsi.org/01903/v1.3.2#", "CompleteCertificateRefs");
     private final static QName _AttributeRevocationRefs_QNAME = new QName("http://uri.etsi.org/01903/v1.3.2#", "AttributeRevocationRefs");
@@ -819,8 +819,8 @@ public class ObjectFactory {
      * 
      */
     @XmlElementDecl(namespace = "http://uri.etsi.org/01903/v1.4.1#", name = "TimeStampValidationData")
-    public JAXBElement<XmlValidationDataType> createTimeStampValidationData(XmlValidationDataType value) {
-        return new JAXBElement<XmlValidationDataType>(_TimeStampValidationData_QNAME, XmlValidationDataType.class, null, value);
+    public JAXBElement<XmlValidationDataType> createTimeStampValidationDataV1_4_1(XmlValidationDataType value) {
+        return new JAXBElement<XmlValidationDataType>(_TimeStampValidationDataV1_4_1_QNAME, XmlValidationDataType.class, null, value);
     }
 
     /**
