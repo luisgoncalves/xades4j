@@ -272,9 +272,11 @@ public class XadesHybridVerifierImpl implements XadesVerifier
             // Valid form transitions:
             // * BES/EPES -> T
             // * BES/EPES -> C
+            // * T -> T
             // * T -> C
             // * C -> X
             // * C -> X-L
+            // * X -> X
             // * X -> X-L
             // * X-L -> A
             // * A -> A
@@ -323,6 +325,8 @@ public class XadesHybridVerifierImpl implements XadesVerifier
         };
         formsExtensionTransitions[XAdESForm.BES.ordinal()][XAdESForm.T.ordinal()] = tPropsCol;
         formsExtensionTransitions[XAdESForm.EPES.ordinal()][XAdESForm.T.ordinal()] = tPropsCol;
+        // T -> T
+        formsExtensionTransitions[XAdESForm.T.ordinal()][XAdESForm.T.ordinal()] = tPropsCol;
 
         // BES/EPES -> C
         FormExtensionPropsCollector cAndTPropsCol = new FormExtensionPropsCollector()
@@ -367,6 +371,8 @@ public class XadesHybridVerifierImpl implements XadesVerifier
             }
         };
         formsExtensionTransitions[XAdESForm.C.ordinal()][XAdESForm.X.ordinal()] = xPropsCol;
+        // X -> X
+        formsExtensionTransitions[XAdESForm.X.ordinal()][XAdESForm.X.ordinal()] = xPropsCol;
 
         // C -> X-L
         FormExtensionPropsCollector xlAndXPropsCol = new FormExtensionPropsCollector()
