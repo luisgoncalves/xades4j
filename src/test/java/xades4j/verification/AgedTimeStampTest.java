@@ -1305,6 +1305,41 @@ public class AgedTimeStampTest
         assertEquals(XAdESForm.A, f);
     }
 
+    // time stamp A(VD) form again
+    @Test
+    public void test03_A_sig6() throws Exception
+    {
+        System.out.println(Thread.currentThread().getStackTrace()[1].getMethodName());
+
+        SurrogateTimeStampTokenProvider.setTSACert(test03_A_tsa3Cert, test02_X_userCaStore);
+        SurrogateTimeStampTokenProvider.setTimeAndSerial(
+                new Date(),
+                new BigInteger("3"));
+
+        System.out.println("ArchiveTimeStamp creation date is "
+                + new Date());
+
+        Document doc = getDocument("document.aged.test03_A_sig5.xml");
+        Element signatureNode = getSigElement(doc);
+
+        XadesFormatExtenderProfile formExtProfile = new XadesFormatExtenderProfile();
+        formExtProfile.withTimeStampTokenProvider(SurrogateTimeStampTokenProvider.class);
+        XadesSignatureFormatExtender formExt = formExtProfile.getFormatExtender();
+        XadesVerificationProfile verProfile = new XadesVerificationProfile(
+                        test03_userCertValidationDataProviderXCreation,
+                        test03_tsaCertValidationDataProviderAnow);
+        XadesHybridVerifierImpl verifier = (XadesHybridVerifierImpl) verProfile.newVerifier();
+
+        // extend A to A (add ArchiveTimeStamp)
+        XAdESVerificationResult res = verifier.verify(signatureNode, null, formExt,
+                        XAdESForm.A);
+
+        assertEquals(res.getSignatureForm(), XAdESForm.A);
+
+        outputDocument(doc, "document.aged.test03_A_sig6.xml");
+
+    }
+
     /*
      * TODO missing grace period support
      * The library should support enforcing grace period, but what's more important, it
