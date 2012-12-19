@@ -26,7 +26,8 @@ import org.apache.xml.security.utils.resolver.ResourceResolver;
  * Represents verification options that are specific to a signature, i.e., options
  * that are not profile-wide.
  * <p>
- * It includes base URI, data for anonymous references or resource resolvers
+ * It includes base URI for file containing signature, data for anonymous references
+ * or resource resolvers (used to retrieve external files referenced by signature).
  *
  * @see xades4j.verification.XadesVerifier
  * @author Luís

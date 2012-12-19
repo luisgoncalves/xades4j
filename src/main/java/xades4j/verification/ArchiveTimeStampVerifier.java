@@ -120,7 +120,7 @@ public class ArchiveTimeStampVerifier extends
          */
         boolean certificateValuesPresent = false;
         boolean revocationValuesPresent = false;
-        // TODO test with document having only XAdES-X-L (above ones) properties
+        // TODO test with document extended from T to X-L form without C and X intermediates
 
         // requirements from SigAndRefsTimeStamp, only enforce singletonity, not presence
         boolean completeCertRefsPresent = false;

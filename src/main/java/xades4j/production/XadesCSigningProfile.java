@@ -28,10 +28,19 @@ import xades4j.providers.ValidationDataProvider;
  * <p>
  * The {@code AttributeCertificateRefs} and {@code AttributeRevocationRefs} properties
  * are not supported.
+ * <p>
+ * If the (implicit or explicit) policy you're following requires grace periods for
+ * signature creation, it is highly recommended <b>not</b> to use this signing profile
+ * but to use {@link XadesTSigningProfile} for initial signature creation and then extend
+ * the signature to XAdES-C form after the grace period has elapsed and new revocation
+ * information is available.
  * @author Luís
  */
 public class XadesCSigningProfile extends XadesTSigningProfile
 {
+    /**
+     * @see XadesCSigningProfile
+     */
     public XadesCSigningProfile(
             KeyingDataProvider keyingProvider,
             ValidationDataProvider validationDataProv)
@@ -40,6 +49,9 @@ public class XadesCSigningProfile extends XadesTSigningProfile
         withBinding(ValidationDataProvider.class, validationDataProv);
     }
 
+    /**
+     * @see XadesCSigningProfile
+     */
     public XadesCSigningProfile(
             KeyingDataProvider keyingProvider,
             Class<? extends ValidationDataProvider> validationDataProvClass)
@@ -48,6 +60,9 @@ public class XadesCSigningProfile extends XadesTSigningProfile
         withBinding(ValidationDataProvider.class, validationDataProvClass);
     }
 
+    /**
+     * @see XadesCSigningProfile
+     */
     public XadesCSigningProfile(
             Class<? extends KeyingDataProvider> keyingProviderClass,
             ValidationDataProvider validationDataProv)
@@ -56,6 +71,9 @@ public class XadesCSigningProfile extends XadesTSigningProfile
         withBinding(ValidationDataProvider.class, validationDataProv);
     }
 
+    /**
+     * @see XadesCSigningProfile
+     */
     public XadesCSigningProfile(
             Class<? extends KeyingDataProvider> keyingProviderClass,
             Class<? extends ValidationDataProvider> validationDataProvClass)

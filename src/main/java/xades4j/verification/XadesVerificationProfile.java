@@ -40,7 +40,8 @@ import xades4j.xml.unmarshalling.UnmarshallingBindingsModule;
  * verify signatures using the configured components.
  * <p>
  * The minimum configuration is a {@link xades4j.providers.CertificateValidationProvider}
- * because the validation data (trust-anchors, CRLs, etc) has to be properly selected. All the other components
+ * because the validation data (trust-anchors, CRLs, etc) has to be properly selected.
+ * All the other components
  * have default implementations that are used if no other actions are taken. However,
  * all of them can be replaced through the corresponding methods, either by an instance
  * or a class. When a class is used it may have dependencies on other components,
@@ -88,7 +89,7 @@ public final class XadesVerificationProfile
 
     /**
      * Certificate validation profile that can be used to validate both signature and
-     * time stamps in Advanced Electronic Signatures.
+     * time stamps in XML Advanced Electronic Signatures.
      *
      * @param certificateValidationProvider validation data and provider to be used for
      * validation Signature only
@@ -174,6 +175,7 @@ public final class XadesVerificationProfile
      * not be affected. Other verifiers can be created, accumulating the profile changes.
      * @return a {@code XadesVerifier} accordingly to this profile.
      * @throws XadesProfileResolutionException if the dependencies of the signer (direct and indirect) cannot be resolved
+     * @see XadesVerifier
      */
     public final XadesVerifier newVerifier() throws XadesProfileResolutionException
     {
@@ -322,7 +324,7 @@ public final class XadesVerificationProfile
     }
 
     public XadesVerificationProfile withElementVerifier(
-            QName elemName, Class<? extends QualifyingPropertyVerifier> vClass)
+            QName elemName, Class<? extends QualifyingPropertyVerifier<?>> vClass)
     {
         if (null == elemName || null == vClass)
             throw new NullPointerException();

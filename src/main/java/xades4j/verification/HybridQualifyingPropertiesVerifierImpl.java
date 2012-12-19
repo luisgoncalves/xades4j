@@ -124,11 +124,18 @@ public class HybridQualifyingPropertiesVerifierImpl implements
              * properties, that is, we found the first property that should have been
              * signed by SigAndRefsTimeStamp.
              *
+             * With SignatureTimeStamp similar situation occurs when there are only
+             * SignedProperties left or all properties have been handled
+             *
              * TODO The situation is even more complex in the unsupported case of
              * RefsOnlyTimeStamp.
              *
-             * With SignatureTimeStamp similar situation occurs when there are only
-             * SignedProperties left or all properties have been handled
+             * TODO handle gracefully multiple ArchiveTimeStamps with similar times
+             * The above described behavior may cause failure of verification for one
+             * of the ArchiveTimeStamps if there are multiple ArchiveTimeStamps present,
+             * but it won't cause failure in verification of the whole signature.
+             * If the first ArchiveTimeStamp is invalid, it won't change the time, so the
+             * second one will verify successfully.
              */
             try {
                 // when we encounter property that needs to be signed by

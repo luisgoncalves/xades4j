@@ -44,7 +44,9 @@ import xades4j.xml.marshalling.algorithms.AlgorithmParametersBindingsModule;
  * The purpose of this class is to configure a {@link XadesSigner} that will actually
  * produce signatures with those characteristics.
  * <p>
- * Only a {@link KeyingDataProvider} has to externally be supplied. All the other components
+ * Only a {@link KeyingDataProvider} has to externally be supplied. If you're creating
+ * a XAdES-T or XAdES-C form, it's highly recommended to change the default
+ * {@link TimeStampTokenProvider}. All the other components
  * have default implementations that are used if no other actions are taken. However,
  * all of them can be replaced through the corresponding methods, either by an instance
  * or a class. When a class is used it may have dependencies on other components,
@@ -58,12 +60,14 @@ import xades4j.xml.marshalling.algorithms.AlgorithmParametersBindingsModule;
  * <p>
  * The XAdES form is also part of the profile. Each form has additional requirements,
  * hence being defined by a specific subclass. There are profiles up to XAdES-C.
- * The extended formats are also supported (with a few limitations) but can only
- * be added after verfication ({@link xades4j.verification.XadesVerifier}).
+ * If the policy you're implementing requires grace periods for signatures, it's highly
+ * recommended to <b>not</b> create XAdES-C form directly.
+ * The extended formats are also supported but can only
+ * be added after verification ({@link xades4j.verification.XadesVerifier}).
  * <p>
  * Repeated dependency bindings will not cause an immediate error. An exception
  * will be thrown when an instance of {@code XadesSigner} is requested.
- * 
+ *
  * @see XadesBesSigningProfile
  * @see XadesEpesSigningProfile
  * @see XadesTSigningProfile
@@ -103,7 +107,7 @@ public abstract class XadesSigningProfile
     /**
      * Creates a new {@code XadesSigner} based on the current state of the profile.
      * If any changes are made after this call, the previously returned signer will
-     * not be afected. Other signers can be created, accumulating the profile changes.
+     * not be affected. Other signers can be created, accumulating the profile changes.
      * @return a {@code XadesSigner} accordingly to this profile
      * @throws XadesProfileResolutionException if the dependencies of the signer (direct and indirect) cannot be resolved
      */
@@ -116,7 +120,7 @@ public abstract class XadesSigningProfile
 
     /***/
     /**
-     * Adds a type dependency mapping to the profile. This is tipically done from an
+     * Adds a type dependency mapping to the profile. This is typically done from an
      * interface to a type that implements that interface. When a dependency to
      * {@code from} is found, the {@code to} class is used. The {@code to} class
      * may in turn have its own dependencies.

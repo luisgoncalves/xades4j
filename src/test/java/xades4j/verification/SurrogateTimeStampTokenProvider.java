@@ -58,7 +58,8 @@ import xades4j.providers.TimeStampTokenGenerationException;
 import xades4j.providers.TimeStampTokenProvider;
 
 /**
- * TimeStampTokenProvider that uses its own internal time source and generator
+ * TimeStampTokenProvider that uses its own internal time source and generator.
+ * In other words, an off-line time stamp token generator. To be used only for tests.
  * @author Hubert Kario
  *
  */
