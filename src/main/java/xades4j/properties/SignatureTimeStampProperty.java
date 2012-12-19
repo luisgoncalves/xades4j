@@ -18,16 +18,19 @@ package xades4j.properties;
 
 import java.util.Date;
 
+import xades4j.providers.ValidationData;
+
 /**
  * The {@code SignatureTimeStamp} property encapsulates the time-stamp over the
  * {@code ds:SignatureValue} element.
  * @author Luís
  */
 public final class SignatureTimeStampProperty extends UnsignedSignatureProperty
+    implements BaseXAdESTimeStampProperty
 {
     public static final String PROP_NAME = "SignatureTimeStamp";
-    /**/
     private Date time;
+    private ValidationData validationData;
 
     public SignatureTimeStampProperty()
     {
@@ -39,17 +42,27 @@ public final class SignatureTimeStampProperty extends UnsignedSignatureProperty
         return PROP_NAME;
     }
 
-    /**
-     * Gets the time-stamp time.
-     * @return the time or {@code null} if the property hasn't been processed in signature production or verification.
-     */
+    @Override
     public Date getTime()
     {
         return time;
     }
 
+    @Override
     public void setTime(Date time)
     {
         this.time = time;
+    }
+
+    @Override
+    public ValidationData getValidationData()
+    {
+        return validationData;
+    }
+
+    @Override
+    public void setValidationData(ValidationData validationData)
+    {
+        this.validationData = validationData;
     }
 }

@@ -18,6 +18,8 @@ package xades4j.properties;
 
 import java.util.Date;
 
+import xades4j.providers.ValidationData;
+
 /**
  * The {@code SigAndRefsTimeStamp} element is an unsigned property qualifying
  * the signature.
@@ -29,10 +31,12 @@ import java.util.Date;
  * @author Luís
  */
 public final class SigAndRefsTimeStampProperty extends UnsignedSignatureProperty
+    implements BaseXAdESTimeStampProperty
 {
     public static final String PROP_NAME = "SigAndRefsTimeStamp";
     /**/
     private Date time;
+    private ValidationData validationData;
 
     /**
      * Gets the time-stamp time.
@@ -52,5 +56,17 @@ public final class SigAndRefsTimeStampProperty extends UnsignedSignatureProperty
     public String getName()
     {
         return PROP_NAME;
+    }
+
+    @Override
+    public ValidationData getValidationData()
+    {
+        return validationData;
+    }
+
+    @Override
+    public void setValidationData(ValidationData validationData)
+    {
+        this.validationData = validationData;
     }
 }

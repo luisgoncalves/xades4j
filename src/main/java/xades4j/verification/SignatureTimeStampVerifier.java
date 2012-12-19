@@ -20,6 +20,7 @@ import com.google.inject.Inject;
 import org.apache.xml.security.utils.Constants;
 import org.w3c.dom.Element;
 import xades4j.utils.CannotAddDataToDigestInputException;
+import xades4j.properties.BaseXAdESTimeStampProperty;
 import xades4j.properties.QualifyingProperty;
 import xades4j.properties.SignatureTimeStampProperty;
 import xades4j.utils.TimeStampDigestInput;
@@ -43,7 +44,7 @@ class SignatureTimeStampVerifier extends TimeStampVerifierBase<SignatureTimeStam
     }
 
     @Override
-    protected QualifyingProperty addPropSpecificTimeStampInputAndCreateProperty(
+    protected BaseXAdESTimeStampProperty addPropSpecificTimeStampInputAndCreateProperty(
             SignatureTimeStampData propData,
             Element location,
             TimeStampDigestInput digestInput,

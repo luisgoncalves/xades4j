@@ -28,6 +28,7 @@ import com.google.inject.Inject;
 import xades4j.properties.ArchiveTimeStampProperty;
 import xades4j.properties.AttrAuthoritiesCertValuesProperty;
 import xades4j.properties.AttributeRevocationValuesProperty;
+import xades4j.properties.BaseXAdESTimeStampProperty;
 import xades4j.properties.CertificateValuesProperty;
 import xades4j.properties.CompleteCertificateRefsProperty;
 import xades4j.properties.CompleteRevocationRefsProperty;
@@ -58,7 +59,7 @@ public class ArchiveTimeStampVerifier extends
     }
 
     @Override
-    protected QualifyingProperty addPropSpecificTimeStampInputAndCreateProperty(
+    protected BaseXAdESTimeStampProperty addPropSpecificTimeStampInputAndCreateProperty(
             ArchiveTimeStampData propData, Element location,
             TimeStampDigestInput digestInput,
             QualifyingPropertyVerificationContext ctx)

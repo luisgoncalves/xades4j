@@ -22,6 +22,7 @@ import java.util.Collection;
 import org.w3c.dom.Element;
 
 import xades4j.properties.AllDataObjsTimeStampProperty;
+import xades4j.properties.BaseXAdESTimeStampProperty;
 import xades4j.utils.CannotAddDataToDigestInputException;
 import xades4j.properties.QualifyingProperty;
 import xades4j.utils.TimeStampDigestInput;
@@ -45,7 +46,7 @@ class AllDataObjsTimeStampVerifier extends TimeStampVerifierBase<AllDataObjsTime
     }
 
     @Override
-    protected QualifyingProperty addPropSpecificTimeStampInputAndCreateProperty(
+    protected BaseXAdESTimeStampProperty addPropSpecificTimeStampInputAndCreateProperty(
             AllDataObjsTimeStampData propData,
             Element location,
             TimeStampDigestInput digestInput,

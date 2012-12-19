@@ -16,19 +16,19 @@
  */
 package xades4j.verification;
 
-import java.lang.reflect.Method;
-import java.util.Date;
 import java.util.List;
 
 import org.w3c.dom.Element;
 
 import xades4j.UnsupportedAlgorithmException;
+import xades4j.properties.BaseXAdESTimeStampProperty;
 import xades4j.properties.QualifyingProperty;
 import xades4j.properties.data.BaseXAdESTimeStampData;
 import xades4j.providers.TimeStampTokenDigestException;
 import xades4j.providers.TimeStampTokenSignatureException;
 import xades4j.providers.TimeStampTokenStructureException;
 import xades4j.providers.TimeStampTokenVerificationException;
+import xades4j.providers.TimeStampVerificationData;
 import xades4j.providers.TimeStampVerificationProvider;
 import xades4j.utils.CannotAddDataToDigestInputException;
 import xades4j.utils.TimeStampDigestInput;
@@ -62,7 +62,7 @@ abstract class TimeStampVerifierBase<TData extends BaseXAdESTimeStampData> imple
         {
             TimeStampDigestInput digestInput = this.tsInputFactory.newTimeStampDigestInput(propData.getCanonicalizationAlgorithm());
 
-            QualifyingProperty prop = addPropSpecificTimeStampInputAndCreateProperty(
+            BaseXAdESTimeStampProperty prop = addPropSpecificTimeStampInputAndCreateProperty(
                     propData,
                     elem,
                     digestInput,
@@ -73,15 +73,15 @@ abstract class TimeStampVerifierBase<TData extends BaseXAdESTimeStampData> imple
              * the tokens are verified, but the returned time-stamp is from the last token.
              */
             List<byte[]> tokens = propData.getTimeStampTokens();
-            Date ts = null;
+            TimeStampVerificationData tsVerData = null;
             for (byte[] tkn : tokens)
             {
-                ts = this.tsVerifier.verifyToken(tkn, data, ctx);
+                tsVerData = this.tsVerifier.verifyToken(tkn, data, ctx);
             }
 
-            // By convention all timestamp property types have a setTime(Date) method
-            Method setTimeMethod = prop.getClass().getMethod("setTime", Date.class);
-            setTimeMethod.invoke(prop, ts);
+            prop.setTime(tsVerData.getTimeStampTokenTime());
+            prop.setValidationData(tsVerData.getValidationData());
+
             // should be a noop, only ArchiveTimeStamp should use it to change the
             // verification time for all subsequent TimeStamps
             updateContextAfterVerification(prop,ctx);
@@ -114,7 +114,7 @@ abstract class TimeStampVerifierBase<TData extends BaseXAdESTimeStampData> imple
         return verify(propData, null, ctx);
     }
 
-    protected abstract QualifyingProperty addPropSpecificTimeStampInputAndCreateProperty(
+    protected abstract BaseXAdESTimeStampProperty addPropSpecificTimeStampInputAndCreateProperty(
             TData propData,
             Element location,
             TimeStampDigestInput digestInput,

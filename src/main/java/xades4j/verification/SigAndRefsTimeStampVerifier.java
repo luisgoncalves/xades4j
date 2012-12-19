@@ -22,6 +22,7 @@ import org.w3c.dom.NodeList;
 
 import com.google.inject.Inject;
 
+import xades4j.properties.BaseXAdESTimeStampProperty;
 import xades4j.properties.CompleteCertificateRefsProperty;
 import xades4j.properties.CompleteRevocationRefsProperty;
 import xades4j.properties.QualifyingProperty;
@@ -53,7 +54,7 @@ public class SigAndRefsTimeStampVerifier extends
     }
 
     @Override
-    protected QualifyingProperty addPropSpecificTimeStampInputAndCreateProperty(
+    protected BaseXAdESTimeStampProperty addPropSpecificTimeStampInputAndCreateProperty(
             SigAndRefsTimeStampData propData, Element location,
             TimeStampDigestInput digestInput,
             QualifyingPropertyVerificationContext ctx)

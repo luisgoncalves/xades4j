@@ -24,7 +24,6 @@ import java.security.cert.CertificateException;
 import java.security.cert.X509Certificate;
 import java.util.Arrays;
 import java.util.Collections;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
@@ -50,6 +49,7 @@ import xades4j.providers.TimeStampTokenSignatureException;
 import xades4j.providers.TimeStampTokenStructureException;
 import xades4j.providers.TimeStampTokenTSACertException;
 import xades4j.providers.TimeStampTokenVerificationException;
+import xades4j.providers.TimeStampVerificationData;
 import xades4j.providers.TimeStampVerificationProvider;
 import xades4j.providers.ValidationData;
 import xades4j.verification.QualifyingPropertyVerificationContext;
@@ -103,7 +103,7 @@ public class DefaultTimeStampVerificationProvider implements TimeStampVerificati
     }
 
     @Override
-    public Date verifyToken(byte[] timeStampToken, byte[] tsDigestInput,
+    public TimeStampVerificationData verifyToken(byte[] timeStampToken, byte[] tsDigestInput,
                 QualifyingPropertyVerificationContext ctx)
                         throws TimeStampTokenVerificationException
     {
@@ -193,6 +193,6 @@ public class DefaultTimeStampVerificationProvider implements TimeStampVerificati
         if (ctx != null)
             ctx.addAttributeValidationData(vData);
 
-        return tsTokenInfo.getGenTime();
+        return new TimeStampVerificationData(vData, tsTokenInfo.getGenTime());
     }
 }
