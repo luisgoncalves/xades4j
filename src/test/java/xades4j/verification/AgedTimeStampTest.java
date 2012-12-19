@@ -54,8 +54,6 @@ import javax.xml.transform.stream.StreamResult;
 
 import org.apache.xml.security.utils.Constants;
 import org.bouncycastle.asn1.x509.CRLReason;
-import org.bouncycastle.bcpg.sig.RevocationReason;
-import org.bouncycastle.bcpg.sig.RevocationReasonTags;
 import org.bouncycastle.cert.jcajce.JcaCertStore;
 import org.bouncycastle.util.Store;
 import org.junit.Test;
@@ -776,7 +774,7 @@ public class AgedTimeStampTest
         System.out.println(Thread.currentThread().getStackTrace()[1].getMethodName());
 
         // test signing
-        SurrogateTimeStampTokenProvider.setTSACert(test01_T_tsaCert, test01_T_userCaStore);
+        SurrogateTimeStampTokenProvider.setTSACert(test01_T_tsaCert);
         SurrogateTimeStampTokenProvider.setTimeAndSerial(
                 new Date(new Date().getTime() - ONE_HOUR_IN_MS/2),
                 new BigInteger("3"));
@@ -970,7 +968,7 @@ public class AgedTimeStampTest
     {
         System.out.println(Thread.currentThread().getStackTrace()[1].getMethodName());
 
-        SurrogateTimeStampTokenProvider.setTSACert(test02_X_tsa1Cert, test02_X_userCaStore);
+        SurrogateTimeStampTokenProvider.setTSACert(test02_X_tsa1Cert);
         SurrogateTimeStampTokenProvider.setTimeAndSerial(
                 new Date(new Date().getTime() - ONE_HOUR_IN_MS * 20),
                 new BigInteger("1"));
@@ -992,7 +990,7 @@ public class AgedTimeStampTest
     {
         System.out.println(Thread.currentThread().getStackTrace()[1].getMethodName());
 
-        SurrogateTimeStampTokenProvider.setTSACert(test02_X_tsa2Cert, test02_X_userCaStore);
+        SurrogateTimeStampTokenProvider.setTSACert(test02_X_tsa2Cert);
         SurrogateTimeStampTokenProvider.setTimeAndSerial(
                 new Date(new Date().getTime() - ONE_HOUR_IN_MS * 14),
                 new BigInteger("2"));
@@ -1122,7 +1120,7 @@ public class AgedTimeStampTest
     {
         System.out.println(Thread.currentThread().getStackTrace()[1].getMethodName());
 
-        SurrogateTimeStampTokenProvider.setTSACert(test03_T_tsa1Cert, test03_userCaStore);
+        SurrogateTimeStampTokenProvider.setTSACert(test03_T_tsa1Cert);
         SurrogateTimeStampTokenProvider.setTimeAndSerial(
                 new Date(new Date().getTime() - ONE_HOUR_IN_MS * 20),
                 new BigInteger("1"));
@@ -1144,7 +1142,7 @@ public class AgedTimeStampTest
     {
         System.out.println(Thread.currentThread().getStackTrace()[1].getMethodName());
 
-        SurrogateTimeStampTokenProvider.setTSACert(test03_X_tsa2Cert, test02_X_userCaStore);
+        SurrogateTimeStampTokenProvider.setTSACert(test03_X_tsa2Cert);
         SurrogateTimeStampTokenProvider.setTimeAndSerial(
                 new Date(new Date().getTime() - ONE_HOUR_IN_MS * 14),
                 new BigInteger("2"));
@@ -1216,7 +1214,7 @@ public class AgedTimeStampTest
     {
         System.out.println(Thread.currentThread().getStackTrace()[1].getMethodName());
 
-        SurrogateTimeStampTokenProvider.setTSACert(test03_A_tsa3Cert, test02_X_userCaStore);
+        SurrogateTimeStampTokenProvider.setTSACert(test03_A_tsa3Cert);
         SurrogateTimeStampTokenProvider.setTimeAndSerial(
                 new Date(new Date().getTime() - ONE_HOUR_IN_MS * 10),
                 new BigInteger("2"));
@@ -1311,7 +1309,7 @@ public class AgedTimeStampTest
     {
         System.out.println(Thread.currentThread().getStackTrace()[1].getMethodName());
 
-        SurrogateTimeStampTokenProvider.setTSACert(test03_A_tsa3Cert, test02_X_userCaStore);
+        SurrogateTimeStampTokenProvider.setTSACert(test03_A_tsa3Cert);
         SurrogateTimeStampTokenProvider.setTimeAndSerial(
                 new Date(),
                 new BigInteger("3"));
@@ -1337,7 +1335,6 @@ public class AgedTimeStampTest
         assertEquals(res.getSignatureForm(), XAdESForm.A);
 
         outputDocument(doc, "document.aged.test03_A_sig6.xml");
-
     }
 
     /*

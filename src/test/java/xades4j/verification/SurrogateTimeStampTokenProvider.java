@@ -38,10 +38,7 @@ import org.bouncycastle.asn1.oiw.OIWObjectIdentifiers;
 import org.bouncycastle.asn1.x509.AlgorithmIdentifier;
 import org.bouncycastle.cms.DefaultSignedAttributeTableGenerator;
 import org.bouncycastle.cms.SignerInfoGenerator;
-import org.bouncycastle.cms.SignerInformationVerifier;
 import org.bouncycastle.cms.jcajce.JcaSignerInfoGeneratorBuilder;
-import org.bouncycastle.cms.jcajce.JcaSimpleSignerInfoGeneratorBuilder;
-import org.bouncycastle.cms.jcajce.JcaSimpleSignerInfoVerifierBuilder;
 import org.bouncycastle.operator.DigestCalculator;
 import org.bouncycastle.operator.jcajce.JcaContentSignerBuilder;
 import org.bouncycastle.operator.jcajce.JcaDigestCalculatorProviderBuilder;
@@ -52,7 +49,6 @@ import org.bouncycastle.tsp.TimeStampResponse;
 import org.bouncycastle.tsp.TimeStampResponseGenerator;
 import org.bouncycastle.tsp.TimeStampToken;
 import org.bouncycastle.tsp.TimeStampTokenGenerator;
-import org.bouncycastle.util.Store;
 
 import com.google.inject.Inject;
 
@@ -71,7 +67,6 @@ class SurrogateTimeStampTokenProvider implements TimeStampTokenProvider
 {
     private static FullCert tsaCert;
     private static String algorithm = "SHA1withRSA";
-    private static Store caCerts;
     private static Date now = null;
     private static BigInteger serial;
 
@@ -98,10 +93,9 @@ class SurrogateTimeStampTokenProvider implements TimeStampTokenProvider
         algorithm = alg;
     }
 
-    public static void setTSACert(FullCert cert, Store caCerts)
+    public static void setTSACert(FullCert cert)
     {
         tsaCert = cert;
-        SurrogateTimeStampTokenProvider.caCerts = caCerts;
     }
 
     public static void setTimeAndSerial(Date time, BigInteger serial)
