@@ -20,6 +20,7 @@ import java.security.cert.X509CRL;
 import java.security.cert.X509Certificate;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.HashSet;
 import java.util.List;
 import xades4j.properties.ArchiveTimeStampProperty;
 import xades4j.properties.AttrAuthoritiesCertValuesProperty;
@@ -89,8 +90,8 @@ public class PropertiesUtils
         usp.add(new CertificateValuesProperty(vData.getCerts()));
         usp.add(new RevocationValuesProperty(vData.getCrls()));
 
-        Collection<X509Certificate> allTSACerts = new ArrayList<X509Certificate>();
-        Collection<X509CRL> allTSACRLs = new ArrayList<X509CRL>();
+        Collection<X509Certificate> allTSACerts = new HashSet<X509Certificate>();
+        Collection<X509CRL> allTSACRLs = new HashSet<X509CRL>();
         for (ValidationData valData : tstValData)
         {
             allTSACerts.addAll(valData.getCerts());
@@ -110,8 +111,8 @@ public class PropertiesUtils
             Collection<UnsignedSignatureProperty> usp,
             Collection<ValidationData> attributeValidationData)
     {
-        Collection<X509Certificate> certificates = new ArrayList<X509Certificate>();
-        Collection<X509CRL> crls = new ArrayList<X509CRL>();
+        Collection<X509Certificate> certificates = new HashSet<X509Certificate>();
+        Collection<X509CRL> crls = new HashSet<X509CRL>();
         for (ValidationData valData : attributeValidationData)
         {
             certificates.addAll(valData.getCerts());
