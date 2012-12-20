@@ -384,8 +384,12 @@ public class XadesHybridVerifierImpl implements XadesVerifier
                     XAdESVerificationResult res)
             {
                 PropertiesUtils.addXadesXProperties(usp);
+
+                Collection<ValidationData> tTimeStampValidationData =
+                        PropertiesUtils.extractTTimeStampValidationData(res);
+
                 PropertiesUtils.addXadesXLProperties(usp, res.getValidationData(),
-                        res.getAttributeValidationData());
+                        tTimeStampValidationData);
             }
         };
         formsExtensionTransitions[XAdESForm.C.ordinal()][XAdESForm.X_L.ordinal()] = xlAndXPropsCol;
@@ -397,11 +401,15 @@ public class XadesHybridVerifierImpl implements XadesVerifier
             public void addProps(Collection<UnsignedSignatureProperty> usp,
                     XAdESVerificationResult res)
             {
+                Collection<ValidationData> tTimeStampValidationData =
+                        PropertiesUtils.extractTTimeStampValidationData(res);
+
                 PropertiesUtils.addXadesXLProperties(
                         usp,
                         res.getValidationData(),
-                        res.getAttributeValidationData());
+                        tTimeStampValidationData);
             }
+
         };
         formsExtensionTransitions[XAdESForm.X.ordinal()][XAdESForm.X_L.ordinal()] = xlPropsCol;
 
@@ -426,7 +434,7 @@ public class XadesHybridVerifierImpl implements XadesVerifier
             public void addProps(Collection<UnsignedSignatureProperty> usp,
                     XAdESVerificationResult res)
             {
-                PropertiesUtils.addXadesAVDProperties(usp, res.getAttributeValidationData());
+                PropertiesUtils.addXadesAVDProperties(usp, res);
             }
         };
         formsExtensionTransitions[XAdESForm.A.ordinal()][XAdESForm.A_VD.ordinal()] = avdPropsCol;
