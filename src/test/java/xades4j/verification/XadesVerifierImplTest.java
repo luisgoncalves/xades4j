@@ -33,7 +33,6 @@ import xades4j.properties.CertificateValuesProperty;
 import xades4j.properties.QualifyingProperty;
 import xades4j.properties.RevocationValuesProperty;
 import xades4j.properties.SigAndRefsTimeStampProperty;
-import xades4j.properties.TimeStampValidationDataProperty;
 
 /**
  *
@@ -297,7 +296,10 @@ public class XadesVerifierImplTest extends VerifierTestBase
                 signatureNode, null, formExt, XAdESForm.A_VD);
 
         assertEquals(XAdESForm.A, res.getSignatureForm());
-        assertPropXAdES141ElementPresent(signatureNode, TimeStampValidationDataProperty.PROP_NAME);
+        // TODO recent changes to verifier made the property generated only when needed,
+        // as all information that would be stored in it is already present in other
+        // properties, the property won't be created
+        //assertPropXAdES141ElementPresent(signatureNode, TimeStampValidationDataProperty.PROP_NAME);
 
         outputDocument(doc, "document.verified.c.xl.avd.xml");
     }
