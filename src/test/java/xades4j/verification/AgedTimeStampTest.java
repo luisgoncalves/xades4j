@@ -168,7 +168,9 @@ public class AgedTimeStampTest
     private static TSACertificateValidationProvider test03_tsaCertValidationDataProviderXCreation;
     private static TSACertificateValidationProvider test03_tsaCertValidationDataProviderACreation;
     private static TSACertificateValidationProvider test03_tsaCertValidationDataProviderAnow;
+    /** validation data with only trust anchors (no CRLs or certificates) */
     private static CertificateValidationProvider test03_userCertMinimalValidationDataProvider;
+    /** validation data with only trust anchors and current CRLs */
     private static TSACertificateValidationProvider test03_tsaCertMinimalValidationDataProvider;
 
     private static final long ONE_HOUR_IN_MS = 60 * 60 * 1000;
@@ -722,11 +724,16 @@ public class AgedTimeStampTest
                         true,
                         emptyCertStore);
 
+        content = new ArrayList<Object>();
+        content.add(test03_A_tsaCRL_3);
+        CertStore aValidationCrlsOnly = CertStore.getInstance(
+                "Collection",
+                new CollectionCertStoreParameters(content));
         test03_tsaCertMinimalValidationDataProvider =
                 new PKIXTSACertificateValidationProvider(
                         test03_A_tsaTrustAnchors,
                         true,
-                        emptyCertStore);
+                        aValidationCrlsOnly);
     }
 
     @Test
