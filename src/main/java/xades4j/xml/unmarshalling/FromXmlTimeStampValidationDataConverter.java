@@ -55,35 +55,42 @@ public class FromXmlTimeStampValidationDataConverter implements
 
         for (XmlValidationDataType xmlVDT : xmlTimeStampValidationData)
         {
-            XmlCertificateValuesType xmlCertificateValues = xmlVDT.getCertificateValues();
-
-            List<Object> certValues = xmlCertificateValues.getEncapsulatedX509CertificateOrOtherCertificate();
-            for (Object item : certValues)
+            if (xmlVDT.getCertificateValues() != null)
             {
-                if (item instanceof XmlEncapsulatedPKIDataType)
+                XmlCertificateValuesType xmlCertificateValues = xmlVDT.getCertificateValues();
+
+                List<Object> certValues = xmlCertificateValues.getEncapsulatedX509CertificateOrOtherCertificate();
+                for (Object item : certValues)
                 {
-                    XmlEncapsulatedPKIDataType cert = (XmlEncapsulatedPKIDataType) item;
-                    timeStampValidationDataData.addCertificateData(cert.getValue());
+                    if (item instanceof XmlEncapsulatedPKIDataType)
+                    {
+                        XmlEncapsulatedPKIDataType cert = (XmlEncapsulatedPKIDataType) item;
+                        timeStampValidationDataData.addCertificateData(cert.getValue());
+                    }
+                    if (item instanceof XmlAnyType)
+                        throw new PropertyUnmarshalException("Property not supprted", "OtherCertificate");
                 }
-                if (item instanceof XmlAnyType)
-                    throw new PropertyUnmarshalException("Property not supprted", "OtherCertificate");
             }
 
             XmlRevocationValuesType xmlRevocationValues = xmlVDT.getRevocationValues();
-            XmlCRLValuesType crlValues = xmlRevocationValues.getCRLValues();
-            List<XmlEncapsulatedPKIDataType> crls = crlValues.getEncapsulatedCRLValue();
-            for (XmlEncapsulatedPKIDataType crl : crls)
+            if (xmlRevocationValues != null && xmlRevocationValues.getCRLValues() != null)
             {
-                timeStampValidationDataData.addCRLData(crl.getValue());
-            }
+                XmlCRLValuesType crlValues = xmlRevocationValues.getCRLValues();
+                List<XmlEncapsulatedPKIDataType> crls = crlValues.getEncapsulatedCRLValue();
+                for (XmlEncapsulatedPKIDataType crl : crls)
+                {
+                    timeStampValidationDataData.addCRLData(crl.getValue());
+                }
 
-            // check for unsupported data
-            if (xmlRevocationValues.getOCSPValues() != null)
-                throw new PropertyUnmarshalException("OCSP responses are unsupported",
-                        "TimeStampValidationData");
-            if (xmlRevocationValues.getOtherValues() != null)
-                throw new PropertyUnmarshalException("Other (not CRL and not OCSP) " +
-                            "certificate revocation values unsupported", "TimeStampValidationData");
+                // check for unsupported data
+                if (xmlRevocationValues.getOCSPValues() != null)
+                    throw new PropertyUnmarshalException("OCSP responses are unsupported",
+                            "TimeStampValidationData");
+                if (xmlRevocationValues.getOtherValues() != null)
+                    throw new PropertyUnmarshalException("Other (not CRL and not OCSP) " +
+                                "certificate revocation values unsupported",
+                                "TimeStampValidationData");
+            }
         }
 
         propertyDataCollector.addTimeStampValidationDataData(timeStampValidationDataData);
