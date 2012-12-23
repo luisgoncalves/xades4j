@@ -206,7 +206,9 @@ public class PropertiesUtils
         certsToSave.removeAll(savedCertificates);
         crlsToSave.removeAll(savedCRLs);
 
-        usp.add(new TimeStampValidationDataProperty(certsToSave, crlsToSave));
+        // don't create empty property
+        if ((!certsToSave.isEmpty()) || (!crlsToSave.isEmpty()))
+            usp.add(new TimeStampValidationDataProperty(certsToSave, crlsToSave));
     }
 
     /**
