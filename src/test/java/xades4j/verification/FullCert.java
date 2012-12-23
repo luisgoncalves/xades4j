@@ -379,7 +379,7 @@ public class FullCert
 
         boolean isCA = true;
         int keyUsage = KeyUsage.digitalSignature | KeyUsage.keyEncipherment
-                | KeyUsage.dataEncipherment;
+                | KeyUsage.dataEncipherment | KeyUsage.keyCertSign | KeyUsage.cRLSign;
         boolean extendedAttrCritical = false;
         KeyPurposeId[] extendedAttr = null;
 
