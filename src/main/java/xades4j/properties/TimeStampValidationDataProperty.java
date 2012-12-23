@@ -48,8 +48,8 @@ public class TimeStampValidationDataProperty extends UnsignedSignatureProperty
     public TimeStampValidationDataProperty(Collection<X509Certificate> certificates,
             Collection<X509CRL> crls)
     {
-        if ((certificates == null && crls == null) ||
-                (certificates.isEmpty() && crls.isEmpty()))
+        if ((certificates == null || certificates.isEmpty()) &&
+                ((crls == null) || crls.isEmpty()))
             throw new NullPointerException("Both parameters can't be null/empty");
 
         this.certificateValues = certificates;
