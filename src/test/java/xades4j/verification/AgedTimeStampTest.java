@@ -18,6 +18,7 @@ package xades4j.verification;
 
 import static org.junit.Assert.assertEquals;
 
+import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
@@ -25,6 +26,7 @@ import java.io.IOException;
 import java.math.BigInteger;
 import java.security.InvalidAlgorithmParameterException;
 import java.security.KeyStore;
+import java.security.KeyStore.Entry;
 import java.security.KeyStoreException;
 import java.security.NoSuchAlgorithmException;
 import java.security.NoSuchProviderException;
@@ -54,8 +56,6 @@ import javax.xml.transform.stream.StreamResult;
 
 import org.apache.xml.security.utils.Constants;
 import org.bouncycastle.asn1.x509.CRLReason;
-import org.bouncycastle.cert.jcajce.JcaCertStore;
-import org.bouncycastle.util.Store;
 import org.junit.Test;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
@@ -99,7 +99,6 @@ public class AgedTimeStampTest
     private static X509CRL  test01_T_tsaCRL_1;
     private static X509CRL  test01_T_userCRL_2;
     private static X509CRL  test01_T_tsaCRL_2;
-    private static Store    test01_T_userCaStore;
     private static KeyStore test01_T_userTrustAnchors;
     private static KeyStore test01_T_tsaTrustAnchors;
 
@@ -134,7 +133,6 @@ public class AgedTimeStampTest
     private static FullCert test02_X_tsa2Cert;
     private static X509CRL  test02_X_tsaCRL_1;
     private static X509CRL  test02_X_tsaCRL_2;
-    private static Store    test02_X_userCaStore;
     private static KeyStore test02_X_userTrustAnchors;
     private static KeyStore test02_X_tsaTrustAnchors;
 
@@ -158,7 +156,6 @@ public class AgedTimeStampTest
     private static X509CRL  test03_X_tsaCRL_1;
     private static X509CRL  test03_X_tsaCRL_2;
     private static X509CRL  test03_A_tsaCRL_3;
-    private static Store    test03_userCaStore;
     private static KeyStore test03_userTrustAnchors;
     private static KeyStore test03_X_tsaTrustAnchors;
     private static KeyStore test03_A_tsaTrustAnchors;
@@ -173,14 +170,46 @@ public class AgedTimeStampTest
     /** validation data with only trust anchors and current CRLs */
     private static TSACertificateValidationProvider test03_tsaCertMinimalValidationDataProvider;
 
+    /*
+     * data for XAdES-A timestamp tests with multiple time stamps
+     */
+    private static FullCert test04_acmeCA;
+    private static FullCert test04_acmePersonalCA;
+    private static FullCert test04_willECoyote;
+    private static FullCert test04_consterCA;
+    private static FullCert test04_consterTSA17ya;
+    private static FullCert test04_ascendeusCA;
+    private static FullCert test04_ascendeusIssuingCA;
+    private static FullCert test04_ascendeusTSA17ya;
+    private static FullCert test04_ascendeusTSA13ya;
+    private static FullCert test04_carpamaCA;
+    private static FullCert test04_carpamaTSA13ya;
+    private static FullCert test04_carpamaTSA9ya;
+    private static FullCert test04_premoxCA;
+    private static FullCert test04_premoxTSA9ya;
+    private static FullCert test04_premoxTSA5ya;
+    private static FullCert test04_gescapeCA;
+    private static FullCert test04_gescapeTSA5ya;
+    private static FullCert test04_unibimCA;
+    private static FullCert test04_unibimTSA1ya;
+    private static FullCert test04_astronCA;
+    private static FullCert test04_astronTSA1ya;
+    private static CertificateValidationProvider test04_certValidationDataProviderCCreation;
+    private static CertificateValidationProvider test04_certValidationDataProviderOnlyTrustAnchors;
+
     private static final long ONE_HOUR_IN_MS = 60 * 60 * 1000;
+    private static final long ONE_DAY_IN_MS = 24 * ONE_HOUR_IN_MS;
+    private static final long ONE_WEEK_IN_MS = 7 * ONE_DAY_IN_MS;
+    private static final long ONE_YEAR_IN_MS = 52 * ONE_WEEK_IN_MS;
+
+    private static final Date realNow = new Date();
+
     static
     {
         try {
 
-        Date now = new Date();
         Security.addProvider(new org.bouncycastle.jce.provider.BouncyCastleProvider());
-        System.out.println("AgedTimeStampTest start, current time is " + now);
+        System.out.println("AgedTimeStampTest start, current time is " + realNow);
 
         CertStoreParameters emptyParams = new CollectionCertStoreParameters();
         emptyCertStore = CertStore.getInstance("Collection", emptyParams );
@@ -190,7 +219,7 @@ public class AgedTimeStampTest
          * Create cryptographic data for XAdES-T tests
          *
          * *****************************************************************************/
-        createXadesTCerts(now);
+        createXadesTCerts(realNow);
 
         /* ******************************************************************************
          *
@@ -198,7 +227,7 @@ public class AgedTimeStampTest
          *
          * *****************************************************************************/
 
-        createXadesXCerts(now);
+        createXadesXCerts(realNow);
 
         /* ******************************************************************************
          *
@@ -206,7 +235,15 @@ public class AgedTimeStampTest
          *
          * *****************************************************************************/
 
-        createXadesACerts(now);
+        createXadesACerts(realNow);
+
+        /* ******************************************************************************
+         *
+         * Create certs for XAdES-A with multiple time stamps
+         *
+         * *****************************************************************************/
+
+        createXadesAmultTSACerts(realNow);
 
         } catch (Exception ex)
         {
@@ -258,13 +295,9 @@ public class AgedTimeStampTest
                 + test01_T_tsaCert.getCertificate().getNotBefore()
                 + " to " + test01_T_tsaCert.getCertificate().getNotAfter());
 
-        List<Object> certList = new ArrayList<Object>();
-        certList.add(test01_T_userCaCert.getCertificate());
-        test01_T_userCaStore = new JcaCertStore(certList);
-
         CRLEntries entries = test01_T_userCaCert.new CRLEntries();
         // add fictional entry
-        entries.addEntry(new BigInteger("134"), new Date(), CRLReason.keyCompromise);
+        entries.addEntry(new BigInteger("134"), realNow, CRLReason.keyCompromise);
 
         crl = test01_T_userCaCert.createCRL("SHA256withRSA",
                 new Date(now.getTime() - ONE_HOUR_IN_MS/2),
@@ -357,13 +390,223 @@ public class AgedTimeStampTest
                 test01_T_tsaTrustAnchors, true, tsaIntermCertsAndCrls);
     }
 
+    private static void createXadesAmultTSACerts(Date now)
+        throws Exception
+    {
+        test04_acmeCA = FullCert.getCACert(
+                "RSA",
+                1024,
+                "CN=ACME Certification Services CA",
+                new Date(now.getTime() - 20 * ONE_YEAR_IN_MS),
+                new Date(now.getTime() - 10 * ONE_YEAR_IN_MS),
+                "SHA1withRSA");
+
+        test04_acmePersonalCA = test04_acmeCA.createSubCACert(
+                "RSA",
+                1024,
+                "CN=ACME Personal Certificates CA",
+                new Date(now.getTime() - 18 * ONE_YEAR_IN_MS),
+                new Date(now.getTime() - 13 * ONE_YEAR_IN_MS),
+                new BigInteger("2"),
+                "SHA1withRSA");
+
+        test04_willECoyote = test04_acmePersonalCA.createUserCert(
+                "RSA",
+                1024,
+                "CN=Will E. Coyote",
+                new Date(now.getTime() - 18 * ONE_YEAR_IN_MS + 45 * ONE_WEEK_IN_MS),
+                new Date(now.getTime() + ONE_HOUR_IN_MS),
+                new BigInteger("2"),
+                "SHA1withRSA");
+
+        test04_consterCA = FullCert.getCACert(
+                "RSA",
+                1024,
+                "CN=Conster CA",
+                new Date(now.getTime() - 18 * ONE_YEAR_IN_MS),
+                new Date(now.getTime() -  8 * ONE_YEAR_IN_MS),
+                "SHA1withRSA");
+
+        test04_consterTSA17ya = test04_consterCA.createTSACert(
+                "RSA",
+                1024,
+                "CN=Conster Time Server",
+                new Date(now.getTime() - 17 * ONE_YEAR_IN_MS),
+                new Date(now.getTime() - 12 * ONE_YEAR_IN_MS),
+                new BigInteger("2"),
+                "SHA1withRSA");
+
+        test04_ascendeusCA = FullCert.getCACert(
+                "RSA",
+                1024,
+                "CN=Ascendeus Root CA",
+                new Date(now.getTime() - 17 * ONE_YEAR_IN_MS - 6 * ONE_WEEK_IN_MS),
+                new Date(now.getTime() - 7 * ONE_YEAR_IN_MS),
+                "SHA1withRSA");
+
+        test04_ascendeusIssuingCA = test04_ascendeusCA.createSubCACert(
+                "RSA",
+                1024,
+                "CN=Ascendeus Issuing CA",
+                new Date(now.getTime() - 17 * ONE_YEAR_IN_MS - 3 * ONE_WEEK_IN_MS),
+                new Date(now.getTime() - 7 * ONE_YEAR_IN_MS),
+                new BigInteger("2"),
+                "SHA1withRSA");
+
+        test04_ascendeusTSA17ya = test04_ascendeusIssuingCA.createTSACert(
+                "RSA",
+                1024,
+                "CN=Ascendeus Time Services",
+                new Date(now.getTime() - 17 * ONE_YEAR_IN_MS),
+                new Date(now.getTime() - 12 * ONE_YEAR_IN_MS),
+                new BigInteger("2"),
+                "SHA1withRSA");
+
+        test04_ascendeusTSA13ya = test04_ascendeusIssuingCA.createTSACert(
+                "RSA",
+                1024,
+                "CN=Ascendeus Time Services",
+                new Date(now.getTime() - 13 * ONE_YEAR_IN_MS),
+                new Date(now.getTime() - 8 * ONE_YEAR_IN_MS),
+                new BigInteger("3"),
+                "SHA1withRSA");
+
+        test04_carpamaCA = FullCert.getCACert(
+                "RSA",
+                1024,
+                "CN=Carpama Certificate Authority",
+                new Date(now.getTime() - 13 * ONE_YEAR_IN_MS - 12 * ONE_WEEK_IN_MS), 
+                new Date(now.getTime() - 3 * ONE_YEAR_IN_MS),
+                "SHA1withRSA");
+
+        test04_carpamaTSA13ya = test04_carpamaCA.createTSACert(
+                "RSA",
+                1024,
+                "CN=Carpama Time Server",
+                new Date(now.getTime() - 13 * ONE_YEAR_IN_MS - 6 * ONE_WEEK_IN_MS),
+                new Date(now.getTime() - 8 * ONE_YEAR_IN_MS),
+                new BigInteger("3"),
+                "SHA1withRSA");
+
+        test04_carpamaTSA9ya = test04_carpamaCA.createTSACert(
+                "RSA",
+                1024,
+                "CN=Carpama Time Server",
+                new Date(now.getTime() - 9 * ONE_YEAR_IN_MS - 6 * ONE_WEEK_IN_MS),
+                new Date(now.getTime() - 4 * ONE_YEAR_IN_MS),
+                new BigInteger("4"),
+                "SHA1withRSA");
+
+        test04_premoxCA = FullCert.getCACert(
+                "RSA",
+                1024,
+                "CN=Premox CA",
+                new Date(now.getTime() - 9 * ONE_YEAR_IN_MS - 12 * ONE_WEEK_IN_MS),
+                new Date(now.getTime() + 1 * ONE_YEAR_IN_MS),
+                "SHA256withRSA");
+
+        test04_premoxTSA9ya = test04_premoxCA.createTSACert(
+                "RSA",
+                1024,
+                "CN=Premox TSA",
+                new Date(now.getTime() - 9 * ONE_YEAR_IN_MS - 6 * ONE_WEEK_IN_MS),
+                new Date(now.getTime() - 4 * ONE_YEAR_IN_MS),
+                new BigInteger("2"),
+                "SHA256withRSA");
+
+        test04_premoxTSA5ya = test04_premoxCA.createTSACert(
+                "RSA",
+                1024,
+                "CN=Premox TSA",
+                new Date(now.getTime() - 5 * ONE_YEAR_IN_MS - 6 * ONE_WEEK_IN_MS),
+                new Date(now.getTime() - 6 * ONE_WEEK_IN_MS),
+                new BigInteger("3"),
+                "SHA256withRSA");
+
+        test04_gescapeCA = FullCert.getCACert(
+                "RSA",
+                1024,
+                "CN=Gescape Certificate Authority",
+                new Date(now.getTime() - 5 * ONE_YEAR_IN_MS - 12 * ONE_WEEK_IN_MS),
+                new Date(now.getTime() + 6 * ONE_WEEK_IN_MS),
+                "SHA256withRSA");
+
+        test04_gescapeTSA5ya = test04_gescapeCA.createTSACert(
+                "RSA",
+                1024,
+                "CN=Gescape Time Stamping Authority",
+                new Date(now.getTime() - 5 * ONE_YEAR_IN_MS - 6 * ONE_WEEK_IN_MS),
+                new Date(now.getTime() + 6 * ONE_WEEK_IN_MS),
+                new BigInteger("2"),
+                "SHA256withRSA");
+
+        test04_unibimCA = FullCert.getCACert(
+                "RSA",
+                2048,
+                "CN=Unibim CA",
+                new Date(now.getTime() - ONE_YEAR_IN_MS - 12 * ONE_WEEK_IN_MS),
+                new Date(now.getTime() + 9 * ONE_YEAR_IN_MS),
+                "SHA256withRSA");
+
+        test04_unibimTSA1ya = test04_unibimCA.createTSACert(
+                "RSA",
+                2048,
+                "CN=Unibim TSA",
+                new Date(now.getTime() - ONE_YEAR_IN_MS - 6 * ONE_WEEK_IN_MS),
+                new Date(now.getTime() + 4 * ONE_YEAR_IN_MS),
+                new BigInteger("2"),
+                "SHA256withRSA");
+
+        test04_astronCA = FullCert.getCACert(
+                "RSA",
+                2048,
+                "CN=Astron CA",
+                new Date(now.getTime() - ONE_YEAR_IN_MS - 12 * ONE_WEEK_IN_MS),
+                new Date(now.getTime() + 9 * ONE_YEAR_IN_MS),
+                "SHA256withRSA");
+
+        test04_astronTSA1ya = test04_astronCA.createTSACert(
+                "RSA",
+                2048,
+                "CN=Astron TSA",
+                new Date(now.getTime() - ONE_YEAR_IN_MS - 6 * ONE_WEEK_IN_MS - 1 * ONE_DAY_IN_MS),
+                new Date(now.getTime() + 4 * ONE_YEAR_IN_MS),
+                new BigInteger("2"),
+                "SHA256withRSA");
+
+        Date cCreatTime = new Date(now.getTime() - 17 * ONE_YEAR_IN_MS
+                + 16 * ONE_DAY_IN_MS);
+        CRLEntries emptyEntries = test04_acmeCA.new CRLEntries();
+        KeyStore trustAnchors = keyStoreForCerts(test04_acmeCA);
+        X509CRL acmeCRL = test04_acmeCA.createCRL(
+                "SHA1withRSA",
+                new Date(cCreatTime.getTime() - 3 * ONE_DAY_IN_MS),
+                new Date(now.getTime() + 4 * ONE_DAY_IN_MS),
+                new BigInteger("3"),
+                emptyEntries);
+        X509CRL acmePersonalCRL = test04_acmePersonalCA.createCRL(
+                "SHA1withRSA",
+                new Date(now.getTime() - 8 * ONE_HOUR_IN_MS),
+                new Date(now.getTime() + 16 * ONE_HOUR_IN_MS),
+                new BigInteger("3"),
+                emptyEntries);
+        Collection<X509CRL> crls = createCRLCollection(acmeCRL, acmePersonalCRL);
+        CertStore intermCertsAndCrls = certStoreForCertsAndCrls(crls,
+                test04_acmeCA.getCertificate(),
+                test04_acmePersonalCA.getCertificate());
+        test04_certValidationDataProviderCCreation =
+                new PKIXCertificateValidationProvider(trustAnchors, true, intermCertsAndCrls);
+
+        test04_certValidationDataProviderOnlyTrustAnchors =
+                new PKIXCertificateValidationProvider(trustAnchors, true, emptyCertStore);
+    }
+
     private static void createXadesXCerts(Date now) throws Exception,
             CertificateEncodingException, KeyStoreException, IOException,
             NoSuchAlgorithmException, CertificateException,
             InvalidAlgorithmParameterException, NoSuchProviderException
     {
         X509CRL crl;
-        List<Object> certList;
         TrustedCertificateEntry ca;
         Collection<Object> content;
         CertStore intermCertsAndCrls;
@@ -470,10 +713,6 @@ public class AgedTimeStampTest
                 new BigInteger("5"),
                 entries_test02);
 
-        certList = new ArrayList<Object>();
-        certList.add(test02_X_userCaCert.getCertificate());
-        test02_X_userCaStore = new JcaCertStore(certList);
-
         test02_X_userTrustAnchors = KeyStore.getInstance(KeyStore.getDefaultType());
         test02_X_userTrustAnchors.load(null);
         ca = new TrustedCertificateEntry(test02_X_userCaCert.getCertificate());
@@ -536,6 +775,12 @@ public class AgedTimeStampTest
                 new PKIXCertificateValidationProvider(test02_X_userTrustAnchors,
                         true,
                         emptyCertStore);
+        content = new ArrayList<Object>();
+        content.add(test02_X_tsaCRL_2);
+
+        intermCertsAndCrls = CertStore.getInstance(
+                "Collection",
+                new CollectionCertStoreParameters(content));
         test02_tsaCertMinimalValidationDataProvider =
                 new PKIXTSACertificateValidationProvider(test02_X_tsaTrustAnchors,
                         true,
@@ -783,11 +1028,11 @@ public class AgedTimeStampTest
         // test signing
         SurrogateTimeStampTokenProvider.setTSACert(test01_T_tsaCert);
         SurrogateTimeStampTokenProvider.setTimeAndSerial(
-                new Date(new Date().getTime() - ONE_HOUR_IN_MS/2),
+                new Date(realNow.getTime() - ONE_HOUR_IN_MS/2),
                 new BigInteger("3"));
         System.out.println("SignatureTimeStamp creation date in " +
                 "\"document.aged.testT_1s\" is " +
-                new Date(new Date().getTime() - ONE_HOUR_IN_MS/2));
+                new Date(realNow.getTime() - ONE_HOUR_IN_MS/2));
 
         Document doc = getDocument("document.xml");
         Element elemToSign = doc.getDocumentElement();
@@ -840,14 +1085,14 @@ public class AgedTimeStampTest
 
         // revoke user certificate 15 min ago
         entries.addEntry(test01_T_userCert.getCertificate().getSerialNumber(),
-                new Date(new Date().getTime() - ONE_HOUR_IN_MS/4), CRLReason.unspecified);
+                new Date(realNow.getTime() - ONE_HOUR_IN_MS/4), CRLReason.unspecified);
         System.out.println("User certificate revoked at " +
-                new Date(new Date().getTime() - ONE_HOUR_IN_MS/4));
+                new Date(realNow.getTime() - ONE_HOUR_IN_MS/4));
 
         // create CRL
         X509CRL revokedCerts = test01_T_userCaCert.createCRL("SHA1withRSA",
-                new Date(new Date().getTime() - ONE_HOUR_IN_MS/60), // generated 1 min ago
-                new Date(new Date().getTime() + ONE_HOUR_IN_MS/2), // nextUpdate in 30 min
+                new Date(realNow.getTime() - ONE_HOUR_IN_MS/60), // generated 1 min ago
+                new Date(realNow.getTime() + ONE_HOUR_IN_MS/2), // nextUpdate in 30 min
                 new BigInteger("4"),
                 entries);
 
@@ -879,14 +1124,14 @@ public class AgedTimeStampTest
 
         // revoke user certificate 15 min ago
         entries.addEntry(test01_T_userCert.getCertificate().getSerialNumber(),
-                new Date(new Date().getTime() - ONE_HOUR_IN_MS/4), CRLReason.affiliationChanged);
+                new Date(realNow.getTime() - ONE_HOUR_IN_MS/4), CRLReason.affiliationChanged);
         System.out.println("User certificate revoked at " +
-                new Date(new Date().getTime() - ONE_HOUR_IN_MS/4));
+                new Date(realNow.getTime() - ONE_HOUR_IN_MS/4));
 
         // create CRL
         X509CRL revokedCerts = test01_T_userCaCert.createCRL("SHA1withRSA",
-                new Date(new Date().getTime() - ONE_HOUR_IN_MS/60), // generated 1 min ago
-                new Date(new Date().getTime() + ONE_HOUR_IN_MS/2), // nextUpdate in 30 min
+                new Date(realNow.getTime() - ONE_HOUR_IN_MS/60), // generated 1 min ago
+                new Date(realNow.getTime() + ONE_HOUR_IN_MS/2), // nextUpdate in 30 min
                 new BigInteger("4"),
                 entries);
 
@@ -917,14 +1162,14 @@ public class AgedTimeStampTest
 
         // revoke user certificate 45 min ago
         entries.addEntry(test01_T_userCert.getCertificate().getSerialNumber(),
-                new Date(new Date().getTime() - 1000*60*45), CRLReason.unspecified);
+                new Date(realNow.getTime() - 1000*60*45), CRLReason.unspecified);
         System.out.println("User certificate revoked at " +
-                new Date(new Date().getTime() - 1000*60*45));
+                new Date(realNow.getTime() - 1000*60*45));
 
         // create CRL
         X509CRL revokedCerts = test01_T_userCaCert.createCRL("SHA1withRSA",
-                new Date(new Date().getTime() - 1000*60), // generated 1 min ago
-                new Date(new Date().getTime() + 1000*60*30), // nextUpdate in 30 min
+                new Date(realNow.getTime() - 1000*60), // generated 1 min ago
+                new Date(realNow.getTime() + 1000*60*30), // nextUpdate in 30 min
                 new BigInteger("4"),
                 entries);
 
@@ -974,13 +1219,15 @@ public class AgedTimeStampTest
     public void test02_X_sig1() throws Exception
     {
         System.out.println(Thread.currentThread().getStackTrace()[1].getMethodName());
+        String outFileName = new String("document.aged.test02_X_sig1.xml");
+        removeFile(outFileName);
 
         SurrogateTimeStampTokenProvider.setTSACert(test02_X_tsa1Cert);
         SurrogateTimeStampTokenProvider.setTimeAndSerial(
-                new Date(new Date().getTime() - ONE_HOUR_IN_MS * 20),
+                new Date(realNow.getTime() - ONE_HOUR_IN_MS * 20),
                 new BigInteger("1"));
         System.out.println("SignatureTimeStamp creation date is "
-                + new Date(new Date().getTime() - ONE_HOUR_IN_MS * 20));
+                + new Date(realNow.getTime() - ONE_HOUR_IN_MS * 20));
 
         Document doc = getDocument("document.xml");
         Element elemToSign = doc.getDocumentElement();
@@ -988,7 +1235,7 @@ public class AgedTimeStampTest
         signer.withTimeStampTokenProvider(SurrogateTimeStampTokenProvider.class);
         new Enveloped(signer.newSigner()).sign(elemToSign);
 
-        outputDocument(doc, "document.aged.test02_X_sig1.xml");
+        outputDocument(doc, outFileName);
     }
 
     // extend T form to X form
@@ -996,14 +1243,16 @@ public class AgedTimeStampTest
     public void test02_X_sig2() throws Exception
     {
         System.out.println(Thread.currentThread().getStackTrace()[1].getMethodName());
+        String outFileName = new String("document.aged.test02_X_sig2.xml");
+        removeFile(outFileName);
 
         SurrogateTimeStampTokenProvider.setTSACert(test02_X_tsa2Cert);
         SurrogateTimeStampTokenProvider.setTimeAndSerial(
-                new Date(new Date().getTime() - ONE_HOUR_IN_MS * 14),
+                new Date(realNow.getTime() - ONE_HOUR_IN_MS * 14),
                 new BigInteger("2"));
 
         System.out.println("SigAndRefsTimeStamp creation date is "
-                + new Date(new Date().getTime() - ONE_HOUR_IN_MS * 14));
+                + new Date(realNow.getTime() - ONE_HOUR_IN_MS * 14));
 
         Document doc = getDocument("document.aged.test02_X_sig1.xml");
         Element signatureNode = getSigElement(doc);
@@ -1025,17 +1274,17 @@ public class AgedTimeStampTest
         // extend T to C
         XAdESVerificationResult res = verifier.verify(signatureNode, null, formExt,
                         XAdESForm.C,
-                        new Date(new Date().getTime() - ONE_HOUR_IN_MS * 14));
+                        new Date(realNow.getTime() - ONE_HOUR_IN_MS * 14));
 
         assertEquals(res.getSignatureForm(), XAdESForm.T);
 
         // extend C to X
         res = verifier.verify(signatureNode, null, formExt, XAdESForm.X,
-                        new Date(new Date().getTime() - ONE_HOUR_IN_MS * 14));
+                        new Date(realNow.getTime() - ONE_HOUR_IN_MS * 14));
 
         assertEquals(res.getSignatureForm(), XAdESForm.C);
 
-        outputDocument(doc, "document.aged.test02_X_sig2.xml");
+        outputDocument(doc, outFileName);
     }
 
     // extend X to X-L form
@@ -1043,6 +1292,8 @@ public class AgedTimeStampTest
     public void test02_X_sig3() throws Exception
     {
         System.out.println(Thread.currentThread().getStackTrace()[1].getMethodName());
+        String outFileName = new String("document.aged.test02_X_sig3.xml");
+        removeFile(outFileName);
 
         Document doc = getDocument("document.aged.test02_X_sig2.xml");
         Element signatureNode = getSigElement(doc);
@@ -1060,7 +1311,7 @@ public class AgedTimeStampTest
 
         assertEquals(res.getSignatureForm(), XAdESForm.X);
 
-        outputDocument(doc, "document.aged.test02_X_sig3.xml");
+        outputDocument(doc, outFileName);
     }
 
     // verify if the X form was properly created
@@ -1078,7 +1329,7 @@ public class AgedTimeStampTest
     }
 
     // verify if the X-L form was properly created by using validators with just CA
-    // certificates, without CRLs or leaf certificates
+    // certificates and current CRLs for TSA
     @Test
     public void test02_X_ver2() throws Exception
     {
@@ -1126,13 +1377,15 @@ public class AgedTimeStampTest
     public void test03_T_sig1() throws Exception
     {
         System.out.println(Thread.currentThread().getStackTrace()[1].getMethodName());
+        String outFileName = new String("document.aged.test03_T_sig1.xml");
+        removeFile(outFileName);
 
         SurrogateTimeStampTokenProvider.setTSACert(test03_T_tsa1Cert);
         SurrogateTimeStampTokenProvider.setTimeAndSerial(
-                new Date(new Date().getTime() - ONE_HOUR_IN_MS * 20),
+                new Date(realNow.getTime() - ONE_HOUR_IN_MS * 20),
                 new BigInteger("1"));
         System.out.println("SignatureTimeStamp creation date is "
-                + new Date(new Date().getTime() - ONE_HOUR_IN_MS * 20));
+                + new Date(realNow.getTime() - ONE_HOUR_IN_MS * 20));
 
         Document doc = getDocument("document.xml");
         Element elemToSign = doc.getDocumentElement();
@@ -1140,7 +1393,7 @@ public class AgedTimeStampTest
         signer.withTimeStampTokenProvider(SurrogateTimeStampTokenProvider.class);
         new Enveloped(signer.newSigner()).sign(elemToSign);
 
-        outputDocument(doc, "document.aged.test03_T_sig1.xml");
+        outputDocument(doc, outFileName);
     }
 
     // extend T form to X form
@@ -1148,14 +1401,16 @@ public class AgedTimeStampTest
     public void test03_X_sig2() throws Exception
     {
         System.out.println(Thread.currentThread().getStackTrace()[1].getMethodName());
+        String outFileName = new String("document.aged.test03_X_sig2.xml");
+        removeFile(outFileName);
 
         SurrogateTimeStampTokenProvider.setTSACert(test03_X_tsa2Cert);
         SurrogateTimeStampTokenProvider.setTimeAndSerial(
-                new Date(new Date().getTime() - ONE_HOUR_IN_MS * 14),
+                new Date(realNow.getTime() - ONE_HOUR_IN_MS * 14),
                 new BigInteger("2"));
 
         System.out.println("SigAndRefsTimeStamp creation date is "
-                + new Date(new Date().getTime() - ONE_HOUR_IN_MS * 14));
+                + new Date(realNow.getTime() - ONE_HOUR_IN_MS * 14));
 
         Document doc = getDocument("document.aged.test03_T_sig1.xml");
         Element signatureNode = getSigElement(doc);
@@ -1177,17 +1432,17 @@ public class AgedTimeStampTest
         // extend T to C
         XAdESVerificationResult res = verifier.verify(signatureNode, null, formExt,
                         XAdESForm.C,
-                        new Date(new Date().getTime() - ONE_HOUR_IN_MS * 14));
+                        new Date(realNow.getTime() - ONE_HOUR_IN_MS * 14));
 
         assertEquals(res.getSignatureForm(), XAdESForm.T);
 
         // extend C to X
         res = verifier.verify(signatureNode, null, formExt, XAdESForm.X,
-                        new Date(new Date().getTime() - ONE_HOUR_IN_MS * 14));
+                        new Date(realNow.getTime() - ONE_HOUR_IN_MS * 14));
 
         assertEquals(res.getSignatureForm(), XAdESForm.C);
 
-        outputDocument(doc, "document.aged.test03_X_sig2.xml");
+        outputDocument(doc, outFileName);
     }
 
     // extend X to X-L form
@@ -1195,6 +1450,8 @@ public class AgedTimeStampTest
     public void test03_X_sig3() throws Exception
     {
         System.out.println(Thread.currentThread().getStackTrace()[1].getMethodName());
+        String outFileName = new String("document.aged.test03_X_sig3.xml");
+        removeFile(outFileName);
 
         Document doc = getDocument("document.aged.test03_X_sig2.xml");
         Element signatureNode = getSigElement(doc);
@@ -1208,11 +1465,11 @@ public class AgedTimeStampTest
 
         // extend X to X-L
         XAdESVerificationResult res = verifier.verify(signatureNode, null, formExt,
-                XAdESForm.X_L, new Date(new Date().getTime() - 10 * ONE_HOUR_IN_MS));
+                XAdESForm.X_L, new Date(realNow.getTime() - 10 * ONE_HOUR_IN_MS));
 
         assertEquals(res.getSignatureForm(), XAdESForm.X);
 
-        outputDocument(doc, "document.aged.test03_X_sig3.xml");
+        outputDocument(doc, outFileName);
     }
 
     // extend X-L form to A form
@@ -1220,14 +1477,16 @@ public class AgedTimeStampTest
     public void test03_A_sig4() throws Exception
     {
         System.out.println(Thread.currentThread().getStackTrace()[1].getMethodName());
+        String outFileName = new String("document.aged.test03_A_sig4.xml");
+        removeFile(outFileName);
 
         SurrogateTimeStampTokenProvider.setTSACert(test03_A_tsa3Cert);
         SurrogateTimeStampTokenProvider.setTimeAndSerial(
-                new Date(new Date().getTime() - ONE_HOUR_IN_MS * 10),
+                new Date(realNow.getTime() - ONE_HOUR_IN_MS * 10),
                 new BigInteger("2"));
 
         System.out.println("ArchiveTimeStamp creation date is "
-                + new Date(new Date().getTime() - ONE_HOUR_IN_MS * 10));
+                + new Date(realNow.getTime() - ONE_HOUR_IN_MS * 10));
 
         Document doc = getDocument("document.aged.test03_X_sig3.xml");
         Element signatureNode = getSigElement(doc);
@@ -1249,11 +1508,11 @@ public class AgedTimeStampTest
         // extend X-L to A
         XAdESVerificationResult res = verifier.verify(signatureNode, null, formExt,
                         XAdESForm.A,
-                        new Date(new Date().getTime() - ONE_HOUR_IN_MS * 14));
+                        new Date(realNow.getTime() - ONE_HOUR_IN_MS * 14));
 
         assertEquals(res.getSignatureForm(), XAdESForm.X_L);
 
-        outputDocument(doc, "document.aged.test03_A_sig4.xml");
+        outputDocument(doc, outFileName);
     }
 
     // verify A form
@@ -1275,6 +1534,8 @@ public class AgedTimeStampTest
     public void test03_A_sig5() throws Exception
     {
         System.out.println(Thread.currentThread().getStackTrace()[1].getMethodName());
+        String outFileName = new String("document.aged.test03_A_sig5.xml");
+        removeFile(outFileName);
 
         Document doc = getDocument("document.aged.test03_A_sig4.xml");
         Element signatureNode = getSigElement(doc);
@@ -1293,7 +1554,7 @@ public class AgedTimeStampTest
 
         assertEquals(res.getSignatureForm(), XAdESForm.A);
 
-        outputDocument(doc, "document.aged.test03_A_sig5.xml");
+        outputDocument(doc, outFileName);
     }
 
     // verify A form using minimal validators
@@ -1315,14 +1576,16 @@ public class AgedTimeStampTest
     public void test03_A_sig6() throws Exception
     {
         System.out.println(Thread.currentThread().getStackTrace()[1].getMethodName());
+        String outFileName = new String("document.aged.test03_A_sig6.xml");
+        removeFile(outFileName);
 
         SurrogateTimeStampTokenProvider.setTSACert(test03_A_tsa3Cert);
         SurrogateTimeStampTokenProvider.setTimeAndSerial(
-                new Date(),
+                realNow,
                 new BigInteger("3"));
 
         System.out.println("ArchiveTimeStamp creation date is "
-                + new Date());
+                + realNow);
 
         Document doc = getDocument("document.aged.test03_A_sig5.xml");
         Element signatureNode = getSigElement(doc);
@@ -1341,7 +1604,1363 @@ public class AgedTimeStampTest
 
         assertEquals(res.getSignatureForm(), XAdESForm.A);
 
-        outputDocument(doc, "document.aged.test03_A_sig6.xml");
+        outputDocument(doc, outFileName);
+    }
+
+    /* Tests with multiple Time Stamping Authorities and realistic time periods
+     *
+     * quick overview:
+     *   t
+     * -17y    -- Signature creation
+     * -17y ̣   -- XAdES-T form creation (2 time stamps) (consterTSA and ascendeusTSA) 
+     * -17y+16d-- XAdES-C form creation
+     * -13y    -- XAdES-X form creation (2 time stamps) (ascendeusTSA and carpamaTSA)
+     * -13y+2w -- XAdES-X-L form creation
+     *  -9y    -- XAdES-A form creation (2 time stamps, 1st set) (carpamaTSA and premoxTSA)
+     *  -9y+2w -- XAdES-A with validation data
+     *  -5y    -- extending XAdES-A with new set of timestamps (2 timestamps, 2nd set) (premoxTSA and gescapeTSA)
+     *  -5y+2w -- adding validation data
+     *  -1y    -- extending XAdES-A with new set of timestamps (2 timestamps, 3rd set) (unibimTSA and astronTSA)
+     *  -1y+2w -- adding validation data
+     *  now    -- validation with currently available revocation data
+     *
+     * Certificate authorities hierarchy:
+     *
+     * ACME Certification Services CA
+     * |
+     * + Will E. Coyote
+     *
+     * Conster CA
+     * |
+     * + Conster Time Server (5 years)
+     *
+     * Ascendeus Root CA (10 years)
+     * |
+     * + Ascendeus Issuing CA (8 years)
+     *   |
+     *   + Ascendeus Time Services (5 years)
+     *   |
+     *   + Ascendeus Time Services (2nd) (5 years)
+     *
+     * Carpama Certificate Authority (10 years)
+     * |
+     * + Carpama Time Server (5 years)
+     * |
+     * + Carpama Time Server (2nd) (5 years)
+     *
+     * Premox CA (10 years)
+     * |
+     * + Premox TSA (5 years)
+     * |
+     * + Premox TSA (2nd) (5 years)
+     *
+     * Gescape CA (10 years)
+     * |
+     * + Gescape TSA (5 years)
+     *
+     * Unibim CA (10 years)
+     * |
+     * + Unibim TSA (5 years)
+     *
+     * Astron CA (10 years)
+     * |
+     * + Astron TSA (5 years)
+     */
+
+    // create XAdES-T form
+    @Test
+    public void test04_T_sig1() throws Exception
+    {
+        System.out.println("test04_T_sig1");
+
+        Date now = new Date(realNow.getTime() - 17 * ONE_YEAR_IN_MS);
+
+        KeyingDataProvider keyingDataProvider = new DirectKeyingDataProvider(
+                test04_willECoyote.getCertificate(),
+                test04_willECoyote.getPrivateKey());
+
+        SurrogateTimeStampTokenProvider.setTSACert(test04_consterTSA17ya);
+        SurrogateTimeStampTokenProvider.setTimeAndSerial(now, new BigInteger("3"));
+
+        Document doc = getDocument("document.xml");
+        Element elemToSign = doc.getDocumentElement();
+        XadesSigningProfile signer = new XadesTSigningProfile(keyingDataProvider);
+        signer.withTimeStampTokenProvider(SurrogateTimeStampTokenProvider.class);
+        new Enveloped(signer.newSigner()).sign(elemToSign);
+
+        outputDocument(doc, "document.aged.test04.T.xml");
+    }
+
+    // add second XAdES-T time stamp
+    @Test
+    public void test04_T_sig2() throws Exception
+    {
+        System.out.println("test04_T_sig2");
+
+        Date now = new Date(realNow.getTime() - 17 * ONE_YEAR_IN_MS
+                + 2 * ONE_HOUR_IN_MS);
+
+        SurrogateTimeStampTokenProvider.setTSACert(test04_ascendeusTSA17ya);
+        SurrogateTimeStampTokenProvider.setTimeAndSerial(now, new BigInteger("34"));
+
+        Document doc = getDocument("document.aged.test04.T.xml");
+        Element signatureNode = getSigElement(doc);
+
+        KeyStore trustAnchors = keyStoreForCerts(test04_acmeCA);
+        final CRLEntries emptyEntries = test04_acmeCA.new CRLEntries();
+        X509CRL acmeCRL = test04_acmeCA.createCRL(
+                "SHA1withRSA",
+                new Date(now.getTime() - 6 * ONE_DAY_IN_MS),
+                new Date(now.getTime() + ONE_DAY_IN_MS),
+                new BigInteger("2"),
+                emptyEntries);
+        X509CRL acmePcCRL = test04_acmePersonalCA.createCRL(
+                "SHA1withRSA",
+                new Date(now.getTime() - 12 * ONE_HOUR_IN_MS),
+                new Date(now.getTime() + 12 * ONE_HOUR_IN_MS),
+                new BigInteger("2"),
+                emptyEntries);
+        Collection<X509CRL> crls = createCRLCollection(acmeCRL, acmePcCRL);
+        CertStore intermCertsAndCrls = certStoreForCertsAndCrls(
+                crls,
+                test04_acmeCA.getCertificate(),
+                test04_acmePersonalCA.getCertificate(),
+                test04_willECoyote.getCertificate());
+        CertificateValidationProvider certValidationDataProvider =
+                new PKIXCertificateValidationProvider(trustAnchors,
+                        true,
+                        intermCertsAndCrls);
+
+        KeyStore tsaTrustAnchors = keyStoreForCerts(test04_consterCA);
+        X509CRL consterCRL = test04_consterCA.createCRL(
+                "SHA1withRSA",
+                new Date(now.getTime() - 12 * ONE_HOUR_IN_MS),
+                new Date(now.getTime() + 12 * ONE_HOUR_IN_MS),
+                new BigInteger("2"),
+                emptyEntries);
+        X509CRL ascendusCRL = test04_ascendeusCA.createCRL(
+                "SHA1withRSA",
+                new Date(now.getTime() - 2 * ONE_DAY_IN_MS),
+                new Date(now.getTime() + 5 * ONE_DAY_IN_MS),
+                new BigInteger("2"),
+                emptyEntries);
+        X509CRL ascendusIssuingCRL = test04_ascendeusIssuingCA.createCRL(
+                "SHA1withRSA",
+                new Date(now.getTime() - 18 * ONE_HOUR_IN_MS),
+                new Date(now.getTime() + 6 * ONE_HOUR_IN_MS),
+                new BigInteger("2"),
+                emptyEntries);
+        Collection<X509CRL> tsaCRLs = createCRLCollection(consterCRL,
+                ascendusCRL,
+                ascendusIssuingCRL);
+        CertStore tsaIntermCertsAndCrls = certStoreForCertsAndCrls(
+                tsaCRLs,
+                test04_consterCA.getCertificate(),
+                test04_consterTSA17ya.getCertificate(),
+                test04_ascendeusCA.getCertificate(),
+                test04_ascendeusIssuingCA.getCertificate(),
+                test04_ascendeusTSA17ya.getCertificate());
+        TSACertificateValidationProvider tsaValidationDataProvider =
+                new PKIXTSACertificateValidationProvider(tsaTrustAnchors,
+                        true,
+                        tsaIntermCertsAndCrls);
+
+        XadesFormatExtenderProfile formExtProfile = new XadesFormatExtenderProfile();
+        formExtProfile.withTimeStampTokenProvider(SurrogateTimeStampTokenProvider.class);
+        XadesSignatureFormatExtender formExt = formExtProfile.getFormatExtender();
+        XadesVerificationProfile verProfile = new XadesVerificationProfile(
+                        certValidationDataProvider,
+                        tsaValidationDataProvider);
+
+        XadesHybridVerifierImpl verifier = (XadesHybridVerifierImpl) verProfile.newVerifier();
+
+        // add second T time stamp
+        XAdESVerificationResult res = verifier.verify(signatureNode, null, formExt,
+                        XAdESForm.T,
+                        now);
+
+        assertEquals(res.getSignatureForm(), XAdESForm.T);
+
+        outputDocument(doc, "document.aged.test04.T2.xml");
+    }
+
+    // add references to signature data
+    @Test
+    public void test04_C_sig3() throws Exception
+    {
+        System.out.println("test04_C_sig3");
+
+        final Date now = new Date(realNow.getTime() - 17 * ONE_YEAR_IN_MS
+                + 16 * ONE_DAY_IN_MS);
+        final CRLEntries emptyEntries = test04_ascendeusCA.new CRLEntries();
+
+        Document doc = getDocument("document.aged.test04.T2.xml");
+        Element signatureNode = getSigElement(doc);
+
+        KeyStore tsaTrustAnchors = keyStoreForCerts(
+                test04_ascendeusCA,
+                test04_consterCA);
+        X509CRL ascendeusCRL = test04_ascendeusCA.createCRL(
+                "SHA1withRSA",
+                new Date(now.getTime() - 1 * ONE_DAY_IN_MS),
+                new Date(now.getTime() + 6 * ONE_DAY_IN_MS),
+                new BigInteger("3"),
+                emptyEntries);
+        X509CRL ascendeusIssuingCRL = test04_ascendeusIssuingCA.createCRL(
+                "SHA1withRSA",
+                new Date(now.getTime() - 12 * ONE_HOUR_IN_MS),
+                new Date(now.getTime() + 12 * ONE_HOUR_IN_MS),
+                new BigInteger("3"),
+                emptyEntries);
+        X509CRL consterCRL = test04_consterCA.createCRL(
+                "SHA1withRSA",
+                new Date(now.getTime() - 20 * ONE_HOUR_IN_MS),
+                new Date(now.getTime() + 1  * ONE_HOUR_IN_MS),
+                new BigInteger("3"),
+                emptyEntries);
+        Collection<X509CRL> tsaCRLs = createCRLCollection(
+                ascendeusCRL,
+                ascendeusIssuingCRL,
+                consterCRL);
+        CertStore tsaIntermCertsAndCrls = certStoreForCertsAndCrls(tsaCRLs,
+                test04_ascendeusCA.getCertificate(),
+                test04_ascendeusIssuingCA.getCertificate(),
+                test04_ascendeusTSA17ya.getCertificate(),
+                test04_consterCA.getCertificate(),
+                test04_consterTSA17ya.getCertificate());
+        TSACertificateValidationProvider tsaValidationDataProvider =
+                new PKIXTSACertificateValidationProvider(tsaTrustAnchors,
+                        true,
+                        tsaIntermCertsAndCrls);
+
+        XadesFormatExtenderProfile formExtProfile = new XadesFormatExtenderProfile();
+        // it shouldn't be used now, as it is not configured, it will throw an exception
+        formExtProfile.withTimeStampTokenProvider(SurrogateTimeStampTokenProvider.class);
+        XadesSignatureFormatExtender formExt = formExtProfile.getFormatExtender();
+        XadesVerificationProfile verProfile = new XadesVerificationProfile(
+                        test04_certValidationDataProviderCCreation,
+                        tsaValidationDataProvider);
+
+        XadesHybridVerifierImpl verifier = (XadesHybridVerifierImpl) verProfile.newVerifier();
+
+        XAdESVerificationResult res = verifier.verify(signatureNode, null, formExt,
+                XAdESForm.C,
+                now);
+
+        assertEquals(res.getSignatureForm(), XAdESForm.T);
+
+        outputDocument(doc, "document.aged.test04_C.xml");
+    }
+
+    // add second type of time stamp to signature (SigAndRefsTimeStamp)
+    @Test
+    public void test04_X_sig4() throws Exception
+    {
+        System.out.println("test04_X_sig4");
+        Date now = new Date(realNow.getTime() - 13 * ONE_YEAR_IN_MS);
+        SurrogateTimeStampTokenProvider.setTSACert(test04_ascendeusTSA13ya);
+        SurrogateTimeStampTokenProvider.setTimeAndSerial(now, new BigInteger("35"));
+
+        Document doc = getDocument("document.aged.test04_C.xml");
+        Element signatureNode = getSigElement(doc);
+        KeyStore tsaTrustAnchors = keyStoreForCerts(
+                test04_consterCA,
+                test04_ascendeusCA,
+                test04_carpamaCA);
+
+        final CRLEntries emptyEntries = test04_consterCA.new CRLEntries();
+        X509CRL consterCRL = test04_consterCA.createCRL(
+                "SHA1withRSA",
+                new Date(now.getTime() - 7 * ONE_HOUR_IN_MS),
+                new Date(now.getTime() + 17 * ONE_HOUR_IN_MS),
+                new BigInteger("4"),
+                emptyEntries );
+        X509CRL ascendeusCRL = test04_ascendeusCA.createCRL(
+                "SHA1withRSA",
+                new Date(now.getTime() - 2 * ONE_DAY_IN_MS),
+                new Date(now.getTime() + 5 * ONE_DAY_IN_MS),
+                new BigInteger("4"),
+                emptyEntries);
+        X509CRL ascendeusIssuingCRL = test04_ascendeusIssuingCA.createCRL(
+                "SHA1withRSA",
+                new Date(now.getTime() - 12 * ONE_HOUR_IN_MS),
+                new Date(now.getTime() + 12 * ONE_HOUR_IN_MS),
+                new BigInteger("4"),
+                emptyEntries);
+        X509CRL carpamaCRL = test04_carpamaCA.createCRL(
+                "SHA256withRSA",
+                new Date(now.getTime() - 4 * ONE_HOUR_IN_MS),
+                new Date(now.getTime() + 4 * ONE_HOUR_IN_MS),
+                new BigInteger("4"),
+                emptyEntries);
+        Collection<X509CRL> tsaCRLs =createCRLCollection(
+                consterCRL,
+                ascendeusCRL,
+                ascendeusIssuingCRL,
+                carpamaCRL);
+        CertStore tsaIntermCertsAndCrls = certStoreForCertsAndCrls(tsaCRLs,
+                test04_consterCA.getCertificate(),
+                test04_consterTSA17ya.getCertificate(),
+                test04_ascendeusCA.getCertificate(),
+                test04_ascendeusIssuingCA.getCertificate(),
+                test04_ascendeusTSA17ya.getCertificate(),
+                test04_ascendeusTSA13ya.getCertificate(),
+                test04_carpamaCA.getCertificate(),
+                test04_carpamaTSA13ya.getCertificate());
+        TSACertificateValidationProvider tsaValidationDataProvider =
+                new PKIXTSACertificateValidationProvider(
+                        tsaTrustAnchors,
+                        true,
+                        tsaIntermCertsAndCrls);
+        XadesFormatExtenderProfile formExtProfile = new XadesFormatExtenderProfile();
+        formExtProfile.withTimeStampTokenProvider(SurrogateTimeStampTokenProvider.class);
+        XadesSignatureFormatExtender formExt = formExtProfile.getFormatExtender();
+        XadesVerificationProfile verProfile = new XadesVerificationProfile(
+                        test04_certValidationDataProviderCCreation,
+                        tsaValidationDataProvider);
+
+        XadesHybridVerifierImpl verifier = (XadesHybridVerifierImpl) verProfile.newVerifier();
+
+        XAdESVerificationResult res = verifier.verify(signatureNode, null, formExt,
+                XAdESForm.X,
+                now);
+
+        assertEquals(res.getSignatureForm(), XAdESForm.C);
+
+        outputDocument(doc, "document.aged.test04.X.xml");
+    }
+
+    // add second SigAndRefsTimeStamp
+    @Test
+    public void test04_X_sig5() throws Exception
+    {
+        System.out.println("test04_X_sig4");
+        Date now = new Date(realNow.getTime() - 13 * ONE_YEAR_IN_MS + ONE_HOUR_IN_MS / 2);
+        SurrogateTimeStampTokenProvider.setTSACert(test04_carpamaTSA13ya);
+        SurrogateTimeStampTokenProvider.setTimeAndSerial(now, new BigInteger("36"));
+
+        Document doc = getDocument("document.aged.test04.X.xml");
+        Element signatureNode = getSigElement(doc);
+        KeyStore tsaTrustAnchors = keyStoreForCerts(
+                test04_consterCA,
+                test04_ascendeusCA,
+                test04_carpamaCA);
+
+        final CRLEntries emptyEntries = test04_consterCA.new CRLEntries();
+        X509CRL consterCRL = test04_consterCA.createCRL(
+                "SHA1withRSA",
+                new Date(now.getTime() - 7 * ONE_HOUR_IN_MS),
+                new Date(now.getTime() + 17 * ONE_HOUR_IN_MS),
+                new BigInteger("5"),
+                emptyEntries );
+        X509CRL ascendeusCRL = test04_ascendeusCA.createCRL(
+                "SHA1withRSA",
+                new Date(now.getTime() - 2 * ONE_DAY_IN_MS),
+                new Date(now.getTime() + 5 * ONE_DAY_IN_MS),
+                new BigInteger("5"),
+                emptyEntries);
+        X509CRL ascendeusIssuingCRL = test04_ascendeusIssuingCA.createCRL(
+                "SHA1withRSA",
+                new Date(now.getTime() - 12 * ONE_HOUR_IN_MS),
+                new Date(now.getTime() + 12 * ONE_HOUR_IN_MS),
+                new BigInteger("5"),
+                emptyEntries);
+        X509CRL carpamaCRL = test04_carpamaCA.createCRL(
+                "SHA256withRSA",
+                new Date(now.getTime() - 4 * ONE_HOUR_IN_MS),
+                new Date(now.getTime() + 4 * ONE_HOUR_IN_MS),
+                new BigInteger("5"),
+                emptyEntries);
+        Collection<X509CRL> tsaCRLs =createCRLCollection(
+                consterCRL,
+                ascendeusCRL,
+                ascendeusIssuingCRL,
+                carpamaCRL);
+        CertStore tsaIntermCertsAndCrls = certStoreForCertsAndCrls(tsaCRLs,
+                test04_consterCA.getCertificate(),
+                test04_consterTSA17ya.getCertificate(),
+                test04_ascendeusCA.getCertificate(),
+                test04_ascendeusIssuingCA.getCertificate(),
+                test04_ascendeusTSA17ya.getCertificate(),
+                test04_ascendeusTSA13ya.getCertificate(),
+                test04_carpamaCA.getCertificate(),
+                test04_carpamaTSA13ya.getCertificate());
+        TSACertificateValidationProvider tsaValidationDataProvider =
+                new PKIXTSACertificateValidationProvider(
+                        tsaTrustAnchors,
+                        true,
+                        tsaIntermCertsAndCrls);
+        XadesFormatExtenderProfile formExtProfile = new XadesFormatExtenderProfile();
+        formExtProfile.withTimeStampTokenProvider(SurrogateTimeStampTokenProvider.class);
+        XadesSignatureFormatExtender formExt = formExtProfile.getFormatExtender();
+        XadesVerificationProfile verProfile = new XadesVerificationProfile(
+                        test04_certValidationDataProviderCCreation,
+                        tsaValidationDataProvider);
+
+        XadesHybridVerifierImpl verifier = (XadesHybridVerifierImpl) verProfile.newVerifier();
+
+        XAdESVerificationResult res = verifier.verify(signatureNode, null, formExt,
+                XAdESForm.X,
+                now);
+
+        assertEquals(res.getSignatureForm(), XAdESForm.X);
+
+        outputDocument(doc, "document.aged.test04.X2.xml");
+    }
+
+    // add certificates to signature (X-L form)
+    @Test
+    public void test04_XL_sig6() throws Exception
+    {
+        System.out.println("test04_XL_sig6");
+
+        final Date now = new Date(realNow.getTime() - 13 * ONE_YEAR_IN_MS
+                + 14 * ONE_DAY_IN_MS);
+        final CRLEntries emptyEntries = test04_ascendeusCA.new CRLEntries();
+
+        Document doc = getDocument("document.aged.test04.X2.xml");
+        Element signatureNode = getSigElement(doc);
+
+        KeyStore tsaTrustAnchors = keyStoreForCerts(
+                test04_ascendeusCA,
+                test04_consterCA,
+                test04_carpamaCA);
+        X509CRL ascendeusCRL = test04_ascendeusCA.createCRL(
+                "SHA1withRSA",
+                new Date(now.getTime() - 1 * ONE_DAY_IN_MS),
+                new Date(now.getTime() + 6 * ONE_DAY_IN_MS),
+                new BigInteger("6"),
+                emptyEntries);
+        X509CRL ascendeusIssuingCRL = test04_ascendeusIssuingCA.createCRL(
+                "SHA1withRSA",
+                new Date(now.getTime() - 12 * ONE_HOUR_IN_MS),
+                new Date(now.getTime() + 12 * ONE_HOUR_IN_MS),
+                new BigInteger("6"),
+                emptyEntries);
+        X509CRL consterCRL = test04_consterCA.createCRL(
+                "SHA1withRSA",
+                new Date(now.getTime() - 20 * ONE_HOUR_IN_MS),
+                new Date(now.getTime() + 1  * ONE_HOUR_IN_MS),
+                new BigInteger("6"),
+                emptyEntries);
+        X509CRL carpamaCRL = test04_carpamaCA.createCRL(
+                "SHA256withRSA",
+                new Date(now.getTime() - 4 * ONE_HOUR_IN_MS),
+                new Date(now.getTime() + 20 * ONE_HOUR_IN_MS),
+                new BigInteger("6"),
+                emptyEntries);
+        Collection<X509CRL> tsaCRLs = createCRLCollection(
+                ascendeusCRL,
+                ascendeusIssuingCRL,
+                consterCRL,
+                carpamaCRL);
+        CertStore tsaIntermCertsAndCrls = certStoreForCertsAndCrls(tsaCRLs,
+                test04_ascendeusCA.getCertificate(),
+                test04_ascendeusIssuingCA.getCertificate(),
+                test04_ascendeusTSA17ya.getCertificate(),
+                test04_ascendeusTSA13ya.getCertificate(),
+                test04_consterCA.getCertificate(),
+                test04_consterTSA17ya.getCertificate(),
+                test04_carpamaCA.getCertificate(),
+                test04_carpamaTSA13ya.getCertificate());
+        TSACertificateValidationProvider tsaValidationDataProvider =
+                new PKIXTSACertificateValidationProvider(tsaTrustAnchors,
+                        true,
+                        tsaIntermCertsAndCrls);
+
+        XadesFormatExtenderProfile formExtProfile = new XadesFormatExtenderProfile();
+        // it shouldn't be used now, as it is not configured, it will throw an exception
+        formExtProfile.withTimeStampTokenProvider(SurrogateTimeStampTokenProvider.class);
+        XadesSignatureFormatExtender formExt = formExtProfile.getFormatExtender();
+        XadesVerificationProfile verProfile = new XadesVerificationProfile(
+                        test04_certValidationDataProviderCCreation,
+                        tsaValidationDataProvider);
+
+        XadesHybridVerifierImpl verifier = (XadesHybridVerifierImpl) verProfile.newVerifier();
+
+        XAdESVerificationResult res = verifier.verify(signatureNode, null, formExt,
+                XAdESForm.X_L,
+                now);
+
+        assertEquals(res.getSignatureForm(), XAdESForm.X);
+
+        outputDocument(doc, "document.aged.test04.XL.xml");
+    }
+
+    // add first Archival Time Stamp
+    @Test
+    public void test04_A_sig7() throws Exception
+    {
+        System.out.println("test04_A_sig7");
+        Date now = new Date(realNow.getTime() - 9 * ONE_YEAR_IN_MS);
+        SurrogateTimeStampTokenProvider.setTSACert(test04_carpamaTSA9ya);
+        SurrogateTimeStampTokenProvider.setTimeAndSerial(now, new BigInteger("37"));
+
+        Document doc = getDocument("document.aged.test04.XL.xml");
+        Element signatureNode = getSigElement(doc);
+        KeyStore tsaTrustAnchors = keyStoreForCerts(
+                test04_consterCA,
+                test04_ascendeusCA,
+                test04_carpamaCA,
+                test04_premoxCA);
+
+        final CRLEntries emptyEntries = test04_consterCA.new CRLEntries();
+        X509CRL ascendeusCRL = test04_ascendeusCA.createCRL(
+                "SHA1withRSA",
+                new Date(now.getTime() - 2 * ONE_DAY_IN_MS),
+                new Date(now.getTime() + 5 * ONE_DAY_IN_MS),
+                new BigInteger("7"),
+                emptyEntries);
+        X509CRL ascendeusIssuingCRL = test04_ascendeusIssuingCA.createCRL(
+                "SHA1withRSA",
+                new Date(now.getTime() - 12 * ONE_HOUR_IN_MS),
+                new Date(now.getTime() + 12 * ONE_HOUR_IN_MS),
+                new BigInteger("7"),
+                emptyEntries);
+        X509CRL carpamaCRL = test04_carpamaCA.createCRL(
+                "SHA256withRSA",
+                new Date(now.getTime() - 4 * ONE_HOUR_IN_MS),
+                new Date(now.getTime() + 4 * ONE_HOUR_IN_MS),
+                new BigInteger("7"),
+                emptyEntries);
+        X509CRL premoxCRL = test04_premoxCA.createCRL(
+                "SHA256withRSA",
+                new Date(now.getTime() - 12 * ONE_HOUR_IN_MS),
+                new Date(now.getTime() + 12 * ONE_HOUR_IN_MS),
+                new BigInteger("7"),
+                emptyEntries);
+        Collection<X509CRL> tsaCRLs =createCRLCollection(
+                ascendeusCRL,
+                ascendeusIssuingCRL,
+                carpamaCRL,
+                premoxCRL);
+        CertStore tsaIntermCertsAndCrls = certStoreForCertsAndCrls(tsaCRLs,
+                test04_ascendeusCA.getCertificate(),
+                test04_ascendeusIssuingCA.getCertificate(),
+                test04_ascendeusTSA13ya.getCertificate(),
+                test04_carpamaCA.getCertificate(),
+                test04_carpamaTSA13ya.getCertificate(),
+                test04_carpamaTSA9ya.getCertificate(),
+                test04_premoxCA.getCertificate(),
+                test04_premoxTSA9ya.getCertificate());
+        TSACertificateValidationProvider tsaValidationDataProvider =
+                new PKIXTSACertificateValidationProvider(
+                        tsaTrustAnchors,
+                        true,
+                        tsaIntermCertsAndCrls);
+        XadesFormatExtenderProfile formExtProfile = new XadesFormatExtenderProfile();
+        formExtProfile.withTimeStampTokenProvider(SurrogateTimeStampTokenProvider.class);
+        XadesSignatureFormatExtender formExt = formExtProfile.getFormatExtender();
+        XadesVerificationProfile verProfile = new XadesVerificationProfile(
+                        test04_certValidationDataProviderOnlyTrustAnchors,
+                        tsaValidationDataProvider);
+
+        XadesHybridVerifierImpl verifier = (XadesHybridVerifierImpl) verProfile.newVerifier();
+
+        XAdESVerificationResult res = verifier.verify(signatureNode, null, formExt,
+                XAdESForm.A,
+                now);
+
+        assertEquals(res.getSignatureForm(), XAdESForm.X_L);
+
+        outputDocument(doc, "document.aged.test04.A.xml");
+    }
+
+    // add second Archival time stamp
+    @Test
+    public void test04_A_sig8() throws Exception
+    {
+        System.out.println("test04_A_sig8");
+        Date now = new Date(realNow.getTime() - 9 * ONE_YEAR_IN_MS + ONE_HOUR_IN_MS / 60);
+        SurrogateTimeStampTokenProvider.setTSACert(test04_premoxTSA9ya);
+        SurrogateTimeStampTokenProvider.setTimeAndSerial(
+                now,
+                new BigInteger("38"));
+
+        Document doc = getDocument("document.aged.test04.A.xml");
+        Element signatureNode = getSigElement(doc);
+        KeyStore tsaTrustAnchors = keyStoreForCerts(
+                test04_consterCA,
+                test04_ascendeusCA,
+                test04_carpamaCA,
+                test04_premoxCA);
+
+        final CRLEntries emptyEntries = test04_consterCA.new CRLEntries();
+        X509CRL ascendeusCRL = test04_ascendeusCA.createCRL(
+                "SHA1withRSA",
+                new Date(now.getTime() - 2 * ONE_DAY_IN_MS),
+                new Date(now.getTime() + 5 * ONE_DAY_IN_MS),
+                new BigInteger("8"),
+                emptyEntries);
+        X509CRL ascendeusIssuingCRL = test04_ascendeusIssuingCA.createCRL(
+                "SHA1withRSA",
+                new Date(now.getTime() - 12 * ONE_HOUR_IN_MS),
+                new Date(now.getTime() + 12 * ONE_HOUR_IN_MS),
+                new BigInteger("8"),
+                emptyEntries);
+        X509CRL carpamaCRL = test04_carpamaCA.createCRL(
+                "SHA256withRSA",
+                new Date(now.getTime() - 4 * ONE_HOUR_IN_MS),
+                new Date(now.getTime() + 4 * ONE_HOUR_IN_MS),
+                new BigInteger("8"),
+                emptyEntries);
+        X509CRL premoxCRL = test04_premoxCA.createCRL(
+                "SHA256withRSA",
+                new Date(now.getTime() - 12 * ONE_HOUR_IN_MS),
+                new Date(now.getTime() + 12 * ONE_HOUR_IN_MS),
+                new BigInteger("8"),
+                emptyEntries);
+        Collection<X509CRL> tsaCRLs =createCRLCollection(
+                ascendeusCRL,
+                ascendeusIssuingCRL,
+                carpamaCRL,
+                premoxCRL);
+        CertStore tsaIntermCertsAndCrls = certStoreForCertsAndCrls(tsaCRLs,
+                test04_ascendeusCA.getCertificate(),
+                test04_ascendeusIssuingCA.getCertificate(),
+                test04_ascendeusTSA13ya.getCertificate(),
+                test04_carpamaCA.getCertificate(),
+                test04_carpamaTSA13ya.getCertificate(),
+                test04_carpamaTSA9ya.getCertificate(),
+                test04_premoxCA.getCertificate(),
+                test04_premoxTSA9ya.getCertificate());
+        TSACertificateValidationProvider tsaValidationDataProvider =
+                new PKIXTSACertificateValidationProvider(
+                        tsaTrustAnchors,
+                        true,
+                        tsaIntermCertsAndCrls);
+        XadesFormatExtenderProfile formExtProfile = new XadesFormatExtenderProfile();
+        formExtProfile.withTimeStampTokenProvider(SurrogateTimeStampTokenProvider.class);
+        XadesSignatureFormatExtender formExt = formExtProfile.getFormatExtender();
+        XadesVerificationProfile verProfile = new XadesVerificationProfile(
+                        test04_certValidationDataProviderOnlyTrustAnchors,
+                        tsaValidationDataProvider);
+
+        XadesHybridVerifierImpl verifier = (XadesHybridVerifierImpl) verProfile.newVerifier();
+
+        XAdESVerificationResult res = verifier.verify(signatureNode, null, formExt,
+                XAdESForm.A,
+                now);
+
+        assertEquals(XAdESForm.A, res.getSignatureForm());
+
+        outputDocument(doc, "document.aged.test04.A2.xml");
+    }
+
+    @Test
+    public void test04_AVD_sig9() throws Exception
+    {
+        System.out.println("test04_AVD_sig9");
+
+        final Date now = new Date(realNow.getTime() - 9 * ONE_YEAR_IN_MS
+                + 14 * ONE_DAY_IN_MS);
+        final CRLEntries emptyEntries = test04_ascendeusCA.new CRLEntries();
+
+        Document doc = getDocument("document.aged.test04.A2.xml");
+        Element signatureNode = getSigElement(doc);
+
+        KeyStore tsaTrustAnchors = keyStoreForCerts(
+                test04_consterCA,
+                test04_ascendeusCA,
+                test04_carpamaCA,
+                test04_premoxCA);
+        X509CRL ascendeusCRL = test04_ascendeusCA.createCRL(
+                "SHA1withRSA",
+                new Date(now.getTime() - 1 * ONE_DAY_IN_MS),
+                new Date(now.getTime() + 6 * ONE_DAY_IN_MS),
+                new BigInteger("9"),
+                emptyEntries);
+        X509CRL ascendeusIssuingCRL = test04_ascendeusIssuingCA.createCRL(
+                "SHA1withRSA",
+                new Date(now.getTime() - 12 * ONE_HOUR_IN_MS),
+                new Date(now.getTime() + 12 * ONE_HOUR_IN_MS),
+                new BigInteger("9"),
+                emptyEntries);
+        X509CRL carpamaCRL = test04_carpamaCA.createCRL(
+                "SHA256withRSA",
+                new Date(now.getTime() - 4 * ONE_HOUR_IN_MS),
+                new Date(now.getTime() + 20 * ONE_HOUR_IN_MS),
+                new BigInteger("9"),
+                emptyEntries);
+        X509CRL premoxCRL = test04_premoxCA.createCRL(
+                "SHA256withRSA",
+                new Date(now.getTime() - 12 * ONE_HOUR_IN_MS),
+                new Date(now.getTime() + 12 * ONE_HOUR_IN_MS),
+                new BigInteger("9"),
+                emptyEntries);
+        Collection<X509CRL> tsaCRLs = createCRLCollection(
+                ascendeusCRL,
+                ascendeusIssuingCRL,
+                premoxCRL,
+                carpamaCRL);
+        CertStore tsaIntermCertsAndCrls = certStoreForCertsAndCrls(tsaCRLs,
+                test04_ascendeusCA.getCertificate(),
+                test04_ascendeusIssuingCA.getCertificate(),
+                test04_ascendeusTSA13ya.getCertificate(),
+                test04_carpamaCA.getCertificate(),
+                test04_carpamaTSA13ya.getCertificate(),
+                test04_carpamaTSA9ya.getCertificate(),
+                test04_premoxCA.getCertificate(),
+                test04_premoxTSA9ya.getCertificate());
+        TSACertificateValidationProvider tsaValidationDataProvider =
+                new PKIXTSACertificateValidationProvider(tsaTrustAnchors,
+                        true,
+                        tsaIntermCertsAndCrls);
+
+        XadesFormatExtenderProfile formExtProfile = new XadesFormatExtenderProfile();
+        // it shouldn't be used now, as it is not configured, it will throw an exception
+        formExtProfile.withTimeStampTokenProvider(SurrogateTimeStampTokenProvider.class);
+        XadesSignatureFormatExtender formExt = formExtProfile.getFormatExtender();
+        XadesVerificationProfile verProfile = new XadesVerificationProfile(
+                        test04_certValidationDataProviderOnlyTrustAnchors,
+                        tsaValidationDataProvider);
+
+        XadesHybridVerifierImpl verifier = (XadesHybridVerifierImpl) verProfile.newVerifier();
+
+        XAdESVerificationResult res = verifier.verify(signatureNode, null, formExt,
+                XAdESForm.A_VD,
+                now);
+
+        assertEquals(res.getSignatureForm(), XAdESForm.A);
+
+        outputDocument(doc, "document.aged.test04.AVD.xml");
+    }
+
+    // add second group of A time stamps
+    @Test
+    public void test04_2A_sig10() throws Exception
+    {
+        System.out.println("test04_2A_sig10");
+        Date now = new Date(realNow.getTime() - 5 * ONE_YEAR_IN_MS);
+        SurrogateTimeStampTokenProvider.setTSACert(test04_premoxTSA5ya);
+        SurrogateTimeStampTokenProvider.setTimeAndSerial(now, new BigInteger("38"));
+
+        Document doc = getDocument("document.aged.test04.AVD.xml");
+        Element signatureNode = getSigElement(doc);
+        KeyStore tsaTrustAnchors = keyStoreForCerts(
+                test04_consterCA,
+                test04_ascendeusCA,
+                test04_carpamaCA,
+                test04_premoxCA,
+                test04_gescapeCA);
+
+        final CRLEntries emptyEntries = test04_consterCA.new CRLEntries();
+        X509CRL gescapeCRL = test04_gescapeCA.createCRL(
+                "SHA1withRSA",
+                new Date(now.getTime() - 2 * ONE_DAY_IN_MS),
+                new Date(now.getTime() + 5 * ONE_DAY_IN_MS),
+                new BigInteger("10"),
+                emptyEntries);
+        X509CRL carpamaCRL = test04_carpamaCA.createCRL(
+                "SHA256withRSA",
+                new Date(now.getTime() - 4 * ONE_HOUR_IN_MS),
+                new Date(now.getTime() + 4 * ONE_HOUR_IN_MS),
+                new BigInteger("10"),
+                emptyEntries);
+        X509CRL premoxCRL = test04_premoxCA.createCRL(
+                "SHA256withRSA",
+                new Date(now.getTime() - 12 * ONE_HOUR_IN_MS),
+                new Date(now.getTime() + 12 * ONE_HOUR_IN_MS),
+                new BigInteger("10"),
+                emptyEntries);
+        Collection<X509CRL> tsaCRLs = createCRLCollection(
+                carpamaCRL,
+                premoxCRL,
+                gescapeCRL);
+        CertStore tsaIntermCertsAndCrls = certStoreForCertsAndCrls(tsaCRLs,
+                test04_gescapeCA.getCertificate(),
+                test04_gescapeTSA5ya.getCertificate(),
+                test04_carpamaCA.getCertificate(),
+                test04_carpamaTSA9ya.getCertificate(),
+                test04_premoxCA.getCertificate(),
+                test04_premoxTSA9ya.getCertificate(),
+                test04_premoxTSA5ya.getCertificate());
+        TSACertificateValidationProvider tsaValidationDataProvider =
+                new PKIXTSACertificateValidationProvider(
+                        tsaTrustAnchors,
+                        true,
+                        tsaIntermCertsAndCrls);
+        XadesFormatExtenderProfile formExtProfile = new XadesFormatExtenderProfile();
+        formExtProfile.withTimeStampTokenProvider(SurrogateTimeStampTokenProvider.class);
+        XadesSignatureFormatExtender formExt = formExtProfile.getFormatExtender();
+        XadesVerificationProfile verProfile = new XadesVerificationProfile(
+                        test04_certValidationDataProviderOnlyTrustAnchors,
+                        tsaValidationDataProvider);
+
+        XadesHybridVerifierImpl verifier = (XadesHybridVerifierImpl) verProfile.newVerifier();
+
+        XAdESVerificationResult res = verifier.verify(signatureNode, null, formExt,
+                XAdESForm.A,
+                now);
+
+        assertEquals(res.getSignatureForm(), XAdESForm.A);
+
+        outputDocument(doc, "document.aged.test04.2A.xml");
+    }
+
+    // add second time stamp in second group of timestamps
+    @Test
+    public void test04_2A_sig11() throws Exception
+    {
+        System.out.println("test04_2A_sig11");
+        Date now = new Date(realNow.getTime() - 5 * ONE_YEAR_IN_MS + ONE_HOUR_IN_MS);
+        SurrogateTimeStampTokenProvider.setTSACert(test04_gescapeTSA5ya);
+        SurrogateTimeStampTokenProvider.setTimeAndSerial(now, new BigInteger("39"));
+
+        Document doc = getDocument("document.aged.test04.2A.xml");
+        Element signatureNode = getSigElement(doc);
+        KeyStore tsaTrustAnchors = keyStoreForCerts(
+                test04_consterCA,
+                test04_ascendeusCA,
+                test04_carpamaCA,
+                test04_premoxCA,
+                test04_gescapeCA);
+
+        final CRLEntries emptyEntries = test04_consterCA.new CRLEntries();
+        X509CRL gescapeCRL = test04_gescapeCA.createCRL(
+                "SHA1withRSA",
+                new Date(now.getTime() - 2 * ONE_DAY_IN_MS),
+                new Date(now.getTime() + 5 * ONE_DAY_IN_MS),
+                new BigInteger("11"),
+                emptyEntries);
+        X509CRL carpamaCRL = test04_carpamaCA.createCRL(
+                "SHA256withRSA",
+                new Date(now.getTime() - 4 * ONE_HOUR_IN_MS),
+                new Date(now.getTime() + 4 * ONE_HOUR_IN_MS),
+                new BigInteger("11"),
+                emptyEntries);
+        X509CRL premoxCRL = test04_premoxCA.createCRL(
+                "SHA256withRSA",
+                new Date(now.getTime() - 12 * ONE_HOUR_IN_MS),
+                new Date(now.getTime() + 12 * ONE_HOUR_IN_MS),
+                new BigInteger("11"),
+                emptyEntries);
+        Collection<X509CRL> tsaCRLs = createCRLCollection(
+                carpamaCRL,
+                premoxCRL,
+                gescapeCRL);
+        CertStore tsaIntermCertsAndCrls = certStoreForCertsAndCrls(tsaCRLs,
+                test04_gescapeCA.getCertificate(),
+                test04_gescapeTSA5ya.getCertificate(),
+                test04_carpamaCA.getCertificate(),
+                test04_carpamaTSA9ya.getCertificate(),
+                test04_premoxCA.getCertificate(),
+                test04_premoxTSA9ya.getCertificate(),
+                test04_premoxTSA5ya.getCertificate());
+        TSACertificateValidationProvider tsaValidationDataProvider =
+                new PKIXTSACertificateValidationProvider(
+                        tsaTrustAnchors,
+                        true,
+                        tsaIntermCertsAndCrls);
+        XadesFormatExtenderProfile formExtProfile = new XadesFormatExtenderProfile();
+        formExtProfile.withTimeStampTokenProvider(SurrogateTimeStampTokenProvider.class);
+        XadesSignatureFormatExtender formExt = formExtProfile.getFormatExtender();
+        XadesVerificationProfile verProfile = new XadesVerificationProfile(
+                        test04_certValidationDataProviderOnlyTrustAnchors,
+                        tsaValidationDataProvider);
+
+        XadesHybridVerifierImpl verifier = (XadesHybridVerifierImpl) verProfile.newVerifier();
+
+        XAdESVerificationResult res = verifier.verify(signatureNode, null, formExt,
+                XAdESForm.A,
+                now);
+
+        assertEquals(res.getSignatureForm(), XAdESForm.A);
+
+        outputDocument(doc, "document.aged.test04.2A2.xml");
+    }
+
+    // add revocation information about first group of archive time stamps
+    @Test
+    public void test04_2AVD_sig12() throws Exception
+    {
+        System.out.println("test04_2AVD_sig12");
+
+        final Date now = new Date(realNow.getTime() - 5 * ONE_YEAR_IN_MS
+                + 14 * ONE_DAY_IN_MS);
+        final CRLEntries emptyEntries = test04_ascendeusCA.new CRLEntries();
+
+        Document doc = getDocument("document.aged.test04.2A2.xml");
+        Element signatureNode = getSigElement(doc);
+
+        KeyStore tsaTrustAnchors = keyStoreForCerts(
+                test04_consterCA,
+                test04_ascendeusCA,
+                test04_carpamaCA,
+                test04_premoxCA,
+                test04_gescapeCA);
+        X509CRL carpamaCRL = test04_carpamaCA.createCRL(
+                "SHA256withRSA",
+                new Date(now.getTime() - 4 * ONE_HOUR_IN_MS),
+                new Date(now.getTime() + 20 * ONE_HOUR_IN_MS),
+                new BigInteger("12"),
+                emptyEntries);
+        X509CRL premoxCRL = test04_premoxCA.createCRL(
+                "SHA256withRSA",
+                new Date(now.getTime() - 12 * ONE_HOUR_IN_MS),
+                new Date(now.getTime() + 12 * ONE_HOUR_IN_MS),
+                new BigInteger("12"),
+                emptyEntries);
+        X509CRL gescapeCRL = test04_gescapeCA.createCRL(
+                "SHA256withRSA",
+                new Date(now.getTime() - 12 * ONE_HOUR_IN_MS),
+                new Date(now.getTime() + 12 * ONE_HOUR_IN_MS),
+                new BigInteger("12"),
+                emptyEntries);
+        Collection<X509CRL> tsaCRLs = createCRLCollection(
+                premoxCRL,
+                carpamaCRL,
+                gescapeCRL);
+        CertStore tsaIntermCertsAndCrls = certStoreForCertsAndCrls(tsaCRLs,
+                test04_carpamaCA.getCertificate(),
+                test04_carpamaTSA9ya.getCertificate(),
+                test04_premoxCA.getCertificate(),
+                test04_premoxTSA9ya.getCertificate(),
+                test04_gescapeCA.getCertificate(),
+                test04_gescapeTSA5ya.getCertificate(),
+                test04_premoxTSA5ya.getCertificate());
+        TSACertificateValidationProvider tsaValidationDataProvider =
+                new PKIXTSACertificateValidationProvider(tsaTrustAnchors,
+                        true,
+                        tsaIntermCertsAndCrls);
+
+        XadesFormatExtenderProfile formExtProfile = new XadesFormatExtenderProfile();
+        // it shouldn't be used now, as it is not configured, it will throw an exception
+        formExtProfile.withTimeStampTokenProvider(SurrogateTimeStampTokenProvider.class);
+        XadesSignatureFormatExtender formExt = formExtProfile.getFormatExtender();
+        XadesVerificationProfile verProfile = new XadesVerificationProfile(
+                        test04_certValidationDataProviderOnlyTrustAnchors,
+                        tsaValidationDataProvider);
+
+        XadesHybridVerifierImpl verifier = (XadesHybridVerifierImpl) verProfile.newVerifier();
+
+        XAdESVerificationResult res = verifier.verify(signatureNode, null, formExt,
+                XAdESForm.A_VD,
+                now);
+
+        assertEquals(res.getSignatureForm(), XAdESForm.A);
+
+        outputDocument(doc, "document.aged.test04.2AVD.xml");
+    }
+
+    // add first timestamp to third group of timestamps
+    @Test
+    public void test04_3A_sig13() throws Exception
+    {
+        System.out.println("test04_3A_sig13");
+        Date now = new Date(realNow.getTime() - 1 * ONE_YEAR_IN_MS);
+        SurrogateTimeStampTokenProvider.setTSACert(test04_unibimTSA1ya);
+        SurrogateTimeStampTokenProvider.setTimeAndSerial(now, new BigInteger("39"));
+
+        Document doc = getDocument("document.aged.test04.2AVD.xml");
+        Element signatureNode = getSigElement(doc);
+        KeyStore tsaTrustAnchors = keyStoreForCerts(
+                test04_consterCA,
+                test04_ascendeusCA,
+                test04_carpamaCA,
+                test04_premoxCA,
+                test04_gescapeCA,
+                test04_unibimCA);
+
+        final CRLEntries emptyEntries = test04_consterCA.new CRLEntries();
+        X509CRL gescapeCRL = test04_gescapeCA.createCRL(
+                "SHA1withRSA",
+                new Date(now.getTime() - 2 * ONE_DAY_IN_MS),
+                new Date(now.getTime() + 5 * ONE_DAY_IN_MS),
+                new BigInteger("13"),
+                emptyEntries);
+        X509CRL premoxCRL = test04_premoxCA.createCRL(
+                "SHA256withRSA",
+                new Date(now.getTime() - 12 * ONE_HOUR_IN_MS),
+                new Date(now.getTime() + 12 * ONE_HOUR_IN_MS),
+                new BigInteger("13"),
+                emptyEntries);
+        X509CRL unibimCRL = test04_unibimCA.createCRL(
+                "SHA256withRSA",
+                new Date(now.getTime() - 12 * ONE_HOUR_IN_MS),
+                new Date(now.getTime() + 12 * ONE_HOUR_IN_MS),
+                new BigInteger("13"),
+                emptyEntries);
+        Collection<X509CRL> tsaCRLs = createCRLCollection(
+                premoxCRL,
+                gescapeCRL,
+                unibimCRL);
+        CertStore tsaIntermCertsAndCrls = certStoreForCertsAndCrls(tsaCRLs,
+                test04_gescapeCA.getCertificate(),
+                test04_gescapeTSA5ya.getCertificate(),
+                test04_premoxCA.getCertificate(),
+                test04_premoxTSA5ya.getCertificate(),
+                test04_unibimCA.getCertificate(),
+                test04_unibimTSA1ya.getCertificate());
+        TSACertificateValidationProvider tsaValidationDataProvider =
+                new PKIXTSACertificateValidationProvider(
+                        tsaTrustAnchors,
+                        true,
+                        tsaIntermCertsAndCrls);
+        XadesFormatExtenderProfile formExtProfile = new XadesFormatExtenderProfile();
+        formExtProfile.withTimeStampTokenProvider(SurrogateTimeStampTokenProvider.class);
+        XadesSignatureFormatExtender formExt = formExtProfile.getFormatExtender();
+        XadesVerificationProfile verProfile = new XadesVerificationProfile(
+                        test04_certValidationDataProviderOnlyTrustAnchors,
+                        tsaValidationDataProvider);
+
+        XadesHybridVerifierImpl verifier = (XadesHybridVerifierImpl) verProfile.newVerifier();
+
+        XAdESVerificationResult res = verifier.verify(signatureNode, null, formExt,
+                XAdESForm.A,
+                now);
+
+        assertEquals(res.getSignatureForm(), XAdESForm.A);
+
+        outputDocument(doc, "document.aged.test04.3A.xml");
+    }
+
+    // add second timestamp to third group of timestamps
+    @Test
+    public void test04_3A_sig14() throws Exception
+    {
+        System.out.println("test04_3A_sig14");
+        Date now = new Date(realNow.getTime() - 1 * ONE_YEAR_IN_MS + ONE_HOUR_IN_MS);
+        SurrogateTimeStampTokenProvider.setTSACert(test04_astronTSA1ya);
+        SurrogateTimeStampTokenProvider.setTimeAndSerial(now, new BigInteger("40"));
+
+        Document doc = getDocument("document.aged.test04.3A.xml");
+        Element signatureNode = getSigElement(doc);
+        KeyStore tsaTrustAnchors = keyStoreForCerts(
+                test04_consterCA,
+                test04_ascendeusCA,
+                test04_carpamaCA,
+                test04_premoxCA,
+                test04_gescapeCA,
+                test04_unibimCA,
+                test04_astronCA);
+
+        final CRLEntries emptyEntries = test04_consterCA.new CRLEntries();
+        X509CRL gescapeCRL = test04_gescapeCA.createCRL(
+                "SHA1withRSA",
+                new Date(now.getTime() - 2 * ONE_DAY_IN_MS),
+                new Date(now.getTime() + 5 * ONE_DAY_IN_MS),
+                new BigInteger("14"),
+                emptyEntries);
+        X509CRL premoxCRL = test04_premoxCA.createCRL(
+                "SHA256withRSA",
+                new Date(now.getTime() - 12 * ONE_HOUR_IN_MS),
+                new Date(now.getTime() + 12 * ONE_HOUR_IN_MS),
+                new BigInteger("14"),
+                emptyEntries);
+        X509CRL unibimCRL = test04_unibimCA.createCRL(
+                "SHA256withRSA",
+                new Date(now.getTime() - 12 * ONE_HOUR_IN_MS),
+                new Date(now.getTime() + 12 * ONE_HOUR_IN_MS),
+                new BigInteger("14"),
+                emptyEntries);
+        X509CRL astronCRL = test04_astronCA.createCRL(
+                "SHA256withRSA",
+                new Date(now.getTime() - 12 * ONE_HOUR_IN_MS),
+                new Date(now.getTime() + 12 * ONE_HOUR_IN_MS),
+                new BigInteger("14"),
+                emptyEntries);
+        Collection<X509CRL> tsaCRLs = createCRLCollection(
+                premoxCRL,
+                gescapeCRL,
+                unibimCRL,
+                astronCRL);
+        CertStore tsaIntermCertsAndCrls = certStoreForCertsAndCrls(tsaCRLs,
+                test04_gescapeCA.getCertificate(),
+                test04_gescapeTSA5ya.getCertificate(),
+                test04_premoxCA.getCertificate(),
+                test04_premoxTSA5ya.getCertificate(),
+                test04_unibimCA.getCertificate(),
+                test04_unibimTSA1ya.getCertificate());
+        TSACertificateValidationProvider tsaValidationDataProvider =
+                new PKIXTSACertificateValidationProvider(
+                        tsaTrustAnchors,
+                        true,
+                        tsaIntermCertsAndCrls);
+        XadesFormatExtenderProfile formExtProfile = new XadesFormatExtenderProfile();
+        formExtProfile.withTimeStampTokenProvider(SurrogateTimeStampTokenProvider.class);
+        XadesSignatureFormatExtender formExt = formExtProfile.getFormatExtender();
+        XadesVerificationProfile verProfile = new XadesVerificationProfile(
+                        test04_certValidationDataProviderOnlyTrustAnchors,
+                        tsaValidationDataProvider);
+
+        XadesHybridVerifierImpl verifier = (XadesHybridVerifierImpl) verProfile.newVerifier();
+
+        XAdESVerificationResult res = verifier.verify(signatureNode, null, formExt,
+                XAdESForm.A,
+                now);
+
+        assertEquals(res.getSignatureForm(), XAdESForm.A);
+
+        outputDocument(doc, "document.aged.test04.3A2.xml");
+    }
+
+    // add revocation information about second group of archive time stamps
+    @Test
+    public void test04_3AVD_sig15() throws Exception
+    {
+        System.out.println("test04_3AVD_sig14");
+
+        final Date now = new Date(realNow.getTime() - 1 * ONE_YEAR_IN_MS
+                + 14 * ONE_DAY_IN_MS);
+        final CRLEntries emptyEntries = test04_ascendeusCA.new CRLEntries();
+
+        Document doc = getDocument("document.aged.test04.3A2.xml");
+        Element signatureNode = getSigElement(doc);
+
+        KeyStore tsaTrustAnchors = keyStoreForCerts(
+                test04_consterCA,
+                test04_ascendeusCA,
+                test04_carpamaCA,
+                test04_premoxCA,
+                test04_gescapeCA,
+                test04_unibimCA,
+                test04_astronCA);
+        X509CRL premoxCRL = test04_premoxCA.createCRL(
+                "SHA256withRSA",
+                new Date(now.getTime() - 12 * ONE_HOUR_IN_MS),
+                new Date(now.getTime() + 12 * ONE_HOUR_IN_MS),
+                new BigInteger("14"),
+                emptyEntries);
+        X509CRL gescapeCRL = test04_gescapeCA.createCRL(
+                "SHA256withRSA",
+                new Date(now.getTime() - 12 * ONE_HOUR_IN_MS),
+                new Date(now.getTime() + 12 * ONE_HOUR_IN_MS),
+                new BigInteger("14"),
+                emptyEntries);
+        X509CRL unibimCRL = test04_unibimCA.createCRL(
+                "SHA256withRSA",
+                new Date(now.getTime() - 12 * ONE_HOUR_IN_MS),
+                new Date(now.getTime() + 12 * ONE_HOUR_IN_MS),
+                new BigInteger("14"),
+                emptyEntries);
+        X509CRL astronCRL = test04_astronCA.createCRL(
+                "SHA256withRSA",
+                new Date(now.getTime() - 12 * ONE_HOUR_IN_MS),
+                new Date(now.getTime() + 12 * ONE_HOUR_IN_MS),
+                new BigInteger("14"),
+                emptyEntries);
+        Collection<X509CRL> tsaCRLs = createCRLCollection(
+                premoxCRL,
+                gescapeCRL,
+                unibimCRL,
+                astronCRL);
+        CertStore tsaIntermCertsAndCrls = certStoreForCertsAndCrls(tsaCRLs,
+                test04_premoxCA.getCertificate(),
+                test04_premoxTSA5ya.getCertificate(),
+                test04_gescapeCA.getCertificate(),
+                test04_gescapeTSA5ya.getCertificate(),
+                test04_unibimCA.getCertificate(),
+                test04_unibimTSA1ya.getCertificate(),
+                test04_astronCA.getCertificate(),
+                test04_astronTSA1ya.getCertificate());
+        TSACertificateValidationProvider tsaValidationDataProvider =
+                new PKIXTSACertificateValidationProvider(tsaTrustAnchors,
+                        true,
+                        tsaIntermCertsAndCrls);
+
+        XadesFormatExtenderProfile formExtProfile = new XadesFormatExtenderProfile();
+        // it shouldn't be used now, as it is not configured, it will throw an exception
+        formExtProfile.withTimeStampTokenProvider(SurrogateTimeStampTokenProvider.class);
+        XadesSignatureFormatExtender formExt = formExtProfile.getFormatExtender();
+        XadesVerificationProfile verProfile = new XadesVerificationProfile(
+                        test04_certValidationDataProviderOnlyTrustAnchors,
+                        tsaValidationDataProvider);
+
+        XadesHybridVerifierImpl verifier = (XadesHybridVerifierImpl) verProfile.newVerifier();
+
+        XAdESVerificationResult res = verifier.verify(signatureNode, null, formExt,
+                XAdESForm.A_VD,
+                now);
+
+        assertEquals(res.getSignatureForm(), XAdESForm.A);
+
+        outputDocument(doc, "document.aged.test04.3AVD.xml");
+    }
+
+    // test with minimal revocation information and all trust anchors
+    @Test
+    public void test04_3AVD_ver1() throws Exception
+    {
+        System.out.println("test04_3AVD_ver1");
+
+        final Date now = realNow;
+        final CRLEntries emptyEntries = test04_ascendeusCA.new CRLEntries();
+
+        Document doc = getDocument("document.aged.test04.3AVD.xml");
+        Element signatureNode = getSigElement(doc);
+
+        KeyStore tsaTrustAnchors = keyStoreForCerts(
+                test04_consterCA,
+                test04_ascendeusCA,
+                test04_carpamaCA,
+                test04_premoxCA,
+                test04_gescapeCA,
+                test04_unibimCA,
+                test04_astronCA);
+        X509CRL unibimCRL = test04_unibimCA.createCRL(
+                "SHA256withRSA",
+                new Date(now.getTime() - 12 * ONE_HOUR_IN_MS),
+                new Date(now.getTime() + 12 * ONE_HOUR_IN_MS),
+                new BigInteger("14"),
+                emptyEntries);
+        X509CRL astronCRL = test04_astronCA.createCRL(
+                "SHA256withRSA",
+                new Date(now.getTime() - 12 * ONE_HOUR_IN_MS),
+                new Date(now.getTime() + 12 * ONE_HOUR_IN_MS),
+                new BigInteger("14"),
+                emptyEntries);
+        Collection<X509CRL> tsaCRLs = createCRLCollection(
+                unibimCRL,
+                astronCRL);
+        CertStore tsaIntermCertsAndCrls = certStoreForCertsAndCrls(tsaCRLs,
+                test04_unibimCA.getCertificate(),
+                test04_astronCA.getCertificate());
+        TSACertificateValidationProvider tsaValidationDataProvider =
+                new PKIXTSACertificateValidationProvider(tsaTrustAnchors,
+                        true,
+                        tsaIntermCertsAndCrls);
+
+        XadesVerificationProfile verProfile = new XadesVerificationProfile(
+                        test04_certValidationDataProviderOnlyTrustAnchors,
+                        tsaValidationDataProvider);
+
+        XadesHybridVerifierImpl verifier = (XadesHybridVerifierImpl) verProfile.newVerifier();
+
+        XAdESVerificationResult res = verifier.verify(signatureNode, null);
+
+        assertEquals(res.getSignatureForm(), XAdESForm.A);
+    }
+
+    // test with minimal revocation information and only some TSA trust anchors (minimal amount
+    // that will still allow for successful history traversal)
+    @Test
+    public void test04_3AVD_ver2() throws Exception
+    {
+        System.out.println("test04_3AVD_ver2");
+
+        final Date now = realNow;
+        final CRLEntries emptyEntries = test04_ascendeusCA.new CRLEntries();
+
+        Document doc = getDocument("document.aged.test04.3AVD.xml");
+        Element signatureNode = getSigElement(doc);
+
+        KeyStore tsaTrustAnchors = keyStoreForCerts(
+                test04_consterCA,
+                test04_carpamaCA,
+                test04_gescapeCA,
+                test04_astronCA);
+        X509CRL astronCRL = test04_astronCA.createCRL(
+                "SHA256withRSA",
+                new Date(now.getTime() - 12 * ONE_HOUR_IN_MS),
+                new Date(now.getTime() + 12 * ONE_HOUR_IN_MS),
+                new BigInteger("14"),
+                emptyEntries);
+        Collection<X509CRL> tsaCRLs = createCRLCollection(
+                astronCRL);
+        CertStore tsaIntermCertsAndCrls = certStoreForCertsAndCrls(tsaCRLs,
+                test04_astronCA.getCertificate());
+        TSACertificateValidationProvider tsaValidationDataProvider =
+                new PKIXTSACertificateValidationProvider(tsaTrustAnchors,
+                        true,
+                        tsaIntermCertsAndCrls);
+
+        XadesVerificationProfile verProfile = new XadesVerificationProfile(
+                        test04_certValidationDataProviderOnlyTrustAnchors,
+                        tsaValidationDataProvider);
+
+        XadesHybridVerifierImpl verifier = (XadesHybridVerifierImpl) verProfile.newVerifier();
+
+        XAdESVerificationResult res = verifier.verify(signatureNode, null);
+
+        assertEquals(res.getSignatureForm(), XAdESForm.A);
+    }
+
+    // test with minimal revocation information and only some TSA trust anchors
+    // removal of trust for all newest TSAs (gescape TSA is valid but don't provide CRL
+    // for it)
+    @Test(expected = CannotBuildCertificationPathException.class)
+    public void test04_3AVD_ver3() throws Exception
+    {
+        System.out.println("test04_3AVD_ver3");
+
+        final Date now = realNow;
+        final CRLEntries emptyEntries = test04_ascendeusCA.new CRLEntries();
+
+        Document doc = getDocument("document.aged.test04.3AVD.xml");
+        Element signatureNode = getSigElement(doc);
+
+        KeyStore tsaTrustAnchors = keyStoreForCerts(
+                test04_consterCA,
+                test04_carpamaCA,
+                test04_gescapeCA);
+        X509CRL astronCRL = test04_astronCA.createCRL(
+                "SHA256withRSA",
+                new Date(now.getTime() - 12 * ONE_HOUR_IN_MS),
+                new Date(now.getTime() + 12 * ONE_HOUR_IN_MS),
+                new BigInteger("14"),
+                emptyEntries);
+        Collection<X509CRL> tsaCRLs = createCRLCollection(
+                astronCRL);
+        CertStore tsaIntermCertsAndCrls = certStoreForCertsAndCrls(tsaCRLs,
+                test04_astronCA.getCertificate());
+        TSACertificateValidationProvider tsaValidationDataProvider =
+                new PKIXTSACertificateValidationProvider(tsaTrustAnchors,
+                        true,
+                        tsaIntermCertsAndCrls);
+
+        XadesVerificationProfile verProfile = new XadesVerificationProfile(
+                        test04_certValidationDataProviderOnlyTrustAnchors,
+                        tsaValidationDataProvider);
+
+        XadesHybridVerifierImpl verifier = (XadesHybridVerifierImpl) verProfile.newVerifier();
+
+        XAdESVerificationResult res = verifier.verify(signatureNode, null);
+
+        assertEquals(res.getSignatureForm(), XAdESForm.A);
+    }
+
+    // test with minimal revocation information and only some TSA trust anchors
+    // removal of trust for all newest TSAs, but provide CRL for gescape
+    @Test
+    public void test04_3AVD_ver4() throws Exception
+    {
+        System.out.println("test04_3AVD_ver3");
+
+        final Date now = realNow;
+        final CRLEntries emptyEntries = test04_ascendeusCA.new CRLEntries();
+
+        Document doc = getDocument("document.aged.test04.3AVD.xml");
+        Element signatureNode = getSigElement(doc);
+
+        KeyStore tsaTrustAnchors = keyStoreForCerts(
+                test04_consterCA,
+                test04_carpamaCA,
+                test04_gescapeCA);
+        X509CRL gescapeCRL = test04_gescapeCA.createCRL(
+                "SHA256withRSA",
+                new Date(now.getTime() - 12 * ONE_HOUR_IN_MS),
+                new Date(now.getTime() + 12 * ONE_HOUR_IN_MS),
+                new BigInteger("14"),
+                emptyEntries);
+        Collection<X509CRL> tsaCRLs = createCRLCollection(
+                gescapeCRL);
+        CertStore tsaIntermCertsAndCrls = certStoreForCertsAndCrls(tsaCRLs,
+                test04_gescapeCA.getCertificate());
+        TSACertificateValidationProvider tsaValidationDataProvider =
+                new PKIXTSACertificateValidationProvider(tsaTrustAnchors,
+                        true,
+                        tsaIntermCertsAndCrls);
+
+        XadesVerificationProfile verProfile = new XadesVerificationProfile(
+                        test04_certValidationDataProviderOnlyTrustAnchors,
+                        tsaValidationDataProvider);
+
+        XadesHybridVerifierImpl verifier = (XadesHybridVerifierImpl) verProfile.newVerifier();
+
+        XAdESVerificationResult res = verifier.verify(signatureNode, null);
+
+        assertEquals(res.getSignatureForm(), XAdESForm.A);
     }
 
     /*
@@ -1426,6 +3045,13 @@ public class AgedTimeStampTest
                 Constants._TAG_SIGNATURE).item(0);
     }
 
+    private void removeFile(String path)
+    {
+      path = toDocumentDirFilePath(path);
+      File file = new File(path);
+      file.delete();
+    }
+
     // helper method
     private void outputDocument(Document doc, String path)
             throws TransformerConfigurationException,
@@ -1482,5 +3108,46 @@ public class AgedTimeStampTest
         Element elem = doc.getDocumentElement();
         DOMHelper.useIdAsXmlId(elem);
         return doc;
+    }
+
+    private static Collection<X509CRL> createCRLCollection(X509CRL... crls)
+    {
+        Collection<X509CRL> list = new ArrayList<X509CRL>(crls.length);
+        for (X509CRL c : crls)
+        {
+            list.add(c);
+        }
+        return list;
+    }
+
+    private static CertStore certStoreForCertsAndCrls(Collection<X509CRL> crls,
+            X509Certificate... certificates)
+            throws InvalidAlgorithmParameterException, NoSuchAlgorithmException
+    {
+        Collection<Object> certs = new ArrayList<Object>(crls.size() + certificates.length);
+        for (X509Certificate cert : certificates)
+        {
+            certs.add(cert);
+        }
+        certs.addAll(crls);
+        CertStore certStore = CertStore.getInstance(
+                "Collection",
+                new CollectionCertStoreParameters(certs));
+        return certStore;
+    }
+
+    private static KeyStore keyStoreForCerts(FullCert... certs) throws KeyStoreException,
+            IOException, NoSuchAlgorithmException, CertificateException
+    {
+        KeyStore trustAnchors = KeyStore.getInstance(KeyStore.getDefaultType());
+        trustAnchors.load(null);
+        int i = 1;
+        for(FullCert cert: certs)
+        {
+            Entry entry = new TrustedCertificateEntry(cert.getCertificate());
+            trustAnchors.setEntry("ca" + i, entry , null);
+            i++;
+        }
+        return trustAnchors;
     }
 }
