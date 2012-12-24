@@ -38,7 +38,7 @@ public class VerifyExternalSigsTest extends VerifierTestBase
     public void testVerifyPTTSL() throws Exception
     {
         if (!onWindowsPlatform())
-            fail("Test written for Windows-ROOT certificate repository");
+            return;
 
         FileSystemDirectoryCertStore certStore = createDirectoryCertStore("tsl/pt");
         KeyStore ks = KeyStore.getInstance("Windows-ROOT");

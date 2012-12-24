@@ -48,7 +48,7 @@ public class PKCS11KeyStoreKeyingDataProviderTest extends SignerTestBase
 
         if (!onWindowsPlatform())
         {
-            fail("Test written for the Windows platform");
+            return;
         }
 
         try

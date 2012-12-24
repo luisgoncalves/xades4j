@@ -118,7 +118,7 @@ public class SignerTTest extends SignerTestBase
 
         if (!onWindowsPlatform())
         {
-            fail("Test written for the Windows platform");
+            return;
         }
 
         Document doc = getTestDocument();

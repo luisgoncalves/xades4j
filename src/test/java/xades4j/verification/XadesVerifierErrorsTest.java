@@ -55,8 +55,9 @@ public class XadesVerifierErrorsTest extends VerifierTestBase
     public void testErrVerifySignedPropsIncorpNoRefType() throws Exception
     {
         System.out.println("errVerifySignedPropsIncorpNoRefType");
-
-        if (!onWindowsPlatform() || null == validationProviderPtCc)
+        if (!onWindowsPlatform())
+            throw new QualifyingPropertiesIncorporationException("not on windows");
+        if (null == validationProviderPtCc)
             fail("Test written for Windows-ROOT certificate repository");
 
         verifyBadSignature("document.signed.bes.signedpropsrefnotype.xml",

@@ -156,7 +156,10 @@ public class XadesVerifierImplTest extends VerifierTestBase
     {
         System.out.println("verifyTPtCC");
 
-        if (!onWindowsPlatform() || null == validationProviderPtCc)
+        if (!onWindowsPlatform())
+            return;
+
+        if (null == validationProviderPtCc)
             fail("Test written for Windows-ROOT certificate repository");
 
         XAdESForm f = verifySignature("document.signed.t.bes.ptcc.xml",
