@@ -31,10 +31,14 @@ import org.w3c.dom.Element;
 import com.google.inject.Inject;
 
 import xades4j.XAdES4jException;
+import xades4j.properties.AttrAuthoritiesCertValuesProperty;
 import xades4j.properties.QualifyingProperty;
 import xades4j.properties.SigAndRefsTimeStampProperty;
 import xades4j.properties.SignatureTimeStampProperty;
 import xades4j.properties.data.AllDataObjsTimeStampData;
+import xades4j.properties.data.AttrAuthoritiesCertValuesData;
+import xades4j.properties.data.AttributeRevocationValuesData;
+import xades4j.properties.data.CertificateValuesData;
 import xades4j.properties.data.CommitmentTypeData;
 import xades4j.properties.data.CompleteCertificateRefsData;
 import xades4j.properties.data.CompleteRevocationRefsData;
@@ -43,12 +47,14 @@ import xades4j.properties.data.IndividualDataObjsTimeStampData;
 import xades4j.properties.data.PropertiesDataObjectsStructureVerifier;
 import xades4j.properties.data.PropertyDataObject;
 import xades4j.properties.data.PropertyDataStructureException;
+import xades4j.properties.data.RevocationValuesData;
 import xades4j.properties.data.SignaturePolicyData;
 import xades4j.properties.data.SignatureProdPlaceData;
 import xades4j.properties.data.SignatureTimeStampData;
 import xades4j.properties.data.SignerRoleData;
 import xades4j.properties.data.SigningCertificateData;
 import xades4j.properties.data.SigningTimeData;
+import xades4j.properties.data.TimeStampValidationDataData;
 import xades4j.xml.unmarshalling.QualifyingPropertiesDataCollector;
 
 public class HybridQualifyingPropertiesVerifierImpl implements
@@ -101,6 +107,39 @@ public class HybridQualifyingPropertiesVerifierImpl implements
         // and sanity of all elements)
         List<PropertyDataObject> unmarshalledProperties = dataCollector.getPropertiesData();
         dataObjectsStructureVerifier.verifiyPropertiesDataStructure(unmarshalledProperties);
+
+        /*
+         * Because TSA or CA certificates may have been used in the past (in previous
+         * ArchiveTimeStamp) and included in TimeStampVerificationData or one of
+         * XAdES-X-L properties, it does not have to be present in subsequent
+         * TimeStampValidationData, we have to first go over all properties that can
+         * contain certificates other than time stamps themselves.
+         *
+         * Because the certificates have been added in chronological order, we too have
+         * to validate them in normal order
+         *
+         * TODO time stamp verifier won't use the certificates if the algorithms used
+         * to secure them are currently insecure (at the time of last validated timestamp)
+         *
+         * TODO make it work for CA certificates included in previous time stamp tokens
+         */
+        for(PropertyDataObject pdo : unmarshalledProperties)
+        {
+            if (pdo instanceof CertificateValuesData ||
+                    pdo instanceof RevocationValuesData ||
+                    pdo instanceof AttrAuthoritiesCertValuesData ||
+                    pdo instanceof AttributeRevocationValuesData ||
+                    pdo instanceof TimeStampValidationDataData)
+            {
+                QualifyingPropertyVerifier<PropertyDataObject> propVerifier =
+                        this.propertyVerifiersMapper.getVerifier(pdo);
+
+                Element elem = (Element) dataCollector.getPropertyNode(pdo);
+
+                // the verifier adds certificates and CRLs to context (ctx)
+                propVerifier.verify(pdo, elem, ctx);
+            } // else do nothing
+        }
 
         List<PropertyInfo> props = new LinkedList<PropertyInfo>();
 
