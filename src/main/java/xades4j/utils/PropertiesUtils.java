@@ -135,19 +135,20 @@ public class PropertiesUtils
         Collection<X509Certificate> allCertificates = new HashSet<X509Certificate>();
         Collection<X509CRL> crlsAfterGracePeriod = new HashSet<X509CRL>();
 
-        Collection<BaseXAdESTimeStampProperty> timeStamps = new ArrayList<BaseXAdESTimeStampProperty>(
-                res.getPropertiesFilter().getOfType(AllDataObjsTimeStampProperty.class));
-        timeStamps.addAll(
+        Collection<BaseXAdESTimeStampProperty> validationTimeStamps =
+                new ArrayList<BaseXAdESTimeStampProperty>(
+                        res.getPropertiesFilter().getOfType(AllDataObjsTimeStampProperty.class));
+        validationTimeStamps.addAll(
                 res.getPropertiesFilter().getOfType(IndividualDataObjsTimeStampProperty.class));
-        timeStamps.addAll(
+        validationTimeStamps.addAll(
                 res.getPropertiesFilter().getOfType(SignatureTimeStampProperty.class));
-        timeStamps.addAll(
+        validationTimeStamps.addAll(
                 res.getPropertiesFilter().getOfType(SigAndRefsTimeStampProperty.class));
-        timeStamps.addAll(
+        validationTimeStamps.addAll(
                 res.getPropertiesFilter().getOfType(ArchiveTimeStampProperty.class));
 
         /* get validation data that may be useful to add to TimeStampValidationData */
-        for (BaseXAdESTimeStampProperty ts : timeStamps)
+        for (BaseXAdESTimeStampProperty ts : validationTimeStamps)
         {
             allCertificates.addAll(ts.getValidationData().getCerts());
 
