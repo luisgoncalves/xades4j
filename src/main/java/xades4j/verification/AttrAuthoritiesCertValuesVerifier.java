@@ -24,7 +24,6 @@ import com.google.inject.Inject;
 import xades4j.properties.AttrAuthoritiesCertValuesProperty;
 import xades4j.properties.QualifyingProperty;
 import xades4j.properties.data.AttrAuthoritiesCertValuesData;
-import xades4j.providers.TSACertificateValidationProvider;
 
 /**
  *

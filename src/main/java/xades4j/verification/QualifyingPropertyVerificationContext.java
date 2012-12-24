@@ -330,11 +330,17 @@ public class QualifyingPropertyVerificationContext
         untrustedAttributeCRLs.addAll(crls);
     }
 
+    /**
+     * @return list of untrusted CRLs read from properties
+     */
     public Collection<X509CRL> getAttributeCRLs()
     {
         return untrustedAttributeCRLs;
     }
 
+    /**
+     * @return list of untrusted certificates read from properties
+     */
     public Collection<X509Certificate> getAttributeCertificates()
     {
         return untrustedAttributeCertificates;

@@ -136,6 +136,8 @@ public class DefaultTimeStampVerificationProvider implements TimeStampVerificati
             }
             if (ctx != null)
             {
+                // add only certificates and CRLs that use currently secure algorithms
+                // and are signed by currently valid certificate authorities
                 tsaCertificateValidationProvider.addCertificates(
                         ctx.getAttributeCertificates(), ctx.getCurrentTime());
                 tsaCertificateValidationProvider.addCRLs(
