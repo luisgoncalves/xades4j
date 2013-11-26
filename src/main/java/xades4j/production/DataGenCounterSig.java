@@ -80,10 +80,14 @@ class DataGenCounterSig implements PropertyDataObjectGenerator<CounterSignatureP
 
             try
             {
-                counterSigner.sign(
-                        new SignedDataObjects().withSignedDataObject(sigValueRef),
-                        counterSigElem);
-            } catch (XAdES4jException ex)
+                SignedDataObjects objs = prop.getSignedDataObjectsForCounterSig();
+                if(null == objs)
+                    objs = new SignedDataObjects();
+
+                objs.withSignedDataObject(sigValueRef);
+                counterSigner.sign(objs, counterSigElem);
+            }
+            catch (XAdES4jException ex)
             {
                 throw new PropertyDataGenerationException(prop, "cannot apply counter signature", ex);
             }
