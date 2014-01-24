@@ -23,10 +23,10 @@ import java.security.Provider;
 import java.security.cert.CertificateException;
 import java.security.cert.X509Certificate;
 import java.util.Arrays;
-import java.util.Collections;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.LinkedList;
 import java.util.Map;
 import org.apache.xml.security.algorithms.MessageDigestAlgorithm;
 import org.bouncycastle.asn1.ASN1InputStream;
@@ -41,6 +41,7 @@ import org.bouncycastle.tsp.TSPAlgorithms;
 import org.bouncycastle.tsp.TSPException;
 import org.bouncycastle.tsp.TSPValidationException;
 import org.bouncycastle.tsp.TimeStampToken;
+import org.bouncycastle.util.Selector;
 import xades4j.UnsupportedAlgorithmException;
 import xades4j.XAdES4jException;
 import xades4j.providers.CertificateValidationProvider;
@@ -123,18 +124,16 @@ public class DefaultTimeStampVerificationProvider implements TimeStampVerificati
         try
         {
             /* Validate the TSA certificate */
-
-            // TODO should extract all certificates from the token
-            Iterator certsIt = tsToken.getCertificates().getMatches(tsToken.getSID()).iterator();
-            if (certsIt.hasNext())
+            LinkedList<X509Certificate> certs = new LinkedList<X509Certificate>();
+            for (Object certHolder : tsToken.getCertificates().getMatches(new AllCertificatesSelector()))
             {
-                tsaCert = this.x509CertificateConverter.getCertificate((X509CertificateHolder) certsIt.next());
+                certs.add(this.x509CertificateConverter.getCertificate((X509CertificateHolder) certHolder));
             }
 
             ValidationData vData = this.certificateValidationProvider.validate(
                     x509CertSelectorConverter.getCertSelector(tsToken.getSID()),
                     tsToken.getTimeStampInfo().getGenTime(),
-                    null == tsaCert ? null : Collections.singletonList(tsaCert));
+                    certs);
 
             tsaCert = vData.getCerts().get(0);
         }
@@ -178,5 +177,22 @@ public class DefaultTimeStampVerificationProvider implements TimeStampVerificati
         }
 
         return tsTokenInfo.getGenTime();
+    }
+    
+    /** Selector selecting all certificates. */
+    private static class AllCertificatesSelector implements Selector {
+
+        @Override
+        public boolean match(Object o)
+        {
+            return true;
+}
+
+        @Override
+        public Object clone()
+        {
+            return this;
+        }        
+        
     }
 }
