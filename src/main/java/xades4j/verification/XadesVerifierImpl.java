@@ -247,7 +247,8 @@ class XadesVerifierImpl implements XadesVerifier
                 new QualifyingPropertyVerificationContext.SignedObjectsData(
                 new ArrayList<RawDataObjectDesc>(0),
                 signature));
-        QualifyingProperty sigTs = this.qualifyingPropertiesVerifier.verifyProperties(sigTsData, ctx).iterator().next().getProperty();
+        Collection<PropertyInfo> props = this.qualifyingPropertiesVerifier.verifyProperties(sigTsData, ctx);
+        QualifyingProperty sigTs = props.iterator().next().getProperty();
 
         return ((SignatureTimeStampProperty) sigTs).getTime();
     }
