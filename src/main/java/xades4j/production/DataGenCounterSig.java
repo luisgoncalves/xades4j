@@ -72,7 +72,8 @@ class DataGenCounterSig implements PropertyDataObjectGenerator<CounterSignatureP
                     ctx.getTargetXmlSignature().getElement(),
                     Constants.SignatureSpecNS, Constants._TAG_SIGNATUREVALUE);
             String sigValueId = sigValueElem.getAttribute(Constants._ATT_ID);
-            DataObjectReference sigValueRef = new DataObjectReference('#' + sigValueId);
+            DataObjectReference sigValueRef = new DataObjectReference('#' + sigValueId)
+                    .withType(CounterSignatureProperty.COUNTER_SIGNATURE_TYPE_URI);
 
             XadesSigner counterSigner = prop.getCounterSigSigner();
             if (null == counterSigner)
