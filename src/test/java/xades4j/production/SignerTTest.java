@@ -118,7 +118,8 @@ public class SignerTTest extends SignerTestBase
 
         if (!onWindowsPlatform())
         {
-            fail("Test written for the Windows platform");
+            System.out.println("Test written for the Windows platform. Skipping.");
+            return;
         }
 
         Document doc = getTestDocument();
@@ -135,7 +136,8 @@ public class SignerTTest extends SignerTestBase
             outputDocument(doc, "document.signed.t.bes.ptcc.xml");
         } catch (ProviderException ex)
         {
-            fail("PT CC PKCS#11 provider not configured");
+            System.out.println(ex.getMessage());
+            System.out.println("Requires PT CC and SUN PKCS#11 provider. Skipping.");
         }
     }
 }
