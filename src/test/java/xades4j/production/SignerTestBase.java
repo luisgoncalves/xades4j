@@ -16,13 +16,17 @@
  */
 package xades4j.production;
 
+import java.io.File;
 import java.security.KeyStoreException;
+import static org.junit.Assume.assumeTrue;
 import org.w3c.dom.Document;
 import xades4j.providers.impl.DirectPasswordProvider;
 import xades4j.providers.impl.FileSystemKeyStoreKeyingDataProvider;
 import xades4j.providers.impl.FirstCertificateSelector;
 import xades4j.providers.KeyingDataProvider;
+import xades4j.providers.impl.PKCS11KeyStoreKeyingDataProvider;
 import xades4j.utils.SignatureServicesTestBase;
+import static xades4j.utils.SignatureServicesTestBase.onWindowsPlatform;
 
 /**
  *
@@ -34,6 +38,8 @@ public class SignerTestBase extends SignatureServicesTestBase
     static protected KeyingDataProvider keyingProviderMy;
     static protected KeyingDataProvider keyingProviderNist;
 
+    static protected String PTCC_PKCS11_LIB_PATH = "C:\\Windows\\System32\\pteidpkcs11.dll";
+    
     static
     {
         try
@@ -62,5 +68,15 @@ public class SignerTestBase extends SignatureServicesTestBase
                 new FirstCertificateSelector(),
                 new DirectPasswordProvider(keyStorePwd),
                 new DirectPasswordProvider(keyStorePwd), returnFullChain);
+    }
+    
+    /**
+     * Skips tests that are not executing on Windows with the PT citizen card.
+     */
+    protected static void assumePtCcPkcs11OnWindows()
+    {
+        assumeTrue(onWindowsPlatform());
+        assumeTrue(PKCS11KeyStoreKeyingDataProvider.isProviderAvailable());
+        assumeTrue(new File(PTCC_PKCS11_LIB_PATH).exists());
     }
 }

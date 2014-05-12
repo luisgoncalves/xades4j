@@ -18,7 +18,7 @@ package xades4j.verification;
 
 import java.security.KeyStore;
 import org.junit.Test;
-import static org.junit.Assert.*;
+import static org.junit.Assume.assumeTrue;
 import org.junit.Before;
 import xades4j.providers.CannotSelectCertificateException;
 import xades4j.providers.impl.PKIXCertificateValidationProvider;
@@ -50,9 +50,7 @@ public class XadesVerifierErrorsTest extends VerifierTestBase
     public void testErrVerifySignedPropsIncorpNoRefType() throws Exception
     {
         System.out.println("errVerifySignedPropsIncorpNoRefType");
-
-        if (!onWindowsPlatform() || null == validationProviderPtCc)
-            fail("Test written for Windows-ROOT certificate repository");
+        assumeTrue(onWindowsPlatform() && null != validationProviderPtCc);
 
         verifyBadSignature("document.signed.bes.signedpropsrefnotype.xml",
                 new XadesVerificationProfile(validationProviderPtCc));

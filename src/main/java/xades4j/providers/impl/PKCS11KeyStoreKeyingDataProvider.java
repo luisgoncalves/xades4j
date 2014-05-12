@@ -231,4 +231,17 @@ public class PKCS11KeyStoreKeyingDataProvider extends KeyStoreKeyingDataProvider
            throw new ProviderException("Cannot find SunPKCS11 provider", ex);
         }
     }
+    
+    public static boolean isProviderAvailable()
+    {
+        try
+        {
+            getPkcs11ProviderClass();
+            return true;
+        }
+        catch(ProviderException ex)
+        {
+            return false;
+        }
+    }
 }

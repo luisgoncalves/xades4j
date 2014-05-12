@@ -19,6 +19,7 @@ package xades4j.verification;
 import java.io.FileInputStream;
 import java.io.InputStream;
 import static org.junit.Assert.*;
+import static org.junit.Assume.assumeTrue;
 import org.junit.Before;
 import org.junit.Test;
 import org.w3c.dom.Document;
@@ -148,9 +149,7 @@ public class XadesVerifierImplTest extends VerifierTestBase
     public void testVerifyTPTCC() throws Exception
     {
         System.out.println("verifyTPtCC");
-
-        if (!onWindowsPlatform() || null == validationProviderPtCc)
-            fail("Test written for Windows-ROOT certificate repository");
+        assumeTrue(onWindowsPlatform() && null != validationProviderPtCc);
 
         XAdESForm f = verifySignature("document.signed.t.bes.ptcc.xml",
                 new XadesVerificationProfile(validationProviderPtCc));

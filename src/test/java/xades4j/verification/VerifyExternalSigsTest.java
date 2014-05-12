@@ -18,6 +18,7 @@ package xades4j.verification;
 
 import java.security.KeyStore;
 import static org.junit.Assert.*;
+import static org.junit.Assume.assumeTrue;
 import org.junit.Test;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
@@ -35,8 +36,7 @@ public class VerifyExternalSigsTest extends VerifierTestBase
     @Test
     public void testVerifyPTTSL() throws Exception
     {
-        if (!onWindowsPlatform())
-            fail("Test written for Windows-ROOT certificate repository");
+        assumeTrue(onWindowsPlatform());
 
         FileSystemDirectoryCertStore certStore = createDirectoryCertStore("tsl/pt");
         KeyStore ks = KeyStore.getInstance("Windows-ROOT");
