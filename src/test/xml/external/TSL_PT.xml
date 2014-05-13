@@ -1,8 +1,8 @@
-<?xml version="1.0" encoding="UTF-8"?><tsl:TrustServiceStatusList xmlns:tsl="http://uri.etsi.org/02231/v2#" xmlns:tslx="http://uri.etsi.org/02231/v2/additionaltypes#" Id="TrustServiceStatusList" TSLTag="http://uri.etsi.org/02231/TSLTag">
+﻿<?xml version="1.0" encoding="utf-8" standalone="no"?><tsl:TrustServiceStatusList xmlns:tsl="http://uri.etsi.org/02231/v2#" xmlns:tslx="http://uri.etsi.org/02231/v2/additionaltypes#" Id="TrustServiceStatusList" TSLTag="http://uri.etsi.org/19612/TSLTag">
   <tsl:SchemeInformation>
-    <tsl:TSLVersionIdentifier>3</tsl:TSLVersionIdentifier>
-    <tsl:TSLSequenceNumber>1</tsl:TSLSequenceNumber>
-    <tsl:TSLType>http://uri.etsi.org/TrstSvc/eSigDir-1999-93-EC-TrustedList/TSLType/generic</tsl:TSLType>
+    <tsl:TSLVersionIdentifier>4</tsl:TSLVersionIdentifier>
+    <tsl:TSLSequenceNumber>12</tsl:TSLSequenceNumber>
+    <tsl:TSLType>http://uri.etsi.org/TrstSvc/TrustedList/TSLType/EUgeneric</tsl:TSLType>
     <tsl:SchemeOperatorName>
       <tsl:Name xml:lang="en">National Security Cabinet of Portugal</tsl:Name>
       <tsl:Name xml:lang="pt">Gabinete Nacional de Segurança</tsl:Name>
@@ -25,97 +25,141 @@
         </tsl:PostalAddress>
       </tsl:PostalAddresses>
       <tsl:ElectronicAddress>
-        <tsl:URI>http://www.gns.gov.pt</tsl:URI>
-        <tsl:URI>mailto:geral@gns.gov.pt</tsl:URI>
+        <tsl:URI xml:lang="en">http://www.gns.gov.pt</tsl:URI>
+        <tsl:URI xml:lang="en">mailto:geral@gns.gov.pt</tsl:URI>
       </tsl:ElectronicAddress>
     </tsl:SchemeOperatorAddress>
     <tsl:SchemeName>
-      <tsl:Name xml:lang="en">PT:Supervision/Accreditation Status List of certification services from Certification Service Providers, which are supervised/accredited by the referenced Scheme Operator Member State for compliance with the relevant provisions laid down in Directive 1999/93/EC of the European Parliament and of the Council of 13 December 1999 on a Community framework for electronic signatures</tsl:Name>
+      <tsl:Name xml:lang="en">PT:Supervision/Accreditation Status List of certification services from Certification Service Providers, 
+which are supervised/accredited by the referenced Scheme Operator’s Member State for compliance with the relevant provisions laid down in Directive 1999/93/EC of the European Parliament and of the Council of 13 December 1999 on a Community framework for electronic signatures.</tsl:Name>
       <tsl:Name xml:lang="pt">PT:Relação das Entidades Certificadoras que estão registadas ou credenciadas pela Autoridade Credenciadora, no cumprimento das disposições previstas na Directiva 1999/93/CE do Parlamento Europeu e do Conselho de 13 de Dezembro de 1999, relativa ao quadro comunitário para as assinaturas electrónicas.</tsl:Name>
     </tsl:SchemeName>
     <tsl:SchemeInformationURI>
-      <tsl:URI xml:lang="en">http://www.gns.gov.pt/gns/en/tsl</tsl:URI>
-      <tsl:URI xml:lang="pt">http://www.gns.gov.pt/gns/pt/tsl/</tsl:URI>
+      <tsl:URI xml:lang="en">http://www.gns.gov.pt/trusted-lists.aspx</tsl:URI>
+      <tsl:URI xml:lang="pt">http://www.gns.gov.pt/trusted-lists.aspx</tsl:URI>
     </tsl:SchemeInformationURI>
-    <tsl:StatusDeterminationApproach>http://uri.etsi.org/TrstSvc/eSigDir-1999-93-EC-TrustedList/StatusDetn/appropriate</tsl:StatusDeterminationApproach>
+    <tsl:StatusDeterminationApproach>http://uri.etsi.org/TrstSvc/TrustedList/TSLType/StatusDetn/EUappropriate</tsl:StatusDeterminationApproach>
     <tsl:SchemeTypeCommunityRules>
-      <tsl:URI>http://uri.etsi.org/TrstSvc/eSigDir-1999-93-EC-TrustedList/schemerules/common</tsl:URI>
-      <tsl:URI>http://uri.etsi.org/TrstSvc/eSigDir-1999-93-EC-TrustedList/schemerules/PT</tsl:URI>
+      <tsl:URI xml:lang="en">http://uri.etsi.org/TrstSvc/TrustedList/schemerules/EUcommon</tsl:URI>
+      <tsl:URI xml:lang="pt">http://uri.etsi.org/TrstSvc/TrustedList/schemerules/PT</tsl:URI>
     </tsl:SchemeTypeCommunityRules>
     <tsl:SchemeTerritory>PT</tsl:SchemeTerritory>
     <tsl:PolicyOrLegalNotice>
-      <tsl:TSLLegalNotice xml:lang="en">The applicable legal framework for the present TSL implementation of the Trusted List of supervised/accredited Certification Service Providers for Portugal is the Directive 1999/93/EC of the European Parliament and of the Council of 13 December 1999 on a Community framework for electronic signatures and its implementation in Portugal laws.</tsl:TSLLegalNotice>
-      <tsl:TSLLegalNotice xml:lang="pt">O quadro jurídico aplicável à presente impelemntação desta TSL (Trusted-Service Status List) é a Directiva 1999/93/CE do Parlamento Europeu e do Conselho de 13 de Dezembro de 1999, relativa ao quadro comunitário para as assinaturas electrónicass e sua aplicação nas leis de Portugal, nomeadamente, o Decreto-Lei n.º 290-D/99, de 2 de Agosto.</tsl:TSLLegalNotice>
+      <tsl:TSLLegalNotice xml:lang="en">The applicable legal framework for the present TSL implementation of the Trusted List of supervised/accredited Certification Service Providers for Portugal is Directive 1999/93/EC of the European Parliament and of the Council of 13 December 1999 on a Community framework for electronic signatures and its implementation in Portugal laws.</tsl:TSLLegalNotice>
+      <tsl:TSLLegalNotice xml:lang="pt">O quadro jurídico aplicável à presente implementação desta TSL (Trusted-Service Status List) é a Directiva 1999/93/CE do Parlamento Europeu e do Conselho de 13 de Dezembro de 1999, relativa ao quadro comunitário para as assinaturas electrónicass e sua aplicação nas leis de Portugal, nomeadamente, o Decreto-Lei n.º 290-D/99, de 2 de Agosto.</tsl:TSLLegalNotice>
     </tsl:PolicyOrLegalNotice>
-    <tsl:HistoricalInformationPeriod>7306</tsl:HistoricalInformationPeriod>
+    <tsl:HistoricalInformationPeriod>65535</tsl:HistoricalInformationPeriod>
     <tsl:PointersToOtherTSL>
       <tsl:OtherTSLPointer>
+        <tsl:ServiceDigitalIdentities>
+          <tsl:ServiceDigitalIdentity>
+            <tsl:DigitalId>
+              <tsl:X509Certificate>MIIFFzCCA/+gAwIBAgISESE/HwqWFgw444aZ4vdHq384MA0GCSqGSIb3DQEBBQUA
+MF0xCzAJBgNVBAYTAkJFMRkwFwYDVQQKExBHbG9iYWxTaWduIG52LXNhMTMwMQYD
+VQQDEypHbG9iYWxTaWduIE9yZ2FuaXphdGlvbiBWYWxpZGF0aW9uIENBIC0gRzIw
+HhcNMTMwMzIwMTAwNTA1WhcNMTUwMzIxMTAwNTA1WjBnMQswCQYDVQQGEwJCRTEQ
+MA4GA1UECBMHQmVsZ2l1bTERMA8GA1UEBxMIQnJ1c3NlbHMxHDAaBgNVBAoTE0V1
+cm9wZWFuIENvbW1pc3Npb24xFTATBgNVBAMTDGVjLmV1cm9wYS5ldTCCASIwDQYJ
+KoZIhvcNAQEBBQADggEPADCCAQoCggEBAOyOz37JNZ3ac9PSo9bn9wELcVARSDHY
+cTOUw0yjhSl5FVA/oDhmy7cdafUg6s1HNsV3631X7OXLFBa2MInUFqIRJlcqIx71
+AN7C7PY3tENhYIDLcObSfMNeIr4jTdR69Nd/u15GM8ys2sFnmH3ih2uTChVHHmOG
+rmLcFb4ApZNGiN/qhA2RCCzHI5qYuMHkG23gfraXS4ftwbQCoEXtBbFRrfF+cSJA
+Bx7e1xz6Vo+7663keKNDtPujfOQSoHbctMhraDWFDECs2EL83gzLPzX5NOR8Tc8F
+Rv7RC5lfmuAv6Uq/LzCTMB4XRiqfJtgkBo7NEAso5x5yJ0j1yDEjgDMCAwEAAaOC
+AcUwggHBMA4GA1UdDwEB/wQEAwIFoDBMBgNVHSAERTBDMEEGCSsGAQQBoDIBFDA0
+MDIGCCsGAQUFBwIBFiZodHRwczovL3d3dy5nbG9iYWxzaWduLmNvbS9yZXBvc2l0
+b3J5LzAXBgNVHREEEDAOggxlYy5ldXJvcGEuZXUwCQYDVR0TBAIwADAdBgNVHSUE
+FjAUBggrBgEFBQcDAQYIKwYBBQUHAwIwRQYDVR0fBD4wPDA6oDigNoY0aHR0cDov
+L2NybC5nbG9iYWxzaWduLmNvbS9ncy9nc29yZ2FuaXphdGlvbnZhbGcyLmNybDCB
+lgYIKwYBBQUHAQEEgYkwgYYwRwYIKwYBBQUHMAKGO2h0dHA6Ly9zZWN1cmUuZ2xv
+YmFsc2lnbi5jb20vY2FjZXJ0L2dzb3JnYW5pemF0aW9udmFsZzIuY3J0MDsGCCsG
+AQUFBzABhi9odHRwOi8vb2NzcDIuZ2xvYmFsc2lnbi5jb20vZ3Nvcmdhbml6YXRp
+b252YWxnMjAdBgNVHQ4EFgQUv4UsqLa1HO0++xa/AlEQsJB5cfMwHwYDVR0jBBgw
+FoAUXUayjcRLdBy77fVztjq3OI91nn4wDQYJKoZIhvcNAQEFBQADggEBACit+R/F
+48l1NqATvi8Oi07V3kVzsHDTnloYz05DwEjjkmuCiDDs+IPE2MdQbxYiy4C6Wun1
+U/YEcSya9bIeZJG89Jbdp0Ys58x6v7GDpinLdi9SXqnj8Uoj7XCEVMc0CXhLQnm0
+ZdIbfury5xMfq0QjfHKMmw1GB1lOTAQlpQ/LGPihDs9PFDOJ2W8l29aqYRwU0B8t
+5SX1bxS5JocelkSnHr4lF3ZNbwMo9rclhVZKAsVdiNzJLOt2k5Hi4T4M9dDAoPQo
+/ZnJt/An1MltN9mXuLnQ/1QpyaGhWlzVTjBQ8DYMmbVd9fucJKr1P34O+kAwRw8B
+iTk9l9L5VbxVroI=</tsl:X509Certificate>
+            </tsl:DigitalId>
+          </tsl:ServiceDigitalIdentity>
+        </tsl:ServiceDigitalIdentities>
         <tsl:TSLLocation>https://ec.europa.eu/information_society/policy/esignature/trusted-list/tl-hr.pdf</tsl:TSLLocation>
         <tsl:AdditionalInformation>
           <tsl:OtherInformation>
-            <tsl:TSLType>http://uri.etsi.org/TrstSvc/eSigDir-1999-93-EC-TrustedList/TSLType/schemes</tsl:TSLType>
+            <tsl:TSLType xml:lang="en">http://uri.etsi.org/TrstSvc/TrustedList/TSLType/EUlistofthelists</tsl:TSLType>
           </tsl:OtherInformation>
           <tsl:OtherInformation>
             <tsl:SchemeOperatorName>
               <tsl:Name xml:lang="en">European Commission</tsl:Name>
+              <tsl:Name xml:lang="pt">Comissão Europeia</tsl:Name>
             </tsl:SchemeOperatorName>
           </tsl:OtherInformation>
           <tsl:OtherInformation>
             <tsl:SchemeTypeCommunityRules>
-              <tsl:URI>http://uri.etsi.org/TrstSvc/eSigDir-1999-93-EC-TrustedList/schemerules/CompiledList</tsl:URI>
+              <tsl:URI xml:lang="en">http://uri.etsi.org/TrstSvc/TrustedList/schemerules/EUlistofthelists</tsl:URI>
             </tsl:SchemeTypeCommunityRules>
           </tsl:OtherInformation>
           <tsl:OtherInformation>
-            <tsl:SchemeTerritory>EU</tsl:SchemeTerritory>
+            <tsl:SchemeTerritory xml:lang="en">EU</tsl:SchemeTerritory>
           </tsl:OtherInformation>
           <tsl:OtherInformation>
-            <tslx:MimeType>application/pdf</tslx:MimeType>
+            <tslx:MimeType xml:lang="en">application/pdf</tslx:MimeType>
           </tsl:OtherInformation>
         </tsl:AdditionalInformation>
       </tsl:OtherTSLPointer>
       <tsl:OtherTSLPointer>
+        <tsl:ServiceDigitalIdentities>
+          <tsl:ServiceDigitalIdentity>
+            <tsl:DigitalId>
+              <tsl:X509Certificate>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
+</tsl:X509Certificate>
+            </tsl:DigitalId>
+          </tsl:ServiceDigitalIdentity>
+        </tsl:ServiceDigitalIdentities>
         <tsl:TSLLocation>https://ec.europa.eu/information_society/policy/esignature/trusted-list/tl-mp.xml</tsl:TSLLocation>
         <tsl:AdditionalInformation>
           <tsl:OtherInformation>
-            <tsl:TSLType>http://uri.etsi.org/TrstSvc/eSigDir-1999-93-EC-TrustedList/TSLType/schemes</tsl:TSLType>
-          </tsl:OtherInformation>
-          <tsl:OtherInformation>
             <tsl:SchemeOperatorName>
               <tsl:Name xml:lang="en">European Commission</tsl:Name>
+              <tsl:Name xml:lang="pt">Comissão Europeia</tsl:Name>
             </tsl:SchemeOperatorName>
+            <tsl:TSLType xml:lang="en">http://uri.etsi.org/TrstSvc/TrustedList/TSLType/EUlistofthelists</tsl:TSLType>
           </tsl:OtherInformation>
           <tsl:OtherInformation>
             <tsl:SchemeTypeCommunityRules>
-              <tsl:URI>http://uri.etsi.org/TrstSvc/eSigDir-1999-93-EC-TrustedList/schemerules/CompiledList</tsl:URI>
+              <tsl:URI xml:lang="en">http://uri.etsi.org/TrstSvc/TrustedList/schemerules/EUlistofthelists</tsl:URI>
             </tsl:SchemeTypeCommunityRules>
           </tsl:OtherInformation>
           <tsl:OtherInformation>
-            <tsl:SchemeTerritory>EU</tsl:SchemeTerritory>
+            <tsl:SchemeTerritory xml:lang="en">EU</tsl:SchemeTerritory>
           </tsl:OtherInformation>
           <tsl:OtherInformation>
-            <tslx:MimeType>application/vnd.etsi.tsl.xml</tslx:MimeType>
+            <tslx:MimeType>application/vnd.etsi.tsl+xml</tslx:MimeType>
           </tsl:OtherInformation>
         </tsl:AdditionalInformation>
       </tsl:OtherTSLPointer>
     </tsl:PointersToOtherTSL>
-    <tsl:ListIssueDateTime>2009-12-28T00:00:00Z</tsl:ListIssueDateTime>
+    <tsl:ListIssueDateTime>2014-03-31T00:00:01Z</tsl:ListIssueDateTime>
     <tsl:NextUpdate>
-      <tsl:dateTime>2010-06-27T23:00:00Z</tsl:dateTime>
+      <tsl:dateTime>2014-09-30T00:00:01Z</tsl:dateTime>
     </tsl:NextUpdate>
     <tsl:DistributionPoints>
-      <tsl:URI>http://www.gns.gov.pt/NR/rdonlyres/AE2B69CF-4869-4CDC-820C-8C5C0FE1736E/0/TSLPT.xml</tsl:URI>
+      <tsl:URI>http://www.gns.gov.pt/media/1894/TSLPT.xml</tsl:URI>
+      <tsl:URI>http://www.gns.gov.pt/media/1891/TSLPTHR.pdf</tsl:URI>
     </tsl:DistributionPoints>
   </tsl:SchemeInformation>
   <tsl:TrustServiceProviderList>
     <tsl:TrustServiceProvider>
       <tsl:TSPInformation>
         <tsl:TSPName>
-          <tsl:Name xml:lang="en">ECCE - State Common Certification Service Provider</tsl:Name>
-          <tsl:Name xml:lang="pt">ECCE - Entidade Certificadora Comum do Estado</tsl:Name>
+          <tsl:Name xml:lang="en">ECCE</tsl:Name>
+          <tsl:Name xml:lang="pt">ECCE</tsl:Name>
         </tsl:TSPName>
         <tsl:TSPTradeName>
-          <tsl:Name xml:lang="en">CEGER - Management Center for the Electronic Government Network</tsl:Name>
-          <tsl:Name xml:lang="pt">CEGER - Centro de Gestão da Rede Informática do Governo</tsl:Name>
+          <tsl:Name xml:lang="en">ECCE - State Common Certification Service Provider</tsl:Name>
+          <tsl:Name xml:lang="pt">ECCE - Entidade Certificadora Comum do Estado</tsl:Name>
         </tsl:TSPTradeName>
         <tsl:TSPAddress>
           <tsl:PostalAddresses>
@@ -135,8 +179,8 @@
             </tsl:PostalAddress>
           </tsl:PostalAddresses>
           <tsl:ElectronicAddress>
-            <tsl:URI>mailto:certificacao@ecce.gov.pt</tsl:URI>
-            <tsl:URI>http://www.ecce.gov.pt</tsl:URI>
+            <tsl:URI xml:lang="en">mailto:certificacao@ecce.gov.pt</tsl:URI>
+            <tsl:URI xml:lang="en">http://www.ecce.gov.pt</tsl:URI>
           </tsl:ElectronicAddress>
         </tsl:TSPAddress>
         <tsl:TSPInformationURI>
@@ -155,9 +199,6 @@
             <tsl:ServiceDigitalIdentity>
               <tsl:DigitalId>
                 <tsl:X509SubjectName>CN=ECCE,OU=ECEstado,O=SCEE,C=PT</tsl:X509SubjectName>
-              </tsl:DigitalId>
-              <tsl:DigitalId>
-                <tsl:X509SKI>WQtmzPp7FphoDvZcAPO5remmOnQ=</tsl:X509SKI>
               </tsl:DigitalId>
               <tsl:DigitalId>
                 <tsl:X509Certificate>
@@ -187,7 +228,7 @@ pJZsqT9lkj3+BLKwL7X5TmFNbB7fTLditheWjfOtBLINieJuiJta1enG
 </tsl:X509Certificate>
               </tsl:DigitalId>
             </tsl:ServiceDigitalIdentity>
-            <tsl:ServiceStatus>http://uri.etsi.org/TrstSvc/eSigDir-1999-93-EC-TrustedList/Svcstatus/accredited</tsl:ServiceStatus>
+            <tsl:ServiceStatus>http://uri.etsi.org/TrstSvc/TrustedList/Svcstatus/accredited</tsl:ServiceStatus>
             <tsl:StatusStartingTime>2007-07-04T00:00:00Z</tsl:StatusStartingTime>
             <tsl:SchemeServiceDefinitionURI>
               <tsl:URI xml:lang="en">http://www.ecce.gov.pt</tsl:URI>
@@ -198,8 +239,8 @@ pJZsqT9lkj3+BLKwL7X5TmFNbB7fTLditheWjfOtBLINieJuiJta1enG
                 <ecc:Qualifications xmlns:ecc="http://uri.etsi.org/TrstSvc/SvcInfoExt/eSigDir-1999-93-EC-TrustedList/#" xmlns:xades="http://uri.etsi.org/01903/v1.3.2#" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
                   <ecc:QualificationElement>
                     <ecc:Qualifiers>
-                      <ecc:Qualifier uri="http://uri.etsi.org/TrstSvc/eSigDir-1999-93-EC-TrustedList/SvcInfoExt/QCSSCDStatusAsInCert"/>
-                      <ecc:Qualifier uri="http://uri.etsi.org/TrstSvc/eSigDir-1999-93-EC-TrustedList/SvcInfoExt/QCForLegalPerson"/>
+                      <ecc:Qualifier uri="http://uri.etsi.org/TrstSvc/TrustedList/SvcInfoExt/QCSSCDStatusAsInCert"/>
+                      <ecc:Qualifier uri="http://uri.etsi.org/TrstSvc/TrustedList/SvcInfoExt/QCStatement"/>
                     </ecc:Qualifiers>
                     <ecc:CriteriaList assert="all">
                       <ecc:PolicySet>
@@ -219,33 +260,33 @@ pJZsqT9lkj3+BLKwL7X5TmFNbB7fTLditheWjfOtBLINieJuiJta1enG
     <tsl:TrustServiceProvider>
       <tsl:TSPInformation>
         <tsl:TSPName>
-          <tsl:Name xml:lang="en">ECCC - National Identification Card Certification Service Provider</tsl:Name>
-          <tsl:Name xml:lang="pt">ECCC - Entidade Certificadora do Cartão de Cidadão</tsl:Name>
+          <tsl:Name xml:lang="en">Cartão de Cidadão</tsl:Name>
+          <tsl:Name xml:lang="pt">Cartão de Cidadão</tsl:Name>
         </tsl:TSPName>
         <tsl:TSPTradeName>
-          <tsl:Name xml:lang="en">ITIJ, I.P. - Justice Information Technology Institute</tsl:Name>
-          <tsl:Name xml:lang="pt">ITIJ, I.P. - Instituto das Tecnologias de Informação na Justiça</tsl:Name>
+          <tsl:Name xml:lang="en">ECCC - National Identification Card Certification Service Provider</tsl:Name>
+          <tsl:Name xml:lang="pt">ECCC - Entidade Certificadora do Cartão de Cidadão</tsl:Name>
         </tsl:TSPTradeName>
         <tsl:TSPAddress>
           <tsl:PostalAddresses>
             <tsl:PostalAddress xml:lang="en">
-              <tsl:StreetAddress>Av. Casal Ribeiro, 16</tsl:StreetAddress>
+              <tsl:StreetAddress>Av. D. João II, n.º 1.08.01E, Torre H, Piso 17</tsl:StreetAddress>
               <tsl:Locality>Lisboa</tsl:Locality>
               <tsl:StateOrProvince>Lisboa</tsl:StateOrProvince>
-              <tsl:PostalCode>1049-068 Lisboa</tsl:PostalCode>
+              <tsl:PostalCode>1990-097 LISBOA</tsl:PostalCode>
               <tsl:CountryName>PT</tsl:CountryName>
             </tsl:PostalAddress>
             <tsl:PostalAddress xml:lang="pt">
-              <tsl:StreetAddress>Av. Casal Ribeiro, 16</tsl:StreetAddress>
+              <tsl:StreetAddress>Av. D. João II, n.º 1.08.01E, Torre H, Piso 17</tsl:StreetAddress>
               <tsl:Locality>Lisboa</tsl:Locality>
               <tsl:StateOrProvince>Lisboa</tsl:StateOrProvince>
-              <tsl:PostalCode>1049-068 Lisboa</tsl:PostalCode>
+              <tsl:PostalCode>1990-097 LISBOA</tsl:PostalCode>
               <tsl:CountryName>PT</tsl:CountryName>
             </tsl:PostalAddress>
           </tsl:PostalAddresses>
           <tsl:ElectronicAddress>
-            <tsl:URI>mailto:correio@mail.itij.mj.pt</tsl:URI>
-            <tsl:URI>http://www.cartaodecidadao.pt/</tsl:URI>
+            <tsl:URI xml:lang="en">mailto:pkicc@igfej.mj.pt</tsl:URI>
+            <tsl:URI xml:lang="en">http://www.cartaodecidadao.pt/</tsl:URI>
           </tsl:ElectronicAddress>
         </tsl:TSPAddress>
         <tsl:TSPInformationURI>
@@ -257,75 +298,74 @@ pJZsqT9lkj3+BLKwL7X5TmFNbB7fTLditheWjfOtBLINieJuiJta1enG
           <tsl:ServiceInformation>
             <tsl:ServiceTypeIdentifier>http://uri.etsi.org/TrstSvc/Svctype/CA/QC</tsl:ServiceTypeIdentifier>
             <tsl:ServiceName>
-              <tsl:Name xml:lang="en">ECCC 1 (CA-Qualified Certificates)</tsl:Name>
-              <tsl:Name xml:lang="pt">ECCC 1 (EC-Certificados Qualificados)</tsl:Name>
+              <tsl:Name xml:lang="en">Cartão de Cidadão 001 (EC Raiz para Certificados Qualificados emitido por ECs subordinadas)</tsl:Name>
+              <tsl:Name xml:lang="pt">Cartão de Cidadão 001 (Qualified Certificates issued by subordinated CA under the root CA)</tsl:Name>
             </tsl:ServiceName>
             <tsl:ServiceDigitalIdentity>
               <tsl:DigitalId>
-                <tsl:X509SubjectName>C=PT,O=Cartão de Cidadão,OU=subECEstado,CN=EC de Assinatura Digital Qualificada do Cartão de Cidadão 0001</tsl:X509SubjectName>
-              </tsl:DigitalId>
-              <tsl:DigitalId>
-                <tsl:X509SKI>8IbLprj1rwfw+UK6R8qQ7oJ4uBU=</tsl:X509SKI>
+                <tsl:X509SubjectName>C = PT, O = SCEE - Sistema de Certificação Electrónica do Estado, OU = ECEstado, CN = Cartão de Cidadão 001</tsl:X509SubjectName>
               </tsl:DigitalId>
               <tsl:DigitalId>
                 <tsl:X509Certificate>
-MIIHGjCCBQKgAwIBAgIIOblC7yPj0Q0wDQYJKoZIhvcNAQEFBQAwgYQxIDAeBgNVBAMMF0NhcnTD
-o28gZGUgQ2lkYWTDo28gMDAxMREwDwYDVQQLDAhFQ0VzdGFkbzFAMD4GA1UECgw3U0NFRSAtIFNp
-c3RlbWEgZGUgQ2VydGlmaWNhw6fDo28gRWxlY3Ryw7NuaWNhIGRvIEVzdGFkbzELMAkGA1UEBhMC
-UFQwHhcNMDcwMTI5MjEyOTM5WhcNMTMwMzMwMjEzOTM5WjCBjDFJMEcGA1UEAwxARUMgZGUgQXNz
-aW5hdHVyYSBEaWdpdGFsIFF1YWxpZmljYWRhIGRvIENhcnTDo28gZGUgQ2lkYWTDo28gMDAwMTEU
-MBIGA1UECwwLc3ViRUNFc3RhZG8xHDAaBgNVBAoME0NhcnTDo28gZGUgQ2lkYWTDo28xCzAJBgNV
-BAYTAlBUMIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAutF+m5+bQVXs/ZVKO0xg52BP
-RjcaC5Czw0NkB+gqP85/n8XA85OQ4L7rtZw5ytyBPK0u2ZpU2CODXVqFPgiVkVZ4QKHkGMbHAFLi
-B0n+nB1U+1hE1LHm15o2Uaa6yNlO1rjEvPogimjcsTNea7SXxE97YNC9NPIOyeQd4hITUx52PycX
-vt0/wJde5nJw6EvsZwwT/6zPKw5quWxrhLNU4fwPT1sgFjd26QdWSznnSg1G2Y7FEk6Swt7U1tlP
-YIGFBJy8abtKT2fFvg6r/T3k+9Z5NKLxfm5hTSjqYJCy3voMKofQ+TEWF8cKqTt1pQz2yYe3bV6C
-dnsQ33qf52GN3wIDAQABo4IChDCCAoAwEgYDVR0TAQH/BAgwBgEB/wIBADAOBgNVHQ8BAf8EBAMC
-AQYwHQYDVR0OBBYEFPCGy6a49a8H8PlCukfKkO6CeLgVMB8GA1UdIwQYMBaAFLJnMLLPRWrjkbVv
-O2P7jain4W2eMIIBcQYDVR0gBIIBaDCCAWQwMgYEVR0gADAqMCgGCCsGAQUFBwIBFhxodHRwOi8v
-d3d3LnNjZWUuZ292LnB0L3BjZXJ0MIHFBgtghGwBAQECBAABAjCBtTCBsgYIKwYBBQUHAgIwgaUe
-gaIAaAB0AHQAcAA6AC8ALwBwAGsAaQAuAGMAYQByAHQAYQBvAGQAZQBjAGkAZABhAGQAYQBvAC4A
-cAB0AC8AcAB1AGIAbABpAGMAbwAvAHAAbwBsAGkAdABpAGMAYQBzAC8AcABjAC8AYwBjAF8AcwB1
-AGIALQBlAGMAXwBjAGkAZABhAGQAYQBvAF8AYQBzAHMAcQBfAHAAYwAuAGgAdABtAGwwZgYKYIRs
-AQEBAgQABzBYMFYGCCsGAQUFBwIBFkpodHRwOi8vcGtpLmNhcnRhb2RlY2lkYWRhby5wdC9wdWJs
-aWNvL3BvbGl0aWNhcy9kcGMvY2NfZWNfY2lkYWRhb19kcGMuaHRtbDBXBgNVHR8EUDBOMEygSqBI
-hkZodHRwOi8vcGtpLmNhcnRhb2RlY2lkYWRhby5wdC9wdWJsaWNvL2xyYy9jY19lY19jaWRhZGFv
-X2NybDAwMV9jcmwuY3JsMEwGCCsGAQUFBwEBBEAwPjA8BggrBgEFBQcwAYYwaHR0cDovL29jc3Au
-cm9vdC5jYXJ0YW9kZWNpZGFkYW8ucHQvcHVibGljby9vY3NwMA0GCSqGSIb3DQEBBQUAA4ICAQAM
-OzygC7s11ukHNQWlaGNjEBbgQ/LB+oVvXqe8pWJK2ikx6DaMwirDf2A4Tmai5LTcuiDA3hENegmU
-Jg4gh2VExVpn8kq2A4SGXhyOy0UBoRYGfJVy17csqa24MzLztGDlFJxysNmuNoXLMJdwhFwbzaxO
-rkktzIZdU7DHK3zIp7D8tXlR/SRzUlIE4vDwZcVU4fiErLb7s00cuqDKwPFB7FdJ59cZn3xgVJAa
-bdnXn1Ys5WLqmK50O4GGEJT5UxVQlGuYJ9lVIeu7SQFF+z7+06ZRBZQaobUt7EWlE/0k6+uOq14D
-ETEWBCY3xbNCJBBw122YwhL4OozgbEd8AZpzMBTYc9SpaIFxMMk9Nm8vVbPM8IuRClEkQp7+2ARt
-V6BRzgtdT9mCBExYJ/YOztKLsoitRB4DrYjhRRXrvKhilz+jUT/W7htr+SlG53tgoxVp9n9aQBxm
-sOis4ZM8/d6PoBZxLLazgRl5c+zZOfShaXY2KWaHedoUUGlofRPvhOld0uPGsZ2+lEke69mB5bcI
-sqFn9Up2XoGsBtKL6Apl08AVmnYYWCpbueqCH9DU1LCsf3CrnwVc5KWPw+jsuFtbZkxqbCDtfJmZ
-e+xh1ur19IzWXeVd1QuMqTWE9/pO/2oIGVMPxiqlceWyVk+/SB2qhqiG2JdcloRLU38pNsMtHw==
+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
 </tsl:X509Certificate>
               </tsl:DigitalId>
             </tsl:ServiceDigitalIdentity>
-            <tsl:ServiceStatus>http://uri.etsi.org/TrstSvc/eSigDir-1999-93-EC-TrustedList/Svcstatus/accredited</tsl:ServiceStatus>
-            <tsl:StatusStartingTime>2007-01-30T09:00:01Z</tsl:StatusStartingTime>
+            <tsl:ServiceStatus>http://uri.etsi.org/TrstSvc/TrustedList/Svcstatus/accredited</tsl:ServiceStatus>
+            <tsl:StatusStartingTime>2008-07-17T09:00:01Z</tsl:StatusStartingTime>
             <tsl:SchemeServiceDefinitionURI>
               <tsl:URI xml:lang="en">http://pki.cartaodecidadao.pt/</tsl:URI>
               <tsl:URI xml:lang="pt">http://pki.cartaodecidadao.pt/</tsl:URI>
             </tsl:SchemeServiceDefinitionURI>
             <tsl:ServiceInformationExtensions>
+              <ecc:QualificationElement xmlns:ecc="http://uri.etsi.org/TrstSvc/SvcInfoExt/eSigDir-1999-93-EC-TrustedList/#">
+                <ecc:Qualifiers>
+                  <ecc:Qualifier uri="http://uri.etsi.org/TrstSvc/TrustedList/SvcInfoExt/QCSSCDStatusAsInCert"/>
+                </ecc:Qualifiers>
+                <ecc:CriteriaList assert="all">
+                  <ecc:PolicySet>
+                    <ecc:PolicyIdentifier>
+                      <xades:Identifier xmlns:xades="http://uri.etsi.org/01903/v1.3.2#">2.16.620.1.1.1.2.4.1.0.1.1</xades:Identifier>
+                    </ecc:PolicyIdentifier>
+                  </ecc:PolicySet>
+                </ecc:CriteriaList>
+              </ecc:QualificationElement>
               <tsl:Extension Critical="true">
-                <ecc:Qualifications xmlns:ecc="http://uri.etsi.org/TrstSvc/SvcInfoExt/eSigDir-1999-93-EC-TrustedList/#" xmlns:xades="http://uri.etsi.org/01903/v1.3.2#" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
-                  <ecc:QualificationElement>
-                    <ecc:Qualifiers>
-                      <ecc:Qualifier uri="http://uri.etsi.org/TrstSvc/eSigDir-1999-93-EC-TrustedList/SvcInfoExt/QCSSCDStatusAsInCert"/>
-                    </ecc:Qualifiers>
-                    <ecc:CriteriaList assert="all">
-                      <ecc:PolicySet>
-                        <ecc:PolicyIdentifier>
-                          <xades:Identifier>2.16.620.1.1.1.2.4.1.0.1.1</xades:Identifier>
-                        </ecc:PolicyIdentifier>
-                      </ecc:PolicySet>
-                    </ecc:CriteriaList>
-                  </ecc:QualificationElement>
-                </ecc:Qualifications>
+                <tsl:AdditionalServiceInformation>
+                  <tsl:URI xml:lang="en">http://uri.etsi.org/TrstSvc/TrustedList/SvcInfoExt/RootCA-QC</tsl:URI>
+                </tsl:AdditionalServiceInformation>
               </tsl:Extension>
             </tsl:ServiceInformationExtensions>
           </tsl:ServiceInformation>
@@ -334,152 +374,61 @@ e+xh1ur19IzWXeVd1QuMqTWE9/pO/2oIGVMPxiqlceWyVk+/SB2qhqiG2JdcloRLU38pNsMtHw==
           <tsl:ServiceInformation>
             <tsl:ServiceTypeIdentifier>http://uri.etsi.org/TrstSvc/Svctype/CA/QC</tsl:ServiceTypeIdentifier>
             <tsl:ServiceName>
-              <tsl:Name xml:lang="en">ECCC 2 (CA-Qualified Certificates)</tsl:Name>
-              <tsl:Name xml:lang="pt">ECCC 2 (EC-Certificados Qualificados)</tsl:Name>
+              <tsl:Name xml:lang="en">Cartão de Cidadão 002 (EC Raiz para Certificados Qualificados emitido por ECs subordinadas)</tsl:Name>
+              <tsl:Name xml:lang="pt">Cartão de Cidadão 002 (Qualified Certificates issued by subordinated CA under the root CA)</tsl:Name>
             </tsl:ServiceName>
             <tsl:ServiceDigitalIdentity>
               <tsl:DigitalId>
-                <tsl:X509SubjectName>C=PT,O=Cartão de Cidadão,OU=subECEstado,CN=EC de Assinatura Digital Qualificada do Cartão de Cidadão 0002</tsl:X509SubjectName>
+                <tsl:X509SubjectName>C = PT, O = SCEE - Sistema de Certificação Electrónica do Estado, OU = ECEstado, CN = Cartão de Cidadão 002</tsl:X509SubjectName>
               </tsl:DigitalId>
               <tsl:DigitalId>
-                <tsl:X509SKI>XYFEdeykvHrl0Kn8jlbkoOA4eO4=</tsl:X509SKI>
-              </tsl:DigitalId>
-              <tsl:DigitalId>
-                <tsl:X509Certificate>
-MIIHGjCCBQKgAwIBAgIIINhV129xx80wDQYJKoZIhvcNAQEFBQAwgYQxIDAeBgNVBAMMF0NhcnTD
-o28gZGUgQ2lkYWTDo28gMDAxMREwDwYDVQQLDAhFQ0VzdGFkbzFAMD4GA1UECgw3U0NFRSAtIFNp
-c3RlbWEgZGUgQ2VydGlmaWNhw6fDo28gRWxlY3Ryw7NuaWNhIGRvIEVzdGFkbzELMAkGA1UEBhMC
-UFQwHhcNMDgwMTE2MTY1NzI0WhcNMTQwMzE3MTcwNzI0WjCBjDFJMEcGA1UEAwxARUMgZGUgQXNz
-aW5hdHVyYSBEaWdpdGFsIFF1YWxpZmljYWRhIGRvIENhcnTDo28gZGUgQ2lkYWTDo28gMDAwMjEU
-MBIGA1UECwwLc3ViRUNFc3RhZG8xHDAaBgNVBAoME0NhcnTDo28gZGUgQ2lkYWTDo28xCzAJBgNV
-BAYTAlBUMIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAzwuM2/GoLWkjNDUoXFBdOKUl
-jFmwdh/iN4Qfe7mB1ENYxp4utX+smSV+qfICkJYnbEIyqsf1EooQ6Kl5mt/68WATxOIvnm4EbmKW
-tYlbyIi5yWZcYVD8jJSpIkAPYHca9mkVZYqdv3D2menm6B9TR3w4e3C7aOhUg4p69ptEuZJzmoSf
-YtCs+Jp2w6BgUzV61SePmYr8B3OuiBsHtZaxn/YX27zyq70l05uBKlsu7t2C1ciLhBf3AZ7AYJ4h
-gBEYsqOXjuA7Cp0aAGldxQhF09p1qRQvlvCn775nbIwOHOAKbkl7CPlqugot13yJ3ouF1HDxEYWv
-g1KdPzwBwTqDiQIDAQABo4IChDCCAoAwEgYDVR0TAQH/BAgwBgEB/wIBADAOBgNVHQ8BAf8EBAMC
-AQYwHQYDVR0OBBYEFF2BRHXspLx65dCp/I5W5KDgOHjuMB8GA1UdIwQYMBaAFLJnMLLPRWrjkbVv
-O2P7jain4W2eMIIBcQYDVR0gBIIBaDCCAWQwMgYEVR0gADAqMCgGCCsGAQUFBwIBFhxodHRwOi8v
-d3d3LnNjZWUuZ292LnB0L3BjZXJ0MIHFBgtghGwBAQECBAABAjCBtTCBsgYIKwYBBQUHAgIwgaUe
-gaIAaAB0AHQAcAA6AC8ALwBwAGsAaQAuAGMAYQByAHQAYQBvAGQAZQBjAGkAZABhAGQAYQBvAC4A
-cAB0AC8AcAB1AGIAbABpAGMAbwAvAHAAbwBsAGkAdABpAGMAYQBzAC8AcABjAC8AYwBjAF8AcwB1
-AGIALQBlAGMAXwBjAGkAZABhAGQAYQBvAF8AYQBzAHMAcQBfAHAAYwAuAGgAdABtAGwwZgYKYIRs
-AQEBAgQABzBYMFYGCCsGAQUFBwIBFkpodHRwOi8vcGtpLmNhcnRhb2RlY2lkYWRhby5wdC9wdWJs
-aWNvL3BvbGl0aWNhcy9kcGMvY2NfZWNfY2lkYWRhb19kcGMuaHRtbDBXBgNVHR8EUDBOMEygSqBI
-hkZodHRwOi8vcGtpLmNhcnRhb2RlY2lkYWRhby5wdC9wdWJsaWNvL2xyYy9jY19lY19jaWRhZGFv
-X2NybDAwMV9jcmwuY3JsMEwGCCsGAQUFBwEBBEAwPjA8BggrBgEFBQcwAYYwaHR0cDovL29jc3Au
-cm9vdC5jYXJ0YW9kZWNpZGFkYW8ucHQvcHVibGljby9vY3NwMA0GCSqGSIb3DQEBBQUAA4ICAQBg
-baweBtATaOtT43ZVBVt0asTB6L6KMo3hYZxkXaKsZFIygm8AVbzD2jS1VjIp3lGd5XEIXSzukNLX
-iXHoN0KChLMB92QsWnXj5Mcm5fUS0CfWZx9iosk6X5puji2ED8VWGER4a7WB6HiPjGzpM5yA/+uU
-TikuJk+Up1TaAwEdbj7SvMNZIIa1Y/YKL5mwFHk4HkvsCQYHP+Cqdi+WeizkM2/0kuf2aMq6XLsG
-xcE6AAwAw3qnZPXoR0/VwQZysmhX4P4uhJTXDzDSLguX84mRjUaDRJJmKofsPPFJQTJa41CQfIN/
-pXoiOobp7l2lb3tatobj8t6kFVu0eOVVZVYqypZ78goAIfjDuOGQ7FtIL85f+hbddffs02RSPALP
-hidz4j1tD4x0GtZC4D3PbxL14syUn19N6aXnPKrccVf5tJV5b8V3ThvnJm5tuPwfYrLIcJJXovf+
-hK4cAucMEc3DNxI/8w/e8xSHDvURIp8/KNgZj5ztYPUQ/CdCt9RAov+ZEoK42bLKZkHk81R2d16J
-VpYDPF0Nup1G8vQDaSaHWddLGKvAyh7s+5HcDrcxmA7wEMVCnsAGs1iSaJmntFT7d8eo+wT1UKbl
-k4vurhVsQqc3zYVvF/W5hTsyf2lX3F23s+d5+DCarFIru5o+O8r0mKv3dC287BG9VoN5VOmAIQ==
-</tsl:X509Certificate>
+                <tsl:X509Certificate>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</tsl:X509Certificate>
               </tsl:DigitalId>
             </tsl:ServiceDigitalIdentity>
-            <tsl:ServiceStatus>http://uri.etsi.org/TrstSvc/eSigDir-1999-93-EC-TrustedList/Svcstatus/accredited</tsl:ServiceStatus>
-            <tsl:StatusStartingTime>2008-01-17T09:00:01Z</tsl:StatusStartingTime>
+            <tsl:ServiceStatus>http://uri.etsi.org/TrstSvc/TrustedList/Svcstatus/accredited</tsl:ServiceStatus>
+            <tsl:StatusStartingTime>2013-05-30T00:00:01Z</tsl:StatusStartingTime>
             <tsl:SchemeServiceDefinitionURI>
               <tsl:URI xml:lang="en">http://pki.cartaodecidadao.pt/</tsl:URI>
               <tsl:URI xml:lang="pt">http://pki.cartaodecidadao.pt/</tsl:URI>
             </tsl:SchemeServiceDefinitionURI>
             <tsl:ServiceInformationExtensions>
               <tsl:Extension Critical="true">
-                <ecc:Qualifications xmlns:ecc="http://uri.etsi.org/TrstSvc/SvcInfoExt/eSigDir-1999-93-EC-TrustedList/#" xmlns:xades="http://uri.etsi.org/01903/v1.3.2#" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
-                  <ecc:QualificationElement>
-                    <ecc:Qualifiers>
-                      <ecc:Qualifier uri="http://uri.etsi.org/TrstSvc/eSigDir-1999-93-EC-TrustedList/SvcInfoExt/QCSSCDStatusAsInCert"/>
-                    </ecc:Qualifiers>
-                    <ecc:CriteriaList assert="all">
-                      <ecc:PolicySet>
-                        <ecc:PolicyIdentifier>
-                          <xades:Identifier>2.16.620.1.1.1.2.4.1.0.1.1</xades:Identifier>
-                        </ecc:PolicyIdentifier>
-                      </ecc:PolicySet>
-                    </ecc:CriteriaList>
-                  </ecc:QualificationElement>
-                </ecc:Qualifications>
-              </tsl:Extension>
-            </tsl:ServiceInformationExtensions>
-          </tsl:ServiceInformation>
-        </tsl:TSPService>
-        <tsl:TSPService>
-          <tsl:ServiceInformation>
-            <tsl:ServiceTypeIdentifier>http://uri.etsi.org/TrstSvc/Svctype/CA/QC</tsl:ServiceTypeIdentifier>
-            <tsl:ServiceName>
-              <tsl:Name xml:lang="en">ECCC 3 (CA-Qualified Certificates)</tsl:Name>
-              <tsl:Name xml:lang="pt">ECCC 3 (EC-Certificados Qualificados)</tsl:Name>
-            </tsl:ServiceName>
-            <tsl:ServiceDigitalIdentity>
-              <tsl:DigitalId>
-                <tsl:X509SubjectName>CN=EC de Assinatura Digital Qualificada do Cartão de Cidadão 0003,OU=subECEstado,O=Cartão de Cidadão,C=PT</tsl:X509SubjectName>
-              </tsl:DigitalId>
-              <tsl:DigitalId>
-                <tsl:X509SKI>O9SH7nUXlahmziOO5x4lGdtLI3w=</tsl:X509SKI>
-              </tsl:DigitalId>
-              <tsl:DigitalId>
-                <tsl:X509Certificate>
-MIIHGjCCBQKgAwIBAgIIY5eHNxWP+o8wDQYJKoZIhvcNAQEFBQAwgYQxIDAeBgNVBAMMF0NhcnTD
-o28gZGUgQ2lkYWTDo28gMDAxMREwDwYDVQQLDAhFQ0VzdGFkbzFAMD4GA1UECgw3U0NFRSAtIFNp
-c3RlbWEgZGUgQ2VydGlmaWNhw6fDo28gRWxlY3Ryw7NuaWNhIGRvIEVzdGFkbzELMAkGA1UEBhMC
-UFQwHhcNMDkwMjE3MTYwMzQ3WhcNMTUwNDE5MTYxMzQ3WjCBjDELMAkGA1UEBhMCUFQxHDAaBgNV
-BAoME0NhcnTDo28gZGUgQ2lkYWTDo28xFDASBgNVBAsMC3N1YkVDRXN0YWRvMUkwRwYDVQQDDEBF
-QyBkZSBBc3NpbmF0dXJhIERpZ2l0YWwgUXVhbGlmaWNhZGEgZG8gQ2FydMOjbyBkZSBDaWRhZMOj
-byAwMDAzMIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAqwC9UGCbRC+OqZrjiS5OaD89
-Bg5+8Ty9S2KuJfGYJjx4qipI5KAfJR7R45jwEFjWp+tsAwkVyiO3eg2qofTvOhqvVOjXVXSTgyZ4
-erg9KaYT0+duQ2zZwK/lP4rjA7fXWFJ/xh1ZBvzDWfufjBSuAJTBWVo2Bk8t+6q9tPzhaBx6DPZ0
-laqmINbD/wjbunefIXO4sBL4EWJ1tpivoXSSl9X3SF4ai0f9A7oxbvW3NnO3N8MjEeisN95oOL9p
-h1EP8fUv0je3/Rx3uv9UXFfnd38RppP+Dz5EMGNj/L4zzcDGD/GqU5RvQZDeQtrcj+zT3PZ7HNSU
-bH5oB7piE6S+QQIDAQABo4IChDCCAoAwEgYDVR0TAQH/BAgwBgEB/wIBADAOBgNVHQ8BAf8EBAMC
-AQYwHQYDVR0OBBYEFDvUh+51F5WoZs4jjuceJRnbSyN8MB8GA1UdIwQYMBaAFLJnMLLPRWrjkbVv
-O2P7jain4W2eMIIBcQYDVR0gBIIBaDCCAWQwMgYEVR0gADAqMCgGCCsGAQUFBwIBFhxodHRwOi8v
-d3d3LnNjZWUuZ292LnB0L3BjZXJ0MIHFBgtghGwBAQECBAABAjCBtTCBsgYIKwYBBQUHAgIwgaUe
-gaIAaAB0AHQAcAA6AC8ALwBwAGsAaQAuAGMAYQByAHQAYQBvAGQAZQBjAGkAZABhAGQAYQBvAC4A
-cAB0AC8AcAB1AGIAbABpAGMAbwAvAHAAbwBsAGkAdABpAGMAYQBzAC8AcABjAC8AYwBjAF8AcwB1
-AGIALQBlAGMAXwBjAGkAZABhAGQAYQBvAF8AYQBzAHMAcQBfAHAAYwAuAGgAdABtAGwwZgYKYIRs
-AQEBAgQABzBYMFYGCCsGAQUFBwIBFkpodHRwOi8vcGtpLmNhcnRhb2RlY2lkYWRhby5wdC9wdWJs
-aWNvL3BvbGl0aWNhcy9kcGMvY2NfZWNfY2lkYWRhb19kcGMuaHRtbDBXBgNVHR8EUDBOMEygSqBI
-hkZodHRwOi8vcGtpLmNhcnRhb2RlY2lkYWRhby5wdC9wdWJsaWNvL2xyYy9jY19lY19jaWRhZGFv
-X2NybDAwMV9jcmwuY3JsMEwGCCsGAQUFBwEBBEAwPjA8BggrBgEFBQcwAYYwaHR0cDovL29jc3Au
-cm9vdC5jYXJ0YW9kZWNpZGFkYW8ucHQvcHVibGljby9vY3NwMA0GCSqGSIb3DQEBBQUAA4ICAQBz
-8zcUAHC6d6B8yZVzq0xF1priElnsk/ei91FL7+nq50H/jXkZ1N4EMBNy3JhIIkOtXtTTN5XGZJy6
-9V4yZPzCpvCyhyTxhtoRL1CQET6eAjZpKIwcQTV9Vvl6oSUfdCT4oA7cQW7VHgihqnotdi9zxD87
-HQApCNcm/TIbxObAVqIpWWGJhLrnSjfl5X7tGr6jvEBeDBSi3tnnvlBU60jDJ32pXCIwdP2+ppnN
-R0OqZD0VkJVQ2YeKGAJTTzMM8m2bLqyNPrR12mh2RueeOnFc3bnTDmCAK2PdxKMnM+0f5qZiV3rH
-oFAJ69pRiSAaI8CIq2Ax9+Epw5ClljV8ygd1Yt/Kj9XL5/Nj4B8H4/l2vLGq82asVWqc4CyPyjDh
-DasaWd7xQ+cjaPba2eb6m8zF1XGLL2JDLDptRumti15H4FUNh7ovAmh8qX+jskD5P8XcAalsb6eu
-PXfIBpLdp677afyHCpNOm3uvZQmG08JHd7bdcLhKUrDrfA3VSR8WYH25vw/mqc1VblIPmAFpgRJ9
-KWpmHSe/g1tHfOSA2tXnoNV9sKjfwQLfeSWwxd1LRQeU/7bq2zm3BMFpB4G4KymgAv3nRCs/lHeO
-nu16q0vIo59lsC5piZxqgRNlH73rJuaG1Riuw6os95Jkmm4AESvEoex5jR8sHTqadM1jtvBvMw==
-</tsl:X509Certificate>
-              </tsl:DigitalId>
-            </tsl:ServiceDigitalIdentity>
-            <tsl:ServiceStatus>http://uri.etsi.org/TrstSvc/eSigDir-1999-93-EC-TrustedList/Svcstatus/accredited</tsl:ServiceStatus>
-            <tsl:StatusStartingTime>2009-02-19T09:00:01Z</tsl:StatusStartingTime>
-            <tsl:SchemeServiceDefinitionURI>
-              <tsl:URI xml:lang="en">http://pki.cartaodecidadao.pt/</tsl:URI>
-              <tsl:URI xml:lang="pt">http://pki.cartaodecidadao.pt/</tsl:URI>
-            </tsl:SchemeServiceDefinitionURI>
-            <tsl:ServiceInformationExtensions>
-              <tsl:Extension Critical="true">
-                <ecc:Qualifications xmlns:ecc="http://uri.etsi.org/TrstSvc/SvcInfoExt/eSigDir-1999-93-EC-TrustedList/#" xmlns:xades="http://uri.etsi.org/01903/v1.3.2#" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
-                  <ecc:QualificationElement>
-                    <ecc:Qualifiers>
-                      <ecc:Qualifier uri="http://uri.etsi.org/TrstSvc/eSigDir-1999-93-EC-TrustedList/SvcInfoExt/QCSSCDStatusAsInCert"/>
-                    </ecc:Qualifiers>
-                    <ecc:CriteriaList assert="all">
-                      <ecc:PolicySet>
-                        <ecc:PolicyIdentifier>
-                          <xades:Identifier>2.16.620.1.1.1.2.4.1.0.1.1</xades:Identifier>
-                        </ecc:PolicyIdentifier>
-                      </ecc:PolicySet>
-                    </ecc:CriteriaList>
-                  </ecc:QualificationElement>
-                </ecc:Qualifications>
+                <tsl:AdditionalServiceInformation>
+                  <tsl:URI xml:lang="en">http://uri.etsi.org/TrstSvc/TrustedList/SvcInfoExt/RootCA-QC</tsl:URI>
+                </tsl:AdditionalServiceInformation>
               </tsl:Extension>
             </tsl:ServiceInformationExtensions>
           </tsl:ServiceInformation>
@@ -489,37 +438,37 @@ nu16q0vIo59lsC5piZxqgRNlH73rJuaG1Riuw6os95Jkmm4AESvEoex5jR8sHTqadM1jtvBvMw==
     <tsl:TrustServiceProvider>
       <tsl:TSPInformation>
         <tsl:TSPName>
-          <tsl:Name xml:lang="en">ECM Justiça - Ministry of Justice Certification Service Provider</tsl:Name>
-          <tsl:Name xml:lang="pt">ECM Justiça - Entidade Certificadora do Ministério da Justiça</tsl:Name>
+          <tsl:Name xml:lang="en">Justica</tsl:Name>
+          <tsl:Name xml:lang="pt">Justica</tsl:Name>
         </tsl:TSPName>
         <tsl:TSPTradeName>
-          <tsl:Name xml:lang="en">ITIJ, I.P. - Justice Information Technology Institute</tsl:Name>
-          <tsl:Name xml:lang="pt">ITIJ, I.P. - Instituto das Tecnologias de Informação na Justiça</tsl:Name>
+          <tsl:Name xml:lang="en">ECM Justiça - Ministry of Justice Certification Service Provider</tsl:Name>
+          <tsl:Name xml:lang="pt">ECM Justiça - Entidade Certificadora do Ministério da Justiça</tsl:Name>
         </tsl:TSPTradeName>
         <tsl:TSPAddress>
           <tsl:PostalAddresses>
             <tsl:PostalAddress xml:lang="en">
-              <tsl:StreetAddress>Av. Casal Ribeiro, 16</tsl:StreetAddress>
+              <tsl:StreetAddress>Av. D. João II, n.º 1.08.01E, Torre H, Piso 17</tsl:StreetAddress>
               <tsl:Locality>Lisboa</tsl:Locality>
               <tsl:StateOrProvince>Lisboa</tsl:StateOrProvince>
-              <tsl:PostalCode>1049-068 Lisboa</tsl:PostalCode>
+              <tsl:PostalCode>1990-097 LISBOA</tsl:PostalCode>
               <tsl:CountryName>PT</tsl:CountryName>
             </tsl:PostalAddress>
             <tsl:PostalAddress xml:lang="pt">
-              <tsl:StreetAddress>Av. Casal Ribeiro, 16</tsl:StreetAddress>
+              <tsl:StreetAddress>Av. D. João II, n.º 1.08.01E, Torre H, Piso 17</tsl:StreetAddress>
               <tsl:Locality>Lisboa</tsl:Locality>
               <tsl:StateOrProvince>Lisboa</tsl:StateOrProvince>
-              <tsl:PostalCode>1049-068 Lisboa</tsl:PostalCode>
+              <tsl:PostalCode>1990-097 LISBOA</tsl:PostalCode>
               <tsl:CountryName>PT</tsl:CountryName>
             </tsl:PostalAddress>
           </tsl:PostalAddresses>
           <tsl:ElectronicAddress>
-            <tsl:URI>mailto:correio@mail.itij.mj.pt</tsl:URI>
-            <tsl:URI>http://www.itij.mj.pt</tsl:URI>
+            <tsl:URI xml:lang="en">mailto:pki@igfej.mj.pt</tsl:URI>
+            <tsl:URI xml:lang="en">http://www.igfej.mj.pt</tsl:URI>
           </tsl:ElectronicAddress>
         </tsl:TSPAddress>
         <tsl:TSPInformationURI>
-          <tsl:URI xml:lang="en">http://icp.itij.mj.pt</tsl:URI>
+          <tsl:URI xml:lang="en">http://icp.igfej.mj.pt</tsl:URI>
         </tsl:TSPInformationURI>
       </tsl:TSPInformation>
       <tsl:TSPServices>
@@ -533,9 +482,6 @@ nu16q0vIo59lsC5piZxqgRNlH73rJuaG1Riuw6os95Jkmm4AESvEoex5jR8sHTqadM1jtvBvMw==
             <tsl:ServiceDigitalIdentity>
               <tsl:DigitalId>
                 <tsl:X509SubjectName>CN=Justica,OU=ECEstado,O=SCEE,C=PT</tsl:X509SubjectName>
-              </tsl:DigitalId>
-              <tsl:DigitalId>
-                <tsl:X509SKI>vagyDStD1bulc/1Y7V+pCt3msAs=</tsl:X509SKI>
               </tsl:DigitalId>
               <tsl:DigitalId>
                 <tsl:X509Certificate>
@@ -570,19 +516,19 @@ jPEKkh5IEX0RUGIGbjntzw==
 </tsl:X509Certificate>
               </tsl:DigitalId>
             </tsl:ServiceDigitalIdentity>
-            <tsl:ServiceStatus>http://uri.etsi.org/TrstSvc/eSigDir-1999-93-EC-TrustedList/Svcstatus/accredited</tsl:ServiceStatus>
+            <tsl:ServiceStatus>http://uri.etsi.org/TrstSvc/TrustedList/Svcstatus/accredited</tsl:ServiceStatus>
             <tsl:StatusStartingTime>2007-09-14T09:00:01Z</tsl:StatusStartingTime>
             <tsl:SchemeServiceDefinitionURI>
-              <tsl:URI xml:lang="en">http://icp.itij.mj.pt</tsl:URI>
-              <tsl:URI xml:lang="pt">http://icp.itij.mj.pt</tsl:URI>
+              <tsl:URI xml:lang="en">http://icp.igfej.mj.pt</tsl:URI>
+              <tsl:URI xml:lang="pt">http://icp.igfej.mj.pt</tsl:URI>
             </tsl:SchemeServiceDefinitionURI>
             <tsl:ServiceInformationExtensions>
               <tsl:Extension Critical="true">
                 <ecc:Qualifications xmlns:ecc="http://uri.etsi.org/TrstSvc/SvcInfoExt/eSigDir-1999-93-EC-TrustedList/#" xmlns:xades="http://uri.etsi.org/01903/v1.3.2#" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
                   <ecc:QualificationElement>
                     <ecc:Qualifiers>
-                      <ecc:Qualifier uri="http://uri.etsi.org/TrstSvc/eSigDir-1999-93-EC-TrustedList/SvcInfoExt/QCSSCDStatusAsInCert"/>
-                      <ecc:Qualifier uri="http://uri.etsi.org/TrstSvc/eSigDir-1999-93-EC-TrustedList/SvcInfoExt/QCForLegalPerson"/>
+                      <ecc:Qualifier uri="http://uri.etsi.org/TrstSvc/TrustedList/SvcInfoExt/QCSSCDStatusAsInCert"/>
+                      <ecc:Qualifier uri="http://uri.etsi.org/TrstSvc/TrustedList/SvcInfoExt/QCStatement"/>
                     </ecc:Qualifiers>
                     <ecc:CriteriaList assert="all">
                       <ecc:PolicySet>
@@ -602,12 +548,12 @@ jPEKkh5IEX0RUGIGbjntzw==
     <tsl:TrustServiceProvider>
       <tsl:TSPInformation>
         <tsl:TSPName>
-          <tsl:Name xml:lang="en">ECAR - Assembly of the Republic Certification Service Provider</tsl:Name>
-          <tsl:Name xml:lang="pt">ECAR - Entidade certificadora da Assembleia da Republica</tsl:Name>
+          <tsl:Name xml:lang="en">ECAR</tsl:Name>
+          <tsl:Name xml:lang="pt">ECAR</tsl:Name>
         </tsl:TSPName>
         <tsl:TSPTradeName>
-          <tsl:Name xml:lang="en">Assembly of the Republic</tsl:Name>
-          <tsl:Name xml:lang="pt">Assembleia da República</tsl:Name>
+          <tsl:Name xml:lang="en">ECAR - Assembly of the Republic Certification Service Provider</tsl:Name>
+          <tsl:Name xml:lang="pt">ECAR - Entidade certificadora da Assembleia da Republica</tsl:Name>
         </tsl:TSPTradeName>
         <tsl:TSPAddress>
           <tsl:PostalAddresses>
@@ -627,8 +573,8 @@ jPEKkh5IEX0RUGIGbjntzw==
             </tsl:PostalAddress>
           </tsl:PostalAddresses>
           <tsl:ElectronicAddress>
-            <tsl:URI>mailto:cinf.correio@ar.parlamento.pt</tsl:URI>
-            <tsl:URI>http://www.parlamento.pt</tsl:URI>
+            <tsl:URI xml:lang="en">mailto:ecar.correio@ar.parlamento.pt</tsl:URI>
+            <tsl:URI xml:lang="en">http://www.parlamento.pt</tsl:URI>
           </tsl:ElectronicAddress>
         </tsl:TSPAddress>
         <tsl:TSPInformationURI>
@@ -646,9 +592,6 @@ jPEKkh5IEX0RUGIGbjntzw==
             <tsl:ServiceDigitalIdentity>
               <tsl:DigitalId>
                 <tsl:X509SubjectName>CN=ECAR,OU=ECEstado,O=SCEE,C=PT</tsl:X509SubjectName>
-              </tsl:DigitalId>
-              <tsl:DigitalId>
-                <tsl:X509SKI>buclO/gIMrZ2cLQsrZFkogkuB/4=</tsl:X509SKI>
               </tsl:DigitalId>
               <tsl:DigitalId>
                 <tsl:X509Certificate>
@@ -683,7 +626,7 @@ O33AhL2EPHbRja7dhZ0l5BuEetgDpnphk5DbGiLV7Frmg6cq9mUR++BzfVUfw9/T+fVAoHbW7q8O
 </tsl:X509Certificate>
               </tsl:DigitalId>
             </tsl:ServiceDigitalIdentity>
-            <tsl:ServiceStatus>http://uri.etsi.org/TrstSvc/eSigDir-1999-93-EC-TrustedList/Svcstatus/accredited</tsl:ServiceStatus>
+            <tsl:ServiceStatus>http://uri.etsi.org/TrstSvc/TrustedList/Svcstatus/accredited</tsl:ServiceStatus>
             <tsl:StatusStartingTime>2007-12-08T00:00:01Z</tsl:StatusStartingTime>
             <tsl:SchemeServiceDefinitionURI>
               <tsl:URI xml:lang="en">http://www.ecar.parlamento.pt/</tsl:URI>
@@ -694,8 +637,8 @@ O33AhL2EPHbRja7dhZ0l5BuEetgDpnphk5DbGiLV7Frmg6cq9mUR++BzfVUfw9/T+fVAoHbW7q8O
                 <ecc:Qualifications xmlns:ecc="http://uri.etsi.org/TrstSvc/SvcInfoExt/eSigDir-1999-93-EC-TrustedList/#" xmlns:xades="http://uri.etsi.org/01903/v1.3.2#" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
                   <ecc:QualificationElement>
                     <ecc:Qualifiers>
-                      <ecc:Qualifier uri="http://uri.etsi.org/TrstSvc/eSigDir-1999-93-EC-TrustedList/SvcInfoExt/QCSSCDStatusAsInCert"/>
-                      <ecc:Qualifier uri="http://uri.etsi.org/TrstSvc/eSigDir-1999-93-EC-TrustedList/SvcInfoExt/QCForLegalPerson"/>
+                      <ecc:Qualifier uri="http://uri.etsi.org/TrstSvc/TrustedList/SvcInfoExt/QCSSCDStatusAsInCert"/>
+                      <ecc:Qualifier uri="http://uri.etsi.org/TrstSvc/TrustedList/SvcInfoExt/QCStatement"/>
                     </ecc:Qualifiers>
                     <ecc:CriteriaList assert="all">
                       <ecc:PolicySet>
@@ -715,12 +658,12 @@ O33AhL2EPHbRja7dhZ0l5BuEetgDpnphk5DbGiLV7Frmg6cq9mUR++BzfVUfw9/T+fVAoHbW7q8O
     <tsl:TrustServiceProvider>
       <tsl:TSPInformation>
         <tsl:TSPName>
-          <tsl:Name xml:lang="en">MULTICERT S.A.</tsl:Name>
-          <tsl:Name xml:lang="pt">MULTICERT S.A.</tsl:Name>
+          <tsl:Name xml:lang="en">MULTICERT - Serviços de Certificação Electrónica S.A.</tsl:Name>
+          <tsl:Name xml:lang="pt">MULTICERT - Serviços de Certificação Electrónica S.A.</tsl:Name>
         </tsl:TSPName>
         <tsl:TSPTradeName>
-          <tsl:Name xml:lang="en">MULTICERT - Serviços de Certificação Electrónica S.A.</tsl:Name>
-          <tsl:Name xml:lang="pt">PT:MULTICERT - Serviços de Certificação Electrónica S.A.</tsl:Name>
+          <tsl:Name xml:lang="en">MULTICERT S.A.</tsl:Name>
+          <tsl:Name xml:lang="pt">MULTICERT S.A.</tsl:Name>
         </tsl:TSPTradeName>
         <tsl:TSPAddress>
           <tsl:PostalAddresses>
@@ -740,8 +683,8 @@ O33AhL2EPHbRja7dhZ0l5BuEetgDpnphk5DbGiLV7Frmg6cq9mUR++BzfVUfw9/T+fVAoHbW7q8O
             </tsl:PostalAddress>
           </tsl:PostalAddresses>
           <tsl:ElectronicAddress>
-            <tsl:URI>mailto:info@multicert.com</tsl:URI>
-            <tsl:URI>http://www.multicert.com</tsl:URI>
+            <tsl:URI xml:lang="en">mailto:info@multicert.com</tsl:URI>
+            <tsl:URI xml:lang="en">http://www.multicert.com</tsl:URI>
           </tsl:ElectronicAddress>
         </tsl:TSPAddress>
         <tsl:TSPInformationURI>
@@ -759,9 +702,6 @@ O33AhL2EPHbRja7dhZ0l5BuEetgDpnphk5DbGiLV7Frmg6cq9mUR++BzfVUfw9/T+fVAoHbW7q8O
             <tsl:ServiceDigitalIdentity>
               <tsl:DigitalId>
                 <tsl:X509SubjectName>CN=MULTICERT - Entidade de Certificação 001,OU=Entidade de Certificação Credenciada,O=MULTICERT - Serviços de Certificação Electrónica S.A.,C=PT</tsl:X509SubjectName>
-              </tsl:DigitalId>
-              <tsl:DigitalId>
-                <tsl:X509SKI>fzNyf0zaNMgOp3XLLoOYGwa4ppA=</tsl:X509SKI>
               </tsl:DigitalId>
               <tsl:DigitalId>
                 <tsl:X509Certificate>
@@ -794,7 +734,7 @@ b1M0msAD0x0nElq2/fs=
 </tsl:X509Certificate>
               </tsl:DigitalId>
             </tsl:ServiceDigitalIdentity>
-            <tsl:ServiceStatus>http://uri.etsi.org/TrstSvc/eSigDir-1999-93-EC-TrustedList/Svcstatus/accredited</tsl:ServiceStatus>
+            <tsl:ServiceStatus>http://uri.etsi.org/TrstSvc/TrustedList/Svcstatus/accredited</tsl:ServiceStatus>
             <tsl:StatusStartingTime>2009-05-27T00:00:01Z</tsl:StatusStartingTime>
             <tsl:SchemeServiceDefinitionURI>
               <tsl:URI xml:lang="en">https://pki.multicert.com</tsl:URI>
@@ -805,8 +745,8 @@ b1M0msAD0x0nElq2/fs=
                 <ecc:Qualifications xmlns:ecc="http://uri.etsi.org/TrstSvc/SvcInfoExt/eSigDir-1999-93-EC-TrustedList/#" xmlns:xades="http://uri.etsi.org/01903/v1.3.2#" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
                   <ecc:QualificationElement>
                     <ecc:Qualifiers>
-                      <ecc:Qualifier uri="http://uri.etsi.org/TrstSvc/eSigDir-1999-93-EC-TrustedList/SvcInfoExt/QCSSCDStatusAsInCert"/>
-                      <ecc:Qualifier uri="http://uri.etsi.org/TrstSvc/eSigDir-1999-93-EC-TrustedList/SvcInfoExt/QCForLegalPerson"/>
+                      <ecc:Qualifier uri="http://uri.etsi.org/TrstSvc/TrustedList/SvcInfoExt/QCSSCDStatusAsInCert"/>
+                      <ecc:Qualifier uri="http://uri.etsi.org/TrstSvc/TrustedList/SvcInfoExt/QCStatement"/>
                     </ecc:Qualifiers>
                     <ecc:CriteriaList assert="all">
                       <ecc:PolicySet>
@@ -865,22 +805,95 @@ b1M0msAD0x0nElq2/fs=
 </tsl:X509Certificate>
                 </tsl:DigitalId>
               </tsl:ServiceDigitalIdentity>
-              <tsl:ServiceStatus>http://uri.etsi.org/TrstSvc/eSigDir-1999-93-EC-TrustedList/Svcstatus/undersupervision</tsl:ServiceStatus>
+              <tsl:ServiceStatus>http://uri.etsi.org/TrstSvc/TrustedList/Svcstatus/undersupervision</tsl:ServiceStatus>
               <tsl:StatusStartingTime>2009-02-10T00:00:01Z</tsl:StatusStartingTime>
             </tsl:ServiceHistoryInstance>
           </tsl:ServiceHistory>
+        </tsl:TSPService>
+      </tsl:TSPServices>
+      <tsl:TSPServices>
+        <tsl:TSPService>
+          <tsl:ServiceInformation>
+            <tsl:ServiceTypeIdentifier>http://uri.etsi.org/TrstSvc/Svctype/CA/QC</tsl:ServiceTypeIdentifier>
+            <tsl:ServiceName>
+              <tsl:Name xml:lang="en">Multicert (CA-Qualified Certificates)</tsl:Name>
+              <tsl:Name xml:lang="pt">Multicert (EC-Certificados Qualificados)</tsl:Name>
+            </tsl:ServiceName>
+            <tsl:ServiceDigitalIdentity>
+              <tsl:DigitalId>
+                <tsl:X509SubjectName>CN=MULTICERT - Entidade de Certificação 001,OU=Entidade de Certificação Credenciada,O=MULTICERT - Serviços de Certificação Electrónica S.A.,C=PT</tsl:X509SubjectName>
+              </tsl:DigitalId>
+              <tsl:DigitalId>
+                <tsl:X509Certificate>MIIFkjCCBHqgAwIBAgIEByeO8DANBgkqhkiG9w0BAQUFADBaMQswCQYDVQQGEwJJ
+RTESMBAGA1UEChMJQmFsdGltb3JlMRMwEQYDVQQLEwpDeWJlclRydXN0MSIwIAYD
+VQQDExlCYWx0aW1vcmUgQ3liZXJUcnVzdCBSb290MB4XDTEzMDczMTE5MjMwNloX
+DTIwMDUyOTE5MjE0OFowgbcxCzAJBgNVBAYTAlBUMUIwQAYDVQQKDDlNVUxUSUNF
+UlQgLSBTZXJ2acOnb3MgZGUgQ2VydGlmaWNhw6fDo28gRWxlY3Ryw7NuaWNhIFMu
+QS4xLzAtBgNVBAsMJkVudGlkYWRlIGRlIENlcnRpZmljYcOnw6NvIENyZWRlbmNp
+YWRhMTMwMQYDVQQDDCpNVUxUSUNFUlQgLSBFbnRpZGFkZSBkZSBDZXJ0aWZpY2HD
+p8OjbyAwMDEwggIiMA0GCSqGSIb3DQEBAQUAA4ICDwAwggIKAoICAQCV8akRYT1d
+fNnFVQZ4O3k9Vc90fm0YPfO9sf8tpiXmrFGAzD3iFXUxiZbfULl0+xjAw8ia7qd8
+J7V/B1y0F/cK1rscyD/xxN3Sqy/9p5f1HKy4/vq6J5gaI+LbarQOJE16/1PtjX9F
+aCfGccZa7dc8Run0FmEwmqp5b8nZNdyfLgyB2SOWCquCUJpgP18JgU1LvwTcYsdk
+auBajMPIslG0Fzf3wRTSX17ACbj5Hc5QuReFAfuEDlqO2oBJliIc2vqA3Jw7PdzV
+dh8n8WIXfrLb9oCsfhBFFJ49Ct68pafeugrnejocOBE5+pYhI+GzyhupG6OYEG92
+QLrauSe7AW23GLtkxoBNmIrzAIDXZnNxRB5CgmnWBfwNBCdfX8SxqrBtarvF9JZE
+KVpMV/eQ+2muZKICcJFdUnRNnW/0SESBqO3jsCwvqxtPVqK/89NAjkb7ttBzUzHb
+Q2e/vzHUqgzfsN3iz0YF1WfhEervPaXBqsGDYRitVcg/nAaQrWHS4616NXhWQg1H
+EiFoshMzuluInYNqu8eHscG52TndlFPc5GtgCxCn3Hjx0Ra3aXRSCsb4lIjcQRbi
+lOraqUUzyWLnk61EIsdYixmP/KzeFtzAoXtg6SjYFS3k8iFwaF/KglxU02DJuR7l
+GW4knWng4vnbT5KU7SV2xzxgDxX7vwfupQIDAQABo4IBADCB/TASBgNVHRMBAf8E
+CDAGAQH/AgEBMFMGA1UdIARMMEowSAYJKwYBBAGxPgEAMDswOQYIKwYBBQUHAgEW
+LWh0dHA6Ly9jeWJlcnRydXN0Lm9tbmlyb290LmNvbS9yZXBvc2l0b3J5LmNmbTAO
+BgNVHQ8BAf8EBAMCAQYwHwYDVR0jBBgwFoAU5Z1ZMIJHWMys+ghUNoZ7OrUETfAw
+QgYDVR0fBDswOTA3oDWgM4YxaHR0cDovL2NkcDEucHVibGljLXRydXN0LmNvbS9D
+UkwvT21uaXJvb3QyMDI1LmNybDAdBgNVHQ4EFgQUfzNyf0zaNMgOp3XLLoOYGwa4
+ppAwDQYJKoZIhvcNAQEFBQADggEBAAatUQlI2YrtFFRbXSYx7rG+99GkMAuos8ut
+QkDkTQAIPRs+Bn5ez2Nug0fzrMbaXsK1jXyTvJLb9QqIIvpfMLiDuNSkqENQ599r
+Zng7IzQgbU89u44zkUL/2B+BMKno0NukEdG29xv5oB2Oxf28ux9J9WKal24+yrqk
+O1edDu1IK0X9Iu8QuV7GwJ4KYWu/19uL/fsQ+8qmHu0Y1G1HMaA6AZZLBHZX8yJ2
+GOPGZPlQEkLpR2c+A4yr8nrVe1MPt2l4WxmncEf5A2969wbJLXHCsqeYuRG1A1VN
+DFpd/xilJV60Ga/oA3TUrVbAvwD6CwUR6BIvlteMVq5r2xxdHGw=</tsl:X509Certificate>
+              </tsl:DigitalId>
+            </tsl:ServiceDigitalIdentity>
+            <tsl:ServiceStatus>http://uri.etsi.org/TrstSvc/TrustedList/Svcstatus/accredited</tsl:ServiceStatus>
+            <tsl:StatusStartingTime>2014-03-01T00:00:01Z</tsl:StatusStartingTime>
+            <tsl:SchemeServiceDefinitionURI>
+              <tsl:URI xml:lang="en">https://pki.multicert.com</tsl:URI>
+              <tsl:URI xml:lang="pt">https://pki.multicert.com</tsl:URI>
+            </tsl:SchemeServiceDefinitionURI>
+            <tsl:ServiceInformationExtensions>
+              <tsl:Extension Critical="true">
+                <ecc:Qualifications xmlns:ecc="http://uri.etsi.org/TrstSvc/SvcInfoExt/eSigDir-1999-93-EC-TrustedList/#" xmlns:xades="http://uri.etsi.org/01903/v1.3.2#" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+                  <ecc:QualificationElement>
+                    <ecc:Qualifiers>
+                      <ecc:Qualifier uri="http://uri.etsi.org/TrstSvc/eSigDir-1999-93-EC-TrustedList/SvcInfoExt/QCSSCDStatusAsInCert"/>
+                      <ecc:Qualifier uri="http://uri.etsi.org/TrstSvc/eSigDir-1999-93-EC-TrustedList/SvcInfoExt/QCStatement"/>
+                    </ecc:Qualifiers>
+                    <ecc:CriteriaList assert="all">
+                      <ecc:PolicySet>
+                        <ecc:PolicyIdentifier>
+                          <xades:Identifier>1.3.6.1.4.1.25070.1.1.1.1.0.1.2</xades:Identifier>
+                        </ecc:PolicyIdentifier>
+                      </ecc:PolicySet>
+                    </ecc:CriteriaList>
+                  </ecc:QualificationElement>
+                </ecc:Qualifications>
+              </tsl:Extension>
+            </tsl:ServiceInformationExtensions>
+          </tsl:ServiceInformation>
         </tsl:TSPService>
       </tsl:TSPServices>
     </tsl:TrustServiceProvider>
     <tsl:TrustServiceProvider>
       <tsl:TSPInformation>
         <tsl:TSPName>
-          <tsl:Name xml:lang="en">British Telecom</tsl:Name>
-          <tsl:Name xml:lang="pt">British Telecom</tsl:Name>
-        </tsl:TSPName>
-        <tsl:TSPTradeName>
           <tsl:Name xml:lang="en">British Telecommunications plc</tsl:Name>
           <tsl:Name xml:lang="pt">British Telecommunications plc</tsl:Name>
+        </tsl:TSPName>
+        <tsl:TSPTradeName>
+          <tsl:Name xml:lang="en">British Telecom</tsl:Name>
+          <tsl:Name xml:lang="pt">British Telecom</tsl:Name>
         </tsl:TSPTradeName>
         <tsl:TSPAddress>
           <tsl:PostalAddresses>
@@ -900,7 +913,7 @@ b1M0msAD0x0nElq2/fs=
             </tsl:PostalAddress>
           </tsl:PostalAddresses>
           <tsl:ElectronicAddress>
-            <tsl:URI>mailto:support@trustwise.com</tsl:URI>
+            <tsl:URI xml:lang="en">mailto:support@trustwise.com</tsl:URI>
           </tsl:ElectronicAddress>
         </tsl:TSPAddress>
         <tsl:TSPInformationURI>
@@ -920,9 +933,6 @@ b1M0msAD0x0nElq2/fs=
                 <tsl:X509SubjectName>CN=BT/DigitalSign Qualified CA,OU=Class 2 Managed PKI Individual Subscriber CA,OU=Terms of use at https://www.trustwise.com/rpa (c)08,OU=VeriSign Trust Network,OU=LRA - DigitalSign Certificadora Digital (PT507015851),O=British Telecommunications plc,C=GB</tsl:X509SubjectName>
               </tsl:DigitalId>
               <tsl:DigitalId>
-                <tsl:X509SKI>oYNyGj2enyLm3oLHkMlRAf+DKWs=</tsl:X509SKI>
-              </tsl:DigitalId>
-              <tsl:DigitalId>
                 <tsl:X509Certificate>
 MIIFkDCCBHigAwIBAgIQYUeap4Wb5VWhWJkpIyTydDANBgkqhkiG9w0BAQUFADB0MQswCQYDVQQG
 EwJHQjEnMCUGA1UEChMeQnJpdGlzaCBUZWxlY29tbXVuaWNhdGlvbnMgcGxjMR8wHQYDVQQLExZW
@@ -953,7 +963,7 @@ el2v
 </tsl:X509Certificate>
               </tsl:DigitalId>
             </tsl:ServiceDigitalIdentity>
-            <tsl:ServiceStatus>http://uri.etsi.org/TrstSvc/eSigDir-1999-93-EC-TrustedList/Svcstatus/accredited</tsl:ServiceStatus>
+            <tsl:ServiceStatus>http://uri.etsi.org/TrstSvc/TrustedList/Svcstatus/accredited</tsl:ServiceStatus>
             <tsl:StatusStartingTime>2009-04-22T23:00:01Z</tsl:StatusStartingTime>
           </tsl:ServiceInformation>
         </tsl:TSPService>
@@ -969,9 +979,6 @@ el2v
                 <tsl:X509SubjectName>CN=BT/DigitalSign Qualified CA,OU=Class 2 Managed PKI Individual Subscriber CA,OU=Terms of use at https://www.trustwise.com/rpa (c)08,OU=VeriSign Trust Network,OU=LRA - DigitalSign Certificadora Digital (PT507015851),O=British Telecommunications plc,C=GB</tsl:X509SubjectName>
               </tsl:DigitalId>
               <tsl:DigitalId>
-                <tsl:X509SKI>oYNyGj2enyLm3oLHkMlRAf+DKWs=</tsl:X509SKI>
-              </tsl:DigitalId>
-              <tsl:DigitalId>
                 <tsl:X509Certificate>
 MIIFkDCCBHigAwIBAgIQYUeap4Wb5VWhWJkpIyTydDANBgkqhkiG9w0BAQUFADB0MQswCQYDVQQG
 EwJHQjEnMCUGA1UEChMeQnJpdGlzaCBUZWxlY29tbXVuaWNhdGlvbnMgcGxjMR8wHQYDVQQLExZW
@@ -1002,7 +1009,7 @@ el2v
 </tsl:X509Certificate>
               </tsl:DigitalId>
             </tsl:ServiceDigitalIdentity>
-            <tsl:ServiceStatus>http://uri.etsi.org/TrstSvc/eSigDir-1999-93-EC-TrustedList/Svcstatus/undersupervision</tsl:ServiceStatus>
+            <tsl:ServiceStatus>http://uri.etsi.org/TrstSvc/TrustedList/Svcstatus/undersupervision</tsl:ServiceStatus>
             <tsl:StatusStartingTime>2009-04-22T23:00:01Z</tsl:StatusStartingTime>
             <tsl:SchemeServiceDefinitionURI>
               <tsl:URI xml:lang="en">http://www.digitalsign.pt</tsl:URI>
@@ -1011,32 +1018,220 @@ el2v
         </tsl:TSPService>
       </tsl:TSPServices>
     </tsl:TrustServiceProvider>
-  </tsl:TrustServiceProviderList>
-<ds:Signature xmlns:ds="http://www.w3.org/2000/09/xmldsig#" Id="xmldsig-e1003dd0-ff29-4dca-9e82-a016990f3d2d"><ds:SignedInfo><ds:CanonicalizationMethod Algorithm="http://www.w3.org/2001/10/xml-exc-c14n#"/><ds:SignatureMethod Algorithm="http://www.w3.org/2000/09/xmldsig#rsa-sha1"/><ds:Reference URI="#TrustServiceStatusList"><ds:Transforms><ds:Transform Algorithm="http://www.w3.org/2000/09/xmldsig#enveloped-signature"/><ds:Transform Algorithm="http://www.w3.org/2001/10/xml-exc-c14n#"/></ds:Transforms><ds:DigestMethod Algorithm="http://www.w3.org/2001/04/xmlenc#sha256"/><ds:DigestValue>pbhAoJFYGjrMbycA0M/rW177K2wLup4dXSTWZcml+tA=</ds:DigestValue></ds:Reference><ds:Reference Type="http://uri.etsi.org/01903#SignedProperties" URI="#xmldsig-e1003dd0-ff29-4dca-9e82-a016990f3d2d-xades"><ds:Transforms><ds:Transform Algorithm="http://www.w3.org/2001/10/xml-exc-c14n#"/></ds:Transforms><ds:DigestMethod Algorithm="http://www.w3.org/2001/04/xmlenc#sha256"/><ds:DigestValue>s18DdRxtgeAOp1BKsipwxN29aUaveStkZhsxti8l/Lc=</ds:DigestValue></ds:Reference></ds:SignedInfo><ds:SignatureValue Id="xmldsig-e1003dd0-ff29-4dca-9e82-a016990f3d2d-signature-value">lj6En+wro5CObbjR4yNY+0Y5hSeh3UOKjNam8AyaZvtYceQ54MRix/oXIUZ0un150VNMURnpPa6h
-f7zhtdtM6TBpcT0192UQrPBzEhK5lwrmFC5KRg83GzM5wsUG7Bcc1kz9IocSJ8amylH0GZui50n5
-I4XcPGnzq/gUnngnpN0=</ds:SignatureValue><ds:KeyInfo><ds:X509Data><ds:X509Certificate>MIIFKjCCBBKgAwIBAgIQdT3gwCnU9J5Lfr/0p0t5ezANBgkqhkiG9w0BAQUFADA+MQswCQYDVQQG
-EwJQVDENMAsGA1UECgwEU0NFRTERMA8GA1UECwwIRUNFc3RhZG8xDTALBgNVBAMMBEVDQ0UwHhcN
-MTAwMjE5MTYzMjA5WhcNMTMwMjE5MTYzMjA5WjCBizELMAkGA1UEBhMCUFQxLTArBgNVBAoTJFBy
-ZXNpZOpuY2lhIGRvIENvbnNlbGhvIGRlIE1pbmlzdHJvczEnMCUGA1UECxMeR2FiaW5ldGUgTmFj
-aW9uYWwgZGUgU2VndXJhbudhMSQwIgYDVQQDExtKb3PpIERlb2xpbmRvIFRvcnJlcyBTb2JyYWww
-gZ8wDQYJKoZIhvcNAQEBBQADgY0AMIGJAoGBAL2zmT6jyXz7qMDgp2xU8TZkuKr2Q2hKpzSt/NUf
-nQWZJBzluTucoqMnmaaQ2BZ+bZ4PBFtTRxPssiLth4Ve16CeQA26+ot/lNI/thaW54fCwdurYbKd
-pKpv2PwZtGRT1D8octsbTSKWR6rwomaAUtxQjQQakYGN6um/9GB3me2DAgMBAAGjggJYMIICVDBD
-BgNVHREEPDA6gRNqdHNvYnJhbEBuZXRjYWJvLnB0pCMwITEfMB0GC2CEbAEBAQICAAIBEw5EaXJl
-Y3Rvci1HZXJhbDAMBgNVHRMBAf8EAjAAMA4GA1UdDwEB/wQEAwIGQDATBgNVHSUEDDAKBggrBgEF
-BQcDBDARBglghkgBhvhCAQEEBAMCBSAwHQYDVR0OBBYEFMXcvYoqvFdTgjPQ9G+CxW2JIO/UMB8G
-A1UdIwQYMBaAFFkLZsz6exaYaA72XADzua3ppjp0MIH/BgNVHSAEgfcwgfQwgfEGCGCEbAEBAQIK
-MIHkMCYGCCsGAQUFBwIBFhpodHRwOi8vd3d3LmVjY2UuZ292LnB0L2RwYzCBuQYIKwYBBQUHAgIw
-gawagalPIGNlcnRpZmljYWRvIGVtaXRpZG8gc2VndW5kbyBlc3RhIHBvbO10aWNhIOkgZXF1aXZh
-bGVudGUgYSB1bSBjZXJ0aWZpY2FkbyBkaWdpdGFsIHF1YWxpZmljYWRvLCBub3MgdGVybW9zLCBk
-byBkZWZpbmlkbyBuYSBMZWdpc2xh5+NvIFBvcnR1Z3Vlc2EsIGFwbGlj4XZlbCBwYXJhIG8gZWZl
-aXRvMCIGCCsGAQUFBwEDBBYwFDAIBgYEAI5GAQEwCAYGBACORgEEMGEGA1UdHwRaMFgwKqAooCaG
-JGh0dHA6Ly9jcmxzLmVjY2UuZ292LnB0L2NybHMvY3JsLmNybDAqoCigJoYkaHR0cDovL2NybHMu
-ZWNjZS5nb3YucHQvY3Jscy9jcmwuY3JsMA0GCSqGSIb3DQEBBQUAA4IBAQCRP5tuQS3Fx1Jq6Qvg
-SETn3jC0KhYROWWTIpLqWFjvhuAUjQHiSA48hgCG/EnkVKuYMeW1O8xsd4ujGGDyK4/vqCOnNvPA
-Z50h2ADdz56VyIv3WZmIP/QHuZ8EE8VJGkwNTNUq86t5wQZ3oF3JKZSgP7ij1l3Ko2342Nv9eeUF
-oetIvvDgslygOARYNC8PUlEMlW8RriHJBBNCbny5dkKuxt7CWBh8bp6BJeIr9l2iwi6F5N83D1xr
-WnhkZmLsplLfR8VzIyXsfjzkFxjoNf5p0uuQhrQoB+j3i+eYpDas3z/tZ28xGJb08vnICReo3/Z4
-jvKnL9Bp9eEEveEhzW5d</ds:X509Certificate><ds:X509IssuerSerial><ds:X509IssuerName>CN=ECCE, OU=ECEstado, O=SCEE, C=PT</ds:X509IssuerName><ds:X509SerialNumber>155840964099710535181894397973314107771</ds:X509SerialNumber></ds:X509IssuerSerial></ds:X509Data><ds:KeyValue><ds:RSAKeyValue><ds:Modulus>vbOZPqPJfPuowOCnbFTxNmS4qvZDaEqnNK381R+dBZkkHOW5O5yioyeZppDYFn5tng8EW1NHE+yy
-Iu2HhV7XoJ5ADbr6i3+U0j+2Fpbnh8LB26thsp2kqm/Y/Bm0ZFPUPyhy2xtNIpZHqvCiZoBS3FCN
-BBqRgY3q6b/0YHeZ7YM=</ds:Modulus><ds:Exponent>AQAB</ds:Exponent></ds:RSAKeyValue></ds:KeyValue></ds:KeyInfo><ds:Object><xades:QualifyingProperties xmlns:xades="http://uri.etsi.org/01903/v1.3.2#" Target="#xmldsig-e1003dd0-ff29-4dca-9e82-a016990f3d2d" xmlns:ds="http://www.w3.org/2000/09/xmldsig#"><xades:SignedProperties Id="xmldsig-e1003dd0-ff29-4dca-9e82-a016990f3d2d-xades"><xades:SignedSignatureProperties><xades:SigningTime>2010-02-25T14:27:54.241Z</xades:SigningTime><xades:SigningCertificate><xades:Cert><xades:CertDigest><ds:DigestMethod Algorithm="http://www.w3.org/2001/04/xmlenc#sha256"/><ds:DigestValue>wqRiRUIufRx8zJ9R+93rA7X0CaLcIlRxny/xOzG9kQM=</ds:DigestValue></xades:CertDigest><xades:IssuerSerial><ds:X509IssuerName>CN=ECCE, OU=ECEstado, O=SCEE, C=PT</ds:X509IssuerName><ds:X509SerialNumber>155840964099710535181894397973314107771</ds:X509SerialNumber></xades:IssuerSerial></xades:Cert></xades:SigningCertificate></xades:SignedSignatureProperties></xades:SignedProperties></xades:QualifyingProperties></ds:Object></ds:Signature></tsl:TrustServiceStatusList>
+    <tsl:TrustServiceProvider>
+      <tsl:TSPInformation>
+        <tsl:TSPName>
+          <tsl:Name xml:lang="en">DigitalSign - Certificadora Digital</tsl:Name>
+          <tsl:Name xml:lang="pt">DigitalSign - Certificadora Digital</tsl:Name>
+        </tsl:TSPName>
+        <tsl:TSPTradeName>
+          <tsl:Name xml:lang="en">DigitalSign - Certificadora Digital, S.A.</tsl:Name>
+          <tsl:Name xml:lang="pt">DigitalSign - Certificadora Digital, S.A.</tsl:Name>
+        </tsl:TSPTradeName>
+        <tsl:TSPAddress>
+          <tsl:PostalAddresses>
+            <tsl:PostalAddress xml:lang="en">
+              <tsl:StreetAddress>Largo Pe. Bernardino Ribeiro Fernandes, 26</tsl:StreetAddress>
+              <tsl:Locality>Nespereira - Guimarães</tsl:Locality>
+              <tsl:StateOrProvince>Guimarães</tsl:StateOrProvince>
+              <tsl:PostalCode>4835-489 Nespereira - Guimarães</tsl:PostalCode>
+              <tsl:CountryName>PT</tsl:CountryName>
+            </tsl:PostalAddress>
+            <tsl:PostalAddress xml:lang="pt">
+              <tsl:StreetAddress>Largo Pe. Bernardino Ribeiro Fernandes, 26</tsl:StreetAddress>
+              <tsl:Locality>Nespereira - Guimarães</tsl:Locality>
+              <tsl:StateOrProvince>Guimarães</tsl:StateOrProvince>
+              <tsl:PostalCode>4835-489 Nespereira - Guimarães</tsl:PostalCode>
+              <tsl:CountryName>PT</tsl:CountryName>
+            </tsl:PostalAddress>
+          </tsl:PostalAddresses>
+          <tsl:ElectronicAddress>
+            <tsl:URI xml:lang="en">mailto:geral@digitalsign.pt</tsl:URI>
+            <tsl:URI xml:lang="en">http://www.digitalsign.pt</tsl:URI>
+          </tsl:ElectronicAddress>
+        </tsl:TSPAddress>
+        <tsl:TSPInformationURI>
+          <tsl:URI xml:lang="en">http://www.digitalsign.pt/ECDIGITALSIGN/cps/</tsl:URI>
+        </tsl:TSPInformationURI>
+      </tsl:TSPInformation>
+      <tsl:TSPServices>
+        <tsl:TSPService>
+          <tsl:ServiceInformation>
+            <tsl:ServiceTypeIdentifier>http://uri.etsi.org/TrstSvc/Svctype/CA/QC</tsl:ServiceTypeIdentifier>
+            <tsl:ServiceName>
+              <tsl:Name xml:lang="en">Digitalsign (CA-Qualified Certificates)</tsl:Name>
+              <tsl:Name xml:lang="pt">Digitalsign (EC-Certificados Qualificados)</tsl:Name>
+            </tsl:ServiceName>
+            <tsl:ServiceDigitalIdentity>
+              <tsl:DigitalId>
+                <tsl:X509SubjectName>CN = DigitalSign Qualified CA, OU = Class 2 Managed PKI Individual Subscriber CA, OU = Terms of use at https://www.trustwise.com/rpa (c)08, OU = VeriSign Trust Network, O = DigitalSign - Certificadora Digital, C = PT</tsl:X509SubjectName>
+              </tsl:DigitalId>
+              <tsl:DigitalId>
+                <tsl:X509Certificate>MIIFUTCCBDmgAwIBAgIQA8gNst29Jzdf7G1q4Y41MzANBgkqhkiG9w0BAQUFADB0
+MQswCQYDVQQGEwJHQjEnMCUGA1UEChMeQnJpdGlzaCBUZWxlY29tbXVuaWNhdGlv
+bnMgcGxjMR8wHQYDVQQLExZWZXJpU2lnbiBUcnVzdCBOZXR3b3JrMRswGQYDVQQD
+ExJCVCBDbGFzcyAyIENBIC0gRzIwHhcNMDgwNjEzMDAwMDAwWhcNMTgwNjExMjM1
+OTU5WjCB9DELMAkGA1UEBhMCUFQxLDAqBgNVBAoTI0RpZ2l0YWxTaWduIC0gQ2Vy
+dGlmaWNhZG9yYSBEaWdpdGFsMR8wHQYDVQQLExZWZXJpU2lnbiBUcnVzdCBOZXR3
+b3JrMTwwOgYDVQQLEzNUZXJtcyBvZiB1c2UgYXQgaHR0cHM6Ly93d3cudHJ1c3R3
+aXNlLmNvbS9ycGEgKGMpMDgxNTAzBgNVBAsTLENsYXNzIDIgTWFuYWdlZCBQS0kg
+SW5kaXZpZHVhbCBTdWJzY3JpYmVyIENBMSEwHwYDVQQDExhEaWdpdGFsU2lnbiBR
+dWFsaWZpZWQgQ0EwggEiMA0GCSqGSIb3DQEBAQUAA4IBDwAwggEKAoIBAQCnpbFC
++LeXCigYZLRotgC295f7W60aeRSiVTNE5CgeP7qk2R/z+GjRMLXn9hcy8/92fjqT
+n9CMenyzsr/wE1Ki0vcE73SSLOvMKsyVn5yFt2UJ5RpmUloC743HsPIv8Xdy1k7i
+uj+4W3+hIXsyA9o7QSbJmWMI8x2avSg28ocpCsOmtTTakvSqJC3Q33hQomF/MSXE
+zAEoSNuNQwJWux1ZzYTIunjb4B7g6zKGvPWGB5tof6/MIo53IRRgofaG9S8o3xZg
+ZgMaaBQ4aOjRMvE0kORa+L4j6qxqE/Tizzr/n//V/6UedE9kYyiJOeJb1XsDg4bm
+ApvIAnZ3INeP4hHZAgMBAAGjggFcMIIBWDAOBgNVHQ8BAf8EBAMCAQYwEQYJYIZI
+AYb4QgEBBAQDAgEGMBIGA1UdEwEB/wQIMAYBAf8CAQAwKAYDVR0RBCEwH6QdMBsx
+GTAXBgNVBAMTEGJ0MjA0OGMyUHViMS0yMDEwHQYDVR0OBBYEFLsfRB3sIveg9Svy
+jyOQWfiymSCqMHIGA1UdIARrMGkwZwYLYIZIAYb4RQEHFwIwWDApBggrBgEFBQcC
+ARYdaHR0cHM6Ly93d3cudHJ1c3R3aXNlLmNvbS9jcHMwKwYIKwYBBQUHAgIwHxod
+aHR0cHM6Ly93d3cudHJ1c3R3aXNlLmNvbS9ycGEwQQYDVR0fBDowODA2oDSgMoYw
+aHR0cDovL29uc2l0ZWNybC50cnVzdHdpc2UuY29tL0JUQ2xhc3MyQ0EtRzIuY3Js
+MB8GA1UdIwQYMBaAFGq7BXz93s3m2wjKO9lOJD07V7P0MA0GCSqGSIb3DQEBBQUA
+A4IBAQB2uiu2wtZWS+HL10lE0FtBRSmLRKbKIaqFNWEOlfX7QoqK6nJnYAUheCzw
+Mg77USCc0ivzwRyNvbY6U9V5eRdw6PpcfcJ77sIO1d0boOczioOg8ywmnRPFd7CZ
+cQp7WQIh/W57H1k8qcUwKrCcjOCW+JDz5d4tjHe3aFLsjNwjGHyUq25Fes1WFDfM
+c3EHq3M2YXHSOUgjlGVnW3TeURVCURos6hxqUF249s7YDYfwZQyY9EqFWLPIsyta
+CwcG7w0HbqJUL12IiAHvHtGoXNtvYNptuGbwfRhs8wgswoe3hthBXGFSnwkMCdEa
+J/ZZiGgIcGH2ex0gtPdu5Ruhr5Jw
+</tsl:X509Certificate>
+              </tsl:DigitalId>
+            </tsl:ServiceDigitalIdentity>
+            <tsl:ServiceStatus>http://uri.etsi.org/TrstSvc/TrustedList/Svcstatus/undersupervision</tsl:ServiceStatus>
+            <tsl:StatusStartingTime>2011-12-19T00:00:01Z</tsl:StatusStartingTime>
+            <tsl:SchemeServiceDefinitionURI>
+              <tsl:URI xml:lang="en">http://www.digitalsign.pt/ECDIGITALSIGN/cps/</tsl:URI>
+              <tsl:URI xml:lang="pt">http://www.digitalsign.pt/ECDIGITALSIGN/cps/</tsl:URI>
+            </tsl:SchemeServiceDefinitionURI>
+            <tsl:ServiceInformationExtensions>
+              <tsl:Extension Critical="true">
+                <ecc:Qualifications xmlns:ecc="http://uri.etsi.org/TrstSvc/SvcInfoExt/eSigDir-1999-93-EC-TrustedList/#" xmlns:xades="http://uri.etsi.org/01903/v1.3.2#" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+                  <ecc:QualificationElement>
+                    <ecc:Qualifiers>
+                      <ecc:Qualifier uri="http://uri.etsi.org/TrstSvc/TrustedList/SvcInfoExt/QCSSCDStatusAsInCert"/>
+                      <ecc:Qualifier uri="http://uri.etsi.org/TrstSvc/TrustedList/SvcInfoExt/QCStatement"/>
+                    </ecc:Qualifiers>
+                    <ecc:CriteriaList assert="all">
+                      <ecc:PolicySet>
+                        <ecc:PolicyIdentifier>
+                          <xades:Identifier>2.16.840.1.113733.1.7.44.2</xades:Identifier>
+                        </ecc:PolicyIdentifier>
+                      </ecc:PolicySet>
+                    </ecc:CriteriaList>
+                  </ecc:QualificationElement>
+                </ecc:Qualifications>
+              </tsl:Extension>
+            </tsl:ServiceInformationExtensions>
+          </tsl:ServiceInformation>
+        </tsl:TSPService>
+        <tsl:TSPService>
+          <tsl:ServiceInformation>
+            <tsl:ServiceTypeIdentifier xml:lang="en">http://uri.etsi.org/TrstSvc/Svctype/TSA/QTST</tsl:ServiceTypeIdentifier>
+            <tsl:ServiceName>
+              <tsl:Name xml:lang="en">Digitalsign (Qualified TSA)</tsl:Name>
+              <tsl:Name xml:lang="pt">Digitalsign (Serviço de Validação Cronológica Qualificado - TSA)</tsl:Name>
+            </tsl:ServiceName>
+            <tsl:ServiceDigitalIdentity>
+              <tsl:DigitalId>
+                <tsl:X509SubjectName>CN = DigitalSign TSA, O = DigitalSign - Certificadora Digital, C = PT</tsl:X509SubjectName>
+              </tsl:DigitalId>
+              <tsl:DigitalId>
+                <tsl:X509Certificate>MIIFGTCCBAGgAwIBAgIQPtdfZGlWUoqJ3zrqYEX0CDANBgkqhkiG9w0BAQUFADCB
+9DELMAkGA1UEBhMCUFQxLDAqBgNVBAoTI0RpZ2l0YWxTaWduIC0gQ2VydGlmaWNh
+ZG9yYSBEaWdpdGFsMR8wHQYDVQQLExZWZXJpU2lnbiBUcnVzdCBOZXR3b3JrMTww
+OgYDVQQLEzNUZXJtcyBvZiB1c2UgYXQgaHR0cHM6Ly93d3cudHJ1c3R3aXNlLmNv
+bS9ycGEgKGMpMDgxNTAzBgNVBAsTLENsYXNzIDIgTWFuYWdlZCBQS0kgSW5kaXZp
+ZHVhbCBTdWJzY3JpYmVyIENBMSEwHwYDVQQDExhEaWdpdGFsU2lnbiBRdWFsaWZp
+ZWQgQ0EwHhcNMTIwNjI3MDAwMDAwWhcNMTgwNjExMjM1OTU5WjBVMQswCQYDVQQG
+EwJQVDEsMCoGA1UEChMjRGlnaXRhbFNpZ24gLSBDZXJ0aWZpY2Fkb3JhIERpZ2l0
+YWwxGDAWBgNVBAMTD0RpZ2l0YWxTaWduIFRTQTCCASIwDQYJKoZIhvcNAQEBBQAD
+ggEPADCCAQoCggEBAN+4C31C5k3s/BfCrCpVxgTmrnzBsdJkfBT7f0N6UXqN/+ct
+3/048bbqpfvW455J8DSqRN6hkz32Ec4jC3WVpCjnxP+EXI/dj6bBq5nEXRg+Bn+t
+vz/2377T1WzYLI+tiP4397RhXiRCtcNIwOnnObRSPk3OkMe584N1q3d8+BzjcOdv
+aZ6Is+2yhGk3KO2Z2Pq+gjDJH98AmP9PE/TRIXHWljXT4gz7TKkEYWOYtawO4LNn
+gcIsPReFgICs+AqSULbj1OuN1m5TCJ2YDZ0b4trMpl2XY26vrlsnYQKqBcJm2LqC
+HZNVxl/4tt62OIohSkkOzkavr16WqW37G+8kp80CAwEAAaOCAUMwggE/MAwGA1Ud
+EwEB/wQCMAAwVAYDVR0gBE0wSzBJBgtghkgBhvhFAQcXAjA6MDgGCCsGAQUFBwIB
+FixodHRwczovL3d3dy5kaWdpdGFsc2lnbi5wdC9FQ0RJR0lUQUxTSUdOL2NwczBx
+BgNVHR8EajBoMGagZKBihmBodHRwOi8vb25zaXRlY3JsLnRydXN0d2lzZS5jb20v
+RGlnaXRhbFNpZ25DZXJ0aWZpY2Fkb3JhRGlnaXRhbFF1YWxpZmllZENlcnRpZmlj
+YXRlL0xhdGVzdENSTC5jcmwwDgYDVR0PAQH/BAQDAgbAMB0GA1UdDgQWBBTk7wHO
+jFbg1kDl4BTWEgM16Jyo0TAWBgNVHSUBAf8EDDAKBggrBgEFBQcDCDAfBgNVHSME
+GDAWgBS7H0Qd7CL3oPUr8o8jkFn4spkgqjANBgkqhkiG9w0BAQUFAAOCAQEALIKg
+ofI89pm+B70cTwBX5Z6U1+6wgus8hef9xmwpuRQKQ2d9tNwMfjjMZXt+jYynO/am
+/YDN3qvrOHLmVqGZdrsuydsTKVEb+6sslnjuEoDA9oUfcOrNk7QOoJgeZrVDO7Du
+atw6rJDPSG76TwLWVItAL+mXgVFQilJejjlDtRBOZFBrSIjz2+XrqjJjPNTy4Og9
+TT4SzUOkFrpjt36BD03pzAUVP3NccNlVqpQwebkuIeovJ/Cso6BtyZn/paMVLiec
+g1ip23HEUDQqNJarXzAtPwmWVUp7pL8+CGkWLSgyl/fHGJbEF0Ki1OQg3fzvkmTi
+3KdJhBDLf+YkbWg9cQ==
+</tsl:X509Certificate>
+              </tsl:DigitalId>
+            </tsl:ServiceDigitalIdentity>
+            <tsl:ServiceStatus>http://uri.etsi.org/TrstSvc/TrustedList/Svcstatus/undersupervision</tsl:ServiceStatus>
+            <tsl:StatusStartingTime>2013-06-21T00:00:01Z</tsl:StatusStartingTime>
+            <tsl:SchemeServiceDefinitionURI>
+              <tsl:URI xml:lang="en">https://www.digitalsign.pt/ECDIGITALSIGN/cps</tsl:URI>
+              <tsl:URI xml:lang="pt">https://www.digitalsign.pt/ECDIGITALSIGN/cps</tsl:URI>
+            </tsl:SchemeServiceDefinitionURI>
+          </tsl:ServiceInformation>
+        </tsl:TSPService>
+        <tsl:TSPService>
+          <tsl:ServiceInformation>
+            <tsl:ServiceTypeIdentifier>http://uri.etsi.org/TrstSvc/Svctype/TSA/QTST</tsl:ServiceTypeIdentifier>
+            <tsl:ServiceName>
+              <tsl:Name xml:lang="en">Digitalsign (Qualified TSA)</tsl:Name>
+              <tsl:Name xml:lang="pt">Digitalsign (Serviço de Validação Cronológica Qualificado - TSA)</tsl:Name>
+            </tsl:ServiceName>
+            <tsl:ServiceDigitalIdentity>
+              <tsl:DigitalId>
+                <tsl:X509SubjectName>CN = DigitalSign TSA - G2, OU = Symantec Trust Network, O = DigitalSign - Certificadora Digital, C = PT</tsl:X509SubjectName>
+              </tsl:DigitalId>
+              <tsl:DigitalId>
+                <tsl:X509Certificate>MIIF+TCCBOGgAwIBAgIQCQFStOb9/Bp5UMn1VuM2YDANBgkqhkiG9w0BAQsFADCB
+uzELMAkGA1UEBhMCUFQxLDAqBgNVBAoTI0RpZ2l0YWxTaWduIC0gQ2VydGlmaWNh
+ZG9yYSBEaWdpdGFsMR8wHQYDVQQLExZTeW1hbnRlYyBUcnVzdCBOZXR3b3JrMTUw
+MwYDVQQLEyxDbGFzcyAyIE1hbmFnZWQgUEtJIEluZGl2aWR1YWwgU3Vic2NyaWJl
+ciBDQTEmMCQGA1UEAxMdRGlnaXRhbFNpZ24gUXVhbGlmaWVkIENBIC0gRzIwHhcN
+MTMxMDMxMDAwMDAwWhcNMTkxMDMwMjM1OTU5WjB7MQswCQYDVQQGEwJQVDEsMCoG
+A1UEChMjRGlnaXRhbFNpZ24gLSBDZXJ0aWZpY2Fkb3JhIERpZ2l0YWwxHzAdBgNV
+BAsTFlN5bWFudGVjIFRydXN0IE5ldHdvcmsxHTAbBgNVBAMTFERpZ2l0YWxTaWdu
+IFRTQSAtIEcyMIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAvH+Na4N+
+aBBjzTt46fnW63iN4kEwj01JydNJBW7VK9nNbojD85DxkBOV19VwWd2ryrMM3TG3
+MwM1cDBRPIWs0Asm16BMNYvtDast8014yIu6jUJeNTk8cwmuHmBNY+Q4kt+NNzlr
+tgwetLbe36B1FWDYfTGwe4vgy5l7n47UnwpQHeYgBbiMLKZ4HF4A3MrqaazjggwF
+CXAYNpguNNtZWEUARoWWhLdpUel5oPwO7zlb9PoD2MlO3YTPyUpT0uAEVd6uGFjQ
+hCa8rAMyLqKcp0XsUWOnebFse43h6V17qF14ZuQwm0I582j8RLtzxl7JMNHHrG4V
+CwY5SenkziXkzQIDAQABo4ICNjCCAjIwDgYDVR0PAQH/BAQDAgbAMCIGCCsGAQUF
+BwEDBBYwFDAIBgYEAI5GAQEwCAYGBACORgEEMB0GA1UdDgQWBBQnhvlI8YQ8aGsf
+Mhmmt9GRsJ69KTAMBgNVHRMBAf8EAjAAMIIBHwYDVR0gBIIBFjCCARIwggEOBgtg
+hkgBhvhFAQcXAjCB/jA4BggrBgEFBQcCARYsaHR0cHM6Ly93d3cuZGlnaXRhbHNp
+Z24ucHQvRUNESUdJVEFMU0lHTi9jcHMwOgYIKwYBBQUHAgIwLhosaHR0cHM6Ly93
+d3cuZGlnaXRhbHNpZ24ucHQvRUNESUdJVEFMU0lHTi9ycGEwgYUGCCsGAQUFBwIC
+MHkad0luIGV2ZW50IG9mIGEgY29uZmxpY3QgYmV0d2VlbiB0aGUgdGVybXMgb2Yg
+QlQgQ1BTIGFuZCB0aGUgdGVybXMgb2YgRGlnaXRhbFNpZ24gQ1BTLCB0aGUgdGVy
+bXMgb2YgQlQgQ1BTIHNoYWxsIGNvbnRyb2wuMHMGA1UdHwRsMGowaKBmoGSGYmh0
+dHA6Ly9vbnNpdGVjcmwudHJ1c3R3aXNlLmNvbS9EaWdpdGFsU2lnbkNlcnRpZmlj
+YWRvcmFEaWdpdGFsUXVhbGlmaWVkQ2VydGlmaWNhdGVHMi9MYXRlc3RDUkwuY3Js
+MBYGA1UdJQEB/wQMMAoGCCsGAQUFBwMIMB8GA1UdIwQYMBaAFCjtST2CrVmXEUFs
+lLOwSrJZiRR5MA0GCSqGSIb3DQEBCwUAA4IBAQCHg+x+oHvI96icfdV4sLY6Fd+a
+axVRU7smb6nExRCPTnt+qwtMc9qHSet+ioEdwtF6SasJLgTHn5MExBqVAfuKAGVh
+BYdZr59a6sjb23DIxqpovP3SXt4TRSzFva+dBrSq/9MxOlBcdvaGYes8Xb+IIIZW
+pzm8ZgK/XsmFPWoasIM5CQ/CunbZoIGp6y5mtCGzTmenbfuOD8kF3z33mEonS5kh
+nkg4qT4PFkKC1E9+f7OS6UiTyo6VsNSyjyXaLH96KOsh4BKFrWO4SaUIC9hCHufr
+TiCeJpC1VsE8KzOdaeEUAENKsLyCzjx/lAouHeXKZ9M0SNq1VbXgX7c2tPHN</tsl:X509Certificate>
+              </tsl:DigitalId>
+            </tsl:ServiceDigitalIdentity>
+            <tsl:ServiceStatus>http://uri.etsi.org/TrstSvc/TrustedList/Svcstatus/undersupervision</tsl:ServiceStatus>
+            <tsl:StatusStartingTime>2014-02-06T00:00:01Z</tsl:StatusStartingTime>
+            <tsl:SchemeServiceDefinitionURI>
+              <tsl:URI xml:lang="en">https://www.digitalsign.pt/ECDIGITALSIGN/cps</tsl:URI>
+              <tsl:URI xml:lang="pt">https://www.digitalsign.pt/ECDIGITALSIGN/cps</tsl:URI>
+            </tsl:SchemeServiceDefinitionURI>
+          </tsl:ServiceInformation>
+        </tsl:TSPService>
+      </tsl:TSPServices>
+    </tsl:TrustServiceProvider>
+  </tsl:TrustServiceProviderList><ds:Signature xmlns:ds="http://www.w3.org/2000/09/xmldsig#" Id="Signature-1684561369"><ds:SignedInfo><ds:CanonicalizationMethod Algorithm="http://www.w3.org/2001/10/xml-exc-c14n#"/><ds:SignatureMethod Algorithm="http://www.w3.org/2001/04/xmldsig-more#rsa-sha256"/><ds:Reference Id="id-LockItSignatureReference-1x542538200" URI=""><ds:Transforms><ds:Transform Algorithm="http://www.w3.org/2000/09/xmldsig#enveloped-signature"/><ds:Transform Algorithm="http://www.w3.org/2001/10/xml-exc-c14n#"/></ds:Transforms><ds:DigestMethod Algorithm="http://www.w3.org/2001/04/xmlenc#sha256"/><ds:DigestValue>Iicef/4Le2ovoXmX9zGH9439uAJ9TtJNkU/ldeQxEw0=</ds:DigestValue></ds:Reference><ds:Reference Type="http://uri.etsi.org/01903#SignedProperties" URI="#SignedProperties-227113597"><ds:Transforms><ds:Transform Algorithm="http://www.w3.org/2001/10/xml-exc-c14n#"/></ds:Transforms><ds:DigestMethod Algorithm="http://www.w3.org/2001/04/xmlenc#sha256"/><ds:DigestValue>mHE7l3udwSSZpoUWDJSaEfQ6/rcvjHkgF5WM+CwuVjs=</ds:DigestValue></ds:Reference></ds:SignedInfo><ds:SignatureValue>nqSALLehKsrcQfE1nU5BtsTmL+GaZpvxlIMULTYterk3zeMT7R9XEoEoSbdtxUM+i6rkg45FNUoDbRbpEbDbr9LoCmgOTSSNObh9fmkGiLFVmw2RzF1o22cXQfGhiUuAUV6E9zRjaIZlcQcDbpnTB5a0Cbq/w5XMAeHirhCeNMw=</ds:SignatureValue><ds:KeyInfo><ds:KeyValue><ds:RSAKeyValue><ds:Modulus>rdhrJnhlVDnYav4WCPQ4KbiDzU7qkLmVGTmOR9WnjXlBy8aDnoJshHTccHQJaBFv16QDKTJs0nccNLGJ0x0ag7WQHGVa6wiFUo5LlD92G38t7ktImWo5IUWL+jV3DaOruCWFw0y1PSWPFSpE6hrcL1Ish2VAVzGPraWJlz9kWtE=</ds:Modulus><ds:Exponent>AQAB</ds:Exponent></ds:RSAKeyValue></ds:KeyValue><ds:X509Data><ds:X509IssuerSerial><ds:X509IssuerName>CN=ECCE, OU=ECEstado, O=SCEE, C=PT</ds:X509IssuerName><ds:X509SerialNumber>42466286775278460040921971076021202205</ds:X509SerialNumber></ds:X509IssuerSerial><ds:X509SubjectName>CN=José Deolindo Torres Sobral, OU=Gabinete Nacional de Segurança, O=Presidência do Conselho de Ministros, C=PT</ds:X509SubjectName><ds:X509Certificate>MIIFKjCCBBKgAwIBAgIQH/K1ltSrX/hSFKpj7I2tHTANBgkqhkiG9w0BAQUFADA+MQswCQYDVQQGEwJQVDENMAsGA1UECgwEU0NFRTERMA8GA1UECwwIRUNFc3RhZG8xDTALBgNVBAMMBEVDQ0UwHhcNMTMwODIxMTE1NjQ5WhcNMTYwODIxMTE1NjQ5WjCBizELMAkGA1UEBhMCUFQxLTArBgNVBAoTJFByZXNpZOpuY2lhIGRvIENvbnNlbGhvIGRlIE1pbmlzdHJvczEnMCUGA1UECxMeR2FiaW5ldGUgTmFjaW9uYWwgZGUgU2VndXJhbudhMSQwIgYDVQQDExtKb3PpIERlb2xpbmRvIFRvcnJlcyBTb2JyYWwwgZ8wDQYJKoZIhvcNAQEBBQADgY0AMIGJAoGBAK3YayZ4ZVQ52Gr+Fgj0OCm4g81O6pC5lRk5jkfVp415QcvGg56CbIR03HB0CWgRb9ekAykybNJ3HDSxidMdGoO1kBxlWusIhVKOS5Q/dht/Le5LSJlqOSFFi/o1dw2jq7glhcNMtT0ljxUqROoa3C9SLIdlQFcxj62liZc/ZFrRAgMBAAGjggJYMIICVDBDBgNVHREEPDA6gRNqdHNvYnJhbEBuZXRjYWJvLnB0pCMwITEfMB0GC2CEbAEBAQICAAIBEw5EaXJlY3Rvci1HZXJhbDAMBgNVHRMBAf8EAjAAMA4GA1UdDwEB/wQEAwIGQDATBgNVHSUEDDAKBggrBgEFBQcDBDARBglghkgBhvhCAQEEBAMCBSAwHQYDVR0OBBYEFJPoXwwWAyUiCEw2MLBjBGPvhQafMB8GA1UdIwQYMBaAFFkLZsz6exaYaA72XADzua3ppjp0MIH/BgNVHSAEgfcwgfQwgfEGCGCEbAEBAQIKMIHkMCYGCCsGAQUFBwIBFhpodHRwOi8vd3d3LmVjY2UuZ292LnB0L2RwYzCBuQYIKwYBBQUHAgIwgawagalPIGNlcnRpZmljYWRvIGVtaXRpZG8gc2VndW5kbyBlc3RhIHBvbO10aWNhIOkgZXF1aXZhbGVudGUgYSB1bSBjZXJ0aWZpY2FkbyBkaWdpdGFsIHF1YWxpZmljYWRvLCBub3MgdGVybW9zLCBkbyBkZWZpbmlkbyBuYSBMZWdpc2xh5+NvIFBvcnR1Z3Vlc2EsIGFwbGlj4XZlbCBwYXJhIG8gZWZlaXRvMCIGCCsGAQUFBwEDBBYwFDAIBgYEAI5GAQEwCAYGBACORgEEMGEGA1UdHwRaMFgwKqAooCaGJGh0dHA6Ly9jcmxzLmVjY2UuZ292LnB0L2NybHMvY3JsLmNybDAqoCigJoYkaHR0cDovL2NybHMuZWNjZS5nb3YucHQvY3Jscy9jcmwuY3JsMA0GCSqGSIb3DQEBBQUAA4IBAQA6aeUvpKENqd0cP38sziAJezFkAwH8VKM4P33ej0YFwvAPsCqJMMAmj2s2stxoW3HPR9QiN5Rlyc1DrSdLZ5A1lK8YtA1QhhO0224jdHfIuRM2fAL7+ZPhd6vF27OjVOEW8V77SuuWIRSSU/rH4BnGJsR6CsRjZd9CZVkgmuyBlCO7VKotNynapB4Xgfk4a9twnQk01ae8jQDUcsB1t2y1oJ5ahAvFhMjx9HEjXxbVG6JXBfe7fvqZtJ5PNCktKFMZnbANms/RXf5KitLlGqsjsoyhGRb0j2aru8VDx0nOOTV+MI/YlyZPsTOHCjNKcQf8NKFIVE2ewjBlaZJd1y/+</ds:X509Certificate></ds:X509Data></ds:KeyInfo><ds:Object><xades:QualifyingProperties xmlns:xades="http://uri.etsi.org/01903/v1.3.2#" Target="#Signature-1684561369"><xades:SignedProperties Id="SignedProperties-227113597"><xades:SignedSignatureProperties><xades:SigningTime>2014-03-31T14:18:46.042Z</xades:SigningTime><xades:SigningCertificate><xades:Cert><xades:CertDigest><ds:DigestMethod Algorithm="http://www.w3.org/2001/04/xmlenc#sha256"/><ds:DigestValue>CbP+GAM57Gz20kxpjpy5v95bz4t5FSDszwsjtB3jduM=</ds:DigestValue></xades:CertDigest><xades:IssuerSerial><ds:X509IssuerName>CN=ECCE, OU=ECEstado, O=SCEE, C=PT</ds:X509IssuerName><ds:X509SerialNumber>42466286775278460040921971076021202205</ds:X509SerialNumber></xades:IssuerSerial></xades:Cert></xades:SigningCertificate><xades:SignaturePolicyIdentifier><xades:SignaturePolicyImplied/></xades:SignaturePolicyIdentifier></xades:SignedSignatureProperties><xades:SignedDataObjectProperties><xades:DataObjectFormat ObjectReference="#id-LockItSignatureReference-1x542538200"><xades:Description>Content-Type: text/xml; charset=UTF-8; name="doc.xml"</xades:Description><xades:MimeType>text/xml</xades:MimeType></xades:DataObjectFormat></xades:SignedDataObjectProperties></xades:SignedProperties></xades:QualifyingProperties></ds:Object></ds:Signature>
+</tsl:TrustServiceStatusList>

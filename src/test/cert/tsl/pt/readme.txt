@@ -2,4 +2,4 @@
 
 Certificates in the Portuguese Government PKI. The top most CA is "GTE CyberTrust Global Root".
 
-Used to verify the PT TSL.
+Used to verify the PT TSL (http://www.gns.gov.pt/trusted-lists.aspx).
