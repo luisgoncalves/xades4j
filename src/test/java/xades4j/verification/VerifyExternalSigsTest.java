@@ -53,14 +53,18 @@ public class VerifyExternalSigsTest extends VerifierTestBase
         verifyTSL("TSL_BE.xml", cvp);
     }
 
-    @Test
-    public void testVerifyESTSL() throws Exception
-    {
-        KeyStore ks = createAndLoadJKSKeyStore("tsl/es/esStore", "esstorepass");
-        FileSystemDirectoryCertStore certStore = createDirectoryCertStore("tsl/es");
-        PKIXCertificateValidationProvider cvp = new PKIXCertificateValidationProvider(ks, false, certStore.getStore());
-        verifyTSL("TSL_ES.xml", cvp);
-    }
+//    @Test
+//    public void testVerifyESTSL() throws Exception
+//    {
+//        // The CertRef on the SigningCertificate property doesn't seem to obey to
+//        // the DN encoding rules: the RDN are in the same order as the certificate
+//        // instead of reverse order as stated on RFC 4514.
+//        
+//        KeyStore ks = createAndLoadJKSKeyStore("tsl/es/esStore", "esstorepass");
+//        FileSystemDirectoryCertStore certStore = createDirectoryCertStore("tsl/es");
+//        PKIXCertificateValidationProvider cvp = new PKIXCertificateValidationProvider(ks, false, certStore.getStore());
+//        verifyTSL("TSL_ES.xml", cvp);
+//    }
     
     @Test
     public void testVerifyITTSL() throws Exception
