@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
     <modelVersion>4.0.0</modelVersion>
-    <groupId>code.google.com.xades4j</groupId>
+    <groupId>com.google.code.xades4j</groupId>
     <artifactId>xades4j</artifactId>
     <packaging>jar</packaging>
     <version>1.3.1-SNAPSHOT</version>
@@ -29,12 +29,17 @@
         </license>
     </licenses>
 
+    <scm>
+        <url>https://code.google.com/p/xades4j</url>
+        <connection>scm:git:https://code.google.com/p/xades4j</connection>
+    </scm>
+
     <developers>
         <developer>
             <id>Lead developer</id>
             <name>Luís Gonçalves</name>
             <email>luis.fgoncalv@gmail.com</email>
-            <url>http://luisfsgoncalves.wordpress.com/</url>
+            <url>http://luisfsgoncalves.wordpress.com</url>
         </developer>
     </developers>
 
@@ -67,45 +72,58 @@
         </dependency>
     </dependencies>
 	
-	<build>
-		<plugins>
-			<plugin>
-				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-javadoc-plugin</artifactId>
-				<version>2.9.1</version>
-				<configuration>
-					<docletArtifact>
-						<groupId>com.google.doclava</groupId>
-						<artifactId>doclava</artifactId>
-						<version>1.0.5</version>
-					</docletArtifact>
-					<doclet>com.google.doclava.Doclava</doclet>
-					<!--
-					| bootclasspath required by Sun's JVM 
-					-->
-					<bootclasspath>${sun.boot.class.path}</bootclasspath>
-					<additionalparam>
-					-quiet
-					-federate JDK http://download.oracle.com/javase/6/docs/api/index.html?
-					-federationxml JDK http://doclava.googlecode.com/svn/static/api/openjdk-6.xml
-					-hdf project.name "${project.name}"
-					-d ${project.build.directory}/apidocs
-					</additionalparam>
-					<useStandardDocletOptions>false</useStandardDocletOptions>
-					<!--
-					| Apple's JVM sometimes requires more memory
-					-->
-					<additionalJOption>-J-Xmx1024m</additionalJOption>
-				</configuration>
-				<executions>
-					<execution>
-						<id>attach-javadocs</id>
-						<goals>
-							<goal>jar</goal>
-						</goals>
-					</execution>
-				</executions>
-			</plugin>
-		</plugins>
-	</build>
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-source-plugin</artifactId>
+                <version>2.2.1</version>
+                <executions>
+                    <execution>
+                        <id>attach-sources</id>
+                        <goals>
+                            <goal>jar-no-fork</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-javadoc-plugin</artifactId>
+                <version>2.9.1</version>
+                <configuration>
+                    <docletArtifact>
+                        <groupId>com.google.doclava</groupId>
+                        <artifactId>doclava</artifactId>
+                        <version>1.0.5</version>
+                    </docletArtifact>
+                    <doclet>com.google.doclava.Doclava</doclet>
+                    <!--
+                    | bootclasspath required by Sun's JVM 
+                    -->
+                    <bootclasspath>${sun.boot.class.path}</bootclasspath>
+                    <additionalparam>
+                        -quiet
+                        -federate JDK http://download.oracle.com/javase/6/docs/api/index.html?
+                        -federationxml JDK http://doclava.googlecode.com/svn/static/api/openjdk-6.xml
+                        -hdf project.name "${project.name}"
+                        -d ${project.build.directory}/apidocs
+                    </additionalparam>
+                    <useStandardDocletOptions>false</useStandardDocletOptions>
+                    <!--
+                    | Apple's JVM sometimes requires more memory
+                    -->
+                    <additionalJOption>-J-Xmx1024m</additionalJOption>
+                </configuration>
+                <executions>
+                    <execution>
+                        <id>attach-javadocs</id>
+                        <goals>
+                            <goal>jar</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+        </plugins>
+    </build>
 </project>
