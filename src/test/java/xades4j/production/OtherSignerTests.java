@@ -19,6 +19,7 @@ package xades4j.production;
 import org.apache.xml.security.signature.XMLSignatureInput;
 import org.apache.xml.security.utils.Constants;
 import org.apache.xml.security.utils.resolver.ResourceResolver;
+import org.apache.xml.security.utils.resolver.ResourceResolverContext;
 import org.apache.xml.security.utils.resolver.ResourceResolverException;
 import org.apache.xml.security.utils.resolver.ResourceResolverSpi;
 import org.w3c.dom.Attr;
@@ -78,17 +79,17 @@ public class OtherSignerTests extends SignerTestBase
         private int resolveCount = 0;
 
         @Override
-        public XMLSignatureInput engineResolve(Attr attr, String baseUri) throws ResourceResolverException
+        public XMLSignatureInput engineResolveURI(ResourceResolverContext context) throws ResourceResolverException
         {
-            XMLSignatureInput input = new XMLSignatureInput(attr.getValue().getBytes());
+            XMLSignatureInput input = new XMLSignatureInput(context.attr.getValue().getBytes());
             resolveCount++;
             return input;
         }
 
         @Override
-        public boolean engineCanResolve(Attr attr, String baseUri)
+        public boolean engineCanResolveURI(ResourceResolverContext context)
         {
-            return attr.getValue().startsWith("xades4j:");
+            return context.attr.getValue().startsWith("xades4j:");
         }
     }
 }

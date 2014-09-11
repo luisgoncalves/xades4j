@@ -194,7 +194,7 @@ public class QualifyingPropertyVerificationContext
 
             try
             {
-                XMLSignatureInput refData = ResourceResolver.getInstance(refAttr, "").resolve(refAttr, "");
+                XMLSignatureInput refData = ResourceResolver.getInstance(refAttr, "", true).resolve(refAttr, "", true);
                 // This has to be a NodeSet data because it is a same-document reference.
                 Node refNode = refData.getSubNode();
                 if (refNode.getNodeType() != Node.ELEMENT_NODE)
