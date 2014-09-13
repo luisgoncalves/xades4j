@@ -16,7 +16,9 @@
  */
 package xades4j.algorithms;
 
+import java.util.Map;
 import org.apache.xml.security.transforms.Transforms;
+import xades4j.utils.CollectionUtils;
 
 /**
  * The XPath filtering transform.
@@ -25,6 +27,7 @@ import org.apache.xml.security.transforms.Transforms;
 public final class XPathTransform extends Algorithm
 {
     private final String xpath;
+    private Map<String, String> namespaces;
 
     /**
      * Creates a new instance of the transform
@@ -43,5 +46,33 @@ public final class XPathTransform extends Algorithm
     public String getXPath()
     {
         return xpath;
+    }
+
+    /**
+     * Registers a namespace and the corresponding prefix to be used when resolving
+     * the XPath expression. The namespace declaration will be added to the XML
+     * definition of the current transform.
+     * 
+     * @param prefix the namespace prefix
+     * @param namespace the namespace URI
+     * 
+     * @return the current instance
+     */
+    public XPathTransform withNamespace(String prefix, String namespace) 
+    {
+        if (null == prefix || prefix.isEmpty())
+            throw new NullPointerException("Prefix cannot be null nor empty");
+        if (null == namespace || namespace.isEmpty())
+            throw new NullPointerException("Namespace cannot be null nor empty");
+        
+        namespaces = CollectionUtils.newIfNull(namespaces, 2);
+        namespaces.put(prefix, namespace);
+        
+        return this;
+    }
+    
+    public Map<String, String> getNamespaces()
+    {
+        return CollectionUtils.emptyIfNull(namespaces);
     }
 }

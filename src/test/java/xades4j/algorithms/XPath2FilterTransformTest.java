@@ -14,9 +14,8 @@
  * You should have received a copy of the GNU Lesser General Public License along
  * with XAdES4j. If not, see <http://www.gnu.org/licenses/>.
  */
-package xades4j.production;
+package xades4j.algorithms;
 
-import xades4j.algorithms.XPath2FilterTransform;
 import java.util.List;
 import xades4j.algorithms.XPath2FilterTransform.XPath2Filter;
 import org.junit.Test;

@@ -19,6 +19,8 @@ package xades4j.xml.marshalling.algorithms;
 
 import java.util.Collections;
 import java.util.List;
+import java.util.Map;
+import org.apache.xml.security.exceptions.XMLSecurityException;
 import org.apache.xml.security.transforms.params.XPathContainer;
 import org.w3c.dom.Document;
 import org.w3c.dom.Node;
@@ -34,6 +36,18 @@ final class XPathTransformParamsMarshaller implements AlgorithmParametersMarshal
     {
         XPathContainer xpathContainer = new XPathContainer(doc);
         xpathContainer.setXPath(alg.getXPath());
+                
+        for(Map.Entry<String, String> ns : alg.getNamespaces().entrySet())
+        {
+            try 
+            {
+                xpathContainer.setXPathNamespaceContext(ns.getKey(), ns.getValue());
+            }catch (XMLSecurityException ex) 
+            {
+                throw new IllegalArgumentException("Invalid namespaces for XPath query", ex);
+            }
+        }
+
         return Collections.singletonList((Node)xpathContainer.getElement());
     }
 }
