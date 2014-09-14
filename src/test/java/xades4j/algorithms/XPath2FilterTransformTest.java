@@ -34,8 +34,8 @@ public class XPath2FilterTransformTest
         XPath2FilterTransform t2 = t1.union("2");
         XPath2FilterTransform t3 = t2.subtract("3");
 
-        assertNotSame(t1, t2);
-        assertNotSame(t2, t3);
+        assertSame(t1, t2);
+        assertSame(t2, t3);
 
         List<XPath2Filter> filters = t3.getFilters();
         assertEquals(3, filters.size());
