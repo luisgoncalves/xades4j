@@ -68,7 +68,7 @@ public class XadesVerifierErrorsTest extends VerifierTestBase
     {
         System.out.println("ErrVerifyNoSignCert");
 
-        KeyStore ks = createAndLoadJKSKeyStore("tsl/be/beStore", "bestorepass");
+        KeyStore ks = createAndLoadJKSKeyStore("be/beStore", "bestorepass");
         PKIXCertificateValidationProvider cvp = new PKIXCertificateValidationProvider(ks, false);
         verifyBadSignature("TSL_BE.nocert.xml", new XadesVerificationProfile(cvp));
     }
