@@ -75,6 +75,14 @@ public class XadesVerifierImplTest extends VerifierTestBase
     }
 
     @Test
+    public void testVerifyDetachedBES() throws Exception
+    {
+        System.out.println("verifyDetachedBES");
+        XAdESForm f = verifySignature("detached.bes.xml");
+        assertEquals(XAdESForm.BES, f);
+    }
+    
+    @Test
     public void testVerifyBESCounterSig() throws Exception
     {
         System.out.println("verifyBESCounterSig");

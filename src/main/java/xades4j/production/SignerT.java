@@ -49,7 +49,7 @@ class SignerT extends SignerBES
             KeyingDataProvider keyingProvider,
             AlgorithmsProviderEx algorithmsProvider,
             BasicSignatureOptionsProvider basicSignatureOptionsProvider,
-            DataObjectDescsProcessor dataObjectDescsProcessor,
+            SignedDataObjectsProcessor dataObjectDescsProcessor,
             SignaturePropertiesProvider signaturePropsProvider,
             DataObjectPropertiesProvider dataObjPropsProvider,
             PropertiesDataObjectsGenerator propsDataObjectsGenerator,

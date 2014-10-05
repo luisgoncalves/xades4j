@@ -34,7 +34,7 @@ import static org.junit.Assert.*;
  *
  * @author Luís
  */
-public class DataObjectDescsProcessorTest extends SignatureServicesTestBase
+public class SignedDataObjectsProcessorTest extends SignatureServicesTestBase
 {
 
     @BeforeClass
@@ -60,7 +60,7 @@ public class DataObjectDescsProcessorTest extends SignatureServicesTestBase
 
         AllwaysNullAlgsParamsMarshaller algsParamsMarshaller = new AllwaysNullAlgsParamsMarshaller();
 
-        DataObjectDescsProcessor processor = new DataObjectDescsProcessor(new TestAlgorithmsProvider(), algsParamsMarshaller);
+        SignedDataObjectsProcessor processor = new SignedDataObjectsProcessor(new TestAlgorithmsProvider(), algsParamsMarshaller);
         Map<DataObjectDesc, Reference> result = processor.process(dataObjsDescs, xmlSignature);
 
         assertEquals(dataObjsDescs.getDataObjectsDescs().size(), result.size());
@@ -90,7 +90,7 @@ public class DataObjectDescsProcessorTest extends SignatureServicesTestBase
         XMLSignature xmlSignature = new XMLSignature(doc, "", XMLSignature.ALGO_ID_SIGNATURE_RSA_SHA256);
         xmlSignature.setId("sigId");
 
-        DataObjectDescsProcessor processor = new DataObjectDescsProcessor(new TestAlgorithmsProvider(), new AllwaysNullAlgsParamsMarshaller());
+        SignedDataObjectsProcessor processor = new SignedDataObjectsProcessor(new TestAlgorithmsProvider(), new AllwaysNullAlgsParamsMarshaller());
         Map<DataObjectDesc, Reference> result = processor.process(dataObjsDescs, xmlSignature);
 
         assertEquals(1, result.size());
@@ -115,7 +115,7 @@ public class DataObjectDescsProcessorTest extends SignatureServicesTestBase
         XMLSignature xmlSignature = new XMLSignature(doc, "", XMLSignature.ALGO_ID_SIGNATURE_RSA_SHA256);
         xmlSignature.setId("sigId");
 
-        DataObjectDescsProcessor processor = new DataObjectDescsProcessor(new TestAlgorithmsProvider(), new AllwaysNullAlgsParamsMarshaller());
+        SignedDataObjectsProcessor processor = new SignedDataObjectsProcessor(new TestAlgorithmsProvider(), new AllwaysNullAlgsParamsMarshaller());
         processor.process(dataObjsDescs, xmlSignature);
     }
 }

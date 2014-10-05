@@ -48,7 +48,7 @@ class SignerEPES extends SignerBES
             KeyingDataProvider keyingProvider,
             AlgorithmsProviderEx algorithmsProvider,
             BasicSignatureOptionsProvider basicSignatureOptionsProvider,
-            DataObjectDescsProcessor dataObjectDescsProcessor,
+            SignedDataObjectsProcessor dataObjectDescsProcessor,
             SignaturePolicyInfoProvider policyInfoProvider,
             SignaturePropertiesProvider signaturePropsProvider,
             DataObjectPropertiesProvider dataObjPropsProvider,

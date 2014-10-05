@@ -44,29 +44,37 @@ import xades4j.xml.marshalling.algorithms.AlgorithmsParametersMarshallingProvide
  * 
  * @author Luís
  */
-class DataObjectDescsProcessor
+class SignedDataObjectsProcessor
 {
     private final AlgorithmsProviderEx algorithmsProvider;
     private final AlgorithmsParametersMarshallingProvider algorithmsParametersMarshaller;
 
     @Inject
-    DataObjectDescsProcessor(AlgorithmsProviderEx algorithmsProvider, AlgorithmsParametersMarshallingProvider algorithmsParametersMarshaller)
+    SignedDataObjectsProcessor(AlgorithmsProviderEx algorithmsProvider, AlgorithmsParametersMarshallingProvider algorithmsParametersMarshaller)
     {
         this.algorithmsProvider = algorithmsProvider;
         this.algorithmsParametersMarshaller = algorithmsParametersMarshaller;
     }
 
     /**
-     * Returns the reference mappings resulting from the data object descriptions.
-     * The corresponding {@code Reference}s and {@code Object}s are added to the
-     * signature.
-
+     * Processes the signed data objects and adds the corresponding {@code Reference}s
+     * and {@code Object}s to the signature. This method must be invoked before
+     * adding any other {@code Reference}s to the signature.
+     * 
+     * @return the reference mappings resulting from the data object descriptions.
+     * 
      * @throws UnsupportedAlgorithmException
+     * @throws IllegalStateException if the signature already contains {@code Reference}s
      */
     Map<DataObjectDesc, Reference> process(
             SignedDataObjects signedDataObjects,
             XMLSignature xmlSignature) throws UnsupportedAlgorithmException
     {
+        if(xmlSignature.getSignedInfo().getLength() != 0)
+        {
+            throw new IllegalStateException("XMLSignature already contais references");
+        }
+        
         for (ResourceResolver resolver : signedDataObjects.getResourceResolvers())
         {
             xmlSignature.addResourceResolver(resolver);

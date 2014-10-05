@@ -72,7 +72,7 @@ class SignerBES implements XadesSigner
     /**/
     private final KeyingDataProvider keyingProvider;
     private final AlgorithmsProviderEx algorithmsProvider;
-    private final DataObjectDescsProcessor dataObjectDescsProcessor;
+    private final SignedDataObjectsProcessor dataObjectDescsProcessor;
     private final PropertiesDataObjectsGenerator propsDataObjectsGenerator;
     private final SignedPropertiesMarshaller signedPropsMarshaller;
     private final UnsignedPropertiesMarshaller unsignedPropsMarshaller;
@@ -86,7 +86,7 @@ class SignerBES implements XadesSigner
             KeyingDataProvider keyingProvider,
             AlgorithmsProviderEx algorithmsProvider,
             BasicSignatureOptionsProvider basicSignatureOptionsProvider,
-            DataObjectDescsProcessor dataObjectDescsProcessor,
+            SignedDataObjectsProcessor dataObjectDescsProcessor,
             SignaturePropertiesProvider signaturePropsProvider,
             DataObjectPropertiesProvider dataObjPropsProvider,
             PropertiesDataObjectsGenerator propsDataObjectsGenerator,
@@ -163,9 +163,6 @@ class SignerBES implements XadesSigner
 
         signature.setId(signatureId);
 
-        /* ds:KeyInfo */
-        this.keyInfoBuilder.buildKeyInfo(signingCertificate, signature);
-
         /* References */
         // Process the data object descriptions to get the References and mappings.
         // After this call all the signed data objects References and XMLObjects
@@ -173,6 +170,9 @@ class SignerBES implements XadesSigner
         Map<DataObjectDesc, Reference> referenceMappings = this.dataObjectDescsProcessor.process(
                 signedDataObjects,
                 signature);
+        
+        /* ds:KeyInfo */
+        this.keyInfoBuilder.buildKeyInfo(signingCertificate, signature);
 
         /* QualifyingProperties element */
         // Create the QualifyingProperties element
