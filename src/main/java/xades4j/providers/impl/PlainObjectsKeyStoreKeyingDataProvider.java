@@ -13,7 +13,7 @@ public class PlainObjectsKeyStoreKeyingDataProvider extends KeyStoreKeyingDataPr
      * @param entryPasswordProvider
      * @param returnFullChain       return the full certificate chain, if available
      */
-    protected PlainObjectsKeyStoreKeyingDataProvider(
+    public PlainObjectsKeyStoreKeyingDataProvider(
             final PrivateKey privateKey,
             final X509Certificate[] certificateChain,
             final String alias,
@@ -32,9 +32,7 @@ public class PlainObjectsKeyStoreKeyingDataProvider extends KeyStoreKeyingDataPr
                     KeyStore ks = KeyStore.getInstance("JKS", "SUN");
                     ks.load(null, null);
                     ks.setKeyEntry(alias, privateKey, null, certificateChain);
-                    return KeyStore.Builder.newInstance(ks, new KeyStore.ProtectionParameter()
-                    {
-                    });
+                    return KeyStore.Builder.newInstance(ks, new KeyStore.PasswordProtection(null));
                 }
                 catch (KeyStoreException | NoSuchProviderException | CertificateException | IOException | NoSuchAlgorithmException e)
                 {
