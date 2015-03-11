@@ -14,32 +14,15 @@ public class PlainObjectsKeyStoreKeyingDataProvider extends KeyStoreKeyingDataPr
      * @param returnFullChain       return the full certificate chain, if available
      */
     public PlainObjectsKeyStoreKeyingDataProvider(
+            final String alias,
             final PrivateKey privateKey,
             final X509Certificate[] certificateChain,
-            final String alias,
             SigningCertSelector certificateSelector,
             KeyStorePasswordProvider storePasswordProvider,
             KeyEntryPasswordProvider entryPasswordProvider,
             boolean returnFullChain)
     {
-        super(new KeyStoreBuilderCreator()
-        {
-            @Override
-            public KeyStore.Builder getBuilder(KeyStore.ProtectionParameter loadProtection)
-            {
-                try
-                {
-                    KeyStore ks = KeyStore.getInstance("JKS", "SUN");
-                    ks.load(null, null);
-                    ks.setKeyEntry(alias, privateKey, null, certificateChain);
-                    return KeyStore.Builder.newInstance(ks, new KeyStore.PasswordProtection(null));
-                }
-                catch (KeyStoreException | NoSuchProviderException | CertificateException | IOException | NoSuchAlgorithmException e)
-                {
-                    throw new RuntimeException(e.getMessage());
-                }
-            }
-        }, certificateSelector, storePasswordProvider, entryPasswordProvider, returnFullChain);
+        super(new PlainObjectKeyStoreBuilderCreator(alias, privateKey, certificateChain), certificateSelector, storePasswordProvider, entryPasswordProvider, returnFullChain);
     }
 
     @Override
@@ -49,5 +32,35 @@ public class PlainObjectsKeyStoreKeyingDataProvider extends KeyStoreKeyingDataPr
             KeyEntryPasswordProvider entryPasswordProvider)
     {
         return null;
+    }
+
+    private static class PlainObjectKeyStoreBuilderCreator implements KeyStoreBuilderCreator
+    {
+        private final String alias;
+        private final PrivateKey privateKey;
+        private final X509Certificate[] certificateChain;
+
+        private PlainObjectKeyStoreBuilderCreator(final String alias, final PrivateKey privateKey, final X509Certificate[] certificateChain)
+        {
+            this.alias = alias;
+            this.privateKey = privateKey;
+            this.certificateChain = certificateChain;
+        }
+
+        @Override
+        public KeyStore.Builder getBuilder(KeyStore.ProtectionParameter loadProtection)
+        {
+            try
+            {
+                KeyStore ks = KeyStore.getInstance("JKS", "SUN");
+                ks.load(null, null);
+                ks.setKeyEntry(alias, privateKey, null, certificateChain);
+                return KeyStore.Builder.newInstance(ks, new KeyStore.PasswordProtection(null));
+            }
+            catch (KeyStoreException | NoSuchProviderException | CertificateException | IOException | NoSuchAlgorithmException e)
+            {
+                throw new ProviderException(e.getMessage());
+            }
+        }
     }
 }
