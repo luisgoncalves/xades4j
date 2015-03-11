@@ -7,7 +7,6 @@ import java.security.cert.X509Certificate;
 
 public class PlainObjectsKeyStoreKeyingDataProvider extends KeyStoreKeyingDataProvider
 {
-
     /**
      * @param certificateSelector
      * @param storePasswordProvider
