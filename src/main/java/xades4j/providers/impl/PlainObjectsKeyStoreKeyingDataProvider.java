@@ -7,6 +7,8 @@ import java.security.cert.X509Certificate;
 
 public class PlainObjectsKeyStoreKeyingDataProvider extends KeyStoreKeyingDataProvider
 {
+    private static final String PASSWORD = "anything";
+
     /**
      * @param certificateSelector
      * @param storePasswordProvider
@@ -31,7 +33,7 @@ public class PlainObjectsKeyStoreKeyingDataProvider extends KeyStoreKeyingDataPr
             X509Certificate entryCert,
             KeyEntryPasswordProvider entryPasswordProvider)
     {
-        return null;
+        return new KeyStore.PasswordProtection(PASSWORD.toCharArray());
     }
 
     private static class PlainObjectKeyStoreBuilderCreator implements KeyStoreBuilderCreator
@@ -54,8 +56,8 @@ public class PlainObjectsKeyStoreKeyingDataProvider extends KeyStoreKeyingDataPr
             {
                 KeyStore ks = KeyStore.getInstance("JKS", "SUN");
                 ks.load(null, null);
-                ks.setKeyEntry(alias, privateKey, null, certificateChain);
-                return KeyStore.Builder.newInstance(ks, new KeyStore.PasswordProtection(null));
+                ks.setKeyEntry(alias, privateKey, PASSWORD.toCharArray(), certificateChain);
+                return KeyStore.Builder.newInstance(ks, new KeyStore.PasswordProtection(PASSWORD.toCharArray()));
             }
             catch (KeyStoreException | NoSuchProviderException | CertificateException | IOException | NoSuchAlgorithmException e)
             {
