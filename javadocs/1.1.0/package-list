@@ -1,0 +1,13 @@
+xades4j
+xades4j.production
+xades4j.properties
+xades4j.properties.data
+xades4j.providers
+xades4j.providers.impl
+xades4j.utils
+xades4j.verification
+xades4j.xml.bind
+xades4j.xml.bind.xades
+xades4j.xml.bind.xmldsig
+xades4j.xml.marshalling
+xades4j.xml.unmarshalling
