@@ -1,6 +1,6 @@
 <p align='right'><img src='https://github.com/luisgoncalves/xades4j/blob/gh-pages/images/logo-02.png' /></p>
 
-The _XAdES4j_ library is an high-level, configurable and extensible Java implementation of XML Advanced Electronic Signatures (XAdES 1.3.2 and 1.4.1). It enables producing, verifying and extending signatures in the main XAdES forms: XAdES-BES, XAdES-EPES, XAdES-T and XAdES-C. Also, extended forms are supported through the enrichment of an existing signature.
+_XAdES4j_ is an high-level, configurable and extensible Java implementation of XML Advanced Electronic Signatures (XAdES 1.3.2 and 1.4.1). It enables producing, verifying and extending signatures in the main XAdES forms: XAdES-BES, XAdES-EPES, XAdES-T and XAdES-C. Also, extended forms are supported through the enrichment of an existing signature.
 
 The API provides an high level of abstraction, handling all the structural details of XAdES. The library relies on Apache XML Security for the core XML-DSIG processing and uses Guice to assemble the different configurable components.
 
@@ -24,6 +24,6 @@ If you can't find the information you need on the wiki and/or javadocs please re
 
 For an overview of the library's architecture and implementation you can watch the [XAdES4j Prezi](http://prezi.com/06vyxbgohncv/xades4j-en/).
 
-## Q & A ##
+# Q & A
 
 Use the _xades4j_ tag on [Stack Overflow](http://stackoverflow.com/questions/tagged/xades4j).
