@@ -130,7 +130,7 @@ public class SignerBESTest extends SignerTestBase
                 .withBasicSignatureOptionsProvider(MyBasicSignatureOptionsProvider.class)
                 .newSigner();
         
-        String fileUti = new File("./src/test/xml/document.xml").toURI().toString();
+        String fileUti = new File("src/test/xml/document.xml").toURI().toString();
         DataObjectDesc obj1 = new DataObjectReference(fileUti)
                 .withTransform(
                     new XPathTransform("/collection/album/foo:tracks")
