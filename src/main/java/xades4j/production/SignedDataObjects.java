@@ -104,7 +104,7 @@ public final class SignedDataObjects
 
     /**************************************************************************/
     /**
-     * Sets the base URI for <b>all/b> the relative references. Fragment references
+     * Sets the base URI for <b>all</b> the relative references. Fragment references
      * (starting with '#') are not afected.
      * @param baseUri the references' base uri
      * @return the current instance

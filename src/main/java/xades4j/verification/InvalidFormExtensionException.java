@@ -20,7 +20,7 @@ import xades4j.XAdES4jException;
 
 /**
  * Thrown during signature verification (with form extension) when the form transition
- * is invalid. For instance, XAdES-BES -> XAdES-X is invalid.
+ * is invalid. For instance, XAdES-BES -&gt; XAdES-X is invalid.
  * @see XadesVerifier
  * @author Luís
  */
