@@ -21,7 +21,7 @@ import xades4j.algorithms.Algorithm;
 
 /**
  * @deprecated This class is deprecated and might be removed on future releases
- * @see xades4j.Algorithm
+ * @see xades4j.algorithms.Algorithm
  *
  * @author Luís
  */
