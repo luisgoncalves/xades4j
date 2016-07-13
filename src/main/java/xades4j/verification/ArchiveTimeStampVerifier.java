@@ -18,6 +18,7 @@ package xades4j.verification;
 
 import org.apache.xml.security.exceptions.XMLSecurityException;
 import org.apache.xml.security.keys.KeyInfo;
+import org.apache.xml.security.signature.ObjectContainer;
 import org.apache.xml.security.signature.Reference;
 import org.apache.xml.security.signature.SignedInfo;
 import org.apache.xml.security.utils.Constants;
@@ -225,6 +226,15 @@ public class ArchiveTimeStampVerifier extends
             {
                 digestInput.addNode(elem);
             }// else: ignore other properties
+        }
+
+        /* take "all the ds:Object elements different to the one
+         * containing the QualifyingProperties." */
+        for (int i = 0; i < ctx.getSignature().getObjectLength(); i++)
+        {
+            ObjectContainer obj = ctx.getSignature().getObjectItem(i);
+            if (null == DOMHelper.getFirstDescendant(obj.getElement(), QualifyingProperty.XADES_XMLNS, "*"))
+                digestInput.addNode(obj.getElement());
         }
 
         if (certificateValuesPresent && revocationValuesPresent)
