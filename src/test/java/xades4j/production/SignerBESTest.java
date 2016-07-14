@@ -16,6 +16,7 @@
  */
 package xades4j.production;
 
+import java.io.File;
 import xades4j.algorithms.EnvelopedSignatureTransform;
 import xades4j.properties.DataObjectDesc;
 import xades4j.properties.AllDataObjsCommitmentTypeProperty;
@@ -26,10 +27,13 @@ import org.junit.Test;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
+import xades4j.algorithms.XPath2FilterTransform.XPath2Filter;
+import xades4j.algorithms.XPathTransform;
 import xades4j.properties.CounterSignatureProperty;
 import xades4j.properties.SignerRoleProperty;
 import xades4j.providers.SignaturePropertiesCollector;
 import xades4j.providers.SignaturePropertiesProvider;
+import xades4j.providers.impl.DefaultBasicSignatureOptionsProvider;
 
 /**
  *
@@ -40,7 +44,7 @@ public class SignerBESTest extends SignerTestBase
     public SignerBESTest()
     {
     }
-
+    
     @Test
     public void testSignBES() throws Exception
     {
@@ -106,5 +110,40 @@ public class SignerBESTest extends SignerTestBase
         signer.sign(dataObjs, elemToSign);
 
         outputDocument(doc, "document.signed.bes.cs.xml");
+    }
+    
+    public static class MyBasicSignatureOptionsProvider extends DefaultBasicSignatureOptionsProvider{
+        @Override
+        public boolean signSigningCertificate() {
+            return true;
+        }
+    }
+    
+    @Test
+    public void testSignBESDetachedWithXPathAndNamespaces() throws Exception
+    {
+        System.out.println("signBESDetachedWithXPathAndNamespaces");
+        
+        Document doc = getNewDocument();
+        
+        XadesSigner signer = new XadesBesSigningProfile(keyingProviderMy)
+                .withBasicSignatureOptionsProvider(MyBasicSignatureOptionsProvider.class)
+                .newSigner();
+        
+        String fileUti = new File("src/test/xml/document.xml").toURI().toString();
+        DataObjectDesc obj1 = new DataObjectReference(fileUti)
+                .withTransform(
+                    new XPathTransform("/collection/album/foo:tracks")
+                        .withNamespace("foo", "http://test.xades4j/tracks"))
+                .withDataObjectFormat(new DataObjectFormatProperty("text/xml"));
+        
+        DataObjectDesc obj2 = new DataObjectReference(fileUti)
+                .withTransform(
+                    XPath2Filter.intersect("/collection/album/bar:tracks/bar:song[@tracknumber = 1]")
+                        .withNamespace("bar", "http://test.xades4j/tracks"));
+        
+        signer.sign(new SignedDataObjects(obj1, obj2), doc);
+        
+        outputDocument(doc, "detached.bes.xml");
     }
 }

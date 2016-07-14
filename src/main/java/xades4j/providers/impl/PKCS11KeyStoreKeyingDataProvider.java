@@ -18,23 +18,28 @@ package xades4j.providers.impl;
 
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
+import java.io.InputStream;
+import java.lang.reflect.Constructor;
+import java.lang.reflect.InvocationTargetException;
 import java.security.KeyStore;
 import java.security.KeyStore.Builder;
 import java.security.KeyStore.ProtectionParameter;
 import java.security.KeyStoreException;
 import java.security.Provider;
+import java.security.ProviderException;
 import java.security.Security;
 import java.security.cert.X509Certificate;
 import javax.security.auth.callback.Callback;
 import javax.security.auth.callback.CallbackHandler;
 import javax.security.auth.callback.PasswordCallback;
 import javax.security.auth.callback.UnsupportedCallbackException;
-import sun.security.pkcs11.SunPKCS11;
 
 /**
  * A specification of {@code KeyStoreKeyingDataProvider} for PKCS#11 keystores.
  * This class uses the SUN's PKCS#11 provider, which brigdes with the native PKCS#11
- * library.
+ * library. Note that this provider is not included in some versions of the JRE,
+ * namely the 64 bits Windows version. On those scenarios this class will fail at
+ * runtime.
  * <p>
  * The {@code KeyStorePasswordProvider} and {@code KeyEntryPasswordProvider} may
  * be {@code null}. In that case the keystore protection has to be handled by the
@@ -98,8 +103,8 @@ public class PKCS11KeyStoreKeyingDataProvider extends KeyStoreKeyingDataProvider
             @Override
             public Builder getBuilder(ProtectionParameter loadProtection)
             {
-                Provider p = (SunPKCS11) Security.getProvider("SunPKCS11-" + providerName);
-                if (null == p)
+                Provider p = getInstalledProvider(providerName);
+                if (p == null)
                 {
                     StringBuilder config = new StringBuilder("name = ").append(providerName);
                     config.append(System.getProperty("line.separator"));
@@ -109,9 +114,8 @@ public class PKCS11KeyStoreKeyingDataProvider extends KeyStoreKeyingDataProvider
                         config.append(System.getProperty("line.separator"));
                         config.append("slot = ").append(slotId);
                     }
-
                     ByteArrayInputStream configStream = new ByteArrayInputStream(config.toString().getBytes());
-                    p = new SunPKCS11(configStream);
+                    p = createPkcs11Provider(configStream);
                     Security.addProvider(p);
                 }
 
@@ -175,5 +179,69 @@ public class PKCS11KeyStoreKeyingDataProvider extends KeyStoreKeyingDataProvider
                 c.setPassword(entryPasswordProvider.getPassword(entryAlias, entryCert));
             }
         });
+    }
+
+    private static Provider getInstalledProvider(String providerName)
+    {
+        Class<Provider> pkcs11Class = getPkcs11ProviderClass();
+        Provider p = Security.getProvider("SunPKCS11-" + providerName);
+        // Throws expcetion if the provider is not of the expected type
+        return pkcs11Class.cast(p);
+    }
+
+    private static Provider createPkcs11Provider(InputStream configStream)
+    {
+        try
+        {
+            Class<Provider> providerClass = getPkcs11ProviderClass();
+            Constructor<Provider> ctor = providerClass.getConstructor(InputStream.class);
+            return ctor.newInstance(configStream);
+        }
+        // Since the provider class was loaded, these exceptions are unexpected
+        catch (IllegalAccessException ex)
+        {
+            throw new ProviderException(ex);
+        }
+        catch (IllegalArgumentException ex)
+        {
+            throw new ProviderException(ex);
+        }
+        catch (InvocationTargetException ex)
+        {
+            throw new ProviderException(ex);
+        }
+        catch (NoSuchMethodException ex)
+        {
+            throw new ProviderException(ex);
+        }
+        catch(InstantiationException ex)
+        {
+            throw new ProviderException(ex);
+        }
+    }
+
+    private static Class getPkcs11ProviderClass()
+    {
+        try
+        {
+            return Class.forName("sun.security.pkcs11.SunPKCS11");
+        }
+        catch (ClassNotFoundException ex)
+        {
+           throw new ProviderException("Cannot find SunPKCS11 provider", ex);
+        }
+    }
+    
+    public static boolean isProviderAvailable()
+    {
+        try
+        {
+            getPkcs11ProviderClass();
+            return true;
+        }
+        catch(ProviderException ex)
+        {
+            return false;
+        }
     }
 }

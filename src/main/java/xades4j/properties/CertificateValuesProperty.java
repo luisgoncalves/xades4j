@@ -21,7 +21,7 @@ import java.util.Collection;
 
 /**
  * The {@code CertificateValues} is an optional unsigned property and qualifies
- * the XML signature. There is at most one occurence of this property in the signature.
+ * the XML signature. There is at most one occurrence of this property in the signature.
  * <p>
  * In principle, the {@code CertificateValues} element contains the full set of certificates
  * that have been used to validate the electronic signature, including the signer's

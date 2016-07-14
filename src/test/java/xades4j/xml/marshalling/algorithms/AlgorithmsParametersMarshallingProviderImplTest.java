@@ -21,10 +21,14 @@ import java.util.List;
 import xades4j.algorithms.*;
 import com.google.inject.Injector;
 import com.google.inject.Guice;
+import java.util.Map;
+import org.apache.xml.security.utils.Constants;
 import org.w3c.dom.Document;
 import xades4j.utils.SignatureServicesTestBase;
 import org.junit.Test;
 import static org.junit.Assert.*;
+import org.junit.Before;
+import org.w3c.dom.Element;
 
 /**
  *
@@ -32,15 +36,20 @@ import static org.junit.Assert.*;
  */
 public class AlgorithmsParametersMarshallingProviderImplTest
 {
-
-    @Test
-    public void testMarshalParameters() throws Exception
+    private Document doc;
+    private AlgorithmsParametersMarshallingProviderImpl sut;
+    
+    @Before
+    public void setUp() throws Exception
     {
-        Document doc = SignatureServicesTestBase.getNewDocument();
+        doc = SignatureServicesTestBase.getNewDocument();
         Injector injector = Guice.createInjector(new AlgorithmParametersBindingsModule());
-
-        AlgorithmsParametersMarshallingProviderImpl instance = new AlgorithmsParametersMarshallingProviderImpl(injector);
-
+        sut = new AlgorithmsParametersMarshallingProviderImpl(injector);
+    }
+    
+    @Test
+    public void testMarshalParametersWithDefaultConfiguration() throws Exception
+    {
         Algorithm[] algorithms = new Algorithm[]
         {
             new XPathTransform("xpath"),
@@ -50,20 +59,22 @@ public class AlgorithmsParametersMarshallingProviderImplTest
 
         for (Algorithm alg : algorithms)
         {
-            List<Node> params = instance.marshalParameters(alg, doc);
+            List<Node> params = sut.marshalParameters(alg, doc);
             assertNotNull(params);
+            assertFalse(params.isEmpty());
         }
 
         algorithms = new Algorithm[]
         {
             new EnvelopedSignatureTransform(),
+            new ExclusiveCanonicalXMLWithComments(), // Can also be used without parameters
             new CanonicalXMLWithoutComments(),
             new GenericAlgorithm("uri")
         };
 
         for (Algorithm t : algorithms)
         {
-            List<Node> params = instance.marshalParameters(t, doc);
+            List<Node> params = sut.marshalParameters(t, doc);
             assertNull(params);
         }
     }

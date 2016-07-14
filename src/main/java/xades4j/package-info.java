@@ -19,7 +19,7 @@
  * <b>XAdES4j</b> - a Java library to produce and verify XML Advanced Electronic Signatures.
  * <p>
  * For signature production refer to {@code xades4j.production.XadesSigningProfile}.
- * <br/>
+ * <br>
  * For signature verification refer to {@code xades4j.verification.XadesVerificationProfile}.
  */
 package xades4j;

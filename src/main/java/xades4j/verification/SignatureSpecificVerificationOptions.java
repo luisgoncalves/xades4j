@@ -41,7 +41,7 @@ public class SignatureSpecificVerificationOptions
     private final List<ResourceResolver> resolvers = new ArrayList<ResourceResolver>(0);
 
     /**
-     * Sets the base URI to be used when resolving <b>all/b> the relative references.
+     * Sets the base URI to be used when resolving <b>all</b> the relative references.
      * Fragment references (starting with '#') are not affected.
      * @param baseUri the references' base uri
      * @return the current instance

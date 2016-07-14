@@ -57,7 +57,7 @@ public class XadesSignatureFormatExtenderImplTest extends SignerTestBase
     {
         System.out.println("enrichSignatureWithA");
 
-        Document doc = getDocument("out/document.verified.c.xl.xml");
+        Document doc = getDocument("document.verified.c.xl.xml");
         Element signatureNode = (Element)doc.getElementsByTagNameNS(Constants.SignatureSpecNS, "Signature").item(0);
 
         XadesSignatureFormatExtenderImpl instance = (XadesSignatureFormatExtenderImpl)new XadesFormatExtenderProfile().getFormatExtender();

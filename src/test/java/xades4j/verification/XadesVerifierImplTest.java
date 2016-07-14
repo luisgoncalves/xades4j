@@ -19,6 +19,7 @@ package xades4j.verification;
 import java.io.FileInputStream;
 import java.io.InputStream;
 import static org.junit.Assert.*;
+import static org.junit.Assume.assumeTrue;
 import org.junit.Before;
 import org.junit.Test;
 import org.w3c.dom.Document;
@@ -80,6 +81,14 @@ public class XadesVerifierImplTest extends VerifierTestBase
         assertEquals(XAdESForm.BES, f);
     }
 
+    @Test
+    public void testVerifyDetachedBES() throws Exception
+    {
+        System.out.println("verifyDetachedBES");
+        XAdESForm f = verifySignature("detached.bes.xml");
+        assertEquals(XAdESForm.BES, f);
+    }
+    
     @Test
     public void testVerifyBESCounterSig() throws Exception
     {
@@ -155,12 +164,7 @@ public class XadesVerifierImplTest extends VerifierTestBase
     public void testVerifyTPTCC() throws Exception
     {
         System.out.println("verifyTPtCC");
-
-        if (!onWindowsPlatform())
-            return;
-
-        if (null == validationProviderPtCc)
-            fail("Test written for Windows-ROOT certificate repository");
+        assumeTrue(onWindowsPlatform() && null != validationProviderPtCc);
 
         XAdESForm f = verifySignature("document.signed.t.bes.ptcc.xml",
                 new XadesVerificationProfile(validationProviderPtCc,
@@ -241,7 +245,7 @@ public class XadesVerifierImplTest extends VerifierTestBase
     {
         System.out.println("verifyX");
         XAdESForm f = verifySignature(
-                "out/document.verified.c.x.xml",
+                "document.verified.c.x.xml",
                 nistVerificationProfile);
         assertEquals(XAdESForm.X, f);
     }
@@ -251,7 +255,7 @@ public class XadesVerifierImplTest extends VerifierTestBase
     {
         System.out.println("verifyXL");
         XAdESForm f = verifySignature(
-                "out/document.verified.c.xl.xml",
+                "document.verified.c.xl.xml",
                 nistVerificationProfile);
         assertEquals(XAdESForm.X_L, f);
     }
@@ -261,7 +265,7 @@ public class XadesVerifierImplTest extends VerifierTestBase
     {
         System.out.println("testVerifyXLEnrichA");
 
-        Document doc = getDocument("out/document.verified.c.xl.xml");
+        Document doc = getDocument("document.verified.c.xl.xml");
         Element signatureNode = getSigElement(doc);
 
         XadesSignatureFormatExtender formExt =
@@ -280,7 +284,7 @@ public class XadesVerifierImplTest extends VerifierTestBase
     {
         System.out.println("testVerifyA");
         XAdESForm f = verifySignature(
-                "out/document.verified.c.xl.a.xml",
+                "document.verified.c.xl.a.xml",
                 nistVerificationProfile);
         assertEquals(XAdESForm.A, f);
     }
@@ -290,7 +294,7 @@ public class XadesVerifierImplTest extends VerifierTestBase
     {
         System.out.println("testVerifyXLEnrichA");
 
-        Document doc = getDocument("out/document.verified.c.xl.a.xml");
+        Document doc = getDocument("document.verified.c.xl.a.xml");
         Element signatureNode = getSigElement(doc);
 
         XadesSignatureFormatExtender formExt =

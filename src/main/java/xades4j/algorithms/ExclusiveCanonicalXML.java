@@ -19,8 +19,8 @@ package xades4j.algorithms;
 
 import java.util.Arrays;
 import java.util.Collections;
+import java.util.HashSet;
 import java.util.Set;
-import java.util.TreeSet;
 
 /**
  * Base class for representations of the <a HREF="http://www.w3.org/TR/2002/REC-xml-exc-c14n-20020718/">
@@ -33,7 +33,7 @@ public abstract class ExclusiveCanonicalXML extends Algorithm{
 
     protected ExclusiveCanonicalXML(String uri, String... inclusiveNamespacePrefixes)
     {
-        this(uri, new TreeSet<String>(Arrays.asList(inclusiveNamespacePrefixes)));
+        this(uri, new HashSet<String>(Arrays.asList(inclusiveNamespacePrefixes)));
     }
 
     protected ExclusiveCanonicalXML(String uri, Set<String> inclusiveNamespacePrefixes)

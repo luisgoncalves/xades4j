@@ -16,6 +16,7 @@
  */
 package xades4j.providers.impl;
 
+import java.io.File;
 import xades4j.production.XadesBesSigningProfile;
 import org.w3c.dom.Element;
 import xades4j.production.SignerTestBase;
@@ -32,6 +33,7 @@ import java.util.List;
 import xades4j.providers.KeyingDataProvider;
 import org.junit.Test;
 import static org.junit.Assert.*;
+import static org.junit.Assume.assumeTrue;
 
 /**
  *
@@ -45,25 +47,15 @@ public class PKCS11KeyStoreKeyingDataProviderTest extends SignerTestBase
     public void testCertAndKeyMatch() throws Exception
     {
         System.out.println("certAndKeyMatch");
+        assumePtCcPkcs11OnWindows();
 
-        if (!onWindowsPlatform())
-        {
-            return;
-        }
+        KeyingDataProvider ptccKeyingDataProv = new PKCS11KeyStoreKeyingDataProvider(
+                PTCC_PKCS11_LIB_PATH, "PT_CC", new FirstCertificateSelector());
+        doTestWithJCA(ptccKeyingDataProv);
 
-        try
-        {
-            KeyingDataProvider ptccKeyingDataProv = new PKCS11KeyStoreKeyingDataProvider(
-                    "C:\\Windows\\System32\\pteidpkcs11.dll", "PT_CC", new FirstCertificateSelector());
-            doTestWithJCA(ptccKeyingDataProv);
-
-            ptccKeyingDataProv = new PKCS11KeyStoreKeyingDataProvider(
-                    "C:\\Windows\\System32\\pteidpkcs11.dll", "PT_CC", new FirstCertificateSelector());
-            doTestWithXades4j(ptccKeyingDataProv);
-        } catch (ProviderException ex)
-        {
-            fail("PT CC PKCS#11 provider not configured");
-        }
+        ptccKeyingDataProv = new PKCS11KeyStoreKeyingDataProvider(
+                PTCC_PKCS11_LIB_PATH, "PT_CC", new FirstCertificateSelector());
+        doTestWithXades4j(ptccKeyingDataProv);
     }
 
     private void doTestWithJCA(KeyingDataProvider keyingDataProvider) throws Exception

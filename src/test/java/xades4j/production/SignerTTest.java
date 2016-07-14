@@ -19,7 +19,7 @@ package xades4j.production;
 import com.google.inject.Inject;
 import java.security.ProviderException;
 import org.junit.Test;
-import static org.junit.Assert.*;
+import static org.junit.Assume.assumeTrue;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import xades4j.algorithms.Algorithm;
@@ -115,27 +115,18 @@ public class SignerTTest extends SignerTestBase
     public void testSignTPtCC() throws Exception
     {
         System.out.println("signTPtCitizenCard");
-
-        if (!onWindowsPlatform())
-        {
-            return;
-        }
+        assumePtCcPkcs11OnWindows();
 
         Document doc = getTestDocument();
         Element elemToSign = doc.getDocumentElement();
-        try
-        {
-            PKCS11KeyStoreKeyingDataProvider ptccKeyingDataProv = new PKCS11KeyStoreKeyingDataProvider(
-                    "C:\\Windows\\System32\\pteidpkcs11.dll", "PT_CC",
-                    new FirstCertificateSelector(), null, null, false);
 
-            SignerT signer = (SignerT) new XadesTSigningProfile(ptccKeyingDataProv).withAlgorithmsProviderEx(PtCcAlgorithmsProvider.class).newSigner();
-            new Enveloped(signer).sign(elemToSign);
+        PKCS11KeyStoreKeyingDataProvider ptccKeyingDataProv = new PKCS11KeyStoreKeyingDataProvider(
+                PTCC_PKCS11_LIB_PATH, "PT_CC",
+                new FirstCertificateSelector(), null, null, false);
 
-            outputDocument(doc, "document.signed.t.bes.ptcc.xml");
-        } catch (ProviderException ex)
-        {
-            fail("PT CC PKCS#11 provider not configured");
-        }
+        SignerT signer = (SignerT) new XadesTSigningProfile(ptccKeyingDataProv).withAlgorithmsProviderEx(PtCcAlgorithmsProvider.class).newSigner();
+        new Enveloped(signer).sign(elemToSign);
+
+        outputDocument(doc, "document.signed.t.bes.ptcc.xml");
     }
 }

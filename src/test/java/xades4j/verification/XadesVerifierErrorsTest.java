@@ -17,8 +17,9 @@
 package xades4j.verification;
 
 import java.security.KeyStore;
+import static org.junit.Assert.assertEquals;
 import org.junit.Test;
-import static org.junit.Assert.*;
+import static org.junit.Assume.assumeTrue;
 import org.junit.Before;
 
 import xades4j.providers.CannotBuildCertificationPathException;
@@ -55,10 +56,7 @@ public class XadesVerifierErrorsTest extends VerifierTestBase
     public void testErrVerifySignedPropsIncorpNoRefType() throws Exception
     {
         System.out.println("errVerifySignedPropsIncorpNoRefType");
-        if (!onWindowsPlatform())
-            throw new QualifyingPropertiesIncorporationException("not on windows");
-        if (null == validationProviderPtCc)
-            fail("Test written for Windows-ROOT certificate repository");
+        assumeTrue(onWindowsPlatform() && null != validationProviderPtCc);
 
         verifyBadSignature("document.signed.bes.signedpropsrefnotype.xml",
                 new XadesVerificationProfile(validationProviderPtCc,
@@ -77,7 +75,7 @@ public class XadesVerifierErrorsTest extends VerifierTestBase
     {
         System.out.println("ErrVerifyNoSignCert");
 
-        KeyStore ks = createAndLoadJKSKeyStore("tsl/be/beStore", "bestorepass");
+        KeyStore ks = createAndLoadJKSKeyStore("be/beStore", "bestorepass");
         PKIXCertificateValidationProvider cvp = new PKIXCertificateValidationProvider(ks, false);
         verifyBadSignature("TSL_BE.nocert.xml", new XadesVerificationProfile(cvp,
                 tsaValidationProviderMySigs));

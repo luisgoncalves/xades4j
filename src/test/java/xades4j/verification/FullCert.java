@@ -39,17 +39,16 @@ import org.bouncycastle.asn1.x509.AlgorithmIdentifier;
 import org.bouncycastle.asn1.x509.AuthorityKeyIdentifier;
 import org.bouncycastle.asn1.x509.BasicConstraints;
 import org.bouncycastle.asn1.x509.CRLNumber;
-import org.bouncycastle.asn1.x509.ExtendedKeyUsage;
+import org.bouncycastle.asn1.x509.Extension;
 import org.bouncycastle.asn1.x509.KeyPurposeId;
 import org.bouncycastle.asn1.x509.KeyUsage;
-import org.bouncycastle.asn1.x509.SubjectKeyIdentifier;
 import org.bouncycastle.asn1.x509.SubjectPublicKeyInfo;
-import org.bouncycastle.asn1.x509.X509Extension;
 import org.bouncycastle.cert.X509CRLHolder;
 import org.bouncycastle.cert.X509v2CRLBuilder;
 import org.bouncycastle.cert.X509v3CertificateBuilder;
 import org.bouncycastle.cert.jcajce.JcaX509CRLConverter;
 import org.bouncycastle.cert.jcajce.JcaX509CertificateConverter;
+import org.bouncycastle.cert.jcajce.JcaX509ExtensionUtils;
 import org.bouncycastle.cert.jcajce.JcaX509v3CertificateBuilder;
 import org.bouncycastle.operator.ContentSigner;
 import org.bouncycastle.operator.jcajce.JcaContentSignerBuilder;
@@ -168,27 +167,30 @@ public class FullCert
         /*
          * Additional constraints are defaults from EJBCA
          */
-        certBuilder.addExtension(X509Extension.subjectKeyIdentifier,
-                false, /* extension should always be non critical */
-                new SubjectKeyIdentifier(subjectKeyInfo));
+        JcaX509ExtensionUtils utils = new JcaX509ExtensionUtils();
 
-        certBuilder.addExtension(X509Extension.basicConstraints,
+        certBuilder.addExtension(Extension.subjectKeyIdentifier,
+                false, /* extension should always be non critical */
+                utils.createSubjectKeyIdentifier(subjectKeyInfo));
+
+        certBuilder.addExtension(Extension.basicConstraints,
                 true, /* extension is critical */
                 new BasicConstraints(isCA));
 
-        certBuilder.addExtension(X509Extension.authorityKeyIdentifier,
+        certBuilder.addExtension(Extension.authorityKeyIdentifier,
                 false, /* extension should always be non critical */
-                new AuthorityKeyIdentifier(issuerKeyInfo));
+                utils.createAuthorityKeyIdentifier(issuerKeyInfo));
 
-        certBuilder.addExtension(X509Extension.keyUsage,
+        certBuilder.addExtension(Extension.keyUsage,
                 true, /* is critical */
                 new KeyUsage(keyUsage));
 
         if (extendedAttr != null)
         {
-            certBuilder.addExtension(X509Extension.extendedKeyUsage,
+            certBuilder.addExtension(Extension.extendedKeyUsage,
                     extendedAttrCritical,
-                    new ExtendedKeyUsage(new DERSequence(extendedAttr)));
+                    new DERSequence(extendedAttr));
+            //new ExtendedKeyUsage(new DERSequence(extendedAttr)));
         }
 
         // signature generator
@@ -493,13 +495,13 @@ public class FullCert
                     entries.getRevocationReason(i));
         }
 
-        crlBuilder.addExtension(X509Extension.authorityKeyIdentifier,
-                    false, /* not critical */
-                    new AuthorityKeyIdentifier(issuerKeyInfo));
+        crlBuilder.addExtension(Extension.authorityKeyIdentifier,
+                false, /* not critical */
+                new AuthorityKeyIdentifier(issuerKeyInfo));
 
-        crlBuilder.addExtension(X509Extension.cRLNumber,
-                    false, /* not critical */
-                    new CRLNumber(serial));
+        crlBuilder.addExtension(Extension.cRLNumber,
+                false, /* not critical */
+                new CRLNumber(serial));
 
         // signature generator (use CA key)
         ContentSigner sigGen = new JcaContentSignerBuilder(sigAlgorithm)

@@ -126,6 +126,7 @@ class SurrogateTimeStampTokenProvider implements TimeStampTokenProvider
 
             // create time stamp token generator
             TimeStampTokenGenerator tokenGenerator;
+
             DigestCalculator sha1DigestCalculator = new DigestCalculator()
             {
                 /* SHA1 is hardcoded in few places in the library itself so hardcoding it
@@ -185,8 +186,8 @@ class SurrogateTimeStampTokenProvider implements TimeStampTokenProvider
                    .getCertificate());
 
             // "1.2" is a "no policy" policy ID
-            tokenGenerator = new TimeStampTokenGenerator(sha1DigestCalculator,
-                    signerInfoGen,new ASN1ObjectIdentifier("1.2"));
+            tokenGenerator = new TimeStampTokenGenerator(signerInfoGen,
+                    sha1DigestCalculator, new ASN1ObjectIdentifier("1.2"));
 
             //tokenGenerator.addCertificates(caCerts);
 

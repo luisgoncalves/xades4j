@@ -18,6 +18,9 @@ package xades4j.xml.marshalling.algorithms;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
+import java.util.Set;
+import org.apache.xml.security.exceptions.XMLSecurityException;
 import org.apache.xml.security.transforms.params.XPath2FilterContainer;
 import org.w3c.dom.Document;
 import org.w3c.dom.Node;
@@ -35,7 +38,9 @@ final class XPath2FilterTransformParamsMarshaller implements AlgorithmParameters
     {
         List<XPath2Filter> filters = alg.getFilters();
         List<Node> params = new ArrayList<Node>(filters.size());
-
+        
+        Set<Map.Entry<String, String>> namespaces = alg.getNamespaces().entrySet();
+        
         for (XPath2Filter filter : filters)
         {
             XPath2FilterContainer c = null;
@@ -56,6 +61,21 @@ final class XPath2FilterTransformParamsMarshaller implements AlgorithmParameters
             {
                 throw new IllegalArgumentException(filterType);
             }
+            
+            // For simplicity, add the namespace declarations to all the  XPath
+            // elements. Also, it's likely that the same prefix is used on the
+            // different filters.
+            for(Map.Entry<String, String> ns : namespaces)
+            {
+                try 
+                {
+                    c.setXPathNamespaceContext(ns.getKey(), ns.getValue());
+                }catch (XMLSecurityException ex) 
+                {
+                    throw new IllegalArgumentException("Invalid namespaces for XPath query", ex);
+                }
+            }
+            
             params.add(c.getElement());
         }
         return params;

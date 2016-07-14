@@ -16,6 +16,7 @@
  */
 package xades4j.properties;
 
+import xades4j.production.SignedDataObjects;
 import xades4j.production.XadesSigner;
 import xades4j.verification.XAdESVerificationResult;
 
@@ -34,6 +35,7 @@ public final class CounterSignatureProperty extends UnsignedSignatureProperty
     public static final String COUNTER_SIGNATURE_TYPE_URI = "http://uri.etsi.org/01903#CountersignedSignature",
             PROP_NAME = "CounterSignature";
     private XadesSigner counterSigSigner;
+    private SignedDataObjects signedDataObjectsForCounterSig;
     private XAdESVerificationResult verificationResult;
 
     /**
@@ -45,6 +47,17 @@ public final class CounterSignatureProperty extends UnsignedSignatureProperty
         if (null == counterSigSigner)
             throw new NullPointerException("Signer for counter signature cannot be null");
         this.counterSigSigner = counterSigSigner;
+    }
+
+    /**
+     * @param counterSigSigner the signer that will be used to generate the counter signature
+     * @param signedDataObjectsForCounterSig additional signed data objects for the counter signature
+     * @throws NullPointerException if {@code counterSigSigner} is {@code null}
+     */
+    public CounterSignatureProperty(XadesSigner counterSigSigner, SignedDataObjects signedDataObjectsForCounterSig)
+    {
+        this(counterSigSigner);
+        this.signedDataObjectsForCounterSig = signedDataObjectsForCounterSig;
     }
 
     /**
@@ -63,6 +76,15 @@ public final class CounterSignatureProperty extends UnsignedSignatureProperty
     public XadesSigner getCounterSigSigner()
     {
         return counterSigSigner;
+    }
+
+    /**
+     * Gets the additional signed data objects for the counter signature or {@code null}.
+     * @return the signed data objects
+     */
+    public SignedDataObjects getSignedDataObjectsForCounterSig()
+    {
+        return signedDataObjectsForCounterSig;
     }
 
     /**

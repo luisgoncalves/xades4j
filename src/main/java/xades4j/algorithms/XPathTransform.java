@@ -22,7 +22,7 @@ import org.apache.xml.security.transforms.Transforms;
  * The XPath filtering transform.
  * @author Luís
  */
-public final class XPathTransform extends Algorithm
+public final class XPathTransform extends XPathTransformBase
 {
     private final String xpath;
 
@@ -43,5 +43,21 @@ public final class XPathTransform extends Algorithm
     public String getXPath()
     {
         return xpath;
+    }
+    
+    /**
+     * Registers a namespace and the corresponding prefix to be used when resolving
+     * the XPath expression. In the signature, the namespace declaration will be
+     * added to the {@code XPath} parameter element of the current transform.
+     * 
+     * @param prefix the namespace prefix
+     * @param namespace the namespace URI
+     * 
+     * @return the current instance
+     */
+    public XPathTransform withNamespace(String prefix, String namespace)
+    {
+        addNamespace(prefix, namespace);
+        return this;
     }
 }

@@ -94,20 +94,20 @@ public interface XadesVerifier
      * format extensions. To work around this limitation you can first extend the form to
      * XAdES-C form and then to XAdES-X form.
      * </p><p>
-     * Valid transitions are (actual signature form -> form after extension):
+     * Valid transitions are (actual signature form -&gt; form after extension):
      * <ul>
-     *  <li>BES/EPES -> T</li>
-     *  <li>BES/EPES -> C</li>
-     *  <li>T -> T</li>
-     *  <li>T -> C</li>
-     *  <li>T -> X-L (not supported)</li>
-     *  <li>C -> X</li>
-     *  <li>C -> X-L</li>
-     *  <li>X -> X</li>
-     *  <li>X -> X-L</li>
-     *  <li>X-L -> A</li>
-     *  <li>A -> A</li>
-     *  <li>A -> A-VD</li>
+     *  <li>BES/EPES -&gt; T</li>
+     *  <li>BES/EPES -&gt; C</li>
+     *  <li>T -&gt; T</li>
+     *  <li>T -&gt; C</li>
+     *  <li>T -&gt; X-L (not supported)</li>
+     *  <li>C -&gt; X</li>
+     *  <li>C -&gt; X-L</li>
+     *  <li>X -&gt; X</li>
+     *  <li>X -&gt; X-L</li>
+     *  <li>X-L -&gt; A</li>
+     *  <li>A -&gt; A</li>
+     *  <li>A -&gt; A-VD</li>
      * </ul>
      * Note: {@code A-VD} form is an abstract form, that's used inside this library
      * to notify the extender that we want to add {@code TimeStampVerificationData}

@@ -48,14 +48,13 @@ import java.util.List;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
-import javax.xml.transform.TransformerConfigurationException;
-import javax.xml.transform.TransformerException;
 import javax.xml.transform.TransformerFactory;
 import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.stream.StreamResult;
 
 import org.apache.xml.security.utils.Constants;
 import org.bouncycastle.asn1.x509.CRLReason;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
@@ -75,6 +74,8 @@ import xades4j.providers.impl.DirectKeyingDataProvider;
 import xades4j.providers.impl.PKIXCertificateValidationProvider;
 import xades4j.providers.impl.PKIXTSACertificateValidationProvider;
 import xades4j.utils.DOMHelper;
+import static xades4j.utils.SignatureServicesTestBase.toPlatformSpecificFilePath;
+import static xades4j.utils.SignatureServicesTestBase.toPlatformSpecificXMLDirFilePath;
 import xades4j.utils.XadesProfileResolutionException;
 import xades4j.verification.FullCert.CRLEntries;
 
@@ -85,6 +86,7 @@ import xades4j.verification.FullCert.CRLEntries;
  * @author Hubert Kario
  *
  */
+@Ignore
 public class AgedTimeStampTest
 {
     private static final CertStore emptyCertStore;
@@ -1254,7 +1256,7 @@ public class AgedTimeStampTest
         System.out.println("SigAndRefsTimeStamp creation date is "
                 + new Date(realNow.getTime() - ONE_HOUR_IN_MS * 14));
 
-        Document doc = getDocument("document.aged.test02_X_sig1.xml");
+        Document doc = getOutputDocument("document.aged.test02_X_sig1.xml");
         Element signatureNode = getSigElement(doc);
 
         /*
@@ -1295,7 +1297,7 @@ public class AgedTimeStampTest
         String outFileName = new String("document.aged.test02_X_sig3.xml");
         removeFile(outFileName);
 
-        Document doc = getDocument("document.aged.test02_X_sig2.xml");
+        Document doc = getOutputDocument("document.aged.test02_X_sig2.xml");
         Element signatureNode = getSigElement(doc);
 
         XadesFormatExtenderProfile formExtProfile = new XadesFormatExtenderProfile();
@@ -1412,7 +1414,7 @@ public class AgedTimeStampTest
         System.out.println("SigAndRefsTimeStamp creation date is "
                 + new Date(realNow.getTime() - ONE_HOUR_IN_MS * 14));
 
-        Document doc = getDocument("document.aged.test03_T_sig1.xml");
+        Document doc = getOutputDocument("document.aged.test03_T_sig1.xml");
         Element signatureNode = getSigElement(doc);
 
         /*
@@ -1453,7 +1455,7 @@ public class AgedTimeStampTest
         String outFileName = new String("document.aged.test03_X_sig3.xml");
         removeFile(outFileName);
 
-        Document doc = getDocument("document.aged.test03_X_sig2.xml");
+        Document doc = getOutputDocument("document.aged.test03_X_sig2.xml");
         Element signatureNode = getSigElement(doc);
 
         XadesFormatExtenderProfile formExtProfile = new XadesFormatExtenderProfile();
@@ -1488,7 +1490,7 @@ public class AgedTimeStampTest
         System.out.println("ArchiveTimeStamp creation date is "
                 + new Date(realNow.getTime() - ONE_HOUR_IN_MS * 10));
 
-        Document doc = getDocument("document.aged.test03_X_sig3.xml");
+        Document doc = getOutputDocument("document.aged.test03_X_sig3.xml");
         Element signatureNode = getSigElement(doc);
 
         /*
@@ -1537,7 +1539,7 @@ public class AgedTimeStampTest
         String outFileName = new String("document.aged.test03_A_sig5.xml");
         removeFile(outFileName);
 
-        Document doc = getDocument("document.aged.test03_A_sig4.xml");
+        Document doc = getOutputDocument("document.aged.test03_A_sig4.xml");
         Element signatureNode = getSigElement(doc);
 
         XadesFormatExtenderProfile formExtProfile = new XadesFormatExtenderProfile();
@@ -1587,7 +1589,7 @@ public class AgedTimeStampTest
         System.out.println("ArchiveTimeStamp creation date is "
                 + realNow);
 
-        Document doc = getDocument("document.aged.test03_A_sig5.xml");
+        Document doc = getOutputDocument("document.aged.test03_A_sig5.xml");
         Element signatureNode = getSigElement(doc);
 
         XadesFormatExtenderProfile formExtProfile = new XadesFormatExtenderProfile();
@@ -1703,7 +1705,7 @@ public class AgedTimeStampTest
         SurrogateTimeStampTokenProvider.setTSACert(test04_ascendeusTSA17ya);
         SurrogateTimeStampTokenProvider.setTimeAndSerial(now, new BigInteger("34"));
 
-        Document doc = getDocument("document.aged.test04.T.xml");
+        Document doc = getOutputDocument("document.aged.test04.T.xml");
         Element signatureNode = getSigElement(doc);
 
         KeyStore trustAnchors = keyStoreForCerts(test04_acmeCA);
@@ -1794,7 +1796,7 @@ public class AgedTimeStampTest
                 + 16 * ONE_DAY_IN_MS);
         final CRLEntries emptyEntries = test04_ascendeusCA.new CRLEntries();
 
-        Document doc = getDocument("document.aged.test04.T2.xml");
+        Document doc = getOutputDocument("document.aged.test04.T2.xml");
         Element signatureNode = getSigElement(doc);
 
         KeyStore tsaTrustAnchors = keyStoreForCerts(
@@ -1861,7 +1863,7 @@ public class AgedTimeStampTest
         SurrogateTimeStampTokenProvider.setTSACert(test04_ascendeusTSA13ya);
         SurrogateTimeStampTokenProvider.setTimeAndSerial(now, new BigInteger("35"));
 
-        Document doc = getDocument("document.aged.test04_C.xml");
+        Document doc = getOutputDocument("document.aged.test04_C.xml");
         Element signatureNode = getSigElement(doc);
         KeyStore tsaTrustAnchors = keyStoreForCerts(
                 test04_consterCA,
@@ -1934,12 +1936,12 @@ public class AgedTimeStampTest
     @Test
     public void test04_X_sig5() throws Exception
     {
-        System.out.println("test04_X_sig4");
+        System.out.println("test04_X_sig5");
         Date now = new Date(realNow.getTime() - 13 * ONE_YEAR_IN_MS + ONE_HOUR_IN_MS / 2);
         SurrogateTimeStampTokenProvider.setTSACert(test04_carpamaTSA13ya);
         SurrogateTimeStampTokenProvider.setTimeAndSerial(now, new BigInteger("36"));
 
-        Document doc = getDocument("document.aged.test04.X.xml");
+        Document doc = getOutputDocument("document.aged.test04.X.xml");
         Element signatureNode = getSigElement(doc);
         KeyStore tsaTrustAnchors = keyStoreForCerts(
                 test04_consterCA,
@@ -2018,7 +2020,7 @@ public class AgedTimeStampTest
                 + 14 * ONE_DAY_IN_MS);
         final CRLEntries emptyEntries = test04_ascendeusCA.new CRLEntries();
 
-        Document doc = getDocument("document.aged.test04.X2.xml");
+        Document doc = getOutputDocument("document.aged.test04.X2.xml");
         Element signatureNode = getSigElement(doc);
 
         KeyStore tsaTrustAnchors = keyStoreForCerts(
@@ -2096,7 +2098,7 @@ public class AgedTimeStampTest
         SurrogateTimeStampTokenProvider.setTSACert(test04_carpamaTSA9ya);
         SurrogateTimeStampTokenProvider.setTimeAndSerial(now, new BigInteger("37"));
 
-        Document doc = getDocument("document.aged.test04.XL.xml");
+        Document doc = getOutputDocument("document.aged.test04.XL.xml");
         Element signatureNode = getSigElement(doc);
         KeyStore tsaTrustAnchors = keyStoreForCerts(
                 test04_consterCA,
@@ -2177,7 +2179,7 @@ public class AgedTimeStampTest
                 now,
                 new BigInteger("38"));
 
-        Document doc = getDocument("document.aged.test04.A.xml");
+        Document doc = getOutputDocument("document.aged.test04.A.xml");
         Element signatureNode = getSigElement(doc);
         KeyStore tsaTrustAnchors = keyStoreForCerts(
                 test04_consterCA,
@@ -2256,7 +2258,7 @@ public class AgedTimeStampTest
                 + 14 * ONE_DAY_IN_MS);
         final CRLEntries emptyEntries = test04_ascendeusCA.new CRLEntries();
 
-        Document doc = getDocument("document.aged.test04.A2.xml");
+        Document doc = getOutputDocument("document.aged.test04.A2.xml");
         Element signatureNode = getSigElement(doc);
 
         KeyStore tsaTrustAnchors = keyStoreForCerts(
@@ -2335,7 +2337,7 @@ public class AgedTimeStampTest
         SurrogateTimeStampTokenProvider.setTSACert(test04_premoxTSA5ya);
         SurrogateTimeStampTokenProvider.setTimeAndSerial(now, new BigInteger("38"));
 
-        Document doc = getDocument("document.aged.test04.AVD.xml");
+        Document doc = getOutputDocument("document.aged.test04.AVD.xml");
         Element signatureNode = getSigElement(doc);
         KeyStore tsaTrustAnchors = keyStoreForCerts(
                 test04_consterCA,
@@ -2407,7 +2409,7 @@ public class AgedTimeStampTest
         SurrogateTimeStampTokenProvider.setTSACert(test04_gescapeTSA5ya);
         SurrogateTimeStampTokenProvider.setTimeAndSerial(now, new BigInteger("39"));
 
-        Document doc = getDocument("document.aged.test04.2A.xml");
+        Document doc = getOutputDocument("document.aged.test04.2A.xml");
         Element signatureNode = getSigElement(doc);
         KeyStore tsaTrustAnchors = keyStoreForCerts(
                 test04_consterCA,
@@ -2480,7 +2482,7 @@ public class AgedTimeStampTest
                 + 14 * ONE_DAY_IN_MS);
         final CRLEntries emptyEntries = test04_ascendeusCA.new CRLEntries();
 
-        Document doc = getDocument("document.aged.test04.2A2.xml");
+        Document doc = getOutputDocument("document.aged.test04.2A2.xml");
         Element signatureNode = getSigElement(doc);
 
         KeyStore tsaTrustAnchors = keyStoreForCerts(
@@ -2552,7 +2554,7 @@ public class AgedTimeStampTest
         SurrogateTimeStampTokenProvider.setTSACert(test04_unibimTSA1ya);
         SurrogateTimeStampTokenProvider.setTimeAndSerial(now, new BigInteger("39"));
 
-        Document doc = getDocument("document.aged.test04.2AVD.xml");
+        Document doc = getOutputDocument("document.aged.test04.2AVD.xml");
         Element signatureNode = getSigElement(doc);
         KeyStore tsaTrustAnchors = keyStoreForCerts(
                 test04_consterCA,
@@ -2624,7 +2626,7 @@ public class AgedTimeStampTest
         SurrogateTimeStampTokenProvider.setTSACert(test04_astronTSA1ya);
         SurrogateTimeStampTokenProvider.setTimeAndSerial(now, new BigInteger("40"));
 
-        Document doc = getDocument("document.aged.test04.3A.xml");
+        Document doc = getOutputDocument("document.aged.test04.3A.xml");
         Element signatureNode = getSigElement(doc);
         KeyStore tsaTrustAnchors = keyStoreForCerts(
                 test04_consterCA,
@@ -2705,7 +2707,7 @@ public class AgedTimeStampTest
                 + 14 * ONE_DAY_IN_MS);
         final CRLEntries emptyEntries = test04_ascendeusCA.new CRLEntries();
 
-        Document doc = getDocument("document.aged.test04.3A2.xml");
+        Document doc = getOutputDocument("document.aged.test04.3A2.xml");
         Element signatureNode = getSigElement(doc);
 
         KeyStore tsaTrustAnchors = keyStoreForCerts(
@@ -2787,7 +2789,7 @@ public class AgedTimeStampTest
         final Date now = realNow;
         final CRLEntries emptyEntries = test04_ascendeusCA.new CRLEntries();
 
-        Document doc = getDocument("document.aged.test04.3AVD.xml");
+        Document doc = getOutputDocument("document.aged.test04.3AVD.xml");
         Element signatureNode = getSigElement(doc);
 
         KeyStore tsaTrustAnchors = keyStoreForCerts(
@@ -2842,7 +2844,7 @@ public class AgedTimeStampTest
         final Date now = realNow;
         final CRLEntries emptyEntries = test04_ascendeusCA.new CRLEntries();
 
-        Document doc = getDocument("document.aged.test04.3AVD.xml");
+        Document doc = getOutputDocument("document.aged.test04.3AVD.xml");
         Element signatureNode = getSigElement(doc);
 
         KeyStore tsaTrustAnchors = keyStoreForCerts(
@@ -2887,7 +2889,7 @@ public class AgedTimeStampTest
         final Date now = realNow;
         final CRLEntries emptyEntries = test04_ascendeusCA.new CRLEntries();
 
-        Document doc = getDocument("document.aged.test04.3AVD.xml");
+        Document doc = getOutputDocument("document.aged.test04.3AVD.xml");
         Element signatureNode = getSigElement(doc);
 
         KeyStore tsaTrustAnchors = keyStoreForCerts(
@@ -2930,7 +2932,7 @@ public class AgedTimeStampTest
         final Date now = realNow;
         final CRLEntries emptyEntries = test04_ascendeusCA.new CRLEntries();
 
-        Document doc = getDocument("document.aged.test04.3AVD.xml");
+        Document doc = getOutputDocument("document.aged.test04.3AVD.xml");
         Element signatureNode = getSigElement(doc);
 
         KeyStore tsaTrustAnchors = keyStoreForCerts(
@@ -3033,7 +3035,7 @@ public class AgedTimeStampTest
             throws FileNotFoundException, ParserConfigurationException,
             SAXException, IOException, XadesProfileResolutionException, XAdES4jException
     {
-        Element signatureNode = getSigElement(getDocument(path));
+        Element signatureNode = getSigElement(getOutputDocument(path));
         XAdESVerificationResult res = p.newVerifier().verify(signatureNode, null);
         return res.getSignatureForm();
     }
@@ -3047,13 +3049,31 @@ public class AgedTimeStampTest
 
     private void removeFile(String path)
     {
-      path = toDocumentDirFilePath(path);
-      File file = new File(path);
-      file.delete();
+        File outDir = ensureOutputDir("xml/");
+        File file = new File(outDir, path);
+        file.delete();
     }
 
     // helper method
-    private void outputDocument(Document doc, String path)
+    private void outputDocument(Document doc, String fileName) throws Exception {
+        TransformerFactory tf = TransformerFactory.newInstance();
+        File outDir = ensureOutputDir("xml");
+        FileOutputStream out = new FileOutputStream(new File(outDir, fileName));
+        tf.newTransformer().transform(
+                new DOMSource(doc),
+                new StreamResult(out));
+        out.flush();
+        out.getFD().sync();
+        out.close();
+    }
+
+    private static File ensureOutputDir(String subdir) {
+        File dir = new File(toPlatformSpecificFilePath("./target/out/" + subdir));
+        dir.mkdirs();
+        return dir;
+    }
+
+    /*private void outputDocument(Document doc, String path)
             throws TransformerConfigurationException,
             TransformerException, IOException
     {
@@ -3066,45 +3086,57 @@ public class AgedTimeStampTest
         out.flush();
         out.getFD().sync();
         out.close();
-    }
+    }*/
 
     // helper method
-    private static void saveCRL(String path, X509CRL crl)
+    private static void saveCRL(String fileName, X509CRL crl)
             throws CRLException, IOException
     {
-        path = "./src/test/cert/aged/" + path;
-        FileOutputStream fos = new FileOutputStream(path);
+        File directory = ensureOutputDir("cert/aged");
+        FileOutputStream fos = new FileOutputStream(new File(directory, fileName));
         fos.write(crl.getEncoded());
         fos.close();
         return;
     }
 
     // helper method
-    private String toDocumentDirFilePath(String path)
+    /*private String toDocumentDirFilePath(String path)
     {
         return "./src/test/xml/" + path;
-    }
+    }*/
 
     // helper method
-    private static void saveCertificate(String path, X509Certificate cert)
-        throws CertificateEncodingException, IOException
+    private static void saveCertificate(String fileName, X509Certificate cert)
+            throws CertificateEncodingException, IOException
     {
-        path = "./src/test/cert/aged/" + path;
-        FileOutputStream fos = new FileOutputStream(path);
+        File outDir = ensureOutputDir("cert/aged");
+        FileOutputStream fos = new FileOutputStream(new File(outDir, fileName));
         fos.write(cert.getEncoded());
         fos.close();
         return;
     }
 
     // helper method
-    private Document getDocument(String path) throws ParserConfigurationException,
-        FileNotFoundException, SAXException, IOException
+    private Document getDocument(String fileName) throws ParserConfigurationException,
+            FileNotFoundException, SAXException, IOException
     {
-        path = toDocumentDirFilePath(path);
+        String path = toPlatformSpecificXMLDirFilePath(fileName);
         DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
         dbf.setNamespaceAware(true);
         DocumentBuilder db = dbf.newDocumentBuilder();
         Document doc = db.parse(new FileInputStream(path));
+        Element elem = doc.getDocumentElement();
+        DOMHelper.useIdAsXmlId(elem);
+        return doc;
+    }
+
+    private Document getOutputDocument(String fileName) throws ParserConfigurationException,
+            FileNotFoundException, SAXException, IOException {
+        File outDir = ensureOutputDir("xml");
+        DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
+        dbf.setNamespaceAware(true);
+        DocumentBuilder db = dbf.newDocumentBuilder();
+        Document doc = db.parse(new FileInputStream(new File(outDir, fileName)));
         Element elem = doc.getDocumentElement();
         DOMHelper.useIdAsXmlId(elem);
         return doc;

@@ -171,7 +171,7 @@ public class DOMHelper
     }
 
     /**
-     * Defines the element's "Id" atribute as its XML ID, if present.
+     * Defines the element's "Id" attribute as its XML ID, if present.
      * @param e the element
      */
     public static void useIdAsXmlId(Element e)

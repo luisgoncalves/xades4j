@@ -261,7 +261,8 @@ class XadesVerifierImpl implements XadesVerifier
                 new ArrayList<RawDataObjectDesc>(0),
                 signature),
                 new Date());
-        QualifyingProperty sigTs = this.qualifyingPropertiesVerifier.verifyProperties(sigTsData, ctx).iterator().next().getProperty();
+        Collection<PropertyInfo> props = this.qualifyingPropertiesVerifier.verifyProperties(sigTsData, ctx);
+        QualifyingProperty sigTs = props.iterator().next().getProperty();
 
         return ((SignatureTimeStampProperty) sigTs).getTime();
     }
@@ -291,7 +292,9 @@ class XadesVerifierImpl implements XadesVerifier
                 new ArrayList<RawDataObjectDesc>(0),
                 signature),
                 new Date());
-        QualifyingProperty certVal = this.qualifyingPropertiesVerifier.verifyProperties(certValData, ctx).iterator().next().getProperty();
+        Collection<PropertyInfo> props = this.qualifyingPropertiesVerifier.verifyProperties(certValData, ctx);
+        QualifyingProperty certVal = props.iterator().next().getProperty();
+
 
         return ((CertificateValuesProperty) certVal).getCertificates();
     }
@@ -321,7 +324,8 @@ class XadesVerifierImpl implements XadesVerifier
                 new ArrayList<RawDataObjectDesc>(0),
                 signature),
                 new Date());
-        QualifyingProperty revVal = this.qualifyingPropertiesVerifier.verifyProperties(revValData, ctx).iterator().next().getProperty();
+        Collection<PropertyInfo> props = this.qualifyingPropertiesVerifier.verifyProperties(revValData, ctx);
+        QualifyingProperty revVal = props.iterator().next().getProperty();
 
         return ((RevocationValuesProperty) revVal).getCrls();
     }
