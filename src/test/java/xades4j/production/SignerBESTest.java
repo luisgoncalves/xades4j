@@ -17,6 +17,13 @@
 package xades4j.production;
 
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import org.apache.xml.security.signature.XMLSignatureInput;
+import org.apache.xml.security.utils.resolver.ResourceResolver;
+import org.apache.xml.security.utils.resolver.ResourceResolverContext;
+import org.apache.xml.security.utils.resolver.ResourceResolverException;
+import org.apache.xml.security.utils.resolver.ResourceResolverSpi;
 import xades4j.algorithms.EnvelopedSignatureTransform;
 import xades4j.properties.DataObjectDesc;
 import xades4j.properties.AllDataObjsCommitmentTypeProperty;
@@ -129,21 +136,24 @@ public class SignerBESTest extends SignerTestBase
         XadesSigner signer = new XadesBesSigningProfile(keyingProviderMy)
                 .withBasicSignatureOptionsProvider(MyBasicSignatureOptionsProvider.class)
                 .newSigner();
-        
-        String fileUti = new File("src/test/xml/document.xml").toURI().toString();
-        DataObjectDesc obj1 = new DataObjectReference(fileUti)
+
+        DataObjectDesc obj1 = new DataObjectReference("xades4j://document.xml")
                 .withTransform(
                     new XPathTransform("/collection/album/foo:tracks")
                         .withNamespace("foo", "http://test.xades4j/tracks"))
                 .withDataObjectFormat(new DataObjectFormatProperty("text/xml"));
-        
-        DataObjectDesc obj2 = new DataObjectReference(fileUti)
+
+        DataObjectDesc obj2 = new DataObjectReference("xades4j://document.xml")
                 .withTransform(
                     XPath2Filter.intersect("/collection/album/bar:tracks/bar:song[@tracknumber = 1]")
                         .withNamespace("bar", "http://test.xades4j/tracks"));
-        
-        signer.sign(new SignedDataObjects(obj1, obj2), doc);
+
+        TestResolverSpi resolverSpi = new TestResolverSpi();
+        SignedDataObjects dataObjs = new SignedDataObjects(obj1, obj2)
+                .withResourceResolver(new ResourceResolver(resolverSpi));
+        signer.sign(dataObjs, doc);
         
         outputDocument(doc, "detached.bes.xml");
     }
+
 }

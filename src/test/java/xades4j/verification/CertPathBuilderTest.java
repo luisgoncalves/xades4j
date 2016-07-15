@@ -16,6 +16,7 @@
  */
 package xades4j.verification;
 
+import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.math.BigInteger;
@@ -42,6 +43,7 @@ import java.util.Date;
 import org.bouncycastle.asn1.x509.CRLReason;
 import org.bouncycastle.x509.ExtendedPKIXParameters;
 import org.junit.Test;
+import static xades4j.utils.SignatureServicesTestBase.toPlatformSpecificFilePath;
 
 import xades4j.verification.FullCert.CRLEntries;
 
@@ -153,9 +155,8 @@ public class CertPathBuilderTest
         buildParams.setRevocationEnabled(true);
         buildParams.setDate(new Date(new Date().getTime() - 1000*60*15));
 
-        ExtendedPKIXParameters extBuildParams = ExtendedPKIXParameters.getInstance(buildParams);
-        extBuildParams.setValidityModel(ExtendedPKIXParameters.PKIX_VALIDITY_MODEL);
-
+        //ExtendedPKIXParameters extBuildParams = ExtendedPKIXParameters.getInstance(buildParams);
+        //extBuildParams.setValidityModel(ExtendedPKIXParameters.PKIX_VALIDITY_MODEL);
         PKIXCertPathBuilderResult result = (PKIXCertPathBuilderResult) builder.build(buildParams);
         CertPath certPath = result.getCertPath();
 
@@ -210,24 +211,29 @@ public class CertPathBuilderTest
     /*
      * end of tests
      */
+    private static File ensureOutputDir() {
+        File dir = new File(toPlatformSpecificFilePath("./target/out/cert/certpath"));
+        dir.mkdirs();
+        return dir;
+    }
 
     // helper method
-    private static void saveCRL(String path, X509CRL crl)
+    private static void saveCRL(String fileName, X509CRL crl)
             throws CRLException, IOException
     {
-        path = "./src/test/cert/certpath/" + path;
-        FileOutputStream fos = new FileOutputStream(path);
+        File outDir = ensureOutputDir();
+        FileOutputStream fos = new FileOutputStream(new File(outDir, fileName));
         fos.write(crl.getEncoded());
         fos.close();
         return;
     }
 
     // helper method
-    private static void saveCertificate(String path, X509Certificate cert)
-        throws CertificateEncodingException, IOException
+    private static void saveCertificate(String fileName, X509Certificate cert)
+            throws CertificateEncodingException, IOException
     {
-        path = "./src/test/cert/certpath/" + path;
-        FileOutputStream fos = new FileOutputStream(path);
+        File outDir = ensureOutputDir();
+        FileOutputStream fos = new FileOutputStream(new File(outDir, fileName));
         fos.write(cert.getEncoded());
         fos.close();
         return;
