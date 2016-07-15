@@ -8,5 +8,6 @@ The default TSA is from http://www.accv.es/ and its certificate is issued by the
 
 ======== Trust-anchors keystore =========
 
-
 keytool -importcert -alias accvCA -file "rootgva.cer" -keystore trustAnchor -storepass password
+
+keytool -importcert -alias accvraiz1 -file "ACCVRAIZ1.crt" -keystore trustAnchor -storepass password
