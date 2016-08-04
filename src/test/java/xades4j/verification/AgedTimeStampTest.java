@@ -54,8 +54,10 @@ import javax.xml.transform.stream.StreamResult;
 
 import org.apache.xml.security.utils.Constants;
 import org.bouncycastle.asn1.x509.CRLReason;
+import org.junit.FixMethodOrder;
 import org.junit.Ignore;
 import org.junit.Test;
+import org.junit.runners.MethodSorters;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.xml.sax.SAXException;
@@ -86,7 +88,7 @@ import xades4j.verification.FullCert.CRLEntries;
  * @author Hubert Kario
  *
  */
-@Ignore
+@FixMethodOrder(MethodSorters.NAME_ASCENDING)
 public class AgedTimeStampTest
 {
     private static final CertStore emptyCertStore;
@@ -657,7 +659,7 @@ public class AgedTimeStampTest
                 "CN=XAdES4j XAdES-X TSA 1",
                 new Date(now.getTime() - ONE_HOUR_IN_MS * 21),
                 new Date(now.getTime() - ONE_HOUR_IN_MS * 12),
-                new BigInteger("1"),
+                new BigInteger("2"),
                 "SHA256withRSA");
         System.out.println("TSA certificate " +
                 test02_X_tsa1Cert.getCertificate().getSubjectDN().toString() +
@@ -881,7 +883,7 @@ public class AgedTimeStampTest
                 "CN=XAdES-A testing A form TSA",
                 new Date(now.getTime() - 11 * ONE_HOUR_IN_MS),
                 new Date(now.getTime() + ONE_HOUR_IN_MS),
-                new BigInteger("1"),
+                new BigInteger("2"),
                 "SHA256withRSA");
 
         tsaCaCrlEntries = test03_A_tsaCaCert.new CRLEntries();
@@ -1023,7 +1025,7 @@ public class AgedTimeStampTest
 
     // test creation of document with time stamp in the past
     @Test
-    public void test01_T_sig1() throws Exception
+    public void test01_01_T_sig1() throws Exception
     {
         System.out.println(Thread.currentThread().getStackTrace()[1].getMethodName());
 
@@ -1048,7 +1050,7 @@ public class AgedTimeStampTest
     // test if document can be validated using revocation information published before
     // time stamp generation (TODO should fail if we support grace period)
     @Test
-    public void test01_T_ver1() throws Exception
+    public void test01_02_T_ver1() throws Exception
     {
         System.out.println(Thread.currentThread().getStackTrace()[1].getMethodName());
 
@@ -1061,7 +1063,7 @@ public class AgedTimeStampTest
 
     // test if document can be validated using current revocation information
     @Test
-    public void test01_T_ver2() throws Exception
+    public void test01_03_T_ver2() throws Exception
     {
         System.out.println(Thread.currentThread().getStackTrace()[1].getMethodName());
 
@@ -1079,7 +1081,8 @@ public class AgedTimeStampTest
     // BC provider has such behavior for revocation reason unspecified, keyCompromise,
     // aACompromise and few others
     @Test
-    public void test01_T_ver3() throws Exception
+    @Ignore
+    public void test01_04_T_ver3() throws Exception
     {
         System.out.println(Thread.currentThread().getStackTrace()[1].getMethodName());
 
@@ -1118,7 +1121,7 @@ public class AgedTimeStampTest
     // exact same test as testT_3v, with the change to a more "harmless" revocation
     // reason than unspecified: affiliation changed.
     @Test
-    public void test01_T_ver3_1() throws Exception
+    public void test01_05_T_ver3_1() throws Exception
     {
         System.out.println(Thread.currentThread().getStackTrace()[1].getMethodName());
 
@@ -1156,7 +1159,7 @@ public class AgedTimeStampTest
     // test if document can be validated if user certificate was revoked before
     // signature was time stamped
     @Test(expected = CannotBuildCertificationPathException.class)
-    public void test01_T_ver4() throws Exception
+    public void test01_06_T_ver4() throws Exception
     {
         System.out.println(Thread.currentThread().getStackTrace()[1].getMethodName());
 
@@ -1218,7 +1221,7 @@ public class AgedTimeStampTest
 
     // create basic XAdES-T signed document
     @Test
-    public void test02_X_sig1() throws Exception
+    public void test02_01_X_sig1() throws Exception
     {
         System.out.println(Thread.currentThread().getStackTrace()[1].getMethodName());
         String outFileName = new String("document.aged.test02_X_sig1.xml");
@@ -1242,7 +1245,7 @@ public class AgedTimeStampTest
 
     // extend T form to X form
     @Test
-    public void test02_X_sig2() throws Exception
+    public void test02_02_X_sig2() throws Exception
     {
         System.out.println(Thread.currentThread().getStackTrace()[1].getMethodName());
         String outFileName = new String("document.aged.test02_X_sig2.xml");
@@ -1291,7 +1294,7 @@ public class AgedTimeStampTest
 
     // extend X to X-L form
     @Test
-    public void test02_X_sig3() throws Exception
+    public void test02_03_X_sig3() throws Exception
     {
         System.out.println(Thread.currentThread().getStackTrace()[1].getMethodName());
         String outFileName = new String("document.aged.test02_X_sig3.xml");
@@ -1318,7 +1321,7 @@ public class AgedTimeStampTest
 
     // verify if the X form was properly created
     @Test
-    public void test02_X_ver1() throws Exception
+    public void test02_04_X_ver1() throws Exception
     {
         System.out.println(Thread.currentThread().getStackTrace()[1].getMethodName());
 
@@ -1333,7 +1336,7 @@ public class AgedTimeStampTest
     // verify if the X-L form was properly created by using validators with just CA
     // certificates and current CRLs for TSA
     @Test
-    public void test02_X_ver2() throws Exception
+    public void test02_05_X_ver2() throws Exception
     {
         System.out.println(Thread.currentThread().getStackTrace()[1].getMethodName());
 
@@ -1376,7 +1379,7 @@ public class AgedTimeStampTest
 
     // create basic XAdES-T signed document
     @Test
-    public void test03_T_sig1() throws Exception
+    public void test03_01_T_sig1() throws Exception
     {
         System.out.println(Thread.currentThread().getStackTrace()[1].getMethodName());
         String outFileName = new String("document.aged.test03_T_sig1.xml");
@@ -1400,7 +1403,7 @@ public class AgedTimeStampTest
 
     // extend T form to X form
     @Test
-    public void test03_X_sig2() throws Exception
+    public void test03_02_X_sig2() throws Exception
     {
         System.out.println(Thread.currentThread().getStackTrace()[1].getMethodName());
         String outFileName = new String("document.aged.test03_X_sig2.xml");
@@ -1449,7 +1452,7 @@ public class AgedTimeStampTest
 
     // extend X to X-L form
     @Test
-    public void test03_X_sig3() throws Exception
+    public void test03_03_X_sig3() throws Exception
     {
         System.out.println(Thread.currentThread().getStackTrace()[1].getMethodName());
         String outFileName = new String("document.aged.test03_X_sig3.xml");
@@ -1476,7 +1479,7 @@ public class AgedTimeStampTest
 
     // extend X-L form to A form
     @Test
-    public void test03_A_sig4() throws Exception
+    public void test03_04_A_sig4() throws Exception
     {
         System.out.println(Thread.currentThread().getStackTrace()[1].getMethodName());
         String outFileName = new String("document.aged.test03_A_sig4.xml");
@@ -1519,7 +1522,7 @@ public class AgedTimeStampTest
 
     // verify A form
     @Test
-    public void test03_A_ver1() throws Exception
+    public void test03_05_A_ver1() throws Exception
     {
         System.out.println(Thread.currentThread().getStackTrace()[1].getMethodName());
 
@@ -1533,7 +1536,7 @@ public class AgedTimeStampTest
 
     // add validation info to A form
     @Test
-    public void test03_A_sig5() throws Exception
+    public void test03_06_A_sig5() throws Exception
     {
         System.out.println(Thread.currentThread().getStackTrace()[1].getMethodName());
         String outFileName = new String("document.aged.test03_A_sig5.xml");
@@ -1561,7 +1564,7 @@ public class AgedTimeStampTest
 
     // verify A form using minimal validators
     @Test
-    public void test03_A_ver2() throws Exception
+    public void test03_07_A_ver2() throws Exception
     {
         System.out.println(Thread.currentThread().getStackTrace()[1].getMethodName());
 
@@ -1575,7 +1578,7 @@ public class AgedTimeStampTest
 
     // time stamp A(VD) form again
     @Test
-    public void test03_A_sig6() throws Exception
+    public void test03_08_A_sig6() throws Exception
     {
         System.out.println(Thread.currentThread().getStackTrace()[1].getMethodName());
         String outFileName = new String("document.aged.test03_A_sig6.xml");
@@ -1671,7 +1674,7 @@ public class AgedTimeStampTest
 
     // create XAdES-T form
     @Test
-    public void test04_T_sig1() throws Exception
+    public void test04_01_T_sig1() throws Exception
     {
         System.out.println("test04_T_sig1");
 
@@ -1695,7 +1698,7 @@ public class AgedTimeStampTest
 
     // add second XAdES-T time stamp
     @Test
-    public void test04_T_sig2() throws Exception
+    public void test04_02_T_sig2() throws Exception
     {
         System.out.println("test04_T_sig2");
 
@@ -1788,7 +1791,7 @@ public class AgedTimeStampTest
 
     // add references to signature data
     @Test
-    public void test04_C_sig3() throws Exception
+    public void test04_03_C_sig3() throws Exception
     {
         System.out.println("test04_C_sig3");
 
@@ -1856,7 +1859,7 @@ public class AgedTimeStampTest
 
     // add second type of time stamp to signature (SigAndRefsTimeStamp)
     @Test
-    public void test04_X_sig4() throws Exception
+    public void test04_04_X_sig4() throws Exception
     {
         System.out.println("test04_X_sig4");
         Date now = new Date(realNow.getTime() - 13 * ONE_YEAR_IN_MS);
@@ -1934,7 +1937,7 @@ public class AgedTimeStampTest
 
     // add second SigAndRefsTimeStamp
     @Test
-    public void test04_X_sig5() throws Exception
+    public void test04_05_X_sig5() throws Exception
     {
         System.out.println("test04_X_sig5");
         Date now = new Date(realNow.getTime() - 13 * ONE_YEAR_IN_MS + ONE_HOUR_IN_MS / 2);
@@ -2012,7 +2015,7 @@ public class AgedTimeStampTest
 
     // add certificates to signature (X-L form)
     @Test
-    public void test04_XL_sig6() throws Exception
+    public void test04_06_XL_sig6() throws Exception
     {
         System.out.println("test04_XL_sig6");
 
@@ -2091,7 +2094,7 @@ public class AgedTimeStampTest
 
     // add first Archival Time Stamp
     @Test
-    public void test04_A_sig7() throws Exception
+    public void test04_07_A_sig7() throws Exception
     {
         System.out.println("test04_A_sig7");
         Date now = new Date(realNow.getTime() - 9 * ONE_YEAR_IN_MS);
@@ -2170,7 +2173,7 @@ public class AgedTimeStampTest
 
     // add second Archival time stamp
     @Test
-    public void test04_A_sig8() throws Exception
+    public void test04_08_A_sig8() throws Exception
     {
         System.out.println("test04_A_sig8");
         Date now = new Date(realNow.getTime() - 9 * ONE_YEAR_IN_MS + ONE_HOUR_IN_MS / 60);
@@ -2250,7 +2253,7 @@ public class AgedTimeStampTest
     }
 
     @Test
-    public void test04_AVD_sig9() throws Exception
+    public void test04_09_AVD_sig9() throws Exception
     {
         System.out.println("test04_AVD_sig9");
 
@@ -2330,7 +2333,7 @@ public class AgedTimeStampTest
 
     // add second group of A time stamps
     @Test
-    public void test04_2A_sig10() throws Exception
+    public void test04_10_2A_sig10() throws Exception
     {
         System.out.println("test04_2A_sig10");
         Date now = new Date(realNow.getTime() - 5 * ONE_YEAR_IN_MS);
@@ -2402,7 +2405,7 @@ public class AgedTimeStampTest
 
     // add second time stamp in second group of timestamps
     @Test
-    public void test04_2A_sig11() throws Exception
+    public void test04_11_2A_sig11() throws Exception
     {
         System.out.println("test04_2A_sig11");
         Date now = new Date(realNow.getTime() - 5 * ONE_YEAR_IN_MS + ONE_HOUR_IN_MS);
@@ -2474,7 +2477,7 @@ public class AgedTimeStampTest
 
     // add revocation information about first group of archive time stamps
     @Test
-    public void test04_2AVD_sig12() throws Exception
+    public void test04_12_2AVD_sig12() throws Exception
     {
         System.out.println("test04_2AVD_sig12");
 
@@ -2547,7 +2550,7 @@ public class AgedTimeStampTest
 
     // add first timestamp to third group of timestamps
     @Test
-    public void test04_3A_sig13() throws Exception
+    public void test04_13_3A_sig13() throws Exception
     {
         System.out.println("test04_3A_sig13");
         Date now = new Date(realNow.getTime() - 1 * ONE_YEAR_IN_MS);
@@ -2619,7 +2622,7 @@ public class AgedTimeStampTest
 
     // add second timestamp to third group of timestamps
     @Test
-    public void test04_3A_sig14() throws Exception
+    public void test04_14_3A_sig14() throws Exception
     {
         System.out.println("test04_3A_sig14");
         Date now = new Date(realNow.getTime() - 1 * ONE_YEAR_IN_MS + ONE_HOUR_IN_MS);
@@ -2699,7 +2702,7 @@ public class AgedTimeStampTest
 
     // add revocation information about second group of archive time stamps
     @Test
-    public void test04_3AVD_sig15() throws Exception
+    public void test04_15_3AVD_sig15() throws Exception
     {
         System.out.println("test04_3AVD_sig14");
 
@@ -2782,7 +2785,7 @@ public class AgedTimeStampTest
 
     // test with minimal revocation information and all trust anchors
     @Test
-    public void test04_3AVD_ver1() throws Exception
+    public void test04_16_3AVD_ver1() throws Exception
     {
         System.out.println("test04_3AVD_ver1");
 
@@ -2837,7 +2840,7 @@ public class AgedTimeStampTest
     // test with minimal revocation information and only some TSA trust anchors (minimal amount
     // that will still allow for successful history traversal)
     @Test
-    public void test04_3AVD_ver2() throws Exception
+    public void test04_17_3AVD_ver2() throws Exception
     {
         System.out.println("test04_3AVD_ver2");
 
@@ -2882,7 +2885,7 @@ public class AgedTimeStampTest
     // removal of trust for all newest TSAs (gescape TSA is valid but don't provide CRL
     // for it)
     @Test(expected = CannotBuildCertificationPathException.class)
-    public void test04_3AVD_ver3() throws Exception
+    public void test04_18_3AVD_ver3() throws Exception
     {
         System.out.println("test04_3AVD_ver3");
 
@@ -2925,7 +2928,7 @@ public class AgedTimeStampTest
     // test with minimal revocation information and only some TSA trust anchors
     // removal of trust for all newest TSAs, but provide CRL for gescape
     @Test
-    public void test04_3AVD_ver4() throws Exception
+    public void test04_19_3AVD_ver4() throws Exception
     {
         System.out.println("test04_3AVD_ver3");
 
