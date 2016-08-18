@@ -8,231 +8,231 @@ Any modifications to this file will be lost upon recompilation of the source sch
 Generated on: 2011.08.02 at 08:48:59 PM BST
 
   -->
-  <bindings scd="x-schema::tns" xmlns:tns="http://uri.etsi.org/01903/v1.3.2#">
+  <bindings xmlns:tns="http://uri.etsi.org/01903/v1.3.2#"  if-exists="true" scd="x-schema::tns">
     <schemaBindings map="false"/>
-    <bindings scd="~tns:CertifiedRolesListType">
+    <bindings if-exists="true" scd="~tns:CertifiedRolesListType">
       <class ref="xades4j.xml.bind.xades.XmlCertifiedRolesListType"/>
     </bindings>
-    <bindings scd="~tns:CommitmentTypeIndicationType">
+    <bindings if-exists="true" scd="~tns:CommitmentTypeIndicationType">
       <class ref="xades4j.xml.bind.xades.XmlCommitmentTypeIndicationType"/>
     </bindings>
-    <bindings scd="~tns:RevocationValuesType">
+    <bindings if-exists="true" scd="~tns:RevocationValuesType">
       <class ref="xades4j.xml.bind.xades.XmlRevocationValuesType"/>
     </bindings>
-    <bindings scd="~tns:DocumentationReferencesType">
+    <bindings if-exists="true" scd="~tns:DocumentationReferencesType">
       <class ref="xades4j.xml.bind.xades.XmlDocumentationReferencesType"/>
     </bindings>
-    <bindings scd="~tns:SPUserNoticeType">
+    <bindings if-exists="true" scd="~tns:SPUserNoticeType">
       <class ref="xades4j.xml.bind.xades.XmlSPUserNoticeType"/>
     </bindings>
-    <bindings scd="~tns:CertIDListType">
+    <bindings if-exists="true" scd="~tns:CertIDListType">
       <class ref="xades4j.xml.bind.xades.XmlCertIDListType"/>
     </bindings>
-    <bindings scd="~tns:SignedPropertiesType">
+    <bindings if-exists="true" scd="~tns:SignedPropertiesType">
       <class ref="xades4j.xml.bind.xades.XmlSignedPropertiesType"/>
     </bindings>
-    <bindings scd="~tns:SignaturePolicyIdType">
+    <bindings if-exists="true" scd="~tns:SignaturePolicyIdType">
       <class ref="xades4j.xml.bind.xades.XmlSignaturePolicyIdType"/>
     </bindings>
-    <bindings scd="~tns:ReferenceInfoType">
+    <bindings if-exists="true" scd="~tns:ReferenceInfoType">
       <class ref="xades4j.xml.bind.xades.XmlReferenceInfoType"/>
     </bindings>
-    <bindings scd="~tns:OCSPRefsType">
+    <bindings if-exists="true" scd="~tns:OCSPRefsType">
       <class ref="xades4j.xml.bind.xades.XmlOCSPRefsType"/>
     </bindings>
-    <bindings scd="~tns:EncapsulatedPKIDataType">
+    <bindings if-exists="true" scd="~tns:EncapsulatedPKIDataType">
       <class ref="xades4j.xml.bind.xades.XmlEncapsulatedPKIDataType"/>
     </bindings>
-    <bindings scd="~tns:CompleteCertificateRefsType">
+    <bindings if-exists="true" scd="~tns:CompleteCertificateRefsType">
       <class ref="xades4j.xml.bind.xades.XmlCompleteCertificateRefsType"/>
     </bindings>
-    <bindings scd="~tns:DigestAlgAndValueType">
+    <bindings if-exists="true" scd="~tns:DigestAlgAndValueType">
       <class ref="xades4j.xml.bind.xades.XmlDigestAlgAndValueType"/>
     </bindings>
-    <bindings scd="~tns:ObjectIdentifierType">
+    <bindings if-exists="true" scd="~tns:ObjectIdentifierType">
       <class ref="xades4j.xml.bind.xades.XmlObjectIdentifierType"/>
     </bindings>
-    <bindings scd="~tns:OCSPRefType">
+    <bindings if-exists="true" scd="~tns:OCSPRefType">
       <class ref="xades4j.xml.bind.xades.XmlOCSPRefType"/>
     </bindings>
-    <bindings scd="~tns:GenericTimeStampType">
+    <bindings if-exists="true" scd="~tns:GenericTimeStampType">
       <class ref="xades4j.xml.bind.xades.XmlGenericTimeStampType"/>
     </bindings>
-    <bindings scd="~tns:CRLRefType">
+    <bindings if-exists="true" scd="~tns:CRLRefType">
       <class ref="xades4j.xml.bind.xades.XmlCRLRefType"/>
     </bindings>
-    <bindings scd="~tns:UnsignedSignaturePropertiesType">
+    <bindings if-exists="true" scd="~tns:UnsignedSignaturePropertiesType">
       <class ref="xades4j.xml.bind.xades.XmlUnsignedSignaturePropertiesType"/>
     </bindings>
-    <bindings scd="~tns:SignerRoleType">
+    <bindings if-exists="true" scd="~tns:SignerRoleType">
       <class ref="xades4j.xml.bind.xades.XmlSignerRoleType"/>
     </bindings>
-    <bindings scd="~tns:UnsignedDataObjectPropertiesType">
+    <bindings if-exists="true" scd="~tns:UnsignedDataObjectPropertiesType">
       <class ref="xades4j.xml.bind.xades.XmlUnsignedDataObjectPropertiesType"/>
     </bindings>
-    <bindings scd="~tns:IdentifierType">
+    <bindings if-exists="true" scd="~tns:IdentifierType">
       <class ref="xades4j.xml.bind.xades.XmlIdentifierType"/>
     </bindings>
-    <bindings scd="~tns:CounterSignatureType">
+    <bindings if-exists="true" scd="~tns:CounterSignatureType">
       <class ref="xades4j.xml.bind.xades.XmlCounterSignatureType"/>
     </bindings>
-    <bindings scd="~tns:SignedDataObjectPropertiesType">
+    <bindings if-exists="true" scd="~tns:SignedDataObjectPropertiesType">
       <class ref="xades4j.xml.bind.xades.XmlSignedDataObjectPropertiesType"/>
     </bindings>
-    <bindings scd="~tns:UnsignedPropertiesType">
+    <bindings if-exists="true" scd="~tns:UnsignedPropertiesType">
       <class ref="xades4j.xml.bind.xades.XmlUnsignedPropertiesType"/>
     </bindings>
-    <bindings scd="~tns:NoticeReferenceType">
+    <bindings if-exists="true" scd="~tns:NoticeReferenceType">
       <class ref="xades4j.xml.bind.xades.XmlNoticeReferenceType"/>
     </bindings>
-    <bindings scd="~tns:CertificateValuesType">
+    <bindings if-exists="true" scd="~tns:CertificateValuesType">
       <class ref="xades4j.xml.bind.xades.XmlCertificateValuesType"/>
     </bindings>
-    <bindings scd="~tns:OtherCertStatusRefsType">
+    <bindings if-exists="true" scd="~tns:OtherCertStatusRefsType">
       <class ref="xades4j.xml.bind.xades.XmlOtherCertStatusRefsType"/>
     </bindings>
-    <bindings scd="~tns:QualifyingPropertiesType">
+    <bindings if-exists="true" scd="~tns:QualifyingPropertiesType">
       <class ref="xades4j.xml.bind.xades.XmlQualifyingPropertiesType"/>
     </bindings>
-    <bindings scd="~tns:CommitmentTypeQualifiersListType">
+    <bindings if-exists="true" scd="~tns:CommitmentTypeQualifiersListType">
       <class ref="xades4j.xml.bind.xades.XmlCommitmentTypeQualifiersListType"/>
     </bindings>
-    <bindings scd="~tns:SignatureProductionPlaceType">
+    <bindings if-exists="true" scd="~tns:SignatureProductionPlaceType">
       <class ref="xades4j.xml.bind.xades.XmlSignatureProductionPlaceType"/>
     </bindings>
-    <bindings scd="~tns:SignedSignaturePropertiesType">
+    <bindings if-exists="true" scd="~tns:SignedSignaturePropertiesType">
       <class ref="xades4j.xml.bind.xades.XmlSignedSignaturePropertiesType"/>
     </bindings>
-    <bindings scd="~tns:OtherTimeStampType">
+    <bindings if-exists="true" scd="~tns:OtherTimeStampType">
       <class ref="xades4j.xml.bind.xades.XmlOtherTimeStampType"/>
     </bindings>
-    <bindings scd="~tns:CRLValuesType">
+    <bindings if-exists="true" scd="~tns:CRLValuesType">
       <class ref="xades4j.xml.bind.xades.XmlCRLValuesType"/>
     </bindings>
-    <bindings scd="~tns:XAdESTimeStampType">
+    <bindings if-exists="true" scd="~tns:XAdESTimeStampType">
       <class ref="xades4j.xml.bind.xades.XmlXAdESTimeStampType"/>
     </bindings>
-    <bindings scd="~tns:SigPolicyQualifiersListType">
+    <bindings if-exists="true" scd="~tns:SigPolicyQualifiersListType">
       <class ref="xades4j.xml.bind.xades.XmlSigPolicyQualifiersListType"/>
     </bindings>
-    <bindings scd="~tns:CompleteRevocationRefsType">
+    <bindings if-exists="true" scd="~tns:CompleteRevocationRefsType">
       <class ref="xades4j.xml.bind.xades.XmlCompleteRevocationRefsType"/>
     </bindings>
-    <bindings scd="~tns:OCSPValuesType">
+    <bindings if-exists="true" scd="~tns:OCSPValuesType">
       <class ref="xades4j.xml.bind.xades.XmlOCSPValuesType"/>
     </bindings>
-    <bindings scd="~tns:CRLIdentifierType">
+    <bindings if-exists="true" scd="~tns:CRLIdentifierType">
       <class ref="xades4j.xml.bind.xades.XmlCRLIdentifierType"/>
     </bindings>
-    <bindings scd="~tns:ClaimedRolesListType">
+    <bindings if-exists="true" scd="~tns:ClaimedRolesListType">
       <class ref="xades4j.xml.bind.xades.XmlClaimedRolesListType"/>
     </bindings>
-    <bindings scd="~tns:ResponderIDType">
+    <bindings if-exists="true" scd="~tns:ResponderIDType">
       <class ref="xades4j.xml.bind.xades.XmlResponderIDType"/>
     </bindings>
-    <bindings scd="~tns:QualifyingPropertiesReferenceType">
+    <bindings if-exists="true" scd="~tns:QualifyingPropertiesReferenceType">
       <class ref="xades4j.xml.bind.xades.XmlQualifyingPropertiesReferenceType"/>
     </bindings>
-    <bindings scd="~tns:OtherCertStatusValuesType">
+    <bindings if-exists="true" scd="~tns:OtherCertStatusValuesType">
       <class ref="xades4j.xml.bind.xades.XmlOtherCertStatusValuesType"/>
     </bindings>
-    <bindings scd="~tns:IncludeType">
+    <bindings if-exists="true" scd="~tns:IncludeType">
       <class ref="xades4j.xml.bind.xades.XmlIncludeType"/>
     </bindings>
-    <bindings scd="~tns:CRLRefsType">
+    <bindings if-exists="true" scd="~tns:CRLRefsType">
       <class ref="xades4j.xml.bind.xades.XmlCRLRefsType"/>
     </bindings>
-    <bindings scd="~tns:AnyType">
+    <bindings if-exists="true" scd="~tns:AnyType">
       <class ref="xades4j.xml.bind.xades.XmlAnyType"/>
     </bindings>
-    <bindings scd="~tns:SignaturePolicyIdentifierType">
+    <bindings if-exists="true" scd="~tns:SignaturePolicyIdentifierType">
       <class ref="xades4j.xml.bind.xades.XmlSignaturePolicyIdentifierType"/>
     </bindings>
-    <bindings scd="~tns:CertIDType">
+    <bindings if-exists="true" scd="~tns:CertIDType">
       <class ref="xades4j.xml.bind.xades.XmlCertIDType"/>
     </bindings>
-    <bindings scd="~tns:IntegerListType">
+    <bindings if-exists="true" scd="~tns:IntegerListType">
       <class ref="xades4j.xml.bind.xades.XmlIntegerListType"/>
     </bindings>
-    <bindings scd="~tns:OCSPIdentifierType">
+    <bindings if-exists="true" scd="~tns:OCSPIdentifierType">
       <class ref="xades4j.xml.bind.xades.XmlOCSPIdentifierType"/>
     </bindings>
-    <bindings scd="~tns:DataObjectFormatType">
+    <bindings if-exists="true" scd="~tns:DataObjectFormatType">
       <class ref="xades4j.xml.bind.xades.XmlDataObjectFormatType"/>
     </bindings>
   </bindings>
-  <bindings scd="x-schema::tns" xmlns:tns="http://www.w3.org/2000/09/xmldsig#">
+  <bindings  xmlns:tns="http://www.w3.org/2000/09/xmldsig#" if-exists="true" scd="x-schema::tns">
     <schemaBindings map="false"/>
-    <bindings scd="~tns:X509DataType">
+    <bindings if-exists="true" scd="~tns:X509DataType">
       <class ref="xades4j.xml.bind.xmldsig.XmlX509DataType"/>
     </bindings>
-    <bindings scd="~tns:KeyInfoType">
+    <bindings if-exists="true" scd="~tns:KeyInfoType">
       <class ref="xades4j.xml.bind.xmldsig.XmlKeyInfoType"/>
     </bindings>
-    <bindings scd="~tns:SignaturePropertyType">
+    <bindings if-exists="true" scd="~tns:SignaturePropertyType">
       <class ref="xades4j.xml.bind.xmldsig.XmlSignaturePropertyType"/>
     </bindings>
-    <bindings scd="~tns:SPKIDataType">
+    <bindings if-exists="true" scd="~tns:SPKIDataType">
       <class ref="xades4j.xml.bind.xmldsig.XmlSPKIDataType"/>
     </bindings>
-    <bindings scd="~tns:ReferenceType">
+    <bindings if-exists="true" scd="~tns:ReferenceType">
       <class ref="xades4j.xml.bind.xmldsig.XmlReferenceType"/>
     </bindings>
-    <bindings scd="~tns:SignatureType">
+    <bindings if-exists="true" scd="~tns:SignatureType">
       <class ref="xades4j.xml.bind.xmldsig.XmlSignatureType"/>
     </bindings>
-    <bindings scd="~tns:TransformsType">
+    <bindings if-exists="true" scd="~tns:TransformsType">
       <class ref="xades4j.xml.bind.xmldsig.XmlTransformsType"/>
     </bindings>
-    <bindings scd="~tns:KeyValueType">
+    <bindings if-exists="true" scd="~tns:KeyValueType">
       <class ref="xades4j.xml.bind.xmldsig.XmlKeyValueType"/>
     </bindings>
-    <bindings scd="~tns:ManifestType">
+    <bindings if-exists="true" scd="~tns:ManifestType">
       <class ref="xades4j.xml.bind.xmldsig.XmlManifestType"/>
     </bindings>
-    <bindings scd="~tns:SignaturePropertiesType">
+    <bindings if-exists="true" scd="~tns:SignaturePropertiesType">
       <class ref="xades4j.xml.bind.xmldsig.XmlSignaturePropertiesType"/>
     </bindings>
-    <bindings scd="~tns:ObjectType">
+    <bindings if-exists="true" scd="~tns:ObjectType">
       <class ref="xades4j.xml.bind.xmldsig.XmlObjectType"/>
     </bindings>
-    <bindings scd="~tns:TransformType">
+    <bindings if-exists="true" scd="~tns:TransformType">
       <class ref="xades4j.xml.bind.xmldsig.XmlTransformType"/>
     </bindings>
-    <bindings scd="~tns:SignatureValueType">
+    <bindings if-exists="true" scd="~tns:SignatureValueType">
       <class ref="xades4j.xml.bind.xmldsig.XmlSignatureValueType"/>
     </bindings>
-    <bindings scd="~tns:DigestMethodType">
+    <bindings if-exists="true" scd="~tns:DigestMethodType">
       <class ref="xades4j.xml.bind.xmldsig.XmlDigestMethodType"/>
     </bindings>
-    <bindings scd="~tns:DSAKeyValueType">
+    <bindings if-exists="true" scd="~tns:DSAKeyValueType">
       <class ref="xades4j.xml.bind.xmldsig.XmlDSAKeyValueType"/>
     </bindings>
-    <bindings scd="~tns:PGPDataType">
+    <bindings if-exists="true" scd="~tns:PGPDataType">
       <class ref="xades4j.xml.bind.xmldsig.XmlPGPDataType"/>
     </bindings>
-    <bindings scd="~tns:RetrievalMethodType">
+    <bindings if-exists="true" scd="~tns:RetrievalMethodType">
       <class ref="xades4j.xml.bind.xmldsig.XmlRetrievalMethodType"/>
     </bindings>
-    <bindings scd="~tns:CanonicalizationMethodType">
+    <bindings if-exists="true" scd="~tns:CanonicalizationMethodType">
       <class ref="xades4j.xml.bind.xmldsig.XmlCanonicalizationMethodType"/>
     </bindings>
-    <bindings scd="~tns:SignatureMethodType">
+    <bindings if-exists="true" scd="~tns:SignatureMethodType">
       <class ref="xades4j.xml.bind.xmldsig.XmlSignatureMethodType"/>
     </bindings>
-    <bindings scd="~tns:X509IssuerSerialType">
+    <bindings if-exists="true" scd="~tns:X509IssuerSerialType">
       <class ref="xades4j.xml.bind.xmldsig.XmlX509IssuerSerialType"/>
     </bindings>
-    <bindings scd="~tns:SignedInfoType">
+    <bindings if-exists="true" scd="~tns:SignedInfoType">
       <class ref="xades4j.xml.bind.xmldsig.XmlSignedInfoType"/>
     </bindings>
-    <bindings scd="~tns:RSAKeyValueType">
+    <bindings if-exists="true" scd="~tns:RSAKeyValueType">
       <class ref="xades4j.xml.bind.xmldsig.XmlRSAKeyValueType"/>
     </bindings>
   </bindings>
-  <bindings scd="x-schema::tns" xmlns:tns="http://uri.etsi.org/01903/v1.4.1#">
+  <bindings  xmlns:tns="http://uri.etsi.org/01903/v1.4.1#" if-exists="true" scd="x-schema::tns">
     <schemaBindings map="false"/>
-    <bindings scd="~tns:ValidationDataType">
+    <bindings if-exists="true" scd="~tns:ValidationDataType">
       <class ref="xades4j.xml.bind.xades.XmlValidationDataType"/>
     </bindings>
   </bindings>
