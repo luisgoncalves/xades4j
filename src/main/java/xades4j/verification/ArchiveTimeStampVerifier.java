@@ -225,7 +225,13 @@ public class ArchiveTimeStampVerifier extends
                     TimeStampValidationDataProperty.class))
             {
                 digestInput.addNode(elem);
-            }// else: ignore other properties
+            } else {
+                // TS 101 903 V1.4.1 defined new unsigned properties making use
+                // of the extension mechanism specified in
+                // xades:UnsignedSignatureProperties, namely the <xsd:any
+                // namespace="##other"> element.
+                digestInput.addNode(elem);
+            }
         }
 
         /* take "all the ds:Object elements different to the one
