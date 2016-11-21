@@ -19,6 +19,8 @@ package xades4j.utils;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.io.InputStream;
 import java.security.InvalidAlgorithmParameterException;
 import java.security.NoSuchAlgorithmException;
 import java.security.NoSuchProviderException;
@@ -162,16 +164,20 @@ public class FileSystemDirectoryCertStore
             if (f.isDirectory())
                 transverseDirToFindContent(f, contentList, certsFilesExts, crlsFilesExts, cf);
             else if (f.isFile())
-                try
-                {
-                    if (hasExt(f, certsFilesExts))
-                        contentList.add((X509Certificate)cf.generateCertificate(new FileInputStream(f)));
-                    else if (hasExt(f, crlsFilesExts))
-                        contentList.add((X509CRL)cf.generateCRL(new FileInputStream(f)));
-                } catch (FileNotFoundException ex)
-                {
-                    // The file existed right up there! If somehow it doesn't exist
-                    // now, nevermind.
+                if (hasExt(f, certsFilesExts)) {
+                    try (InputStream is = new FileInputStream(f)) {
+                        contentList.add((X509Certificate) cf.generateCertificate(is));
+                    } catch (IOException e) {
+                        // The file existed and somehow it doesn't exist now, or
+                        // it was not possible to close is, nevermind.
+                    }
+                } else if (hasExt(f, crlsFilesExts)) {
+                    try (InputStream is = new FileInputStream(f)) {
+                        contentList.add((X509CRL) cf.generateCRL(is));
+                    } catch (IOException e) {
+                        // The file existed and somehow it doesn't exist now, or
+                        // it was not possible to close is, nevermind.
+                    }
                 }
         }
     }
