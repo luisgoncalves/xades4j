@@ -18,10 +18,13 @@ package xades4j.production;
 
 import java.security.cert.CertificateException;
 import java.security.cert.X509Certificate;
+
 import org.apache.xml.security.exceptions.XMLSecurityException;
 import org.apache.xml.security.signature.XMLSignature;
 import org.apache.xml.security.signature.XMLSignatureException;
+import org.apache.xml.security.transforms.Transforms;
 import xades4j.UnsupportedAlgorithmException;
+import xades4j.algorithms.Algorithm;
 import xades4j.providers.AlgorithmsProviderEx;
 import xades4j.providers.BasicSignatureOptionsProvider;
 
@@ -72,13 +75,24 @@ class KeyInfoBuilder
             {
                 xmlSig.addKeyInfo(signingCertificate);
 
+                Algorithm canonAlg = this.algorithmsProvider.getCanonicalizationAlgorithmForKeyInfo();
+
+                if (null == canonAlg)
+                {
+                    throw new NullPointerException("Canonicalization algorithm not provided");
+                }
+
                 if (this.basicSignatureOptionsProvider.signSigningCertificate())
                 {
                     String keyInfoId = xmlSig.getId() + "-keyinfo";
+
+                    Transforms transforms = new Transforms(xmlSig.getDocument());
+                    transforms.addTransform(canonAlg.getUri());
+
                     xmlSig.getKeyInfo().setId(keyInfoId);
                     xmlSig.addDocument(
                             '#' + keyInfoId,
-                            null,
+                            transforms,
                             this.algorithmsProvider.getDigestAlgorithmForDataObjsReferences());
                 }
             } catch (XMLSignatureException ex)

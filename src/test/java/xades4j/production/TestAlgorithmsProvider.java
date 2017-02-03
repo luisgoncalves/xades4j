@@ -64,4 +64,15 @@ class TestAlgorithmsProvider implements AlgorithmsProviderEx{
         throw new UnsupportedOperationException("Not supported yet.");
     }
 
+    @Override
+    public Algorithm getCanonicalizationAlgorithmForKeyInfo()
+    {
+        throw new UnsupportedOperationException("Not supported yet.");
+    }
+
+    @Override
+    public Algorithm getCanonicalizationAlgorithmForSignedProperties()
+    {
+        throw new UnsupportedOperationException("Not supported yet.");
+    }
 }

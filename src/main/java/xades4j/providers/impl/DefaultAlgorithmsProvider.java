@@ -64,4 +64,16 @@ public class DefaultAlgorithmsProvider implements AlgorithmsProvider
     {
         return algorithmsProviderEx.getDigestAlgorithmForTimeStampProperties();
     }
+
+    @Override
+    public String getCanonicalizationAlgorithmForKeyInfo()
+    {
+        return algorithmsProviderEx.getCanonicalizationAlgorithmForKeyInfo().getUri();
+    }
+
+    @Override
+    public String getCanonicalizationAlgorithmForSignedProperties()
+    {
+        return algorithmsProviderEx.getCanonicalizationAlgorithmForSignedProperties().getUri();
+    }
 }

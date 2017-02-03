@@ -16,6 +16,9 @@
  */
 package xades4j.production;
 
+import org.apache.xml.security.c14n.Canonicalizer;
+import org.apache.xml.security.transforms.TransformationException;
+import xades4j.algorithms.GenericAlgorithm;
 import xades4j.properties.QualifyingProperties;
 import xades4j.properties.DataObjectDesc;
 import com.google.inject.Inject;
@@ -31,6 +34,7 @@ import org.apache.xml.security.signature.ObjectContainer;
 import org.apache.xml.security.signature.Reference;
 import org.apache.xml.security.signature.XMLSignature;
 import org.apache.xml.security.signature.XMLSignatureException;
+import org.apache.xml.security.transforms.Transforms;
 import org.apache.xml.security.utils.Constants;
 import org.apache.xml.security.utils.ElementProxy;
 import org.apache.xml.security.utils.XMLUtils;
@@ -159,7 +163,7 @@ class SignerBES implements XadesSigner
         XMLSignature signature = createSignature(
                 signatureDocument,
                 signedDataObjects.getBaseUri(),
-                signingCertificate.getPublicKey().getAlgorithm());
+                signingCertificate.getSigAlgName());
 
         signature.setId(signatureId);
 
@@ -239,9 +243,18 @@ class SignerBES implements XadesSigner
                 throw new NullPointerException("Digest algorithm URI not provided");
             }
 
+            Algorithm canonAlg = this.algorithmsProvider.getCanonicalizationAlgorithmForSignedProperties();
+
+            if (null == canonAlg)
+            {
+                throw new NullPointerException("Canonicalization algorithm not provided");
+            }
+
             try
             {
-                signature.addDocument('#' + signedPropsId, null, digestAlgUri, null, QualifyingProperty.SIGNED_PROPS_TYPE_URI);
+                Transforms transforms = new Transforms(signatureDocument);
+                transforms.addTransform(canonAlg.getUri());
+                signature.addDocument('#' + signedPropsId, transforms, digestAlgUri, null, QualifyingProperty.SIGNED_PROPS_TYPE_URI);
             } catch (XMLSignatureException ex)
             {
                 // Seems to be thrown when the digest algorithm is not supported. In
@@ -250,6 +263,11 @@ class SignerBES implements XadesSigner
                 throw new UnsupportedAlgorithmException(
                         "Digest algorithm not supported in the XML Signature provider",
                         digestAlgUri, ex);
+            } catch (TransformationException ex)
+            {
+                throw new UnsupportedAlgorithmException(
+                        "Transform algorithm not supported in the XML Signature provider",
+                        canonAlg.getUri(), ex);
             }
 
             // Apply the signature

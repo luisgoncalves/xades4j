@@ -75,4 +75,16 @@ final class AlgorithmsProvider_ExToDeprecated_Adapter implements AlgorithmsProvi
     {
         return this.adaptee.getDigestAlgorithmForTimeStampProperties();
     }
+
+    @Override
+    public String getCanonicalizationAlgorithmForKeyInfo()
+    {
+        return this.adaptee.getCanonicalizationAlgorithmForKeyInfo().getUri();
+    }
+
+    @Override
+    public String getCanonicalizationAlgorithmForSignedProperties()
+    {
+        return this.adaptee.getCanonicalizationAlgorithmForSignedProperties().getUri();
+    }
 }

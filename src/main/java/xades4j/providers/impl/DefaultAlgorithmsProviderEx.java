@@ -88,4 +88,16 @@ public class DefaultAlgorithmsProviderEx implements AlgorithmsProviderEx
     {
         return MessageDigestAlgorithm.ALGO_ID_DIGEST_SHA1;
     }
+
+    @Override
+    public Algorithm getCanonicalizationAlgorithmForKeyInfo()
+    {
+        return new CanonicalXMLWithoutComments();
+    }
+
+    @Override
+    public Algorithm getCanonicalizationAlgorithmForSignedProperties()
+    {
+        return new CanonicalXMLWithoutComments();
+    }
 }
