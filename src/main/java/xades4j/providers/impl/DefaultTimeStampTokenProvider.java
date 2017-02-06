@@ -86,7 +86,7 @@ public class DefaultTimeStampTokenProvider implements TimeStampTokenProvider
     }
 
     @Override
-    public final TimeStampTokenRes getTimeStampToken(
+    public TimeStampTokenRes getTimeStampToken(
             byte[] tsDigestInput,
             String digestAlgUri) throws TimeStampTokenGenerationException
     {
