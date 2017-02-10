@@ -331,7 +331,8 @@ class SignatureUtils
 
         try
         {
-            Node sPropsNode = signedPropsRef.getNodesetBeforeFirstCanonicalization().getSubNode();
+            // Node sPropsNode = signedPropsRef.getNodesetBeforeFirstCanonicalization().getSubNode();
+            Node sPropsNode = signedPropsRef.getContentsBeforeTransformation().getSubNode(); // FIXME: Uncomment last line when xmlsec fixes issue SANTUARIO-462
             if (sPropsNode == null || sPropsNode.getNodeType() != Node.ELEMENT_NODE)
             {
                 throw new QualifyingPropertiesIncorporationException("The supposed reference over signed properties doesn't cover an element.");

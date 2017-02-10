@@ -36,6 +36,12 @@ public class XadesBesSigningProfileTest
         XadesSigner s = new XadesBesSigningProfile(new KeyingDataProvider()
         {
             @Override
+            public X509Certificate getSigningCertificate()
+            {
+                throw new UnsupportedOperationException();
+            }
+
+            @Override
             public List<X509Certificate> getSigningCertificateChain()
             {
                 throw new UnsupportedOperationException();

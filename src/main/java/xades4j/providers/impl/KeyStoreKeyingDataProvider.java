@@ -27,11 +27,7 @@ import java.security.PrivateKey;
 import java.security.UnrecoverableKeyException;
 import java.security.cert.Certificate;
 import java.security.cert.X509Certificate;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.Enumeration;
-import java.util.List;
+import java.util.*;
 import javax.security.auth.callback.Callback;
 import javax.security.auth.callback.CallbackHandler;
 import javax.security.auth.callback.PasswordCallback;
@@ -86,7 +82,7 @@ public abstract class KeyStoreKeyingDataProvider implements KeyingDataProvider
     public interface SigningCertSelector
     {
         X509Certificate selectCertificate(
-                List<X509Certificate> availableCertificates);
+                Map<String, X509Certificate> availableCertificates);
     }
     /**/
 
@@ -189,7 +185,7 @@ public abstract class KeyStoreKeyingDataProvider implements KeyingDataProvider
         ensureInitialized();
         try
         {
-            List<X509Certificate> availableSignCerts = new ArrayList<X509Certificate>(keyStore.size());
+            Map<String, X509Certificate> availableSignCerts = new HashMap<String, X509Certificate>(keyStore.size());
 
             for (Enumeration<String> aliases = keyStore.aliases(); aliases.hasMoreElements();)
             {
@@ -198,7 +194,7 @@ public abstract class KeyStoreKeyingDataProvider implements KeyingDataProvider
                 {
                     Certificate cer = keyStore.getCertificate(alias);
                     if (cer instanceof X509Certificate)
-                        availableSignCerts.add((X509Certificate)cer);
+                        availableSignCerts.put(alias, (X509Certificate)cer);
                 }
             }
 
@@ -207,6 +203,8 @@ public abstract class KeyStoreKeyingDataProvider implements KeyingDataProvider
 
             // Select the signing certificate from the available certificates.
             X509Certificate signingCert = this.certificateSelector.selectCertificate(availableSignCerts);
+            if (null == signingCert)
+                throw new SigningCertChainException("No certificates match the given alias");
 
             String signingCertAlias = this.keyStore.getCertificateAlias(signingCert);
             if (null == signingCertAlias)
@@ -223,6 +221,42 @@ public abstract class KeyStoreKeyingDataProvider implements KeyingDataProvider
             } else
                 return Collections.singletonList((X509Certificate)signingCertChain[0]);
 
+        } catch (KeyStoreException ex)
+        {
+            // keyStore.getCertificateAlias, keyStore.getCertificateChain -> if the
+            // keystore is not loaded.
+            throw new UnexpectedJCAException(ex.getMessage(), ex);
+        }
+    }
+
+    @Override
+    public X509Certificate getSigningCertificate() throws UnexpectedJCAException, SigningCertChainException
+    {
+        ensureInitialized();
+        try
+        {
+            Map<String, X509Certificate> availableSignCerts = new HashMap<String, X509Certificate>(keyStore.size());
+
+            for (Enumeration<String> aliases = keyStore.aliases(); aliases.hasMoreElements();)
+            {
+                String alias = aliases.nextElement();
+                if (keyStore.entryInstanceOf(alias, KeyStore.PrivateKeyEntry.class))
+                {
+                    Certificate cer = keyStore.getCertificate(alias);
+                    if (cer instanceof X509Certificate)
+                        availableSignCerts.put(alias, (X509Certificate)cer);
+                }
+            }
+
+            if (availableSignCerts.isEmpty())
+                throw new SigningCertChainException("No certificates available in the key store");
+
+            // Select the signing certificate from the available certificates.
+            X509Certificate signingCert = this.certificateSelector.selectCertificate(availableSignCerts);
+            if (null == signingCert)
+                throw new SigningCertChainException("No certificates match the given alias");
+
+            return signingCert;
         } catch (KeyStoreException ex)
         {
             // keyStore.getCertificateAlias, keyStore.getCertificateChain -> if the

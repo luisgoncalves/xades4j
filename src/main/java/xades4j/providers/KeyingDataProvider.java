@@ -30,6 +30,12 @@ public interface KeyingDataProvider
 {
     /**
      * Gets the signing certificate chain to be used in an ongoing signature operation.
+     * At least the signing certificate must be present.
+     */
+    X509Certificate getSigningCertificate() throws SigningCertChainException, UnexpectedJCAException;
+
+    /**
+     * Gets the signing certificate chain to be used in an ongoing signature operation.
      * At least the signing certificate must be present. Other certificates may
      * be present, possibly up to the trust anchor.
      * @return the signing certificate (chain)
