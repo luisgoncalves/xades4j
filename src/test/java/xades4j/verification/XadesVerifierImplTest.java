@@ -16,21 +16,28 @@
  */
 package xades4j.verification;
 
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assume.assumeTrue;
+
 import java.io.FileInputStream;
 import java.io.InputStream;
-import static org.junit.Assert.*;
-import static org.junit.Assume.assumeTrue;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+
 import org.junit.Before;
 import org.junit.Test;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.NodeList;
+
 import xades4j.production.XadesFormatExtenderProfile;
 import xades4j.production.XadesSignatureFormatExtender;
 import xades4j.properties.CertificateValuesProperty;
 import xades4j.properties.QualifyingProperty;
 import xades4j.properties.RevocationValuesProperty;
 import xades4j.properties.SigAndRefsTimeStampProperty;
+import xades4j.providers.CannotBuildCertificationPathException;
 
 /**
  *
@@ -56,6 +63,22 @@ public class XadesVerifierImplTest extends VerifierTestBase
         assertEquals(XAdESForm.BES, f);
     }
 
+    /**
+     * Try to verify a test xades BES (no timestamp) in year 2041, 
+     * expect we can't build the certificate path because certificates are expired.
+     */
+    @Test(expected = CannotBuildCertificationPathException.class)
+    public void testVerifyBESWithVerificationDate() throws Exception
+    {
+        System.out.println("testVerifyBESWithVerificationDate");
+        String sigFilename ="document.signed.bes.xml";
+        Element signatureNode = getSigElement(getDocument(sigFilename));
+        XadesVerificationProfile p = new XadesVerificationProfile(VerifierTestBase.validationProviderMySigs);
+        Date verificationDate = new SimpleDateFormat("YYYY").parse("2041");
+        p.newVerifier().verify(signatureNode, 
+        		new SignatureSpecificVerificationOptions().setDefaultVerificationDate(verificationDate));
+    }
+    
     @Test(expected = InvalidSignatureException.class)
     public void testVerifyWithCustomRawVerifier() throws Exception
     {

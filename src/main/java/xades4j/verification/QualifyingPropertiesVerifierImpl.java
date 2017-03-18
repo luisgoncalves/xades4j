@@ -54,7 +54,7 @@ class QualifyingPropertiesVerifierImpl implements QualifyingPropertiesVerifier
         
         for (PropertyDataObject propData : unmarshalledProperties)
         {
-            QualifyingPropertyVerifier propVerifier = this.propertyVerifiersMapper.getVerifier(propData);
+            QualifyingPropertyVerifier<PropertyDataObject> propVerifier = this.propertyVerifiersMapper.getVerifier(propData);
 
             QualifyingProperty p = propVerifier.verify(propData, ctx);
             if (null == p)
