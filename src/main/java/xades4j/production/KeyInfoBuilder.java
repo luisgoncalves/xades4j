@@ -1,16 +1,16 @@
 /*
  * XAdES4j - A Java library for generation and verification of XAdES signatures.
  * Copyright (C) 2011 Luis Goncalves.
- * 
+ *
  * XAdES4j is free software; you can redistribute it and/or modify it under
  * the terms of the GNU Lesser General Public License as published by the Free
  * Software Foundation; either version 3 of the License, or any later version.
- * 
+ *
  * XAdES4j is distributed in the hope that it will be useful, but WITHOUT
  * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
  * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
  * details.
- * 
+ *
  * You should have received a copy of the GNU Lesser General Public License along
  * with XAdES4j. If not, see <http://www.gnu.org/licenses/>.
  */
@@ -22,11 +22,14 @@ import java.security.cert.X509Certificate;
 import org.apache.xml.security.exceptions.XMLSecurityException;
 import org.apache.xml.security.signature.XMLSignature;
 import org.apache.xml.security.signature.XMLSignatureException;
+import org.apache.xml.security.transforms.TransformationException;
 import org.apache.xml.security.transforms.Transforms;
 import xades4j.UnsupportedAlgorithmException;
 import xades4j.algorithms.Algorithm;
 import xades4j.providers.AlgorithmsProviderEx;
 import xades4j.providers.BasicSignatureOptionsProvider;
+import xades4j.utils.CanonicalizerUtils;
+
 
 /**
  * Helper class that creates the {@code ds:KeyInfo} element accordingly to some
@@ -71,23 +74,27 @@ class KeyInfoBuilder
 
         if (this.basicSignatureOptionsProvider.includeSigningCertificate())
         {
+            Algorithm canonAlg = this.algorithmsProvider.getCanonicalizationAlgorithmForKeyInfo();
+
             try
             {
                 xmlSig.addKeyInfo(signingCertificate);
-
-                Algorithm canonAlg = this.algorithmsProvider.getCanonicalizationAlgorithmForKeyInfo();
-
-                if (null == canonAlg)
-                {
-                    throw new NullPointerException("Canonicalization algorithm not provided");
-                }
 
                 if (this.basicSignatureOptionsProvider.signSigningCertificate())
                 {
                     String keyInfoId = xmlSig.getId() + "-keyinfo";
 
-                    Transforms transforms = new Transforms(xmlSig.getDocument());
-                    transforms.addTransform(canonAlg.getUri());
+                    Transforms transforms = null;
+
+                    if (canonAlg != null)
+                    {
+                        transforms = new Transforms(xmlSig.getDocument());
+
+                        if (CanonicalizerUtils.isCanonicalizationAlgorithm(canonAlg.getUri()))
+                            transforms.addTransform(canonAlg.getUri());
+                        else
+                            throw new TransformationException(canonAlg.getUri());
+                    }
 
                     xmlSig.getKeyInfo().setId(keyInfoId);
                     xmlSig.addDocument(
@@ -95,6 +102,11 @@ class KeyInfoBuilder
                             transforms,
                             this.algorithmsProvider.getDigestAlgorithmForDataObjsReferences());
                 }
+            } catch (TransformationException ex)
+            {
+                throw new UnsupportedAlgorithmException(
+                    "Transform algorithm not supported in the XML Signature provider",
+                    canonAlg.getUri(), ex);
             } catch (XMLSignatureException ex)
             {
                 throw new UnsupportedAlgorithmException(

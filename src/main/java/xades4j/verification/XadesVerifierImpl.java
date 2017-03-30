@@ -102,6 +102,12 @@ class XadesVerifierImpl implements XadesVerifier
     @Override
     public XAdESVerificationResult verify(Element signatureElem, SignatureSpecificVerificationOptions verificationOptions) throws XAdES4jException
     {
+        return this.verify(signatureElem, verificationOptions, false);
+    }
+
+    @Override
+    public XAdESVerificationResult verify(Element signatureElem, SignatureSpecificVerificationOptions verificationOptions, boolean secureValidation) throws XAdES4jException
+    {
         if (null == signatureElem)
         {
             throw new NullPointerException("Signature node not specified");
@@ -117,7 +123,7 @@ class XadesVerifierImpl implements XadesVerifier
         XMLSignature signature;
         try
         {
-            signature = new XMLSignature(signatureElem, verificationOptions.getBaseUri());
+            signature = new XMLSignature(signatureElem, verificationOptions.getBaseUri(), secureValidation);
         } catch (XMLSecurityException ex)
         {
             throw new UnmarshalException("Bad XML signature", ex);
@@ -132,7 +138,7 @@ class XadesVerifierImpl implements XadesVerifier
         ReferencesRes referencesRes = SignatureUtils.processReferences(signature);
 
         /* Apply early verifiers */
-        
+
         RawSignatureVerifierContext rawCtx = new RawSignatureVerifierContext(signature);
         for (RawSignatureVerifier rawSignatureVerifier : this.rawSigVerifiers)
         {
@@ -217,7 +223,7 @@ class XadesVerifierImpl implements XadesVerifier
 
         return res;
     }
-    
+
     /*************************************************************************************/
     /**/
 

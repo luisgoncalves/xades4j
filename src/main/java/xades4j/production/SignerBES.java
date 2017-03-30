@@ -56,6 +56,7 @@ import xades4j.providers.DataObjectPropertiesProvider;
 import xades4j.providers.KeyingDataProvider;
 import xades4j.providers.SignaturePropertiesProvider;
 import xades4j.providers.SigningCertChainException;
+import xades4j.utils.CanonicalizerUtils;
 import xades4j.utils.DOMHelper;
 import xades4j.utils.ObjectUtils;
 import xades4j.xml.marshalling.SignedPropertiesMarshaller;
@@ -174,7 +175,7 @@ class SignerBES implements XadesSigner
         Map<DataObjectDesc, Reference> referenceMappings = this.dataObjectDescsProcessor.process(
                 signedDataObjects,
                 signature);
-        
+
         /* ds:KeyInfo */
         this.keyInfoBuilder.buildKeyInfo(signingCertificate, signature);
 
@@ -238,6 +239,7 @@ class SignerBES implements XadesSigner
             // with its value set to: http://uri.etsi.org/01903#SignedProperties."
 
             String digestAlgUri = algorithmsProvider.getDigestAlgorithmForDataObjsReferences();
+
             if (null == digestAlgUri)
             {
                 throw new NullPointerException("Digest algorithm URI not provided");
@@ -245,15 +247,20 @@ class SignerBES implements XadesSigner
 
             Algorithm canonAlg = this.algorithmsProvider.getCanonicalizationAlgorithmForSignedProperties();
 
-            if (null == canonAlg)
-            {
-                throw new NullPointerException("Canonicalization algorithm not provided");
-            }
-
             try
             {
-                Transforms transforms = new Transforms(signatureDocument);
-                transforms.addTransform(canonAlg.getUri());
+                Transforms transforms = null;
+
+                if (canonAlg != null)
+                {
+                    transforms = new Transforms(signatureDocument);
+
+                    if (CanonicalizerUtils.isCanonicalizationAlgorithm(canonAlg.getUri()))
+                        transforms.addTransform(canonAlg.getUri());
+                    else
+                        throw new TransformationException(canonAlg.getUri());
+                }
+
                 signature.addDocument('#' + signedPropsId, transforms, digestAlgUri, null, QualifyingProperty.SIGNED_PROPS_TYPE_URI);
             } catch (XMLSignatureException ex)
             {
