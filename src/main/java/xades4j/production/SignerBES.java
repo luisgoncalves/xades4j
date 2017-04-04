@@ -16,6 +16,9 @@
  */
 package xades4j.production;
 
+import org.apache.xml.security.c14n.Canonicalizer;
+import org.apache.xml.security.transforms.TransformationException;
+import xades4j.algorithms.GenericAlgorithm;
 import xades4j.properties.QualifyingProperties;
 import xades4j.properties.DataObjectDesc;
 import com.google.inject.Inject;
@@ -31,6 +34,7 @@ import org.apache.xml.security.signature.ObjectContainer;
 import org.apache.xml.security.signature.Reference;
 import org.apache.xml.security.signature.XMLSignature;
 import org.apache.xml.security.signature.XMLSignatureException;
+import org.apache.xml.security.transforms.Transforms;
 import org.apache.xml.security.utils.Constants;
 import org.apache.xml.security.utils.ElementProxy;
 import org.apache.xml.security.utils.XMLUtils;
@@ -52,6 +56,7 @@ import xades4j.providers.DataObjectPropertiesProvider;
 import xades4j.providers.KeyingDataProvider;
 import xades4j.providers.SignaturePropertiesProvider;
 import xades4j.providers.SigningCertChainException;
+import xades4j.utils.CanonicalizerUtils;
 import xades4j.utils.DOMHelper;
 import xades4j.utils.ObjectUtils;
 import xades4j.xml.marshalling.SignedPropertiesMarshaller;
@@ -159,7 +164,7 @@ class SignerBES implements XadesSigner
         XMLSignature signature = createSignature(
                 signatureDocument,
                 signedDataObjects.getBaseUri(),
-                signingCertificate.getPublicKey().getAlgorithm());
+                signingCertificate.getSigAlgName());
 
         signature.setId(signatureId);
 
@@ -170,7 +175,7 @@ class SignerBES implements XadesSigner
         Map<DataObjectDesc, Reference> referenceMappings = this.dataObjectDescsProcessor.process(
                 signedDataObjects,
                 signature);
-        
+
         /* ds:KeyInfo */
         this.keyInfoBuilder.buildKeyInfo(signingCertificate, signature);
 
@@ -234,14 +239,29 @@ class SignerBES implements XadesSigner
             // with its value set to: http://uri.etsi.org/01903#SignedProperties."
 
             String digestAlgUri = algorithmsProvider.getDigestAlgorithmForDataObjsReferences();
+
             if (null == digestAlgUri)
             {
                 throw new NullPointerException("Digest algorithm URI not provided");
             }
 
+            Algorithm canonAlg = this.algorithmsProvider.getCanonicalizationAlgorithmForSignedProperties();
+
             try
             {
-                signature.addDocument('#' + signedPropsId, null, digestAlgUri, null, QualifyingProperty.SIGNED_PROPS_TYPE_URI);
+                Transforms transforms = null;
+
+                if (canonAlg != null)
+                {
+                    transforms = new Transforms(signatureDocument);
+
+                    if (CanonicalizerUtils.isCanonicalizationAlgorithm(canonAlg.getUri()))
+                        transforms.addTransform(canonAlg.getUri());
+                    else
+                        throw new TransformationException(canonAlg.getUri());
+                }
+
+                signature.addDocument('#' + signedPropsId, transforms, digestAlgUri, null, QualifyingProperty.SIGNED_PROPS_TYPE_URI);
             } catch (XMLSignatureException ex)
             {
                 // Seems to be thrown when the digest algorithm is not supported. In
@@ -250,6 +270,11 @@ class SignerBES implements XadesSigner
                 throw new UnsupportedAlgorithmException(
                         "Digest algorithm not supported in the XML Signature provider",
                         digestAlgUri, ex);
+            } catch (TransformationException ex)
+            {
+                throw new UnsupportedAlgorithmException(
+                        "Transform algorithm not supported in the XML Signature provider",
+                        canonAlg.getUri(), ex);
             }
 
             // Apply the signature

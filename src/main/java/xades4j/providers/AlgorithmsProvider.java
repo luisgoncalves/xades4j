@@ -54,4 +54,14 @@ public interface AlgorithmsProvider
      * @deprecated the interface is deprecated
      */
     String getDigestAlgorithmForTimeStampProperties();
+
+    /**
+     * @deprecated the interface is deprecated
+     */
+    String getCanonicalizationAlgorithmForKeyInfo();
+
+    /**
+     * @deprecated the interface is deprecated
+     */
+    String getCanonicalizationAlgorithmForSignedProperties();
 }

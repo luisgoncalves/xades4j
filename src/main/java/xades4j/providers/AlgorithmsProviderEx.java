@@ -76,4 +76,16 @@ public interface AlgorithmsProviderEx
      * @return the algorithm
      */
     String getDigestAlgorithmForTimeStampProperties();
+
+    /**
+     * Gets the canonicalization algorithm to be used in the key info reference.
+     * @return the algorithm
+     */
+    Algorithm getCanonicalizationAlgorithmForKeyInfo();
+
+    /**
+     * Gets the canonicalization algorithm to be used in the signed signature properties reference.
+     * @return the algorithm
+     */
+    Algorithm getCanonicalizationAlgorithmForSignedProperties();
 }

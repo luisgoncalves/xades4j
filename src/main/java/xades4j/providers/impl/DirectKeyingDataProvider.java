@@ -30,6 +30,7 @@ import xades4j.providers.KeyingDataProvider;
 public class DirectKeyingDataProvider implements KeyingDataProvider
 {
     private final List<X509Certificate> certificates;
+    private final X509Certificate certificate;
     private final PrivateKey key;
 
     public DirectKeyingDataProvider(X509Certificate certificate, PrivateKey key)
@@ -37,7 +38,14 @@ public class DirectKeyingDataProvider implements KeyingDataProvider
         if (null == certificate || null == key)
             throw new NullPointerException("Null key or certificate");
         this.certificates = Collections.singletonList(certificate);
+        this.certificate = this.certificates.get(0);
         this.key = key;
+    }
+
+    @Override
+    public X509Certificate getSigningCertificate()
+    {
+        return this.certificate;
     }
 
     @Override
@@ -52,3 +60,4 @@ public class DirectKeyingDataProvider implements KeyingDataProvider
         return this.key;
     }
 }
+

@@ -76,4 +76,16 @@ class AlgorithmsProvider_DeprecatedToEx_Adapter implements AlgorithmsProviderEx
     {
         return this.algorithmsProvider.getDigestAlgorithmForTimeStampProperties();
     }
+
+    @Override
+    public Algorithm getCanonicalizationAlgorithmForKeyInfo()
+    {
+        return new GenericAlgorithm(this.algorithmsProvider.getCanonicalizationAlgorithmForKeyInfo());
+    }
+
+    @Override
+    public Algorithm getCanonicalizationAlgorithmForSignedProperties()
+    {
+        return new GenericAlgorithm(this.algorithmsProvider.getCanonicalizationAlgorithmForSignedProperties());
+    }
 }

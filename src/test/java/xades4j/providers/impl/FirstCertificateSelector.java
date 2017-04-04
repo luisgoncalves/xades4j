@@ -18,6 +18,7 @@ package xades4j.providers.impl;
 
 import java.security.cert.X509Certificate;
 import java.util.List;
+import java.util.Map;
 
 /**
  *
@@ -27,8 +28,8 @@ public class FirstCertificateSelector implements KeyStoreKeyingDataProvider.Sign
 {
     @Override
     public X509Certificate selectCertificate(
-            List<X509Certificate> availableCertificates)
+            Map<String, X509Certificate> availableCertificates)
     {
-        return availableCertificates.get(0);
+        return (X509Certificate) availableCertificates.values().toArray()[0];
     }
 }
