@@ -44,8 +44,7 @@ public final class AuthenticatedTimeStampTokenProvider extends DefaultTimeStampT
     }
 
     @Override
-    HttpURLConnection getHttpConnection() throws IOException
-    {
+    protected HttpURLConnection getHttpConnection() throws IOException    {
         HttpURLConnection connection = super.getHttpConnection();
         connection.setRequestProperty("Authorization", "Basic " + this.base64tsaUsrAndPwd);
         return connection;

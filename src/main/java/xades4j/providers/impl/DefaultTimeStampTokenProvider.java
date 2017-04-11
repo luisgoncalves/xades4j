@@ -153,8 +153,7 @@ public class DefaultTimeStampTokenProvider implements TimeStampTokenProvider
         }
     }
 
-    HttpURLConnection getHttpConnection() throws IOException
-    {
+    protected HttpURLConnection getHttpConnection() throws IOException    {
         URL url = new URL(getTSAUrl());
         return (HttpURLConnection) url.openConnection();
     }
