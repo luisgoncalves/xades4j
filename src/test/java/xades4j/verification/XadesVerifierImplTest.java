@@ -64,21 +64,21 @@ public class XadesVerifierImplTest extends VerifierTestBase
     }
 
     /**
-     * Try to verify a test xades BES (no timestamp) in year 2041, 
-     * expect we can't build the certificate path because certificates are expired.
+     * Try to verify a test xades BES (no timestamp) in year 2041, expect we
+     * can't build the certificate path because certificates are expired.
      */
     @Test(expected = CannotBuildCertificationPathException.class)
     public void testVerifyBESWithVerificationDate() throws Exception
     {
         System.out.println("testVerifyBESWithVerificationDate");
-        String sigFilename ="document.signed.bes.xml";
+        String sigFilename = "document.signed.bes.xml";
         Element signatureNode = getSigElement(getDocument(sigFilename));
         XadesVerificationProfile p = new XadesVerificationProfile(VerifierTestBase.validationProviderMySigs);
         Date verificationDate = new SimpleDateFormat("YYYY").parse("2041");
-        p.newVerifier().verify(signatureNode, 
-        		new SignatureSpecificVerificationOptions().setDefaultVerificationDate(verificationDate));
+        p.newVerifier().verify(signatureNode,
+                new SignatureSpecificVerificationOptions().setDefaultVerificationDate(verificationDate));
     }
-    
+
     @Test(expected = InvalidSignatureException.class)
     public void testVerifyWithCustomRawVerifier() throws Exception
     {
@@ -104,7 +104,7 @@ public class XadesVerifierImplTest extends VerifierTestBase
         XAdESForm f = verifySignature("detached.bes.xml");
         assertEquals(XAdESForm.BES, f);
     }
-    
+
     @Test
     public void testVerifyBESCounterSig() throws Exception
     {
@@ -209,7 +209,7 @@ public class XadesVerifierImplTest extends VerifierTestBase
         InputStream is = new FileInputStream("license.txt");
         SignatureSpecificVerificationOptions options = new SignatureSpecificVerificationOptions().useDataForAnonymousReference(is);
         XAdESVerificationResult res = verifier.verify(signatureNode, options);
-        
+
         // The caller must close the stream.
         is.close();
 
