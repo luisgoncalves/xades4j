@@ -19,6 +19,7 @@ package xades4j.production;
 import java.security.cert.CertificateException;
 import java.security.cert.X509Certificate;
 import org.apache.xml.security.exceptions.XMLSecurityException;
+import org.apache.xml.security.keys.content.X509Data;
 import org.apache.xml.security.signature.XMLSignature;
 import org.apache.xml.security.signature.XMLSignatureException;
 import xades4j.UnsupportedAlgorithmException;
@@ -70,7 +71,11 @@ class KeyInfoBuilder
         {
             try
             {
-                xmlSig.addKeyInfo(signingCertificate);
+                X509Data x509Data = new X509Data(xmlSig.getDocument());
+                x509Data.addCertificate(signingCertificate);
+                x509Data.addSubjectName(signingCertificate);
+                x509Data.addIssuerSerial(signingCertificate.getIssuerX500Principal().getName(), signingCertificate.getSerialNumber());
+                xmlSig.getKeyInfo().add(x509Data);
 
                 if (this.basicSignatureOptionsProvider.signSigningCertificate())
                 {
