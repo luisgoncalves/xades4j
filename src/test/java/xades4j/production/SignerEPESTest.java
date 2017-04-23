@@ -46,7 +46,8 @@ public class SignerEPESTest extends SignerTestBase
             {
                 return new SignaturePolicyIdentifierProperty(
                         new ObjectIdentifier("oid:/1.2.4.0.9.4.5", IdentifierType.OIDAsURI, "Policy description"),
-                        new ByteArrayInputStream("Test policy input stream".getBytes()));
+                        new ByteArrayInputStream("Test policy input stream".getBytes()))
+                    .withLocationUrl("http://www.example.com/policy");
             }
         };
     }

@@ -16,10 +16,15 @@
  */
 package xades4j.xml.marshalling;
 
+import javax.xml.bind.JAXBElement;
+import javax.xml.namespace.QName;
 import org.w3c.dom.Document;
+import xades4j.properties.QualifyingProperty;
 import xades4j.properties.data.PropertyDataObject;
 import xades4j.properties.data.SignaturePolicyData;
+import xades4j.xml.bind.xades.XmlAnyType;
 import xades4j.xml.bind.xades.XmlDigestAlgAndValueType;
+import xades4j.xml.bind.xades.XmlSigPolicyQualifiersListType;
 import xades4j.xml.bind.xades.XmlSignaturePolicyIdType;
 import xades4j.xml.bind.xades.XmlSignaturePolicyIdentifierType;
 import xades4j.xml.bind.xades.XmlSignedPropertiesType;
@@ -41,27 +46,44 @@ class ToXmlSignaturePolicyConverter implements SignedPropertyDataToXmlConverter
         XmlSignaturePolicyIdentifierType xmlSigPolicy = new XmlSignaturePolicyIdentifierType();
 
         if (null == sigPolicyData.getIdentifier())
+        {
             xmlSigPolicy.setSignaturePolicyImplied();
+        }
         else
         {
-            XmlSignaturePolicyIdType xmlSigPolicyId = new XmlSignaturePolicyIdType();
-            xmlSigPolicyId.setSigPolicyId(ToXmlUtils.getXmlObjectId(sigPolicyData.getIdentifier()));
-            xmlSigPolicyId.setSigPolicyHash(getDigest(sigPolicyData));
-
-            xmlSigPolicy.setSignaturePolicyId(xmlSigPolicyId);
+            xmlSigPolicy.setSignaturePolicyId(getSignaturePolicy(sigPolicyData, doc));
         }
         xmlProps.getSignedSignatureProperties().setSignaturePolicyIdentifier(xmlSigPolicy);
     }
 
-    private XmlDigestAlgAndValueType getDigest(SignaturePolicyData sigPolicyData)
+    private XmlSignaturePolicyIdType getSignaturePolicy(SignaturePolicyData sigPolicyData, Document doc)
     {
+        XmlSignaturePolicyIdType xmlSigPolicyId = new XmlSignaturePolicyIdType();
+        
+        // Identifier
+        xmlSigPolicyId.setSigPolicyId(ToXmlUtils.getXmlObjectId(sigPolicyData.getIdentifier()));
+        
+        // Hash
         XmlDigestMethodType xmlDigestMethod = new XmlDigestMethodType();
         xmlDigestMethod.setAlgorithm(sigPolicyData.getDigestAlgorithm());
-
         XmlDigestAlgAndValueType xmlDigest = new XmlDigestAlgAndValueType();
         xmlDigest.setDigestMethod(xmlDigestMethod);
         xmlDigest.setDigestValue(sigPolicyData.getDigestValue());
-
-        return xmlDigest;
+        xmlSigPolicyId.setSigPolicyHash(xmlDigest);
+        
+        // Qualifiers
+        String url = sigPolicyData.getLocationUrl();
+        if (url != null)
+        {
+            JAXBElement<String> xmlSPURI = new JAXBElement<String>(new QName(QualifyingProperty.XADES_XMLNS, "SPURI"), String.class, url);
+            XmlAnyType xmlQualifier = new XmlAnyType();
+            xmlQualifier.getContent().add(xmlSPURI);
+            
+            XmlSigPolicyQualifiersListType xmlQualifiers = new XmlSigPolicyQualifiersListType();
+            xmlQualifiers.getSigPolicyQualifier().add(xmlQualifier);
+            xmlSigPolicyId.setSigPolicyQualifiers(xmlQualifiers);
+        }
+        
+        return xmlSigPolicyId;
     }
 }
