@@ -54,6 +54,7 @@ import xades4j.providers.SignaturePropertiesProvider;
 import xades4j.providers.SigningCertChainException;
 import xades4j.utils.DOMHelper;
 import xades4j.utils.ObjectUtils;
+import xades4j.utils.StringUtils;
 import xades4j.xml.marshalling.SignedPropertiesMarshaller;
 import xades4j.xml.marshalling.UnsignedPropertiesMarshaller;
 import xades4j.xml.marshalling.algorithms.AlgorithmsParametersMarshallingProvider;
@@ -155,11 +156,20 @@ class SignerBES implements XadesSigner
         }
         X509Certificate signingCertificate = signingCertificateChain.get(0);
 
+        String algorithm = signingCertificate.getSigAlgName();
+
+        if (StringUtils.isNullOrEmptyString(algorithm))
+        {
+            // Fallback. If its not possible to extract the Signature Algorithm
+            // Field from the certificate. Use the public key algorithm instead.
+            algorithm = signingCertificate.getPublicKey().getAlgorithm();
+        }
+
         // The XMLSignature (ds:Signature).
         XMLSignature signature = createSignature(
                 signatureDocument,
                 signedDataObjects.getBaseUri(),
-                signingCertificate.getPublicKey().getAlgorithm());
+                algorithm);
 
         signature.setId(signatureId);
 
