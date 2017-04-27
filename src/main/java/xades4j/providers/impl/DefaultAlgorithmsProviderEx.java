@@ -30,7 +30,7 @@ import xades4j.providers.AlgorithmsProviderEx;
  * The default implementation of {@link AlgorithmsProviderEx}. The defaults
  * are:
  * <ul>
- *  <li>Signature: RSA(RSA_SHA256), DSA(DSA_SHA1)</li>
+ *  <li>Signature: RSA(RSA_SHA256, RSA_SHA1), DSA(DSA_SHA1)</li>
  *  <li>Canonicalization: Canonical XML 1.0 without comments</li>
  *  <li>Digest: SHA256 (data objs and refs properties); SHA1 (time-stamps)</li>
  * </ul>
@@ -43,14 +43,17 @@ public class DefaultAlgorithmsProviderEx implements AlgorithmsProviderEx
     static
     {
         signatureAlgsMaps = new HashMap<String, Algorithm>(2);
+        signatureAlgsMaps.put("SHA1withRSA", new GenericAlgorithm(XMLSignature.ALGO_ID_SIGNATURE_RSA_SHA1));
+        signatureAlgsMaps.put("SHA256withRSA", new GenericAlgorithm(XMLSignature.ALGO_ID_SIGNATURE_RSA_SHA256));
         signatureAlgsMaps.put("DSA", new GenericAlgorithm(XMLSignature.ALGO_ID_SIGNATURE_DSA));
-        signatureAlgsMaps.put("RSA", new GenericAlgorithm(XMLSignature.ALGO_ID_SIGNATURE_RSA_SHA256));
+        signatureAlgsMaps.put("RSA", new GenericAlgorithm(XMLSignature.ALGO_ID_SIGNATURE_RSA));
     }
 
     @Override
     public Algorithm getSignatureAlgorithm(String keyAlgorithmName) throws UnsupportedAlgorithmException
     {
         Algorithm sigAlg = signatureAlgsMaps.get(keyAlgorithmName);
+
         if (null == sigAlg)
         {
             throw new UnsupportedAlgorithmException("Signature algorithm not supported by the provider", keyAlgorithmName);

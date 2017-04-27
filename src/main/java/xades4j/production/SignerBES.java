@@ -16,6 +16,10 @@
  */
 package xades4j.production;
 
+import org.apache.xml.security.c14n.Canonicalizer;
+import org.apache.xml.security.c14n.InvalidCanonicalizerException;
+import org.apache.xml.security.transforms.TransformationException;
+import org.apache.xml.security.transforms.Transforms;
 import xades4j.properties.QualifyingProperties;
 import xades4j.properties.DataObjectDesc;
 import com.google.inject.Inject;
@@ -244,14 +248,27 @@ class SignerBES implements XadesSigner
             // with its value set to: http://uri.etsi.org/01903#SignedProperties."
 
             String digestAlgUri = algorithmsProvider.getDigestAlgorithmForDataObjsReferences();
-            if (null == digestAlgUri)
+            if (StringUtils.isNullOrEmptyString(digestAlgUri))
             {
                 throw new NullPointerException("Digest algorithm URI not provided");
             }
 
+            // Use same canonicalization URI as specified in the ds:CanonicalizationMethod for Signature.
+            String canonAlg = this.algorithmsProvider.getCanonicalizationAlgorithmForSignature().getUri();
+
             try
             {
-                signature.addDocument('#' + signedPropsId, null, digestAlgUri, null, QualifyingProperty.SIGNED_PROPS_TYPE_URI);
+                Transforms transforms = null;
+
+                if (!StringUtils.isNullOrEmptyString(canonAlg))
+                {
+                    // HACK: since we're not using Canonicalizer, do a quick check to ensure
+                    // that 'c14n' refers to a configured C14N algorithm.
+                    transforms = new Transforms(signatureDocument);
+                    transforms.addTransform(Canonicalizer.getInstance(canonAlg).getURI());
+                }
+
+                signature.addDocument('#' + signedPropsId, transforms, digestAlgUri, null, QualifyingProperty.SIGNED_PROPS_TYPE_URI);
             } catch (XMLSignatureException ex)
             {
                 // Seems to be thrown when the digest algorithm is not supported. In
@@ -260,6 +277,17 @@ class SignerBES implements XadesSigner
                 throw new UnsupportedAlgorithmException(
                         "Digest algorithm not supported in the XML Signature provider",
                         digestAlgUri, ex);
+            } catch (InvalidCanonicalizerException ex)
+            {
+                throw new UnsupportedAlgorithmException(
+                        "Unsupported canonicalization method",
+                        canonAlg, ex);
+
+            } catch (TransformationException ex)
+            {
+                throw new UnsupportedAlgorithmException(
+                        "Transform algorithm not supported in the XML Signature provider",
+                        canonAlg, ex);
             }
 
             // Apply the signature

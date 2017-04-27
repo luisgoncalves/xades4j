@@ -18,12 +18,16 @@ package xades4j.production;
 
 import java.security.cert.CertificateException;
 import java.security.cert.X509Certificate;
+
+import org.apache.xml.security.c14n.Canonicalizer;
 import org.apache.xml.security.exceptions.XMLSecurityException;
 import org.apache.xml.security.signature.XMLSignature;
 import org.apache.xml.security.signature.XMLSignatureException;
+import org.apache.xml.security.transforms.Transforms;
 import xades4j.UnsupportedAlgorithmException;
 import xades4j.providers.AlgorithmsProviderEx;
 import xades4j.providers.BasicSignatureOptionsProvider;
+import xades4j.utils.StringUtils;
 
 /**
  * Helper class that creates the {@code ds:KeyInfo} element accordingly to some
@@ -68,8 +72,21 @@ class KeyInfoBuilder
 
         if (this.basicSignatureOptionsProvider.includeSigningCertificate())
         {
+            // Use same canonicalization URI as specified in the ds:CanonicalizationMethod for Signature.
+            String canonAlg = this.algorithmsProvider.getCanonicalizationAlgorithmForSignature().getUri();
+
             try
             {
+                Transforms transforms = null;
+
+                if (!StringUtils.isNullOrEmptyString(canonAlg))
+                {
+                    // HACK: since we're not using Canonicalizer, do a quick check to ensure
+                    // that 'c14n' refers to a configured C14N algorithm.
+                    transforms = new Transforms(xmlSig.getDocument());
+                    transforms.addTransform(Canonicalizer.getInstance(canonAlg).getURI());
+                }
+
                 xmlSig.addKeyInfo(signingCertificate);
 
                 if (this.basicSignatureOptionsProvider.signSigningCertificate())
@@ -78,7 +95,7 @@ class KeyInfoBuilder
                     xmlSig.getKeyInfo().setId(keyInfoId);
                     xmlSig.addDocument(
                             '#' + keyInfoId,
-                            null,
+                            transforms,
                             this.algorithmsProvider.getDigestAlgorithmForDataObjsReferences());
                 }
             } catch (XMLSignatureException ex)
