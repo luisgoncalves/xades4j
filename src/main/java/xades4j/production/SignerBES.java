@@ -160,20 +160,11 @@ class SignerBES implements XadesSigner
         }
         X509Certificate signingCertificate = signingCertificateChain.get(0);
 
-        String algorithm = signingCertificate.getSigAlgName();
-
-        if (StringUtils.isNullOrEmptyString(algorithm))
-        {
-            // Fallback. If its not possible to extract the Signature Algorithm
-            // Field from the certificate. Use the public key algorithm instead.
-            algorithm = signingCertificate.getPublicKey().getAlgorithm();
-        }
-
         // The XMLSignature (ds:Signature).
         XMLSignature signature = createSignature(
                 signatureDocument,
                 signedDataObjects.getBaseUri(),
-                algorithm);
+                signingCertificate.getPublicKey().getAlgorithm());
 
         signature.setId(signatureId);
 

@@ -43,10 +43,8 @@ public class DefaultAlgorithmsProviderEx implements AlgorithmsProviderEx
     static
     {
         signatureAlgsMaps = new HashMap<String, Algorithm>(2);
-        signatureAlgsMaps.put("SHA1withRSA", new GenericAlgorithm(XMLSignature.ALGO_ID_SIGNATURE_RSA_SHA1));
-        signatureAlgsMaps.put("SHA256withRSA", new GenericAlgorithm(XMLSignature.ALGO_ID_SIGNATURE_RSA_SHA256));
         signatureAlgsMaps.put("DSA", new GenericAlgorithm(XMLSignature.ALGO_ID_SIGNATURE_DSA));
-        signatureAlgsMaps.put("RSA", new GenericAlgorithm(XMLSignature.ALGO_ID_SIGNATURE_RSA));
+        signatureAlgsMaps.put("RSA", new GenericAlgorithm(XMLSignature.ALGO_ID_SIGNATURE_RSA_SHA256));
     }
 
     @Override
