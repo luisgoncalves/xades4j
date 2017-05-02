@@ -225,7 +225,8 @@ class XadesVerifierImpl implements XadesVerifier
         return res;
     }
 
-    /*************************************************************************************/
+    /**
+     * @param verificationOptions ***********************************************************************************/
     /**/
 
     private Date getValidationDate(
