@@ -224,7 +224,7 @@ class XadesVerifierImpl implements XadesVerifier
 
         return res;
     }
-
+    
     /**
      * @param verificationOptions ***********************************************************************************/
     /**/
