@@ -25,8 +25,10 @@ import org.apache.xml.security.signature.XMLSignature;
 import org.apache.xml.security.signature.XMLSignatureException;
 import org.apache.xml.security.transforms.Transforms;
 import xades4j.UnsupportedAlgorithmException;
+import xades4j.algorithms.Algorithm;
 import xades4j.providers.AlgorithmsProviderEx;
 import xades4j.providers.BasicSignatureOptionsProvider;
+import xades4j.utils.CanonicalizerUtils;
 import xades4j.utils.StringUtils;
 
 /**
@@ -73,19 +75,14 @@ class KeyInfoBuilder
         if (this.basicSignatureOptionsProvider.includeSigningCertificate())
         {
             // Use same canonicalization URI as specified in the ds:CanonicalizationMethod for Signature.
-            String canonAlg = this.algorithmsProvider.getCanonicalizationAlgorithmForSignature().getUri();
+            Algorithm canonAlg = this.algorithmsProvider.getCanonicalizationAlgorithmForSignature();
 
             try
             {
-                Transforms transforms = null;
+                CanonicalizerUtils.checkC14NAlgorithm(canonAlg);
 
-                if (!StringUtils.isNullOrEmptyString(canonAlg))
-                {
-                    // HACK: since we're not using Canonicalizer, do a quick check to ensure
-                    // that 'c14n' refers to a configured C14N algorithm.
-                    transforms = new Transforms(xmlSig.getDocument());
-                    transforms.addTransform(Canonicalizer.getInstance(canonAlg).getURI());
-                }
+                Transforms transforms = new Transforms(xmlSig.getDocument());
+                transforms.addTransform(canonAlg.getUri(), xmlSig.getKeyInfo().getElement());
 
                 xmlSig.addKeyInfo(signingCertificate);
 

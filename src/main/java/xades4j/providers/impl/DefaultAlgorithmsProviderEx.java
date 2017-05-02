@@ -30,7 +30,7 @@ import xades4j.providers.AlgorithmsProviderEx;
  * The default implementation of {@link AlgorithmsProviderEx}. The defaults
  * are:
  * <ul>
- *  <li>Signature: RSA(RSA_SHA256, RSA_SHA1), DSA(DSA_SHA1)</li>
+ *  <li>Signature: RSA(RSA_SHA256), DSA(DSA_SHA1)</li>
  *  <li>Canonicalization: Canonical XML 1.0 without comments</li>
  *  <li>Digest: SHA256 (data objs and refs properties); SHA1 (time-stamps)</li>
  * </ul>
