@@ -21,6 +21,7 @@ import java.security.cert.X509Certificate;
 
 import org.apache.xml.security.c14n.Canonicalizer;
 import org.apache.xml.security.exceptions.XMLSecurityException;
+import org.apache.xml.security.keys.content.X509Data;
 import org.apache.xml.security.signature.XMLSignature;
 import org.apache.xml.security.signature.XMLSignatureException;
 import org.apache.xml.security.transforms.Transforms;
@@ -79,12 +80,16 @@ class KeyInfoBuilder
 
             try
             {
+                X509Data x509Data = new X509Data(xmlSig.getDocument());
+                x509Data.addCertificate(signingCertificate);
+                x509Data.addSubjectName(signingCertificate);
+                x509Data.addIssuerSerial(signingCertificate.getIssuerX500Principal().getName(), signingCertificate.getSerialNumber());
+                xmlSig.getKeyInfo().add(x509Data);
+
                 CanonicalizerUtils.checkC14NAlgorithm(canonAlg);
 
                 Transforms transforms = new Transforms(xmlSig.getDocument());
                 transforms.addTransform(canonAlg.getUri(), xmlSig.getKeyInfo().getElement());
-
-                xmlSig.addKeyInfo(signingCertificate);
 
                 if (this.basicSignatureOptionsProvider.signSigningCertificate())
                 {

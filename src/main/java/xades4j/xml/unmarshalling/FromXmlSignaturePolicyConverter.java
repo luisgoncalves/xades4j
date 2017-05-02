@@ -16,9 +16,16 @@
  */
 package xades4j.xml.unmarshalling;
 
+import java.util.List;
+import javax.xml.bind.JAXBElement;
+import org.w3c.dom.Element;
 import xades4j.properties.ObjectIdentifier;
+import xades4j.properties.QualifyingProperty;
 import xades4j.properties.SignaturePolicyBase;
 import xades4j.properties.data.SignaturePolicyData;
+import xades4j.utils.CollectionUtils;
+import xades4j.xml.bind.xades.XmlAnyType;
+import xades4j.xml.bind.xades.XmlSigPolicyQualifiersListType;
 import xades4j.xml.bind.xades.XmlSignaturePolicyIdType;
 import xades4j.xml.bind.xades.XmlSignaturePolicyIdentifierType;
 import xades4j.xml.bind.xades.XmlSignedSignaturePropertiesType;
@@ -50,10 +57,31 @@ class FromXmlSignaturePolicyConverter implements SignedSigPropFromXmlConv
         if (xmlPolicyId.getTransforms() != null)
             throw new PropertyUnmarshalException("Signature policy transforms are not supported", SignaturePolicyBase.PROP_NAME);
 
-        ObjectIdentifier policyId = FromXmlUtils.getObjectIdentifier(xmlPolicyId.getSigPolicyId());
         propertyDataCollector.setSignaturePolicy(new SignaturePolicyData(
-                policyId,
+                FromXmlUtils.getObjectIdentifier(xmlPolicyId.getSigPolicyId()),
                 xmlPolicyId.getSigPolicyHash().getDigestMethod().getAlgorithm(),
-                xmlPolicyId.getSigPolicyHash().getDigestValue()));
+                xmlPolicyId.getSigPolicyHash().getDigestValue(),
+                getLocationUrl(xmlPolicyId.getSigPolicyQualifiers())));
+    }
+
+    private static String getLocationUrl(XmlSigPolicyQualifiersListType sigPolicyQualifiers) throws PropertyUnmarshalException
+    {
+        String locationUrl = null;
+        
+        List<XmlAnyType> xmlQualifiers = sigPolicyQualifiers.getSigPolicyQualifier();
+        for (XmlAnyType xmlQualifier : xmlQualifiers)
+        {
+            List content = xmlQualifier.getContent();
+            if (content.size() == 1 && content.get(0) instanceof JAXBElement)
+            {
+                JAXBElement xmlSPURI = (JAXBElement)content.get(0);
+                if (xmlSPURI.getName().getLocalPart().equals("SPURI") && xmlSPURI.getName().getNamespaceURI().equals(QualifyingProperty.XADES_XMLNS))
+                {
+                    locationUrl = (String)xmlSPURI.getValue();
+                }
+            }
+        }
+        
+        return locationUrl;
     }
 }

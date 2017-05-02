@@ -178,7 +178,7 @@ class XadesVerifierImpl implements XadesVerifier
         /* Certification path */
 
         KeyInfoRes keyInfoRes = SignatureUtils.processKeyInfo(signature.getKeyInfo());
-        Date validationDate = getValidationDate(qualifPropsData, signature);
+        Date validationDate = getValidationDate(qualifPropsData, signature, verificationOptions);
         ValidationData certValidationRes = this.certificateValidator.validate(
                 keyInfoRes.certSelector,
                 validationDate,
@@ -231,14 +231,14 @@ class XadesVerifierImpl implements XadesVerifier
 
     private Date getValidationDate(
             Collection<PropertyDataObject> qualifPropsData,
-            XMLSignature signature) throws XAdES4jException
+            XMLSignature signature, SignatureSpecificVerificationOptions verificationOptions) throws XAdES4jException
     {
         List sigTsData = CollectionUtils.filterByType(qualifPropsData, SignatureTimeStampData.class);
 
         // If no signature time-stamp is present, use the current date.
         if (sigTsData.isEmpty())
         {
-            return new Date();
+            return verificationOptions.getDefaultVerificationDate();
         }
 
         // TODO support multiple SignatureTimeStamps (section 7.3 last paragraph of Standard v.1.4.2)

@@ -79,7 +79,8 @@ class SignaturePolicyVerifier implements QualifyingPropertyVerifier<SignaturePol
                 throw new SignaturePolicyDigestMismatchException(policyId);
             }
 
-            return new SignaturePolicyIdentifierProperty(policyId, sigDocStream);
+            return new SignaturePolicyIdentifierProperty(policyId, sigDocStream)
+                    .withLocationUrl(propData.getLocationUrl());
         } catch (IOException ex)
         {
             throw new SignaturePolicyNotAvailableException(policyId, ex);

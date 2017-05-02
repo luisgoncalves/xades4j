@@ -59,6 +59,9 @@ class ToXmlUtils
         // same as not specifying a qualifier.
         xmlId.setQualifier(identifierTypeConv.get(objId.getIdentifierType()));
         xmlObjId.setIdentifier(xmlId);
+        
+        // Description
+        xmlObjId.setDescription(objId.getDescription());
 
         return xmlObjId;
     }
