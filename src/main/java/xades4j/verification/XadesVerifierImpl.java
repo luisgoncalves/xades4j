@@ -72,6 +72,7 @@ class XadesVerifierImpl implements XadesVerifier
     private final QualifyingPropertiesUnmarshaller qualifPropsUnmarshaller;
     private final Set<RawSignatureVerifier> rawSigVerifiers;
     private final Set<CustomSignatureVerifier> customSigVerifiers;
+    private boolean secureValidation;
 
     @Inject
     protected XadesVerifierImpl(
@@ -92,6 +93,7 @@ class XadesVerifierImpl implements XadesVerifier
         this.qualifPropsUnmarshaller = qualifPropsUnmarshaller;
         this.rawSigVerifiers = rawSigVerifiers;
         this.customSigVerifiers = customSigVerifiers;
+        this.secureValidation = false;
     }
 
     void setAcceptUnknownProperties(boolean accept)
@@ -99,14 +101,13 @@ class XadesVerifierImpl implements XadesVerifier
         this.qualifPropsUnmarshaller.setAcceptUnknownProperties(accept);
     }
 
-    @Override
-    public XAdESVerificationResult verify(Element signatureElem, SignatureSpecificVerificationOptions verificationOptions) throws XAdES4jException
+    void setSecureValidation(boolean secureValidation)
     {
-        return this.verify(signatureElem, verificationOptions, false);
+        this.secureValidation = secureValidation;
     }
 
     @Override
-    public XAdESVerificationResult verify(Element signatureElem, SignatureSpecificVerificationOptions verificationOptions, boolean secureValidation) throws XAdES4jException
+    public XAdESVerificationResult verify(Element signatureElem, SignatureSpecificVerificationOptions verificationOptions) throws XAdES4jException
     {
         if (null == signatureElem)
         {
@@ -123,7 +124,7 @@ class XadesVerifierImpl implements XadesVerifier
         XMLSignature signature;
         try
         {
-            signature = new XMLSignature(signatureElem, verificationOptions.getBaseUri(), secureValidation);
+            signature = new XMLSignature(signatureElem, verificationOptions.getBaseUri(), this.secureValidation);
         } catch (XMLSecurityException ex)
         {
             throw new UnmarshalException("Bad XML signature", ex);
@@ -223,8 +224,9 @@ class XadesVerifierImpl implements XadesVerifier
 
         return res;
     }
-
-    /*************************************************************************************/
+    
+    /**
+     * @param verificationOptions ***********************************************************************************/
     /**/
 
     private Date getValidationDate(

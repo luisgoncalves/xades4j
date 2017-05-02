@@ -65,11 +65,13 @@ public final class XadesVerificationProfile
     private final XadesProfileCore profileCore;
     /**/
     private boolean acceptUnknownProperties;
+    private boolean secureValidation;
 
     private XadesVerificationProfile()
     {
         this.profileCore = new XadesProfileCore();
         this.acceptUnknownProperties = false;
+        this.secureValidation = false;
         withBinding(XadesVerifier.class, XadesVerifierImpl.class);
     }
 
@@ -87,7 +89,6 @@ public final class XadesVerificationProfile
         withBinding(CertificateValidationProvider.class, certificateValidationProviderClass);
     }
 
-    /***/
     /**
      * Adds a type dependency mapping to the profile. This is typically done from an
      * interface to a type that implements that interface. When a dependency to
@@ -146,6 +147,7 @@ public final class XadesVerificationProfile
     {
         XadesVerifierImpl v = profileCore.getInstance(XadesVerifierImpl.class, overridableModules, sealedModules);
         v.setAcceptUnknownProperties(acceptUnknownProperties);
+        v.setSecureValidation(secureValidation);
         return v;
     }
 
@@ -222,6 +224,22 @@ public final class XadesVerificationProfile
     public XadesVerificationProfile acceptUnknownProperties(boolean accept)
     {
         this.acceptUnknownProperties = accept;
+        return this;
+    }
+
+    /**
+     * If true, it will perform the digital enforcing the following restrictions:
+     *      1. Forbids use of the XSLT Transform
+     *      2. Restricts the number of SignedInfo or Manifest References to 30 or less
+     *      3. Restricts the number of Reference Transforms to 5 or less
+     *      4. Forbids the use of MD5 related signature or mac algorithms
+     *      5. Ensures that Reference Ids are unique to help prevent signature wrapping attacks
+     *      6. Forbids Reference URIs of type http or file
+     *      7. Does not allow a RetrievalMethod to reference another RetrievalMethod
+     */
+    public XadesVerificationProfile withSecureValidation(boolean secureValidation)
+    {
+        this.secureValidation = secureValidation;
         return this;
     }
 

@@ -62,31 +62,6 @@ public interface XadesVerifier
             SignatureSpecificVerificationOptions verificationOptions) throws XAdES4jException;
 
     /**
-     * Verifies a signature.
-     * @param signatureElem the element containing the signature; must have an Id
-     * @param verificationOptions signature verification options. If {@code null},
-     *      default options are used
-     * @param secureValidation boolean value. If true, it will perform the digital
-     *      enforcing the following restrictions:
-     *           1. Forbids use of the XSLT Transform
-     *           2. Restricts the number of SignedInfo or Manifest References to 30 or less
-     *           3. Restricts the number of Reference Transforms to 5 or less
-     *           4. Forbids the use of MD5 related signature or mac algorithms
-     *           5. Ensures that Reference Ids are unique to help prevent signature wrapping attacks
-     *           6. Forbids Reference URIs of type http or file
-     *           7. Does not allow a RetrievalMethod to reference another RetrievalMethod
-     * @return the verification result
-     *
-     * @see xades4j.verification.SignatureSpecificVerificationOptions
-     * @throws XAdES4jException if an error occurs, including if signature verification fails
-     * @throws NullPointerException if {@code signatureElem} is {@code null}
-     */
-    public XAdESVerificationResult verify(
-            Element signatureElem,
-            SignatureSpecificVerificationOptions verificationOptions,
-            boolean secureValidation) throws XAdES4jException;
-
-    /**
      * Verifies a signature and extends its format if needed.
      * <p>
      * Note that, due to the library's internal design, the properties being added
