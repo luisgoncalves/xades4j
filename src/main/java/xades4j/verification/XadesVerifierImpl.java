@@ -225,13 +225,12 @@ class XadesVerifierImpl implements XadesVerifier
         return res;
     }
     
-    /**
-     * @param verificationOptions ***********************************************************************************/
-    /**/
+    /*************************************************************************************/
 
     private Date getValidationDate(
             Collection<PropertyDataObject> qualifPropsData,
-            XMLSignature signature, SignatureSpecificVerificationOptions verificationOptions) throws XAdES4jException
+            XMLSignature signature,
+            SignatureSpecificVerificationOptions verificationOptions) throws XAdES4jException
     {
         List sigTsData = CollectionUtils.filterByType(qualifPropsData, SignatureTimeStampData.class);
 
