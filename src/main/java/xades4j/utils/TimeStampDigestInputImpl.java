@@ -86,7 +86,7 @@ class TimeStampDigestInputImpl implements TimeStampDigestInput
         {
             if (refData.isNodeSet() || refData.isElement())
             {
-                Transform c14nTransform = CanonicalizerUtils.createTransform(this.c14n, this.parametersMarshallingProvider, doc);
+                Transform c14nTransform = TransformUtils.createTransform(this.c14n, this.parametersMarshallingProvider, doc);
                 refData = c14nTransform.performTransform(refData);
                 // Fall through to add the bytes resulting from the canonicalization.
             }
