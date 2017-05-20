@@ -130,19 +130,19 @@ public class SignerBESTest extends SignerTestBase
                 .withBasicSignatureOptionsProvider(MyBasicSignatureOptionsProvider.class)
                 .newSigner();
         
-        String fileUti = new File("src/test/xml/document.xml").toURI().toString();
-        DataObjectDesc obj1 = new DataObjectReference(fileUti)
+        DataObjectDesc obj1 = new DataObjectReference("document.xml")
                 .withTransform(
                     new XPathTransform("/collection/album/foo:tracks")
                         .withNamespace("foo", "http://test.xades4j/tracks"))
                 .withDataObjectFormat(new DataObjectFormatProperty("text/xml"));
         
-        DataObjectDesc obj2 = new DataObjectReference(fileUti)
+        DataObjectDesc obj2 = new DataObjectReference("document.xml")
                 .withTransform(
                     XPath2Filter.intersect("/collection/album/bar:tracks/bar:song[@tracknumber = 1]")
                         .withNamespace("bar", "http://test.xades4j/tracks"));
         
-        signer.sign(new SignedDataObjects(obj1, obj2), doc);
+        SignedDataObjects objs = new SignedDataObjects(obj1, obj2).withBaseUri(new File("src/test/xml/").toURI().toString());
+        signer.sign(objs, doc);
         
         outputDocument(doc, "detached.bes.xml");
     }

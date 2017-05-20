@@ -16,6 +16,7 @@
  */
 package xades4j.verification;
 
+import java.io.File;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assume.assumeTrue;
@@ -101,7 +102,9 @@ public class XadesVerifierImplTest extends VerifierTestBase
     public void testVerifyDetachedBES() throws Exception
     {
         System.out.println("verifyDetachedBES");
-        XAdESForm f = verifySignature("detached.bes.xml");
+        XAdESForm f = verifySignature(
+                "detached.bes.xml",
+                new SignatureSpecificVerificationOptions().useBaseUri(new File("src/test/xml/").toURI().toString()));
         assertEquals(XAdESForm.BES, f);
     }
 
