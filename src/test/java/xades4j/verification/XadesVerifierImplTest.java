@@ -115,6 +115,14 @@ public class XadesVerifierImplTest extends VerifierTestBase
         XAdESForm f = verifySignature("document.signed.bes.cs.xml");
         assertEquals(XAdESForm.BES, f);
     }
+    
+    @Test
+    public void testVerifyBESCounterSigCounterSig() throws Exception
+    {
+        System.out.println("verifyBESCounterSigCounterSig");
+        XAdESForm f = verifySignature("document.signed.bes.cs.cs.xml");
+        assertEquals(XAdESForm.BES, f);
+    }
 
     @Test
     public void testVerifyBESEnrichT() throws Exception
