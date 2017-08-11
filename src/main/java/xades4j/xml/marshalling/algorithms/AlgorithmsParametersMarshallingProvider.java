@@ -36,7 +36,7 @@ public interface AlgorithmsParametersMarshallingProvider
     /**
      * @param alg the algorithm
      * @param doc the XML document where the nodes will be appended
-     * @return the list os parameter nodes (can be {@code null but not empty)
+     * @return the list os parameter nodes (can be {@code null} but not empty)
      * @throws UnsupportedAlgorithmException if {@code alg} is not recognized
      */
     List<Node> marshalParameters(Algorithm alg, Document doc) throws UnsupportedAlgorithmException;

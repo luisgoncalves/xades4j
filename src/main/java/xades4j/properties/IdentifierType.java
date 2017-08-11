@@ -31,7 +31,7 @@ package xades4j.properties;
  *		&lt;xsd:enumeration value=&quot;OIDAsURI&quot;/&gt;
  *		&lt;xsd:enumeration value=&quot;OIDAsURN&quot;/&gt;
  *	&lt;/xsd:restriction&gt;
- * &lt;/xsd:simpleType&gt
+ * &lt;/xsd:simpleType&gt;
  * 
  * @author Luís
  */

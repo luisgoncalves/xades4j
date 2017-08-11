@@ -50,8 +50,9 @@ import xades4j.providers.TimeStampTokenProvider;
 import xades4j.providers.impl.DefaultAlgorithmsProviderEx;
 import xades4j.providers.impl.DefaultMessageDigestProvider;
 import xades4j.providers.impl.DefaultSignaturePropertiesProvider;
-import xades4j.providers.impl.DefaultTimeStampTokenProvider;
 import xades4j.providers.impl.DefaultBasicSignatureOptionsProvider;
+import xades4j.providers.impl.HttpTimeStampTokenProvider;
+import xades4j.providers.impl.TSAHttpData;
 
 /**
  * Contains the Guice bindings for the default components and the bindings for the
@@ -79,7 +80,8 @@ class DefaultProductionBindingsModule extends AbstractModule
         bind(AlgorithmsProvider.class).to(AlgorithmsProvider_ExToDeprecated_Adapter.class);
         bind(BasicSignatureOptionsProvider.class).to(DefaultBasicSignatureOptionsProvider.class);
         bind(MessageDigestEngineProvider.class).to(DefaultMessageDigestProvider.class);
-        bind(TimeStampTokenProvider.class).to(DefaultTimeStampTokenProvider.class);
+        bind(TimeStampTokenProvider.class).to(HttpTimeStampTokenProvider.class);
+        bind(TSAHttpData.class).toInstance(new TSAHttpData("http://tss.accv.es:8318/tsa")); // Backwards compatibility
 
         // PropertiesDataObjectsGenerator is not configurable but the individual
         // generators may have dependencies.

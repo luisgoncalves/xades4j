@@ -21,22 +21,19 @@ import com.google.inject.Inject;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.IdentityHashMap;
-import java.util.List;
 import java.util.Map;
 import org.apache.xml.security.signature.ObjectContainer;
 import org.apache.xml.security.signature.Reference;
 import org.apache.xml.security.signature.XMLSignature;
 import org.apache.xml.security.signature.XMLSignatureException;
-import org.apache.xml.security.transforms.TransformationException;
 import org.apache.xml.security.transforms.Transforms;
 import org.apache.xml.security.utils.resolver.ResourceResolver;
 import org.apache.xml.security.utils.resolver.implementations.ResolverAnonymous;
 import org.w3c.dom.Document;
-import org.w3c.dom.Node;
 import xades4j.UnsupportedAlgorithmException;
 import xades4j.properties.DataObjectDesc;
 import xades4j.providers.AlgorithmsProviderEx;
-import xades4j.utils.DOMHelper;
+import xades4j.utils.TransformUtils;
 import xades4j.xml.marshalling.algorithms.AlgorithmsParametersMarshallingProvider;
 
 /**
@@ -181,29 +178,6 @@ class SignedDataObjectsProcessor
             return null;
         }
 
-        Transforms transforms = new Transforms(document);
-
-        for (Algorithm dObjTransf : dObjTransfs)
-        {
-            try
-            {
-                List<Node> transfParams = this.algorithmsParametersMarshaller.marshalParameters(dObjTransf, document);
-                if (null == transfParams)
-                {
-                    transforms.addTransform(dObjTransf.getUri());
-                }
-                else
-                {
-                    transforms.addTransform(dObjTransf.getUri(), DOMHelper.nodeList(transfParams));
-                }
-            }
-            catch (TransformationException ex)
-            {
-                throw new UnsupportedAlgorithmException(
-                        "Unsupported transform on XML Signature provider",
-                        dObjTransf.getUri(), ex);
-            }
-        }
-        return transforms;
+        return TransformUtils.createTransforms(document, this.algorithmsParametersMarshaller, dObjTransfs);
     }
 }

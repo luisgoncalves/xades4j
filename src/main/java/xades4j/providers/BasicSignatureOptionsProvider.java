@@ -28,8 +28,8 @@ package xades4j.providers;
 public interface BasicSignatureOptionsProvider
 {
     /**
-     * Indicates whether the signing certificate should be included in a
-     * {@code ds:X509Certificate} element within {@code ds:KeyInfo}.
+     * Indicates whether the signing certificate, the subject name and issuer/serial
+     * should be included within {@code ds:KeyInfo}.
      * @return {@code true} if the certificate should be included; false otherwise
      */
     boolean includeSigningCertificate();

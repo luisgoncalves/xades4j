@@ -21,6 +21,7 @@ import xades4j.properties.SignatureProductionPlaceProperty;
 import xades4j.properties.CounterSignatureProperty;
 import xades4j.properties.OtherUnsignedSignatureProperty;
 import xades4j.properties.OtherSignedSignatureProperty;
+import xades4j.properties.PropertyTargetException;
 import xades4j.properties.SignerRoleProperty;
 
 /**

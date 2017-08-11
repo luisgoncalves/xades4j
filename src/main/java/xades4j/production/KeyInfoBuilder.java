@@ -18,12 +18,19 @@ package xades4j.production;
 
 import java.security.cert.CertificateException;
 import java.security.cert.X509Certificate;
+
 import org.apache.xml.security.exceptions.XMLSecurityException;
+import org.apache.xml.security.keys.content.X509Data;
 import org.apache.xml.security.signature.XMLSignature;
 import org.apache.xml.security.signature.XMLSignatureException;
+import org.apache.xml.security.transforms.Transforms;
 import xades4j.UnsupportedAlgorithmException;
+import xades4j.algorithms.Algorithm;
 import xades4j.providers.AlgorithmsProviderEx;
 import xades4j.providers.BasicSignatureOptionsProvider;
+import xades4j.utils.CanonicalizerUtils;
+import xades4j.utils.TransformUtils;
+import xades4j.xml.marshalling.algorithms.AlgorithmsParametersMarshallingProvider;
 
 /**
  * Helper class that creates the {@code ds:KeyInfo} element accordingly to some
@@ -35,13 +42,16 @@ class KeyInfoBuilder
 
     private final BasicSignatureOptionsProvider basicSignatureOptionsProvider;
     private final AlgorithmsProviderEx algorithmsProvider;
+    private final AlgorithmsParametersMarshallingProvider algorithmsParametersMarshaller;
 
     KeyInfoBuilder(
             BasicSignatureOptionsProvider basicSignatureOptionsProvider,
-            AlgorithmsProviderEx algorithmsProvider)
+            AlgorithmsProviderEx algorithmsProvider,
+            AlgorithmsParametersMarshallingProvider algorithmsParametersMarshaller)
     {
         this.basicSignatureOptionsProvider = basicSignatureOptionsProvider;
         this.algorithmsProvider = algorithmsProvider;
+        this.algorithmsParametersMarshaller = algorithmsParametersMarshaller;
     }
 
     void buildKeyInfo(
@@ -70,15 +80,25 @@ class KeyInfoBuilder
         {
             try
             {
-                xmlSig.addKeyInfo(signingCertificate);
+                X509Data x509Data = new X509Data(xmlSig.getDocument());
+                x509Data.addCertificate(signingCertificate);
+                x509Data.addSubjectName(signingCertificate);
+                x509Data.addIssuerSerial(signingCertificate.getIssuerX500Principal().getName(), signingCertificate.getSerialNumber());
+                xmlSig.getKeyInfo().add(x509Data);
 
                 if (this.basicSignatureOptionsProvider.signSigningCertificate())
                 {
                     String keyInfoId = xmlSig.getId() + "-keyinfo";
                     xmlSig.getKeyInfo().setId(keyInfoId);
+                    
+                    // Use same canonicalization URI as specified in the ds:CanonicalizationMethod for Signature.
+                    Algorithm canonAlg = this.algorithmsProvider.getCanonicalizationAlgorithmForSignature();
+                    CanonicalizerUtils.checkC14NAlgorithm(canonAlg);
+                    Transforms transforms = TransformUtils.createTransforms(canonAlg, this.algorithmsParametersMarshaller, xmlSig.getDocument());
+                    
                     xmlSig.addDocument(
                             '#' + keyInfoId,
-                            null,
+                            transforms,
                             this.algorithmsProvider.getDigestAlgorithmForDataObjsReferences());
                 }
             } catch (XMLSignatureException ex)

@@ -16,6 +16,8 @@
  */
 package xades4j.utils;
 
+import java.util.ArrayList;
+import java.util.Collection;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
 import org.apache.xml.security.utils.Constants;
@@ -140,15 +142,45 @@ public class DOMHelper
     /**
      * Gets the first element with the specified qualified name that is descendant
      * of {@code e}.
+     * @param e the element
+     * @param namespaceUri namespace
+     * @param localName element name
      * @return the element or {@code null} if there is no such element
      */
     public static Element getFirstDescendant(
             Element e,
-            String nameSpace, String localName)
+            String namespaceUri,
+            String localName)
     {
-        return (Element)e.getElementsByTagNameNS(nameSpace, localName).item(0);
+        return (Element)e.getElementsByTagNameNS(namespaceUri, localName).item(0);
     }
 
+    /**
+     * Gets all the elements with the given qualified name that are direct children
+     * of {@code e}.
+     * @param e the element
+     * @param namespaceURI namespace
+     * @param localName element name
+     * @return 
+     */
+    public static Collection<Element> getChildElementsByTagNameNS(Element e, String namespaceURI, String localName)
+    {
+        Node node = e.getFirstChild();
+        Collection<Element> elements = new ArrayList<Element>();
+
+        while (node != null)
+        {
+            if (node.getNodeType() == Node.ELEMENT_NODE && namespaceURI.equals(node.getNamespaceURI()) && localName.equals(node.getLocalName()))
+            {
+                elements.add((Element)node);
+            }
+
+            node = node.getNextSibling();
+        }
+
+        return elements;
+    }
+    
     public static NodeList nodeList(Iterable<Node> nodes)
     {
         HelperNodeList nl = new HelperNodeList();

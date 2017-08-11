@@ -23,16 +23,16 @@ import xades4j.xml.bind.Base64XmlAdapter;
  * <p>The following schema fragment specifies the expected content contained within this class.
  * 
  * <pre>
- * &lt;complexType name="ResponderIDType">
- *   &lt;complexContent>
- *     &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType">
- *       &lt;choice>
- *         &lt;element name="ByName" type="{http://www.w3.org/2001/XMLSchema}string"/>
- *         &lt;element name="ByKey" type="{http://www.w3.org/2001/XMLSchema}base64Binary"/>
- *       &lt;/choice>
- *     &lt;/restriction>
- *   &lt;/complexContent>
- * &lt;/complexType>
+ * &lt;complexType name="ResponderIDType"&gt;
+ *   &lt;complexContent&gt;
+ *     &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType"&gt;
+ *       &lt;choice&gt;
+ *         &lt;element name="ByName" type="{http://www.w3.org/2001/XMLSchema}string"/&gt;
+ *         &lt;element name="ByKey" type="{http://www.w3.org/2001/XMLSchema}base64Binary"/&gt;
+ *       &lt;/choice&gt;
+ *     &lt;/restriction&gt;
+ *   &lt;/complexContent&gt;
+ * &lt;/complexType&gt;
  * </pre>
  * 
  * 

@@ -17,9 +17,7 @@
 package xades4j.production;
 
 import com.google.inject.Inject;
-import java.security.ProviderException;
 import org.junit.Test;
-import static org.junit.Assume.assumeTrue;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import xades4j.algorithms.Algorithm;
@@ -29,9 +27,10 @@ import xades4j.properties.SignaturePolicyImpliedProperty;
 import xades4j.providers.MessageDigestEngineProvider;
 import xades4j.providers.SignaturePolicyInfoProvider;
 import xades4j.providers.impl.DefaultAlgorithmsProviderEx;
-import xades4j.providers.impl.DefaultTimeStampTokenProvider;
 import xades4j.providers.impl.FirstCertificateSelector;
+import xades4j.providers.impl.HttpTimeStampTokenProvider;
 import xades4j.providers.impl.PKCS11KeyStoreKeyingDataProvider;
+import xades4j.providers.impl.TSAHttpData;
 
 /**
  *
@@ -39,20 +38,12 @@ import xades4j.providers.impl.PKCS11KeyStoreKeyingDataProvider;
  */
 public class SignerTTest extends SignerTestBase
 {
-    static class TestTimeStampTokenProvider extends DefaultTimeStampTokenProvider
+    static class TestTimeStampTokenProvider extends HttpTimeStampTokenProvider
     {
-
         @Inject
-        public TestTimeStampTokenProvider(
-                MessageDigestEngineProvider messageDigestProvider)
+        public TestTimeStampTokenProvider(MessageDigestEngineProvider messageDigestProvider)
         {
-            super(messageDigestProvider);
-        }
-
-        @Override
-        protected String getTSAUrl()
-        {
-            return "http://tsa.starfieldtech.com/";
+            super(messageDigestProvider, new TSAHttpData("http://tsa.starfieldtech.com"));
         }
     }
 

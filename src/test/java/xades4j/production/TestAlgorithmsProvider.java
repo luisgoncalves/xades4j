@@ -20,6 +20,8 @@ package xades4j.production;
 import org.apache.xml.security.algorithms.MessageDigestAlgorithm;
 import xades4j.algorithms.Algorithm;
 import xades4j.UnsupportedAlgorithmException;
+import xades4j.algorithms.CanonicalXMLWithoutComments;
+import xades4j.algorithms.GenericAlgorithm;
 import xades4j.providers.AlgorithmsProviderEx;
 
 /**
@@ -37,7 +39,7 @@ class TestAlgorithmsProvider implements AlgorithmsProviderEx{
     @Override
     public Algorithm getCanonicalizationAlgorithmForSignature()
     {
-        throw new UnsupportedOperationException("Not supported yet.");
+        return new CanonicalXMLWithoutComments();
     }
 
     @Override

@@ -88,19 +88,19 @@ class SignatureUtils
         // "All certificates appearing in an X509Data element MUST relate to the
         // validation key by either containing it or being part of a certification
         // chain that terminates in a certificate containing the validation key".
-        
+
         // Scan ds:X509Data to find ds:IssuerSerial or ds:SubjectName elements. The
         // first to be found is used to select the leaf certificate. If none of those
         // elements is present, the first ds:X509Certificate is assumed as the signing
         // certificate.
         boolean hasSelectionCriteria = false;
-        
+
         try
         {
             for (int i = 0; i < keyInfo.lengthX509Data(); ++i)
             {
                 X509Data x509Data = keyInfo.itemX509Data(i);
-                
+
                 if(!hasSelectionCriteria)
                 {
                     if (x509Data.containsIssuerSerial())
@@ -116,7 +116,7 @@ class SignatureUtils
                         hasSelectionCriteria = true;
                     }
                 }
-                
+
                 // Collect all certificates as they may be needed to build the cert path.
                 if (x509Data.containsCertificate())
                 {
@@ -126,7 +126,7 @@ class SignatureUtils
                     }
                 }
             }
-            
+
             if(!hasSelectionCriteria)
             {
                 if(keyInfoCerts.isEmpty())
@@ -137,7 +137,7 @@ class SignatureUtils
                     throw new InvalidKeyInfoDataException("No criteria to select the leaf certificate");
                 }
                 certSelector.setCertificate(keyInfoCerts.get(0));
-            }           
+            }
         }
         catch (XMLSecurityException ex)
         {
@@ -331,7 +331,10 @@ class SignatureUtils
 
         try
         {
-            Node sPropsNode = signedPropsRef.getNodesetBeforeFirstCanonicalization().getSubNode();
+            // Node sPropsNode = signedPropsRef.getNodesetBeforeFirstCanonicalization().getSubNode();
+            // FIXME: Use line on top after xmlsec fixes issue SANTUARIO-462, probably on the 2.0.9 release
+            // URL: https://issues.apache.org/jira/browse/SANTUARIO-462
+            Node sPropsNode = signedPropsRef.getContentsBeforeTransformation().getSubNode();
             if (sPropsNode == null || sPropsNode.getNodeType() != Node.ELEMENT_NODE)
             {
                 throw new QualifyingPropertiesIncorporationException("The supposed reference over signed properties doesn't cover an element.");

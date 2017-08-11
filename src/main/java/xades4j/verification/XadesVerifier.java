@@ -70,16 +70,16 @@ public interface XadesVerifier
      * all the data needed to the properties. For instance, it's not possible to
      * correctly add properties from XAdES-C and XAdES-X at the same time, as the
      * last need the first's XML structure. This imposes some restrictions on the
-     * format extensions. Valid transitions are (actual signature form -> form
+     * format extensions. Valid transitions are (actual signature form -&gt; form
      * after extension):
      * <ul>
-     *  <li>BES/EPES -> T</li>
-     *  <li>BES/EPES -> C</li>
-     *  <li>T -> C</li>
-     *  <li>C -> X</li>
-     *  <li>C -> X-L</li>
-     *  <li>X -> X-L (not supported by default because X cannot be verified)</li>
-     *  <li>X-L -> A (not supported by default because X-L cannot be verified)</li>
+     *  <li>BES/EPES -&gt; T</li>
+     *  <li>BES/EPES -&gt; C</li>
+     *  <li>T -&gt; C</li>
+     *  <li>C -&gt; X</li>
+     *  <li>C -&gt; X-L</li>
+     *  <li>X -&gt; X-L (not supported by default because X cannot be verified)</li>
+     *  <li>X-L -&gt; A (not supported by default because X-L cannot be verified)</li>
      * </ul>
      * Note that the {@code XadesSignatureFormatExtender} can also be used separately,
      * but no checks are made to ensure that the signature has the appropriate

@@ -24,7 +24,10 @@ import org.apache.xml.security.utils.Constants;
 import org.junit.Test;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
+import org.w3c.dom.NodeList;
+import static xades4j.production.SignerTestBase.keyingProviderMy;
 import xades4j.properties.ArchiveTimeStampProperty;
+import xades4j.properties.CounterSignatureProperty;
 import xades4j.properties.SignatureTimeStampProperty;
 import xades4j.properties.UnsignedSignatureProperty;
 
@@ -34,6 +37,28 @@ import xades4j.properties.UnsignedSignatureProperty;
  */
 public class XadesSignatureFormatExtenderImplTest extends SignerTestBase
 {
+    @Test
+    public void testEnrichSignatureWithNestedCounterSig() throws Exception
+    {
+        System.out.println("enrichSignatureWithNestedCounterSig");
+
+        Document doc = getDocument("document.signed.bes.cs.xml");
+        NodeList signatures = doc.getElementsByTagNameNS(Constants.SignatureSpecNS, Constants._TAG_SIGNATURE);
+        // Existing counter signature is the last
+        Element signatureNode = (Element)signatures.item(signatures.getLength() - 1);
+                
+        XadesSigner signer = new XadesBesSigningProfile(keyingProviderMy).newSigner();
+        
+        XadesSignatureFormatExtender extender = new XadesFormatExtenderProfile().getFormatExtender();
+        XMLSignature sig = new XMLSignature(signatureNode, signatureNode.getOwnerDocument().getBaseURI());
+        Collection<UnsignedSignatureProperty> usp = new ArrayList<UnsignedSignatureProperty>(1);
+        usp.add(new CounterSignatureProperty(signer));
+        
+        extender.enrichSignature(sig, new UnsignedProperties(usp));
+
+        outputDocument(doc, "document.signed.bes.cs.cs.xml");
+    }
+    
     @Test
     public void testEnrichSignatureWithT() throws Exception
     {
