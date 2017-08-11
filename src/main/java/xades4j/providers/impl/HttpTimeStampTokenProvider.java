@@ -36,12 +36,21 @@ import java.net.URL;
  * @author luis
  */
 public class HttpTimeStampTokenProvider extends AbstractTimeStampTokenProvider {
+    private final TSAHttpData tsaHttpData;
+    private final String base64TsaUsrAndPwd;
 
     public HttpTimeStampTokenProvider(MessageDigestEngineProvider messageDigestProvider, TSAHttpData tsaHttpData) {
-        super(messageDigestProvider, tsaHttpData);
+        super(messageDigestProvider);
+        this.tsaHttpData = tsaHttpData;
+        if (tsaHttpData.getUsername() != null) {
+            String usrAndPwd = tsaHttpData.getUsername() + ":" + tsaHttpData.getPassword();
+            base64TsaUsrAndPwd = Base64.encodeBytes(usrAndPwd.getBytes());
+        } else {
+            base64TsaUsrAndPwd = null;
+        }
     }
 
-    protected byte[] getResponseFromServer(byte[] encodedRequest) throws TimeStampTokenGenerationException {
+    protected byte[] getResponse(byte[] encodedRequest) throws TimeStampTokenGenerationException {
         HttpURLConnection connection = null;
         try {
             connection = createHttpConnection();
@@ -59,7 +68,9 @@ public class HttpTimeStampTokenProvider extends AbstractTimeStampTokenProvider {
                 throw new TimeStampTokenGenerationException(String.format("TSA returned HTTP %d %s", connection.getResponseCode(), connection.getResponseMessage()));
             }
 
-            try (BufferedInputStream input = new BufferedInputStream(connection.getInputStream())) {
+            BufferedInputStream input = null;
+            try {
+                input = new BufferedInputStream(connection.getInputStream());
                 ByteArrayOutputStream baos = new ByteArrayOutputStream();
                 byte[] buffer = new byte[1024];
                 int len;
@@ -69,6 +80,8 @@ public class HttpTimeStampTokenProvider extends AbstractTimeStampTokenProvider {
                 baos.flush();
 
                 return baos.toByteArray();
+            } finally {
+                if (input != null) input.close();
             }
         } catch (IOException ex) {
             throw new TimeStampTokenGenerationException("Error when connecting to the TSA", ex);
@@ -79,17 +92,9 @@ public class HttpTimeStampTokenProvider extends AbstractTimeStampTokenProvider {
 
     private HttpURLConnection createHttpConnection() throws IOException {
         HttpURLConnection connection = (HttpURLConnection) new URL(this.temporaryGetTSAUrl()).openConnection();
-        String base64TsaUsrAndPwd;
 
-        if (this.tsaHttpData.getUsername() != null) {
-            String usrAndPwd = this.tsaHttpData.getUsername() + ":" + this.tsaHttpData.getPassword();
-            base64TsaUsrAndPwd = Base64.encodeBytes(usrAndPwd.getBytes());
-        } else {
-            base64TsaUsrAndPwd = null;
-        }
-
-        if (base64TsaUsrAndPwd != null) {
-            connection.setRequestProperty("Authorization", "Basic " + base64TsaUsrAndPwd);
+        if (this.base64TsaUsrAndPwd != null) {
+            connection.setRequestProperty("Authorization", "Basic " + this.base64TsaUsrAndPwd);
         }
 
         return connection;
