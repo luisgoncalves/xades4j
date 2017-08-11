@@ -24,6 +24,7 @@ import org.bouncycastle.tsp.*;
 import xades4j.UnsupportedAlgorithmException;
 import xades4j.providers.MessageDigestEngineProvider;
 import xades4j.providers.TimeStampTokenGenerationException;
+import xades4j.providers.TimeStampTokenProvider;
 
 import java.io.IOException;
 import java.math.BigInteger;
@@ -33,17 +34,16 @@ import java.util.Map;
 
 /**
  * Implementation of {@code TimeStampTokenProvider} that gets time-stamp tokens
- * from a HTTP TSA. Requests are issued with {@code certReq} set to
- * {@code true}. If username and password are set supplied, HTTP basic
- * authenticated will be used.
+ * from a TSA. Requests are issued with {@code certReq} set to
+ * {@code true}.
  *
  * @author luis
  */
-public abstract class AbstractTimeStampTokenProvider implements xades4j.providers.TimeStampTokenProvider {
+public abstract class AbstractTimeStampTokenProvider implements TimeStampTokenProvider {
     private static final Map<String, ASN1ObjectIdentifier> digestUriToOidMappings;
 
     static {
-        digestUriToOidMappings = new HashMap<>(6);
+        digestUriToOidMappings = new HashMap<String, ASN1ObjectIdentifier>(6);
         digestUriToOidMappings.put(MessageDigestAlgorithm.ALGO_ID_DIGEST_NOT_RECOMMENDED_MD5, TSPAlgorithms.MD5);
         digestUriToOidMappings.put(MessageDigestAlgorithm.ALGO_ID_DIGEST_RIPEMD160, TSPAlgorithms.RIPEMD160);
         digestUriToOidMappings.put(MessageDigestAlgorithm.ALGO_ID_DIGEST_SHA1, TSPAlgorithms.SHA1);
@@ -58,13 +58,11 @@ public abstract class AbstractTimeStampTokenProvider implements xades4j.provider
     }
 
     private final MessageDigestEngineProvider messageDigestProvider;
-    final TSAHttpData tsaHttpData;
     private final TimeStampRequestGenerator tsRequestGenerator;
 
     @Inject
-    AbstractTimeStampTokenProvider(MessageDigestEngineProvider messageDigestProvider, TSAHttpData tsaHttpData) {
+    AbstractTimeStampTokenProvider(MessageDigestEngineProvider messageDigestProvider) {
         this.messageDigestProvider = messageDigestProvider;
-        this.tsaHttpData = tsaHttpData;
         this.tsRequestGenerator = new TimeStampRequestGenerator();
         this.tsRequestGenerator.setCertReq(true);
     }
@@ -84,13 +82,7 @@ public abstract class AbstractTimeStampTokenProvider implements xades4j.provider
                 digest,
                 BigInteger.valueOf(System.currentTimeMillis()));
 
-        TimeStampResponse tsResponse;
-        try {
-            tsResponse = getTimeStampResponse(tsRequest.getEncoded());
-        } catch (IOException ex) {
-            throw new TimeStampTokenGenerationException("Encoding error", ex);
-        }
-
+        TimeStampResponse tsResponse = getTimeStampResponse(tsRequest);
         if (tsResponse.getStatus() != PKIStatus.GRANTED && tsResponse.getStatus() != PKIStatus.GRANTED_WITH_MODS) {
             throw new TimeStampTokenGenerationException("Time stamp token not granted. " + tsResponse.getStatusString());
         }
@@ -112,10 +104,10 @@ public abstract class AbstractTimeStampTokenProvider implements xades4j.provider
         return tsTokenRes;
     }
 
-    private TimeStampResponse getTimeStampResponse(byte[] tsRequest) throws TimeStampTokenGenerationException {
-        byte[] responseStream = getResponseFromServer(tsRequest);
+    private TimeStampResponse getTimeStampResponse(TimeStampRequest tsRequest) throws TimeStampTokenGenerationException {
         TimeStampResponse tsResponse;
         try {
+            byte[] responseStream = getResponse(tsRequest.getEncoded());
             tsResponse = new TimeStampResponse(responseStream);
         } catch (TSPException ex) {
             throw new TimeStampTokenGenerationException("Invalid time stamp response", ex);
@@ -126,5 +118,5 @@ public abstract class AbstractTimeStampTokenProvider implements xades4j.provider
         return tsResponse;
     }
 
-    abstract byte[] getResponseFromServer(byte[] encodedRequest) throws TimeStampTokenGenerationException;
+    abstract byte[] getResponse(byte[] encodedRequest) throws TimeStampTokenGenerationException;
 }
