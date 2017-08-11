@@ -79,16 +79,10 @@ public class HttpTimeStampTokenProvider extends AbstractTimeStampTokenProvider {
 
     private HttpURLConnection createHttpConnection() throws IOException {
         HttpURLConnection connection = (HttpURLConnection) new URL(this.temporaryGetTSAUrl()).openConnection();
-        String base64TsaUsrAndPwd;
 
         if (this.tsaHttpData.getUsername() != null) {
             String usrAndPwd = this.tsaHttpData.getUsername() + ":" + this.tsaHttpData.getPassword();
-            base64TsaUsrAndPwd = Base64.encodeBytes(usrAndPwd.getBytes());
-        } else {
-            base64TsaUsrAndPwd = null;
-        }
-
-        if (base64TsaUsrAndPwd != null) {
+            String base64TsaUsrAndPwd = Base64.encodeBytes(usrAndPwd.getBytes());
             connection.setRequestProperty("Authorization", "Basic " + base64TsaUsrAndPwd);
         }
 
