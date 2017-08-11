@@ -16,6 +16,7 @@
  */
 package xades4j.providers.impl;
 
+import com.google.inject.Inject;
 import xades4j.providers.MessageDigestEngineProvider;
 import xades4j.providers.TimeStampTokenGenerationException;
 import xades4j.utils.Base64;
@@ -39,6 +40,7 @@ public class HttpTimeStampTokenProvider extends AbstractTimeStampTokenProvider {
     private final TSAHttpData tsaHttpData;
     private final String base64TsaUsrAndPwd;
 
+    @Inject
     public HttpTimeStampTokenProvider(MessageDigestEngineProvider messageDigestProvider, TSAHttpData tsaHttpData) {
         super(messageDigestProvider);
         this.tsaHttpData = tsaHttpData;
