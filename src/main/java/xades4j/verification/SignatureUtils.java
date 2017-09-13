@@ -331,10 +331,7 @@ class SignatureUtils
 
         try
         {
-            // Node sPropsNode = signedPropsRef.getNodesetBeforeFirstCanonicalization().getSubNode();
-            // FIXME: Use line on top after xmlsec fixes issue SANTUARIO-462, probably on the 2.0.9 release
-            // URL: https://issues.apache.org/jira/browse/SANTUARIO-462
-            Node sPropsNode = signedPropsRef.getContentsBeforeTransformation().getSubNode();
+            Node sPropsNode = signedPropsRef.getNodesetBeforeFirstCanonicalization().getSubNode();
             if (sPropsNode == null || sPropsNode.getNodeType() != Node.ELEMENT_NODE)
             {
                 throw new QualifyingPropertiesIncorporationException("The supposed reference over signed properties doesn't cover an element.");
