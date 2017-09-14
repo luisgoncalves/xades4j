@@ -22,7 +22,7 @@ The library is available on [Maven](http://search.maven.org/#search%7Cga%7C1%7Cg
 
 # Docs
 
-General usage documentation can be found on the project's [wiki](https://github.com/luisgoncalves/xades4j/wiki). Javadocs for the latest version can be found [here](http://luisgoncalves.github.io/xades4j/javadocs/1.3.1/reference/packages.html). 
+General usage documentation can be found on the project's [wiki](https://github.com/luisgoncalves/xades4j/wiki). Javadocs for the latest version can be found [here](http://luisgoncalves.github.io/xades4j/javadocs/1.4.0/reference/packages.html). 
 
 If you can't find the information you need on the wiki and/or javadocs please refer to the tests in the source code, which illustrate all the features. Also, feel free to give some feedback, as it will be useful for further improvements.
 
