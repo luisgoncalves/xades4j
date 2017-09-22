@@ -23,6 +23,7 @@ import xades4j.providers.BasicSignatureOptionsProvider;
  * are:
  * <ul>
  *  <li>includeSigningCertificate: true</li>
+ *  <li>includeSigningCertificateFullChain: false</li>
  *  <li>includePublicKey: false</li>
  *  <li>signSigningCertificate: false</li>
  * </ul>
@@ -31,19 +32,22 @@ import xades4j.providers.BasicSignatureOptionsProvider;
 public class DefaultBasicSignatureOptionsProvider implements BasicSignatureOptionsProvider
 {
     private final boolean includeSigningCertificate;
+    private final boolean includeSigningCertificateFullChain;
     private final boolean includePublicKey;
     private final boolean signSigningCertificate;
 
     public DefaultBasicSignatureOptionsProvider()
     {
         this.includeSigningCertificate = true;
+        this.includeSigningCertificateFullChain = false;
         this.includePublicKey = false;
         this.signSigningCertificate = false;
     }
 
-    public DefaultBasicSignatureOptionsProvider(boolean includeSigningCertificate, boolean includePublicKey, boolean signSigningCertificate)
+    public DefaultBasicSignatureOptionsProvider(boolean includeSigningCertificate, boolean includeSigningCertificateFullChain, boolean includePublicKey, boolean signSigningCertificate)
     {
         this.includeSigningCertificate = includeSigningCertificate;
+        this.includeSigningCertificateFullChain = includeSigningCertificateFullChain;
         this.includePublicKey = includePublicKey;
         this.signSigningCertificate = signSigningCertificate;
     }
@@ -52,6 +56,11 @@ public class DefaultBasicSignatureOptionsProvider implements BasicSignatureOptio
     public boolean includeSigningCertificate()
     {
         return this.includeSigningCertificate;
+    }
+
+    @Override
+    public boolean includeSigningCertificateFullChain() {
+        return this.includeSigningCertificateFullChain;
     }
 
     @Override

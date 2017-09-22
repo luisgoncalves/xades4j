@@ -35,6 +35,14 @@ public interface BasicSignatureOptionsProvider
     boolean includeSigningCertificate();
 
     /**
+     * Indicates whether the full certificate chain should be included in
+     * {@code ds:X509Certificate} elements inside the same {@code ds:X509Data} within
+     * {@code ds:KeyInfo}.
+     * @return {@code true} if the full chain should be included; false otherwise
+     */
+    boolean includeSigningCertificateFullChain();
+
+    /**
      * Indicates whether a {@code ds:KeyValue} element containing the public key's
      * value should be included in {@code ds:KeyInfo}.
      * @return {@code true} if the public key should be included; false otherwise
