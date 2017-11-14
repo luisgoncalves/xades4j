@@ -1,10 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
     <modelVersion>4.0.0</modelVersion>
     <groupId>com.googlecode.xades4j</groupId>
     <artifactId>xades4j</artifactId>
     <packaging>jar</packaging>
-    <version>1.4.1-SNAPSHOT</version>
+    <version>1.4.1-KCK-SNAPSHOT</version>
     <name>xades4j</name>
     <url>https://github.com/luisgoncalves/xades4j</url>
 
@@ -72,13 +73,14 @@
             <version>1.56</version>
         </dependency>
     </dependencies>
-	
+
     <distributionManagement>
         <snapshotRepository>
             <id>ossrh</id>
             <url>https://oss.sonatype.org/content/repositories/snapshots</url>
         </snapshotRepository>
     </distributionManagement>
+
 
     <build>
         <plugins>
@@ -97,6 +99,19 @@
     </build>
 
     <profiles>
+        <profile>
+            <id>kck</id>
+            <distributionManagement>
+                <repository>
+                    <id>kck.release</id>
+                    <url>http://archiva.devcenter1.kck.ru:8081/nexus/content/repositories/releases/</url>
+                </repository>
+                <snapshotRepository>
+                    <id>kck.snapshot</id>
+                    <url>http://archiva.devcenter1.kck.ru:8081/nexus/content/repositories/snapshots</url>
+                </snapshotRepository>
+            </distributionManagement>
+        </profile>
         <profile>
             <id>release</id>
             <build>
@@ -169,5 +184,5 @@
             </build>
         </profile>
     </profiles>
-    
+
 </project>
