@@ -23,9 +23,7 @@ import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.security.NoSuchProviderException;
 import java.security.Security;
-import java.util.HashMap;
 
-import org.apache.xml.security.algorithms.MessageDigestAlgorithm;
 import xades4j.UnsupportedAlgorithmException;
 
 /**
