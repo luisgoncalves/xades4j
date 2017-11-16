@@ -18,13 +18,11 @@ package xades4j.providers;
 
 import java.security.MessageDigest;
 import xades4j.UnsupportedAlgorithmException;
-import xades4j.providers.impl.SantuarioMessageDigestProvider;
 
 /**
  * Interface for providers of message digest engines. A default implementation
  * is provided.
  * @see xades4j.providers.impl.DefaultMessageDigestProvider
- * @see xades4j.providers.impl.SantuarioMessageDigestProvider
  * @author Luís
  */
 public interface MessageDigestEngineProvider
