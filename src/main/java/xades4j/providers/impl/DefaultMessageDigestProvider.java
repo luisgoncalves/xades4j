@@ -16,6 +16,7 @@
  */
 package xades4j.providers.impl;
 
+import org.apache.xml.security.Init;
 import org.apache.xml.security.algorithms.JCEMapper;
 import xades4j.providers.*;
 
@@ -34,6 +35,10 @@ import xades4j.UnsupportedAlgorithmException;
  */
 public class DefaultMessageDigestProvider implements MessageDigestEngineProvider {
     private final String messageDigestProvider;
+
+    static {
+        Init.init();
+    }
 
     /**
      * Initializes a new instance that will use the specified JCE provider to get
