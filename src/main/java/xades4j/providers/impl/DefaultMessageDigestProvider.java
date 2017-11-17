@@ -16,56 +16,44 @@
  */
 package xades4j.providers.impl;
 
+import org.apache.xml.security.Init;
+import org.apache.xml.security.algorithms.JCEMapper;
 import xades4j.providers.*;
+
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.security.NoSuchProviderException;
 import java.security.Security;
-import java.util.HashMap;
-import org.apache.xml.security.algorithms.MessageDigestAlgorithm;
+
 import xades4j.UnsupportedAlgorithmException;
 
 /**
  * The default implementation of {@code MessageDigestEngineProvider}. It supports
- * the default digest algorithms in the Java platform, namely:
- * <ul>
- *  <li>{@code http://www.w3.org/2000/09/xmldsig#sha1} - SHA-1</li>
- *  <li>{@code http://www.w3.org/2001/04/xmlenc#sha256} - SHA-256</li>
- *  <li>{@code http://www.w3.org/2001/04/xmldsig-more#sha384} - SHA-384</li>
- *  <li>{@code http://www.w3.org/2001/04/xmlenc#sha512} - SHA-512</li>
- * </ul>
+ * <a href="http://santuario.apache.org/">Apache Santuario</a> available algorithms
+ *
  * @author Luís
  */
-public class DefaultMessageDigestProvider implements MessageDigestEngineProvider
-{
-    private static final HashMap<String, String> algorithmMapper;
-
-    static
-    {
-        algorithmMapper = new HashMap<String, String>(4);
-        algorithmMapper.put(MessageDigestAlgorithm.ALGO_ID_DIGEST_SHA1, "SHA-1");
-        algorithmMapper.put(MessageDigestAlgorithm.ALGO_ID_DIGEST_SHA256, "SHA-256");
-        algorithmMapper.put(MessageDigestAlgorithm.ALGO_ID_DIGEST_SHA384, "SHA-384");
-        algorithmMapper.put(MessageDigestAlgorithm.ALGO_ID_DIGEST_SHA512, "SHA-512");
-    }
-
+public class DefaultMessageDigestProvider implements MessageDigestEngineProvider {
     private final String messageDigestProvider;
+
+    static {
+        Init.init();
+    }
 
     /**
      * Initializes a new instance that will use the specified JCE provider to get
      * MessageDigest instances.
+     *
      * @param messageDigestProvider the JCE provider for MessageDigest
      * @throws NoSuchProviderException if the JCE provider is not installed
      */
     public DefaultMessageDigestProvider(String messageDigestProvider) throws NoSuchProviderException
     {
-        if(null == messageDigestProvider)
-        {
+        if (null == messageDigestProvider) {
             throw new NullPointerException("Message digest provider cannot be null");
         }
 
-        if(Security.getProvider(messageDigestProvider) == null)
-        {
+        if (Security.getProvider(messageDigestProvider) == null) {
             throw new NoSuchProviderException(messageDigestProvider);
         }
 
@@ -84,20 +72,18 @@ public class DefaultMessageDigestProvider implements MessageDigestEngineProvider
     @Override
     public MessageDigest getEngine(String digestAlgorithmURI) throws UnsupportedAlgorithmException
     {
-        String digestAlgorithmName = algorithmMapper.get(digestAlgorithmURI);
-        if (null == digestAlgorithmName)
+
+        String digestAlgorithmName = JCEMapper.translateURItoJCEID(digestAlgorithmURI);
+        if (null == digestAlgorithmName) {
             throw new UnsupportedAlgorithmException("Digest algorithm not supported by the provider", digestAlgorithmURI);
-        try
-        {
-            return this.messageDigestProvider == null ? 
-                MessageDigest.getInstance(digestAlgorithmName):
-                MessageDigest.getInstance(digestAlgorithmName, this.messageDigestProvider);
         }
-        catch (NoSuchAlgorithmException nsae)
-        {
+        try {
+            return this.messageDigestProvider == null ?
+                    MessageDigest.getInstance(digestAlgorithmName) :
+                    MessageDigest.getInstance(digestAlgorithmName, this.messageDigestProvider);
+        } catch (NoSuchAlgorithmException nsae) {
             throw new UnsupportedAlgorithmException(nsae.getMessage(), digestAlgorithmURI, nsae);
-        }catch(NoSuchProviderException nspe)
-        {
+        } catch (NoSuchProviderException nspe) {
             // We checked that the provider existed on construction, but throw anyway
             throw new UnsupportedAlgorithmException("Provider not available", digestAlgorithmURI, nspe);
         }
