@@ -20,7 +20,9 @@ import java.util.Collection;
 import org.w3c.dom.Document;
 import xades4j.properties.data.PropertyDataObject;
 import xades4j.properties.data.CommitmentTypeData;
+import xades4j.xml.bind.xades.XmlAnyType;
 import xades4j.xml.bind.xades.XmlCommitmentTypeIndicationType;
+import xades4j.xml.bind.xades.XmlCommitmentTypeQualifiersListType;
 import xades4j.xml.bind.xades.XmlIdentifierType;
 import xades4j.xml.bind.xades.XmlObjectIdentifierType;
 import xades4j.xml.bind.xades.XmlSignedPropertiesType;
@@ -31,13 +33,14 @@ import xades4j.xml.bind.xades.XmlSignedPropertiesType;
  */
 class ToXmlCommitmentTypeConverter implements SignedPropertyDataToXmlConverter
 {
+
     @Override
     public void convertIntoObjectTree(
             PropertyDataObject propData,
             XmlSignedPropertiesType xmlProps,
             Document doc)
     {
-        CommitmentTypeData commitmentTypeData = (CommitmentTypeData)propData;
+        CommitmentTypeData commitmentTypeData = (CommitmentTypeData) propData;
 
         // Create the JAXB CommitmentTypeIndication and add it to SignedDataObjectProperties.
         XmlCommitmentTypeIndicationType xmlCommitmentTypeProp = new XmlCommitmentTypeIndicationType();
@@ -52,8 +55,26 @@ class ToXmlCommitmentTypeConverter implements SignedPropertyDataToXmlConverter
 
         Collection<String> refsUris = commitmentTypeData.getObjReferences();
         if (null == refsUris)
+        {
             xmlCommitmentTypeProp.setAllSignedDataObjects();
-        else
+        } else
+        {
             xmlCommitmentTypeProp.getObjectReference().addAll(refsUris);
+        }
+
+        Collection qualifiers = commitmentTypeData.getQualifiers();
+        if (!qualifiers.isEmpty())
+        {
+            XmlCommitmentTypeQualifiersListType xmlQualifiers = new XmlCommitmentTypeQualifiersListType();
+            for (Object q : qualifiers)
+            {
+                XmlAnyType xmlQualifier = new XmlAnyType();
+                xmlQualifier.getContent().add(q);
+                
+                xmlQualifiers.getCommitmentTypeQualifier().add(xmlQualifier);
+            }
+            
+            xmlCommitmentTypeProp.setCommitmentTypeQualifiers(xmlQualifiers);
+        }
     }
 }
