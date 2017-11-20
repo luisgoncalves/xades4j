@@ -57,6 +57,8 @@ class DataGenCommitmentType implements PropertyDataObjectGenerator<CommitmentTyp
             commTypeData.addObjReferences('#' + referencesMappings.get(obj).getId());
         }
 
+        commTypeData.setQualifiers(prop.getQualifiers());
+        
         return commTypeData;
     }
 }
