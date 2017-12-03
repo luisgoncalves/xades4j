@@ -18,12 +18,9 @@ package xades4j.xml.unmarshalling;
 
 import java.util.List;
 import javax.xml.bind.JAXBElement;
-import org.w3c.dom.Element;
-import xades4j.properties.ObjectIdentifier;
 import xades4j.properties.QualifyingProperty;
 import xades4j.properties.SignaturePolicyBase;
 import xades4j.properties.data.SignaturePolicyData;
-import xades4j.utils.CollectionUtils;
 import xades4j.xml.bind.xades.XmlAnyType;
 import xades4j.xml.bind.xades.XmlSigPolicyQualifiersListType;
 import xades4j.xml.bind.xades.XmlSignaturePolicyIdType;
@@ -61,12 +58,16 @@ class FromXmlSignaturePolicyConverter implements SignedSigPropFromXmlConv
                 FromXmlUtils.getObjectIdentifier(xmlPolicyId.getSigPolicyId()),
                 xmlPolicyId.getSigPolicyHash().getDigestMethod().getAlgorithm(),
                 xmlPolicyId.getSigPolicyHash().getDigestValue(),
-                getLocationUrl(xmlPolicyId.getSigPolicyQualifiers())));
+                getLocationUrl(xmlPolicyId)));
     }
 
-    private static String getLocationUrl(XmlSigPolicyQualifiersListType sigPolicyQualifiers) throws PropertyUnmarshalException
+    private static String getLocationUrl(XmlSignaturePolicyIdType xmlPolicyId) throws PropertyUnmarshalException
     {
-        String locationUrl = null;
+        XmlSigPolicyQualifiersListType sigPolicyQualifiers = xmlPolicyId.getSigPolicyQualifiers();
+        if(null == sigPolicyQualifiers)
+        {
+            return null;
+        }
         
         List<XmlAnyType> xmlQualifiers = sigPolicyQualifiers.getSigPolicyQualifier();
         for (XmlAnyType xmlQualifier : xmlQualifiers)
@@ -77,11 +78,11 @@ class FromXmlSignaturePolicyConverter implements SignedSigPropFromXmlConv
                 JAXBElement xmlSPURI = (JAXBElement)content.get(0);
                 if (xmlSPURI.getName().getLocalPart().equals("SPURI") && xmlSPURI.getName().getNamespaceURI().equals(QualifyingProperty.XADES_XMLNS))
                 {
-                    locationUrl = (String)xmlSPURI.getValue();
+                    return (String)xmlSPURI.getValue();
                 }
             }
         }
         
-        return locationUrl;
+        return null;
     }
 }

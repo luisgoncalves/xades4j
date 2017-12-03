@@ -171,11 +171,20 @@ public class XadesVerifierImplTest extends VerifierTestBase
     }
 
     @Test
-    public void testVerifyEPES() throws Exception
+    public void testVerifyEPES1() throws Exception
     {
-        System.out.println("verifyEPES");
+        System.out.println("verifyEPES 1");
         verificationProfile.withPolicyDocumentProvider(VerifierTestBase.policyDocumentFinder);
-        XAdESForm f = verifySignature("document.signed.epes.xml", verificationProfile);
+        XAdESForm f = verifySignature("document.signed.epes_1.xml", verificationProfile);
+        assertEquals(XAdESForm.EPES, f);
+    }
+    
+    @Test
+    public void testVerifyEPES2() throws Exception
+    {
+        System.out.println("verifyEPES 2");
+        verificationProfile.withPolicyDocumentProvider(VerifierTestBase.policyDocumentFinder);
+        XAdESForm f = verifySignature("document.signed.epes_2.xml", verificationProfile);
         assertEquals(XAdESForm.EPES, f);
     }
 
