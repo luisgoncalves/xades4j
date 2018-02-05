@@ -27,6 +27,7 @@ public final class CommitmentTypeData implements PropertyDataObject
 {
     private String description, uri;
     private Collection<String> objReferences;
+    private Collection qualifiers;
 
     public CommitmentTypeData(String uri)
     {
@@ -68,5 +69,13 @@ public final class CommitmentTypeData implements PropertyDataObject
     public String getUri()
     {
         return uri;
+    }
+    
+    public void setQualifiers(Collection qualifiers){
+        this.qualifiers = qualifiers;
+    }
+    
+    public Collection getQualifiers(){
+        return this.qualifiers;
     }
 }

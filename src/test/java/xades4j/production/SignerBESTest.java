@@ -65,7 +65,7 @@ public class SignerBESTest extends SignerTestBase
 
         IndividualDataObjsTimeStampProperty dataObjsTimeStamp = new IndividualDataObjsTimeStampProperty();
         AllDataObjsCommitmentTypeProperty globalCommitment = AllDataObjsCommitmentTypeProperty.proofOfApproval();
-        CommitmentTypeProperty commitment = CommitmentTypeProperty.proofOfCreation();
+        CommitmentTypeProperty commitment = (CommitmentTypeProperty)CommitmentTypeProperty.proofOfCreation().withQualifier("MyQualifier");
         DataObjectDesc obj1 = new DataObjectReference('#' + elemToSign.getAttribute("Id")).withTransform(new EnvelopedSignatureTransform()).withDataObjectFormat(new DataObjectFormatProperty("text/xml", "MyEncoding").withDescription("Isto é uma descrição do elemento raiz").withDocumentationUri("http://doc1.txt").withDocumentationUri("http://doc2.txt").withIdentifier("http://elem.root")).withCommitmentType(commitment).withDataObjectTimeStamp(dataObjsTimeStamp);
         DataObjectDesc obj2 = new EnvelopedXmlObject(objectContent, "text/xml", null).withDataObjectFormat(new DataObjectFormatProperty("text/xml", "MyEncoding").withDescription("Isto é uma descrição do elemento dentro do object").withDocumentationUri("http://doc3.txt").withDocumentationUri("http://doc4.txt").withIdentifier("http://elem.in.object")).withCommitmentType(commitment).withDataObjectTimeStamp(dataObjsTimeStamp);
         SignedDataObjects dataObjs = new SignedDataObjects(obj1, obj2).withCommitmentType(globalCommitment).withDataObjectsTimeStamp();
@@ -136,22 +136,20 @@ public class SignerBESTest extends SignerTestBase
         XadesSigner signer = new XadesBesSigningProfile(keyingProviderMy)
                 .withBasicSignatureOptionsProvider(MyBasicSignatureOptionsProvider.class)
                 .newSigner();
-
-        DataObjectDesc obj1 = new DataObjectReference("xades4j://document.xml")
+        
+        DataObjectDesc obj1 = new DataObjectReference("document.xml")
                 .withTransform(
                     new XPathTransform("/collection/album/foo:tracks")
                         .withNamespace("foo", "http://test.xades4j/tracks"))
                 .withDataObjectFormat(new DataObjectFormatProperty("text/xml"));
-
-        DataObjectDesc obj2 = new DataObjectReference("xades4j://document.xml")
+        
+        DataObjectDesc obj2 = new DataObjectReference("document.xml")
                 .withTransform(
                     XPath2Filter.intersect("/collection/album/bar:tracks/bar:song[@tracknumber = 1]")
                         .withNamespace("bar", "http://test.xades4j/tracks"));
-
-        TestResolverSpi resolverSpi = new TestResolverSpi();
-        SignedDataObjects dataObjs = new SignedDataObjects(obj1, obj2)
-                .withResourceResolver(new ResourceResolver(resolverSpi));
-        signer.sign(dataObjs, doc);
+        
+        SignedDataObjects objs = new SignedDataObjects(obj1, obj2).withBaseUri(new File("src/test/xml/").toURI().toString());
+        signer.sign(objs, doc);
         
         outputDocument(doc, "detached.bes.xml");
     }

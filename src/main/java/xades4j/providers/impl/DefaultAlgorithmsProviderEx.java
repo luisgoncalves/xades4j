@@ -51,6 +51,7 @@ public class DefaultAlgorithmsProviderEx implements AlgorithmsProviderEx
     public Algorithm getSignatureAlgorithm(String keyAlgorithmName) throws UnsupportedAlgorithmException
     {
         Algorithm sigAlg = signatureAlgsMaps.get(keyAlgorithmName);
+
         if (null == sigAlg)
         {
             throw new UnsupportedAlgorithmException("Signature algorithm not supported by the provider", keyAlgorithmName);

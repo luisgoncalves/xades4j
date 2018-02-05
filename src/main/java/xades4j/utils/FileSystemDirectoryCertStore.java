@@ -18,7 +18,6 @@ package xades4j.utils;
 
 import java.io.File;
 import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.security.InvalidAlgorithmParameterException;
@@ -165,15 +164,25 @@ public class FileSystemDirectoryCertStore
                 transverseDirToFindContent(f, contentList, certsFilesExts, crlsFilesExts, cf);
             else if (f.isFile())
                 if (hasExt(f, certsFilesExts)) {
-                    try (InputStream is = new FileInputStream(f)) {
-                        contentList.add((X509Certificate) cf.generateCertificate(is));
+                    try {
+                        InputStream is = new FileInputStream(f);
+                        try {
+                            contentList.add((X509Certificate) cf.generateCertificate(is));
+                        } finally {
+                            is.close();
+                        }
                     } catch (IOException e) {
                         // The file existed and somehow it doesn't exist now, or
                         // it was not possible to close is, nevermind.
                     }
                 } else if (hasExt(f, crlsFilesExts)) {
-                    try (InputStream is = new FileInputStream(f)) {
-                        contentList.add((X509CRL) cf.generateCRL(is));
+                    try {
+                        InputStream is = new FileInputStream(f);
+                        try {
+                            contentList.add((X509CRL) cf.generateCRL(is));
+                        } finally {
+                            is.close();
+                        }
                     } catch (IOException e) {
                         // The file existed and somehow it doesn't exist now, or
                         // it was not possible to close is, nevermind.

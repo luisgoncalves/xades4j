@@ -19,6 +19,7 @@ package xades4j.verification;
 import java.math.BigInteger;
 import java.security.cert.X509CRL;
 import java.security.cert.X509Certificate;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
@@ -136,8 +137,11 @@ public class QualifyingPropertyVerificationContext
     public void setCurrentTime(Date currentTime)
     throws IllegalArgumentException
     {
-        if (this.currentTime.getTime() < currentTime.getTime())
-            throw new IllegalArgumentException("New time from TimeStamp is in the future");
+        if (this.currentTime.getTime() < currentTime.getTime()) {
+            final SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSS");
+            throw new IllegalArgumentException(String.format("New time from TimeStamp is in the future %s < %s",
+                    formatter.format(this.currentTime.getTime()), formatter.format(currentTime.getTime())));
+        }
 
         this.currentTime = new Date(currentTime.getTime());
     }

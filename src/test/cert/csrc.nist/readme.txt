@@ -19,6 +19,4 @@ More info on the test certificates: http://csrc.nist.gov/groups/ST/crypto_apps_i
 
 keytool -importcert -alias TACP0101 -file "Trust Anchor CP.01.01.crt" -keystore trustAnchor -storepass password
 
-keytool -importcert -alias accvCA -file "..\gva\rootgva.cer" -keystore trustAnchor -storepass password
-
-keytool -importcert -alias accvraiz1 -file "..\gva\ACCVRAIZ1.crt" -keystore trustAnchor -storepass password
+keytool -importcert -alias accvCA -file "..\gva\accvroot1.cer" -keystore trustAnchor -storepass password

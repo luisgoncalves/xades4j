@@ -66,6 +66,7 @@ public class XadesHybridVerifierImpl implements XadesVerifier
     private final Set<RawSignatureVerifier> rawSigVerifiers;
     private final Set<CustomSignatureVerifier> customSigVerifiers;
     private QualifyingPropertiesUnmarshaller qualifPropsUnmarshaller;
+    private boolean secureValidation;
 
     @Inject
     protected XadesHybridVerifierImpl(
@@ -80,6 +81,7 @@ public class XadesHybridVerifierImpl implements XadesVerifier
         this.qualifPropsUnmarshaller = qualifyingPropsUnmarshaller;
         this.rawSigVerifiers = rawSigVerifiers;
         this.customSigVerifiers = customSigVerifiers;
+        this.secureValidation = false;
     }
 
     @Override
@@ -87,23 +89,13 @@ public class XadesHybridVerifierImpl implements XadesVerifier
             SignatureSpecificVerificationOptions verificationOptions)
             throws XAdES4jException
     {
-        Date now = new Date();
-        return verify(signatureElem, verificationOptions, now);
-    }
-
-    protected XAdESVerificationResult verify(Element signatureElem,
-            SignatureSpecificVerificationOptions verificationOptions,
-            Date now)
-            throws XAdES4jException
-    {
-        if (signatureElem == null)
-        {
+        if (signatureElem == null)        {
             throw new NullPointerException("Signature node not specified");
         }
 
         if (verificationOptions == null)
         {
-            verificationOptions = SignatureSpecificVerificationOptions.empty;
+            verificationOptions = SignatureSpecificVerificationOptions.empty();
         }
 
         /*
@@ -112,7 +104,7 @@ public class XadesHybridVerifierImpl implements XadesVerifier
         XMLSignature signature;
         try
         {
-            signature = new XMLSignature(signatureElem, verificationOptions.getBaseUri());
+            signature = new XMLSignature(signatureElem, verificationOptions.getBaseUri(), this.secureValidation);
         } catch (XMLSecurityException ex)
         {
             throw new UnmarshalException("Bad XML signature", ex);
@@ -170,7 +162,7 @@ public class XadesHybridVerifierImpl implements XadesVerifier
                 new QualifyingPropertyVerificationContext.SignedObjectsData(
                 referencesRes.dataObjsReferences,
                 signature),
-                now);
+                verificationOptions.getDefaultVerificationDate());
 
         /*
          * go over all qualified properties in reverse order, verify the properties,
@@ -185,7 +177,7 @@ public class XadesHybridVerifierImpl implements XadesVerifier
                 this.qualifyingPropertiesVerifier.verifyProperties(propsDataCollector, qPropsCtx);
 
         /* create certification path */
-        Date validationDate = getValidationDate(props, now);
+        Date validationDate = getValidationDate(props, verificationOptions);
         this.certificateValidator.addCertificates(qPropsCtx.getSignatureCertificates(),
                 validationDate);
         this.certificateValidator.addCRLs(qPropsCtx.getSignatureCRLs(), validationDate);
@@ -243,17 +235,7 @@ public class XadesHybridVerifierImpl implements XadesVerifier
             XadesSignatureFormatExtender formatExtender, XAdESForm finalForm)
             throws XAdES4jException
     {
-        Date now = new Date();
-        return verify(signatureElem, verificationOptions, formatExtender, finalForm, now);
-    }
-
-    protected XAdESVerificationResult verify(Element signatureElem,
-            SignatureSpecificVerificationOptions verificationOptions,
-            XadesSignatureFormatExtender formatExtender, XAdESForm finalForm, Date now)
-            throws XAdES4jException
-    {
-        if (null == finalForm || null == formatExtender)
-        {
+        if (null == finalForm || null == formatExtender)        {
             throw new NullPointerException("'finalForm' and 'formatExtender' cannot be null");
         }
 
@@ -264,7 +246,7 @@ public class XadesHybridVerifierImpl implements XadesVerifier
             throw new IllegalArgumentException("Signature format can only be extended to XAdES-T or above");
         }
 
-        XAdESVerificationResult res = this.verify(signatureElem, verificationOptions, now);
+        XAdESVerificationResult res = this.verify(signatureElem, verificationOptions);
         XAdESForm actualForm = res.getSignatureForm();
 
         if (!finalForm.before(actualForm))
@@ -298,8 +280,7 @@ public class XadesHybridVerifierImpl implements XadesVerifier
         return res;
     }
 
-    private static interface FormExtensionPropsCollector
-    {
+    private static interface FormExtensionPropsCollector    {
 
         void addProps(Collection<UnsignedSignatureProperty> usp,
                 XAdESVerificationResult res);
@@ -445,6 +426,10 @@ public class XadesHybridVerifierImpl implements XadesVerifier
         this.qualifPropsUnmarshaller.setAcceptUnknownProperties(acceptUnknownProperties);
     }
 
+    void setSecureValidation(boolean secureValidation) {
+        this.secureValidation = secureValidation;
+    }
+
     private static void doCoreVerification(
             XMLSignature signature,
             SignatureSpecificVerificationOptions verificationOptions,
@@ -507,10 +492,9 @@ public class XadesHybridVerifierImpl implements XadesVerifier
     }
 
     private Date getValidationDate(
-            List<PropertyInfo> props, Date now)
-                    throws XAdES4jException
-    {
-        Date earliestDate = now;
+            List<PropertyInfo> props, SignatureSpecificVerificationOptions verificationOptions)
+            throws XAdES4jException    {
+        Date earliestDate = null;
         for (PropertyInfo p : props)
         {
             QualifyingProperty qp = p.getProperty();
@@ -537,8 +521,9 @@ public class XadesHybridVerifierImpl implements XadesVerifier
                     earliestDate = timeStampDate;
             }
         }
-        if (earliestDate == null)
-            earliestDate = new Date();
+        if (earliestDate == null) {
+            earliestDate = verificationOptions.getDefaultVerificationDate();
+        }
 
         return earliestDate;
     }

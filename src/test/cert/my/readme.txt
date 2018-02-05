@@ -30,8 +30,7 @@ pvk2pfx.exe -pvk LG.pvk -pi mykeypass -spc LG.cer -pfx LG.pfx
 
 --> ACCV CA for the TSA certificate 
 
-        keytool -importcert -alias accvCA -file "..\gva\rootgva.cer" -keystore myStore -storepass mystorepass
-	keytool -importcert -alias accvraiz1 -file "..\gva\ACCVRAIZ1.crt" -keystore myStore -storepass mystorepass
+	keytool -importcert -alias accvCA -file "..\gva\accvroot1.cer" -keystore myStore -storepass mystorepass
 
 --> Starfield Class 2 Certification Authority
 

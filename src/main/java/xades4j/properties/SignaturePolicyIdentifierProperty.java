@@ -29,6 +29,7 @@ public final class SignaturePolicyIdentifierProperty extends SignaturePolicyBase
     private final ObjectIdentifier identifier;
     private byte[] policyDocumentData;
     private InputStream policyDocumentStream;
+    private String locationUrl;
 
     /**
      * @param identifier the policy identifier
@@ -86,5 +87,22 @@ public final class SignaturePolicyIdentifierProperty extends SignaturePolicyBase
     public ObjectIdentifier getIdentifier()
     {
         return identifier;
+    }
+    
+    /**
+     * Adds a URL where a copy of the signature policy may be obtained. This will
+     * be added as a qualifier.
+     * @param url the location URL
+     * @return the current instance
+     */
+    public SignaturePolicyIdentifierProperty withLocationUrl(String url)
+    {
+        locationUrl = url;
+        return this;
+    }
+    
+    public String getLocationUrl()
+    {
+        return locationUrl;
     }
 }

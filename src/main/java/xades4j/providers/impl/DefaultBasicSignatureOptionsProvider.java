@@ -30,21 +30,39 @@ import xades4j.providers.BasicSignatureOptionsProvider;
  */
 public class DefaultBasicSignatureOptionsProvider implements BasicSignatureOptionsProvider
 {
+    private final boolean includeSigningCertificate;
+    private final boolean includePublicKey;
+    private final boolean signSigningCertificate;
+
+    public DefaultBasicSignatureOptionsProvider()
+    {
+        this.includeSigningCertificate = true;
+        this.includePublicKey = false;
+        this.signSigningCertificate = false;
+    }
+
+    public DefaultBasicSignatureOptionsProvider(boolean includeSigningCertificate, boolean includePublicKey, boolean signSigningCertificate)
+    {
+        this.includeSigningCertificate = includeSigningCertificate;
+        this.includePublicKey = includePublicKey;
+        this.signSigningCertificate = signSigningCertificate;
+    }
+    
     @Override
     public boolean includeSigningCertificate()
     {
-        return true;
+        return this.includeSigningCertificate;
     }
 
     @Override
     public boolean includePublicKey()
     {
-        return false;
+        return this.includePublicKey;
     }
 
     @Override
     public boolean signSigningCertificate()
     {
-        return false;
+        return this.signSigningCertificate;
     }
 }

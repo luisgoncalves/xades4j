@@ -17,11 +17,10 @@
 package xades4j.verification;
 
 import java.util.Collection;
-
 import org.w3c.dom.Element;
-
 import xades4j.properties.AllDataObjsCommitmentTypeProperty;
 import xades4j.properties.CommitmentTypeProperty;
+import xades4j.properties.CommitmentTypePropertyBase;
 import xades4j.properties.QualifyingProperty;
 import xades4j.properties.data.CommitmentTypeData;
 import xades4j.verification.QualifyingPropertyVerificationContext.SignedObjectsData;
@@ -40,6 +39,8 @@ class CommitmentTypeVerifier implements QualifyingPropertyVerifier<CommitmentTyp
         String uri = propData.getUri(), desc = propData.getDescription();
         Collection<String> objsReferences = propData.getObjReferences();
 
+        CommitmentTypePropertyBase property;
+        
         if (objsReferences != null)
         {
             // "Check that all the ObjectReference elements actually reference
@@ -57,9 +58,29 @@ class CommitmentTypeVerifier implements QualifyingPropertyVerifier<CommitmentTyp
                 // Associate the property to the data object.
                 dataObj.withCommitmentType(commitmentTypeProperty);
             }
-            return commitmentTypeProperty;
+            property = commitmentTypeProperty;
         }
-        return new AllDataObjsCommitmentTypeProperty(uri, desc);
+        else
+        {
+            property = new AllDataObjsCommitmentTypeProperty(uri, desc);
+        }
+        
+        if (propData.getQualifiers() != null)
+        {
+            for (Object q : propData.getQualifiers())
+            {
+                if (q instanceof String)
+                {
+                    property.withQualifier((String)q);
+                }
+                else if (q instanceof Element)
+                {
+                    property.withQualifier((Element)q);
+                }
+            }
+        }
+        
+        return property;
     }
 
     @Override

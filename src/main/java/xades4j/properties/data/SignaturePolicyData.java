@@ -27,22 +27,23 @@ public final class SignaturePolicyData implements PropertyDataObject
     private final ObjectIdentifier identifier;
     private final String digestAlgorithm;
     private final byte[] digestValue;
+    private final String locationUrl;
 
     public SignaturePolicyData(
             ObjectIdentifier identifier,
             String digestAlgorithm,
-            byte[] digestValue)
+            byte[] digestValue,
+            String locationUrl)
     {
         this.identifier = identifier;
         this.digestAlgorithm = digestAlgorithm;
         this.digestValue = digestValue;
+        this.locationUrl = locationUrl;
     }
 
     public SignaturePolicyData()
     {
-        this.identifier = null;
-        this.digestAlgorithm = null;
-        this.digestValue = null;
+        this(null, null, null, null);
     }
 
     public String getDigestAlgorithm()
@@ -58,5 +59,10 @@ public final class SignaturePolicyData implements PropertyDataObject
     public ObjectIdentifier getIdentifier()
     {
         return identifier;
+    }
+
+    public String getLocationUrl()
+    {
+        return locationUrl;
     }
 }

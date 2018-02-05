@@ -1275,17 +1275,17 @@ public class AgedTimeStampTest
                         test02_userCertValidationDataProviderXCreation,
                         test02_tsaCertValidationDataProviderXCreation);
         XadesHybridVerifierImpl verifier = (XadesHybridVerifierImpl) verProfile.newVerifier();
+        Date now = new Date(realNow.getTime() - ONE_HOUR_IN_MS * 14);
+        SignatureSpecificVerificationOptions options = new SignatureSpecificVerificationOptions().setDefaultVerificationDate(now);
 
         // extend T to C
-        XAdESVerificationResult res = verifier.verify(signatureNode, null, formExt,
-                        XAdESForm.C,
-                        new Date(realNow.getTime() - ONE_HOUR_IN_MS * 14));
+        XAdESVerificationResult res = verifier.verify(signatureNode, options, formExt,
+                XAdESForm.C);
 
         assertEquals(res.getSignatureForm(), XAdESForm.T);
 
         // extend C to X
-        res = verifier.verify(signatureNode, null, formExt, XAdESForm.X,
-                        new Date(realNow.getTime() - ONE_HOUR_IN_MS * 14));
+        res = verifier.verify(signatureNode, options, formExt, XAdESForm.X);
 
         assertEquals(res.getSignatureForm(), XAdESForm.C);
 
@@ -1409,13 +1409,14 @@ public class AgedTimeStampTest
         String outFileName = new String("document.aged.test03_X_sig2.xml");
         removeFile(outFileName);
 
+        Date now = new Date(realNow.getTime() - ONE_HOUR_IN_MS * 14);
         SurrogateTimeStampTokenProvider.setTSACert(test03_X_tsa2Cert);
         SurrogateTimeStampTokenProvider.setTimeAndSerial(
-                new Date(realNow.getTime() - ONE_HOUR_IN_MS * 14),
+                now,
                 new BigInteger("2"));
 
         System.out.println("SigAndRefsTimeStamp creation date is "
-                + new Date(realNow.getTime() - ONE_HOUR_IN_MS * 14));
+                + now);
 
         Document doc = getOutputDocument("document.aged.test03_T_sig1.xml");
         Element signatureNode = getSigElement(doc);
@@ -1433,17 +1434,16 @@ public class AgedTimeStampTest
                         test03_userCertValidationDataProviderXCreation,
                         test03_tsaCertValidationDataProviderXCreation);
         XadesHybridVerifierImpl verifier = (XadesHybridVerifierImpl) verProfile.newVerifier();
+        SignatureSpecificVerificationOptions options = new SignatureSpecificVerificationOptions().setDefaultVerificationDate(now);
 
         // extend T to C
-        XAdESVerificationResult res = verifier.verify(signatureNode, null, formExt,
-                        XAdESForm.C,
-                        new Date(realNow.getTime() - ONE_HOUR_IN_MS * 14));
+        XAdESVerificationResult res = verifier.verify(signatureNode, options, formExt,
+                XAdESForm.C);
 
         assertEquals(res.getSignatureForm(), XAdESForm.T);
 
         // extend C to X
-        res = verifier.verify(signatureNode, null, formExt, XAdESForm.X,
-                        new Date(realNow.getTime() - ONE_HOUR_IN_MS * 14));
+        res = verifier.verify(signatureNode, options, formExt, XAdESForm.X);
 
         assertEquals(res.getSignatureForm(), XAdESForm.C);
 
@@ -1467,10 +1467,12 @@ public class AgedTimeStampTest
                         test03_userCertValidationDataProviderXCreation,
                         test03_tsaCertValidationDataProviderACreation);
         XadesHybridVerifierImpl verifier = (XadesHybridVerifierImpl) verProfile.newVerifier();
+        Date now = new Date(realNow.getTime() - 10 * ONE_HOUR_IN_MS);
+        SignatureSpecificVerificationOptions options = new SignatureSpecificVerificationOptions().setDefaultVerificationDate(now);
 
         // extend X to X-L
-        XAdESVerificationResult res = verifier.verify(signatureNode, null, formExt,
-                XAdESForm.X_L, new Date(realNow.getTime() - 10 * ONE_HOUR_IN_MS));
+        XAdESVerificationResult res = verifier.verify(signatureNode, options, formExt,
+                XAdESForm.X_L);
 
         assertEquals(res.getSignatureForm(), XAdESForm.X);
 
@@ -1485,13 +1487,14 @@ public class AgedTimeStampTest
         String outFileName = new String("document.aged.test03_A_sig4.xml");
         removeFile(outFileName);
 
+        Date now = new Date(realNow.getTime() - ONE_HOUR_IN_MS * 10);
         SurrogateTimeStampTokenProvider.setTSACert(test03_A_tsa3Cert);
         SurrogateTimeStampTokenProvider.setTimeAndSerial(
-                new Date(realNow.getTime() - ONE_HOUR_IN_MS * 10),
+                now,
                 new BigInteger("2"));
 
         System.out.println("ArchiveTimeStamp creation date is "
-                + new Date(realNow.getTime() - ONE_HOUR_IN_MS * 10));
+                + now);
 
         Document doc = getOutputDocument("document.aged.test03_X_sig3.xml");
         Element signatureNode = getSigElement(doc);
@@ -1509,11 +1512,11 @@ public class AgedTimeStampTest
                         test03_userCertValidationDataProviderXCreation,
                         test03_tsaCertValidationDataProviderAnow);
         XadesHybridVerifierImpl verifier = (XadesHybridVerifierImpl) verProfile.newVerifier();
+        SignatureSpecificVerificationOptions options = new SignatureSpecificVerificationOptions().setDefaultVerificationDate(new Date(realNow.getTime() - ONE_HOUR_IN_MS * 14));
 
         // extend X-L to A
-        XAdESVerificationResult res = verifier.verify(signatureNode, null, formExt,
-                        XAdESForm.A,
-                        new Date(realNow.getTime() - ONE_HOUR_IN_MS * 14));
+        XAdESVerificationResult res = verifier.verify(signatureNode, options, formExt,
+                XAdESForm.A);
 
         assertEquals(res.getSignatureForm(), XAdESForm.X_L);
 
@@ -1778,11 +1781,11 @@ public class AgedTimeStampTest
                         tsaValidationDataProvider);
 
         XadesHybridVerifierImpl verifier = (XadesHybridVerifierImpl) verProfile.newVerifier();
+        SignatureSpecificVerificationOptions options = new SignatureSpecificVerificationOptions().setDefaultVerificationDate(now);
 
         // add second T time stamp
-        XAdESVerificationResult res = verifier.verify(signatureNode, null, formExt,
-                        XAdESForm.T,
-                        now);
+        XAdESVerificationResult res = verifier.verify(signatureNode, options, formExt,
+                XAdESForm.T);
 
         assertEquals(res.getSignatureForm(), XAdESForm.T);
 
@@ -1847,10 +1850,10 @@ public class AgedTimeStampTest
                         tsaValidationDataProvider);
 
         XadesHybridVerifierImpl verifier = (XadesHybridVerifierImpl) verProfile.newVerifier();
+        SignatureSpecificVerificationOptions options = new SignatureSpecificVerificationOptions().setDefaultVerificationDate(now);
 
-        XAdESVerificationResult res = verifier.verify(signatureNode, null, formExt,
-                XAdESForm.C,
-                now);
+        XAdESVerificationResult res = verifier.verify(signatureNode, options, formExt,
+                XAdESForm.C);
 
         assertEquals(res.getSignatureForm(), XAdESForm.T);
 
@@ -1925,10 +1928,10 @@ public class AgedTimeStampTest
                         tsaValidationDataProvider);
 
         XadesHybridVerifierImpl verifier = (XadesHybridVerifierImpl) verProfile.newVerifier();
+        SignatureSpecificVerificationOptions options = new SignatureSpecificVerificationOptions().setDefaultVerificationDate(now);
 
-        XAdESVerificationResult res = verifier.verify(signatureNode, null, formExt,
-                XAdESForm.X,
-                now);
+        XAdESVerificationResult res = verifier.verify(signatureNode, options, formExt,
+                XAdESForm.X);
 
         assertEquals(res.getSignatureForm(), XAdESForm.C);
 
@@ -2003,10 +2006,10 @@ public class AgedTimeStampTest
                         tsaValidationDataProvider);
 
         XadesHybridVerifierImpl verifier = (XadesHybridVerifierImpl) verProfile.newVerifier();
+        SignatureSpecificVerificationOptions options = new SignatureSpecificVerificationOptions().setDefaultVerificationDate(now);
 
-        XAdESVerificationResult res = verifier.verify(signatureNode, null, formExt,
-                XAdESForm.X,
-                now);
+        XAdESVerificationResult res = verifier.verify(signatureNode, options, formExt,
+                XAdESForm.X);
 
         assertEquals(res.getSignatureForm(), XAdESForm.X);
 
@@ -2082,10 +2085,10 @@ public class AgedTimeStampTest
                         tsaValidationDataProvider);
 
         XadesHybridVerifierImpl verifier = (XadesHybridVerifierImpl) verProfile.newVerifier();
+        SignatureSpecificVerificationOptions options = new SignatureSpecificVerificationOptions().setDefaultVerificationDate(now);
 
-        XAdESVerificationResult res = verifier.verify(signatureNode, null, formExt,
-                XAdESForm.X_L,
-                now);
+        XAdESVerificationResult res = verifier.verify(signatureNode, options, formExt,
+                XAdESForm.X_L);
 
         assertEquals(res.getSignatureForm(), XAdESForm.X);
 
@@ -2161,10 +2164,10 @@ public class AgedTimeStampTest
                         tsaValidationDataProvider);
 
         XadesHybridVerifierImpl verifier = (XadesHybridVerifierImpl) verProfile.newVerifier();
+        SignatureSpecificVerificationOptions options = new SignatureSpecificVerificationOptions().setDefaultVerificationDate(now);
 
-        XAdESVerificationResult res = verifier.verify(signatureNode, null, formExt,
-                XAdESForm.A,
-                now);
+        XAdESVerificationResult res = verifier.verify(signatureNode, options, formExt,
+                XAdESForm.A);
 
         assertEquals(res.getSignatureForm(), XAdESForm.X_L);
 
@@ -2242,10 +2245,10 @@ public class AgedTimeStampTest
                         tsaValidationDataProvider);
 
         XadesHybridVerifierImpl verifier = (XadesHybridVerifierImpl) verProfile.newVerifier();
+        SignatureSpecificVerificationOptions options = new SignatureSpecificVerificationOptions().setDefaultVerificationDate(now);
 
-        XAdESVerificationResult res = verifier.verify(signatureNode, null, formExt,
-                XAdESForm.A,
-                now);
+        XAdESVerificationResult res = verifier.verify(signatureNode, options, formExt,
+                XAdESForm.A);
 
         assertEquals(XAdESForm.A, res.getSignatureForm());
 
@@ -2321,10 +2324,10 @@ public class AgedTimeStampTest
                         tsaValidationDataProvider);
 
         XadesHybridVerifierImpl verifier = (XadesHybridVerifierImpl) verProfile.newVerifier();
+        SignatureSpecificVerificationOptions options = new SignatureSpecificVerificationOptions().setDefaultVerificationDate(now);
 
-        XAdESVerificationResult res = verifier.verify(signatureNode, null, formExt,
-                XAdESForm.A_VD,
-                now);
+        XAdESVerificationResult res = verifier.verify(signatureNode, options, formExt,
+                XAdESForm.A_VD);
 
         assertEquals(res.getSignatureForm(), XAdESForm.A);
 
@@ -2393,10 +2396,10 @@ public class AgedTimeStampTest
                         tsaValidationDataProvider);
 
         XadesHybridVerifierImpl verifier = (XadesHybridVerifierImpl) verProfile.newVerifier();
+        SignatureSpecificVerificationOptions options = new SignatureSpecificVerificationOptions().setDefaultVerificationDate(now);
 
-        XAdESVerificationResult res = verifier.verify(signatureNode, null, formExt,
-                XAdESForm.A,
-                now);
+        XAdESVerificationResult res = verifier.verify(signatureNode, options, formExt,
+                XAdESForm.A);
 
         assertEquals(res.getSignatureForm(), XAdESForm.A);
 
@@ -2465,10 +2468,10 @@ public class AgedTimeStampTest
                         tsaValidationDataProvider);
 
         XadesHybridVerifierImpl verifier = (XadesHybridVerifierImpl) verProfile.newVerifier();
+        SignatureSpecificVerificationOptions options = new SignatureSpecificVerificationOptions().setDefaultVerificationDate(now);
 
-        XAdESVerificationResult res = verifier.verify(signatureNode, null, formExt,
-                XAdESForm.A,
-                now);
+        XAdESVerificationResult res = verifier.verify(signatureNode, options, formExt,
+                XAdESForm.A);
 
         assertEquals(res.getSignatureForm(), XAdESForm.A);
 
@@ -2538,10 +2541,10 @@ public class AgedTimeStampTest
                         tsaValidationDataProvider);
 
         XadesHybridVerifierImpl verifier = (XadesHybridVerifierImpl) verProfile.newVerifier();
+        SignatureSpecificVerificationOptions options = new SignatureSpecificVerificationOptions().setDefaultVerificationDate(now);
 
-        XAdESVerificationResult res = verifier.verify(signatureNode, null, formExt,
-                XAdESForm.A_VD,
-                now);
+        XAdESVerificationResult res = verifier.verify(signatureNode, options, formExt,
+                XAdESForm.A_VD);
 
         assertEquals(res.getSignatureForm(), XAdESForm.A);
 
@@ -2610,10 +2613,10 @@ public class AgedTimeStampTest
                         tsaValidationDataProvider);
 
         XadesHybridVerifierImpl verifier = (XadesHybridVerifierImpl) verProfile.newVerifier();
+        SignatureSpecificVerificationOptions options = new SignatureSpecificVerificationOptions().setDefaultVerificationDate(now);
 
-        XAdESVerificationResult res = verifier.verify(signatureNode, null, formExt,
-                XAdESForm.A,
-                now);
+        XAdESVerificationResult res = verifier.verify(signatureNode, options, formExt,
+                XAdESForm.A);
 
         assertEquals(res.getSignatureForm(), XAdESForm.A);
 
@@ -2690,10 +2693,10 @@ public class AgedTimeStampTest
                         tsaValidationDataProvider);
 
         XadesHybridVerifierImpl verifier = (XadesHybridVerifierImpl) verProfile.newVerifier();
+        SignatureSpecificVerificationOptions options = new SignatureSpecificVerificationOptions().setDefaultVerificationDate(now);
 
-        XAdESVerificationResult res = verifier.verify(signatureNode, null, formExt,
-                XAdESForm.A,
-                now);
+        XAdESVerificationResult res = verifier.verify(signatureNode, options, formExt,
+                XAdESForm.A);
 
         assertEquals(res.getSignatureForm(), XAdESForm.A);
 
@@ -2773,10 +2776,10 @@ public class AgedTimeStampTest
                         tsaValidationDataProvider);
 
         XadesHybridVerifierImpl verifier = (XadesHybridVerifierImpl) verProfile.newVerifier();
+        SignatureSpecificVerificationOptions options = new SignatureSpecificVerificationOptions().setDefaultVerificationDate(now);
 
-        XAdESVerificationResult res = verifier.verify(signatureNode, null, formExt,
-                XAdESForm.A_VD,
-                now);
+        XAdESVerificationResult res = verifier.verify(signatureNode, options, formExt,
+                XAdESForm.A_VD);
 
         assertEquals(res.getSignatureForm(), XAdESForm.A);
 

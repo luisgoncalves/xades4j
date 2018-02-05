@@ -16,18 +16,19 @@
  */
 package xades4j.verification;
 
+import java.io.File;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+
 import java.io.FileInputStream;
 import java.io.InputStream;
-import org.apache.xml.security.utils.resolver.ResourceResolver;
-import static org.junit.Assert.*;
-import static org.junit.Assume.assumeTrue;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import org.junit.Before;
-import org.junit.Ignore;
 import org.junit.Test;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.NodeList;
-import xades4j.production.TestResolverSpi;
 import xades4j.production.XadesFormatExtenderProfile;
 import xades4j.production.XadesSignatureFormatExtender;
 import xades4j.properties.ArchiveTimeStampProperty;
@@ -37,6 +38,7 @@ import xades4j.properties.CertificateValuesProperty;
 import xades4j.properties.QualifyingProperty;
 import xades4j.properties.RevocationValuesProperty;
 import xades4j.properties.SigAndRefsTimeStampProperty;
+import xades4j.providers.CannotBuildCertificationPathException;
 import static org.junit.Assume.assumeTrue;
 
 /**
@@ -67,6 +69,22 @@ public class XadesVerifierImplTest extends VerifierTestBase
         assertEquals(XAdESForm.BES, f);
     }
 
+    /**
+     * Try to verify a test xades BES (no timestamp) in year 2041, expect we
+     * can't build the certificate path because certificates are expired.
+     */
+    @Test(expected = CannotBuildCertificationPathException.class)
+    public void testVerifyBESWithVerificationDate() throws Exception
+    {
+        System.out.println("testVerifyBESWithVerificationDate");
+        String sigFilename = "document.signed.bes.xml";
+        Element signatureNode = getSigElement(getDocument(sigFilename));
+        XadesVerificationProfile p = new XadesVerificationProfile(VerifierTestBase.validationProviderMySigs, VerifierTestBase.tsaValidationProviderMySigs);
+        Date verificationDate = new SimpleDateFormat("YYYY").parse("2041");
+        p.newVerifier().verify(signatureNode,
+                new SignatureSpecificVerificationOptions().setDefaultVerificationDate(verificationDate));
+    }
+
     @Test(expected = InvalidSignatureException.class)
     public void testVerifyWithCustomRawVerifier() throws Exception
     {
@@ -89,21 +107,25 @@ public class XadesVerifierImplTest extends VerifierTestBase
     public void testVerifyDetachedBES() throws Exception
     {
         System.out.println("verifyDetachedBES");
-
-        Document doc = getDocument("detached.bes.xml");
-        Element signatureNode = getSigElement(doc);
-
-        SignatureSpecificVerificationOptions options = new SignatureSpecificVerificationOptions().useResourceResolver(new ResourceResolver(new TestResolverSpi()));
-
-        XAdESVerificationResult res = verificationProfile.newVerifier().verify(signatureNode, options);
-        assertEquals(XAdESForm.BES, res.getSignatureForm());
+        XAdESForm f = verifySignature(
+                "detached.bes.xml",
+                new SignatureSpecificVerificationOptions().useBaseUri(new File("src/test/xml/").toURI().toString()));
+        assertEquals(XAdESForm.BES, f);
     }
-    
+
     @Test
     public void testVerifyBESCounterSig() throws Exception
     {
         System.out.println("verifyBESCounterSig");
         XAdESForm f = verifySignature("document.signed.bes.cs.xml");
+        assertEquals(XAdESForm.BES, f);
+    }
+    
+    @Test
+    public void testVerifyBESCounterSigCounterSig() throws Exception
+    {
+        System.out.println("verifyBESCounterSigCounterSig");
+        XAdESForm f = verifySignature("document.signed.bes.cs.cs.xml");
         assertEquals(XAdESForm.BES, f);
     }
 
@@ -154,11 +176,20 @@ public class XadesVerifierImplTest extends VerifierTestBase
     }
 
     @Test
-    public void testVerifyEPES() throws Exception
+    public void testVerifyEPES1() throws Exception
     {
-        System.out.println("verifyEPES");
+        System.out.println("verifyEPES 1");
         verificationProfile.withPolicyDocumentProvider(VerifierTestBase.policyDocumentFinder);
-        XAdESForm f = verifySignature("document.signed.epes.xml", verificationProfile);
+        XAdESForm f = verifySignature("document.signed.epes_1.xml", verificationProfile);
+        assertEquals(XAdESForm.EPES, f);
+    }
+    
+    @Test
+    public void testVerifyEPES2() throws Exception
+    {
+        System.out.println("verifyEPES 2");
+        verificationProfile.withPolicyDocumentProvider(VerifierTestBase.policyDocumentFinder);
+        XAdESForm f = verifySignature("document.signed.epes_2.xml", verificationProfile);
         assertEquals(XAdESForm.EPES, f);
     }
 
@@ -170,14 +201,8 @@ public class XadesVerifierImplTest extends VerifierTestBase
         assertEquals(XAdESForm.T, f);
     }
 
-    /**
-     * XXX fails because we do not have a signed document with valid ptcc certificate
-     *
-     * @throws Exception
-     */
     @Test
-    @Ignore
-    public void testVerifyTPTCC() throws Exception    {
+    public void testVerifyTPTCC() throws Exception {
         System.out.println("verifyTPtCC");
         assumeTrue(onWindowsPlatform() && null != validationProviderPtCc);
 
@@ -209,7 +234,7 @@ public class XadesVerifierImplTest extends VerifierTestBase
         InputStream is = new FileInputStream("license.txt");
         SignatureSpecificVerificationOptions options = new SignatureSpecificVerificationOptions().useDataForAnonymousReference(is);
         XAdESVerificationResult res = verifier.verify(signatureNode, options);
-        
+
         // The caller must close the stream.
         is.close();
 

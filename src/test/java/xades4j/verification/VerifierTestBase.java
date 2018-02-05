@@ -109,20 +109,29 @@ public class VerifierTestBase extends SignatureServicesTestBase
         return verifySignature(sigFileName, new XadesVerificationProfile(VerifierTestBase.validationProviderMySigs,
                 VerifierTestBase.tsaValidationProviderMySigs));
     }
-
+    
     protected static XAdESForm verifySignature(
             String sigFileName,
             XadesVerificationProfile p) throws Exception
     {
-        Element signatureNode = getSigElement(getDocument(sigFileName));
-        return verifySignature(signatureNode, p);
+        return verifySignature(sigFileName, p, null);
     }
-
+    
     protected static XAdESForm verifySignature(
-            Element sigElem,
-            XadesVerificationProfile p) throws Exception
+            String sigFileName,
+            SignatureSpecificVerificationOptions options) throws Exception
     {
-        XAdESVerificationResult res = p.newVerifier().verify(sigElem, null);
+        return verifySignature(sigFileName, new XadesVerificationProfile(VerifierTestBase.validationProviderMySigs,
+                VerifierTestBase.tsaValidationProviderMySigs), options);
+    }
+    
+    private static XAdESForm verifySignature(
+            String sigFileName,
+            XadesVerificationProfile p,
+            SignatureSpecificVerificationOptions options) throws Exception
+    {
+        Element signatureNode = getSigElement(getDocument(sigFileName));
+        XAdESVerificationResult res = p.newVerifier().verify(signatureNode, options);
         return res.getSignatureForm();
     }
 

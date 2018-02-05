@@ -1,6 +1,6 @@
 /*
  * XAdES4j - A Java library for generation and verification of XAdES signatures.
- * Copyright (C) 2010 Luis Goncalves.
+ * Copyright (C) 2017 Luis Goncalves.
  *
  * XAdES4j is free software; you can redistribute it and/or modify it under
  * the terms of the GNU Lesser General Public License as published by the Free
@@ -21,24 +21,23 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import org.apache.xml.security.algorithms.MessageDigestAlgorithm;
+import static org.junit.Assert.assertNotNull;
 import org.junit.Test;
-import static org.junit.Assert.*;
 import xades4j.providers.TimeStampTokenProvider.TimeStampTokenRes;
 
-/**
- *
- * @author Luís
- */
-public class DefaultTimeStampTokenProviderTest
+public class HttpTimeStampTokenProviderTest
 {
     @Test
     public void testGetTimeStampToken() throws Exception
     {
         System.out.println("getTimeStampToken");
+
         byte[] tsDigestInput = "TestDigestInput".getBytes();
         String digestAlgUri = MessageDigestAlgorithm.ALGO_ID_DIGEST_SHA1;
 
-        DefaultTimeStampTokenProvider instance = new DefaultTimeStampTokenProvider(new DefaultMessageDigestProvider());
+        HttpTimeStampTokenProvider instance = new HttpTimeStampTokenProvider(
+                new DefaultMessageDigestProvider(),
+                new TSAHttpData("http://tss.accv.es:8318/tsa"));
 
         TimeStampTokenRes result = instance.getTimeStampToken(tsDigestInput, digestAlgUri);
 
@@ -46,7 +45,6 @@ public class DefaultTimeStampTokenProviderTest
         assertNotNull(result.encodedTimeStampToken);
         //updateTestToken(result.encodedTimeStampToken);
         assertNotNull(result.timeStampTime);
-        System.out.println(result.timeStampTime);
     }
 
     private void updateTestToken(byte[] encodedTimeStampToken) throws FileNotFoundException, IOException {

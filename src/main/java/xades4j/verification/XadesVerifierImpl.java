@@ -77,6 +77,7 @@ class XadesVerifierImpl implements XadesVerifier
     private final QualifyingPropertiesUnmarshaller qualifPropsUnmarshaller;
     private final Set<RawSignatureVerifier> rawSigVerifiers;
     private final Set<CustomSignatureVerifier> customSigVerifiers;
+    private boolean secureValidation;
 
     @Inject
     protected XadesVerifierImpl(
@@ -97,11 +98,17 @@ class XadesVerifierImpl implements XadesVerifier
         this.qualifPropsUnmarshaller = qualifPropsUnmarshaller;
         this.rawSigVerifiers = rawSigVerifiers;
         this.customSigVerifiers = customSigVerifiers;
+        this.secureValidation = false;
     }
 
     void setAcceptUnknownProperties(boolean accept)
     {
         this.qualifPropsUnmarshaller.setAcceptUnknownProperties(accept);
+    }
+
+    void setSecureValidation(boolean secureValidation)
+    {
+        this.secureValidation = secureValidation;
     }
 
     @Override
@@ -114,7 +121,7 @@ class XadesVerifierImpl implements XadesVerifier
 
         if (null == verificationOptions)
         {
-            verificationOptions = SignatureSpecificVerificationOptions.empty;
+            verificationOptions = SignatureSpecificVerificationOptions.empty();
         }
 
         /* Unmarshal the signature */
@@ -122,7 +129,7 @@ class XadesVerifierImpl implements XadesVerifier
         XMLSignature signature;
         try
         {
-            signature = new XMLSignature(signatureElem, verificationOptions.getBaseUri());
+            signature = new XMLSignature(signatureElem, verificationOptions.getBaseUri(), this.secureValidation);
         } catch (XMLSecurityException ex)
         {
             throw new UnmarshalException("Bad XML signature", ex);
@@ -137,7 +144,7 @@ class XadesVerifierImpl implements XadesVerifier
         ReferencesRes referencesRes = SignatureUtils.processReferences(signature);
 
         /* Apply early verifiers */
-        
+
         RawSignatureVerifierContext rawCtx = new RawSignatureVerifierContext(signature);
         for (RawSignatureVerifier rawSignatureVerifier : this.rawSigVerifiers)
         {
@@ -182,7 +189,7 @@ class XadesVerifierImpl implements XadesVerifier
         /* Certification path */
 
         KeyInfoRes keyInfoRes = SignatureUtils.processKeyInfo(signature.getKeyInfo());
-        Date validationDate = getValidationDate(qualifPropsData, signature);
+        Date validationDate = getValidationDate(qualifPropsData, signature, verificationOptions);
         ValidationData certValidationRes = this.certificateValidator.validate(
                 keyInfoRes.certSelector,
                 validationDate,
@@ -232,18 +239,18 @@ class XadesVerifierImpl implements XadesVerifier
     }
 
     /*************************************************************************************/
-    /**/
 
     private Date getValidationDate(
             Collection<PropertyDataObject> qualifPropsData,
-            XMLSignature signature) throws XAdES4jException
+            XMLSignature signature,
+            SignatureSpecificVerificationOptions verificationOptions) throws XAdES4jException
     {
         List sigTsData = CollectionUtils.filterByType(qualifPropsData, SignatureTimeStampData.class);
 
         // If no signature time-stamp is present, use the current date.
         if (sigTsData.isEmpty())
         {
-            return new Date();
+            return verificationOptions.getDefaultVerificationDate();
         }
 
         // TODO support multiple SignatureTimeStamps (section 7.3 last paragraph of Standard v.1.4.2)

@@ -1,0 +1,5 @@
+language: java
+group: deprecated-2017Q3
+sudo: true
+jdk:
+  - oraclejdk8
