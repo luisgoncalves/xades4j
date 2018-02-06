@@ -126,7 +126,7 @@ public class CertPathBuilderTest
     {
         System.out.println("test1");
 
-        CertPathBuilder builder = CertPathBuilder.getInstance("PKIX", "BC");
+        CertPathBuilder builder = CertPathBuilder.getInstance("PKIX"/*, "BC"*/);
 
         X509CertSelector userCertSelector = new X509CertSelector();
         userCertSelector.setCertificate(userCert.getCertificate());
