@@ -18,21 +18,27 @@ package xades4j.properties;
 
 import java.util.Date;
 
+import xades4j.providers.ValidationData;
+
 /**
  * The {@code xades141:ArchiveTimeStamp} unsigned signature property. Used for the
  * XAdES-A form.
  * @author Luís
  */
 public final class ArchiveTimeStampProperty extends UnsignedSignatureProperty
+    implements BaseXAdESTimeStampProperty
 {
-    public static final String PROP_NAME = "xadesv141:ArchiveTimeStamp";
+    // it's in "xades141" namespace though!
+    public static final String PROP_NAME = "ArchiveTimeStamp";
     /**/
     private Date time;
+    private ValidationData validationData;
 
     /**
      * Gets the time-stamp time after signature production or verification.
      * @return the time or {@code null} if the property wasn't part of a signature production
      */
+    @Override
     public Date getTime()
     {
         return time;
@@ -43,6 +49,7 @@ public final class ArchiveTimeStampProperty extends UnsignedSignatureProperty
      * the time-stamp can be accessed afterwards.
      * @param time the time
      */
+    @Override
     public void setTime(Date time)
     {
         this.time = time;
@@ -51,6 +58,18 @@ public final class ArchiveTimeStampProperty extends UnsignedSignatureProperty
     @Override
     public String getName()
     {
-        throw new UnsupportedOperationException("Not supported yet.");
+        return PROP_NAME;
+    }
+
+    @Override
+    public ValidationData getValidationData()
+    {
+        return validationData;
+    }
+
+    @Override
+    public void setValidationData(ValidationData validationData)
+    {
+        this.validationData = validationData;
     }
 }

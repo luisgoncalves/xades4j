@@ -25,6 +25,7 @@ import xades4j.properties.data.PropertyDataObject;
 import xades4j.providers.CertificateValidationProvider;
 import xades4j.providers.MessageDigestEngineProvider;
 import xades4j.providers.SignaturePolicyDocumentProvider;
+import xades4j.providers.TSACertificateValidationProvider;
 import xades4j.providers.TimeStampVerificationProvider;
 import xades4j.utils.UtilsBindingsModule;
 import xades4j.xml.marshalling.algorithms.AlgorithmParametersBindingsModule;
@@ -39,7 +40,8 @@ import xades4j.xml.unmarshalling.UnmarshallingBindingsModule;
  * verify signatures using the configured components.
  * <p>
  * The minimum configuration is a {@link xades4j.providers.CertificateValidationProvider}
- * because the validation data (trust-anchors, CRLs, etc) has to be properly selected. All the other components
+ * because the validation data (trust-anchors, CRLs, etc) has to be properly selected.
+ * All the other components
  * have default implementations that are used if no other actions are taken. However,
  * all of them can be replaced through the corresponding methods, either by an instance
  * or a class. When a class is used it may have dependencies on other components,
@@ -72,9 +74,14 @@ public final class XadesVerificationProfile
         this.profileCore = new XadesProfileCore();
         this.acceptUnknownProperties = false;
         this.secureValidation = false;
-        withBinding(XadesVerifier.class, XadesVerifierImpl.class);
+        withBinding(XadesVerifier.class, XadesHybridVerifierImpl.class);
     }
 
+    /**
+     * Certificate validation profile to be used only with signatures lacking time stamps
+     *
+     * @param certificateValidationProvider
+     */
     public XadesVerificationProfile(
             CertificateValidationProvider certificateValidationProvider)
     {
@@ -82,11 +89,38 @@ public final class XadesVerificationProfile
         withBinding(CertificateValidationProvider.class, certificateValidationProvider);
     }
 
+    /**
+     * Certificate validation profile that can be used to validate both signature and
+     * time stamps in XML Advanced Electronic Signatures.
+     *
+     * @param certificateValidationProvider validation data and provider to be used for
+     * validation Signature only
+     * @param tsaCertificateValidationProvider validation data and provider to be used for
+     * validation of time stamps in signature
+     */
+    public XadesVerificationProfile(
+            CertificateValidationProvider certificateValidationProvider,
+            TSACertificateValidationProvider tsaCertificateValidationProvider)
+    {
+        this();
+        withBinding(CertificateValidationProvider.class, certificateValidationProvider);
+        withBinding(TSACertificateValidationProvider.class, tsaCertificateValidationProvider);
+    }
+
     public XadesVerificationProfile(
             Class<? extends CertificateValidationProvider> certificateValidationProviderClass)
     {
         this();
         withBinding(CertificateValidationProvider.class, certificateValidationProviderClass);
+    }
+
+    public XadesVerificationProfile(
+            Class<? extends CertificateValidationProvider> certificateValidationProviderClass,
+            Class<? extends TSACertificateValidationProvider> tsaCertificateValProvClass)
+    {
+        this();
+        withBinding(CertificateValidationProvider.class, certificateValidationProviderClass);
+        withBinding(TSACertificateValidationProvider.class, tsaCertificateValProvClass);
     }
 
     /**
@@ -142,10 +176,11 @@ public final class XadesVerificationProfile
      * not be affected. Other verifiers can be created, accumulating the profile changes.
      * @return a {@code XadesVerifier} accordingly to this profile.
      * @throws XadesProfileResolutionException if the dependencies of the signer (direct and indirect) cannot be resolved
+     * @see XadesVerifier
      */
     public final XadesVerifier newVerifier() throws XadesProfileResolutionException
     {
-        XadesVerifierImpl v = profileCore.getInstance(XadesVerifierImpl.class, overridableModules, sealedModules);
+        XadesHybridVerifierImpl v = profileCore.getInstance(XadesHybridVerifierImpl.class, overridableModules, sealedModules);
         v.setAcceptUnknownProperties(acceptUnknownProperties);
         v.setSecureValidation(secureValidation);
         return v;
@@ -307,7 +342,7 @@ public final class XadesVerificationProfile
     }
 
     public XadesVerificationProfile withElementVerifier(
-            QName elemName, Class<? extends QualifyingPropertyVerifier> vClass)
+            QName elemName, Class<? extends QualifyingPropertyVerifier<?>> vClass)
     {
         if (null == elemName || null == vClass)
             throw new NullPointerException();

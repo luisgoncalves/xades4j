@@ -16,10 +16,21 @@
  */
 package xades4j.properties.data;
 
+import java.util.Collection;
+
 /**
  *
  * @author Luís
  */
 public class RevocationValuesData extends BaseEncapsulatedPKIData
 {
+    public RevocationValuesData()
+    {
+        super();
+    }
+
+    public RevocationValuesData(Collection<byte[]> revocationData)
+    {
+        super(revocationData);
+    }
 }

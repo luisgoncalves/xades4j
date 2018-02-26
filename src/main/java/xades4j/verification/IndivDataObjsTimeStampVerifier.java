@@ -16,8 +16,11 @@
  */
 package xades4j.verification;
 
+import org.w3c.dom.Element;
+
 import com.google.inject.Inject;
 import xades4j.utils.CannotAddDataToDigestInputException;
+import xades4j.properties.BaseXAdESTimeStampProperty;
 import xades4j.properties.IndividualDataObjsTimeStampProperty;
 import xades4j.properties.QualifyingProperty;
 import xades4j.utils.TimeStampDigestInput;
@@ -41,8 +44,9 @@ class IndivDataObjsTimeStampVerifier extends TimeStampVerifierBase<IndividualDat
     }
 
     @Override
-    protected QualifyingProperty addPropSpecificTimeStampInputAndCreateProperty(
+    protected BaseXAdESTimeStampProperty addPropSpecificTimeStampInputAndCreateProperty(
             IndividualDataObjsTimeStampData propData,
+            Element location,
             TimeStampDigestInput digestInput,
             QualifyingPropertyVerificationContext ctx) throws CannotAddDataToDigestInputException, TimeStampVerificationException
     {
@@ -62,5 +66,12 @@ class IndivDataObjsTimeStampVerifier extends TimeStampVerifierBase<IndividualDat
             o.withDataObjectTimeStamp(prop);
         }
         return prop;
+    }
+
+    @Override
+    protected void updateContextAfterVerification(QualifyingProperty prop,
+            QualifyingPropertyVerificationContext ctx)
+    {
+        // noop
     }
 }

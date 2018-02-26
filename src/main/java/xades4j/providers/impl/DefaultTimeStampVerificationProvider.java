@@ -44,15 +44,17 @@ import org.bouncycastle.tsp.TimeStampToken;
 import org.bouncycastle.util.Selector;
 import xades4j.UnsupportedAlgorithmException;
 import xades4j.XAdES4jException;
-import xades4j.providers.CertificateValidationProvider;
 import xades4j.providers.MessageDigestEngineProvider;
+import xades4j.providers.TSACertificateValidationProvider;
 import xades4j.providers.TimeStampTokenDigestException;
 import xades4j.providers.TimeStampTokenSignatureException;
 import xades4j.providers.TimeStampTokenStructureException;
 import xades4j.providers.TimeStampTokenTSACertException;
 import xades4j.providers.TimeStampTokenVerificationException;
+import xades4j.providers.TimeStampVerificationData;
 import xades4j.providers.TimeStampVerificationProvider;
 import xades4j.providers.ValidationData;
+import xades4j.verification.QualifyingPropertyVerificationContext;
 
 /**
  * Default implementation of {@code TimeStampVerificationProvider}. It verifies
@@ -82,7 +84,7 @@ public class DefaultTimeStampVerificationProvider implements TimeStampVerificati
     {
         return digestOidToUriMappings.get(digestalgOid);
     }
-    private final CertificateValidationProvider certificateValidationProvider;
+    private final TSACertificateValidationProvider tsaCertificateValidationProvider;
     private final MessageDigestEngineProvider messageDigestProvider;
     private final JcaSimpleSignerInfoVerifierBuilder signerInfoVerifierBuilder;
     private final JcaX509CertificateConverter x509CertificateConverter;
@@ -90,10 +92,10 @@ public class DefaultTimeStampVerificationProvider implements TimeStampVerificati
 
     @Inject
     public DefaultTimeStampVerificationProvider(
-            CertificateValidationProvider certificateValidationProvider,
+            TSACertificateValidationProvider certificateValidationProvider,
             MessageDigestEngineProvider messageDigestProvider)
     {
-        this.certificateValidationProvider = certificateValidationProvider;
+        this.tsaCertificateValidationProvider = certificateValidationProvider;
         this.messageDigestProvider = messageDigestProvider;
 
         Provider bcProv = new BouncyCastleProvider();
@@ -103,7 +105,9 @@ public class DefaultTimeStampVerificationProvider implements TimeStampVerificati
     }
 
     @Override
-    public Date verifyToken(byte[] timeStampToken, byte[] tsDigestInput) throws TimeStampTokenVerificationException
+    public TimeStampVerificationData verifyToken(byte[] timeStampToken, byte[] tsDigestInput,
+                QualifyingPropertyVerificationContext ctx)
+                        throws TimeStampTokenVerificationException
     {
         TimeStampToken tsToken;
         try
@@ -121,6 +125,7 @@ public class DefaultTimeStampVerificationProvider implements TimeStampVerificati
         }
 
         X509Certificate tsaCert = null;
+        ValidationData vData = null;
         try
         {
             /* Validate the TSA certificate */
@@ -129,10 +134,19 @@ public class DefaultTimeStampVerificationProvider implements TimeStampVerificati
             {
                 certs.add(this.x509CertificateConverter.getCertificate((X509CertificateHolder) certHolder));
             }
+            if (ctx != null)
+            {
+                // add only certificates and CRLs that use currently secure algorithms
+                // and are signed by currently valid certificate authorities
+                tsaCertificateValidationProvider.addCertificates(
+                        ctx.getAttributeCertificates(), ctx.getCurrentTime());
+                tsaCertificateValidationProvider.addCRLs(
+                        ctx.getAttributeCRLs(), ctx.getCurrentTime());
+            }
 
-            ValidationData vData = this.certificateValidationProvider.validate(
+            vData = this.tsaCertificateValidationProvider.validate(
                     x509CertSelectorConverter.getCertSelector(tsToken.getSID()),
-                    tsToken.getTimeStampInfo().getGenTime(),
+                    (ctx == null) ? null : ctx.getCurrentTime(), // unit tests provision
                     certs);
 
             tsaCert = vData.getCerts().get(0);
@@ -176,7 +190,12 @@ public class DefaultTimeStampVerificationProvider implements TimeStampVerificati
             throw new TimeStampTokenVerificationException("The token's digest algorithm is not supported", ex);
         }
 
-        return tsTokenInfo.getGenTime();
+        // token verified successfully, remember the validation data used for its
+        // verification
+        if (ctx != null)
+            ctx.addAttributeValidationData(vData);
+
+        return new TimeStampVerificationData(vData, tsTokenInfo.getGenTime());
     }
     
     /** Selector selecting all certificates. */

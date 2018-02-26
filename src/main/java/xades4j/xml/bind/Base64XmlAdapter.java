@@ -23,7 +23,7 @@ public class Base64XmlAdapter
 
     @Override
     public String marshal(byte[] value) throws IOException {
-        return (xades4j.utils.Base64.encodeBytes(value, xades4j.utils.Base64.DO_BREAK_LINES));
+        return (xades4j.utils.Base64.encodeBytes(value/*, xades4j.utils.Base64.DO_BREAK_LINES*/));
     }
 
 }

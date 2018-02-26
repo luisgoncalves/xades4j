@@ -19,26 +19,27 @@ package xades4j.verification;
 import java.io.File;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
-import static org.junit.Assume.assumeTrue;
 
 import java.io.FileInputStream;
 import java.io.InputStream;
 import java.text.SimpleDateFormat;
 import java.util.Date;
-
 import org.junit.Before;
 import org.junit.Test;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.NodeList;
-
 import xades4j.production.XadesFormatExtenderProfile;
 import xades4j.production.XadesSignatureFormatExtender;
+import xades4j.properties.ArchiveTimeStampProperty;
+import xades4j.properties.AttrAuthoritiesCertValuesProperty;
+import xades4j.properties.AttributeRevocationValuesProperty;
 import xades4j.properties.CertificateValuesProperty;
 import xades4j.properties.QualifyingProperty;
 import xades4j.properties.RevocationValuesProperty;
 import xades4j.properties.SigAndRefsTimeStampProperty;
 import xades4j.providers.CannotBuildCertificationPathException;
+import static org.junit.Assume.assumeTrue;
 
 /**
  *
@@ -52,8 +53,12 @@ public class XadesVerifierImplTest extends VerifierTestBase
     @Before
     public void initialize()
     {
-        verificationProfile = new XadesVerificationProfile(VerifierTestBase.validationProviderMySigs);
-        nistVerificationProfile = new XadesVerificationProfile(VerifierTestBase.validationProviderNist);
+        verificationProfile = new XadesVerificationProfile(
+                                    VerifierTestBase.validationProviderMySigs,
+                                    VerifierTestBase.tsaValidationProviderMySigs);
+        nistVerificationProfile = new XadesVerificationProfile(
+                                    VerifierTestBase.validationProviderNist,
+                                    VerifierTestBase.tsaValidationProviderNist);
     }
 
     @Test
@@ -74,7 +79,7 @@ public class XadesVerifierImplTest extends VerifierTestBase
         System.out.println("testVerifyBESWithVerificationDate");
         String sigFilename = "document.signed.bes.xml";
         Element signatureNode = getSigElement(getDocument(sigFilename));
-        XadesVerificationProfile p = new XadesVerificationProfile(VerifierTestBase.validationProviderMySigs);
+        XadesVerificationProfile p = new XadesVerificationProfile(VerifierTestBase.validationProviderMySigs, VerifierTestBase.tsaValidationProviderMySigs);
         Date verificationDate = new SimpleDateFormat("YYYY").parse("2041");
         p.newVerifier().verify(signatureNode,
                 new SignatureSpecificVerificationOptions().setDefaultVerificationDate(verificationDate));
@@ -197,13 +202,13 @@ public class XadesVerifierImplTest extends VerifierTestBase
     }
 
     @Test
-    public void testVerifyTPTCC() throws Exception
-    {
+    public void testVerifyTPTCC() throws Exception {
         System.out.println("verifyTPtCC");
         assumeTrue(onWindowsPlatform() && null != validationProviderPtCc);
 
         XAdESForm f = verifySignature("document.signed.t.bes.ptcc.xml",
-                new XadesVerificationProfile(validationProviderPtCc));
+                new XadesVerificationProfile(validationProviderPtCc,
+                        tsaValidationProviderMySigs));
         assertEquals(XAdESForm.T, f);
     }
 
@@ -237,6 +242,24 @@ public class XadesVerifierImplTest extends VerifierTestBase
     }
 
     @Test
+    public void testVerifyCEnrichX() throws Exception
+    {
+        System.out.println("verifyCEnrichX");
+
+        Document doc = getDocument("document.signed.c.xml");
+        Element signatureNode = getSigElement(doc);
+
+        XadesSignatureFormatExtender formExt = new XadesFormatExtenderProfile().getFormatExtender();
+        XAdESVerificationResult res = nistVerificationProfile.newVerifier().verify(signatureNode, null, formExt, XAdESForm.X);
+
+        assertEquals(XAdESForm.C, res.getSignatureForm());
+        assertPropElementPresent(signatureNode, SigAndRefsTimeStampProperty.PROP_NAME);
+
+        outputDocument(doc, "document.verified.c.x.xml");
+
+    }
+
+    @Test
     public void testVerifyCEnrichXL() throws Exception
     {
         System.out.println("verifyCEnrichXL");
@@ -251,15 +274,98 @@ public class XadesVerifierImplTest extends VerifierTestBase
         assertPropElementPresent(signatureNode, SigAndRefsTimeStampProperty.PROP_NAME);
         assertPropElementPresent(signatureNode, CertificateValuesProperty.PROP_NAME);
         assertPropElementPresent(signatureNode, RevocationValuesProperty.PROP_NAME);
+        assertPropElementPresent(signatureNode, AttrAuthoritiesCertValuesProperty.PROP_NAME);
+        assertPropElementPresent(signatureNode, AttributeRevocationValuesProperty.PROP_NAME);
 
         outputDocument(doc, "document.verified.c.xl.xml");
     }
+
+    @Test
+    public void testVerifyX() throws Exception
+    {
+        System.out.println("verifyX");
+        XAdESForm f = verifySignature(
+                "document.verified.c.x.xml",
+                nistVerificationProfile);
+        assertEquals(XAdESForm.X, f);
+    }
+
+    @Test
+    public void testVerifyXL() throws Exception
+    {
+        System.out.println("verifyXL");
+        XAdESForm f = verifySignature(
+                "document.verified.c.xl.xml",
+                nistVerificationProfile);
+        assertEquals(XAdESForm.X_L, f);
+    }
+
+    @Test
+    public void testVerifyXLEnrichA() throws Exception
+    {
+        System.out.println("testVerifyXLEnrichA");
+
+        Document doc = getDocument("document.verified.c.xl.xml");
+        Element signatureNode = getSigElement(doc);
+
+        XadesSignatureFormatExtender formExt =
+                new XadesFormatExtenderProfile().getFormatExtender();
+        XAdESVerificationResult res = nistVerificationProfile.newVerifier().verify(
+                signatureNode, null, formExt, XAdESForm.A);
+
+        assertEquals(XAdESForm.X_L, res.getSignatureForm());
+        assertPropXAdES141ElementPresent(signatureNode, ArchiveTimeStampProperty.PROP_NAME);
+
+        outputDocument(doc, "document.verified.c.xl.a.xml");
+    }
+
+    @Test
+    public void testVerifyA() throws Exception
+    {
+        System.out.println("testVerifyA");
+        XAdESForm f = verifySignature(
+                "document.verified.c.xl.a.xml",
+                nistVerificationProfile);
+        assertEquals(XAdESForm.A, f);
+    }
+
+    @Test
+    public void testVerifyAEnrichAVD() throws Exception
+    {
+        System.out.println("testVerifyXLEnrichA");
+
+        Document doc = getDocument("document.verified.c.xl.a.xml");
+        Element signatureNode = getSigElement(doc);
+
+        XadesSignatureFormatExtender formExt =
+                new XadesFormatExtenderProfile().getFormatExtender();
+        XAdESVerificationResult res = nistVerificationProfile.newVerifier().verify(
+                signatureNode, null, formExt, XAdESForm.A_VD);
+
+        assertEquals(XAdESForm.A, res.getSignatureForm());
+        // TODO recent changes to verifier made the property generated only when needed,
+        // as all information that would be stored in it is already present in other
+        // properties, the property won't be created
+        //assertPropXAdES141ElementPresent(signatureNode, TimeStampValidationDataProperty.PROP_NAME);
+
+        outputDocument(doc, "document.verified.c.xl.avd.xml");
+    }
+
 
     private static void assertPropElementPresent(
             Element sigElem,
             String elemName)
     {
         NodeList props = sigElem.getElementsByTagNameNS(QualifyingProperty.XADES_XMLNS, elemName);
+        assertFalse(props.getLength() == 0);
+    }
+
+    private static void assertPropXAdES141ElementPresent(
+            Element sigElem,
+            String elemName)
+    {
+        NodeList props = sigElem.getElementsByTagNameNS(
+                QualifyingProperty.XADESV141_XMLNS, elemName);
         assertFalse(props.getLength() == 0);
     }
 }

@@ -17,14 +17,19 @@
 package xades4j.verification;
 
 import com.google.inject.Inject;
+
 import java.security.cert.X509Certificate;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
+
+import org.w3c.dom.Element;
+
 import xades4j.properties.CompleteCertificateRefsProperty;
 import xades4j.properties.QualifyingProperty;
 import xades4j.properties.data.CertRef;
 import xades4j.properties.data.CompleteCertificateRefsData;
+import xades4j.providers.CertificateValidationProvider;
 import xades4j.providers.MessageDigestEngineProvider;
 
 /**
@@ -37,7 +42,8 @@ class CompleteCertRefsVerifier implements QualifyingPropertyVerifier<CompleteCer
 
     @Inject
     public CompleteCertRefsVerifier(
-            MessageDigestEngineProvider messageDigestProvider)
+            MessageDigestEngineProvider messageDigestProvider,
+            CertificateValidationProvider certificateValidator)
     {
         this.messageDigestProvider = messageDigestProvider;
     }
@@ -69,5 +75,13 @@ class CompleteCertRefsVerifier implements QualifyingPropertyVerifier<CompleteCer
         }
 
         return new CompleteCertificateRefsProperty(Collections.unmodifiableList(caCerts));
+    }
+
+    @Override
+    public QualifyingProperty verify(CompleteCertificateRefsData propData,
+            Element elem, QualifyingPropertyVerificationContext ctx)
+            throws InvalidPropertyException
+    {
+        return verify(propData, ctx);
     }
 }

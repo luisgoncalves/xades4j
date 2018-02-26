@@ -16,6 +16,7 @@
  */
 package xades4j.providers;
 
+import java.security.cert.X509CRL;
 import java.security.cert.X509CertSelector;
 import java.security.cert.X509Certificate;
 import java.util.Collection;
@@ -46,4 +47,33 @@ public interface CertificateValidationProvider
             X509CertSelector certSelector,
             Date validationDate,
             Collection<X509Certificate> otherCerts) throws CertificateValidationException, UnexpectedJCAException;
+
+    /**
+     * adds CRLs to certificate stores of this validation provider, later to be used to
+     * validate certificates
+     * <p>
+     * CRLs are validated whatever they have been signed by a trusted CA using trustworthy
+     * algorithms at time {@code now}.
+     * </p>
+     * <p>
+     * invalid CRLs are ignored
+     * </p>
+     * @param crls set of CRLs to add
+     * @param now date at which the CRL has to be valid (isn't published after this date,
+     * CA that issued this CRL links to a valid trust anchor and used algorithms have
+     * been safe at this point in time)
+     */
+    void addCRLs(Collection<X509CRL> crls, Date now);
+
+    /**
+     * adds intermediate and end-entity certificates used for creating cert paths
+     * <p>
+     * Certificates are validated whatever they have been issued by a valid trust anchor
+     * at time {@code now} and using algorithms that have been safe at this point in time
+     * </p><p>invalid Certificates are ignored, certificates are <b>not</b> validated
+     * using CRLs or OCSP
+     * @param otherCerts set of certificates to add
+     * @param now time of validation for added certificates
+     */
+    void addCertificates(Collection<X509Certificate> otherCerts, Date now);
 }

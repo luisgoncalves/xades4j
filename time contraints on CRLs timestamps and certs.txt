@@ -1,0 +1,51 @@
+#
+# specific to XAdES-C, XAdES-X and forms that are based on them
+#
+
+# certificate should be valid before usage
+CompleteCertificateRefs.notBeforeDate < min(SignatureTimeStamp, SigAndRefsTimeStamp, ArchiveTimeStamp)
+# for signature to be valid certificate has to be used before its revocation
+min(SignatureTimeStamp, SigAndRefsTimeStamp, ArchiveTimeStamp) < CompleteCertificateRefs.revocationDate
+# for signature to be valid certificate has to be used before end of its validity
+min(SignatureTimeStamp, SigAndRefsTimeStamp, ArchiveTimeStamp) < CompleteCertificateRefs.notAfterDate
+# CRLs for signing certificate should be published after signing took place
+min(SignatureTimeStamp, SigAndRefsTimeStamp, ArchiveTimeStamp) + gracePeriod "should be" < CompleteRevocationRefs.thisUpdate
+# CRL has to be published before certificate validity end
+CompleteRevocationRefs.thisUpdate < CompleteCertificateRefs.notAfterDate
+# CRL must be valid for the time it was used
+min(SignatureTimeStamp, SigAndRefsTimeStamp, ArchiveTimeStamp) < CompleteRevocationRefs.nextUpdate
+# SignatureTimeStamp TSA certificate must be used before its validity end
+min(SigAndRefsTimeStamp, ArchiveTimeStamp) < AttributeCertificateRefs.notBeforeDate
+# SignatureTimeStamp TSA certificate must be used before its revocation
+min(SigAndRefsTimeStamp, ArchiveTimeStamp) < AttributeCertificateRefs.revocationDate
+# SignatureTimeStamp TSA must be used before its validity end
+AttributeCertificateRefs.notAfterDate < min(SigAndRefsTimeStamp, ArchiveTimeStamp)
+# CRLs for TSA cert should be published after SignatureTimeStamp creation took place
+min(SigAndRefsTimeStamp, ArchiveTimeStamp) + gracePeriod "should be " < AttributeRevocationRefs.thisUpdate
+# CRLs for TSA cert should be valid at the time the checking takes place
+min(SigAndRefsTimeStamp, ArchiveTimeStamp) < AttributeRevocationRefs.nextUpdate
+# signing certificate can be used after its validity starts
+CompleteCertificateRefs.notBeforeDate < SigAndRefsTimeStamp
+# signature CRLs have to be published before second time stamping
+CompleteRevocationRefs.thisUpdate < SigAndRefsTimeStamp
+
+#
+# specific to XAdES-X-L and XAdES-A
+#
+
+# signature certificate can be used only after its validity starts
+CertificateValues.notBeforeDate < ArchiveTimeStamp
+# signature CRLs must be created before archive time stamp
+RevocationValues.thisUpdate < ArchiveTimeStamp
+# SignatureTimeStamp and SigAndRefsTimeStamp TSA can be used only after their validity starts
+AttrAuthoritiesCertValues.notBeforeDate < ArchiveTimeStamp
+# SignatureTimeStamp or SigAndRefsTimeStamp TSA can be used only if they are still valid
+ArchiveTimeStamp < AttrAuthoritiesCertValues.notAfterDate
+# CRLs for Signature should be published after SignatureTimeStamp or SigAndRefsTimeStamp
+min(SignatureTimeStamp, SigAndRefsTimeStamp) + gracePeriod "should be" < RevocationValues.thisUpdate
+
+#
+# all forms (any property may be omitted)
+#
+# time stamps should be monotonic
+SignatureTimeStamp < SigAndRefsTimeStamp < ArchiveTimeStamp

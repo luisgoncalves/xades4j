@@ -28,6 +28,10 @@ import xades4j.properties.CounterSignatureProperty;
 import xades4j.properties.ObjectIdentifier;
 import xades4j.properties.QualifyingProperty;
 import xades4j.properties.data.AllDataObjsTimeStampData;
+import xades4j.properties.data.ArchiveTimeStampData;
+import xades4j.properties.data.AttrAuthoritiesCertValuesData;
+import xades4j.properties.data.AttributeRevocationValuesData;
+import xades4j.properties.data.CertificateValuesData;
 import xades4j.properties.data.CommitmentTypeData;
 import xades4j.properties.data.CompleteCertificateRefsData;
 import xades4j.properties.data.CompleteRevocationRefsData;
@@ -36,12 +40,15 @@ import xades4j.properties.data.DataObjectFormatData;
 import xades4j.properties.data.GenericDOMData;
 import xades4j.properties.data.IndividualDataObjsTimeStampData;
 import xades4j.properties.data.PropertyDataObject;
+import xades4j.properties.data.RevocationValuesData;
+import xades4j.properties.data.SigAndRefsTimeStampData;
 import xades4j.properties.data.SignaturePolicyData;
 import xades4j.properties.data.SignatureProdPlaceData;
 import xades4j.properties.data.SignatureTimeStampData;
 import xades4j.properties.data.SignerRoleData;
 import xades4j.properties.data.SigningCertificateData;
 import xades4j.properties.data.SigningTimeData;
+import xades4j.properties.data.TimeStampValidationDataData;
 import xades4j.providers.impl.DefaultMessageDigestProvider;
 import xades4j.providers.impl.DefaultTimeStampVerificationProvider;
 import xades4j.providers.MessageDigestEngineProvider;
@@ -85,7 +92,7 @@ class DefaultVerificationBindingsModule extends AbstractModule
 
         // QualifyingPropertiesVerifier is not configurable but the individual
         // verifiers may have dependencies.
-        bind(QualifyingPropertiesVerifier.class).to(QualifyingPropertiesVerifierImpl.class);
+        bind(QualifyingPropertiesVerifier.class).to(HybridQualifyingPropertiesVerifierImpl.class);
         bind(QualifyingPropertyVerifiersMapper.class).to(QualifyingPropertyVerifiersMapperImpl.class);
 
 //        customGlobalStructureVerifiers.add(new CustomPropertiesDataObjsStructureVerifier()
@@ -115,7 +122,14 @@ class DefaultVerificationBindingsModule extends AbstractModule
         bindBuiltInVerifier(SignatureTimeStampData.class, SignatureTimeStampVerifier.class);
         bindBuiltInVerifier(CompleteCertificateRefsData.class, CompleteCertRefsVerifier.class);
         bindBuiltInVerifier(CompleteRevocationRefsData.class, CompleteRevocRefsVerifier.class);
-        
+        bindBuiltInVerifier(SigAndRefsTimeStampData.class, SigAndRefsTimeStampVerifier.class);
+        bindBuiltInVerifier(CertificateValuesData.class, CertificateValuesVerifier.class);
+        bindBuiltInVerifier(AttrAuthoritiesCertValuesData.class, AttrAuthoritiesCertValuesVerifier.class);
+        bindBuiltInVerifier(RevocationValuesData.class, RevocationValuesVerifier.class);
+        bindBuiltInVerifier(AttributeRevocationValuesData.class, AttributeRevocationValuesVerifier.class);
+        bindBuiltInVerifier(ArchiveTimeStampData.class, ArchiveTimeStampVerifier.class);
+        bindBuiltInVerifier(TimeStampValidationDataData.class, TimeStampValidationDataVerifier.class);
+
         MapBinder<QName, QualifyingPropertyVerifier> unkownElemsBinder = MapBinder.newMapBinder(binder(), QName.class, QualifyingPropertyVerifier.class);
         unkownElemsBinder
                 .addBinding(new QName(QualifyingProperty.XADES_XMLNS, CounterSignatureProperty.PROP_NAME))

@@ -18,6 +18,8 @@ package xades4j.properties;
 
 import java.util.Date;
 
+import xades4j.providers.ValidationData;
+
 /**
  * Represents a time-stamp computed before the signature production, over the sequence
  * formed by ALL the {@code ds:Reference} elements within the {@code ds:SignedInfo}
@@ -31,9 +33,11 @@ import java.util.Date;
  * @author Luís
  */
 public final class AllDataObjsTimeStampProperty extends SignedDataObjectProperty
+    implements BaseXAdESTimeStampProperty
 {
     public static final String PROP_NAME = "AllDataObjectsTimeStamp";
     private Date time;
+    private ValidationData validationData;
 
     public AllDataObjsTimeStampProperty()
     {
@@ -63,5 +67,17 @@ public final class AllDataObjsTimeStampProperty extends SignedDataObjectProperty
     public void setTime(Date time)
     {
         this.time = time;
+    }
+
+    @Override
+    public ValidationData getValidationData()
+    {
+        return validationData;
+    }
+
+    @Override
+    public void setValidationData(ValidationData validationData)
+    {
+        this.validationData = validationData;
     }
 }

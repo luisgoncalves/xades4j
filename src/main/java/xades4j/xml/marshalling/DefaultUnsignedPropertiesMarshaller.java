@@ -21,12 +21,15 @@ import xades4j.properties.data.SigAndDataObjsPropertiesData;
 import org.w3c.dom.Node;
 import xades4j.properties.QualifyingProperty;
 import xades4j.properties.data.ArchiveTimeStampData;
+import xades4j.properties.data.AttrAuthoritiesCertValuesData;
+import xades4j.properties.data.AttributeRevocationValuesData;
 import xades4j.properties.data.CertificateValuesData;
 import xades4j.properties.data.CompleteCertificateRefsData;
 import xades4j.properties.data.CompleteRevocationRefsData;
 import xades4j.properties.data.RevocationValuesData;
 import xades4j.properties.data.SigAndRefsTimeStampData;
 import xades4j.properties.data.SignatureTimeStampData;
+import xades4j.properties.data.TimeStampValidationDataData;
 import xades4j.xml.bind.xades.ObjectFactory;
 import xades4j.xml.bind.xades.XmlUnsignedDataObjectPropertiesType;
 import xades4j.xml.bind.xades.XmlUnsignedPropertiesType;
@@ -55,8 +58,11 @@ class DefaultUnsignedPropertiesMarshaller
         super.putConverter(CompleteRevocationRefsData.class, new ToXmlCompleteRevocRefsConverter());
         super.putConverter(SigAndRefsTimeStampData.class, new ToXmlSigAndRefsTimeStampConverter(algorithmsParametersMarshallingProvider));
         super.putConverter(CertificateValuesData.class, new ToXmlCertificateValuesConverter());
+        super.putConverter(AttrAuthoritiesCertValuesData.class, new ToXmlAttrAuthoritiesCertValuesConverter());
         super.putConverter(RevocationValuesData.class, new ToXmlRevocationValuesConverter());
+        super.putConverter(AttributeRevocationValuesData.class, new ToXmlAttributeRevocationValuesConverter());
         super.putConverter(ArchiveTimeStampData.class, new ToXmlArchiveTimeStampConverter(algorithmsParametersMarshallingProvider));
+        super.putConverter(TimeStampValidationDataData.class, new ToXmlTimeStampValidationDataConverter());
         /* The CounterSignature property is marshalled directly using DOM because
          * it is easier that way (it is represented by a GenericDOMData instance).
          */

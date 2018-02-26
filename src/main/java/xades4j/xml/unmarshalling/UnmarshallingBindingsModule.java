@@ -27,6 +27,6 @@ public final class UnmarshallingBindingsModule extends AbstractModule
     @Override
     protected void configure()
     {
-        bind(QualifyingPropertiesUnmarshaller.class).to(DefaultQualifyingPropertiesUnmarshaller.class);
+        bind(QualifyingPropertiesUnmarshaller.class).to(HybridQualifyingPropertiesUnmarshaller.class);
     }
 }

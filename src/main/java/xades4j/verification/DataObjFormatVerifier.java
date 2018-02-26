@@ -19,6 +19,8 @@ package xades4j.verification;
 import java.util.Collection;
 import org.apache.xml.security.signature.ObjectContainer;
 import org.apache.xml.security.signature.Reference;
+import org.w3c.dom.Element;
+
 import xades4j.properties.DataObjectFormatProperty;
 import xades4j.properties.QualifyingProperty;
 import xades4j.properties.data.DataObjectFormatData;
@@ -76,5 +78,13 @@ class DataObjFormatVerifier implements QualifyingPropertyVerifier<DataObjectForm
         // Associate the property to the data object.
         signedObj.withDataObjectFormat(formatProp);
         return formatProp;
+    }
+
+    @Override
+    public QualifyingProperty verify(DataObjectFormatData propData,
+            Element elem, QualifyingPropertyVerificationContext ctx)
+            throws InvalidPropertyException
+    {
+        return verify(propData, ctx);
     }
 }

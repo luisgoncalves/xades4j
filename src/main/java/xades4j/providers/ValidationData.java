@@ -26,7 +26,8 @@ import java.util.List;
  * Container of validation data (certificates and corresponding CRLs).
  * <p>
  * Contains the full certification chain, starting with the signing certificate
- * and endind with the trust-anchor.
+ * and ending with the trust-anchor. Depending on verification profile, it may or may not
+ * contain CRLs used for checking the revocation information of certificates.
  * @author Luís
  */
 public class ValidationData

@@ -20,10 +20,13 @@ import com.google.inject.Inject;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.List;
+
 import xades4j.properties.QualifyingProperty;
 import xades4j.properties.data.PropertiesDataObjectsStructureVerifier;
 import xades4j.properties.data.PropertyDataObject;
 import xades4j.properties.data.PropertyDataStructureException;
+import xades4j.xml.unmarshalling.QualifyingPropertiesDataCollector;
 
 /**
  *
@@ -44,14 +47,25 @@ class QualifyingPropertiesVerifierImpl implements QualifyingPropertiesVerifier
     }
 
     @Override
-    public Collection<PropertyInfo> verifyProperties(
-            Collection<PropertyDataObject> unmarshalledProperties,
+    public List<PropertyInfo> verifyProperties(
+            QualifyingPropertiesDataCollector dataCollector,
             QualifyingPropertyVerificationContext ctx) throws PropertyDataStructureException, InvalidPropertyException, QualifyingPropertyVerifierNotAvailableException
+    {
+        List<PropertyDataObject> unmarshalledProperties = dataCollector.getPropertiesData();
+        return verifyProperties(unmarshalledProperties, ctx);
+    }
+
+    @Override
+    public List<PropertyInfo> verifyProperties(
+            List<PropertyDataObject> unmarshalledProperties,
+            QualifyingPropertyVerificationContext ctx)
+            throws PropertyDataStructureException, InvalidPropertyException,
+            QualifyingPropertyVerifierNotAvailableException
     {
         dataObjectsStructureVerifier.verifiyPropertiesDataStructure(unmarshalledProperties);
 
-        Collection<PropertyInfo> props = new ArrayList<PropertyInfo>(unmarshalledProperties.size());
-        
+        List<PropertyInfo> props = new ArrayList<PropertyInfo>(unmarshalledProperties.size());
+
         for (PropertyDataObject propData : unmarshalledProperties)
         {
             QualifyingPropertyVerifier<PropertyDataObject> propVerifier = this.propertyVerifiersMapper.getVerifier(propData);
@@ -63,6 +77,15 @@ class QualifyingPropertiesVerifierImpl implements QualifyingPropertiesVerifier
             props.add(new PropertyInfo(propData, p));
         }
 
-        return Collections.unmodifiableCollection(props);
+        return Collections.unmodifiableList(props);
+    }
+
+    @Override
+    public List<PropertyInfo> verifyProperties(
+            HybridQualifPropsDataCollectorImpl propsDataCollector,
+            QualifyingPropertyVerificationContext qPropsCtx,
+            List<PropertyInfo> props)
+    {
+        throw new UnsupportedOperationException("Use HybridQualifyingPropertiesVerifierImpl");
     }
 }

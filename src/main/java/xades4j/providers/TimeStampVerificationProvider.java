@@ -16,7 +16,7 @@
  */
 package xades4j.providers;
 
-import java.util.Date;
+import xades4j.verification.QualifyingPropertyVerificationContext;
 
 /**
  * Provides verification of time-stamp tokens. This is used whenever a time-stamp
@@ -33,7 +33,9 @@ public interface TimeStampVerificationProvider
      * @return the time-stamp
      * @throws TimeStampTokenVerificationException if the token cannot be validated (see subclasses of the exception)
      */
-    public Date verifyToken(
+    public TimeStampVerificationData verifyToken(
             byte[] timeStampToken,
-            byte[] tsDigestInput) throws TimeStampTokenVerificationException;
+            byte[] tsDigestInput,
+            QualifyingPropertyVerificationContext ctx)
+                    throws TimeStampTokenVerificationException;
 }

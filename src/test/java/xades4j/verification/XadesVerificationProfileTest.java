@@ -30,7 +30,9 @@ public class XadesVerificationProfileTest
     public void testGetVerifier() throws XadesProfileResolutionException
     {
         System.out.println("getVerifier");
-        XadesVerificationProfile instance = new XadesVerificationProfile(VerifierTestBase.validationProviderMySigs);
+        XadesVerificationProfile instance =
+                new XadesVerificationProfile(VerifierTestBase.validationProviderMySigs,
+                        VerifierTestBase.tsaValidationProviderMySigs);
         XadesVerifier result = instance.newVerifier();
         assertNotNull(result);
     }

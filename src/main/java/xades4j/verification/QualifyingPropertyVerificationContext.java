@@ -19,11 +19,17 @@ package xades4j.verification;
 import java.math.BigInteger;
 import java.security.cert.X509CRL;
 import java.security.cert.X509Certificate;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.Date;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
+
 import javax.security.auth.x500.X500Principal;
 import org.apache.xml.security.keys.content.x509.XMLX509IssuerSerial;
 import org.apache.xml.security.signature.ObjectContainer;
@@ -36,6 +42,9 @@ import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 
+import xades4j.providers.ValidationData;
+import xades4j.verification.SignatureUtils.KeyInfoRes;
+
 /**
  * The context available during the verification of the qualifying properties.
  * @see QualifyingPropertyVerifier
@@ -44,17 +53,102 @@ import org.w3c.dom.Node;
 public class QualifyingPropertyVerificationContext
 {
     private final XMLSignature signature;
-    private final CertificationChainData certChainData;
+    private CertificationChainData certChainData;
     private final SignedObjectsData signedObjectsData;
+    private final KeyInfoRes keyInfoRes;
+    // validation data collected during verification of attributes (trusted)
+    private Collection<ValidationData> attributeValidationData;
+    // validation data collected during verification of signature (trusted)
+    private Collection<ValidationData> signatureValidationData;
+    private final Set<X509Certificate> untrustedAttributeCertificates;
+    private final Set<X509CRL> untrustedAttributeCRLs;
+    private final Set<X509Certificate> untrustedSignatureCertificates;
+    private final Set<X509CRL> untrustedSignatureCRLs;
+
+    private Date currentTime;
 
     QualifyingPropertyVerificationContext(
             XMLSignature signature,
             CertificationChainData certChainData,
-            SignedObjectsData signedObjectsData)
+            SignedObjectsData signedObjectsData,
+            Date currentTime)
     {
         this.signature = signature;
         this.certChainData = certChainData;
         this.signedObjectsData = signedObjectsData;
+        attributeValidationData = new ArrayList<ValidationData>();
+        signatureValidationData = new ArrayList<ValidationData>();
+        this.keyInfoRes = null;
+        this.currentTime = currentTime;
+        untrustedAttributeCertificates = new HashSet<X509Certificate>();
+        untrustedAttributeCRLs = new HashSet<X509CRL>();
+        untrustedSignatureCertificates = new HashSet<X509Certificate>();
+        untrustedSignatureCRLs = new HashSet<X509CRL>();
+    }
+
+    public QualifyingPropertyVerificationContext(
+            XMLSignature signature,
+            KeyInfoRes keyInfoRes,
+            SignedObjectsData signedObjectsData,
+            Date currentTime)
+    {
+        this.signature = signature;
+        this.signedObjectsData = signedObjectsData;
+        this.certChainData = null;
+        this.keyInfoRes = keyInfoRes;
+        attributeValidationData = new ArrayList<ValidationData>();
+        signatureValidationData = new ArrayList<ValidationData>();
+        this.currentTime = currentTime;
+        untrustedAttributeCertificates = new HashSet<X509Certificate>();
+        untrustedAttributeCRLs = new HashSet<X509CRL>();
+        untrustedSignatureCertificates = new HashSet<X509Certificate>();
+        untrustedSignatureCRLs = new HashSet<X509CRL>();
+    }
+
+    public Collection<ValidationData> getAttributeValidationData()
+    {
+        return attributeValidationData;
+    }
+
+    public void addAttributeValidationData(ValidationData validationData)
+    {
+        attributeValidationData.add(validationData);
+    }
+
+    public Collection<ValidationData> getSignatureValidationData()
+    {
+        return signatureValidationData;
+    }
+
+    public void addSignatureValidationData(ValidationData validationData)
+    {
+        signatureValidationData.add(validationData);
+    }
+
+    /**
+     * Changes the time at which subsequent verifications take place, used to ensure
+     * monotonicity of time in time stamps.
+     *
+     * @param currentTime new time at which subsequent verifications should happen
+     * @throws IllegalArgumentException when currentTime is <b>later</b> (in future)
+     * than time saved in this context
+     * ({@code currentTime.getTime() > this.currentTime.getTime()})
+     */
+    public void setCurrentTime(Date currentTime)
+    throws IllegalArgumentException
+    {
+        if (this.currentTime.getTime() < currentTime.getTime()) {
+            final SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSS");
+            throw new IllegalArgumentException(String.format("New time from TimeStamp is in the future %s < %s",
+                    formatter.format(this.currentTime.getTime()), formatter.format(currentTime.getTime())));
+        }
+
+        this.currentTime = new Date(currentTime.getTime());
+    }
+
+    public Date getCurrentTime()
+    {
+        return currentTime;
     }
 
     public XMLSignature getSignature()
@@ -70,6 +164,11 @@ public class QualifyingPropertyVerificationContext
     public SignedObjectsData getSignedObjectsData()
     {
         return signedObjectsData;
+    }
+
+    public KeyInfoRes getKeyInfoRes()
+    {
+        return keyInfoRes;
     }
 
     /**
@@ -207,5 +306,78 @@ public class QualifyingPropertyVerificationContext
                 return null;
             }
         }
+    }
+
+    public void setCertificationChainData(
+            CertificationChainData certificationChainData)
+    {
+        this.certChainData = certificationChainData;
+    }
+
+    /**
+     * Remember the untrusted certificates found in properties.
+     * The same certificate can be provided multiple times and it will be saved only once.
+     * @param certificates found properties
+     */
+    public void addAttributeCertificates(Collection<X509Certificate> certificates)
+    {
+        untrustedAttributeCertificates.addAll(certificates);
+    }
+
+    /**
+     * Remember the untrusted attribute certificates found in properties.
+     * The same CRL can be provided multiple times and it will be saved only once.
+     * @param crls found crls
+     */
+    public void addAttributeCRLs(Collection<X509CRL> crls)
+    {
+        untrustedAttributeCRLs.addAll(crls);
+    }
+
+    /**
+     * @return list of untrusted CRLs read from properties
+     */
+    public Collection<X509CRL> getAttributeCRLs()
+    {
+        return untrustedAttributeCRLs;
+    }
+
+    /**
+     * @return list of untrusted certificates read from properties
+     */
+    public Collection<X509Certificate> getAttributeCertificates()
+    {
+        return untrustedAttributeCertificates;
+    }
+
+    /**
+     * Remember the untrusted signature certificates found in properties.
+     * The same certificates can be provided multiple times and it will be saved only
+     * once.
+     * @param certificates certificates to save
+     */
+    public void addSignatureCertificates(Collection<X509Certificate> certificates)
+    {
+        untrustedSignatureCertificates.addAll(certificates);
+    }
+
+    /**
+     * Remember the untrusted signature revocation data (CRLs) found in properties.
+     * The same CRL can be provided multiple times and it will be save only one.
+     * @param crls CRLs to save
+     */
+    public void addSignatureCRLs(Collection<X509CRL> crls)
+    {
+        untrustedSignatureCRLs.addAll(crls);
+    }
+
+    public Collection<X509CRL> getSignatureCRLs()
+    {
+        return untrustedSignatureCRLs;
+    }
+
+    public Collection<X509Certificate> getSignatureCertificates()
+    {
+        return untrustedSignatureCertificates;
     }
 }

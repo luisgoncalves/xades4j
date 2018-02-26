@@ -16,16 +16,27 @@
  */
 package xades4j.verification;
 
-import java.util.Collection;
+import java.util.List;
+
+import org.w3c.dom.Element;
+import org.w3c.dom.Node;
+
 import xades4j.properties.data.AllDataObjsTimeStampData;
+import xades4j.properties.data.ArchiveTimeStampData;
+import xades4j.properties.data.AttrAuthoritiesCertValuesData;
+import xades4j.properties.data.AttributeRevocationValuesData;
+import xades4j.properties.data.CertificateValuesData;
 import xades4j.properties.data.CompleteCertificateRefsData;
 import xades4j.properties.data.CompleteRevocationRefsData;
 import xades4j.properties.data.GenericDOMData;
 import xades4j.properties.data.IndividualDataObjsTimeStampData;
 import xades4j.properties.data.OtherPropertyData;
+import xades4j.properties.data.RevocationValuesData;
+import xades4j.properties.data.SigAndRefsTimeStampData;
 import xades4j.properties.data.SignaturePolicyData;
 import xades4j.properties.data.SignatureTimeStampData;
 import xades4j.properties.data.SignerRoleData;
+import xades4j.properties.data.TimeStampValidationDataData;
 import xades4j.utils.PropertiesSet;
 import xades4j.properties.data.CommitmentTypeData;
 import xades4j.properties.data.DataObjectFormatData;
@@ -99,6 +110,36 @@ class QualifPropsDataCollectorImpl implements QualifyingPropertiesDataCollector
     }
 
     @Override
+    public void addSigAndRefsTimeStamp(SigAndRefsTimeStampData tsData)
+    {
+        propsData.add(tsData);
+    }
+
+    @Override
+    public void setCertificateValues(CertificateValuesData certificateValuesData)
+    {
+        propsData.add(certificateValuesData);
+    }
+
+    @Override
+    public void setAttrAuthoritiesCertValues(AttrAuthoritiesCertValuesData attrAuthoritiesCertValuesData)
+    {
+        propsData.add(attrAuthoritiesCertValuesData);
+    }
+
+    @Override
+    public void setRevocationValues(RevocationValuesData revocationValuesData)
+    {
+        propsData.add(revocationValuesData);
+    }
+
+    @Override
+    public void setAttributeRevocationValues(AttributeRevocationValuesData attrRevocValData)
+    {
+        propsData.add(attrRevocValData);
+    }
+
+    @Override
     public void addCommitmentType(CommitmentTypeData commitmentData)
     {
         propsData.add(commitmentData);
@@ -136,8 +177,34 @@ class QualifPropsDataCollectorImpl implements QualifyingPropertiesDataCollector
     }
 
     /**/
-    Collection<PropertyDataObject> getPropertiesData()
+    public List<PropertyDataObject> getPropertiesData()
     {
         return propsData.getProperties();
+    }
+
+    @Override
+    public void linkPropertyToElem(Element node)
+    {
+        //noop
+    }
+
+    @Override
+    public Node getPropertyNode(PropertyDataObject pdo)
+    {
+        throw new UnsupportedOperationException("QualifPropsDataCollectorImpl does not"+
+                    " support getPropertyNode() method. Use HybridQualifPropsDataCollectorImpl.");
+    }
+
+    @Override
+    public void addArchiveTimeStamp(ArchiveTimeStampData tsData)
+    {
+        propsData.add(tsData);
+    }
+
+    @Override
+    public void addTimeStampValidationDataData(
+            TimeStampValidationDataData timeStampValidationDataData)
+    {
+        propsData.add(timeStampValidationDataData);
     }
 }

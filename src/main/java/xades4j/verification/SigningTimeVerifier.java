@@ -17,6 +17,9 @@
 package xades4j.verification;
 
 import java.util.Date;
+
+import org.w3c.dom.Element;
+
 import xades4j.properties.QualifyingProperty;
 import xades4j.properties.SigningTimeProperty;
 import xades4j.properties.data.SigningTimeData;
@@ -36,5 +39,13 @@ class SigningTimeVerifier implements QualifyingPropertyVerifier<SigningTimeData>
         if (!sigTime.before(now))
             throw new SigningTimeVerificationException(sigTime, now);
         return new SigningTimeProperty(propData.getSigningTime());
+    }
+
+    @Override
+    public QualifyingProperty verify(SigningTimeData propData, Element elem,
+            QualifyingPropertyVerificationContext ctx)
+            throws InvalidPropertyException
+    {
+        return verify(propData, ctx);
     }
 }

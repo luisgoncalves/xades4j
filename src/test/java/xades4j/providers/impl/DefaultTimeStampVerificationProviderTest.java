@@ -20,6 +20,7 @@ import java.io.ByteArrayOutputStream;
 import java.io.FileInputStream;
 import java.security.KeyStore;
 import org.junit.Test;
+
 import xades4j.providers.TimeStampTokenDigestException;
 import xades4j.providers.TimeStampTokenVerificationException;
 import xades4j.utils.StreamUtils;
@@ -83,12 +84,12 @@ public class DefaultTimeStampVerificationProviderTest extends VerifierTestBase
     private void doVerifyToken(byte[] tsDigestInput, byte[] tsToken) throws Exception
     {
         KeyStore ks = createAndLoadJKSKeyStore("gva/trustAnchor", "password");
-        PKIXCertificateValidationProvider certificateValidationProvider = new PKIXCertificateValidationProvider(ks, false);
+        PKIXTSACertificateValidationProvider certificateValidationProvider = new PKIXTSACertificateValidationProvider(ks, false);
 
         DefaultTimeStampVerificationProvider timeStampVerificationProvider = new DefaultTimeStampVerificationProvider(
                 certificateValidationProvider,
                 new DefaultMessageDigestProvider());
 
-        timeStampVerificationProvider.verifyToken(tsToken, tsDigestInput);
+        timeStampVerificationProvider.verifyToken(tsToken, tsDigestInput, null);
     }
 }

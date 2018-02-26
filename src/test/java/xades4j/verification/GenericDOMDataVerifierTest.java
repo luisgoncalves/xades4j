@@ -26,6 +26,8 @@ import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import org.w3c.dom.Document;
+import org.w3c.dom.Element;
+
 import static org.junit.Assert.*;
 import xades4j.properties.QualifyingProperty;
 import xades4j.properties.data.GenericDOMData;
@@ -118,5 +120,14 @@ class TestElemDOMVerifier implements QualifyingPropertyVerifier<GenericDOMData>
                 return "Elem";
             }
         };
+    }
+
+    @Override
+    public QualifyingProperty verify(GenericDOMData propData,
+            Element elem,
+            QualifyingPropertyVerificationContext ctx)
+            throws InvalidPropertyException
+    {
+        return verify(propData, ctx);
     }
 }

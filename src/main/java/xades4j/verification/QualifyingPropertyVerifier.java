@@ -16,6 +16,8 @@
  */
 package xades4j.verification;
 
+import org.w3c.dom.Element;
+
 import xades4j.properties.QualifyingProperty;
 import xades4j.properties.data.PropertyDataObject;
 
@@ -42,5 +44,23 @@ public interface QualifyingPropertyVerifier<TData extends PropertyDataObject>
      */
     public QualifyingProperty verify(
             TData propData,
+            QualifyingPropertyVerificationContext ctx) throws InvalidPropertyException;
+
+    /**
+     * Verifies the property data and return the corresponding 'high-level'
+     * property instance. In case of failure, an exception should be thrown. This
+     * is done in order to prevent a failure to be undetected by erroneous code.
+     * Furthermore, the data structures resulting for the verification process
+     * become simpler.
+     *
+     * @param propData the property data
+     * @param elem the XML element from which the property data originated from
+     * @param ctx the context with data for validation
+     * @return the verified QualifyingProperty (never {@code null})
+     * @throws InvalidPropertyException (or subclasses) if the property validation fails
+     */
+    public QualifyingProperty verify(
+            TData propData,
+            Element elem,
             QualifyingPropertyVerificationContext ctx) throws InvalidPropertyException;
 }

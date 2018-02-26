@@ -33,7 +33,7 @@ import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
  *         &lt;element ref="{http://uri.etsi.org/01903/v1.3.2#}RevocationValues" minOccurs="0"/&gt;
  *       &lt;/sequence&gt;
  *       &lt;attribute name="Id" type="{http://www.w3.org/2001/XMLSchema}ID" /&gt;
- *       &lt;attribute name="UR" type="{http://www.w3.org/2001/XMLSchema}anyURI" /&gt;
+ *       &lt;attribute name="URI" type="{http://www.w3.org/2001/XMLSchema}anyURI" /&gt;
  *     &lt;/restriction&gt;
  *   &lt;/complexContent&gt;
  * &lt;/complexType&gt;
@@ -57,9 +57,9 @@ public class XmlValidationDataType {
     @XmlID
     @XmlSchemaType(name = "ID")
     protected String id;
-    @XmlAttribute(name = "UR")
+    @XmlAttribute(name = "URI")
     @XmlSchemaType(name = "anyURI")
-    protected String ur;
+    protected String uri;
 
     /**
      * Gets the value of the certificateValues property.
@@ -134,27 +134,27 @@ public class XmlValidationDataType {
     }
 
     /**
-     * Gets the value of the ur property.
+     * Gets the value of the uri property.
      * 
      * @return
      *     possible object is
      *     {@link String }
      *     
      */
-    public String getUR() {
-        return ur;
+    public String getURI() {
+        return uri;
     }
 
     /**
-     * Sets the value of the ur property.
+     * Sets the value of the uri property.
      * 
      * @param value
      *     allowed object is
      *     {@link String }
      *     
      */
-    public void setUR(String value) {
-        this.ur = value;
+    public void setURI(String value) {
+        this.uri = value;
     }
 
 }

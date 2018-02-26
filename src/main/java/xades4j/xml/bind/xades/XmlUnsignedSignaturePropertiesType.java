@@ -41,8 +41,9 @@ import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
  *         &lt;element name="RevocationValues" type="{http://uri.etsi.org/01903/v1.3.2#}RevocationValuesType" minOccurs="0"/&gt;
  *         &lt;element name="AttrAuthoritiesCertValues" type="{http://uri.etsi.org/01903/v1.3.2#}CertificateValuesType" minOccurs="0"/&gt;
  *         &lt;element name="AttributeRevocationValues" type="{http://uri.etsi.org/01903/v1.3.2#}RevocationValuesType" minOccurs="0"/&gt;
- *         &lt;element name="ArchiveTimeStamp" type="{http://uri.etsi.org/01903/v1.3.2#}XAdESTimeStampType" maxOccurs="unbounded" minOccurs="0"/&gt;
- *         &lt;any namespace='##other' maxOccurs="unbounded" minOccurs="0"/&gt;
+ *         &lt;element name="ArchiveTimeStamp" type="{http://uri.etsi.org/01903/v1.4.1#}XAdESTimeStampType" maxOccurs="unbounded" minOccurs="0"/&gt;
+ *         &lt;element name="TimeStampValidationData" type="{http://uri.etsi.org/01903/v1.4.1#}ValidationDataType" maxOccurs="unbounded" minOccurs="0"/&gt;
+ *         &lt;any namespace='##other' maxOccurs="unbounded" minOccurs="0"/>
  *       &lt;/sequence&gt;
  *       &lt;attribute name="Id" type="{http://www.w3.org/2001/XMLSchema}ID" /&gt;
  *     &lt;/restriction&gt;
@@ -68,6 +69,7 @@ import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
     "attrAuthoritiesCertValues",
     "attributeRevocationValues",
     "archiveTimeStamp",
+    "timeStampValidationData",
     "any"
 })
 public class XmlUnsignedSignaturePropertiesType
@@ -98,6 +100,8 @@ public class XmlUnsignedSignaturePropertiesType
     protected XmlRevocationValuesType attributeRevocationValues;
     @XmlElement(name = "ArchiveTimeStamp")
     protected List<XmlXAdESTimeStampType> archiveTimeStamp;
+    @XmlElement(name = "TimeStampValidationData")
+    protected List<XmlValidationDataType> timeStampValidationData;
     @XmlAnyElement(lax = true)
     protected List<Object> any;
     @XmlAttribute(name = "Id")
@@ -457,6 +461,35 @@ public class XmlUnsignedSignaturePropertiesType
         if (archiveTimeStamp == null)
             archiveTimeStamp = new ArrayList<XmlXAdESTimeStampType>();
         return this.archiveTimeStamp;
+    }
+
+    /**
+     * Gets the value of the timeStampValidationData property.
+     *
+     * <p>
+     * This accessor method returns a reference to the live list,
+     * not a snapshot. Therefore any modification you make to the
+     * returned list will be present inside the JAXB object.
+     * This is why there is not a <CODE>set</CODE> method for the archiveTimeStamp property.
+     *
+     * <p>
+     * For example, to add a new item, do as follows:
+     * <pre>
+     *    getTimeStampValidationData().add(newItem);
+     * </pre>
+     *
+     *
+     * <p>
+     * Objects of the following type(s) are allowed in the list
+     * {@link XmlValidationDataType }
+     *
+     *
+     */
+    public List<XmlValidationDataType> getTimeStampValidationData()
+    {
+        if (timeStampValidationData == null)
+            timeStampValidationData = new ArrayList<XmlValidationDataType>();
+        return this.timeStampValidationData;
     }
 
     /**

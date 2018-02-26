@@ -64,4 +64,12 @@ class GenericDOMDataVerifier implements QualifyingPropertyVerifier<GenericDOMDat
 
         return propVerifier.verify(propData, ctx);
     }
+
+    @Override
+    public QualifyingProperty verify(GenericDOMData propData, Element elem,
+            QualifyingPropertyVerificationContext ctx)
+            throws InvalidPropertyException
+    {
+        return verify(propData, ctx);
+    }
 }

@@ -45,7 +45,7 @@ class CommitmentTypeVerifier implements QualifyingPropertyVerifier<CommitmentTyp
         {
             // "Check that all the ObjectReference elements actually reference
             // ds:Reference elements from the signature."
-            
+
             SignedObjectsData signedObjsData = ctx.getSignedObjectsData();
             CommitmentTypeProperty commitmentTypeProperty = new CommitmentTypeProperty(uri, desc);
 
@@ -81,5 +81,13 @@ class CommitmentTypeVerifier implements QualifyingPropertyVerifier<CommitmentTyp
         }
         
         return property;
+    }
+
+    @Override
+    public QualifyingProperty verify(CommitmentTypeData propData, Element elem,
+            QualifyingPropertyVerificationContext ctx)
+            throws InvalidPropertyException
+    {
+        return verify(propData, ctx);
     }
 }

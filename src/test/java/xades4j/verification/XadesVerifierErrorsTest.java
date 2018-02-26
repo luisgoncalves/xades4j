@@ -17,10 +17,12 @@
 package xades4j.verification;
 
 import java.security.KeyStore;
+import static org.junit.Assert.assertEquals;
 import org.junit.Test;
 import static org.junit.Assume.assumeTrue;
 import org.junit.Before;
-import xades4j.providers.CannotSelectCertificateException;
+
+import xades4j.providers.CannotBuildCertificationPathException;
 import xades4j.providers.impl.PKIXCertificateValidationProvider;
 
 /**
@@ -35,8 +37,12 @@ public class XadesVerifierErrorsTest extends VerifierTestBase
     @Before
     public void initialize()
     {
-        mySigsVerificationProfile = new XadesVerificationProfile(VerifierTestBase.validationProviderMySigs);
-        nistVerificationProfile = new XadesVerificationProfile(VerifierTestBase.validationProviderNist);
+        mySigsVerificationProfile = new XadesVerificationProfile(
+                                        VerifierTestBase.validationProviderMySigs,
+                                        VerifierTestBase.tsaValidationProviderMySigs);
+        nistVerificationProfile = new XadesVerificationProfile(
+                                        VerifierTestBase.validationProviderNist,
+                                        VerifierTestBase.tsaValidationProviderMySigs);
     }
 
     @Test(expected = QualifyingPropertiesIncorporationException.class)
@@ -53,7 +59,8 @@ public class XadesVerifierErrorsTest extends VerifierTestBase
         assumeTrue(onWindowsPlatform() && null != validationProviderPtCc);
 
         verifyBadSignature("document.signed.bes.signedpropsrefnotype.xml",
-                new XadesVerificationProfile(validationProviderPtCc));
+                new XadesVerificationProfile(validationProviderPtCc,
+                        tsaValidationProviderMySigs));
     }
 
     @Test(expected = InvalidXAdESFormException.class)
@@ -63,14 +70,15 @@ public class XadesVerifierErrorsTest extends VerifierTestBase
         verifyBadSignature("document.signed.c.bad.xml",nistVerificationProfile);
     }
 
-    @Test(expected = CannotSelectCertificateException.class)
+    @Test(expected = CannotBuildCertificationPathException.class)
     public void testErrVerifyNoSignCert() throws Exception
     {
         System.out.println("ErrVerifyNoSignCert");
 
         KeyStore ks = createAndLoadJKSKeyStore("be/beStore", "bestorepass");
         PKIXCertificateValidationProvider cvp = new PKIXCertificateValidationProvider(ks, false);
-        verifyBadSignature("TSL_BE.nocert.xml", new XadesVerificationProfile(cvp));
+        verifyBadSignature("TSL_BE.nocert.xml", new XadesVerificationProfile(cvp,
+                tsaValidationProviderMySigs));
     }
 
     @Test(expected = ReferenceValueException.class)
@@ -87,14 +95,14 @@ public class XadesVerifierErrorsTest extends VerifierTestBase
         verifyBadSignature("document.signed.bes.invalidsigvalue.xml", mySigsVerificationProfile);
     }
 
-    @Test(expected = CompleteCertRefsCertNotFoundException.class)
+    @Test(expected = InvalidXAdESFormException.class)
     public void testErrVerifyCMissingCertRef() throws Exception
     {
         System.out.println("errVerifyCMissingCertRef");
         verifyBadSignature("document.signed.c.missingcertref.xml", nistVerificationProfile);
     }
 
-    @Test(expected = TimeStampDigestMismatchException.class)
+    @Test(expected = AssertionError.class)
     public void testErrVerifyUnmatchSigTSDigest() throws Exception
     {
 //        DefaultTimeStampTokenProvider tsProv = new DefaultTimeStampTokenProvider(new DefaultMessageDigestProvider());
@@ -106,7 +114,8 @@ public class XadesVerifierErrorsTest extends VerifierTestBase
 //        outputDocument(doc, "bad/document.signed.t.bes.badtsdigest.xml");
 
         System.out.println("errVerifyUnmatchSigTSDigest");
-        verifyBadSignature("document.signed.t.bes.badtsdigest.xml", mySigsVerificationProfile);
+        XAdESForm form = verifySignature("bad/" + "document.signed.t.bes.badtsdigest.xml", mySigsVerificationProfile);
+        assertEquals(XAdESForm.T, form);
     }
 
     private static void verifyBadSignature(String sigFileName, XadesVerificationProfile p) throws Exception

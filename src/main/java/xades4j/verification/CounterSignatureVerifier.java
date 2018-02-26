@@ -83,4 +83,12 @@ class CounterSignatureVerifier implements QualifyingPropertyVerifier<GenericDOMD
             throw new CounterSignatureVerificationException(e);
         }
     }
+
+    @Override
+    public QualifyingProperty verify(GenericDOMData propData, Element elem,
+            QualifyingPropertyVerificationContext ctx)
+            throws InvalidPropertyException
+    {
+        return verify(propData, ctx);
+    }
 }

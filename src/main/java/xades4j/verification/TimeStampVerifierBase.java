@@ -16,16 +16,19 @@
  */
 package xades4j.verification;
 
-import java.lang.reflect.Method;
-import java.util.Date;
 import java.util.List;
+
+import org.w3c.dom.Element;
+
 import xades4j.UnsupportedAlgorithmException;
+import xades4j.properties.BaseXAdESTimeStampProperty;
 import xades4j.properties.QualifyingProperty;
 import xades4j.properties.data.BaseXAdESTimeStampData;
 import xades4j.providers.TimeStampTokenDigestException;
 import xades4j.providers.TimeStampTokenSignatureException;
 import xades4j.providers.TimeStampTokenStructureException;
 import xades4j.providers.TimeStampTokenVerificationException;
+import xades4j.providers.TimeStampVerificationData;
 import xades4j.providers.TimeStampVerificationProvider;
 import xades4j.utils.CannotAddDataToDigestInputException;
 import xades4j.utils.TimeStampDigestInput;
@@ -52,28 +55,36 @@ abstract class TimeStampVerifierBase<TData extends BaseXAdESTimeStampData> imple
     @Override
     public final QualifyingProperty verify(
             TData propData,
+            Element elem,
             QualifyingPropertyVerificationContext ctx) throws InvalidPropertyException
     {
         try
         {
             TimeStampDigestInput digestInput = this.tsInputFactory.newTimeStampDigestInput(propData.getCanonicalizationAlgorithm());
 
-            QualifyingProperty prop = addPropSpecificTimeStampInputAndCreateProperty(propData, digestInput, ctx);
+            BaseXAdESTimeStampProperty prop = addPropSpecificTimeStampInputAndCreateProperty(
+                    propData,
+                    elem,
+                    digestInput,
+                    ctx);
             byte[] data = digestInput.getBytes();
             /**
              * Verify the time-stamp tokens on a time-stamp property data object. All
              * the tokens are verified, but the returned time-stamp is from the last token.
              */
             List<byte[]> tokens = propData.getTimeStampTokens();
-            Date ts = null;
+            TimeStampVerificationData tsVerData = null;
             for (byte[] tkn : tokens)
             {
-                ts = this.tsVerifier.verifyToken(tkn, data);
+                tsVerData = this.tsVerifier.verifyToken(tkn, data, ctx);
             }
 
-            // By convention all timestamp property types have a setTime(Date) method
-            Method setTimeMethod = prop.getClass().getMethod("setTime", Date.class);
-            setTimeMethod.invoke(prop, ts);
+            prop.setTime(tsVerData.getTimeStampTokenTime());
+            prop.setValidationData(tsVerData.getValidationData());
+
+            // should be a noop, only ArchiveTimeStamp should use it to change the
+            // verification time for all subsequent TimeStamps
+            updateContextAfterVerification(prop,ctx);
             return prop;
         }
         catch(UnsupportedAlgorithmException ex)
@@ -95,10 +106,23 @@ abstract class TimeStampVerifierBase<TData extends BaseXAdESTimeStampData> imple
         }
     }
 
-    protected abstract QualifyingProperty addPropSpecificTimeStampInputAndCreateProperty(
+    @Override
+    public final QualifyingProperty verify(
             TData propData,
+            QualifyingPropertyVerificationContext ctx) throws InvalidPropertyException
+    {
+        return verify(propData, null, ctx);
+    }
+
+    protected abstract BaseXAdESTimeStampProperty addPropSpecificTimeStampInputAndCreateProperty(
+            TData propData,
+            Element location,
             TimeStampDigestInput digestInput,
             QualifyingPropertyVerificationContext ctx) throws CannotAddDataToDigestInputException, TimeStampVerificationException;
+
+    protected abstract void updateContextAfterVerification(
+            QualifyingProperty prop,
+            QualifyingPropertyVerificationContext ctx);
 
     private static TimeStampVerificationException getEx(
             final Exception ex,
@@ -121,6 +145,8 @@ abstract class TimeStampVerifierBase<TData extends BaseXAdESTimeStampData> imple
 
         return new TimeStampVerificationException(propName, ex)
         {
+            private static final long serialVersionUID = 1L;
+
             @Override
             protected String getVerificationMessage()
             {

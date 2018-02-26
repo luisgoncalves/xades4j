@@ -16,6 +16,10 @@
  */
 package xades4j.providers.impl;
 
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
 import org.apache.xml.security.algorithms.MessageDigestAlgorithm;
 import static org.junit.Assert.assertNotNull;
 import org.junit.Test;
@@ -39,6 +43,19 @@ public class HttpTimeStampTokenProviderTest
 
         assertNotNull(result);
         assertNotNull(result.encodedTimeStampToken);
+        //updateTestToken(result.encodedTimeStampToken);
         assertNotNull(result.timeStampTime);
+    }
+
+    private void updateTestToken(byte[] encodedTimeStampToken) throws FileNotFoundException, IOException {
+        String tokenPath = "./src/test/java/" + this.getClass().getPackage().getName().replace('.', '/') + "/tstoken";
+        File file = new File(tokenPath);
+        FileOutputStream is = new FileOutputStream(file);
+        try {
+            is.write(encodedTimeStampToken);
+        } finally {
+            is.close();
+        }
+
     }
 }

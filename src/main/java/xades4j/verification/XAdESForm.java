@@ -28,7 +28,8 @@ public enum XAdESForm
     C("C", "Electronic signature with complete validation data references"),
     X("X", "Extended signatures with time forms"),
     X_L("X-L", "Extended long electronic signatures with time"),
-    A("A", "Archival electronic signatures");
+    A("A", "Archival electronic signatures"),
+    A_VD("A-VD", "Archival electronic signature with validation data");
 
     /**/
     private final String alias, fullName;

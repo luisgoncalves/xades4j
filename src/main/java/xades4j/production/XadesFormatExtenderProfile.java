@@ -34,7 +34,7 @@ import xades4j.xml.marshalling.algorithms.AlgorithmParametersBindingsModule;
  * is used to add unsigned signature properties to an existing signature in order
  * augment its format. This can be done as part of the {@link xades4j.verification.XadesVerifier#verify(org.w3c.dom.Element, xades4j.verification.SignatureSpecificVerificationOptions, xades4j.production.XadesSignatureFormatExtender, xades4j.verification.XAdESForm) verification process}.
  * The {@code XadesSignatureFormatExtender} can also be used separately, but no
- * checks are made on the correctness of the signature.
+ * checks are made on the correctness of the signature or added properties.
  * <p>
  * This profile follows the same principles of {@link XadesSigningProfile}.
  * @author Luís

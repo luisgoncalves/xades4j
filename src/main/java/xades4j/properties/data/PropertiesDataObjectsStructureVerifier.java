@@ -25,12 +25,15 @@ import java.util.Map;
 import java.util.Set;
 import xades4j.properties.AllDataObjsTimeStampProperty;
 import xades4j.properties.ArchiveTimeStampProperty;
+import xades4j.properties.AttrAuthoritiesCertValuesProperty;
+import xades4j.properties.AttributeRevocationValuesProperty;
 import xades4j.properties.CertificateValuesProperty;
 import xades4j.properties.CompleteCertificateRefsProperty;
 import xades4j.properties.RevocationValuesProperty;
 import xades4j.properties.SigAndRefsTimeStampProperty;
 import xades4j.properties.SignatureTimeStampProperty;
 import xades4j.properties.SigningCertificateProperty;
+import xades4j.properties.TimeStampValidationDataProperty;
 
 /**
  *
@@ -86,11 +89,20 @@ public class PropertiesDataObjectsStructureVerifier
         structureVerifiers.put(CertificateValuesData.class,
                 new BaseEncapsulatedPKIDataStructureVerifier(CertificateValuesProperty.PROP_NAME));
 
+        structureVerifiers.put(AttrAuthoritiesCertValuesData.class,
+                new BaseEncapsulatedPKIDataStructureVerifier(AttrAuthoritiesCertValuesProperty.PROP_NAME));
+
         structureVerifiers.put(RevocationValuesData.class,
                 new BaseEncapsulatedPKIDataStructureVerifier(RevocationValuesProperty.PROP_NAME));
 
+        structureVerifiers.put(AttributeRevocationValuesData.class,
+                new BaseEncapsulatedPKIDataStructureVerifier(AttributeRevocationValuesProperty.PROP_NAME));
+
         structureVerifiers.put(ArchiveTimeStampData.class,
                 new BaseXAdESTimeStampDataStructureVerifier(ArchiveTimeStampProperty.PROP_NAME));
+
+        structureVerifiers.put(TimeStampValidationDataData.class,
+                new BaseValidationDataStructureVerifier(TimeStampValidationDataProperty.PROP_NAME));
 
         structureVerifiers.put(GenericDOMData.class,
                 new GenericDOMDataStructureVerifier());
@@ -113,6 +125,12 @@ public class PropertiesDataObjectsStructureVerifier
         verifiyPropertiesDataStructure(propsData.getDataObjProps());
     }
 
+    /**
+     * Checks if internal structure and included parameters of the property are present
+     * and sane
+     * @param propsData properties to check
+     * @throws PropertyDataStructureException
+     */
     public void verifiyPropertiesDataStructure(
             Collection<PropertyDataObject> propsData) throws PropertyDataStructureException
     {

@@ -16,7 +16,19 @@
  */
 package xades4j.xml.unmarshalling;
 
+import java.util.List;
+
+import org.w3c.dom.Element;
+import org.w3c.dom.Node;
+
 import xades4j.properties.data.AllDataObjsTimeStampData;
+import xades4j.properties.data.ArchiveTimeStampData;
+import xades4j.properties.data.AttrAuthoritiesCertValuesData;
+import xades4j.properties.data.AttributeRevocationValuesData;
+import xades4j.properties.data.CertificateValuesData;
+import xades4j.properties.data.PropertyDataObject;
+import xades4j.properties.data.RevocationValuesData;
+import xades4j.properties.data.SigAndRefsTimeStampData;
 import xades4j.properties.data.SigningTimeData;
 import xades4j.properties.data.SigningCertificateData;
 import xades4j.properties.data.SignatureProdPlaceData;
@@ -30,10 +42,11 @@ import xades4j.properties.data.OtherPropertyData;
 import xades4j.properties.data.SignaturePolicyData;
 import xades4j.properties.data.SignatureTimeStampData;
 import xades4j.properties.data.SignerRoleData;
+import xades4j.properties.data.TimeStampValidationDataData;
 
 /**
  * Passed to a {@link QualifyingPropertiesUnmarshaller} to collect the property
- * data obejcts. This is used instead of a collection that is returned by the unmarshaller
+ * data objects. This is used instead of a collection that is returned by the unmarshaller
  * because it allows controlling the number of occurrences of each property.
  * <p>
  * All the methods will throw {@code PropertyTargetException} if an attempt is made
@@ -74,4 +87,42 @@ public interface QualifyingPropertiesDataCollector
     public void addGenericDOMData(GenericDOMData domData);
 
     public void addOther(OtherPropertyData otherData);
+
+    public void addSigAndRefsTimeStamp(SigAndRefsTimeStampData tsData);
+
+    public void setCertificateValues(CertificateValuesData certificateValuesData);
+
+    public void setRevocationValues(RevocationValuesData revocationValuesData);
+
+    public void setAttrAuthoritiesCertValues(
+            AttrAuthoritiesCertValuesData attrAuthoritiesCertValuesData);
+
+    public void setAttributeRevocationValues(
+            AttributeRevocationValuesData attrRevocValData);
+
+    public void addArchiveTimeStamp(ArchiveTimeStampData tsData);
+
+    public void addTimeStampValidationDataData(
+            TimeStampValidationDataData timeStampValidationDataData);
+
+    public void linkPropertyToElem(Element node);
+
+    /**
+     * return all properties in Signature in following order:
+     * SignedSignatureProperties, SignedDataObjectProperties, UnsignedSignatureProperties
+     * and UnsignedDataObjectProperties.
+     * <p>
+     * Properties in each of the groups are returned in order in which they are present
+     * in Signature
+     * @return
+     */
+    public List<PropertyDataObject> getPropertiesData();
+
+    /**
+     * Returns XML DOM Node that was parsed to from provided PropertyDataObject
+     * @param pdo
+     * @return {@code null} if property is not part of UnsignedSignaturePoperties or was
+     * not present in unmarshalled Signature
+     */
+    public Node getPropertyNode(PropertyDataObject pdo);
 }

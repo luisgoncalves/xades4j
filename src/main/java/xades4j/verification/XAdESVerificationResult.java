@@ -19,6 +19,8 @@ package xades4j.verification;
 import java.security.cert.X509Certificate;
 import java.util.Collection;
 import org.apache.xml.security.signature.XMLSignature;
+
+import xades4j.properties.BaseXAdESTimeStampProperty;
 import xades4j.properties.QualifyingProperties;
 import xades4j.properties.QualifyingProperty;
 import xades4j.properties.SignedDataObjectProperty;
@@ -48,11 +50,13 @@ public class XAdESVerificationResult
     /**/
     private final DataGetter<QualifyingProperty> propertiesGetter;
     private final QualifyingProperties qualifyingProperties;
+    private final Collection<ValidationData> attributeValidationData;
 
     XAdESVerificationResult(
             XAdESForm signatureForm,
             XMLSignature xmlSignature,
             ValidationData validationData,
+            Collection<ValidationData> attributeValidationData,
             Collection<PropertyInfo> properties,
             Collection<RawDataObjectDesc> signedDataObjects)
     {
@@ -64,6 +68,8 @@ public class XAdESVerificationResult
 
         this.propertiesGetter = createPropsGetter(properties);
         this.qualifyingProperties = createQualifProps();
+
+        this.attributeValidationData = attributeValidationData;
     }
 
     private DataGetter<QualifyingProperty> createPropsGetter(
@@ -98,28 +104,41 @@ public class XAdESVerificationResult
     /**/
     /**/
 
+    /**
+     * @return the form of signature (BES, EPES, T, C, X, X-L, A)
+     */
     public XAdESForm getSignatureForm()
     {
         return signatureForm;
     }
 
+    /**
+     * @return the validated basic XMLDsig object
+     */
     public XMLSignature getXmlSignature()
     {
         return xmlSignature;
     }
 
+    /**
+     * @return the signature algorithm used by the basic XML digital signature
+     */
     public String getSignatureAlgorithmUri()
     {
         return xmlSignature.getSignedInfo().getSignatureMethodURI();
     }
 
+    /**
+     * the canonicalization algorithm used by the basic XML digital signature
+     * @return
+     */
     public String getCanonicalizationAlgorithmUri()
     {
         return xmlSignature.getSignedInfo().getCanonicalizationMethodURI();
     }
 
     /**
-     * Gets the certificates and CRLs used to verify the signature.
+     * Gets all the certificates and CRLs used to verify the basic signature.
      * @return the validation data
      */
     public ValidationData getValidationData()
@@ -173,5 +192,18 @@ public class XAdESVerificationResult
     public Collection<RawDataObjectDesc> getSignedDataObjects()
     {
         return signedDataObjects;
+    }
+
+    /**
+     * Returns all validation data (certs and CRLs) used to verify time stamps.
+     * <p>
+     * If you're interested in validation data of single property, all time stamp
+     * property objects implement {@link BaseXAdESTimeStampProperty} interface, which
+     * defines the {@code getValidationData()} method.
+     * @return
+     */
+    public Collection<ValidationData> getAttributeValidationData()
+    {
+        return attributeValidationData;
     }
 }

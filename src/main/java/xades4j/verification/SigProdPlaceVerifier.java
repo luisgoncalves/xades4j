@@ -16,6 +16,8 @@
  */
 package xades4j.verification;
 
+import org.w3c.dom.Element;
+
 import xades4j.properties.QualifyingProperty;
 import xades4j.properties.SignatureProductionPlaceProperty;
 import xades4j.properties.data.SignatureProdPlaceData;
@@ -36,5 +38,13 @@ class SigProdPlaceVerifier implements QualifyingPropertyVerifier<SignatureProdPl
                 propData.getState(),
                 propData.getPostalCode(),
                 propData.getCountry());
+    }
+
+    @Override
+    public QualifyingProperty verify(SignatureProdPlaceData propData,
+            Element elem, QualifyingPropertyVerificationContext ctx)
+            throws InvalidPropertyException
+    {
+        return verify(propData, ctx);
     }
 }

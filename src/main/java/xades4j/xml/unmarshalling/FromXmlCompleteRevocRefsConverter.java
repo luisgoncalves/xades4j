@@ -40,12 +40,21 @@ class FromXmlCompleteRevocRefsConverter implements UnsignedSigPropFromXmlConv
         if (null == xmlCompleteRevocRefs)
             return;
 
+        convertFromObject(xmlCompleteRevocRefs, propertyDataCollector);
+    }
+
+    public void convertFromObject(XmlCompleteRevocationRefsType xmlCompleteRevocRefs,
+            QualifyingPropertiesDataCollector propertyDataCollector)
+                    throws PropertyUnmarshalException
+    {
         if (xmlCompleteRevocRefs.getOCSPRefs() != null || xmlCompleteRevocRefs.getOtherRefs() != null)
-            throw new PropertyUnmarshalException("Only CRL references are supported", CompleteRevocationRefsProperty.PROP_NAME);
+            throw new PropertyUnmarshalException("Only CRL references are supported",
+                    CompleteRevocationRefsProperty.PROP_NAME);
 
         XmlCRLRefsType xmlCRLRefs = xmlCompleteRevocRefs.getCRLRefs();
         if (null == xmlCRLRefs)
-            throw new PropertyUnmarshalException("CRL references not present", CompleteRevocationRefsProperty.PROP_NAME);
+            throw new PropertyUnmarshalException("CRL references not present",
+                    CompleteRevocationRefsProperty.PROP_NAME);
 
         CompleteRevocationRefsData complRevocRefsData = new CompleteRevocationRefsData();
 

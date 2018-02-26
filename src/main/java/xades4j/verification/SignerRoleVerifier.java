@@ -16,6 +16,8 @@
  */
 package xades4j.verification;
 
+import org.w3c.dom.Element;
+
 import xades4j.properties.QualifyingProperty;
 import xades4j.properties.SignerRoleProperty;
 import xades4j.properties.data.SignerRoleData;
@@ -32,5 +34,13 @@ class SignerRoleVerifier implements QualifyingPropertyVerifier<SignerRoleData>
             QualifyingPropertyVerificationContext ctx) throws InvalidPropertyException
     {
         return new SignerRoleProperty(propData.getClaimedRoles());
+    }
+
+    @Override
+    public QualifyingProperty verify(SignerRoleData propData, Element elem,
+            QualifyingPropertyVerificationContext ctx)
+            throws InvalidPropertyException
+    {
+        return verify(propData, ctx);
     }
 }

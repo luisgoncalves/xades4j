@@ -17,6 +17,13 @@
 package xades4j.production;
 
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import org.apache.xml.security.signature.XMLSignatureInput;
+import org.apache.xml.security.utils.resolver.ResourceResolver;
+import org.apache.xml.security.utils.resolver.ResourceResolverContext;
+import org.apache.xml.security.utils.resolver.ResourceResolverException;
+import org.apache.xml.security.utils.resolver.ResourceResolverSpi;
 import xades4j.algorithms.EnvelopedSignatureTransform;
 import xades4j.properties.DataObjectDesc;
 import xades4j.properties.AllDataObjsCommitmentTypeProperty;
@@ -146,4 +153,5 @@ public class SignerBESTest extends SignerTestBase
         
         outputDocument(doc, "detached.bes.xml");
     }
+
 }
