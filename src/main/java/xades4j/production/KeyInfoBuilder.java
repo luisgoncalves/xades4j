@@ -18,6 +18,7 @@ package xades4j.production;
 
 import java.security.cert.CertificateException;
 import java.security.cert.X509Certificate;
+import java.util.List;
 
 import org.apache.xml.security.exceptions.XMLSecurityException;
 import org.apache.xml.security.keys.content.X509Data;
@@ -55,9 +56,10 @@ class KeyInfoBuilder
     }
 
     void buildKeyInfo(
-            X509Certificate signingCertificate,
+            List<X509Certificate> signingCertificateChain,
             XMLSignature xmlSig) throws KeyingDataException, UnsupportedAlgorithmException
     {
+        X509Certificate signingCertificate = signingCertificateChain.get(0);
         // Check key usage.
         // - KeyUsage[0] = digitalSignature
         // - KeyUsage[1] = nonRepudiation
@@ -76,14 +78,20 @@ class KeyInfoBuilder
             throw new SigningCertValidityException(signingCertificate);
         }
 
-        if (this.basicSignatureOptionsProvider.includeSigningCertificate())
+        if (this.basicSignatureOptionsProvider.includeSigningCertificate() || this.basicSignatureOptionsProvider.includeSigningCertificateFullChain())
         {
             try
             {
                 X509Data x509Data = new X509Data(xmlSig.getDocument());
-                x509Data.addCertificate(signingCertificate);
+                // TODO confirm that signing certificate 'X509SubjectName' and 'X509IssuerSerial' can coexist with a full chain of certificates. Study RFC 3275, "4.4.4 The X509Data Element".
                 x509Data.addSubjectName(signingCertificate);
                 x509Data.addIssuerSerial(signingCertificate.getIssuerX500Principal().getName(), signingCertificate.getSerialNumber());
+                x509Data.addCertificate(signingCertificate);
+                if (this.basicSignatureOptionsProvider.includeSigningCertificateFullChain()) {
+                    for (int i = 1; i < signingCertificateChain.size(); i++) {
+                        x509Data.addCertificate(signingCertificateChain.get(i));
+                    }
+                }
                 xmlSig.getKeyInfo().add(x509Data);
 
                 if (this.basicSignatureOptionsProvider.signSigningCertificate())

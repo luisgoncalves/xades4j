@@ -19,6 +19,8 @@ package xades4j.production;
 import java.io.FileInputStream;
 import java.security.cert.CertificateFactory;
 import java.security.cert.X509Certificate;
+import java.util.Collections;
+
 import junit.framework.Assert;
 import org.apache.xml.security.keys.content.KeyValue;
 import org.apache.xml.security.keys.content.x509.XMLX509Certificate;
@@ -42,12 +44,14 @@ public class KeyInfoBuilderTest extends SignatureServicesTestBase
     {
 
         private final boolean includeSigningCertificate;
+        private final boolean includeSigningCertificateFullChain;
         private final boolean includePublicKey;
         private final boolean signSigningCertificate;
 
-        public TestBasicSignatureOptionsProvider(boolean includeSigningCertificate, boolean includePublicKey, boolean signSigningCertificate)
+        public TestBasicSignatureOptionsProvider(boolean includeSigningCertificate, boolean includeSigningCertificateFullChain, boolean includePublicKey, boolean signSigningCertificate)
         {
             this.includeSigningCertificate = includeSigningCertificate;
+            this.includeSigningCertificateFullChain = includeSigningCertificateFullChain;
             this.includePublicKey = includePublicKey;
             this.signSigningCertificate = signSigningCertificate;
         }
@@ -56,6 +60,11 @@ public class KeyInfoBuilderTest extends SignatureServicesTestBase
         public boolean includeSigningCertificate()
         {
             return this.includeSigningCertificate;
+        }
+
+        @Override
+        public boolean includeSigningCertificateFullChain() {
+            return includeSigningCertificateFullChain;
         }
 
         @Override
@@ -88,12 +97,12 @@ public class KeyInfoBuilderTest extends SignatureServicesTestBase
         System.out.println("includeCertAndKey");
 
         KeyInfoBuilder keyInfoBuilder = new KeyInfoBuilder(
-                new TestBasicSignatureOptionsProvider(true, true, false),
+                new TestBasicSignatureOptionsProvider(true, false, true, false),
                 new TestAlgorithmsProvider(),
                 new TestAlgorithmsParametersMarshallingProvider());
         XMLSignature xmlSignature = getTestSignature();
 
-        keyInfoBuilder.buildKeyInfo(testCertificate, xmlSignature);
+        keyInfoBuilder.buildKeyInfo(Collections.singletonList(testCertificate), xmlSignature);
 
         Assert.assertEquals(0, xmlSignature.getSignedInfo().getLength());
 
@@ -110,12 +119,12 @@ public class KeyInfoBuilderTest extends SignatureServicesTestBase
         System.out.println("ignoreSignSigningCertificateIfNotIncluded");
 
         KeyInfoBuilder keyInfoBuilder = new KeyInfoBuilder(
-                new TestBasicSignatureOptionsProvider(false, true, true),
+                new TestBasicSignatureOptionsProvider(false, false, true, true),
                 new TestAlgorithmsProvider(),
                 new TestAlgorithmsParametersMarshallingProvider());
         XMLSignature xmlSignature = getTestSignature();
 
-        keyInfoBuilder.buildKeyInfo(testCertificate, xmlSignature);
+        keyInfoBuilder.buildKeyInfo(Collections.singletonList(testCertificate), xmlSignature);
 
         Assert.assertEquals(0, xmlSignature.getSignedInfo().getLength());
 
@@ -131,12 +140,12 @@ public class KeyInfoBuilderTest extends SignatureServicesTestBase
         System.out.println("signSigningCertificateIfIncluded");
 
         KeyInfoBuilder keyInfoBuilder = new KeyInfoBuilder(
-                new TestBasicSignatureOptionsProvider(true, true, true),
+                new TestBasicSignatureOptionsProvider(true, false, true, true),
                 new TestAlgorithmsProvider(),
                 new TestAlgorithmsParametersMarshallingProvider());
         XMLSignature xmlSignature = getTestSignature();
 
-        keyInfoBuilder.buildKeyInfo(testCertificate, xmlSignature);
+        keyInfoBuilder.buildKeyInfo(Collections.singletonList(testCertificate), xmlSignature);
 
         SignedInfo signedInfo = xmlSignature.getSignedInfo();
         Assert.assertEquals(1, signedInfo.getLength());
@@ -146,6 +155,8 @@ public class KeyInfoBuilderTest extends SignatureServicesTestBase
 
         Assert.assertEquals(1, xmlSignature.getKeyInfo().lengthX509Data());
     }
+
+    // TODO create a new test for the full certificate chain being included in KeyInfo (BasicSignatureOptionsProvider.includeSigningCertificateFullChain).
 
     private XMLSignature getTestSignature() throws Exception
     {
