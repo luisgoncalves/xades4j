@@ -33,6 +33,7 @@ import xades4j.properties.data.PropertyDataObject;
 import xades4j.providers.AlgorithmsProviderEx;
 import xades4j.providers.MessageDigestEngineProvider;
 import xades4j.utils.CrlExtensionsUtils;
+import xades4j.utils.RfcUtils;
 
 /**
  *
@@ -72,7 +73,7 @@ class DataGenCompleteRevocRefs implements PropertyDataObjectGenerator<CompleteRe
                 BigInteger crlNum = CrlExtensionsUtils.getCrlNumber(crl);
                
                 crlRefs.add(new CRLRef(
-                        crl.getIssuerX500Principal().getName(),
+                        RfcUtils.toRfc4514(crl.getIssuerX500Principal()),
                         crlNum,
                         digestAlgUri,
                         digest,
