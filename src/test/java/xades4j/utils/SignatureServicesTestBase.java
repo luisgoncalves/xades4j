@@ -19,6 +19,8 @@ package xades4j.utils;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
+import java.io.InputStream;
+import java.io.OutputStream;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
@@ -27,9 +29,9 @@ import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.stream.StreamResult;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
+import org.w3c.dom.Node;
 
 /**
- *
  * @author Luís
  */
 public class SignatureServicesTestBase
@@ -77,7 +79,17 @@ public class SignatureServicesTestBase
     public static Document getDocument(String fileName) throws Exception
     {
         String path = toPlatformSpecificXMLDirFilePath(fileName);
-        Document doc = db.parse(new FileInputStream(path));
+        FileInputStream fis = new FileInputStream(path);
+        try {
+            return parseDocument(fis);
+        } finally {
+            fis.close();
+        }
+    }
+
+    public static Document parseDocument(InputStream is) throws Exception
+    {
+        Document doc = db.parse(is);
         // Apache Santuario now uses Document.getElementById; use this convention for tests.
         Element elem = doc.getDocumentElement();
         DOMHelper.useIdAsXmlId(elem);
@@ -91,15 +103,25 @@ public class SignatureServicesTestBase
 
     protected static void outputDocument(Document doc, String fileName) throws Exception
     {
-        TransformerFactory tf = TransformerFactory.newInstance();
         File outDir = ensureOutputDir();
         FileOutputStream out = new FileOutputStream(new File(outDir, fileName));
-        tf.newTransformer().transform(
-                new DOMSource(doc),
-                new StreamResult(out));
-        out.close();
+        try {
+            outputDOM(doc, out);
+        } finally {
+            out.close();
+        }
+
     }
-    
+
+    protected static void outputDOM(Node dom, OutputStream os) throws Exception
+    {
+        TransformerFactory tf = TransformerFactory.newInstance();
+        tf.newTransformer().transform(
+                new DOMSource(dom),
+                new StreamResult(os));
+    }
+
+
     private static File ensureOutputDir()
     {
         File dir = new File(toPlatformSpecificFilePath("./target/out/"));

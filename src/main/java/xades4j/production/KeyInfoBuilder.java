@@ -31,6 +31,7 @@ import xades4j.providers.BasicSignatureOptionsProvider;
 import xades4j.utils.CanonicalizerUtils;
 import xades4j.utils.TransformUtils;
 import xades4j.xml.marshalling.algorithms.AlgorithmsParametersMarshallingProvider;
+import xades4j.utils.RfcUtils;
 
 /**
  * Helper class that creates the {@code ds:KeyInfo} element accordingly to some
@@ -82,20 +83,20 @@ class KeyInfoBuilder
             {
                 X509Data x509Data = new X509Data(xmlSig.getDocument());
                 x509Data.addCertificate(signingCertificate);
-                x509Data.addSubjectName(signingCertificate);
-                x509Data.addIssuerSerial(signingCertificate.getIssuerX500Principal().getName(), signingCertificate.getSerialNumber());
+                x509Data.addSubjectName(RfcUtils.toRfc4514(signingCertificate.getSubjectX500Principal()));
+                x509Data.addIssuerSerial(RfcUtils.toRfc4514(signingCertificate.getIssuerX500Principal()), signingCertificate.getSerialNumber());
                 xmlSig.getKeyInfo().add(x509Data);
 
                 if (this.basicSignatureOptionsProvider.signSigningCertificate())
                 {
                     String keyInfoId = xmlSig.getId() + "-keyinfo";
                     xmlSig.getKeyInfo().setId(keyInfoId);
-                    
+
                     // Use same canonicalization URI as specified in the ds:CanonicalizationMethod for Signature.
                     Algorithm canonAlg = this.algorithmsProvider.getCanonicalizationAlgorithmForSignature();
                     CanonicalizerUtils.checkC14NAlgorithm(canonAlg);
                     Transforms transforms = TransformUtils.createTransforms(canonAlg, this.algorithmsParametersMarshaller, xmlSig.getDocument());
-                    
+
                     xmlSig.addDocument(
                             '#' + keyInfoId,
                             transforms,
