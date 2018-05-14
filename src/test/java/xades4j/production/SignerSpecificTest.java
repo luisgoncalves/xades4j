@@ -51,16 +51,16 @@ import java.util.Random;
  */
 @RunWith(Parameterized.class)
 public class SignerSpecificTest extends SignerTestBase {
-    private static final String NATIONAL_ORGANIZATION_NAME_CYRILLIC = "National organization name '\u043F\u0440\u0438\u043C\u0435\u0440'";
-    private static final String NATIONAL_ORGANIZATION_NAME_ARABIC = "National organization name '\u0645\u062B\u0627\u0644'";
+    private static final String NATIONAL_DN_CYRILLIC = "National name '\u043F\u0440\u0438\u043C\u0435\u0440'";
+    private static final String NATIONAL_DN_ARABIC = "National name '\u0645\u062B\u0627\u0644'";
 
     @Parameterized.Parameters
     public static Collection<ASN1Encodable[]> data() {
         ArrayList<ASN1Encodable[]> result = new ArrayList<ASN1Encodable[]>();
-        result.add(new ASN1Encodable[]{new DERBMPString(NATIONAL_ORGANIZATION_NAME_CYRILLIC)});
-        result.add(new ASN1Encodable[]{new DERUTF8String(NATIONAL_ORGANIZATION_NAME_CYRILLIC)});
-        result.add(new ASN1Encodable[]{new DERBMPString(NATIONAL_ORGANIZATION_NAME_ARABIC)});
-        result.add(new ASN1Encodable[]{new DERUTF8String(NATIONAL_ORGANIZATION_NAME_ARABIC)});
+        result.add(new ASN1Encodable[]{new DERBMPString(NATIONAL_DN_CYRILLIC)});
+        result.add(new ASN1Encodable[]{new DERUTF8String(NATIONAL_DN_CYRILLIC)});
+        result.add(new ASN1Encodable[]{new DERBMPString(NATIONAL_DN_ARABIC)});
+        result.add(new ASN1Encodable[]{new DERUTF8String(NATIONAL_DN_ARABIC)});
         return result;
     }
 
@@ -75,56 +75,35 @@ public class SignerSpecificTest extends SignerTestBase {
         Date validityBeginDate = new Date(System.currentTimeMillis() - 24 * 60 * 60 * 1000);
         long add = (1L * 365L * 24L * 60L * 60L * 1000L);  //1 year
         Date validityEndDate = new Date(System.currentTimeMillis() + add);
-        KeyPair rootCAKeyPair = keyGen.generateKeyPair();
-        KeyPair mainKeyPair = keyGen.generateKeyPair();
+        KeyPair keyPair = keyGen.generateKeyPair();
 
-        X509Certificate certCA;
+
+        X509Certificate certWithNationalSymbols;
         {
             //generate certificate with national symbols in DN
             X500NameBuilder x500NameBuilder = new X500NameBuilder();
             AttributeTypeAndValue attr = new AttributeTypeAndValue(RFC4519Style.cn, commonName);
             x500NameBuilder.addRDN(attr);
-            X500Name caName = x500NameBuilder.build();
+            X500Name dn = x500NameBuilder.build();
             X509v3CertificateBuilder builder = new JcaX509v3CertificateBuilder(
-                    caName, // issuer authority
+                    dn, // issuer authority
                     BigInteger.valueOf(new Random().nextInt()), //serial number of certificate
                     validityBeginDate, // start of validity
                     validityEndDate, //end of certificate validity
-                    caName, // subject name of certificate
-                    rootCAKeyPair.getPublic()); // public key of certificate
+                    dn, // subject name of certificate
+                    keyPair.getPublic()); // public key of certificate
             // key usage restrictions
             builder.addExtension(Extension.keyUsage, true, new KeyUsage(KeyUsage.keyCertSign
                     | KeyUsage.digitalSignature | KeyUsage.keyEncipherment
                     | KeyUsage.dataEncipherment | KeyUsage.cRLSign));
             builder.addExtension(Extension.basicConstraints, false, new BasicConstraints(true));
-            certCA = new JcaX509CertificateConverter().getCertificate(builder
+            certWithNationalSymbols = new JcaX509CertificateConverter().getCertificate(builder
                     .build(new JcaContentSignerBuilder("SHA256withRSA").setProvider(BouncyCastleProvider.PROVIDER_NAME).
-                            build(rootCAKeyPair.getPrivate())));
+                            build(keyPair.getPrivate())));
         }
 
-        X509Certificate certRsaSha1;
-        {
-            //without national symbols, see using org.apache.xml.security.keys.content.X509Data#addSubjectName(java.security.cert.X509Certificate) in xades4j.production.KeyInfoBuilder#buildKeyInfo()
-            String subject = "CN=test user";
-            X509v3CertificateBuilder builder = new JcaX509v3CertificateBuilder(
-                    certCA, // issuer authority
-                    BigInteger.valueOf(new Random().nextInt()), //serial number of certificate
-                    validityBeginDate, // start of validity
-                    validityEndDate, //end of certificate validity
-                    new X500Name(subject), // subject name of certificate
-                    mainKeyPair.getPublic()); // public key of certificate
-            // key usage restrictions
-            builder.addExtension(Extension.keyUsage, true, new KeyUsage(KeyUsage.keyCertSign
-                    | KeyUsage.digitalSignature | KeyUsage.keyEncipherment
-                    | KeyUsage.dataEncipherment | KeyUsage.cRLSign));
 
-            builder.addExtension(Extension.basicConstraints, false, new BasicConstraints(true));
-            certRsaSha1 = new JcaX509CertificateConverter().getCertificate(builder
-                    .build(new JcaContentSignerBuilder("SHA256withRSA").setProvider(BouncyCastleProvider.PROVIDER_NAME).
-                            build(rootCAKeyPair.getPrivate())));
-        }
-
-        XadesSigner signer = new XadesBesSigningProfile(new DirectKeyingDataProvider(certRsaSha1, mainKeyPair.getPrivate())).newSigner();
+        XadesSigner signer = new XadesBesSigningProfile(new DirectKeyingDataProvider(certWithNationalSymbols, keyPair.getPrivate())).newSigner();
         Document doc1 = getTestDocument();
         Element elemToSign = doc1.getDocumentElement();
         DataObjectDesc obj1 = new DataObjectReference('#' + elemToSign.getAttribute("Id")).withTransform(new EnvelopedSignatureTransform());
@@ -132,6 +111,7 @@ public class SignerSpecificTest extends SignerTestBase {
         signer.sign(signDataObject, doc1.getDocumentElement());
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
         outputDOM(doc1, baos);
+        String str = new String(baos.toByteArray());
         //expected without parsing exception
         Document doc = parseDocument(new ByteArrayInputStream(baos.toByteArray()));
 

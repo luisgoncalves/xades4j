@@ -83,8 +83,7 @@ class KeyInfoBuilder
             {
                 X509Data x509Data = new X509Data(xmlSig.getDocument());
                 x509Data.addCertificate(signingCertificate);
-                //Need to make edits in santuario sources for support national certificates (see xades4j.utils.RfcUtils#toRfc4514())
-                x509Data.addSubjectName(signingCertificate);
+                x509Data.addSubjectName(RfcUtils.toRfc4514(signingCertificate.getSubjectX500Principal()));
                 x509Data.addIssuerSerial(RfcUtils.toRfc4514(signingCertificate.getIssuerX500Principal()), signingCertificate.getSerialNumber());
                 xmlSig.getKeyInfo().add(x509Data);
 
@@ -92,12 +91,12 @@ class KeyInfoBuilder
                 {
                     String keyInfoId = xmlSig.getId() + "-keyinfo";
                     xmlSig.getKeyInfo().setId(keyInfoId);
-                    
+
                     // Use same canonicalization URI as specified in the ds:CanonicalizationMethod for Signature.
                     Algorithm canonAlg = this.algorithmsProvider.getCanonicalizationAlgorithmForSignature();
                     CanonicalizerUtils.checkC14NAlgorithm(canonAlg);
                     Transforms transforms = TransformUtils.createTransforms(canonAlg, this.algorithmsParametersMarshaller, xmlSig.getDocument());
-                    
+
                     xmlSig.addDocument(
                             '#' + keyInfoId,
                             transforms,
