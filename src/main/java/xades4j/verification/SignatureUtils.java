@@ -22,7 +22,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
-import javax.security.auth.x500.X500Principal;
+
 import org.apache.xml.security.exceptions.XMLSecurityException;
 import org.apache.xml.security.keys.KeyInfo;
 import org.apache.xml.security.keys.content.X509Data;
@@ -39,6 +39,7 @@ import xades4j.algorithms.GenericAlgorithm;
 import xades4j.properties.QualifyingProperty;
 import xades4j.providers.CertificateValidationException;
 import xades4j.utils.DOMHelper;
+import xades4j.utils.RfcUtils;
 
 /**
  *
@@ -106,13 +107,13 @@ class SignatureUtils
                     if (x509Data.containsIssuerSerial())
                     {
                         issuerSerial = x509Data.itemIssuerSerial(0);
-                        certSelector.setIssuer(new X500Principal(issuerSerial.getIssuerName()));
+                        certSelector.setIssuer(RfcUtils.parseX500Principal(issuerSerial.getIssuerName()));
                         certSelector.setSerialNumber(issuerSerial.getSerialNumber());
                         hasSelectionCriteria = true;
                     }
                     else if (x509Data.containsSubjectName())
                     {
-                        certSelector.setSubject(new X500Principal(x509Data.itemSubjectName(0).getSubjectName()));
+                        certSelector.setSubject(RfcUtils.parseX500Principal(x509Data.itemSubjectName(0).getSubjectName()));
                         hasSelectionCriteria = true;
                     }
                 }

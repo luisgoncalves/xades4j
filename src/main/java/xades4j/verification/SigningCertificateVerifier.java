@@ -26,6 +26,7 @@ import xades4j.properties.SigningCertificateProperty;
 import xades4j.properties.data.CertRef;
 import xades4j.providers.MessageDigestEngineProvider;
 import xades4j.properties.data.SigningCertificateData;
+import xades4j.utils.RfcUtils;
 import xades4j.verification.QualifyingPropertyVerificationContext.CertificationChainData;
 
 /**
@@ -67,7 +68,7 @@ class SigningCertificateVerifier implements QualifyingPropertyVerifier<SigningCe
         // from SigningCertificate, are the same."
         X500Principal keyInfoIssuer = certChainData.getValidationCertIssuer();
         if (keyInfoIssuer != null &&
-                (!new X500Principal(signingCertRef.issuerDN).equals(keyInfoIssuer) ||
+                (!RfcUtils.parseX500Principal(signingCertRef.issuerDN).equals(keyInfoIssuer) ||
                 !signingCertRef.serialNumber.equals(certChainData.getValidationCertSerialNumber())))
             throw new SigningCertificateIssuerSerialMismatchException(
                     signingCertRef.issuerDN,

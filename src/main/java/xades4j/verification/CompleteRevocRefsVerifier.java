@@ -25,7 +25,7 @@ import java.security.cert.X509CRL;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
-import javax.security.auth.x500.X500Principal;
+
 import xades4j.properties.CompleteRevocationRefsProperty;
 import xades4j.properties.QualifyingProperty;
 import xades4j.UnsupportedAlgorithmException;
@@ -33,6 +33,7 @@ import xades4j.properties.data.CRLRef;
 import xades4j.properties.data.CompleteRevocationRefsData;
 import xades4j.providers.MessageDigestEngineProvider;
 import xades4j.utils.CrlExtensionsUtils;
+import xades4j.utils.RfcUtils;
 
 /**
  * XAdES G.2.2.13
@@ -71,7 +72,7 @@ class CompleteRevocRefsVerifier implements QualifyingPropertyVerifier<CompleteRe
                 // should treat the signature as invalid."
 
                 // Check issuer and issue time.
-                if (!crl.getIssuerX500Principal().equals(new X500Principal(crlRef.issuerDN)) ||
+                if (!crl.getIssuerX500Principal().equals(RfcUtils.parseX500Principal(crlRef.issuerDN)) ||
                         !crl.getThisUpdate().equals(crlRef.issueTime.getTime()))
                     continue;
                 

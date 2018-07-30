@@ -26,6 +26,7 @@ import xades4j.UnsupportedAlgorithmException;
 import xades4j.XAdES4jException;
 import xades4j.properties.data.CertRef;
 import xades4j.providers.MessageDigestEngineProvider;
+import xades4j.utils.RfcUtils;
 
 /**
  *
@@ -44,7 +45,7 @@ class CertRefUtils
             X500Principal certRefIssuerPrincipal;
             try
             {
-                certRefIssuerPrincipal = new X500Principal(certRef.issuerDN);
+                certRefIssuerPrincipal = RfcUtils.parseX500Principal(certRef.issuerDN);
             } catch (IllegalArgumentException ex)
             {
                 throw new SigningCertificateVerificationException(ex)

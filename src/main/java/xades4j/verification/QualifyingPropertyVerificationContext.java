@@ -35,6 +35,7 @@ import org.w3c.dom.Attr;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
+import xades4j.utils.RfcUtils;
 
 /**
  * The context available during the verification of the qualifying properties.
@@ -91,7 +92,7 @@ public class QualifyingPropertyVerificationContext
             this.crls = Collections.unmodifiableCollection(crls);
             if (validationCertIssuerSerial != null)
             {
-                this.validationCertIssuer = new X500Principal(validationCertIssuerSerial.getIssuerName());
+                this.validationCertIssuer = RfcUtils.parseX500Principal(validationCertIssuerSerial.getIssuerName());
                 this.validationCertSerialNumber = validationCertIssuerSerial.getSerialNumber();
             } else
             {
