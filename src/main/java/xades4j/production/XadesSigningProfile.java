@@ -18,6 +18,7 @@ package xades4j.production;
 
 import com.google.inject.Module;
 import xades4j.properties.QualifyingProperty;
+import xades4j.providers.X500NameStyleProvider;
 import xades4j.utils.XadesProfileCore;
 import xades4j.utils.XadesProfileResolutionException;
 import xades4j.providers.AlgorithmsProvider;
@@ -209,7 +210,18 @@ public abstract class XadesSigningProfile
         return withBinding(MessageDigestEngineProvider.class, digestProviderClass);
     }
 
-        public XadesSigningProfile withBasicSignatureOptionsProvider(
+    public XadesSigningProfile withX500NameStyleProvider(
+            X500NameStyleProvider x500NameStyleProvider) {
+        return withBinding(X500NameStyleProvider.class, x500NameStyleProvider);
+    }
+
+    public XadesSigningProfile withX500NameStyleProvider(
+            Class<? extends X500NameStyleProvider> x500NameStyleProviderClass) {
+        return withBinding(X500NameStyleProvider.class, x500NameStyleProviderClass);
+    }
+
+
+    public XadesSigningProfile withBasicSignatureOptionsProvider(
             BasicSignatureOptionsProvider optionsProvider)
     {
         return withBinding(BasicSignatureOptionsProvider.class, optionsProvider);

@@ -1,7 +1,6 @@
 package xades4j.utils;
 
 import org.bouncycastle.asn1.ASN1ObjectIdentifier;
-import org.bouncycastle.asn1.x500.X500NameStyle;
 
 
 import org.bouncycastle.asn1.x500.style.RFC4519Style;
@@ -17,13 +16,14 @@ import java.util.Set;
  * @author Artem R. Romanenko
  * @version 30.07.18
  */
-class RFC4519ExtendedStyle extends RFC4519Style implements X500NameStyle{
-
-    public static final RFC4519ExtendedStyle INSTANCE = new RFC4519ExtendedStyle();
+public class RFC4519ExtensibleStyle extends RFC4519Style implements X500ExtensibleNameStyle {
     private Map<String, String> keywordsMap;
-    protected RFC4519ExtendedStyle(){
+
+    public RFC4519ExtensibleStyle(){
         updateKeyWordsMap();
     }
+
+    @Override
     public void addSymbol(String oid,String... names){
         ASN1ObjectIdentifier asn1ObjectIdentifier = new ASN1ObjectIdentifier(oid).intern();
         if(defaultSymbols.contains(asn1ObjectIdentifier)){
@@ -55,8 +55,8 @@ class RFC4519ExtendedStyle extends RFC4519Style implements X500NameStyle{
         }
         keywordsMap= Collections.unmodifiableMap(tmpMap);
     }
-
-    public Map<String,String> getKeywordsMap(){
+    @Override
+    public Map<String,String> getKeywordMap(){
 
         return keywordsMap;
     }

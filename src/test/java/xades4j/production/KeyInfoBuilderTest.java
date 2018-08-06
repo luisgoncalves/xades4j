@@ -19,16 +19,18 @@ package xades4j.production;
 import java.io.FileInputStream;
 import java.security.cert.CertificateFactory;
 import java.security.cert.X509Certificate;
-import junit.framework.Assert;
+
 import org.apache.xml.security.keys.content.KeyValue;
 import org.apache.xml.security.keys.content.x509.XMLX509Certificate;
 import org.apache.xml.security.signature.SignedInfo;
 import org.apache.xml.security.signature.XMLSignature;
+import org.junit.Assert;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import org.w3c.dom.Document;
 import org.w3c.dom.Node;
 import xades4j.providers.BasicSignatureOptionsProvider;
+import xades4j.providers.impl.DefaultX500NameStyleProvider;
 import xades4j.utils.SignatureServicesTestBase;
 
 /**
@@ -90,7 +92,8 @@ public class KeyInfoBuilderTest extends SignatureServicesTestBase
         KeyInfoBuilder keyInfoBuilder = new KeyInfoBuilder(
                 new TestBasicSignatureOptionsProvider(true, true, false),
                 new TestAlgorithmsProvider(),
-                new TestAlgorithmsParametersMarshallingProvider());
+                new TestAlgorithmsParametersMarshallingProvider(),
+                new DefaultX500NameStyleProvider());
         XMLSignature xmlSignature = getTestSignature();
 
         keyInfoBuilder.buildKeyInfo(testCertificate, xmlSignature);
@@ -112,7 +115,8 @@ public class KeyInfoBuilderTest extends SignatureServicesTestBase
         KeyInfoBuilder keyInfoBuilder = new KeyInfoBuilder(
                 new TestBasicSignatureOptionsProvider(false, true, true),
                 new TestAlgorithmsProvider(),
-                new TestAlgorithmsParametersMarshallingProvider());
+                new TestAlgorithmsParametersMarshallingProvider(),
+                new DefaultX500NameStyleProvider());
         XMLSignature xmlSignature = getTestSignature();
 
         keyInfoBuilder.buildKeyInfo(testCertificate, xmlSignature);
@@ -133,7 +137,8 @@ public class KeyInfoBuilderTest extends SignatureServicesTestBase
         KeyInfoBuilder keyInfoBuilder = new KeyInfoBuilder(
                 new TestBasicSignatureOptionsProvider(true, true, true),
                 new TestAlgorithmsProvider(),
-                new TestAlgorithmsParametersMarshallingProvider());
+                new TestAlgorithmsParametersMarshallingProvider(),
+                new DefaultX500NameStyleProvider());
         XMLSignature xmlSignature = getTestSignature();
 
         keyInfoBuilder.buildKeyInfo(testCertificate, xmlSignature);

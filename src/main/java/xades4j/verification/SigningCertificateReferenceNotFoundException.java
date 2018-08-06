@@ -17,7 +17,6 @@
 package xades4j.verification;
 
 import java.security.cert.X509Certificate;
-import xades4j.utils.RfcUtils;
 
 /**
  * Thrown during verification of the {@code SigningCertificate} property if a reference
@@ -42,6 +41,6 @@ public class SigningCertificateReferenceNotFoundException extends SigningCertifi
     @Override
     protected String getVerificationMessage()
     {
-        return "Couldn't find a reference to the signing certificate " + RfcUtils.toRfc4514(signingCertificate.getSubjectX500Principal());
+        return "Couldn't find a reference to the signing certificate " + signingCertificate.getSubjectX500Principal().getName();
     }
 }

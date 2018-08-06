@@ -69,9 +69,9 @@ public class SignerBESTest extends SignerTestBase
     }
 
     @Test
-    public void testSignBESExtrnlRes() throws Exception
+    public void testSignBESExternalRes() throws Exception
     {
-        System.out.println("signBESExtrnlRes");
+        System.out.println("signBESExternalRes");
 
         Document doc = getNewDocument();
         SignerBES signer = (SignerBES)new XadesBesSigningProfile(keyingProviderNist).newSigner();

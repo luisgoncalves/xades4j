@@ -30,7 +30,8 @@ import org.junit.Test;
 import static org.junit.Assert.*;
 import xades4j.providers.ValidationData;
 import xades4j.utils.FileSystemDirectoryCertStore;
-import xades4j.utils.RfcUtils;
+
+import javax.security.auth.x500.X500Principal;
 
 /**
  *
@@ -64,7 +65,7 @@ public class PKIXCertificateValidationProviderTest
         fis.close();
 
         X509CertSelector certSelector = new X509CertSelector();
-        certSelector.setSubject(RfcUtils.parseX500Principal("CN = Luis Goncalves,OU = CC,O = ISEL,C = PT"));
+        certSelector.setSubject(new X500Principal("CN = Luis Goncalves,OU = CC,O = ISEL,C = PT"));
         Collection<X509Certificate> otherCerts = Collections.emptyList();
 
         PKIXCertificateValidationProvider instance = new PKIXCertificateValidationProvider(ks, false, certStore.getStore());
@@ -84,7 +85,7 @@ public class PKIXCertificateValidationProviderTest
         fis.close();
 
         X509CertSelector certSelector = new X509CertSelector();
-        certSelector.setSubject(RfcUtils.parseX500Principal("CN = User1-CP.02.01,OU = Testing,OU = DoD,O = U.S. Government,C = US"));
+        certSelector.setSubject(new X500Principal("CN = User1-CP.02.01,OU = Testing,OU = DoD,O = U.S. Government,C = US"));
         Collection<X509Certificate> otherCerts = Collections.emptyList();
 
         PKIXCertificateValidationProvider instance = new PKIXCertificateValidationProvider(ks, true, certStore.getStore());

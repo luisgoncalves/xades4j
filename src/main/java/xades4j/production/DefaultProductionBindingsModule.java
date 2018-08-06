@@ -47,10 +47,12 @@ import xades4j.providers.DataObjectPropertiesProvider;
 import xades4j.providers.MessageDigestEngineProvider;
 import xades4j.providers.SignaturePropertiesProvider;
 import xades4j.providers.TimeStampTokenProvider;
+import xades4j.providers.X500NameStyleProvider;
 import xades4j.providers.impl.DefaultAlgorithmsProviderEx;
 import xades4j.providers.impl.DefaultMessageDigestProvider;
 import xades4j.providers.impl.DefaultSignaturePropertiesProvider;
 import xades4j.providers.impl.DefaultBasicSignatureOptionsProvider;
+import xades4j.providers.impl.DefaultX500NameStyleProvider;
 import xades4j.providers.impl.HttpTimeStampTokenProvider;
 import xades4j.providers.impl.TSAHttpData;
 
@@ -80,6 +82,7 @@ class DefaultProductionBindingsModule extends AbstractModule
         bind(AlgorithmsProvider.class).to(AlgorithmsProvider_ExToDeprecated_Adapter.class);
         bind(BasicSignatureOptionsProvider.class).to(DefaultBasicSignatureOptionsProvider.class);
         bind(MessageDigestEngineProvider.class).to(DefaultMessageDigestProvider.class);
+        bind(X500NameStyleProvider.class).to(DefaultX500NameStyleProvider.class);
         bind(TimeStampTokenProvider.class).to(HttpTimeStampTokenProvider.class);
         bind(TSAHttpData.class).toInstance(new TSAHttpData("http://tss.accv.es:8318/tsa")); // Backwards compatibility
 

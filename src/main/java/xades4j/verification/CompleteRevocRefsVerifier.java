@@ -32,8 +32,8 @@ import xades4j.UnsupportedAlgorithmException;
 import xades4j.properties.data.CRLRef;
 import xades4j.properties.data.CompleteRevocationRefsData;
 import xades4j.providers.MessageDigestEngineProvider;
+import xades4j.providers.X500NameStyleProvider;
 import xades4j.utils.CrlExtensionsUtils;
-import xades4j.utils.RfcUtils;
 
 /**
  * XAdES G.2.2.13
@@ -42,12 +42,15 @@ import xades4j.utils.RfcUtils;
 class CompleteRevocRefsVerifier implements QualifyingPropertyVerifier<CompleteRevocationRefsData>
 {
     private final MessageDigestEngineProvider digestEngineProvider;
+    private final X500NameStyleProvider x500NameStyleProvider;
 
     @Inject
     public CompleteRevocRefsVerifier(
-            MessageDigestEngineProvider digestEngineProvider)
+            MessageDigestEngineProvider digestEngineProvider,
+            X500NameStyleProvider x500NameStyleProvider)
     {
         this.digestEngineProvider = digestEngineProvider;
+        this.x500NameStyleProvider = x500NameStyleProvider;
     }
 
     @Override
@@ -72,7 +75,7 @@ class CompleteRevocRefsVerifier implements QualifyingPropertyVerifier<CompleteRe
                 // should treat the signature as invalid."
 
                 // Check issuer and issue time.
-                if (!crl.getIssuerX500Principal().equals(RfcUtils.parseX500Principal(crlRef.issuerDN)) ||
+                if (!crl.getIssuerX500Principal().equals(x500NameStyleProvider.fromString(crlRef.issuerDN)) ||
                         !crl.getThisUpdate().equals(crlRef.issueTime.getTime()))
                     continue;
                 
