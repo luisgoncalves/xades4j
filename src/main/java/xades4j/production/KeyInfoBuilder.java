@@ -83,8 +83,15 @@ class KeyInfoBuilder
             {
                 X509Data x509Data = new X509Data(xmlSig.getDocument());
                 x509Data.addCertificate(signingCertificate);
-                x509Data.addSubjectName(RfcUtils.toRfc4514(signingCertificate.getSubjectX500Principal()));
-                x509Data.addIssuerSerial(RfcUtils.toRfc4514(signingCertificate.getIssuerX500Principal()), signingCertificate.getSerialNumber());
+                
+                if(!this.basicSignatureOptionsProvider.disableSubjectName()) {
+                	x509Data.addSubjectName(RfcUtils.toRfc4514(signingCertificate.getSubjectX500Principal()));
+                }
+                
+                if(!this.basicSignatureOptionsProvider.disableIssuerSerial()) {
+                	x509Data.addIssuerSerial(RfcUtils.toRfc4514(signingCertificate.getIssuerX500Principal()), signingCertificate.getSerialNumber());
+                }
+                
                 xmlSig.getKeyInfo().add(x509Data);
 
                 if (this.basicSignatureOptionsProvider.signSigningCertificate())

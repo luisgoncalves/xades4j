@@ -48,4 +48,27 @@ public interface BasicSignatureOptionsProvider
      * @return {@code true} if the certificate should be signed; false otherwise
      */
     boolean signSigningCertificate();
+    
+    
+    /**
+     * Disable {@code ds:X509SubjectName} in {@code ds:X509Certificate} 
+     * element containing the signing certificate. This is only considered if
+     * {@link #includeSigningCertificate()} returns {@code true}. 
+     * Default method for backwards compatibility
+     * @return {@code true} if the subjectName  should be disabled; false otherwise
+     */
+    default boolean disableSubjectName() {
+    	return false;
+    }
+    
+    /**
+     * Disable {@code ds:X509IssuerSerial} in {@code ds:X509Certificate} 
+     * element containing the signing certificate. This is only considered if
+     * {@link #includeSigningCertificate()} returns {@code true}. 
+     * Default method for backwards compatibility
+     * @return {@code true} if the subjectName  should be disabled; false otherwise
+     */
+    default boolean disableIssuerSerial() {
+    	return false;
+    }
 }
