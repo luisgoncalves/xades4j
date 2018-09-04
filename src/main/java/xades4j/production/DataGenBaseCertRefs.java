@@ -46,7 +46,7 @@ class DataGenBaseCertRefs
     {
         this.algorithmsProvider = algorithmsProvider;
         this.messageDigestProvider = messageDigestProvider;
-        this.x500NameStyleProvider=x500NameStyleProvider;
+        this.x500NameStyleProvider = x500NameStyleProvider;
     }
 
     protected PropertyDataObject generate(

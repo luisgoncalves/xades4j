@@ -211,12 +211,14 @@ public abstract class XadesSigningProfile
     }
 
     public XadesSigningProfile withX500NameStyleProvider(
-            X500NameStyleProvider x500NameStyleProvider) {
+            X500NameStyleProvider x500NameStyleProvider)
+    {
         return withBinding(X500NameStyleProvider.class, x500NameStyleProvider);
     }
 
     public XadesSigningProfile withX500NameStyleProvider(
-            Class<? extends X500NameStyleProvider> x500NameStyleProviderClass) {
+            Class<? extends X500NameStyleProvider> x500NameStyleProviderClass)
+    {
         return withBinding(X500NameStyleProvider.class, x500NameStyleProviderClass);
     }
 

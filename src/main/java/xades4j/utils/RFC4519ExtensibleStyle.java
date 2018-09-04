@@ -16,50 +16,55 @@ import java.util.Set;
  * @author Artem R. Romanenko
  * @version 30.07.18
  */
-public class RFC4519ExtensibleStyle extends RFC4519Style implements X500ExtensibleNameStyle {
+public class RFC4519ExtensibleStyle extends RFC4519Style implements X500ExtensibleNameStyle
+{
     private Map<String, String> keywordsMap;
 
-    public RFC4519ExtensibleStyle(){
+    public RFC4519ExtensibleStyle()
+    {
         updateKeyWordsMap();
     }
 
     @Override
-    public void addSymbol(String oid,String... names){
+    public void addSymbol(String oid, String... names)
+    {
         ASN1ObjectIdentifier asn1ObjectIdentifier = new ASN1ObjectIdentifier(oid).intern();
-        if(defaultSymbols.contains(asn1ObjectIdentifier)){
-            throw new IllegalArgumentException("OID '"+oid+"' already registered");
+        if(defaultSymbols.contains(asn1ObjectIdentifier))
+        {
+            throw new IllegalArgumentException("OID '" + oid + "' already registered");
         }
-        for(String name:names){
+        for(String name : names){
             ASN1ObjectIdentifier exist = (ASN1ObjectIdentifier) defaultLookUp.get(Strings.toLowerCase(name));
             if(exist!=null)
             {
-                throw new IllegalArgumentException("Name '"+name+"' already registered");
+                throw new IllegalArgumentException("Name '" + name + "' already registered");
             }
         }
-        boolean first=true;
-        for(String name:names){
-            if(first) {
+        boolean first = true;
+        for(String name:names)
+        {
+            if(first)
+            {
                 defaultSymbols.put(asn1ObjectIdentifier, name);
                 first = false;
             }
-            defaultLookUp.put(name,asn1ObjectIdentifier);
+            defaultLookUp.put(name, asn1ObjectIdentifier);
         }
         updateKeyWordsMap();
     }
 
-    private void updateKeyWordsMap(){
+    private void updateKeyWordsMap()
+    {
         Set<Map.Entry<String,ASN1ObjectIdentifier>> es = defaultLookUp.entrySet();
         Map<String, String> tmpMap = new HashMap<String, String>();
-        for(Map.Entry<String,ASN1ObjectIdentifier> e:es){
-            tmpMap.put(e.getKey().toUpperCase(),e.getValue().getId());
+        for(Map.Entry<String,ASN1ObjectIdentifier> e : es){
+            tmpMap.put(e.getKey().toUpperCase(), e.getValue().getId());
         }
         keywordsMap= Collections.unmodifiableMap(tmpMap);
     }
     @Override
-    public Map<String,String> getKeywordMap(){
-
+    public Map<String,String> getKeywordMap()
+    {
         return keywordsMap;
     }
-
-
 }

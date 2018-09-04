@@ -38,7 +38,7 @@ class DataGenCompleteCertRefs
             MessageDigestEngineProvider messageDigestProvider,
             X500NameStyleProvider x500NameStyleProvider)
     {
-        super(algorithmsProvider, messageDigestProvider,x500NameStyleProvider);
+        super(algorithmsProvider, messageDigestProvider, x500NameStyleProvider);
     }
 
     @Override

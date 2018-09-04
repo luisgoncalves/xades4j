@@ -96,7 +96,7 @@ class XadesVerifierImpl implements XadesVerifier
         this.qualifPropsUnmarshaller = qualifPropsUnmarshaller;
         this.rawSigVerifiers = rawSigVerifiers;
         this.customSigVerifiers = customSigVerifiers;
-        this.x500NameStyleProvider=x500NameStyleProvider;
+        this.x500NameStyleProvider = x500NameStyleProvider;
         this.secureValidation = false;
     }
 
@@ -181,7 +181,7 @@ class XadesVerifierImpl implements XadesVerifier
 
         /* Certification path */
 
-        KeyInfoRes keyInfoRes = SignatureUtils.processKeyInfo(signature.getKeyInfo(),x500NameStyleProvider);
+        KeyInfoRes keyInfoRes = SignatureUtils.processKeyInfo(signature.getKeyInfo(), x500NameStyleProvider);
         Date validationDate = getValidationDate(qualifPropsData, signature, verificationOptions);
         ValidationData certValidationRes = this.certificateValidator.validate(
                 keyInfoRes.certSelector,

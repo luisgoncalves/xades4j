@@ -44,7 +44,7 @@ class SigningCertificateVerifier implements QualifyingPropertyVerifier<SigningCe
             X500NameStyleProvider x500NameStyleProvider)
     {
         this.messageDigestProvider = messageDigestProvider;
-        this.x500NameStyleProvider=x500NameStyleProvider;
+        this.x500NameStyleProvider = x500NameStyleProvider;
     }
 
     @Override
@@ -62,7 +62,7 @@ class SigningCertificateVerifier implements QualifyingPropertyVerifier<SigningCe
         // "If the verifier does not find any reference matching the signing certificate,
         // the validation of this property should be taken as failed."
         X509Certificate signingCert = certPathIter.next();
-        CertRef signingCertRef = CertRefUtils.findCertRef(signingCert, certRefs,x500NameStyleProvider);
+        CertRef signingCertRef = CertRefUtils.findCertRef(signingCert, certRefs, x500NameStyleProvider);
         if (null == signingCertRef)
             throw new SigningCertificateReferenceNotFoundException(signingCert);
 
@@ -94,7 +94,7 @@ class SigningCertificateVerifier implements QualifyingPropertyVerifier<SigningCe
         while (certPathIter.hasNext())
         {
             X509Certificate cert = certPathIter.next();
-            CertRef certRef = CertRefUtils.findCertRef(cert, certRefs,x500NameStyleProvider);
+            CertRef certRef = CertRefUtils.findCertRef(cert, certRefs, x500NameStyleProvider);
             // "Should one or more certificates in the certification path not be
             // referenced by this property, the verifier should assume that the
             // verification is successful (...)"

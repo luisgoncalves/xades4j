@@ -53,7 +53,7 @@ class DataGenCompleteRevocRefs implements PropertyDataObjectGenerator<CompleteRe
     {
         this.messageDigestProvider = messageDigestProvider;
         this.algorithmsProvider = algorithmsProvider;
-        this.x500NameStyleProvider=x500NameStyleProvider;
+        this.x500NameStyleProvider = x500NameStyleProvider;
     }
 
     @Override

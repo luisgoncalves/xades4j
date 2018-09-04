@@ -55,7 +55,7 @@ class KeyInfoBuilder
         this.basicSignatureOptionsProvider = basicSignatureOptionsProvider;
         this.algorithmsProvider = algorithmsProvider;
         this.algorithmsParametersMarshaller = algorithmsParametersMarshaller;
-        this.x500NameStyleProvider=x500NameStyleProvider;
+        this.x500NameStyleProvider = x500NameStyleProvider;
     }
 
     void buildKeyInfo(

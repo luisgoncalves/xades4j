@@ -44,7 +44,7 @@ class CompleteCertRefsVerifier implements QualifyingPropertyVerifier<CompleteCer
             X500NameStyleProvider x500NameStyleProvider)
     {
         this.messageDigestProvider = messageDigestProvider;
-        this.x500NameStyleProvider=x500NameStyleProvider;
+        this.x500NameStyleProvider = x500NameStyleProvider;
     }
 
     @Override
@@ -61,7 +61,7 @@ class CompleteCertRefsVerifier implements QualifyingPropertyVerifier<CompleteCer
 
         for (X509Certificate caCert : caCerts)
         {
-            CertRef caRef = CertRefUtils.findCertRef(caCert, caCertRefs,x500NameStyleProvider);
+            CertRef caRef = CertRefUtils.findCertRef(caCert, caCertRefs, x500NameStyleProvider);
             if (null == caRef)
                 throw new CompleteCertRefsCertNotFoundException(caCert);
             try

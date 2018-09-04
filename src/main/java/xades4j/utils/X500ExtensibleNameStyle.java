@@ -8,7 +8,8 @@ import java.util.Map;
  * @author Artem R. Romanenko
  * @version 06.08.18
  */
-public interface X500ExtensibleNameStyle extends X500NameStyle {
+public interface X500ExtensibleNameStyle extends X500NameStyle
+{
     /**
      *
      * @param oid Object ID

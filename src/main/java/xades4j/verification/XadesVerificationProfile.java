@@ -167,12 +167,14 @@ public final class XadesVerificationProfile
     }
 
     public XadesVerificationProfile withX500NameStyleProvider(
-            X500NameStyleProvider x500NameStyleProvider) {
+            X500NameStyleProvider x500NameStyleProvider)
+    {
         return withBinding(X500NameStyleProvider.class, x500NameStyleProvider);
     }
 
     public XadesVerificationProfile withX500NameStyleProvider(
-            Class<? extends X500NameStyleProvider> x500NameStyleProviderClass) {
+            Class<? extends X500NameStyleProvider> x500NameStyleProviderClass)
+    {
         return withBinding(X500NameStyleProvider.class, x500NameStyleProviderClass);
     }
 
