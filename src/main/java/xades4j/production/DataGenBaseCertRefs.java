@@ -74,7 +74,7 @@ class DataGenBaseCertRefs
                 byte[] digestValue = messageDigest.digest(cert.getEncoded());
 
                 certRefsData.addCertRef(new CertRef(
-                        x500NameStyleProvider.toString(cert.getIssuerX500Principal()),
+                        this.x500NameStyleProvider.toString(cert.getIssuerX500Principal()),
                         cert.getSerialNumber(),
                         digestAlgUri,
                         digestValue));

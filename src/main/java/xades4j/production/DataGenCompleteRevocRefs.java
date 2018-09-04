@@ -76,7 +76,7 @@ class DataGenCompleteRevocRefs implements PropertyDataObjectGenerator<CompleteRe
                 BigInteger crlNum = CrlExtensionsUtils.getCrlNumber(crl);
                
                 crlRefs.add(new CRLRef(
-                        x500NameStyleProvider.toString(crl.getIssuerX500Principal()),
+                        this.x500NameStyleProvider.toString(crl.getIssuerX500Principal()),
                         crlNum,
                         digestAlgUri,
                         digest,

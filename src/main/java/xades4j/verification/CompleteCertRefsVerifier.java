@@ -61,7 +61,7 @@ class CompleteCertRefsVerifier implements QualifyingPropertyVerifier<CompleteCer
 
         for (X509Certificate caCert : caCerts)
         {
-            CertRef caRef = CertRefUtils.findCertRef(caCert, caCertRefs, x500NameStyleProvider);
+            CertRef caRef = CertRefUtils.findCertRef(caCert, caCertRefs, this.x500NameStyleProvider);
             if (null == caRef)
                 throw new CompleteCertRefsCertNotFoundException(caCert);
             try

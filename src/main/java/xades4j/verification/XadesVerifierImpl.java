@@ -181,7 +181,7 @@ class XadesVerifierImpl implements XadesVerifier
 
         /* Certification path */
 
-        KeyInfoRes keyInfoRes = SignatureUtils.processKeyInfo(signature.getKeyInfo(), x500NameStyleProvider);
+        KeyInfoRes keyInfoRes = SignatureUtils.processKeyInfo(signature.getKeyInfo(), this.x500NameStyleProvider);
         Date validationDate = getValidationDate(qualifPropsData, signature, verificationOptions);
         ValidationData certValidationRes = this.certificateValidator.validate(
                 keyInfoRes.certSelector,
@@ -205,7 +205,7 @@ class XadesVerifierImpl implements XadesVerifier
                 certValidationRes.getCerts(),
                 certValidationRes.getCrls(),
                 keyInfoRes.issuerSerial,
-                x500NameStyleProvider),
+                this.x500NameStyleProvider),
                 /**/
                 new QualifyingPropertyVerificationContext.SignedObjectsData(
                 referencesRes.dataObjsReferences,
@@ -255,7 +255,7 @@ class XadesVerifierImpl implements XadesVerifier
                 new ArrayList<X509Certificate>(0),
                 new ArrayList<X509CRL>(0),
                 null,
-                x500NameStyleProvider),
+                this.x500NameStyleProvider),
                 /**/
                 new QualifyingPropertyVerificationContext.SignedObjectsData(
                 new ArrayList<RawDataObjectDesc>(0),
