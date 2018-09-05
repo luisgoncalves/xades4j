@@ -26,6 +26,7 @@ import xades4j.properties.SigningCertificateProperty;
 import xades4j.properties.data.CertRef;
 import xades4j.providers.MessageDigestEngineProvider;
 import xades4j.properties.data.SigningCertificateData;
+import xades4j.providers.X500NameStyleProvider;
 import xades4j.verification.QualifyingPropertyVerificationContext.CertificationChainData;
 
 /**
@@ -35,12 +36,15 @@ import xades4j.verification.QualifyingPropertyVerificationContext.CertificationC
 class SigningCertificateVerifier implements QualifyingPropertyVerifier<SigningCertificateData>
 {
     private final MessageDigestEngineProvider messageDigestProvider;
+    private final X500NameStyleProvider x500NameStyleProvider;
 
     @Inject
     public SigningCertificateVerifier(
-            MessageDigestEngineProvider messageDigestProvider)
+            MessageDigestEngineProvider messageDigestProvider,
+            X500NameStyleProvider x500NameStyleProvider)
     {
         this.messageDigestProvider = messageDigestProvider;
+        this.x500NameStyleProvider = x500NameStyleProvider;
     }
 
     @Override
@@ -58,7 +62,7 @@ class SigningCertificateVerifier implements QualifyingPropertyVerifier<SigningCe
         // "If the verifier does not find any reference matching the signing certificate,
         // the validation of this property should be taken as failed."
         X509Certificate signingCert = certPathIter.next();
-        CertRef signingCertRef = CertRefUtils.findCertRef(signingCert, certRefs);
+        CertRef signingCertRef = CertRefUtils.findCertRef(signingCert, certRefs, this.x500NameStyleProvider);
         if (null == signingCertRef)
             throw new SigningCertificateReferenceNotFoundException(signingCert);
 
@@ -67,7 +71,7 @@ class SigningCertificateVerifier implements QualifyingPropertyVerifier<SigningCe
         // from SigningCertificate, are the same."
         X500Principal keyInfoIssuer = certChainData.getValidationCertIssuer();
         if (keyInfoIssuer != null &&
-                (!new X500Principal(signingCertRef.issuerDN).equals(keyInfoIssuer) ||
+                (!this.x500NameStyleProvider.fromString(signingCertRef.issuerDN).equals(keyInfoIssuer) ||
                 !signingCertRef.serialNumber.equals(certChainData.getValidationCertSerialNumber())))
             throw new SigningCertificateIssuerSerialMismatchException(
                     signingCertRef.issuerDN,
@@ -90,7 +94,7 @@ class SigningCertificateVerifier implements QualifyingPropertyVerifier<SigningCe
         while (certPathIter.hasNext())
         {
             X509Certificate cert = certPathIter.next();
-            CertRef certRef = CertRefUtils.findCertRef(cert, certRefs);
+            CertRef certRef = CertRefUtils.findCertRef(cert, certRefs, this.x500NameStyleProvider);
             // "Should one or more certificates in the certification path not be
             // referenced by this property, the verifier should assume that the
             // verification is successful (...)"

@@ -26,6 +26,7 @@ import xades4j.properties.QualifyingProperty;
 import xades4j.properties.data.CertRef;
 import xades4j.properties.data.CompleteCertificateRefsData;
 import xades4j.providers.MessageDigestEngineProvider;
+import xades4j.providers.X500NameStyleProvider;
 
 /**
  * XAdES G.2.2.12
@@ -34,12 +35,16 @@ import xades4j.providers.MessageDigestEngineProvider;
 class CompleteCertRefsVerifier implements QualifyingPropertyVerifier<CompleteCertificateRefsData>
 {
     private final MessageDigestEngineProvider messageDigestProvider;
+    private final X500NameStyleProvider x500NameStyleProvider;
+
 
     @Inject
     public CompleteCertRefsVerifier(
-            MessageDigestEngineProvider messageDigestProvider)
+            MessageDigestEngineProvider messageDigestProvider,
+            X500NameStyleProvider x500NameStyleProvider)
     {
         this.messageDigestProvider = messageDigestProvider;
+        this.x500NameStyleProvider = x500NameStyleProvider;
     }
 
     @Override
@@ -56,7 +61,7 @@ class CompleteCertRefsVerifier implements QualifyingPropertyVerifier<CompleteCer
 
         for (X509Certificate caCert : caCerts)
         {
-            CertRef caRef = CertRefUtils.findCertRef(caCert, caCertRefs);
+            CertRef caRef = CertRefUtils.findCertRef(caCert, caCertRefs, this.x500NameStyleProvider);
             if (null == caRef)
                 throw new CompleteCertRefsCertNotFoundException(caCert);
             try

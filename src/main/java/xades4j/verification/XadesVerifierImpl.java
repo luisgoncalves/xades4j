@@ -45,6 +45,7 @@ import xades4j.properties.SignatureTimeStampProperty;
 import xades4j.properties.data.SignatureTimeStampData;
 import xades4j.providers.CertificateValidationProvider;
 import xades4j.providers.ValidationData;
+import xades4j.providers.X500NameStyleProvider;
 import xades4j.utils.CollectionUtils;
 import xades4j.utils.ObjectUtils;
 import xades4j.utils.PropertiesUtils;
@@ -72,6 +73,7 @@ class XadesVerifierImpl implements XadesVerifier
     private final QualifyingPropertiesUnmarshaller qualifPropsUnmarshaller;
     private final Set<RawSignatureVerifier> rawSigVerifiers;
     private final Set<CustomSignatureVerifier> customSigVerifiers;
+    private final X500NameStyleProvider x500NameStyleProvider;
     private boolean secureValidation;
 
     @Inject
@@ -80,7 +82,8 @@ class XadesVerifierImpl implements XadesVerifier
             QualifyingPropertiesVerifier qualifyingPropertiesVerifier,
             QualifyingPropertiesUnmarshaller qualifPropsUnmarshaller,
             Set<RawSignatureVerifier> rawSigVerifiers,
-            Set<CustomSignatureVerifier> customSigVerifiers)
+            Set<CustomSignatureVerifier> customSigVerifiers,
+            X500NameStyleProvider x500NameStyleProvider)
     {
         if (ObjectUtils.anyNull(
                 certificateValidator, qualifyingPropertiesVerifier, qualifPropsUnmarshaller, rawSigVerifiers, customSigVerifiers))
@@ -93,6 +96,7 @@ class XadesVerifierImpl implements XadesVerifier
         this.qualifPropsUnmarshaller = qualifPropsUnmarshaller;
         this.rawSigVerifiers = rawSigVerifiers;
         this.customSigVerifiers = customSigVerifiers;
+        this.x500NameStyleProvider = x500NameStyleProvider;
         this.secureValidation = false;
     }
 
@@ -177,7 +181,7 @@ class XadesVerifierImpl implements XadesVerifier
 
         /* Certification path */
 
-        KeyInfoRes keyInfoRes = SignatureUtils.processKeyInfo(signature.getKeyInfo());
+        KeyInfoRes keyInfoRes = SignatureUtils.processKeyInfo(signature.getKeyInfo(), this.x500NameStyleProvider);
         Date validationDate = getValidationDate(qualifPropsData, signature, verificationOptions);
         ValidationData certValidationRes = this.certificateValidator.validate(
                 keyInfoRes.certSelector,
@@ -200,7 +204,8 @@ class XadesVerifierImpl implements XadesVerifier
                 new QualifyingPropertyVerificationContext.CertificationChainData(
                 certValidationRes.getCerts(),
                 certValidationRes.getCrls(),
-                keyInfoRes.issuerSerial),
+                keyInfoRes.issuerSerial,
+                this.x500NameStyleProvider),
                 /**/
                 new QualifyingPropertyVerificationContext.SignedObjectsData(
                 referencesRes.dataObjsReferences,
@@ -249,7 +254,8 @@ class XadesVerifierImpl implements XadesVerifier
                 new QualifyingPropertyVerificationContext.CertificationChainData(
                 new ArrayList<X509Certificate>(0),
                 new ArrayList<X509CRL>(0),
-                null),
+                null,
+                this.x500NameStyleProvider),
                 /**/
                 new QualifyingPropertyVerificationContext.SignedObjectsData(
                 new ArrayList<RawDataObjectDesc>(0),

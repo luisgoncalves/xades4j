@@ -56,6 +56,7 @@ import xades4j.providers.DataObjectPropertiesProvider;
 import xades4j.providers.KeyingDataProvider;
 import xades4j.providers.SignaturePropertiesProvider;
 import xades4j.providers.SigningCertChainException;
+import xades4j.providers.X500NameStyleProvider;
 import xades4j.utils.CanonicalizerUtils;
 import xades4j.utils.DOMHelper;
 import xades4j.utils.ObjectUtils;
@@ -84,6 +85,7 @@ class SignerBES implements XadesSigner
     private final SignedPropertiesMarshaller signedPropsMarshaller;
     private final UnsignedPropertiesMarshaller unsignedPropsMarshaller;
     private final AlgorithmsParametersMarshallingProvider algorithmsParametersMarshaller;
+    private final X500NameStyleProvider x500NameStyleProvider;
     /**/
     private final KeyInfoBuilder keyInfoBuilder;
     private final QualifyingPropertiesProcessor qualifPropsProcessor;
@@ -99,7 +101,8 @@ class SignerBES implements XadesSigner
             PropertiesDataObjectsGenerator propsDataObjectsGenerator,
             SignedPropertiesMarshaller signedPropsMarshaller,
             UnsignedPropertiesMarshaller unsignedPropsMarshaller,
-            AlgorithmsParametersMarshallingProvider algorithmsParametersMarshaller)
+            AlgorithmsParametersMarshallingProvider algorithmsParametersMarshaller,
+            X500NameStyleProvider x500NameStyleProvider)
     {
         if (ObjectUtils.anyNull(
                 keyingProvider, algorithmsProvider,
@@ -115,9 +118,10 @@ class SignerBES implements XadesSigner
         this.signedPropsMarshaller = signedPropsMarshaller;
         this.unsignedPropsMarshaller = unsignedPropsMarshaller;
         this.algorithmsParametersMarshaller = algorithmsParametersMarshaller;
+        this.x500NameStyleProvider = x500NameStyleProvider;
 
         this.dataObjectDescsProcessor = dataObjectDescsProcessor;
-        this.keyInfoBuilder = new KeyInfoBuilder(basicSignatureOptionsProvider, algorithmsProvider, algorithmsParametersMarshaller);
+        this.keyInfoBuilder = new KeyInfoBuilder(basicSignatureOptionsProvider, algorithmsProvider, algorithmsParametersMarshaller, x500NameStyleProvider);
         this.qualifPropsProcessor = new QualifyingPropertiesProcessor(signaturePropsProvider, dataObjPropsProvider);
     }
 

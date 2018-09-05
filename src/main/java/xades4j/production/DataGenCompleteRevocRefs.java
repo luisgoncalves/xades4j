@@ -32,8 +32,8 @@ import xades4j.properties.data.CompleteRevocationRefsData;
 import xades4j.properties.data.PropertyDataObject;
 import xades4j.providers.AlgorithmsProviderEx;
 import xades4j.providers.MessageDigestEngineProvider;
+import xades4j.providers.X500NameStyleProvider;
 import xades4j.utils.CrlExtensionsUtils;
-import xades4j.utils.RfcUtils;
 
 /**
  *
@@ -43,14 +43,17 @@ class DataGenCompleteRevocRefs implements PropertyDataObjectGenerator<CompleteRe
 {
     private final MessageDigestEngineProvider messageDigestProvider;
     private final AlgorithmsProviderEx algorithmsProvider;
+    private final X500NameStyleProvider x500NameStyleProvider;
 
     @Inject
     public DataGenCompleteRevocRefs(
             MessageDigestEngineProvider messageDigestProvider,
-            AlgorithmsProviderEx algorithmsProvider)
+            AlgorithmsProviderEx algorithmsProvider,
+            X500NameStyleProvider x500NameStyleProvider)
     {
         this.messageDigestProvider = messageDigestProvider;
         this.algorithmsProvider = algorithmsProvider;
+        this.x500NameStyleProvider = x500NameStyleProvider;
     }
 
     @Override
@@ -73,7 +76,7 @@ class DataGenCompleteRevocRefs implements PropertyDataObjectGenerator<CompleteRe
                 BigInteger crlNum = CrlExtensionsUtils.getCrlNumber(crl);
                
                 crlRefs.add(new CRLRef(
-                        RfcUtils.toRfc4514(crl.getIssuerX500Principal()),
+                        this.x500NameStyleProvider.toString(crl.getIssuerX500Principal()),
                         crlNum,
                         digestAlgUri,
                         digest,

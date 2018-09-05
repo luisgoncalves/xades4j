@@ -27,7 +27,7 @@ import xades4j.properties.data.CertRef;
 import xades4j.properties.data.PropertyDataObject;
 import xades4j.providers.AlgorithmsProviderEx;
 import xades4j.providers.MessageDigestEngineProvider;
-import xades4j.utils.RfcUtils;
+import xades4j.providers.X500NameStyleProvider;
 
 
 /**
@@ -38,13 +38,15 @@ class DataGenBaseCertRefs
 {
     private final AlgorithmsProviderEx algorithmsProvider;
     private final MessageDigestEngineProvider messageDigestProvider;
-
+    private final X500NameStyleProvider x500NameStyleProvider;
     protected DataGenBaseCertRefs(
             AlgorithmsProviderEx algorithmsProvider,
-            MessageDigestEngineProvider messageDigestProvider)
+            MessageDigestEngineProvider messageDigestProvider,
+            X500NameStyleProvider x500NameStyleProvider)
     {
         this.algorithmsProvider = algorithmsProvider;
         this.messageDigestProvider = messageDigestProvider;
+        this.x500NameStyleProvider = x500NameStyleProvider;
     }
 
     protected PropertyDataObject generate(
@@ -72,7 +74,7 @@ class DataGenBaseCertRefs
                 byte[] digestValue = messageDigest.digest(cert.getEncoded());
 
                 certRefsData.addCertRef(new CertRef(
-                        RfcUtils.toRfc4514(cert.getIssuerX500Principal()),
+                        this.x500NameStyleProvider.toString(cert.getIssuerX500Principal()),
                         cert.getSerialNumber(),
                         digestAlgUri,
                         digestValue));

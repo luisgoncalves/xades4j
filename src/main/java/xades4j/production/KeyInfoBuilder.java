@@ -28,10 +28,10 @@ import xades4j.UnsupportedAlgorithmException;
 import xades4j.algorithms.Algorithm;
 import xades4j.providers.AlgorithmsProviderEx;
 import xades4j.providers.BasicSignatureOptionsProvider;
+import xades4j.providers.X500NameStyleProvider;
 import xades4j.utils.CanonicalizerUtils;
 import xades4j.utils.TransformUtils;
 import xades4j.xml.marshalling.algorithms.AlgorithmsParametersMarshallingProvider;
-import xades4j.utils.RfcUtils;
 
 /**
  * Helper class that creates the {@code ds:KeyInfo} element accordingly to some
@@ -44,15 +44,18 @@ class KeyInfoBuilder
     private final BasicSignatureOptionsProvider basicSignatureOptionsProvider;
     private final AlgorithmsProviderEx algorithmsProvider;
     private final AlgorithmsParametersMarshallingProvider algorithmsParametersMarshaller;
+    private final X500NameStyleProvider x500NameStyleProvider;
 
     KeyInfoBuilder(
             BasicSignatureOptionsProvider basicSignatureOptionsProvider,
             AlgorithmsProviderEx algorithmsProvider,
-            AlgorithmsParametersMarshallingProvider algorithmsParametersMarshaller)
+            AlgorithmsParametersMarshallingProvider algorithmsParametersMarshaller,
+            X500NameStyleProvider x500NameStyleProvider)
     {
         this.basicSignatureOptionsProvider = basicSignatureOptionsProvider;
         this.algorithmsProvider = algorithmsProvider;
         this.algorithmsParametersMarshaller = algorithmsParametersMarshaller;
+        this.x500NameStyleProvider = x500NameStyleProvider;
     }
 
     void buildKeyInfo(
@@ -83,8 +86,8 @@ class KeyInfoBuilder
             {
                 X509Data x509Data = new X509Data(xmlSig.getDocument());
                 x509Data.addCertificate(signingCertificate);
-                x509Data.addSubjectName(RfcUtils.toRfc4514(signingCertificate.getSubjectX500Principal()));
-                x509Data.addIssuerSerial(RfcUtils.toRfc4514(signingCertificate.getIssuerX500Principal()), signingCertificate.getSerialNumber());
+                x509Data.addSubjectName(this.x500NameStyleProvider.toString(signingCertificate.getSubjectX500Principal()));
+                x509Data.addIssuerSerial(this.x500NameStyleProvider.toString(signingCertificate.getIssuerX500Principal()), signingCertificate.getSerialNumber());
                 xmlSig.getKeyInfo().add(x509Data);
 
                 if (this.basicSignatureOptionsProvider.signSigningCertificate())

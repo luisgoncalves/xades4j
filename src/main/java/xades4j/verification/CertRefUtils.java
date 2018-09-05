@@ -26,6 +26,7 @@ import xades4j.UnsupportedAlgorithmException;
 import xades4j.XAdES4jException;
 import xades4j.properties.data.CertRef;
 import xades4j.providers.MessageDigestEngineProvider;
+import xades4j.providers.X500NameStyleProvider;
 
 /**
  *
@@ -35,7 +36,8 @@ class CertRefUtils
 {
     static CertRef findCertRef(
             X509Certificate cert,
-            Collection<CertRef> certRefs) throws SigningCertificateVerificationException
+            Collection<CertRef> certRefs,
+            X500NameStyleProvider x500NameStyleProvider) throws SigningCertificateVerificationException
     {
         for (final CertRef certRef : certRefs)
         {
@@ -44,7 +46,7 @@ class CertRefUtils
             X500Principal certRefIssuerPrincipal;
             try
             {
-                certRefIssuerPrincipal = new X500Principal(certRef.issuerDN);
+                certRefIssuerPrincipal = x500NameStyleProvider.fromString(certRef.issuerDN);
             } catch (IllegalArgumentException ex)
             {
                 throw new SigningCertificateVerificationException(ex)
