@@ -27,7 +27,6 @@ import org.apache.xml.security.transforms.Transforms;
 import xades4j.UnsupportedAlgorithmException;
 import xades4j.algorithms.Algorithm;
 import xades4j.providers.AlgorithmsProviderEx;
-import xades4j.providers.BasicSignatureOptionsProvider;
 import xades4j.providers.X500NameStyleProvider;
 import xades4j.utils.CanonicalizerUtils;
 import xades4j.utils.TransformUtils;
@@ -40,19 +39,18 @@ import xades4j.xml.marshalling.algorithms.AlgorithmsParametersMarshallingProvide
  */
 class KeyInfoBuilder
 {
-
-    private final BasicSignatureOptionsProvider basicSignatureOptionsProvider;
+    private final BasicSignatureOptions basicSignatureOptions;
     private final AlgorithmsProviderEx algorithmsProvider;
     private final AlgorithmsParametersMarshallingProvider algorithmsParametersMarshaller;
     private final X500NameStyleProvider x500NameStyleProvider;
 
     KeyInfoBuilder(
-            BasicSignatureOptionsProvider basicSignatureOptionsProvider,
+            BasicSignatureOptions basicSignatureOptions,
             AlgorithmsProviderEx algorithmsProvider,
             AlgorithmsParametersMarshallingProvider algorithmsParametersMarshaller,
             X500NameStyleProvider x500NameStyleProvider)
     {
-        this.basicSignatureOptionsProvider = basicSignatureOptionsProvider;
+        this.basicSignatureOptions = basicSignatureOptions;
         this.algorithmsProvider = algorithmsProvider;
         this.algorithmsParametersMarshaller = algorithmsParametersMarshaller;
         this.x500NameStyleProvider = x500NameStyleProvider;
@@ -80,7 +78,7 @@ class KeyInfoBuilder
             throw new SigningCertValidityException(signingCertificate);
         }
 
-        if (this.basicSignatureOptionsProvider.includeSigningCertificate())
+        if (this.basicSignatureOptions.includeSigningCertificate())
         {
             try
             {
@@ -90,7 +88,7 @@ class KeyInfoBuilder
                 x509Data.addIssuerSerial(this.x500NameStyleProvider.toString(signingCertificate.getIssuerX500Principal()), signingCertificate.getSerialNumber());
                 xmlSig.getKeyInfo().add(x509Data);
 
-                if (this.basicSignatureOptionsProvider.signSigningCertificate())
+                if (this.basicSignatureOptions.signSigningCertificate())
                 {
                     String keyInfoId = xmlSig.getId() + "-keyinfo";
                     xmlSig.getKeyInfo().setId(keyInfoId);
@@ -116,7 +114,7 @@ class KeyInfoBuilder
             }
         }
 
-        if (this.basicSignatureOptionsProvider.includePublicKey())
+        if (this.basicSignatureOptions.includePublicKey())
         {
             xmlSig.addKeyInfo(signingCertificate.getPublicKey());
         }

@@ -29,7 +29,6 @@ import org.junit.BeforeClass;
 import org.junit.Test;
 import org.w3c.dom.Document;
 import org.w3c.dom.Node;
-import xades4j.providers.BasicSignatureOptionsProvider;
 import xades4j.providers.impl.DefaultX500NameStyleProvider;
 import xades4j.utils.SignatureServicesTestBase;
 
@@ -39,40 +38,6 @@ import xades4j.utils.SignatureServicesTestBase;
  */
 public class KeyInfoBuilderTest extends SignatureServicesTestBase
 {
-
-    static class TestBasicSignatureOptionsProvider implements BasicSignatureOptionsProvider
-    {
-
-        private final boolean includeSigningCertificate;
-        private final boolean includePublicKey;
-        private final boolean signSigningCertificate;
-
-        public TestBasicSignatureOptionsProvider(boolean includeSigningCertificate, boolean includePublicKey, boolean signSigningCertificate)
-        {
-            this.includeSigningCertificate = includeSigningCertificate;
-            this.includePublicKey = includePublicKey;
-            this.signSigningCertificate = signSigningCertificate;
-        }
-
-        @Override
-        public boolean includeSigningCertificate()
-        {
-            return this.includeSigningCertificate;
-        }
-
-        @Override
-        public boolean includePublicKey()
-        {
-            return this.includePublicKey;
-        }
-
-        @Override
-        public boolean signSigningCertificate()
-        {
-            return this.signSigningCertificate;
-        }
-    }
-    /*****/
     private static X509Certificate testCertificate;
 
     @BeforeClass
@@ -90,7 +55,7 @@ public class KeyInfoBuilderTest extends SignatureServicesTestBase
         System.out.println("includeCertAndKey");
 
         KeyInfoBuilder keyInfoBuilder = new KeyInfoBuilder(
-                new TestBasicSignatureOptionsProvider(true, true, false),
+                new BasicSignatureOptions().includeSigningCertificate(true).includePublicKey(true),
                 new TestAlgorithmsProvider(),
                 new TestAlgorithmsParametersMarshallingProvider(),
                 new DefaultX500NameStyleProvider());
@@ -113,7 +78,7 @@ public class KeyInfoBuilderTest extends SignatureServicesTestBase
         System.out.println("ignoreSignSigningCertificateIfNotIncluded");
 
         KeyInfoBuilder keyInfoBuilder = new KeyInfoBuilder(
-                new TestBasicSignatureOptionsProvider(false, true, true),
+                new BasicSignatureOptions().signSigningCertificate(true).includePublicKey(true),
                 new TestAlgorithmsProvider(),
                 new TestAlgorithmsParametersMarshallingProvider(),
                 new DefaultX500NameStyleProvider());
@@ -135,7 +100,7 @@ public class KeyInfoBuilderTest extends SignatureServicesTestBase
         System.out.println("signSigningCertificateIfIncluded");
 
         KeyInfoBuilder keyInfoBuilder = new KeyInfoBuilder(
-                new TestBasicSignatureOptionsProvider(true, true, true),
+                new BasicSignatureOptions().includeSigningCertificate(true).includePublicKey(true).signSigningCertificate(true),
                 new TestAlgorithmsProvider(),
                 new TestAlgorithmsParametersMarshallingProvider(),
                 new DefaultX500NameStyleProvider());
