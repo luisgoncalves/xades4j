@@ -44,6 +44,6 @@ final class BasicSignatureOptionsProvider_DeprecatedToOptions_Adapter implements
                 .includeSubjectName(this.provider.includeSigningCertificate())
                 .includeIssuerSerial(this.provider.includeSigningCertificate())
                 .includePublicKey(this.provider.includePublicKey())
-                .signSigningCertificate(this.provider.signSigningCertificate());
+                .signKeyInfo(this.provider.signSigningCertificate());
     }
 }

@@ -28,7 +28,7 @@ public final class BasicSignatureOptions
     private boolean includeSubjectName;
     private boolean includeIssuerSerial;
     private boolean includePublicKey;
-    private boolean signSigningCertificate;
+    private boolean signKeyInfo;
 
     /**
      * Configures whether the signing certificate should be included in {@code ds:KeyInfo}.
@@ -95,24 +95,19 @@ public final class BasicSignatureOptions
         return this.includePublicKey;
     }
     /**
-     * Configures whether the signature should cover the
-     * {@code ds:X509Certificate} element containing the signing certificate.
-     * 
-     * This is only considered if {@link #includeSigningCertificate()} returns
-     * {@code true}.
+     * Configures whether the signature should cover the {@code ds:KeyInfo} element.
      *
-     * @param signSigningCertificate {@code true} if the certificate should be
-     * signed; false otherwise
+     * @param signKeyInfo {@code true} if the {@code ds:KeyInfo} should be signed; false otherwise
      * @return the current instance
      */
-    public BasicSignatureOptions signSigningCertificate(boolean signSigningCertificate)
+    public BasicSignatureOptions signKeyInfo(boolean signKeyInfo)
     {
-        this.signSigningCertificate = signSigningCertificate;
+        this.signKeyInfo = signKeyInfo;
         return this;
     }
 
-    boolean signSigningCertificate()
+    boolean signKeyInfo()
     {
-        return this.signSigningCertificate;
+        return this.signKeyInfo;
     }
 }

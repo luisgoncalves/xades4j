@@ -109,34 +109,12 @@ public class KeyInfoBuilderTest extends SignatureServicesTestBase
     }
 
     @Test
-    public void testIgnoreSignSigningCertificateIfNotIncluded() throws Exception
+    public void testSignKeyInfo() throws Exception
     {
-        System.out.println("ignoreSignSigningCertificateIfNotIncluded");
+        System.out.println("signKeyInfo");
 
         KeyInfoBuilder keyInfoBuilder = new KeyInfoBuilder(
-                new BasicSignatureOptions().signSigningCertificate(true).includePublicKey(true),
-                new TestAlgorithmsProvider(),
-                new TestAlgorithmsParametersMarshallingProvider(),
-                new DefaultX500NameStyleProvider());
-        XMLSignature xmlSignature = getTestSignature();
-
-        keyInfoBuilder.buildKeyInfo(testCertificate, xmlSignature);
-
-        Assert.assertEquals(0, xmlSignature.getSignedInfo().getLength());
-
-        KeyValue kv = xmlSignature.getKeyInfo().itemKeyValue(0);
-        Assert.assertTrue(kv.getPublicKey().getAlgorithm().startsWith("RSA"));
-
-        Assert.assertEquals(0, xmlSignature.getKeyInfo().lengthX509Data());
-    }
-
-    @Test
-    public void testSignSigningCertificateIfIncluded() throws Exception
-    {
-        System.out.println("signSigningCertificateIfIncluded");
-
-        KeyInfoBuilder keyInfoBuilder = new KeyInfoBuilder(
-                new BasicSignatureOptions().includeSigningCertificate(true).includePublicKey(true).signSigningCertificate(true),
+                new BasicSignatureOptions().signKeyInfo(true),
                 new TestAlgorithmsProvider(),
                 new TestAlgorithmsParametersMarshallingProvider(),
                 new DefaultX500NameStyleProvider());
@@ -149,8 +127,6 @@ public class KeyInfoBuilderTest extends SignatureServicesTestBase
 
         Node refNode = signedInfo.item(0).getContentsBeforeTransformation().getSubNode();
         Assert.assertSame(xmlSignature.getKeyInfo().getElement(), refNode);
-
-        Assert.assertEquals(1, xmlSignature.getKeyInfo().lengthX509Data());
     }
 
     private XMLSignature getTestSignature() throws Exception

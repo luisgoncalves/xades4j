@@ -121,9 +121,9 @@ public class SignerBESTest extends SignerTestBase
         XadesSigner signer = new XadesBesSigningProfile(keyingProviderMy)
                 .withBasicSignatureOptions(new BasicSignatureOptions()
                     .includeSigningCertificate(true)
-                    .signSigningCertificate(true)
                     .includeIssuerSerial(true)
-                    .includeSubjectName(true))
+                    .includeSubjectName(true)
+                    .signKeyInfo(true))
                 .newSigner();
         
         DataObjectDesc obj1 = new DataObjectReference("document.xml")

@@ -92,38 +92,18 @@ class KeyInfoBuilder
                 try
                 {
                     x509Data.addCertificate(signingCertificate);
-
-                    if (this.basicSignatureOptions.signSigningCertificate())
-                    {
-                        String keyInfoId = xmlSig.getId() + "-keyinfo";
-                        xmlSig.getKeyInfo().setId(keyInfoId);
-
-                        // Use same canonicalization URI as specified in the ds:CanonicalizationMethod for Signature.
-                        Algorithm canonAlg = this.algorithmsProvider.getCanonicalizationAlgorithmForSignature();
-                        CanonicalizerUtils.checkC14NAlgorithm(canonAlg);
-                        Transforms transforms = TransformUtils.createTransforms(canonAlg, this.algorithmsParametersMarshaller, xmlSig.getDocument());
-
-                        xmlSig.addDocument(
-                                '#' + keyInfoId,
-                                transforms,
-                                this.algorithmsProvider.getDigestAlgorithmForDataObjsReferences());
-                    }
-                } catch (XMLSignatureException ex)
-                {
-                    throw new UnsupportedAlgorithmException(
-                        "Digest algorithm not supported in the XML Signature provider",
-                        this.algorithmsProvider.getDigestAlgorithmForDataObjsReferences(), ex);
-                } catch (XMLSecurityException ex)
+                } 
+                catch (XMLSecurityException ex)
                 {
                     throw new KeyingDataException(ex.getMessage(), ex);
                 }
             }
-            
+
             if (this.basicSignatureOptions.includeIssuerSerial())
             {
                 x509Data.addIssuerSerial(this.x500NameStyleProvider.toString(signingCertificate.getIssuerX500Principal()), signingCertificate.getSerialNumber());
             }
-            
+
             if (this.basicSignatureOptions.includeSubjectName())
             {
                 x509Data.addSubjectName(this.x500NameStyleProvider.toString(signingCertificate.getSubjectX500Principal()));
@@ -133,6 +113,31 @@ class KeyInfoBuilder
         if (this.basicSignatureOptions.includePublicKey())
         {
             xmlSig.addKeyInfo(signingCertificate.getPublicKey());
+        }
+
+        if (this.basicSignatureOptions.signKeyInfo())
+        {
+            try
+            {
+                String keyInfoId = xmlSig.getId() + "-keyinfo";
+                xmlSig.getKeyInfo().setId(keyInfoId);
+
+                // Use same canonicalization URI as specified in the ds:CanonicalizationMethod for Signature.
+                Algorithm canonAlg = this.algorithmsProvider.getCanonicalizationAlgorithmForSignature();
+                CanonicalizerUtils.checkC14NAlgorithm(canonAlg);
+                Transforms transforms = TransformUtils.createTransforms(canonAlg, this.algorithmsParametersMarshaller, xmlSig.getDocument());
+
+                xmlSig.addDocument(
+                    '#' + keyInfoId,
+                    transforms,
+                    this.algorithmsProvider.getDigestAlgorithmForDataObjsReferences());
+            }
+            catch (XMLSignatureException ex)
+            {
+                throw new UnsupportedAlgorithmException(
+                    "Digest algorithm not supported in the XML Signature provider",
+                    this.algorithmsProvider.getDigestAlgorithmForDataObjsReferences(), ex);
+            }
         }
     }
 }
