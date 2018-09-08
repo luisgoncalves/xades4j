@@ -17,17 +17,17 @@
 package xades4j.providers;
 
 /**
- * Provides basic signature options such as whether {@code ds:KeyInfo} elements
- * should be included.
- *
- * A default implementation is provided.
- * @see xades4j.providers.impl.DefaultBasicSignatureOptionsProvider
+ * @deprecated
+ * This interface is deprecated and might be removed in future versions.
+ * @see xades4j.production.BasicSignatureOptions
  * 
  * @author Luís
  */
 public interface BasicSignatureOptionsProvider
 {
     /**
+     * @deprecated the interface is deprecated
+     * 
      * Indicates whether the signing certificate, the subject name and issuer/serial
      * should be included within {@code ds:KeyInfo}.
      * @return {@code true} if the certificate should be included; false otherwise
@@ -35,6 +35,8 @@ public interface BasicSignatureOptionsProvider
     boolean includeSigningCertificate();
 
     /**
+     * @deprecated the interface is deprecated
+     * 
      * Indicates whether a {@code ds:KeyValue} element containing the public key's
      * value should be included in {@code ds:KeyInfo}.
      * @return {@code true} if the public key should be included; false otherwise
@@ -42,6 +44,8 @@ public interface BasicSignatureOptionsProvider
     boolean includePublicKey();
 
     /**
+     * @deprecated the interface is deprecated
+     * 
      * Indicates whether the signature should cover the {@code ds:X509Certificate}
      * element containing the signing certificate. This is only considered if
      * {@link #includeSigningCertificate()} returns {@code true}.
