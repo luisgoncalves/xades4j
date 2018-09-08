@@ -71,6 +71,42 @@ public class KeyInfoBuilderTest extends SignatureServicesTestBase
         XMLX509Certificate x509Certificate = xmlSignature.getKeyInfo().itemX509Data(0).itemCertificate(0);
         Assert.assertEquals(testCertificate, x509Certificate.getX509Certificate());
     }
+    
+    @Test
+    public void testIncludeIssuerSerial() throws Exception
+    {
+        System.out.println("includeIssuerSerial");
+
+        KeyInfoBuilder keyInfoBuilder = new KeyInfoBuilder(
+                new BasicSignatureOptions().includeIssuerSerial(true),
+                new TestAlgorithmsProvider(),
+                new TestAlgorithmsParametersMarshallingProvider(),
+                new DefaultX500NameStyleProvider());
+        XMLSignature xmlSignature = getTestSignature();
+
+        keyInfoBuilder.buildKeyInfo(testCertificate, xmlSignature);
+
+        Assert.assertEquals(1, xmlSignature.getKeyInfo().lengthX509Data());
+        Assert.assertEquals(1, xmlSignature.getKeyInfo().itemX509Data(0).lengthIssuerSerial());
+    }
+    
+    @Test
+    public void testIncludeSubjectName() throws Exception
+    {
+        System.out.println("includeSubjectName");
+
+        KeyInfoBuilder keyInfoBuilder = new KeyInfoBuilder(
+                new BasicSignatureOptions().includeSubjectName(true),
+                new TestAlgorithmsProvider(),
+                new TestAlgorithmsParametersMarshallingProvider(),
+                new DefaultX500NameStyleProvider());
+        XMLSignature xmlSignature = getTestSignature();
+
+        keyInfoBuilder.buildKeyInfo(testCertificate, xmlSignature);
+
+        Assert.assertEquals(1, xmlSignature.getKeyInfo().lengthX509Data());
+        Assert.assertEquals(1, xmlSignature.getKeyInfo().itemX509Data(0).lengthSubjectName());
+    }
 
     @Test
     public void testIgnoreSignSigningCertificateIfNotIncluded() throws Exception
