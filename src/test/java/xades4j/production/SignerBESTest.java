@@ -33,7 +33,6 @@ import xades4j.properties.CounterSignatureProperty;
 import xades4j.properties.SignerRoleProperty;
 import xades4j.providers.SignaturePropertiesCollector;
 import xades4j.providers.SignaturePropertiesProvider;
-import xades4j.providers.impl.DefaultBasicSignatureOptionsProvider;
 
 /**
  *
@@ -111,14 +110,7 @@ public class SignerBESTest extends SignerTestBase
 
         outputDocument(doc, "document.signed.bes.cs.xml");
     }
-    
-    public static class MyBasicSignatureOptionsProvider extends DefaultBasicSignatureOptionsProvider{
-        @Override
-        public boolean signSigningCertificate() {
-            return true;
-        }
-    }
-    
+
     @Test
     public void testSignBESDetachedWithXPathAndNamespaces() throws Exception
     {
@@ -127,7 +119,11 @@ public class SignerBESTest extends SignerTestBase
         Document doc = getNewDocument();
         
         XadesSigner signer = new XadesBesSigningProfile(keyingProviderMy)
-                .withBasicSignatureOptionsProvider(MyBasicSignatureOptionsProvider.class)
+                .withBasicSignatureOptions(new BasicSignatureOptions()
+                    .includeSigningCertificate(true)
+                    .includeIssuerSerial(true)
+                    .includeSubjectName(true)
+                    .signKeyInfo(true))
                 .newSigner();
         
         DataObjectDesc obj1 = new DataObjectReference("document.xml")

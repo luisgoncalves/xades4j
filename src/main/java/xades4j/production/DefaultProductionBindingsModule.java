@@ -81,6 +81,8 @@ class DefaultProductionBindingsModule extends AbstractModule
         // Will wrap the AlgorithmsProviderEx in use
         bind(AlgorithmsProvider.class).to(AlgorithmsProvider_ExToDeprecated_Adapter.class);
         bind(BasicSignatureOptionsProvider.class).to(DefaultBasicSignatureOptionsProvider.class);
+        // Will adapt from the BasicSignatureOptionsProvider in use
+        bind(BasicSignatureOptions.class).toProvider(BasicSignatureOptionsProvider_DeprecatedToOptions_Adapter.class);
         bind(MessageDigestEngineProvider.class).to(DefaultMessageDigestProvider.class);
         bind(X500NameStyleProvider.class).to(DefaultX500NameStyleProvider.class);
         bind(TimeStampTokenProvider.class).to(HttpTimeStampTokenProvider.class);

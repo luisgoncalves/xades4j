@@ -29,7 +29,6 @@ import org.junit.BeforeClass;
 import org.junit.Test;
 import org.w3c.dom.Document;
 import org.w3c.dom.Node;
-import xades4j.providers.BasicSignatureOptionsProvider;
 import xades4j.providers.impl.DefaultX500NameStyleProvider;
 import xades4j.utils.SignatureServicesTestBase;
 
@@ -39,40 +38,6 @@ import xades4j.utils.SignatureServicesTestBase;
  */
 public class KeyInfoBuilderTest extends SignatureServicesTestBase
 {
-
-    static class TestBasicSignatureOptionsProvider implements BasicSignatureOptionsProvider
-    {
-
-        private final boolean includeSigningCertificate;
-        private final boolean includePublicKey;
-        private final boolean signSigningCertificate;
-
-        public TestBasicSignatureOptionsProvider(boolean includeSigningCertificate, boolean includePublicKey, boolean signSigningCertificate)
-        {
-            this.includeSigningCertificate = includeSigningCertificate;
-            this.includePublicKey = includePublicKey;
-            this.signSigningCertificate = signSigningCertificate;
-        }
-
-        @Override
-        public boolean includeSigningCertificate()
-        {
-            return this.includeSigningCertificate;
-        }
-
-        @Override
-        public boolean includePublicKey()
-        {
-            return this.includePublicKey;
-        }
-
-        @Override
-        public boolean signSigningCertificate()
-        {
-            return this.signSigningCertificate;
-        }
-    }
-    /*****/
     private static X509Certificate testCertificate;
 
     @BeforeClass
@@ -90,7 +55,7 @@ public class KeyInfoBuilderTest extends SignatureServicesTestBase
         System.out.println("includeCertAndKey");
 
         KeyInfoBuilder keyInfoBuilder = new KeyInfoBuilder(
-                new TestBasicSignatureOptionsProvider(true, true, false),
+                new BasicSignatureOptions().includeSigningCertificate(true).includePublicKey(true),
                 new TestAlgorithmsProvider(),
                 new TestAlgorithmsParametersMarshallingProvider(),
                 new DefaultX500NameStyleProvider());
@@ -106,14 +71,14 @@ public class KeyInfoBuilderTest extends SignatureServicesTestBase
         XMLX509Certificate x509Certificate = xmlSignature.getKeyInfo().itemX509Data(0).itemCertificate(0);
         Assert.assertEquals(testCertificate, x509Certificate.getX509Certificate());
     }
-
+    
     @Test
-    public void testIgnoreSignSigningCertificateIfNotIncluded() throws Exception
+    public void testIncludeIssuerSerial() throws Exception
     {
-        System.out.println("ignoreSignSigningCertificateIfNotIncluded");
+        System.out.println("includeIssuerSerial");
 
         KeyInfoBuilder keyInfoBuilder = new KeyInfoBuilder(
-                new TestBasicSignatureOptionsProvider(false, true, true),
+                new BasicSignatureOptions().includeIssuerSerial(true),
                 new TestAlgorithmsProvider(),
                 new TestAlgorithmsParametersMarshallingProvider(),
                 new DefaultX500NameStyleProvider());
@@ -121,21 +86,35 @@ public class KeyInfoBuilderTest extends SignatureServicesTestBase
 
         keyInfoBuilder.buildKeyInfo(testCertificate, xmlSignature);
 
-        Assert.assertEquals(0, xmlSignature.getSignedInfo().getLength());
+        Assert.assertEquals(1, xmlSignature.getKeyInfo().lengthX509Data());
+        Assert.assertEquals(1, xmlSignature.getKeyInfo().itemX509Data(0).lengthIssuerSerial());
+    }
+    
+    @Test
+    public void testIncludeSubjectName() throws Exception
+    {
+        System.out.println("includeSubjectName");
 
-        KeyValue kv = xmlSignature.getKeyInfo().itemKeyValue(0);
-        Assert.assertTrue(kv.getPublicKey().getAlgorithm().startsWith("RSA"));
+        KeyInfoBuilder keyInfoBuilder = new KeyInfoBuilder(
+                new BasicSignatureOptions().includeSubjectName(true),
+                new TestAlgorithmsProvider(),
+                new TestAlgorithmsParametersMarshallingProvider(),
+                new DefaultX500NameStyleProvider());
+        XMLSignature xmlSignature = getTestSignature();
 
-        Assert.assertEquals(0, xmlSignature.getKeyInfo().lengthX509Data());
+        keyInfoBuilder.buildKeyInfo(testCertificate, xmlSignature);
+
+        Assert.assertEquals(1, xmlSignature.getKeyInfo().lengthX509Data());
+        Assert.assertEquals(1, xmlSignature.getKeyInfo().itemX509Data(0).lengthSubjectName());
     }
 
     @Test
-    public void testSignSigningCertificateIfIncluded() throws Exception
+    public void testSignKeyInfo() throws Exception
     {
-        System.out.println("signSigningCertificateIfIncluded");
+        System.out.println("signKeyInfo");
 
         KeyInfoBuilder keyInfoBuilder = new KeyInfoBuilder(
-                new TestBasicSignatureOptionsProvider(true, true, true),
+                new BasicSignatureOptions().signKeyInfo(true),
                 new TestAlgorithmsProvider(),
                 new TestAlgorithmsParametersMarshallingProvider(),
                 new DefaultX500NameStyleProvider());
@@ -148,8 +127,6 @@ public class KeyInfoBuilderTest extends SignatureServicesTestBase
 
         Node refNode = signedInfo.item(0).getContentsBeforeTransformation().getSubNode();
         Assert.assertSame(xmlSignature.getKeyInfo().getElement(), refNode);
-
-        Assert.assertEquals(1, xmlSignature.getKeyInfo().lengthX509Data());
     }
 
     private XMLSignature getTestSignature() throws Exception

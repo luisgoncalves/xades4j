@@ -24,7 +24,6 @@ import xades4j.properties.SignedSignatureProperty;
 import xades4j.properties.UnsignedSignatureProperty;
 import xades4j.XAdES4jException;
 import xades4j.providers.AlgorithmsProviderEx;
-import xades4j.providers.BasicSignatureOptionsProvider;
 import xades4j.providers.DataObjectPropertiesProvider;
 import xades4j.providers.KeyingDataProvider;
 import xades4j.providers.SignaturePropertiesProvider;
@@ -49,7 +48,7 @@ class SignerC extends SignerT
     protected SignerC(
             KeyingDataProvider keyingProvider,
             AlgorithmsProviderEx algorithmsProvider,
-            BasicSignatureOptionsProvider basicSignatureOptionsProvider,
+            BasicSignatureOptions basicSignatureOptions,
             SignedDataObjectsProcessor dataObjectDescsProcessor,
             SignaturePropertiesProvider signaturePropsProvider,
             ValidationDataProvider validationDataProvider,
@@ -60,7 +59,7 @@ class SignerC extends SignerT
             AlgorithmsParametersMarshallingProvider algorithmsParametersMarshaller,
             X500NameStyleProvider x500NameStyleProvider)
     {
-        super(keyingProvider, algorithmsProvider, basicSignatureOptionsProvider, dataObjectDescsProcessor, signaturePropsProvider, dataObjPropsProvider, propsDataObjectsGenerator, signedPropsMarshaller, unsignedPropsMarshaller, algorithmsParametersMarshaller, x500NameStyleProvider);
+        super(keyingProvider, algorithmsProvider, basicSignatureOptions, dataObjectDescsProcessor, signaturePropsProvider, dataObjPropsProvider, propsDataObjectsGenerator, signedPropsMarshaller, unsignedPropsMarshaller, algorithmsParametersMarshaller, x500NameStyleProvider);
         if (null == validationDataProvider)
             throw new NullPointerException("ValidationDataProvider is null");
 

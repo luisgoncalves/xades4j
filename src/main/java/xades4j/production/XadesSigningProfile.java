@@ -222,17 +222,42 @@ public abstract class XadesSigningProfile
         return withBinding(X500NameStyleProvider.class, x500NameStyleProviderClass);
     }
 
-
+    /**
+     * @deprecated
+     * <p>
+     * This method is deprecated and might be removed on future versions. Classes
+     * registered using this method will be adapted to the new {@link BasicSignatureOptions}
+     * class. If a {@BasicSignatureOptions} instance is registered it will override
+     * any registered {@link BasicSignatureOptionsProvider}.
+     * 
+     * @see #withBasicSignatureOptions(BasicSignatureOptions)
+     */
     public XadesSigningProfile withBasicSignatureOptionsProvider(
             BasicSignatureOptionsProvider optionsProvider)
     {
         return withBinding(BasicSignatureOptionsProvider.class, optionsProvider);
     }
 
+    /**
+     * @deprecated
+     * <p>
+     * This method is deprecated and might be removed on future versions. Classes
+     * registered using this method will be adapted to the new {@link BasicSignatureOptions}
+     * class. If a {@BasicSignatureOptions} instance is registered it will override
+     * any registered {@link BasicSignatureOptionsProvider}.
+     * 
+     * @see #withBasicSignatureOptions(BasicSignatureOptions)
+     */
     public XadesSigningProfile withBasicSignatureOptionsProvider(
             Class<? extends BasicSignatureOptionsProvider> optionsProvider)
     {
         return withBinding(BasicSignatureOptionsProvider.class, optionsProvider);
+    }
+    
+    public XadesSigningProfile withBasicSignatureOptions(
+            BasicSignatureOptions options)
+    {
+        return withBinding(BasicSignatureOptions.class, options);
     }
 
     public XadesSigningProfile withSignaturePropertiesProvider(
