@@ -19,6 +19,8 @@ package xades4j.production;
 import java.io.FileInputStream;
 import java.security.cert.CertificateFactory;
 import java.security.cert.X509Certificate;
+import java.util.Arrays;
+import java.util.List;
 
 import org.apache.xml.security.keys.content.KeyValue;
 import org.apache.xml.security.keys.content.x509.XMLX509Certificate;
@@ -39,6 +41,8 @@ import xades4j.utils.SignatureServicesTestBase;
 public class KeyInfoBuilderTest extends SignatureServicesTestBase
 {
     private static X509Certificate testCertificate;
+    private static X509Certificate intermCertificate;
+    private static List<X509Certificate> certificates;
 
     @BeforeClass
     public static void setUpClass() throws Exception
@@ -47,6 +51,8 @@ public class KeyInfoBuilderTest extends SignatureServicesTestBase
 
         CertificateFactory certificateFactory = CertificateFactory.getInstance("X.509");
         testCertificate = (X509Certificate) certificateFactory.generateCertificate(new FileInputStream(toPlatformSpecificCertDirFilePath("my/LG.cer")));
+        intermCertificate = (X509Certificate) certificateFactory.generateCertificate(new FileInputStream(toPlatformSpecificCertDirFilePath("my/Interm.cer")));
+        certificates = Arrays.asList(testCertificate, intermCertificate);
     }
 
     @Test
@@ -55,13 +61,13 @@ public class KeyInfoBuilderTest extends SignatureServicesTestBase
         System.out.println("includeCertAndKey");
 
         KeyInfoBuilder keyInfoBuilder = new KeyInfoBuilder(
-                new BasicSignatureOptions().includeSigningCertificate(true).includePublicKey(true),
+                new BasicSignatureOptions().includeSigningCertificate(SigningCertificateMode.SIGNING_CERTIFICATE).includePublicKey(true),
                 new TestAlgorithmsProvider(),
                 new TestAlgorithmsParametersMarshallingProvider(),
                 new DefaultX500NameStyleProvider());
         XMLSignature xmlSignature = getTestSignature();
 
-        keyInfoBuilder.buildKeyInfo(testCertificate, xmlSignature);
+        keyInfoBuilder.buildKeyInfo(certificates, xmlSignature);
 
         Assert.assertEquals(0, xmlSignature.getSignedInfo().getLength());
 
@@ -70,6 +76,32 @@ public class KeyInfoBuilderTest extends SignatureServicesTestBase
 
         XMLX509Certificate x509Certificate = xmlSignature.getKeyInfo().itemX509Data(0).itemCertificate(0);
         Assert.assertEquals(testCertificate, x509Certificate.getX509Certificate());
+    }
+    
+        @Test
+    public void testIncludeCertChain() throws Exception
+    {
+        System.out.println("includeCertChain");
+
+        KeyInfoBuilder keyInfoBuilder = new KeyInfoBuilder(
+                new BasicSignatureOptions().includeSigningCertificate(SigningCertificateMode.FULL_CHAIN),
+                new TestAlgorithmsProvider(),
+                new TestAlgorithmsParametersMarshallingProvider(),
+                new DefaultX500NameStyleProvider());
+        XMLSignature xmlSignature = getTestSignature();
+
+        keyInfoBuilder.buildKeyInfo(certificates, xmlSignature);
+
+        Assert.assertEquals(0, xmlSignature.getSignedInfo().getLength());
+        
+        Assert.assertEquals(1, xmlSignature.getKeyInfo().lengthX509Data());
+        Assert.assertEquals(2, xmlSignature.getKeyInfo().itemX509Data(0).lengthCertificate());
+
+        XMLX509Certificate x509Certificate = xmlSignature.getKeyInfo().itemX509Data(0).itemCertificate(0);
+        Assert.assertEquals(testCertificate, x509Certificate.getX509Certificate());
+        
+        x509Certificate = xmlSignature.getKeyInfo().itemX509Data(0).itemCertificate(1);
+        Assert.assertEquals(intermCertificate, x509Certificate.getX509Certificate());
     }
     
     @Test
@@ -84,7 +116,7 @@ public class KeyInfoBuilderTest extends SignatureServicesTestBase
                 new DefaultX500NameStyleProvider());
         XMLSignature xmlSignature = getTestSignature();
 
-        keyInfoBuilder.buildKeyInfo(testCertificate, xmlSignature);
+        keyInfoBuilder.buildKeyInfo(certificates, xmlSignature);
 
         Assert.assertEquals(1, xmlSignature.getKeyInfo().lengthX509Data());
         Assert.assertEquals(1, xmlSignature.getKeyInfo().itemX509Data(0).lengthIssuerSerial());
@@ -102,7 +134,7 @@ public class KeyInfoBuilderTest extends SignatureServicesTestBase
                 new DefaultX500NameStyleProvider());
         XMLSignature xmlSignature = getTestSignature();
 
-        keyInfoBuilder.buildKeyInfo(testCertificate, xmlSignature);
+        keyInfoBuilder.buildKeyInfo(certificates, xmlSignature);
 
         Assert.assertEquals(1, xmlSignature.getKeyInfo().lengthX509Data());
         Assert.assertEquals(1, xmlSignature.getKeyInfo().itemX509Data(0).lengthSubjectName());
@@ -120,7 +152,7 @@ public class KeyInfoBuilderTest extends SignatureServicesTestBase
                 new DefaultX500NameStyleProvider());
         XMLSignature xmlSignature = getTestSignature();
 
-        keyInfoBuilder.buildKeyInfo(testCertificate, xmlSignature);
+        keyInfoBuilder.buildKeyInfo(certificates, xmlSignature);
 
         SignedInfo signedInfo = xmlSignature.getSignedInfo();
         Assert.assertEquals(1, signedInfo.getLength());

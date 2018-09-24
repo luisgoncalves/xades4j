@@ -18,6 +18,7 @@ package xades4j.production;
 
 import java.security.cert.CertificateException;
 import java.security.cert.X509Certificate;
+import java.util.List;
 
 import org.apache.xml.security.exceptions.XMLSecurityException;
 import org.apache.xml.security.keys.content.X509Data;
@@ -59,9 +60,11 @@ class KeyInfoBuilder
     }
 
     void buildKeyInfo(
-            X509Certificate signingCertificate,
+            List<X509Certificate> signingCertificateChain,
             XMLSignature xmlSig) throws KeyingDataException, UnsupportedAlgorithmException
     {
+        X509Certificate signingCertificate = signingCertificateChain.get(0);
+        
         // Check key usage.
         // - KeyUsage[0] = digitalSignature
         // - KeyUsage[1] = nonRepudiation
@@ -80,22 +83,29 @@ class KeyInfoBuilder
             throw new SigningCertValidityException(signingCertificate);
         }
 
-        if (this.basicSignatureOptions.includeSigningCertificate()
+        if (this.basicSignatureOptions.includeSigningCertificate() != SigningCertificateMode.NONE
             || this.basicSignatureOptions.includeIssuerSerial()
             || this.basicSignatureOptions.includeSubjectName())
         {
             X509Data x509Data = new X509Data(xmlSig.getDocument());
             xmlSig.getKeyInfo().add(x509Data);
 
-            if (this.basicSignatureOptions.includeSigningCertificate())
+            if (this.basicSignatureOptions.includeSigningCertificate() != SigningCertificateMode.NONE)
             {
-                try
+                int loopLimit = this.basicSignatureOptions.includeSigningCertificate() == SigningCertificateMode.SIGNING_CERTIFICATE
+                        ? 1
+                        : signingCertificateChain.size();
+                
+                for(int i = 0; i < loopLimit; ++i)
                 {
-                    x509Data.addCertificate(signingCertificate);
-                } 
-                catch (XMLSecurityException ex)
-                {
-                    throw new KeyingDataException(ex.getMessage(), ex);
+                    try
+                    {
+                        x509Data.addCertificate(signingCertificateChain.get(i));
+                    } 
+                    catch (XMLSecurityException ex)
+                    {
+                        throw new KeyingDataException(ex.getMessage(), ex);
+                    }
                 }
             }
 

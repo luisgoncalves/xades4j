@@ -180,7 +180,7 @@ class SignerBES implements XadesSigner
                 signature);
         
         /* ds:KeyInfo */
-        this.keyInfoBuilder.buildKeyInfo(signingCertificate, signature);
+        this.keyInfoBuilder.buildKeyInfo(signingCertificateChain, signature);
 
         /* QualifyingProperties element */
         // Create the QualifyingProperties element

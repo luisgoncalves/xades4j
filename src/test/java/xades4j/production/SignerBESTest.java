@@ -120,7 +120,7 @@ public class SignerBESTest extends SignerTestBase
         
         XadesSigner signer = new XadesBesSigningProfile(keyingProviderMy)
                 .withBasicSignatureOptions(new BasicSignatureOptions()
-                    .includeSigningCertificate(true)
+                    .includeSigningCertificate(SigningCertificateMode.SIGNING_CERTIFICATE)
                     .includeIssuerSerial(true)
                     .includeSubjectName(true)
                     .signKeyInfo(true))

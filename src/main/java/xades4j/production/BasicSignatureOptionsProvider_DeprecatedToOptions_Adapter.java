@@ -40,7 +40,9 @@ final class BasicSignatureOptionsProvider_DeprecatedToOptions_Adapter implements
     public BasicSignatureOptions get()
     {
         return new BasicSignatureOptions()
-                .includeSigningCertificate(this.provider.includeSigningCertificate())
+                .includeSigningCertificate(this.provider.includeSigningCertificate()
+                        ? SigningCertificateMode.SIGNING_CERTIFICATE
+                        : SigningCertificateMode.NONE)
                 .includeSubjectName(this.provider.includeSigningCertificate())
                 .includeIssuerSerial(this.provider.includeSigningCertificate())
                 .includePublicKey(this.provider.includePublicKey())

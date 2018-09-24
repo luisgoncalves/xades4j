@@ -24,26 +24,26 @@ package xades4j.production;
  */
 public final class BasicSignatureOptions
 {
-    private boolean includeSigningCertificate;
+    private SigningCertificateMode includeSigningCertificateMode;
     private boolean includeSubjectName;
     private boolean includeIssuerSerial;
     private boolean includePublicKey;
     private boolean signKeyInfo;
 
     /**
-     * Configures whether the signing certificate should be included in {@code ds:KeyInfo}.
-     * @param includeSigningCertificate {@code true} if the certificate should be included; false otherwise
+     * Configures whether the signing certificate / chain should be included in {@code ds:KeyInfo}.
+     * @param includeSigningCertificateMode the include mode
      * @return the current instance
      */
-    public BasicSignatureOptions includeSigningCertificate(boolean includeSigningCertificate)
+    public BasicSignatureOptions includeSigningCertificate(SigningCertificateMode includeSigningCertificateMode)
     {
-        this.includeSigningCertificate = includeSigningCertificate;
+        this.includeSigningCertificateMode = includeSigningCertificateMode;
         return this;
     }
     
-    boolean includeSigningCertificate()
+    SigningCertificateMode includeSigningCertificate()
     {
-        return this.includeSigningCertificate;
+        return this.includeSigningCertificateMode;
     }
 
     /**
