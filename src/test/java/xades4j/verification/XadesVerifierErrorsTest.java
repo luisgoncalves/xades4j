@@ -108,6 +108,13 @@ public class XadesVerifierErrorsTest extends VerifierTestBase
         System.out.println("errVerifyUnmatchSigTSDigest");
         verifyBadSignature("document.signed.t.bes.badtsdigest.xml", mySigsVerificationProfile);
     }
+    
+    @Test(expected = CounterSignatureSigValueRefException.class)
+    public void testErrVerifyCounterSigWithUnallowedTransforms() throws Exception
+    {
+        System.out.println("errVerifyCounterSigWithUnallowedTransforms");
+        verifyBadSignature("document.signed.bes.cs.invalidtransforms.xml", mySigsVerificationProfile);
+    }
 
     private static void verifyBadSignature(String sigFileName, XadesVerificationProfile p) throws Exception
     {
