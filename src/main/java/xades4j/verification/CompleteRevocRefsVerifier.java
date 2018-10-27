@@ -75,7 +75,9 @@ class CompleteRevocRefsVerifier implements QualifyingPropertyVerifier<CompleteRe
                 // should treat the signature as invalid."
 
                 // Check issuer and issue time.
-                if (!crl.getIssuerX500Principal().equals(this.x500NameStyleProvider.fromString(crlRef.issuerDN)) ||
+
+
+                if (!x500NameStyleProvider.areEqual(crl.getIssuerX500Principal(), this.x500NameStyleProvider.fromString(crlRef.issuerDN)) ||
                         !crl.getThisUpdate().equals(crlRef.issueTime.getTime()))
                     continue;
                 
