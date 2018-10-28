@@ -58,7 +58,7 @@ class CertRefUtils
                     }
                 };
             }
-            if (cert.getIssuerX500Principal().equals(certRefIssuerPrincipal) &&
+            if (x500NameStyleProvider.areEqual(cert.getIssuerX500Principal(), certRefIssuerPrincipal) &&
                     certRef.serialNumber.equals(cert.getSerialNumber()))
                 return certRef;
         }

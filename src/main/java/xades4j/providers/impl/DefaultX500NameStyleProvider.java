@@ -31,10 +31,18 @@ public class DefaultX500NameStyleProvider implements X500NameStyleProvider
     {
         return new X500Principal(dn, x500ExtensibleNameStyle.getKeywordMap());
     }
-
     @Override
     public String toString(X500Principal x500Principal)
     {
         return X500Name.getInstance(x500ExtensibleNameStyle, x500Principal.getEncoded()).toString();
     }
+
+    @Override
+    public boolean areEqual(X500Principal dn1, X500Principal dn2)
+    {
+        X500Name bcDn1 = X500Name.getInstance(x500ExtensibleNameStyle, dn1.getEncoded());
+        X500Name bcDn2 = X500Name.getInstance(x500ExtensibleNameStyle, dn2.getEncoded());
+        return bcDn1.equals(bcDn2);
+    }
+
 }

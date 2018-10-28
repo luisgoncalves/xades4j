@@ -71,7 +71,7 @@ class SigningCertificateVerifier implements QualifyingPropertyVerifier<SigningCe
         // from SigningCertificate, are the same."
         X500Principal keyInfoIssuer = certChainData.getValidationCertIssuer();
         if (keyInfoIssuer != null &&
-                (!this.x500NameStyleProvider.fromString(signingCertRef.issuerDN).equals(keyInfoIssuer) ||
+                (!this.x500NameStyleProvider.areEqual(this.x500NameStyleProvider.fromString(signingCertRef.issuerDN), keyInfoIssuer) ||
                 !signingCertRef.serialNumber.equals(certChainData.getValidationCertSerialNumber())))
             throw new SigningCertificateIssuerSerialMismatchException(
                     signingCertRef.issuerDN,
