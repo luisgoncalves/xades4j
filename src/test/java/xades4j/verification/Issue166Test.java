@@ -8,7 +8,6 @@ import org.bouncycastle.asn1.x500.X500Name;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
-import xades4j.providers.impl.DefaultX500NameStyleProvider;
 import xades4j.utils.SignatureServicesTestBase;
 
 /**
@@ -22,7 +21,6 @@ public class Issue166Test extends SignatureServicesTestBase
     private final String dnPlain = "OID.2.5.4.97=VATES-A66721499, CN=UANATACA CA1 2016, OU=TSP-UANATACA, O=UANATACA S.A., L=Barcelona (see current address at www.uanataca.com/address), C=ES";
 
     private X509Certificate cert;
-    private DefaultX500NameStyleProvider nameStyleProvider;
 
     @Before
     public void setUp() throws Exception
@@ -33,7 +31,6 @@ public class Issue166Test extends SignatureServicesTestBase
         {
             cert = (X509Certificate) certFactory.generateCertificate(is);
         }
-        nameStyleProvider = new DefaultX500NameStyleProvider();
     }
 
     @Test
@@ -121,17 +118,4 @@ public class Issue166Test extends SignatureServicesTestBase
 
         Assert.assertTrue(principal1.equals(principal2));
     }
-
-    @Test
-    public void compareWithNameStyleProvider()
-    {
-        X500Principal principal1 = new X500Principal(dnUtf8);
-        X500Principal principal2 = new X500Principal(dnPrintable);
-        X500Principal principal3 = new X500Principal(dnPlain);
-
-        Assert.assertTrue(nameStyleProvider.areEqual(principal1,principal2));
-        Assert.assertTrue(nameStyleProvider.areEqual(principal1,principal3));
-        Assert.assertTrue(nameStyleProvider.areEqual(principal2,principal3));
-    }
-
 }

@@ -32,7 +32,6 @@ import xades4j.UnsupportedAlgorithmException;
 import xades4j.properties.data.CRLRef;
 import xades4j.properties.data.CompleteRevocationRefsData;
 import xades4j.providers.MessageDigestEngineProvider;
-import xades4j.providers.X500NameStyleProvider;
 import xades4j.utils.CrlExtensionsUtils;
 
 /**
@@ -42,15 +41,15 @@ import xades4j.utils.CrlExtensionsUtils;
 class CompleteRevocRefsVerifier implements QualifyingPropertyVerifier<CompleteRevocationRefsData>
 {
     private final MessageDigestEngineProvider digestEngineProvider;
-    private final X500NameStyleProvider x500NameStyleProvider;
+    private final DistinguishedNameComparer dnComparer;
 
     @Inject
     public CompleteRevocRefsVerifier(
             MessageDigestEngineProvider digestEngineProvider,
-            X500NameStyleProvider x500NameStyleProvider)
+            DistinguishedNameComparer dnComparer)
     {
         this.digestEngineProvider = digestEngineProvider;
-        this.x500NameStyleProvider = x500NameStyleProvider;
+        this.dnComparer = dnComparer;
     }
 
     @Override
@@ -76,8 +75,7 @@ class CompleteRevocRefsVerifier implements QualifyingPropertyVerifier<CompleteRe
 
                 // Check issuer and issue time.
 
-
-                if (!x500NameStyleProvider.areEqual(crl.getIssuerX500Principal(), this.x500NameStyleProvider.fromString(crlRef.issuerDN)) ||
+                if (!this.dnComparer.areEqual(crl.getIssuerX500Principal(), crlRef.issuerDN) ||
                         !crl.getThisUpdate().equals(crlRef.issueTime.getTime()))
                     continue;
                 
