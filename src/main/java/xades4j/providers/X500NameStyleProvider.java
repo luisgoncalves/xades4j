@@ -3,6 +3,8 @@ package xades4j.providers;
 import javax.security.auth.x500.X500Principal;
 
 /**
+ * <b>Experimental API</b>. It may be changed or removed in future releases.
+ * 
  * @author Artem R. Romanenko
  * @version 06.08.18
  */
