@@ -14,6 +14,7 @@ import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;
 import org.junit.runners.Parameterized.Parameters;
 import xades4j.providers.impl.DefaultX500NameStyleProvider;
+import xades4j.utils.RFC4519ExtensibleStyle;
 import xades4j.utils.SignatureServicesTestBase;
 
 /**
@@ -73,20 +74,20 @@ public class DistinguishedNameComparerTest extends SignatureServicesTestBase
     }
     private final String issuerDn;
     private final X509Certificate cert;
-    private final DefaultX500NameStyleProvider nameStyleProvider;
+    private final RFC4519ExtensibleStyle nameStyle;
 
     public DistinguishedNameComparerTest(String issuerDn, X509Certificate cert) throws IOException
     {
         this.issuerDn = issuerDn;
         this.cert = cert;
-        this.nameStyleProvider = new DefaultX500NameStyleProvider();
+        this.nameStyle = new RFC4519ExtensibleStyle();
     }
 
     @Test
     public void canCompare()
     {
         X500Principal principal = cert.getIssuerX500Principal();
-        DistinguishedNameComparer comparer = new DistinguishedNameComparer(nameStyleProvider);
+        DistinguishedNameComparer comparer = new DistinguishedNameComparer(nameStyle);
 
         assertTrue(comparer.areEqual(principal, issuerDn));
     }

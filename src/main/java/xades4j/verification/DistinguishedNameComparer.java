@@ -20,6 +20,7 @@ import com.google.inject.Inject;
 import javax.security.auth.x500.X500Principal;
 import org.bouncycastle.asn1.x500.X500Name;
 import xades4j.providers.X500NameStyleProvider;
+import xades4j.utils.X500ExtensibleNameStyle;
 
 /**
  * <b>Experimental API</b>. It may be changed or removed in future releases.
@@ -28,12 +29,12 @@ import xades4j.providers.X500NameStyleProvider;
  */
 class DistinguishedNameComparer
 {
-    private final X500NameStyleProvider x500NameStyleProvider;
+    private final X500ExtensibleNameStyle x500NameStyle;
     
     @Inject
-    DistinguishedNameComparer(X500NameStyleProvider x500NameStyleProvider)
+    DistinguishedNameComparer(X500ExtensibleNameStyle x500NameStyle)
     {
-        this.x500NameStyleProvider = x500NameStyleProvider;
+        this.x500NameStyle = x500NameStyle;
     }
 
     /**
@@ -42,8 +43,7 @@ class DistinguishedNameComparer
     boolean areEqual(X500Principal parsedDn, String stringDn)
     {
         X500Name first = X500Name.getInstance(parsedDn.getEncoded());
-        // TODO consider simplifying this by constructing from string and using the configured keyword map
-        X500Name second = X500Name.getInstance(this.x500NameStyleProvider.fromString(stringDn).getEncoded());
+        X500Name second = new X500Name(this.x500NameStyle, stringDn);
         return first.equals(second);
     }
 }
