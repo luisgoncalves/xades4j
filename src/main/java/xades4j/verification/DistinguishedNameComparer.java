@@ -30,11 +30,13 @@ import xades4j.utils.X500ExtensibleNameStyle;
 class DistinguishedNameComparer
 {
     private final X500ExtensibleNameStyle x500NameStyle;
+    private final X500NameStyleProvider x500NameStyleProvider;
     
     @Inject
-    DistinguishedNameComparer(X500ExtensibleNameStyle x500NameStyle)
+    DistinguishedNameComparer(X500ExtensibleNameStyle x500NameStyle, X500NameStyleProvider x500NameStyleProvider)
     {
         this.x500NameStyle = x500NameStyle;
+        this.x500NameStyleProvider = x500NameStyleProvider;
     }
 
     /**
@@ -43,7 +45,7 @@ class DistinguishedNameComparer
     boolean areEqual(X500Principal parsedDn, String stringDn)
     {
         X500Name first = X500Name.getInstance(parsedDn.getEncoded());
-        X500Name second = new X500Name(this.x500NameStyle, stringDn);
+        X500Name second = X500Name.getInstance(this.x500NameStyle, this.x500NameStyleProvider.fromString(stringDn).getEncoded());
         return first.equals(second);
     }
 }
