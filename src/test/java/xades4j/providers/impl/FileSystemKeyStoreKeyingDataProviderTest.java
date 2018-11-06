@@ -17,11 +17,17 @@
 package xades4j.providers.impl;
 
 import java.io.FileInputStream;
+import java.security.Security;
 import java.security.cert.CertificateFactory;
 import java.security.cert.X509Certificate;
+import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
-import org.junit.Before;
+
+import org.bouncycastle.jce.provider.BouncyCastleProvider;
 import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.junit.runners.Parameterized;
 import xades4j.utils.SignatureServicesTestBase;
 import static org.junit.Assert.*;
 
@@ -29,24 +35,46 @@ import static org.junit.Assert.*;
  *
  * @author Luís
  */
+@RunWith(Parameterized.class)
 public class FileSystemKeyStoreKeyingDataProviderTest
 {
-    FileSystemKeyStoreKeyingDataProvider keyingProvider;
-    X509Certificate signCert;
+    @Parameterized.Parameter(0)
+    public FileSystemKeyStoreKeyingDataProvider keyingProvider;
+    @Parameterized.Parameter(1)
+    public X509Certificate signCert;
 
-    @Before
-    public void setUp() throws Exception
-    {
-        keyingProvider = new FileSystemKeyStoreKeyingDataProvider(
+    @Parameterized.Parameters
+    public static Collection<Object[]> data() throws Exception {
+        Security.addProvider(new BouncyCastleProvider());
+        FileSystemKeyStoreKeyingDataProvider  keyingProviderPksc12 = new FileSystemKeyStoreKeyingDataProvider(
                 "pkcs12",
                 SignatureServicesTestBase.toPlatformSpecificCertDirFilePath("my/LG.pfx"),
                 new FirstCertificateSelector(),
                 new DirectPasswordProvider("mykeypass"),
                 new DirectPasswordProvider("mykeypass"), true);
-
+        FileSystemKeyStoreKeyingDataProvider  keyingProviderJks = new FileSystemKeyStoreKeyingDataProvider(
+                "JKS",
+                SignatureServicesTestBase.toPlatformSpecificCertDirFilePath("my/LG.jks"),
+                new FirstCertificateSelector(),
+                new DirectPasswordProvider("mykeypass"),
+                new DirectPasswordProvider("mykeypass"), true);
+        FileSystemKeyStoreKeyingDataProvider  keyingProviderPksc12BC = new FileSystemKeyStoreKeyingDataProvider(
+                "pkcs12",
+                SignatureServicesTestBase.toPlatformSpecificCertDirFilePath("my/LG.pfx"),
+                new FirstCertificateSelector(),
+                new DirectPasswordProvider("mykeypass"),
+                new DirectPasswordProvider("mykeypass"), true,new BouncyCastleProvider());
         CertificateFactory cf = CertificateFactory.getInstance("X.509");
-        signCert = (X509Certificate)cf.generateCertificate(
+
+        X509Certificate signCert = (X509Certificate)cf.generateCertificate(
                 new FileInputStream(SignatureServicesTestBase.toPlatformSpecificCertDirFilePath("my/LG.cer")));
+        ArrayList<Object[]> result = new ArrayList<Object[]>();
+        result.add(new Object[]{keyingProviderPksc12,signCert});
+
+        //TODO test will break, need find out why
+        //result.add(new Object[]{keyingProviderPksc12BC,signCert});
+        result.add(new Object[]{keyingProviderJks,signCert});
+        return result;
     }
 
     @Test
