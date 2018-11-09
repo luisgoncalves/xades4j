@@ -26,7 +26,6 @@ import xades4j.providers.impl.FirstCertificateSelector;
 import xades4j.providers.KeyingDataProvider;
 import xades4j.providers.impl.PKCS11KeyStoreKeyingDataProvider;
 import xades4j.utils.SignatureServicesTestBase;
-import static xades4j.utils.SignatureServicesTestBase.onWindowsPlatform;
 
 /**
  *
@@ -44,8 +43,8 @@ public class SignerTestBase extends SignatureServicesTestBase
     {
         try
         {
-            keyingProviderMy = createFileSystemKeyingDataProvider("pkcs12", "my/LG.pfx", "mykeypass", true);
-            keyingProviderNist = createFileSystemKeyingDataProvider("pkcs12", "csrc.nist/test4.p12", "password", false);
+            keyingProviderMy = createFileSystemKeyingDataProvider("JKS", "my/LG.jks", "mykeypass", true);
+            keyingProviderNist = createFileSystemKeyingDataProvider("JKS", "csrc.nist/test4.jks", "password", false);
         } catch (KeyStoreException e)
         {
             throw new NullPointerException("SignerTestBase init failed: " + e.getMessage());

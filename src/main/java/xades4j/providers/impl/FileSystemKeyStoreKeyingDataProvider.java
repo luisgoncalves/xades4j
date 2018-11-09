@@ -21,6 +21,7 @@ import java.security.KeyStore;
 import java.security.KeyStore.Builder;
 import java.security.KeyStore.ProtectionParameter;
 import java.security.KeyStoreException;
+import java.security.Provider;
 import java.security.cert.X509Certificate;
 
 /**
@@ -49,18 +50,41 @@ public class FileSystemKeyStoreKeyingDataProvider extends KeyStoreKeyingDataProv
             KeyEntryPasswordProvider entryPasswordProvider,
             boolean returnFullChain) throws KeyStoreException
     {
+       this(keyStoreType,keyStorePath,certificateSelector,keyStorePasswordProvider,entryPasswordProvider,returnFullChain,null);
+    }
+
+    /**
+     *
+     * @param keyStoreType the type of the keystore (jks, pkcs12, etc)
+     * @param keyStorePath the file-system path of the keystore
+     * @param certificateSelector the selector of signing certificate
+     * @param keyStorePasswordProvider the provider of the keystore loading password
+     * @param entryPasswordProvider the provider of entry passwords
+     * @param returnFullChain indicates of the full certificate chain should be returned, if available
+     * @param provider provider for parsing this store type, if it is passed <i>null</i> will be used default provider
+     * @throws KeyStoreException
+     */
+    public FileSystemKeyStoreKeyingDataProvider(
+            final String keyStoreType,
+            final String keyStorePath,
+            SigningCertSelector certificateSelector,
+            KeyStorePasswordProvider keyStorePasswordProvider,
+            KeyEntryPasswordProvider entryPasswordProvider,
+            boolean returnFullChain,
+            final Provider provider) throws KeyStoreException
+    {
         super(new KeyStoreBuilderCreator()
-        {
-            @Override
-            public Builder getBuilder(ProtectionParameter loadProtection)
-            {
-                return KeyStore.Builder.newInstance(
-                        keyStoreType,
-                        null,
-                        new File(keyStorePath),
-                        loadProtection);
-            }
-        },
+              {
+                  @Override
+                  public Builder getBuilder(ProtectionParameter loadProtection)
+                  {
+                      return KeyStore.Builder.newInstance(
+                              keyStoreType,
+                              provider,
+                              new File(keyStorePath),
+                              loadProtection);
+                  }
+              },
                 certificateSelector,
                 keyStorePasswordProvider,
                 entryPasswordProvider,
