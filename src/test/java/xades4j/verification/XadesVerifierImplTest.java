@@ -19,12 +19,12 @@ package xades4j.verification;
 import java.io.File;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
-import static org.junit.Assume.assumeTrue;
 
 import java.io.FileInputStream;
 import java.io.InputStream;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.GregorianCalendar;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -98,6 +98,18 @@ public class XadesVerifierImplTest extends VerifierTestBase
         assertEquals(XAdESForm.BES, f);
     }
 
+    @Test
+    public void testVerifyBESPTCC() throws Exception
+    {
+        System.out.println("verifyBESPtCC");
+
+        XAdESForm f = verifySignature(
+                "document.signed.bes.ptcc.xml",
+                new XadesVerificationProfile(validationProviderPtCc),
+                new SignatureSpecificVerificationOptions().setDefaultVerificationDate(new GregorianCalendar(2014, 0, 1).getTime()));
+        assertEquals(XAdESForm.BES, f);
+    }
+    
     @Test
     public void testVerifyDetachedBES() throws Exception
     {
@@ -193,17 +205,6 @@ public class XadesVerifierImplTest extends VerifierTestBase
     {
         System.out.println("verifyTEPES");
         XAdESForm f = verifySignature("document.signed.t.epes.xml");
-        assertEquals(XAdESForm.T, f);
-    }
-
-    @Test
-    public void testVerifyTPTCC() throws Exception
-    {
-        System.out.println("verifyTPtCC");
-        assumeTrue(onWindowsPlatform() && null != validationProviderPtCc);
-
-        XAdESForm f = verifySignature("document.signed.t.bes.ptcc.xml",
-                new XadesVerificationProfile(validationProviderPtCc));
         assertEquals(XAdESForm.T, f);
     }
 

@@ -73,15 +73,8 @@ public class VerifierTestBase extends SignatureServicesTestBase
             // Validation provider for "pt" folder. Used for signatures produced
             // with the PT citizen card.
             certStore = createDirectoryCertStore("pt");
-            try
-            {
-                ks = KeyStore.getInstance("Windows-ROOT");
-                ks.load(null);
-                validationProviderPtCc = new PKIXCertificateValidationProvider(ks, false, certStore.getStore());
-            } catch (Exception e)
-            {
-                // Not on windows platform...
-            }
+            ks = createAndLoadJKSKeyStore("pt/trustAnchor", "password");
+            validationProviderPtCc = new PKIXCertificateValidationProvider(ks, false, certStore.getStore(), gvaCRLStore.getStore());
         } catch (Exception ex)
         {
             throw new NullPointerException("VerifierTestBase init failed: " + ex.getMessage());
@@ -107,7 +100,7 @@ public class VerifierTestBase extends SignatureServicesTestBase
         return verifySignature(sigFileName, new XadesVerificationProfile(VerifierTestBase.validationProviderMySigs), options);
     }
     
-    private static XAdESForm verifySignature(
+    protected static XAdESForm verifySignature(
             String sigFileName,
             XadesVerificationProfile p,
             SignatureSpecificVerificationOptions options) throws Exception
