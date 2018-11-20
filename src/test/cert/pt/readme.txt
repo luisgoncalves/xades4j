@@ -5,3 +5,7 @@ Certificates in the Portuguese Government PKI. The top most CA is "GTE CyberTrus
 Used to verify signatures produced with PT Citizen Cards.
 
 Cert path is: GTE Global Root > ECRaizEstado > CC001 > ECAuthCC002 > (Personal)
+
+======== Trust-anchors keystore =========
+
+keytool -importcert -alias GTERoot-file "GTEGlobalRoot.cer" -keystore trustAnchor -storepass password

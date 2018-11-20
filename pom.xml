@@ -14,6 +14,7 @@
         <maven.compiler.target>1.6</maven.compiler.target>
         <maven.compiler.testSource>1.7</maven.compiler.testSource>
         <maven.compiler.testTarget>1.7</maven.compiler.testTarget>
+        <bouncycastle.version>1.56</bouncycastle.version>
     </properties>
 
     <description>
@@ -66,12 +67,12 @@
         <dependency>
             <groupId>org.bouncycastle</groupId>
             <artifactId>bcpkix-jdk15on</artifactId>
-            <version>1.56</version>
+            <version>${bouncycastle.version}</version>
         </dependency>
         <dependency>
             <groupId>org.bouncycastle</groupId>
             <artifactId>bcprov-jdk15on</artifactId>
-            <version>1.56</version>
+            <version>${bouncycastle.version}</version>
         </dependency>
     </dependencies>
 	
