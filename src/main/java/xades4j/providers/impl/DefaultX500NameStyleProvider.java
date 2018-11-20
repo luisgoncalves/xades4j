@@ -9,6 +9,8 @@ import xades4j.utils.X500ExtensibleNameStyle;
 import javax.security.auth.x500.X500Principal;
 
 /**
+ * <b>Experimental API</b>. It may be changed or removed in future releases.
+ * 
  * @author Artem R. Romanenko
  * @version 06.08.18
  */
@@ -31,7 +33,6 @@ public class DefaultX500NameStyleProvider implements X500NameStyleProvider
     {
         return new X500Principal(dn, x500ExtensibleNameStyle.getKeywordMap());
     }
-
     @Override
     public String toString(X500Principal x500Principal)
     {

@@ -210,12 +210,18 @@ public abstract class XadesSigningProfile
         return withBinding(MessageDigestEngineProvider.class, digestProviderClass);
     }
 
+    /**
+     * <b>Experimental API</b>. It may be changed or removed in future releases.
+     */
     public XadesSigningProfile withX500NameStyleProvider(
             X500NameStyleProvider x500NameStyleProvider)
     {
         return withBinding(X500NameStyleProvider.class, x500NameStyleProvider);
     }
 
+    /**
+     * <b>Experimental API</b>. It may be changed or removed in future releases.
+     */
     public XadesSigningProfile withX500NameStyleProvider(
             Class<? extends X500NameStyleProvider> x500NameStyleProviderClass)
     {

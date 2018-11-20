@@ -21,12 +21,10 @@ import java.security.cert.CertificateEncodingException;
 import java.security.cert.X509Certificate;
 import java.util.Arrays;
 import java.util.Collection;
-import javax.security.auth.x500.X500Principal;
 import xades4j.UnsupportedAlgorithmException;
 import xades4j.XAdES4jException;
 import xades4j.properties.data.CertRef;
 import xades4j.providers.MessageDigestEngineProvider;
-import xades4j.providers.X500NameStyleProvider;
 
 /**
  *
@@ -37,17 +35,19 @@ class CertRefUtils
     static CertRef findCertRef(
             X509Certificate cert,
             Collection<CertRef> certRefs,
-            X500NameStyleProvider x500NameStyleProvider) throws SigningCertificateVerificationException
+            DistinguishedNameComparer dnComparer) throws SigningCertificateVerificationException
     {
         for (final CertRef certRef : certRefs)
         {
-            // Need to use a X500Principal because the DN strings can have different
-            // spaces and so on.
-            X500Principal certRefIssuerPrincipal;
             try
             {
-                certRefIssuerPrincipal = x500NameStyleProvider.fromString(certRef.issuerDN);
-            } catch (IllegalArgumentException ex)
+                if (dnComparer.areEqual(cert.getIssuerX500Principal(), certRef.issuerDN) &&
+                    certRef.serialNumber.equals(cert.getSerialNumber()))
+                {
+                    return certRef;
+                }
+            }
+            catch (IllegalArgumentException ex)
             {
                 throw new SigningCertificateVerificationException(ex)
                 {
@@ -58,9 +58,6 @@ class CertRefUtils
                     }
                 };
             }
-            if (cert.getIssuerX500Principal().equals(certRefIssuerPrincipal) &&
-                    certRef.serialNumber.equals(cert.getSerialNumber()))
-                return certRef;
         }
         return null;
     }
