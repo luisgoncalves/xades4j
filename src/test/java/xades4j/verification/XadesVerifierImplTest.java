@@ -161,7 +161,7 @@ public class XadesVerifierImplTest extends VerifierTestBase
 
         Document doc = getDocument("document.signed.bes.extres.xml");
         Element signatureNode = getSigElement(doc);
-        SignatureSpecificVerificationOptions options = new SignatureSpecificVerificationOptions().useBaseUri("http://www.ietf.org/rfc/");
+        SignatureSpecificVerificationOptions options = new SignatureSpecificVerificationOptions().useBaseUri("http://luisgoncalves.github.io/xades4j/images/");
 
         XadesSignatureFormatExtender formExt = new XadesFormatExtenderProfile().getFormatExtender();
 
