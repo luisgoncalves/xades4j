@@ -81,7 +81,6 @@ class SignerBES implements XadesSigner
     private final SignedPropertiesMarshaller signedPropsMarshaller;
     private final UnsignedPropertiesMarshaller unsignedPropsMarshaller;
     private final AlgorithmsParametersMarshallingProvider algorithmsParametersMarshaller;
-    private final X500NameStyleProvider x500NameStyleProvider;
     /**/
     private final KeyInfoBuilder keyInfoBuilder;
     private final QualifyingPropertiesProcessor qualifPropsProcessor;
@@ -115,8 +114,6 @@ class SignerBES implements XadesSigner
         this.signedPropsMarshaller = signedPropsMarshaller;
         this.unsignedPropsMarshaller = unsignedPropsMarshaller;
         this.algorithmsParametersMarshaller = algorithmsParametersMarshaller;
-        this.x500NameStyleProvider = x500NameStyleProvider;
-
         this.dataObjectDescsProcessor = dataObjectDescsProcessor;
         this.keyInfoBuilder = new KeyInfoBuilder(basicSignatureOptions, algorithmsProvider, algorithmsParametersMarshaller, x500NameStyleProvider);
         this.qualifPropsProcessor = new QualifyingPropertiesProcessor(signaturePropsProvider, dataObjPropsProvider);
