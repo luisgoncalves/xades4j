@@ -38,19 +38,21 @@ import xades4j.properties.QualifyingProperty;
 import xades4j.properties.UnsignedSignatureProperty;
 import xades4j.XAdES4jException;
 import xades4j.XAdES4jXMLSigException;
+import xades4j.properties.data.CertRef;
 import xades4j.properties.data.PropertyDataObject;
 import xades4j.properties.UnsignedProperties;
 import xades4j.production.XadesSignatureFormatExtender;
 import xades4j.properties.SignatureTimeStampProperty;
 import xades4j.properties.data.SignatureTimeStampData;
+import xades4j.properties.data.SigningCertificateData;
 import xades4j.providers.CertificateValidationProvider;
 import xades4j.providers.ValidationData;
 import xades4j.providers.X500NameStyleProvider;
 import xades4j.utils.CollectionUtils;
 import xades4j.utils.ObjectUtils;
 import xades4j.utils.PropertiesUtils;
+import xades4j.verification.KeyInfoProcessor.KeyInfoRes;
 import xades4j.verification.RawSignatureVerifier.RawSignatureVerifierContext;
-import xades4j.verification.SignatureUtils.KeyInfoRes;
 import xades4j.verification.SignatureUtils.ReferencesRes;
 import xades4j.xml.unmarshalling.QualifyingPropertiesUnmarshaller;
 import xades4j.xml.unmarshalling.UnmarshalException;
@@ -181,8 +183,9 @@ class XadesVerifierImpl implements XadesVerifier
 
         /* Certification path */
 
-        KeyInfoRes keyInfoRes = SignatureUtils.processKeyInfo(signature.getKeyInfo(), this.x500NameStyleProvider);
         Date validationDate = getValidationDate(qualifPropsData, signature, verificationOptions);
+        CertRef signingCertRefAttempt = tryGetSigningCertificateRef(qualifPropsData);
+        KeyInfoRes keyInfoRes = KeyInfoProcessor.process(signature.getKeyInfo(), signingCertRefAttempt, this.x500NameStyleProvider);
         ValidationData certValidationRes = this.certificateValidator.validate(
                 keyInfoRes.certSelector,
                 validationDate,
@@ -231,6 +234,24 @@ class XadesVerifierImpl implements XadesVerifier
     }
     
     /*************************************************************************************/
+
+    private CertRef tryGetSigningCertificateRef(Collection<PropertyDataObject> qualifPropsData){
+        // If the SigningCertificate property contains a single reference, it likely represents the signer's certificate.
+        // In that case, it can be used as a fallback to identify the signing certificate when processing KeyInfo.
+        // This is a temporary solution.
+        // - Properties should probably be verified in two stages (before and after cert path creation).
+        List<SigningCertificateData> certData = CollectionUtils.filterByType(qualifPropsData, SigningCertificateData.class);
+        if (certData.size() == 1)
+        {
+            Collection<CertRef> certRefs = certData.get(0).getCertRefs();
+            if (certRefs.size() == 1)
+            {
+                return certRefs.iterator().next();
+            }
+        }
+
+        return null;
+    }
 
     private Date getValidationDate(
             Collection<PropertyDataObject> qualifPropsData,
