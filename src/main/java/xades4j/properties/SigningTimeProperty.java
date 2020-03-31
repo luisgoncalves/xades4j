@@ -16,37 +16,53 @@
  */
 package xades4j.properties;
 
+import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
 
 /**
- * The {@code SigningTime} property specifies the time at which the signer (purportedly)
- * performed the signing process.
+ * The {@code SigningTime} property specifies the time at which the signer
+ * (purportedly) performed the signing process. Extended for working with
+ * different time formats.
  * <p>
  * This is an optional signed property that qualifies the whole signature. There
  * is at most one occurence of this property in the signature.
+ *
  * @see xades4j.providers.SignaturePropertiesProvider
  * @author Luís
+ * @author Umut
  */
 public final class SigningTimeProperty extends SignedSignatureProperty
 {
     public static final String PROP_NAME = "SigningTime";
     /**/
     private final Calendar signingTime;
+    private final SimpleDateFormat simpleDateFormatter;
 
     public SigningTimeProperty()
     {
         this.signingTime = new GregorianCalendar();
+        this.simpleDateFormatter = null;
     }
 
     public SigningTimeProperty(Calendar signingTime)
     {
         this.signingTime = signingTime;
+        this.simpleDateFormatter = null;
+    }
+
+    public SigningTimeProperty(Calendar signingTime, SimpleDateFormat simpleDateFormatter) {
+        this.signingTime = signingTime;
+        this.simpleDateFormatter = simpleDateFormatter;
     }
 
     public Calendar getSigningTime()
     {
         return signingTime;
+    }
+
+    public SimpleDateFormat getDateFormat() {
+        return simpleDateFormatter;
     }
 
     @Override

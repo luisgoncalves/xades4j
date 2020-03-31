@@ -16,7 +16,9 @@
  */
 package xades4j.properties.data;
 
+import java.text.SimpleDateFormat;
 import java.util.Calendar;
+import xades4j.properties.SigningTimeProperty;
 
 /**
  *
@@ -25,12 +27,18 @@ import java.util.Calendar;
 public final class SigningTimeData implements PropertyDataObject
 {
     private final Calendar signingTime;
+    private final SigningTimeProperty signingTimeProperty;
 
     public SigningTimeData(Calendar signingTime)
     {
         this.signingTime = signingTime;
+        this.signingTimeProperty = new SigningTimeProperty(signingTime);
     }
 
+    public SigningTimeData(SigningTimeProperty signingTimeProperty) {
+        this.signingTime = signingTimeProperty.getSigningTime();
+        this.signingTimeProperty = signingTimeProperty;
+    }
     /**
      * Get the value of signingTime
      *
@@ -39,5 +47,9 @@ public final class SigningTimeData implements PropertyDataObject
     public Calendar getSigningTime()
     {
         return signingTime;
+    }
+
+    public SigningTimeProperty getSigningTimeProperty() {
+        return signingTimeProperty;
     }
 }

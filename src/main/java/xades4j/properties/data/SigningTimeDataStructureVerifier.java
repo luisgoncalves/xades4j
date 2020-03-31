@@ -16,7 +16,6 @@
  */
 package xades4j.properties.data;
 
-import java.util.Calendar;
 import xades4j.properties.SigningTimeProperty;
 
 /**
@@ -28,8 +27,8 @@ class SigningTimeDataStructureVerifier implements PropertyDataObjectStructureVer
     @Override
     public void verifyStructure(PropertyDataObject propData) throws PropertyDataStructureException
     {
-        Calendar time = ((SigningTimeData)propData).getSigningTime();
-        if (null == time)
+        SigningTimeProperty signingTimeProperty = ((SigningTimeData) propData).getSigningTimeProperty();
+        if (null == signingTimeProperty)
             throw new PropertyDataStructureException("time not specified", SigningTimeProperty.PROP_NAME);
     }
 }

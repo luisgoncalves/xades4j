@@ -32,7 +32,7 @@ class SigningTimeVerifier implements QualifyingPropertyVerifier<SigningTimeData>
             SigningTimeData propData,
             QualifyingPropertyVerificationContext ctx) throws SigningTimeVerificationException
     {
-        Date now = new Date(), sigTime = propData.getSigningTime().getTime();
+        Date now = new Date(), sigTime = propData.getSigningTimeProperty().getSigningTime().getTime();
         if (!sigTime.before(now))
             throw new SigningTimeVerificationException(sigTime, now);
         return new SigningTimeProperty(propData.getSigningTime());

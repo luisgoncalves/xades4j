@@ -18,6 +18,7 @@ package xades4j.xml.unmarshalling;
 
 import java.util.Calendar;
 import xades4j.xml.bind.xades.XmlSignedSignaturePropertiesType;
+import xades4j.properties.SigningTimeProperty;
 import xades4j.properties.data.SigningTimeData;
 
 /**
@@ -31,7 +32,7 @@ class FromXmlSigningTimeConverter implements SignedSigPropFromXmlConv
             XmlSignedSignaturePropertiesType xmlProps,
             QualifyingPropertiesDataCollector propertyDataCollector) throws PropertyUnmarshalException
     {
-        Calendar sigTime = xmlProps.getSigningTime();
+        final SigningTimeProperty sigTime = xmlProps.getSigningTime();
         if (null == sigTime)
             return;
 

@@ -18,24 +18,29 @@ package xades4j.xml.bind;
 
 import java.util.Calendar;
 import javax.xml.bind.annotation.adapters.XmlAdapter;
+import xades4j.properties.SigningTimeProperty;
 
 /**
  *
  * @author Luís
  */
-public class DateTimeXmlAdapter extends XmlAdapter<String, Calendar>
+public class DateTimeXmlAdapter extends XmlAdapter<String, SigningTimeProperty>
 {
     @Override
-    public Calendar unmarshal(String value)
+    public SigningTimeProperty unmarshal(String value)
     {
-        return (javax.xml.bind.DatatypeConverter.parseDateTime(value));
+        return new SigningTimeProperty(javax.xml.bind.DatatypeConverter.parseDateTime(value));
     }
 
     @Override
-    public String marshal(Calendar value)
+    public String marshal(SigningTimeProperty value)
     {
         if (value == null)
             return null;
-        return (javax.xml.bind.DatatypeConverter.printDateTime(value));
+        if (value.getDateFormat() != null) {
+            return value.getDateFormat().format(value.getSigningTime().getTime());
+        } else {
+            return (javax.xml.bind.DatatypeConverter.printDateTime(value.getSigningTime()));
+        }
     }
 }

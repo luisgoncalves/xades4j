@@ -6,7 +6,6 @@
 //
 package xades4j.xml.bind.xades;
 
-import java.util.Calendar;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlAttribute;
@@ -16,6 +15,7 @@ import javax.xml.bind.annotation.XmlSchemaType;
 import javax.xml.bind.annotation.XmlType;
 import javax.xml.bind.annotation.adapters.CollapsedStringAdapter;
 import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
+import xades4j.properties.SigningTimeProperty;
 import xades4j.xml.bind.DateTimeXmlAdapter;
 
 /**
@@ -56,7 +56,7 @@ public class XmlSignedSignaturePropertiesType
     @XmlElement(name = "SigningTime", type = String.class)
     @XmlJavaTypeAdapter(DateTimeXmlAdapter.class)
     @XmlSchemaType(name = "dateTime")
-    protected Calendar signingTime;
+    protected SigningTimeProperty signingTime;
     @XmlElement(name = "SigningCertificate")
     protected XmlCertIDListType signingCertificate;
     @XmlElement(name = "SignaturePolicyIdentifier")
@@ -79,7 +79,7 @@ public class XmlSignedSignaturePropertiesType
      *     {@link String }
      *
      */
-    public Calendar getSigningTime()
+    public SigningTimeProperty getSigningTime()
     {
         return signingTime;
     }
@@ -92,7 +92,7 @@ public class XmlSignedSignaturePropertiesType
      *     {@link String }
      *
      */
-    public void setSigningTime(Calendar value)
+    public void setSigningTime(SigningTimeProperty value)
     {
         this.signingTime = value;
     }

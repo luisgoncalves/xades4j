@@ -31,6 +31,6 @@ class DataGenSigningTime implements PropertyDataObjectGenerator<SigningTimePrope
             SigningTimeProperty prop,
             PropertiesDataGenerationContext ctx)
     {
-        return new SigningTimeData(prop.getSigningTime());
+        return new SigningTimeData(prop);
     }
 }

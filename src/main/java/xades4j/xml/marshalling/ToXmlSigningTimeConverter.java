@@ -16,6 +16,7 @@
  */
 package xades4j.xml.marshalling;
 
+import xades4j.properties.SigningTimeProperty;
 import xades4j.properties.data.PropertyDataObject;
 import java.util.Calendar;
 import org.w3c.dom.Document;
@@ -34,9 +35,9 @@ class ToXmlSigningTimeConverter implements SignedPropertyDataToXmlConverter
             XmlSignedPropertiesType xmlProps,
             Document doc)
     {
-        Calendar time = ((SigningTimeData)propData).getSigningTime();
+        final SigningTimeProperty signingTimeProperty = ((SigningTimeData) propData).getSigningTimeProperty();
         // The conversion to date-time string is done by JAXB with the configured
         // adapter (DateTimeXmlAdapter).
-        xmlProps.getSignedSignatureProperties().setSigningTime(time);
+        xmlProps.getSignedSignatureProperties().setSigningTime(signingTimeProperty);
     }
 }
