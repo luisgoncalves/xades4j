@@ -28,7 +28,7 @@ import xades4j.properties.PropertyTargetException;
 import xades4j.properties.SignedDataObjectProperty;
 import xades4j.properties.UnsignedDataObjectProperty;
 import xades4j.utils.PropertiesSet;
-import org.apache.xml.security.utils.resolver.ResourceResolver;
+import org.apache.xml.security.utils.resolver.ResourceResolverSpi;
 
 /**
  * Represents a set of data objects to be signed. Besides the data objects themselves,
@@ -57,7 +57,7 @@ public final class SignedDataObjects
     private final List<DataObjectDesc> dataObjs;
     private String baseUriForRelativeReferences;
     private boolean hasNullURIReference;
-    private final List<ResourceResolver> resourceResolvers;
+    private final List<ResourceResolverSpi> resourceResolvers;
 
     private final PropertiesSet<SignedDataObjectProperty> signedDataObjsProperties;
     private final PropertiesSet<UnsignedDataObjectProperty> unsignedDataObjsProperties;
@@ -70,7 +70,7 @@ public final class SignedDataObjects
         this.dataObjs = new ArrayList<DataObjectDesc>();
         this.baseUriForRelativeReferences = null;
         this.hasNullURIReference = false;
-        this.resourceResolvers = new ArrayList<ResourceResolver>(0);
+        this.resourceResolvers = new ArrayList<ResourceResolverSpi>(0);
 
         this.signedDataObjsProperties = new PropertiesSet<SignedDataObjectProperty>(0);
         this.unsignedDataObjsProperties = new PropertiesSet<UnsignedDataObjectProperty>(0);
@@ -95,18 +95,17 @@ public final class SignedDataObjects
     public SignedDataObjects(DataObjectDesc... dataObjs)
     {
         this();
-        for (int i = 0; i < dataObjs.length; i++)
+        for (DataObjectDesc dataObj : dataObjs)
         {
-            this.withSignedDataObject(dataObjs[i]);
-
+            this.withSignedDataObject(dataObj);
         }
     }
 
     /**************************************************************************/
     /**
      * Sets the base URI for <b>all</b> the relative references. Fragment references
-     * (starting with '#') are not afected.
-     * @param baseUri the references' base uri
+     * (starting with '#') are not affected.
+     * @param baseUri the references' base URI
      * @return the current instance
      */
     public SignedDataObjects withBaseUri(String baseUri)
@@ -283,7 +282,7 @@ public final class SignedDataObjects
 
     /**************************************************************************/
     /**
-     * Registers a {@link ResourceResolver} to be used when signing the current
+     * Registers a {@link ResourceResolverSpi} to be used when signing the current
      * set of data objects. The resolvers are considered in the same order they
      * are added and have priority over the globally registered resolvers.
      *
@@ -292,7 +291,7 @@ public final class SignedDataObjects
      *
      * @throws NullPointerException if {@code resolver} is {@code null}
      */
-    public SignedDataObjects withResourceResolver(ResourceResolver resolver)
+    public SignedDataObjects withResourceResolver(ResourceResolverSpi resolver)
     {
         if (null == resolver)
         {
@@ -303,7 +302,7 @@ public final class SignedDataObjects
         return this;
     }
 
-    List<ResourceResolver> getResourceResolvers()
+    List<ResourceResolverSpi> getResourceResolvers()
     {
         return resourceResolvers;
     }

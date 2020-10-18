@@ -22,7 +22,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-import org.apache.xml.security.utils.resolver.ResourceResolver;
+import org.apache.xml.security.utils.resolver.ResourceResolverSpi;
 
 /**
  * Represents verification options that are specific to a signature, i.e.,
@@ -35,18 +35,18 @@ import org.apache.xml.security.utils.resolver.ResourceResolver;
  */
 public class SignatureSpecificVerificationOptions
 {
-    static final SignatureSpecificVerificationOptions empty = new SignatureSpecificVerificationOptions();
+    static final SignatureSpecificVerificationOptions EMPTY = new SignatureSpecificVerificationOptions();
 
     private String baseUriForRelativeReferences;
     private InputStream dataForAnonymousReference;
     private Date defaultVerificationDate = new Date();
-    private final List<ResourceResolver> resolvers = new ArrayList<ResourceResolver>(0);
+    private final List<ResourceResolverSpi> resolvers = new ArrayList<ResourceResolverSpi>(0);
 
     /**
      * Sets the base URI to be used when resolving <b>all</b> the relative
      * references. Fragment references (starting with '#') are not affected.
      *
-     * @param baseUri the references' base uri
+     * @param baseUri the references' base URI
      * @return the current instance
      */
     public SignatureSpecificVerificationOptions useBaseUri(String baseUri)
@@ -91,7 +91,7 @@ public class SignatureSpecificVerificationOptions
     }
 
     /**
-     * Registers a {@link ResourceResolver} to be used when verifying the
+     * Registers a {@link ResourceResolverSpi} to be used when verifying the
      * signature The resolvers are considered in the same order they are added
      * and have priority over the globally registered resolvers.
      *
@@ -100,7 +100,7 @@ public class SignatureSpecificVerificationOptions
      *
      * @throws NullPointerException if {@code resolver} is {@code null}
      */
-    public SignatureSpecificVerificationOptions useResourceResolver(ResourceResolver resolver)
+    public SignatureSpecificVerificationOptions useResourceResolver(ResourceResolverSpi resolver)
     {
         if (null == resolver) {
             throw new NullPointerException("Resolver cannot be null");
@@ -110,7 +110,7 @@ public class SignatureSpecificVerificationOptions
         return this;
     }
 
-    List<ResourceResolver> getResolvers()
+    List<ResourceResolverSpi> getResolvers()
     {
         return this.resolvers;
     }
