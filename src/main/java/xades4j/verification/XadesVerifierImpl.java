@@ -30,8 +30,7 @@ import org.apache.xml.security.signature.Reference;
 import org.apache.xml.security.signature.SignedInfo;
 import org.apache.xml.security.signature.XMLSignature;
 import org.apache.xml.security.signature.XMLSignatureException;
-import org.apache.xml.security.utils.resolver.ResourceResolver;
-import org.apache.xml.security.utils.resolver.implementations.ResolverAnonymous;
+import org.apache.xml.security.utils.resolver.ResourceResolverSpi;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import xades4j.properties.QualifyingProperty;
@@ -51,6 +50,7 @@ import xades4j.providers.X500NameStyleProvider;
 import xades4j.utils.CollectionUtils;
 import xades4j.utils.ObjectUtils;
 import xades4j.utils.PropertiesUtils;
+import xades4j.utils.ResolverAnonymous;
 import xades4j.verification.KeyInfoProcessor.KeyInfoRes;
 import xades4j.verification.RawSignatureVerifier.RawSignatureVerifierContext;
 import xades4j.verification.SignatureUtils.ReferencesRes;
@@ -122,7 +122,7 @@ class XadesVerifierImpl implements XadesVerifier
 
         if (null == verificationOptions)
         {
-            verificationOptions = SignatureSpecificVerificationOptions.empty;
+            verificationOptions = SignatureSpecificVerificationOptions.EMPTY;
         }
 
         /* Unmarshal the signature */
@@ -292,10 +292,10 @@ class XadesVerifierImpl implements XadesVerifier
             SignatureSpecificVerificationOptions verificationOptions,
             X509Certificate validationCert) throws XAdES4jXMLSigException, InvalidSignatureException
     {
-        List<ResourceResolver> resolvers = verificationOptions.getResolvers();
+        List<ResourceResolverSpi> resolvers = verificationOptions.getResolvers();
         if(!CollectionUtils.nullOrEmpty(resolvers))
         {
-            for (ResourceResolver resolver : resolvers)
+            for (ResourceResolverSpi resolver : resolvers)
             {
                 signature.addResourceResolver(resolver);
             }

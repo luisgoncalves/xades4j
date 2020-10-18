@@ -30,6 +30,7 @@ import org.apache.xml.security.signature.ObjectContainer;
 import org.apache.xml.security.signature.XMLSignature;
 import org.apache.xml.security.signature.XMLSignatureInput;
 import org.apache.xml.security.utils.resolver.ResourceResolver;
+import org.apache.xml.security.utils.resolver.ResourceResolverContext;
 import org.apache.xml.security.utils.resolver.ResourceResolverException;
 import org.w3c.dom.Attr;
 import org.w3c.dom.Document;
@@ -196,7 +197,8 @@ public class QualifyingPropertyVerificationContext
 
             try
             {
-                XMLSignatureInput refData = ResourceResolver.getInstance(refAttr, "", true).resolve(refAttr, "", true);
+                ResourceResolverContext resolverContext = new ResourceResolverContext(refAttr, "", true);
+                XMLSignatureInput refData = ResourceResolver.resolve(resolverContext);
                 // This has to be a NodeSet data because it is a same-document reference.
                 Node refNode = refData.getSubNode();
                 if (refNode.getNodeType() != Node.ELEMENT_NODE)

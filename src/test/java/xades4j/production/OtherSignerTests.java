@@ -18,11 +18,9 @@ package xades4j.production;
 
 import org.apache.xml.security.signature.XMLSignatureInput;
 import org.apache.xml.security.utils.Constants;
-import org.apache.xml.security.utils.resolver.ResourceResolver;
 import org.apache.xml.security.utils.resolver.ResourceResolverContext;
 import org.apache.xml.security.utils.resolver.ResourceResolverException;
 import org.apache.xml.security.utils.resolver.ResourceResolverSpi;
-import org.w3c.dom.Attr;
 import xades4j.algorithms.EnvelopedSignatureTransform;
 import xades4j.properties.DataObjectDesc;
 import org.junit.Test;
@@ -67,7 +65,7 @@ public class OtherSignerTests extends SignerTestBase
 
         SignedDataObjects dataObjs = new SignedDataObjects()
                 .withSignedDataObject(new DataObjectReference("xades4j://ref"))
-                .withResourceResolver(new ResourceResolver(resolverSpi));
+                .withResourceResolver(resolverSpi);
 
         signer.sign(dataObjs, doc);
 
@@ -89,7 +87,7 @@ public class OtherSignerTests extends SignerTestBase
         @Override
         public boolean engineCanResolveURI(ResourceResolverContext context)
         {
-            return context.attr.getValue().startsWith("xades4j:");
+            return context.uriToResolve.startsWith("xades4j:");
         }
     }
 }
