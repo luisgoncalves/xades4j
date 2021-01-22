@@ -2,8 +2,6 @@
 
 ![Build Status](https://github.com/luisgoncalves/xades4j/workflows/Build/badge.svg)
 
-[![Build Status](https://travis-ci.org/luisgoncalves/xades4j.svg?branch=master)](https://travis-ci.org/luisgoncalves/xades4j)
-
 _XAdES4j_ is an high-level, configurable and extensible Java implementation of XML Advanced Electronic Signatures (XAdES 1.3.2 and 1.4.1). It enables producing, verifying and extending signatures in the main XAdES forms: XAdES-BES, XAdES-EPES, XAdES-T and XAdES-C. Also, extended forms are supported through the enrichment of an existing signature.
 
 The API provides an high level of abstraction, handling all the structural details of XAdES. The library relies on Apache XML Security for the core XML-DSIG processing and uses Guice to assemble the different configurable components.
@@ -22,14 +20,16 @@ The library is available on [Maven](http://search.maven.org/#search%7Cga%7C1%7Cg
 </dependency>
 ```
 
-# Docs
+# Docs and Q&A
 
-General usage documentation can be found on the project's [wiki](https://github.com/luisgoncalves/xades4j/wiki). Javadocs for the latest version can be found [here](http://luisgoncalves.github.io/xades4j/javadocs/1.6.0). 
+- General usage documentation can be found on the project's [wiki](https://github.com/luisgoncalves/xades4j/wiki).
+- Javadocs for the latest version can be found [here](http://luisgoncalves.github.io/xades4j/javadocs/1.6.0). 
+- Unit tests in the source code illustrate all the features.
+- Overview of the architecture and implementation on the [XAdES4j Prezi](http://prezi.com/06vyxbgohncv/xades4j-en/).
+- `xades4j` tag on [Stack Overflow](http://stackoverflow.com/questions/tagged/xades4j).
 
-If you can't find the information you need on the wiki and/or javadocs please refer to the tests in the source code, which illustrate all the features. Also, feel free to give some feedback, as it will be useful for further improvements.
+----
 
-For an overview of the library's architecture and implementation you can watch the [XAdES4j Prezi](http://prezi.com/06vyxbgohncv/xades4j-en/).
+If _XAdES4j_ has been useful to you, consider supporting it!
 
-# Q & A
-
-Use the _xades4j_ tag on [Stack Overflow](http://stackoverflow.com/questions/tagged/xades4j).
+<a href="https://www.buymeacoffee.com/luisgoncalves" target="_blank"><img src="https://cdn.buymeacoffee.com/buttons/v2/default-yellow.png" alt="Buy Me A Coffee" width="170px"></a>
