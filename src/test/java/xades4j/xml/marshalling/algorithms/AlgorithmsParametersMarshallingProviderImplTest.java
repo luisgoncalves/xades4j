@@ -21,14 +21,11 @@ import java.util.List;
 import xades4j.algorithms.*;
 import com.google.inject.Injector;
 import com.google.inject.Guice;
-import java.util.Map;
-import org.apache.xml.security.utils.Constants;
 import org.w3c.dom.Document;
 import xades4j.utils.SignatureServicesTestBase;
 import org.junit.Test;
 import static org.junit.Assert.*;
 import org.junit.Before;
-import org.w3c.dom.Element;
 
 /**
  *
@@ -44,7 +41,7 @@ public class AlgorithmsParametersMarshallingProviderImplTest
     {
         doc = SignatureServicesTestBase.getNewDocument();
         Injector injector = Guice.createInjector(new AlgorithmParametersBindingsModule());
-        sut = new AlgorithmsParametersMarshallingProviderImpl(injector);
+        sut = injector.getInstance(AlgorithmsParametersMarshallingProviderImpl.class);
     }
     
     @Test

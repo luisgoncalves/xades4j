@@ -25,6 +25,7 @@ import com.google.inject.multibindings.MapBinder;
 import com.google.inject.multibindings.Multibinder;
 import com.google.inject.util.Modules;
 import com.google.inject.util.Types;
+
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
 import java.util.ArrayList;
@@ -33,12 +34,14 @@ import java.util.Collection;
 
 /**
  * Helper class that implements the core logic of profile resolution based on a series
- * of dependencies. Profile resolution is based on Google's dependency container
- * (Guice).
+ * of dependencies. Profile resolution is based on Google's dependency container (Guice).
+ * <p>
+ * This class is meant for internal use only.
+ *
+ * @author Luís
  * @see xades4j.production.XadesSigningProfile
  * @see xades4j.verification.XadesVerificationProfile
  * @see xades4j.production.XadesFormatExtenderProfile
- * @author Luís
  */
 public final class XadesProfileCore
 {
@@ -46,6 +49,7 @@ public final class XadesProfileCore
     {
         void bind(Binder b);
     }
+
     /**/
     private final Collection<BindingAction> bindings;
 
@@ -217,8 +221,7 @@ public final class XadesProfileCore
         try
         {
             return Guice.createInjector(finalModules).getInstance(clazz);
-        }
-        catch (RuntimeException ex)
+        } catch (RuntimeException ex)
         {
             throw new XadesProfileResolutionException(ex.getMessage(), ex);
         }
