@@ -23,6 +23,7 @@ import com.google.inject.Module;
 import com.google.inject.TypeLiteral;
 import com.google.inject.multibindings.MapBinder;
 import com.google.inject.multibindings.Multibinder;
+import com.google.inject.multibindings.OptionalBinder;
 import com.google.inject.util.Modules;
 import com.google.inject.util.Types;
 
@@ -130,6 +131,18 @@ public final class XadesProfileCore
                 ParameterizedType pt = Types.newParameterizedType(genericClass, genericClassParams);
                 Key k = Key.get(TypeLiteral.get(pt));
                 b.bind(k).toInstance(to);
+            }
+        });
+    }
+
+    public final <T> void addOptionalBinding(final Class<T> clazz)
+    {
+        this.bindings.add(new BindingAction()
+        {
+            @Override
+            public void bind(Binder b)
+            {
+                OptionalBinder.newOptionalBinder(b, clazz);
             }
         });
     }

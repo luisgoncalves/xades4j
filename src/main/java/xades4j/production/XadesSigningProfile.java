@@ -115,7 +115,14 @@ public abstract class XadesSigningProfile
 
     protected abstract Class<? extends XadesSigner> getSignerClass();
 
+    protected final <T> XadesSigningProfile withOptionalBinding(Class<T> clazz)
+    {
+        this.profileCore.addOptionalBinding(clazz);
+        return this;
+    }
+
     /**/
+
     /**
      * Adds a type dependency mapping to the profile. This is tipically done from an
      * interface to a type that implements that interface. When a dependency to

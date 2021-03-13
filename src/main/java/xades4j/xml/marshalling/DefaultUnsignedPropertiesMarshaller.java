@@ -16,7 +16,7 @@
  */
 package xades4j.xml.marshalling;
 
-import com.google.inject.Inject;
+import javax.inject.Inject;
 import xades4j.properties.data.SigAndDataObjsPropertiesData;
 import org.w3c.dom.Node;
 import xades4j.properties.QualifyingProperty;

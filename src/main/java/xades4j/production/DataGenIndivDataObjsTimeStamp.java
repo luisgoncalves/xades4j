@@ -18,7 +18,7 @@ package xades4j.production;
 
 import xades4j.algorithms.Algorithm;
 import xades4j.properties.DataObjectDesc;
-import com.google.inject.Inject;
+import javax.inject.Inject;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;

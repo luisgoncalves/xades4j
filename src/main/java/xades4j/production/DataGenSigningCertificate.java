@@ -16,7 +16,7 @@
  */
 package xades4j.production;
 
-import com.google.inject.Inject;
+import javax.inject.Inject;
 import xades4j.properties.SigningCertificateProperty;
 import xades4j.properties.data.PropertyDataObject;
 import xades4j.properties.data.SigningCertificateData;
