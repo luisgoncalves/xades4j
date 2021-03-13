@@ -16,10 +16,12 @@
  */
 package xades4j.production;
 
-import com.google.inject.Inject;
+import javax.inject.Inject;
 import java.security.cert.X509Certificate;
 import java.util.Collection;
 import java.util.List;
+
+import com.google.common.base.Optional;
 import xades4j.properties.SignedSignatureProperty;
 import xades4j.properties.UnsignedSignatureProperty;
 import xades4j.XAdES4jException;
@@ -42,7 +44,7 @@ import xades4j.xml.marshalling.algorithms.AlgorithmsParametersMarshallingProvide
  */
 class SignerT extends SignerBES
 {
-    private SignaturePolicyInfoProvider policyInfoProvider;
+    private Optional<SignaturePolicyInfoProvider> policyInfoProvider;
 
     @Inject
     protected SignerT(
@@ -56,15 +58,11 @@ class SignerT extends SignerBES
             SignedPropertiesMarshaller signedPropsMarshaller,
             UnsignedPropertiesMarshaller unsignedPropsMarshaller,
             AlgorithmsParametersMarshallingProvider algorithmsParametersMarshaller,
-            X500NameStyleProvider x500NameStyleProvider)
+            X500NameStyleProvider x500NameStyleProvider,
+            Optional<SignaturePolicyInfoProvider> policyInfoProvider)
     {
         super(keyingProvider, algorithmsProvider, basicSignatureOptions, dataObjectDescsProcessor, signaturePropsProvider, dataObjPropsProvider, propsDataObjectsGenerator, signedPropsMarshaller, unsignedPropsMarshaller, algorithmsParametersMarshaller, x500NameStyleProvider);
-    }
-
-    @Inject(optional = true)
-    void setPolicyProvider(SignaturePolicyInfoProvider p)
-    {
-        this.policyInfoProvider = p;
+        this.policyInfoProvider = policyInfoProvider;
     }
 
     @Override
@@ -77,9 +75,9 @@ class SignerT extends SignerBES
                 formatSpecificSignedSigProps, formatSpecificUnsignedSigProps, signingCertificateChain);
 
         // Check if this is based on XAdES-EPES.
-        if (this.policyInfoProvider != null)
+        if (this.policyInfoProvider.isPresent())
         {
-            PropertiesUtils.addXadesEpesProperties(formatSpecificSignedSigProps, this.policyInfoProvider);
+            PropertiesUtils.addXadesEpesProperties(formatSpecificSignedSigProps, this.policyInfoProvider.get());
         }
         // Add XAdES-T.
         PropertiesUtils.addXadesTProperties(formatSpecificUnsignedSigProps);

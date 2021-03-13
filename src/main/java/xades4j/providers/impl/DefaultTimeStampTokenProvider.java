@@ -16,7 +16,7 @@
  */
 package xades4j.providers.impl;
 
-import com.google.inject.Inject;
+import javax.inject.Inject;
 import xades4j.providers.MessageDigestEngineProvider;
 
 /**

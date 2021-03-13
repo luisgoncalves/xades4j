@@ -16,7 +16,7 @@
  */
 package xades4j.utils;
 
-import com.google.inject.Inject;
+import javax.inject.Inject;
 import xades4j.algorithms.Algorithm;
 import xades4j.UnsupportedAlgorithmException;
 import xades4j.xml.marshalling.algorithms.AlgorithmsParametersMarshallingProvider;

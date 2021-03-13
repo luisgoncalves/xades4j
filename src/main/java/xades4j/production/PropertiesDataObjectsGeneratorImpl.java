@@ -18,7 +18,7 @@ package xades4j.production;
 
 import xades4j.properties.UnsignedProperties;
 import xades4j.properties.SignedProperties;
-import com.google.inject.Inject;
+import javax.inject.Inject;
 import java.util.ArrayList;
 import java.util.Collection;
 import xades4j.properties.QualifyingProperty;
@@ -78,14 +78,14 @@ class PropertiesDataObjectsGeneratorImpl implements PropertiesDataObjectsGenerat
             Collection<TProp> props,
             PropertiesDataGenerationContext ctx) throws PropertyDataGenerationException, PropertyDataStructureException
     {
-        Collection<PropertyDataObject> propsData = new ArrayList<PropertyDataObject>(props.size());
+        Collection<PropertyDataObject> propsData = new ArrayList<>(props.size());
 
         for (TProp p : props)
         {
             PropertyDataObjectGenerator<TProp> dataGen = this.propsDataGensMapper.getGenerator(p);
             PropertyDataObject pData = dataGen.generatePropertyData(p, ctx);
             if (null == pData)
-                throw new PropertyDataGeneratorErrorException((QualifyingProperty)p);
+                throw new PropertyDataGeneratorErrorException(p);
 
             propsData.add(pData);
         }

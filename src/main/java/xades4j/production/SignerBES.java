@@ -19,7 +19,7 @@ package xades4j.production;
 import org.apache.xml.security.transforms.Transforms;
 import xades4j.properties.QualifyingProperties;
 import xades4j.properties.DataObjectDesc;
-import com.google.inject.Inject;
+import javax.inject.Inject;
 import java.security.PrivateKey;
 import java.security.cert.X509Certificate;
 import java.util.ArrayList;

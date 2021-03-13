@@ -16,7 +16,7 @@
  */
 package xades4j.providers.impl;
 
-import com.google.inject.Inject;
+import javax.inject.Inject;
 import java.io.IOException;
 import java.security.MessageDigest;
 import java.security.Provider;

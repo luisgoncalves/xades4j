@@ -23,8 +23,10 @@ import com.google.inject.Module;
 import com.google.inject.TypeLiteral;
 import com.google.inject.multibindings.MapBinder;
 import com.google.inject.multibindings.Multibinder;
+import com.google.inject.multibindings.OptionalBinder;
 import com.google.inject.util.Modules;
 import com.google.inject.util.Types;
+
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
 import java.util.ArrayList;
@@ -33,25 +35,28 @@ import java.util.Collection;
 
 /**
  * Helper class that implements the core logic of profile resolution based on a series
- * of dependencies. Profile resultion is based on Google's dependency container
- * (Guice).
+ * of dependencies. Profile resolution is based on Google's dependency container (Guice).
+ * <p>
+ * This class is meant for internal use only.
+ *
+ * @author Luís
  * @see xades4j.production.XadesSigningProfile
  * @see xades4j.verification.XadesVerificationProfile
  * @see xades4j.production.XadesFormatExtenderProfile
- * @author Luís
  */
 public final class XadesProfileCore
 {
-    private static interface BindingAction
+    private interface BindingAction
     {
         void bind(Binder b);
     }
+
     /**/
     private final Collection<BindingAction> bindings;
 
     public XadesProfileCore()
     {
-        this.bindings = new ArrayList<BindingAction>();
+        this.bindings = new ArrayList<>();
     }
 
     /**
@@ -92,7 +97,7 @@ public final class XadesProfileCore
 
     public void addGenericBinding(
             final Type genericClass,
-            final Class to,
+            final Class<?> to,
             final Type... genericClassParams)
     {
         if (ObjectUtils.anyNull(genericClass, genericClassParams, to))
@@ -130,6 +135,18 @@ public final class XadesProfileCore
         });
     }
 
+    public final <T> void addOptionalBinding(final Class<T> clazz)
+    {
+        this.bindings.add(new BindingAction()
+        {
+            @Override
+            public void bind(Binder b)
+            {
+                OptionalBinder.newOptionalBinder(b, clazz);
+            }
+        });
+    }
+
     public <T> void addMultibinding(final Class<T> from, final Class<? extends T> to)
     {
         if (null == from || null == to)
@@ -140,7 +157,7 @@ public final class XadesProfileCore
             @Override
             public void bind(Binder b)
             {
-                Multibinder multibinder = Multibinder.newSetBinder(b, from);
+                Multibinder<T> multibinder = Multibinder.newSetBinder(b, from);
                 multibinder.addBinding().to(to);
             }
         });
@@ -156,7 +173,7 @@ public final class XadesProfileCore
             @Override
             public void bind(Binder b)
             {
-                Multibinder multibinder = Multibinder.newSetBinder(b, from);
+                Multibinder<T> multibinder = Multibinder.newSetBinder(b, from);
                 multibinder.addBinding().toInstance(to);
             }
         });
@@ -217,8 +234,7 @@ public final class XadesProfileCore
         try
         {
             return Guice.createInjector(finalModules).getInstance(clazz);
-        }
-        catch (RuntimeException ex)
+        } catch (RuntimeException ex)
         {
             throw new XadesProfileResolutionException(ex.getMessage(), ex);
         }

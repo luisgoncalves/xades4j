@@ -27,9 +27,9 @@ import static java.lang.annotation.ElementType.METHOD;
 
 /**
  * Indicates that a dependency should be resolved using the built in binding configuration
- * even if the binding for the requested type has been overrided by the application.
+ * even if the binding for the requested type has been overridden by the application.
  * <p>
- * In the current version, this is only availabe for {@link xades4j.verification.QualifyingPropertyVerifier}s.
+ * In the current version, this is only available for {@link xades4j.verification.QualifyingPropertyVerifier}s.
  * @author Luís
  */
 @BindingAnnotation @Target({ FIELD, PARAMETER, METHOD }) @Retention(RUNTIME)

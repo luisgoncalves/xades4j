@@ -19,7 +19,7 @@ package xades4j.utils;
 import java.util.Set;
 import java.util.Map;
 import com.google.inject.AbstractModule;
-import com.google.inject.Inject;
+import javax.inject.Inject;
 import com.google.inject.Module;
 import org.junit.Test;
 import static org.junit.Assert.*;

@@ -257,9 +257,9 @@ public final class XadesVerificationProfile
         return this;
     }
 
-    /**********************************************/
-    /************ Custom verification *************/
-    /**********************************************/
+    /* ******************************************** */
+    /* *********** Custom verification ************ */
+    /* ******************************************** */
     public XadesVerificationProfile withGlobalDataObjsStructureVerifier(
             CustomPropertiesDataObjsStructureVerifier v)
     {
@@ -321,7 +321,7 @@ public final class XadesVerificationProfile
     }
 
     public XadesVerificationProfile withElementVerifier(
-            QName elemName, Class<? extends QualifyingPropertyVerifier> vClass)
+            QName elemName, Class<? extends QualifyingPropertyVerifier<?>> vClass)
     {
         if (null == elemName || null == vClass)
             throw new NullPointerException();

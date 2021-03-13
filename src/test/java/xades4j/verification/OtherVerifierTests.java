@@ -17,7 +17,7 @@
 package xades4j.verification;
 
 import xades4j.utils.BuiltIn;
-import com.google.inject.Inject;
+import javax.inject.Inject;
 import org.junit.Before;
 import xades4j.properties.QualifyingProperty;
 import xades4j.properties.data.SigningTimeData;

@@ -16,7 +16,7 @@
  */
 package xades4j.verification;
 
-import com.google.inject.Inject;
+import javax.inject.Inject;
 import xades4j.utils.CannotAddDataToDigestInputException;
 import xades4j.properties.IndividualDataObjsTimeStampProperty;
 import xades4j.properties.QualifyingProperty;
