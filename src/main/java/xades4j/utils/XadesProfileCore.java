@@ -33,7 +33,7 @@ import java.util.Collection;
 
 /**
  * Helper class that implements the core logic of profile resolution based on a series
- * of dependencies. Profile resultion is based on Google's dependency container
+ * of dependencies. Profile resolution is based on Google's dependency container
  * (Guice).
  * @see xades4j.production.XadesSigningProfile
  * @see xades4j.verification.XadesVerificationProfile
@@ -42,7 +42,7 @@ import java.util.Collection;
  */
 public final class XadesProfileCore
 {
-    private static interface BindingAction
+    private interface BindingAction
     {
         void bind(Binder b);
     }
@@ -51,7 +51,7 @@ public final class XadesProfileCore
 
     public XadesProfileCore()
     {
-        this.bindings = new ArrayList<BindingAction>();
+        this.bindings = new ArrayList<>();
     }
 
     /**
@@ -92,7 +92,7 @@ public final class XadesProfileCore
 
     public void addGenericBinding(
             final Type genericClass,
-            final Class to,
+            final Class<?> to,
             final Type... genericClassParams)
     {
         if (ObjectUtils.anyNull(genericClass, genericClassParams, to))
@@ -140,7 +140,7 @@ public final class XadesProfileCore
             @Override
             public void bind(Binder b)
             {
-                Multibinder multibinder = Multibinder.newSetBinder(b, from);
+                Multibinder<T> multibinder = Multibinder.newSetBinder(b, from);
                 multibinder.addBinding().to(to);
             }
         });
@@ -156,7 +156,7 @@ public final class XadesProfileCore
             @Override
             public void bind(Binder b)
             {
-                Multibinder multibinder = Multibinder.newSetBinder(b, from);
+                Multibinder<T> multibinder = Multibinder.newSetBinder(b, from);
                 multibinder.addBinding().toInstance(to);
             }
         });

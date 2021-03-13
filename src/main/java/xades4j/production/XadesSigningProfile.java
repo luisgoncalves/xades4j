@@ -115,7 +115,7 @@ public abstract class XadesSigningProfile
 
     protected abstract Class<? extends XadesSigner> getSignerClass();
 
-    /***/
+    /**/
     /**
      * Adds a type dependency mapping to the profile. This is tipically done from an
      * interface to a type that implements that interface. When a dependency to
@@ -151,7 +151,9 @@ public abstract class XadesSigningProfile
         return this;
     }
 
-    /**************************************************************************/
+    /*
+     **********************************************************************
+     */
     /**
      * @deprecated
      * <p>
@@ -233,7 +235,7 @@ public abstract class XadesSigningProfile
      * <p>
      * This method is deprecated and might be removed on future versions. Classes
      * registered using this method will be adapted to the new {@link BasicSignatureOptions}
-     * class. If a {@BasicSignatureOptions} instance is registered it will override
+     * class. If a {@link BasicSignatureOptions} instance is registered it will override
      * any registered {@link BasicSignatureOptionsProvider}.
      * 
      * @see #withBasicSignatureOptions(BasicSignatureOptions)
@@ -249,7 +251,7 @@ public abstract class XadesSigningProfile
      * <p>
      * This method is deprecated and might be removed on future versions. Classes
      * registered using this method will be adapted to the new {@link BasicSignatureOptions}
-     * class. If a {@BasicSignatureOptions} instance is registered it will override
+     * class. If a {@link BasicSignatureOptions} instance is registered it will override
      * any registered {@link BasicSignatureOptionsProvider}.
      * 
      * @see #withBasicSignatureOptions(BasicSignatureOptions)
@@ -326,9 +328,9 @@ public abstract class XadesSigningProfile
         return withBinding(UnsignedPropertiesMarshaller.class, uPropsMarshallerClass);
     }
 
-    /*******************************************/
-    /****** Custom data object generation ******/
-    /*******************************************/
+    /* ***************************************** */
+    /* ***** Custom data object generation ***** */
+    /* ***************************************** s*/
     public <TProp extends QualifyingProperty> XadesSigningProfile withPropertyDataObjectGenerator(
             final Class<TProp> propClass,
             final PropertyDataObjectGenerator<TProp> propDataGen)
