@@ -21,6 +21,9 @@ makecert -sv Interm.pvk -cy authority -iv TestCA.pvk -ic TestCA.cer -n "CN=Iterm
 makecert -sv LG.pvk -iv Interm.pvk -ic Interm.cer -n "CN=Luis Goncalves, OU=CC, O=ISEL, C=PT" -a sha1 LG.cer
 pvk2pfx.exe -pvk LG.pvk -pi mykeypass -spc LG.cer -pfx LG.pfx
 
+openssl ecparam -out lg_ec.key -name prime256v1 -genkey
+openssl req -new -x509 -key lg_ec.key -out lg_ec.crt -days 3650
+openssl pkcs12 -export -in lg_ec.crt -inkey lg_ec.key -out lg_ec.p12 -name lg_ec
 
 =========== Creation of trust-anchors keystore ===========
 
