@@ -35,6 +35,7 @@ public class SignerTestBase extends SignatureServicesTestBase
 {
     /**/
     static protected KeyingDataProvider keyingProviderMy;
+    static protected KeyingDataProvider keyingProviderMyEc;
     static protected KeyingDataProvider keyingProviderNist;
 
     static protected String PTCC_PKCS11_LIB_PATH = "C:\\Windows\\System32\\pteidpkcs11.dll";
@@ -44,10 +45,11 @@ public class SignerTestBase extends SignatureServicesTestBase
         try
         {
             keyingProviderMy = createFileSystemKeyingDataProvider("JKS", "my/LG.jks", "mykeypass", true);
+            keyingProviderMyEc = createFileSystemKeyingDataProvider("PKCS12", "my/lg_ec.p12", "mykeypass", true);
             keyingProviderNist = createFileSystemKeyingDataProvider("JKS", "csrc.nist/test4.jks", "password", false);
         } catch (KeyStoreException e)
         {
-            throw new NullPointerException("SignerTestBase init failed: " + e.getMessage());
+            throw new IllegalStateException("SignerTestBase init failed: " + e.getMessage());
         }
     }
 

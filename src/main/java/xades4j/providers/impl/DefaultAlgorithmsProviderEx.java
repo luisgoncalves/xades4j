@@ -30,7 +30,7 @@ import xades4j.providers.AlgorithmsProviderEx;
  * The default implementation of {@link AlgorithmsProviderEx}. The defaults
  * are:
  * <ul>
- *  <li>Signature: RSA(RSA_SHA256), DSA(DSA_SHA1)</li>
+ *  <li>Signature: RSA(RSA_SHA256), DSA(DSA_SHA1), EC(ECDSA_SHA256)</li>
  *  <li>Canonicalization: Canonical XML 1.0 without comments</li>
  *  <li>Digest: SHA256 (data objs and refs properties); SHA1 (time-stamps)</li>
  * </ul>
@@ -45,6 +45,7 @@ public class DefaultAlgorithmsProviderEx implements AlgorithmsProviderEx
         signatureAlgsMaps = new HashMap<String, Algorithm>(2);
         signatureAlgsMaps.put("DSA", new GenericAlgorithm(XMLSignature.ALGO_ID_SIGNATURE_DSA));
         signatureAlgsMaps.put("RSA", new GenericAlgorithm(XMLSignature.ALGO_ID_SIGNATURE_RSA_SHA256));
+        signatureAlgsMaps.put("EC", new GenericAlgorithm(XMLSignature.ALGO_ID_SIGNATURE_ECDSA_SHA256));
     }
 
     @Override

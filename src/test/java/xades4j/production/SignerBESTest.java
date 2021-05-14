@@ -16,23 +16,24 @@
  */
 package xades4j.production;
 
-import java.io.File;
-import xades4j.algorithms.EnvelopedSignatureTransform;
-import xades4j.properties.DataObjectDesc;
-import xades4j.properties.AllDataObjsCommitmentTypeProperty;
-import xades4j.properties.CommitmentTypeProperty;
-import xades4j.properties.IndividualDataObjsTimeStampProperty;
-import xades4j.properties.DataObjectFormatProperty;
 import org.junit.Test;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
+import xades4j.algorithms.EnvelopedSignatureTransform;
 import xades4j.algorithms.XPath2FilterTransform.XPath2Filter;
 import xades4j.algorithms.XPathTransform;
+import xades4j.properties.AllDataObjsCommitmentTypeProperty;
+import xades4j.properties.CommitmentTypeProperty;
 import xades4j.properties.CounterSignatureProperty;
+import xades4j.properties.DataObjectDesc;
+import xades4j.properties.DataObjectFormatProperty;
+import xades4j.properties.IndividualDataObjsTimeStampProperty;
 import xades4j.properties.SignerRoleProperty;
 import xades4j.providers.SignaturePropertiesCollector;
 import xades4j.providers.SignaturePropertiesProvider;
+
+import java.io.File;
 
 /**
  *
@@ -65,6 +66,22 @@ public class SignerBESTest extends SignerTestBase
         signer.sign(dataObjs, elemToSign);
 
         outputDocument(doc1, "document.signed.bes.xml");
+    }
+
+    @Test
+    public void testSignBESWithEllipticCurveKey() throws Exception
+    {
+        System.out.println("testSignBESWithEllipticCurveKey");
+
+        Document doc = getTestDocument();
+        Element elemToSign = doc.getDocumentElement();
+
+        XadesSigner signer = new XadesBesSigningProfile(keyingProviderMyEc)
+                .withBasicSignatureOptions(new BasicSignatureOptions().includePublicKey(true))
+                .newSigner();
+        new Enveloped(signer).sign(elemToSign);
+
+        outputDocument(doc, "document.signed.bes.ec.xml");
     }
 
     @Test
