@@ -46,7 +46,7 @@ public class FileSystemDirectoryCertStoreTest {
     {
         FileSystemDirectoryCertStore certStore = new FileSystemDirectoryCertStore("./src/test/cert/my");
         Collection certs = certStore.getStore().getCertificates(null);
-        assertEquals(certs.size(), 3);
+        assertEquals(certs.size(), 4);
     }
     @Test
     public void testGetStoreNist() throws Exception
