@@ -17,7 +17,7 @@
 package xades4j.production;
 
 import xades4j.algorithms.Algorithm;
-import com.google.inject.Inject;
+import javax.inject.Inject;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.IdentityHashMap;
@@ -27,12 +27,12 @@ import org.apache.xml.security.signature.Reference;
 import org.apache.xml.security.signature.XMLSignature;
 import org.apache.xml.security.signature.XMLSignatureException;
 import org.apache.xml.security.transforms.Transforms;
-import org.apache.xml.security.utils.resolver.ResourceResolver;
-import org.apache.xml.security.utils.resolver.implementations.ResolverAnonymous;
+import org.apache.xml.security.utils.resolver.ResourceResolverSpi;
 import org.w3c.dom.Document;
 import xades4j.UnsupportedAlgorithmException;
 import xades4j.properties.DataObjectDesc;
 import xades4j.providers.AlgorithmsProviderEx;
+import xades4j.utils.ResolverAnonymous;
 import xades4j.utils.TransformUtils;
 import xades4j.xml.marshalling.algorithms.AlgorithmsParametersMarshallingProvider;
 
@@ -72,7 +72,7 @@ class SignedDataObjectsProcessor
             throw new IllegalStateException("XMLSignature already contais references");
         }
         
-        for (ResourceResolver resolver : signedDataObjects.getResourceResolvers())
+        for (ResourceResolverSpi resolver : signedDataObjects.getResourceResolvers())
         {
             xmlSignature.addResourceResolver(resolver);
         }

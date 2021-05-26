@@ -18,6 +18,8 @@ package xades4j.verification;
 
 import com.google.inject.Module;
 import javax.xml.namespace.QName;
+
+import xades4j.providers.X500NameStyleProvider;
 import xades4j.utils.XadesProfileCore;
 import xades4j.utils.XadesProfileResolutionException;
 import xades4j.properties.data.CustomPropertiesDataObjsStructureVerifier;
@@ -164,6 +166,18 @@ public final class XadesVerificationProfile
         return withBinding(MessageDigestEngineProvider.class, digestProviderClass);
     }
 
+    public XadesVerificationProfile withX500NameStyleProvider(
+            X500NameStyleProvider x500NameStyleProvider)
+    {
+        return withBinding(X500NameStyleProvider.class, x500NameStyleProvider);
+    }
+
+    public XadesVerificationProfile withX500NameStyleProvider(
+            Class<? extends X500NameStyleProvider> x500NameStyleProviderClass)
+    {
+        return withBinding(X500NameStyleProvider.class, x500NameStyleProviderClass);
+    }
+
     /**
      * By default no policies are supported.
      */
@@ -243,9 +257,9 @@ public final class XadesVerificationProfile
         return this;
     }
 
-    /**********************************************/
-    /************ Custom verification *************/
-    /**********************************************/
+    /* ******************************************** */
+    /* *********** Custom verification ************ */
+    /* ******************************************** */
     public XadesVerificationProfile withGlobalDataObjsStructureVerifier(
             CustomPropertiesDataObjsStructureVerifier v)
     {
@@ -307,7 +321,7 @@ public final class XadesVerificationProfile
     }
 
     public XadesVerificationProfile withElementVerifier(
-            QName elemName, Class<? extends QualifyingPropertyVerifier> vClass)
+            QName elemName, Class<? extends QualifyingPropertyVerifier<?>> vClass)
     {
         if (null == elemName || null == vClass)
             throw new NullPointerException();

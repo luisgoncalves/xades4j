@@ -18,7 +18,7 @@ package xades4j.properties.data;
 
 import xades4j.utils.DataGetterImpl;
 import xades4j.utils.DataGetter;
-import com.google.inject.Inject;
+import javax.inject.Inject;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;

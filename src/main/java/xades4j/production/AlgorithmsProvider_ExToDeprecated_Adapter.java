@@ -16,7 +16,7 @@
  */
 package xades4j.production;
 
-import com.google.inject.Inject;
+import javax.inject.Inject;
 import xades4j.UnsupportedAlgorithmException;
 import xades4j.providers.AlgorithmsProvider;
 import xades4j.providers.AlgorithmsProviderEx;

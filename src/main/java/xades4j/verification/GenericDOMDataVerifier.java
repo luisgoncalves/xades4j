@@ -16,7 +16,7 @@
  */
 package xades4j.verification;
 
-import com.google.inject.Inject;
+import javax.inject.Inject;
 import java.util.Map;
 import javax.xml.namespace.QName;
 import org.w3c.dom.Element;

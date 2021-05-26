@@ -106,7 +106,7 @@ class XAdESFormChecker
 
         XAdESFormDesc getPrevious()
         {
-            return baseForms[0];
+            return baseForms.length > 0 ? baseForms[0] : null;
         }
 
         /**

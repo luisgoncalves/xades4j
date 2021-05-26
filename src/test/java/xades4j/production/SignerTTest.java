@@ -16,7 +16,8 @@
  */
 package xades4j.production;
 
-import com.google.inject.Inject;
+import javax.inject.Inject;
+
 import org.junit.Test;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
@@ -100,24 +101,5 @@ public class SignerTTest extends SignerTestBase
         new Enveloped(signer).sign(elemToSign);
 
         outputDocument(doc, "document.signed.t.epes.xml");
-    }
-
-    @Test
-    public void testSignTPtCC() throws Exception
-    {
-        System.out.println("signTPtCitizenCard");
-        assumePtCcPkcs11OnWindows();
-
-        Document doc = getTestDocument();
-        Element elemToSign = doc.getDocumentElement();
-
-        PKCS11KeyStoreKeyingDataProvider ptccKeyingDataProv = new PKCS11KeyStoreKeyingDataProvider(
-                PTCC_PKCS11_LIB_PATH, "PT_CC",
-                new FirstCertificateSelector(), null, null, false);
-
-        SignerT signer = (SignerT) new XadesTSigningProfile(ptccKeyingDataProv).withAlgorithmsProviderEx(PtCcAlgorithmsProvider.class).newSigner();
-        new Enveloped(signer).sign(elemToSign);
-
-        outputDocument(doc, "document.signed.t.bes.ptcc.xml");
     }
 }

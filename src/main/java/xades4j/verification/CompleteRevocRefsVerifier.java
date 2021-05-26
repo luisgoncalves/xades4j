@@ -16,7 +16,7 @@
  */
 package xades4j.verification;
 
-import com.google.inject.Inject;
+import javax.inject.Inject;
 import java.io.IOException;
 import java.math.BigInteger;
 import java.security.MessageDigest;
@@ -25,7 +25,7 @@ import java.security.cert.X509CRL;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
-import javax.security.auth.x500.X500Principal;
+
 import xades4j.properties.CompleteRevocationRefsProperty;
 import xades4j.properties.QualifyingProperty;
 import xades4j.UnsupportedAlgorithmException;
@@ -41,12 +41,15 @@ import xades4j.utils.CrlExtensionsUtils;
 class CompleteRevocRefsVerifier implements QualifyingPropertyVerifier<CompleteRevocationRefsData>
 {
     private final MessageDigestEngineProvider digestEngineProvider;
+    private final DistinguishedNameComparer dnComparer;
 
     @Inject
     public CompleteRevocRefsVerifier(
-            MessageDigestEngineProvider digestEngineProvider)
+            MessageDigestEngineProvider digestEngineProvider,
+            DistinguishedNameComparer dnComparer)
     {
         this.digestEngineProvider = digestEngineProvider;
+        this.dnComparer = dnComparer;
     }
 
     @Override
@@ -71,7 +74,8 @@ class CompleteRevocRefsVerifier implements QualifyingPropertyVerifier<CompleteRe
                 // should treat the signature as invalid."
 
                 // Check issuer and issue time.
-                if (!crl.getIssuerX500Principal().equals(new X500Principal(crlRef.issuerDN)) ||
+
+                if (!this.dnComparer.areEqual(crl.getIssuerX500Principal(), crlRef.issuerDN) ||
                         !crl.getThisUpdate().equals(crlRef.issueTime.getTime()))
                     continue;
                 

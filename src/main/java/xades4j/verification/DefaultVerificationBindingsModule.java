@@ -42,12 +42,16 @@ import xades4j.properties.data.SignatureTimeStampData;
 import xades4j.properties.data.SignerRoleData;
 import xades4j.properties.data.SigningCertificateData;
 import xades4j.properties.data.SigningTimeData;
+import xades4j.providers.X500NameStyleProvider;
 import xades4j.providers.impl.DefaultMessageDigestProvider;
 import xades4j.providers.impl.DefaultTimeStampVerificationProvider;
 import xades4j.providers.MessageDigestEngineProvider;
 import xades4j.providers.SignaturePolicyDocumentProvider;
 import xades4j.providers.TimeStampVerificationProvider;
+import xades4j.providers.impl.DefaultX500NameStyleProvider;
 import xades4j.utils.BuiltIn;
+import xades4j.utils.RFC4519ExtensibleStyle;
+import xades4j.utils.X500ExtensibleNameStyle;
 
 /**
  * Contains the Guice bindings for the default components and the bindings for the
@@ -87,7 +91,8 @@ class DefaultVerificationBindingsModule extends AbstractModule
         // verifiers may have dependencies.
         bind(QualifyingPropertiesVerifier.class).to(QualifyingPropertiesVerifierImpl.class);
         bind(QualifyingPropertyVerifiersMapper.class).to(QualifyingPropertyVerifiersMapperImpl.class);
-
+        bind(X500NameStyleProvider.class).to(DefaultX500NameStyleProvider.class);
+        bind(X500ExtensibleNameStyle.class).to(RFC4519ExtensibleStyle.class);
 //        customGlobalStructureVerifiers.add(new CustomPropertiesDataObjsStructureVerifier()
 //        {
 //            @Override

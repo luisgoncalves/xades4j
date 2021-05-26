@@ -17,7 +17,6 @@
 package xades4j.utils;
 
 import java.io.ByteArrayOutputStream;
-import java.util.List;
 import org.apache.xml.security.signature.Reference;
 import org.apache.xml.security.signature.XMLSignatureException;
 import org.apache.xml.security.signature.XMLSignatureInput;
@@ -87,7 +86,7 @@ class TimeStampDigestInputImpl implements TimeStampDigestInput
             if (refData.isNodeSet() || refData.isElement())
             {
                 Transform c14nTransform = TransformUtils.createTransform(this.c14n, this.parametersMarshallingProvider, doc);
-                refData = c14nTransform.performTransform(refData);
+                refData = c14nTransform.performTransform(refData, true);
                 // Fall through to add the bytes resulting from the canonicalization.
             }
 

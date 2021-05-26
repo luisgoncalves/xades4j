@@ -30,7 +30,7 @@ import xades4j.properties.data.PropertyDataObject;
  * Classes or instances of {@code PropertyDataObjectGenerator} for properties that
  * are not supported by the library have to be registered through the {@code withPropertyDataObjectGenerator}
  * method in a {@link XadesSigningProfile}. The library includes default implementations
- * for all the supported properties but these may be overriden.
+ * for all the supported properties but these may be overridden.
  * <p>
  * The classes that implement this interface may have dependencies on other library
  * components (and also external components configured in the signing profile).

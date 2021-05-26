@@ -16,21 +16,16 @@
  */
 package xades4j.production;
 
-import com.google.inject.Inject;
+import javax.inject.Inject;
 import java.security.cert.X509Certificate;
 import java.util.Collection;
 import java.util.List;
+
+import com.google.common.base.Optional;
 import xades4j.properties.SignedSignatureProperty;
 import xades4j.properties.UnsignedSignatureProperty;
 import xades4j.XAdES4jException;
-import xades4j.providers.AlgorithmsProviderEx;
-import xades4j.providers.BasicSignatureOptionsProvider;
-import xades4j.providers.DataObjectPropertiesProvider;
-import xades4j.providers.KeyingDataProvider;
-import xades4j.providers.SignaturePropertiesProvider;
-import xades4j.providers.ValidationData;
-import xades4j.providers.ValidationDataException;
-import xades4j.providers.ValidationDataProvider;
+import xades4j.providers.*;
 import xades4j.utils.PropertiesUtils;
 import xades4j.xml.marshalling.SignedPropertiesMarshaller;
 import xades4j.xml.marshalling.UnsignedPropertiesMarshaller;
@@ -48,7 +43,7 @@ class SignerC extends SignerT
     protected SignerC(
             KeyingDataProvider keyingProvider,
             AlgorithmsProviderEx algorithmsProvider,
-            BasicSignatureOptionsProvider basicSignatureOptionsProvider,
+            BasicSignatureOptions basicSignatureOptions,
             SignedDataObjectsProcessor dataObjectDescsProcessor,
             SignaturePropertiesProvider signaturePropsProvider,
             ValidationDataProvider validationDataProvider,
@@ -56,9 +51,11 @@ class SignerC extends SignerT
             PropertiesDataObjectsGenerator propsDataObjectsGenerator,
             SignedPropertiesMarshaller signedPropsMarshaller,
             UnsignedPropertiesMarshaller unsignedPropsMarshaller,
-            AlgorithmsParametersMarshallingProvider algorithmsParametersMarshaller)
+            AlgorithmsParametersMarshallingProvider algorithmsParametersMarshaller,
+            X500NameStyleProvider x500NameStyleProvider,
+            Optional<SignaturePolicyInfoProvider> policyInfoProvider)
     {
-        super(keyingProvider, algorithmsProvider, basicSignatureOptionsProvider, dataObjectDescsProcessor, signaturePropsProvider, dataObjPropsProvider, propsDataObjectsGenerator, signedPropsMarshaller, unsignedPropsMarshaller, algorithmsParametersMarshaller);
+        super(keyingProvider, algorithmsProvider, basicSignatureOptions, dataObjectDescsProcessor, signaturePropsProvider, dataObjPropsProvider, propsDataObjectsGenerator, signedPropsMarshaller, unsignedPropsMarshaller, algorithmsParametersMarshaller, x500NameStyleProvider, policyInfoProvider);
         if (null == validationDataProvider)
             throw new NullPointerException("ValidationDataProvider is null");
 

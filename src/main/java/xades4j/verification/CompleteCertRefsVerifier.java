@@ -16,7 +16,7 @@
  */
 package xades4j.verification;
 
-import com.google.inject.Inject;
+import javax.inject.Inject;
 import java.security.cert.X509Certificate;
 import java.util.Collection;
 import java.util.Collections;
@@ -34,12 +34,15 @@ import xades4j.providers.MessageDigestEngineProvider;
 class CompleteCertRefsVerifier implements QualifyingPropertyVerifier<CompleteCertificateRefsData>
 {
     private final MessageDigestEngineProvider messageDigestProvider;
+    private final DistinguishedNameComparer dnComparer;
 
     @Inject
     public CompleteCertRefsVerifier(
-            MessageDigestEngineProvider messageDigestProvider)
+            MessageDigestEngineProvider messageDigestProvider,
+            DistinguishedNameComparer dnComparer)
     {
         this.messageDigestProvider = messageDigestProvider;
+        this.dnComparer = dnComparer;
     }
 
     @Override
@@ -56,7 +59,7 @@ class CompleteCertRefsVerifier implements QualifyingPropertyVerifier<CompleteCer
 
         for (X509Certificate caCert : caCerts)
         {
-            CertRef caRef = CertRefUtils.findCertRef(caCert, caCertRefs);
+            CertRef caRef = CertRefUtils.findCertRef(caCert, caCertRefs, this.dnComparer);
             if (null == caRef)
                 throw new CompleteCertRefsCertNotFoundException(caCert);
             try

@@ -19,13 +19,10 @@ package xades4j.providers.impl;
 import xades4j.providers.BasicSignatureOptionsProvider;
 
 /**
- * The default implementation of {@link BasicSignatureOptionsProvider}. The defaults
- * are:
- * <ul>
- *  <li>includeSigningCertificate: true</li>
- *  <li>includePublicKey: false</li>
- *  <li>signSigningCertificate: false</li>
- * </ul>
+ * @deprecated
+ * This class is deprecated and might be removed in future versions.
+ * @see xades4j.production.BasicSignatureOptions
+ * 
  * @author Luís
  */
 public class DefaultBasicSignatureOptionsProvider implements BasicSignatureOptionsProvider

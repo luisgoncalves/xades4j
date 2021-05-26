@@ -16,7 +16,7 @@
  */
 package xades4j.production;
 
-import com.google.inject.Inject;
+import javax.inject.Inject;
 import java.io.IOException;
 import java.security.MessageDigest;
 import xades4j.properties.SignaturePolicyIdentifierProperty;

@@ -1,0 +1,124 @@
+<?xml version="1.0" encoding="UTF-8"?><collection Id="root">
+	<album>
+		<title>Questions, unanswered</title>
+		<artist>Steve and the flubberblubs</artist>
+		<year>1989</year>
+		<t:tracks xmlns:t="http://test.xades4j/tracks">
+			<t:song length="4:05" tracknumber="1">
+				<t:title>What do you know?</t:title>
+				<t:artist>Steve and the flubberblubs</t:artist>
+				<t:lastplayed>2006-10-17-08:31</t:lastplayed>
+			</t:song>
+			<t:song length="3:45" tracknumber="2">
+				<t:title>Who do you know?</t:title>
+				<t:artist>Steve and the flubberblubs</t:artist>
+				<t:lastplayed>2006-10-17-08:35</t:lastplayed>
+			</t:song>
+			<t:song length="5:14" tracknumber="3">
+				<t:title>When do you know?</t:title>
+				<t:artist>Steve and the flubberblubs</t:artist>
+				<t:lastplayed>2006-10-17-08:39</t:lastplayed>
+			</t:song>
+			<t:song length="4:19" tracknumber="4">
+				<t:title>Do you know?</t:title>
+				<t:artist>Steve and the flubberblubs</t:artist>
+				<t:lastplayed>2006-10-17-08:44</t:lastplayed>
+			</t:song>
+		</t:tracks>
+	</album>
+<ds:Signature xmlns:ds="http://www.w3.org/2000/09/xmldsig#" Id="xmldsig-c7db1d6c-8e44-421c-99ed-ffe0688c55f6">
+<ds:SignedInfo>
+<ds:CanonicalizationMethod Algorithm="http://www.w3.org/TR/2001/REC-xml-c14n-20010315"/>
+<ds:SignatureMethod Algorithm="http://www.w3.org/2001/04/xmldsig-more#rsa-sha256"/>
+<ds:Reference Id="xmldsig-c7db1d6c-8e44-421c-99ed-ffe0688c55f6-ref0" URI="#root">
+<ds:Transforms>
+<ds:Transform Algorithm="http://www.w3.org/2000/09/xmldsig#enveloped-signature"/>
+</ds:Transforms>
+<ds:DigestMethod Algorithm="http://www.w3.org/2001/04/xmlenc#sha256"/>
+<ds:DigestValue>rD/g8soqKz8EiPUBhEWfcQacS0ta4ULHX3dKMEH6ZoQ=</ds:DigestValue>
+</ds:Reference>
+<ds:Reference Type="http://uri.etsi.org/01903#SignedProperties" URI="#xmldsig-c7db1d6c-8e44-421c-99ed-ffe0688c55f6-signedprops">
+<ds:Transforms>
+<ds:Transform Algorithm="http://www.w3.org/TR/2001/REC-xml-c14n-20010315"/>
+</ds:Transforms>
+<ds:DigestMethod Algorithm="http://www.w3.org/2001/04/xmlenc#sha256"/>
+<ds:DigestValue>FChDOKKMjcxG5dFfpDB23VvAzbhHIsYs+EGyI406HKk=</ds:DigestValue>
+</ds:Reference>
+</ds:SignedInfo>
+<ds:SignatureValue Id="xmldsig-c7db1d6c-8e44-421c-99ed-ffe0688c55f6-sigvalue">
+fXbeyBGqaZ9RooiCnWF6/dAgy7dUNvZbvOr/DGfiY/VO3dnmqeg//k2jzh4osedmJg2w9XulKffT&#13;
+k20ZVo6a3t81GypHtBIo1tA4fVdGVSe4/sqlRhohdBGLl4AXQTCVpEkNW1bLWYb9OZL+/nF9ZWm0&#13;
+HRrIwMEM0OS2XT6BExs=
+</ds:SignatureValue>
+<ds:KeyInfo>
+<ds:X509Data>
+<ds:X509Certificate>
+MIICbTCCAdqgAwIBAgIQpkK0uals+ItHxBlpJuypOTAJBgUrDgMCHQUAMD8xCzAJBgNVBAYTAlBU&#13;
+MQ0wCwYDVQQKEwRJU0VMMQswCQYDVQQLEwJDQzEUMBIGA1UEAxMLSXRlcm1lZGlhdGUwHhcNMTAw&#13;
+NjI1MTc1ODQ5WhcNMzkxMjMxMjM1OTU5WjBCMQswCQYDVQQGEwJQVDENMAsGA1UEChMESVNFTDEL&#13;
+MAkGA1UECxMCQ0MxFzAVBgNVBAMTDkx1aXMgR29uY2FsdmVzMIGfMA0GCSqGSIb3DQEBAQUAA4GN&#13;
+ADCBiQKBgQCpP9acMX69Dbg9ciMLFc5dm1tlpTY9OTNZ/EaCYoGVhh/3+DFgyIbEer6SA24hpREm&#13;
+AhNG9+Ca0AurDPPgb3aKWFY9pj1WcOctis0VsR0YvzqP+2IGFqKDCd7bXFvv2tI0dEvpdc0oO6PF&#13;
+Q02xvJG0kxQf44XljOCjUBU43jkJawIDAQABo28wbTBrBgNVHQEEZDBigBBdbbL4pDKLT56PpOpA&#13;
+/56toTwwOjELMAkGA1UEBhMCUFQxDTALBgNVBAoTBElTRUwxCzAJBgNVBAsTAkNDMQ8wDQYDVQQD&#13;
+EwZUZXN0Q0GCEN00x9qe7SuWQvpLK0/oay8wCQYFKw4DAh0FAAOBgQBSma8g9dQjiQo4WUljRRuG&#13;
+yMUVRyCqW/9oRz8+0EoLNR/AhrIlGqdNbqQ1BkncgNNdqMAus5VD34v/EhgrkgWN5fZajMpYsmcR&#13;
+Ahu4PzJ6hggAlWWMy245JwIYuV0s1Oi39GVTxVNOBIX//AONZlGWO4S2Psb1mqdZ99b/MugsaA==
+</ds:X509Certificate>
+<ds:X509IssuerSerial>
+<ds:X509IssuerName>cn=Itermediate,ou=CC,o=ISEL,c=PT</ds:X509IssuerName>
+<ds:X509SerialNumber>-119284162484605703133798696662099777223</ds:X509SerialNumber>
+</ds:X509IssuerSerial>
+<ds:X509SubjectName>cn=Luis Goncalves,ou=CC,o=ISEL,c=PT</ds:X509SubjectName>
+</ds:X509Data>
+</ds:KeyInfo>
+<ds:Object><xades:QualifyingProperties xmlns:xades="http://uri.etsi.org/01903/v1.3.2#" xmlns:xades141="http://uri.etsi.org/01903/v1.4.1#" Target="#xmldsig-c7db1d6c-8e44-421c-99ed-ffe0688c55f6"><xades:SignedProperties Id="xmldsig-c7db1d6c-8e44-421c-99ed-ffe0688c55f6-signedprops"><xades:SignedSignatureProperties><xades:SigningCertificate><xades:Cert><xades:CertDigest><ds:DigestMethod Algorithm="http://www.w3.org/2001/04/xmlenc#sha256"/><ds:DigestValue>4btVb5gQ5cdcNhGpvDSWQZabPQrR9jf1x8e3YF9Ajss=</ds:DigestValue></xades:CertDigest><xades:IssuerSerial><ds:X509IssuerName>cn=Itermediate,ou=CC,o=ISEL,c=PT</ds:X509IssuerName><ds:X509SerialNumber>-119284162484605703133798696662099777223</ds:X509SerialNumber></xades:IssuerSerial></xades:Cert><xades:Cert><xades:CertDigest><ds:DigestMethod Algorithm="http://www.w3.org/2001/04/xmlenc#sha256"/><ds:DigestValue>vm5QpbblsWV7fCYXotPhNTeCt4nk8cLFuF36L5RJ4Ok=</ds:DigestValue></xades:CertDigest><xades:IssuerSerial><ds:X509IssuerName>cn=TestCA,ou=CC,o=ISEL,c=PT</ds:X509IssuerName><ds:X509SerialNumber>-46248926895392336918291885380930606289</ds:X509SerialNumber></xades:IssuerSerial></xades:Cert><xades:Cert><xades:CertDigest><ds:DigestMethod Algorithm="http://www.w3.org/2001/04/xmlenc#sha256"/><ds:DigestValue>AUaN+IdhKQqxIVmEOrFwq+Dn22ebTkXJqD3BoOP/x8E=</ds:DigestValue></xades:CertDigest><xades:IssuerSerial><ds:X509IssuerName>cn=TestCA,ou=CC,o=ISEL,c=PT</ds:X509IssuerName><ds:X509SerialNumber>-99704378678639105802976522062798066869</ds:X509SerialNumber></xades:IssuerSerial></xades:Cert></xades:SigningCertificate><xades:SignerRole><xades:ClaimedRoles><xades:ClaimedRole>CounterSignature maniac</xades:ClaimedRole></xades:ClaimedRoles></xades:SignerRole></xades:SignedSignatureProperties></xades:SignedProperties><xades:UnsignedProperties><xades:UnsignedSignatureProperties><xades:CounterSignature><ds:Signature Id="xmldsig-97b501b4-6782-4123-8a68-402c8d29424f">
+<ds:SignedInfo>
+<ds:CanonicalizationMethod Algorithm="http://www.w3.org/TR/2001/REC-xml-c14n-20010315"/>
+<ds:SignatureMethod Algorithm="http://www.w3.org/2001/04/xmldsig-more#rsa-sha256"/>
+<ds:Reference Id="xmldsig-97b501b4-6782-4123-8a68-402c8d29424f-ref0" Type="http://uri.etsi.org/01903#CountersignedSignature" URI="#xmldsig-c7db1d6c-8e44-421c-99ed-ffe0688c55f6-sigvalue">
+<ds:Transforms>
+<ds:Transform Algorithm="http://www.w3.org/TR/1999/REC-xpath-19991116"><ds:XPath>.</ds:XPath></ds:Transform>
+<ds:Transform Algorithm="http://www.w3.org/TR/2001/REC-xml-c14n-20010315"/>
+</ds:Transforms>
+<ds:DigestMethod Algorithm="http://www.w3.org/2001/04/xmlenc#sha256"/>
+<ds:DigestValue>Lng1dagOkcPlGTE83wjBcj2sdawG5gWWqOzB1wUYLhM=</ds:DigestValue>
+</ds:Reference>
+<ds:Reference Type="http://uri.etsi.org/01903#SignedProperties" URI="#xmldsig-97b501b4-6782-4123-8a68-402c8d29424f-signedprops">
+<ds:Transforms>
+<ds:Transform Algorithm="http://www.w3.org/TR/2001/REC-xml-c14n-20010315"/>
+</ds:Transforms>
+<ds:DigestMethod Algorithm="http://www.w3.org/2001/04/xmlenc#sha256"/>
+<ds:DigestValue>47zhP6dIoel24psSy15RmhpFiRCs6gh5Au4OPTxKrz4=</ds:DigestValue>
+</ds:Reference>
+</ds:SignedInfo>
+<ds:SignatureValue Id="xmldsig-97b501b4-6782-4123-8a68-402c8d29424f-sigvalue">
+g8BjF+4sI/bKbCH5y+eL7Lh9eo+7OF71HtN/sPdfVLdAY7t/Bc2WH4fGmacCyvKQ10Ed4+Vze/fu&#13;
++j+CqbFZE8oNyoclNxoqsZQkEpaojYkrtVB3JGBfE1wYLsRZ/ONfb3FnUkMWBOdzzVEPfYgZQ2jc&#13;
+D+DLBDoYKERZFWOLBkM=
+</ds:SignatureValue>
+<ds:KeyInfo>
+<ds:X509Data>
+<ds:X509Certificate>
+MIICbTCCAdqgAwIBAgIQpkK0uals+ItHxBlpJuypOTAJBgUrDgMCHQUAMD8xCzAJBgNVBAYTAlBU&#13;
+MQ0wCwYDVQQKEwRJU0VMMQswCQYDVQQLEwJDQzEUMBIGA1UEAxMLSXRlcm1lZGlhdGUwHhcNMTAw&#13;
+NjI1MTc1ODQ5WhcNMzkxMjMxMjM1OTU5WjBCMQswCQYDVQQGEwJQVDENMAsGA1UEChMESVNFTDEL&#13;
+MAkGA1UECxMCQ0MxFzAVBgNVBAMTDkx1aXMgR29uY2FsdmVzMIGfMA0GCSqGSIb3DQEBAQUAA4GN&#13;
+ADCBiQKBgQCpP9acMX69Dbg9ciMLFc5dm1tlpTY9OTNZ/EaCYoGVhh/3+DFgyIbEer6SA24hpREm&#13;
+AhNG9+Ca0AurDPPgb3aKWFY9pj1WcOctis0VsR0YvzqP+2IGFqKDCd7bXFvv2tI0dEvpdc0oO6PF&#13;
+Q02xvJG0kxQf44XljOCjUBU43jkJawIDAQABo28wbTBrBgNVHQEEZDBigBBdbbL4pDKLT56PpOpA&#13;
+/56toTwwOjELMAkGA1UEBhMCUFQxDTALBgNVBAoTBElTRUwxCzAJBgNVBAsTAkNDMQ8wDQYDVQQD&#13;
+EwZUZXN0Q0GCEN00x9qe7SuWQvpLK0/oay8wCQYFKw4DAh0FAAOBgQBSma8g9dQjiQo4WUljRRuG&#13;
+yMUVRyCqW/9oRz8+0EoLNR/AhrIlGqdNbqQ1BkncgNNdqMAus5VD34v/EhgrkgWN5fZajMpYsmcR&#13;
+Ahu4PzJ6hggAlWWMy245JwIYuV0s1Oi39GVTxVNOBIX//AONZlGWO4S2Psb1mqdZ99b/MugsaA==
+</ds:X509Certificate>
+<ds:X509IssuerSerial>
+<ds:X509IssuerName>cn=Itermediate,ou=CC,o=ISEL,c=PT</ds:X509IssuerName>
+<ds:X509SerialNumber>-119284162484605703133798696662099777223</ds:X509SerialNumber>
+</ds:X509IssuerSerial>
+<ds:X509SubjectName>cn=Luis Goncalves,ou=CC,o=ISEL,c=PT</ds:X509SubjectName>
+</ds:X509Data>
+</ds:KeyInfo>
+<ds:Object><xades:QualifyingProperties Target="#xmldsig-97b501b4-6782-4123-8a68-402c8d29424f"><xades:SignedProperties Id="xmldsig-97b501b4-6782-4123-8a68-402c8d29424f-signedprops"><xades:SignedSignatureProperties><xades:SigningTime>2018-09-30T16:43:34.261+01:00</xades:SigningTime><xades:SigningCertificate><xades:Cert><xades:CertDigest><ds:DigestMethod Algorithm="http://www.w3.org/2001/04/xmlenc#sha256"/><ds:DigestValue>4btVb5gQ5cdcNhGpvDSWQZabPQrR9jf1x8e3YF9Ajss=</ds:DigestValue></xades:CertDigest><xades:IssuerSerial><ds:X509IssuerName>cn=Itermediate,ou=CC,o=ISEL,c=PT</ds:X509IssuerName><ds:X509SerialNumber>-119284162484605703133798696662099777223</ds:X509SerialNumber></xades:IssuerSerial></xades:Cert><xades:Cert><xades:CertDigest><ds:DigestMethod Algorithm="http://www.w3.org/2001/04/xmlenc#sha256"/><ds:DigestValue>vm5QpbblsWV7fCYXotPhNTeCt4nk8cLFuF36L5RJ4Ok=</ds:DigestValue></xades:CertDigest><xades:IssuerSerial><ds:X509IssuerName>cn=TestCA,ou=CC,o=ISEL,c=PT</ds:X509IssuerName><ds:X509SerialNumber>-46248926895392336918291885380930606289</ds:X509SerialNumber></xades:IssuerSerial></xades:Cert><xades:Cert><xades:CertDigest><ds:DigestMethod Algorithm="http://www.w3.org/2001/04/xmlenc#sha256"/><ds:DigestValue>AUaN+IdhKQqxIVmEOrFwq+Dn22ebTkXJqD3BoOP/x8E=</ds:DigestValue></xades:CertDigest><xades:IssuerSerial><ds:X509IssuerName>cn=TestCA,ou=CC,o=ISEL,c=PT</ds:X509IssuerName><ds:X509SerialNumber>-99704378678639105802976522062798066869</ds:X509SerialNumber></xades:IssuerSerial></xades:Cert></xades:SigningCertificate></xades:SignedSignatureProperties></xades:SignedProperties></xades:QualifyingProperties></ds:Object>
+</ds:Signature></xades:CounterSignature></xades:UnsignedSignatureProperties></xades:UnsignedProperties></xades:QualifyingProperties></ds:Object>
+</ds:Signature></collection>

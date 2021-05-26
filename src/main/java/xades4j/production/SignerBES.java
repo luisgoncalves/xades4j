@@ -16,13 +16,10 @@
  */
 package xades4j.production;
 
-import org.apache.xml.security.c14n.Canonicalizer;
-import org.apache.xml.security.c14n.InvalidCanonicalizerException;
-import org.apache.xml.security.transforms.TransformationException;
 import org.apache.xml.security.transforms.Transforms;
 import xades4j.properties.QualifyingProperties;
 import xades4j.properties.DataObjectDesc;
-import com.google.inject.Inject;
+import javax.inject.Inject;
 import java.security.PrivateKey;
 import java.security.cert.X509Certificate;
 import java.util.ArrayList;
@@ -51,11 +48,11 @@ import xades4j.XAdES4jException;
 import xades4j.XAdES4jXMLSigException;
 import xades4j.properties.data.SigAndDataObjsPropertiesData;
 import xades4j.providers.AlgorithmsProviderEx;
-import xades4j.providers.BasicSignatureOptionsProvider;
 import xades4j.providers.DataObjectPropertiesProvider;
 import xades4j.providers.KeyingDataProvider;
 import xades4j.providers.SignaturePropertiesProvider;
 import xades4j.providers.SigningCertChainException;
+import xades4j.providers.X500NameStyleProvider;
 import xades4j.utils.CanonicalizerUtils;
 import xades4j.utils.DOMHelper;
 import xades4j.utils.ObjectUtils;
@@ -92,19 +89,21 @@ class SignerBES implements XadesSigner
     protected SignerBES(
             KeyingDataProvider keyingProvider,
             AlgorithmsProviderEx algorithmsProvider,
-            BasicSignatureOptionsProvider basicSignatureOptionsProvider,
+            BasicSignatureOptions basicSignatureOptions,
             SignedDataObjectsProcessor dataObjectDescsProcessor,
             SignaturePropertiesProvider signaturePropsProvider,
             DataObjectPropertiesProvider dataObjPropsProvider,
             PropertiesDataObjectsGenerator propsDataObjectsGenerator,
             SignedPropertiesMarshaller signedPropsMarshaller,
             UnsignedPropertiesMarshaller unsignedPropsMarshaller,
-            AlgorithmsParametersMarshallingProvider algorithmsParametersMarshaller)
+            AlgorithmsParametersMarshallingProvider algorithmsParametersMarshaller,
+            X500NameStyleProvider x500NameStyleProvider)
     {
         if (ObjectUtils.anyNull(
-                keyingProvider, algorithmsProvider,
+                keyingProvider, algorithmsProvider, basicSignatureOptions,
                 signaturePropsProvider, dataObjPropsProvider, propsDataObjectsGenerator,
-                signedPropsMarshaller, unsignedPropsMarshaller, algorithmsParametersMarshaller))
+                signedPropsMarshaller, unsignedPropsMarshaller, algorithmsParametersMarshaller,
+                x500NameStyleProvider))
         {
             throw new NullPointerException("One or more arguments are null");
         }
@@ -115,9 +114,8 @@ class SignerBES implements XadesSigner
         this.signedPropsMarshaller = signedPropsMarshaller;
         this.unsignedPropsMarshaller = unsignedPropsMarshaller;
         this.algorithmsParametersMarshaller = algorithmsParametersMarshaller;
-
         this.dataObjectDescsProcessor = dataObjectDescsProcessor;
-        this.keyInfoBuilder = new KeyInfoBuilder(basicSignatureOptionsProvider, algorithmsProvider, algorithmsParametersMarshaller);
+        this.keyInfoBuilder = new KeyInfoBuilder(basicSignatureOptions, algorithmsProvider, algorithmsParametersMarshaller, x500NameStyleProvider);
         this.qualifPropsProcessor = new QualifyingPropertiesProcessor(signaturePropsProvider, dataObjPropsProvider);
     }
 
@@ -179,7 +177,7 @@ class SignerBES implements XadesSigner
                 signature);
         
         /* ds:KeyInfo */
-        this.keyInfoBuilder.buildKeyInfo(signingCertificate, signature);
+        this.keyInfoBuilder.buildKeyInfo(signingCertificateChain, signature);
 
         /* QualifyingProperties element */
         // Create the QualifyingProperties element

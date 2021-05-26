@@ -18,7 +18,6 @@ package xades4j.verification;
 
 import java.security.KeyStore;
 import org.junit.Test;
-import static org.junit.Assume.assumeTrue;
 import org.junit.Before;
 import xades4j.providers.CannotSelectCertificateException;
 import xades4j.providers.impl.PKIXCertificateValidationProvider;
@@ -50,7 +49,6 @@ public class XadesVerifierErrorsTest extends VerifierTestBase
     public void testErrVerifySignedPropsIncorpNoRefType() throws Exception
     {
         System.out.println("errVerifySignedPropsIncorpNoRefType");
-        assumeTrue(onWindowsPlatform() && null != validationProviderPtCc);
 
         verifyBadSignature("document.signed.bes.signedpropsrefnotype.xml",
                 new XadesVerificationProfile(validationProviderPtCc));
@@ -107,6 +105,13 @@ public class XadesVerifierErrorsTest extends VerifierTestBase
 
         System.out.println("errVerifyUnmatchSigTSDigest");
         verifyBadSignature("document.signed.t.bes.badtsdigest.xml", mySigsVerificationProfile);
+    }
+    
+    @Test(expected = CounterSignatureSigValueRefException.class)
+    public void testErrVerifyCounterSigWithUnallowedTransforms() throws Exception
+    {
+        System.out.println("errVerifyCounterSigWithUnallowedTransforms");
+        verifyBadSignature("document.signed.bes.cs.invalidtransforms.xml", mySigsVerificationProfile);
     }
 
     private static void verifyBadSignature(String sigFileName, XadesVerificationProfile p) throws Exception

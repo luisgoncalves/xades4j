@@ -16,17 +16,12 @@
  */
 package xades4j.verification;
 
-import java.security.cert.X509CertSelector;
-import java.security.cert.X509Certificate;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
-import javax.security.auth.x500.X500Principal;
+
 import org.apache.xml.security.exceptions.XMLSecurityException;
-import org.apache.xml.security.keys.KeyInfo;
-import org.apache.xml.security.keys.content.X509Data;
-import org.apache.xml.security.keys.content.x509.XMLX509IssuerSerial;
 import org.apache.xml.security.signature.Reference;
 import org.apache.xml.security.signature.SignedInfo;
 import org.apache.xml.security.signature.XMLSignature;
@@ -34,10 +29,10 @@ import org.apache.xml.security.signature.XMLSignatureException;
 import org.apache.xml.security.transforms.Transforms;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
+
 import xades4j.XAdES4jXMLSigException;
 import xades4j.algorithms.GenericAlgorithm;
 import xades4j.properties.QualifyingProperty;
-import xades4j.providers.CertificateValidationException;
 import xades4j.utils.DOMHelper;
 
 /**
@@ -52,102 +47,6 @@ class SignatureUtils
     }
     /**/
 
-    static class KeyInfoRes
-    {
-
-        List<X509Certificate> keyInfoCerts;
-        X509CertSelector certSelector;
-        XMLX509IssuerSerial issuerSerial;
-
-        KeyInfoRes(
-                List<X509Certificate> keyInfoCerts,
-                X509CertSelector certSelector,
-                XMLX509IssuerSerial issuerSerial)
-        {
-            this.keyInfoCerts = keyInfoCerts;
-            this.certSelector = certSelector;
-            this.issuerSerial = issuerSerial;
-        }
-    }
-
-    static KeyInfoRes processKeyInfo(
-            KeyInfo keyInfo) throws CertificateValidationException
-    {
-        if (null == keyInfo || !keyInfo.containsX509Data())
-        {
-            throw new InvalidKeyInfoDataException("No X509Data to identify the leaf certificate");
-        }
-
-        List<X509Certificate> keyInfoCerts = new ArrayList<X509Certificate>(1);
-        XMLX509IssuerSerial issuerSerial = null;
-        X509CertSelector certSelector = new X509CertSelector();
-
-        // XML-DSIG 4.4.4: "Any X509IssuerSerial, X509SKI, and X509SubjectName elements
-        // that appear MUST refer to the certificate or certificates containing the
-        // validation key."
-        // "All certificates appearing in an X509Data element MUST relate to the
-        // validation key by either containing it or being part of a certification
-        // chain that terminates in a certificate containing the validation key".
-
-        // Scan ds:X509Data to find ds:IssuerSerial or ds:SubjectName elements. The
-        // first to be found is used to select the leaf certificate. If none of those
-        // elements is present, the first ds:X509Certificate is assumed as the signing
-        // certificate.
-        boolean hasSelectionCriteria = false;
-
-        try
-        {
-            for (int i = 0; i < keyInfo.lengthX509Data(); ++i)
-            {
-                X509Data x509Data = keyInfo.itemX509Data(i);
-
-                if(!hasSelectionCriteria)
-                {
-                    if (x509Data.containsIssuerSerial())
-                    {
-                        issuerSerial = x509Data.itemIssuerSerial(0);
-                        certSelector.setIssuer(new X500Principal(issuerSerial.getIssuerName()));
-                        certSelector.setSerialNumber(issuerSerial.getSerialNumber());
-                        hasSelectionCriteria = true;
-                    }
-                    else if (x509Data.containsSubjectName())
-                    {
-                        certSelector.setSubject(new X500Principal(x509Data.itemSubjectName(0).getSubjectName()));
-                        hasSelectionCriteria = true;
-                    }
-                }
-
-                // Collect all certificates as they may be needed to build the cert path.
-                if (x509Data.containsCertificate())
-                {
-                    for (int j = 0; j < x509Data.lengthCertificate(); ++j)
-                    {
-                        keyInfoCerts.add(x509Data.itemCertificate(j).getX509Certificate());
-                    }
-                }
-            }
-
-            if(!hasSelectionCriteria)
-            {
-                if(keyInfoCerts.isEmpty())
-                {
-                    // No criteria to select the leaf certificate.
-                    // Improvement: search the SigningCertiticate property and try to
-                    // find the "bottom" certificate.
-                    throw new InvalidKeyInfoDataException("No criteria to select the leaf certificate");
-                }
-                certSelector.setCertificate(keyInfoCerts.get(0));
-            }
-        }
-        catch (XMLSecurityException ex)
-        {
-            throw new InvalidKeyInfoDataException("Cannot process X509Data", ex);
-        }
-
-        return new KeyInfoRes(keyInfoCerts, certSelector, issuerSerial);
-    }
-
-    /**************************************************************************/
     static class ReferencesRes
     {
 
@@ -331,10 +230,7 @@ class SignatureUtils
 
         try
         {
-            // Node sPropsNode = signedPropsRef.getNodesetBeforeFirstCanonicalization().getSubNode();
-            // FIXME: Use line on top after xmlsec fixes issue SANTUARIO-462, probably on the 2.0.9 release
-            // URL: https://issues.apache.org/jira/browse/SANTUARIO-462
-            Node sPropsNode = signedPropsRef.getContentsBeforeTransformation().getSubNode();
+            Node sPropsNode = signedPropsRef.getNodesetBeforeFirstCanonicalization().getSubNode();
             if (sPropsNode == null || sPropsNode.getNodeType() != Node.ELEMENT_NODE)
             {
                 throw new QualifyingPropertiesIncorporationException("The supposed reference over signed properties doesn't cover an element.");

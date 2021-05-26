@@ -16,24 +16,24 @@
  */
 package xades4j.production;
 
-import java.io.File;
-import xades4j.algorithms.EnvelopedSignatureTransform;
-import xades4j.properties.DataObjectDesc;
-import xades4j.properties.AllDataObjsCommitmentTypeProperty;
-import xades4j.properties.CommitmentTypeProperty;
-import xades4j.properties.IndividualDataObjsTimeStampProperty;
-import xades4j.properties.DataObjectFormatProperty;
 import org.junit.Test;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
+import xades4j.algorithms.EnvelopedSignatureTransform;
 import xades4j.algorithms.XPath2FilterTransform.XPath2Filter;
 import xades4j.algorithms.XPathTransform;
+import xades4j.properties.AllDataObjsCommitmentTypeProperty;
+import xades4j.properties.CommitmentTypeProperty;
 import xades4j.properties.CounterSignatureProperty;
+import xades4j.properties.DataObjectDesc;
+import xades4j.properties.DataObjectFormatProperty;
+import xades4j.properties.IndividualDataObjsTimeStampProperty;
 import xades4j.properties.SignerRoleProperty;
 import xades4j.providers.SignaturePropertiesCollector;
 import xades4j.providers.SignaturePropertiesProvider;
-import xades4j.providers.impl.DefaultBasicSignatureOptionsProvider;
+
+import java.io.File;
 
 /**
  *
@@ -58,7 +58,7 @@ public class SignerBESTest extends SignerTestBase
 
         IndividualDataObjsTimeStampProperty dataObjsTimeStamp = new IndividualDataObjsTimeStampProperty();
         AllDataObjsCommitmentTypeProperty globalCommitment = AllDataObjsCommitmentTypeProperty.proofOfApproval();
-        CommitmentTypeProperty commitment = CommitmentTypeProperty.proofOfCreation();
+        CommitmentTypeProperty commitment = (CommitmentTypeProperty)CommitmentTypeProperty.proofOfCreation().withQualifier("MyQualifier");
         DataObjectDesc obj1 = new DataObjectReference('#' + elemToSign.getAttribute("Id")).withTransform(new EnvelopedSignatureTransform()).withDataObjectFormat(new DataObjectFormatProperty("text/xml", "MyEncoding").withDescription("Isto é uma descrição do elemento raiz").withDocumentationUri("http://doc1.txt").withDocumentationUri("http://doc2.txt").withIdentifier("http://elem.root")).withCommitmentType(commitment).withDataObjectTimeStamp(dataObjsTimeStamp);
         DataObjectDesc obj2 = new EnvelopedXmlObject(objectContent, "text/xml", null).withDataObjectFormat(new DataObjectFormatProperty("text/xml", "MyEncoding").withDescription("Isto é uma descrição do elemento dentro do object").withDocumentationUri("http://doc3.txt").withDocumentationUri("http://doc4.txt").withIdentifier("http://elem.in.object")).withCommitmentType(commitment).withDataObjectTimeStamp(dataObjsTimeStamp);
         SignedDataObjects dataObjs = new SignedDataObjects(obj1, obj2).withCommitmentType(globalCommitment).withDataObjectsTimeStamp();
@@ -69,15 +69,33 @@ public class SignerBESTest extends SignerTestBase
     }
 
     @Test
-    public void testSignBESExtrnlRes() throws Exception
+    public void testSignBESWithEllipticCurveKey() throws Exception
     {
-        System.out.println("signBESExtrnlRes");
+        System.out.println("testSignBESWithEllipticCurveKey");
+
+        Document doc = getTestDocument();
+        Element elemToSign = doc.getDocumentElement();
+
+        XadesSigner signer = new XadesBesSigningProfile(keyingProviderMyEc)
+                .withBasicSignatureOptions(new BasicSignatureOptions().includePublicKey(true))
+                .newSigner();
+        new Enveloped(signer).sign(elemToSign);
+
+        outputDocument(doc, "document.signed.bes.ec.xml");
+    }
+
+    @Test
+    public void testSignBESExternalRes() throws Exception
+    {
+        System.out.println("signBESExternalRes");
 
         Document doc = getNewDocument();
         SignerBES signer = (SignerBES)new XadesBesSigningProfile(keyingProviderNist).newSigner();
 
-        DataObjectDesc obj1 = new DataObjectReference("rfc3161.txt").withDataObjectFormat(new DataObjectFormatProperty("text/plain").withDescription("Internet X.509 Public Key Infrastructure Time-Stamp Protocol (TSP)")).withDataObjectTimeStamp(new IndividualDataObjsTimeStampProperty());
-        signer.sign(new SignedDataObjects(obj1).withBaseUri("http://www.ietf.org/rfc/"), doc);
+        DataObjectDesc obj1 = new DataObjectReference("logo-01.png")
+                .withDataObjectFormat(new DataObjectFormatProperty("image/png").withDescription("XAdES4j logo"))
+                .withDataObjectTimeStamp(new IndividualDataObjsTimeStampProperty());
+        signer.sign(new SignedDataObjects(obj1).withBaseUri("http://luisgoncalves.github.io/xades4j/images/"), doc);
 
         outputDocument(doc, "document.signed.bes.extres.xml");
     }
@@ -111,14 +129,7 @@ public class SignerBESTest extends SignerTestBase
 
         outputDocument(doc, "document.signed.bes.cs.xml");
     }
-    
-    public static class MyBasicSignatureOptionsProvider extends DefaultBasicSignatureOptionsProvider{
-        @Override
-        public boolean signSigningCertificate() {
-            return true;
-        }
-    }
-    
+
     @Test
     public void testSignBESDetachedWithXPathAndNamespaces() throws Exception
     {
@@ -127,7 +138,11 @@ public class SignerBESTest extends SignerTestBase
         Document doc = getNewDocument();
         
         XadesSigner signer = new XadesBesSigningProfile(keyingProviderMy)
-                .withBasicSignatureOptionsProvider(MyBasicSignatureOptionsProvider.class)
+                .withBasicSignatureOptions(new BasicSignatureOptions()
+                    .includeSigningCertificate(SigningCertificateMode.SIGNING_CERTIFICATE)
+                    .includeIssuerSerial(true)
+                    .includeSubjectName(true)
+                    .signKeyInfo(true))
                 .newSigner();
         
         DataObjectDesc obj1 = new DataObjectReference("document.xml")

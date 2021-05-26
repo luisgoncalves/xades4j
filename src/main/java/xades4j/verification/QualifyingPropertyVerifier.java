@@ -23,7 +23,7 @@ import xades4j.properties.data.PropertyDataObject;
  * Verifies a property accordingly to the XAdES verification rules. The verifier
  * is passed the unmarshalled property data object (structure already verified)
  * and should verify the XAdES rules and create the high-level {@code QualifyingProperty}.
- * @param TData the type of data objects that the implementing class verifies
+ * @param <TData> the type of data objects that the implementing class verifies
  * @author Luís
  */
 public interface QualifyingPropertyVerifier<TData extends PropertyDataObject>

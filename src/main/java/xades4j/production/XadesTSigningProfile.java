@@ -41,6 +41,7 @@ public class XadesTSigningProfile extends XadesSigningProfile
     public XadesTSigningProfile(KeyingDataProvider keyingProvider)
     {
         super(keyingProvider);
+        withOptionalBinding(SignaturePolicyInfoProvider.class);
     }
 
     @Override

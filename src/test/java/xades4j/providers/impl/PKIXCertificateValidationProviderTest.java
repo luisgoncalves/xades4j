@@ -23,13 +23,15 @@ import java.security.cert.X509Certificate;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Date;
-import javax.security.auth.x500.X500Principal;
+
 import org.junit.AfterClass;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import static org.junit.Assert.*;
 import xades4j.providers.ValidationData;
 import xades4j.utils.FileSystemDirectoryCertStore;
+
+import javax.security.auth.x500.X500Principal;
 
 /**
  *

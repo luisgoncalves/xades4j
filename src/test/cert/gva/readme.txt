@@ -2,7 +2,7 @@
 
 Certificate and CRL from ACCV RAIZ 1.
 
-The CRL may need to be updated (http://www.accv.es/ciudadanos/validacion-de-certificados/).
+The CRL may need to be updated (see CRL distribution point in the certificate).
 
 The default TSA is from http://www.accv.es/ and its certificate is issued by the above CA.
 

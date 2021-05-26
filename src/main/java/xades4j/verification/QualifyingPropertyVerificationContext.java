@@ -30,11 +30,13 @@ import org.apache.xml.security.signature.ObjectContainer;
 import org.apache.xml.security.signature.XMLSignature;
 import org.apache.xml.security.signature.XMLSignatureInput;
 import org.apache.xml.security.utils.resolver.ResourceResolver;
+import org.apache.xml.security.utils.resolver.ResourceResolverContext;
 import org.apache.xml.security.utils.resolver.ResourceResolverException;
 import org.w3c.dom.Attr;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
+import xades4j.providers.X500NameStyleProvider;
 
 /**
  * The context available during the verification of the qualifying properties.
@@ -85,13 +87,14 @@ public class QualifyingPropertyVerificationContext
         CertificationChainData(
                 List<X509Certificate> certificateChain,
                 Collection<X509CRL> crls,
-                XMLX509IssuerSerial validationCertIssuerSerial)
+                XMLX509IssuerSerial validationCertIssuerSerial,
+                X500NameStyleProvider x500NameStyleProvider)
         {
             this.certificateChain = Collections.unmodifiableList(certificateChain);
             this.crls = Collections.unmodifiableCollection(crls);
             if (validationCertIssuerSerial != null)
             {
-                this.validationCertIssuer = new X500Principal(validationCertIssuerSerial.getIssuerName());
+                this.validationCertIssuer = x500NameStyleProvider.fromString(validationCertIssuerSerial.getIssuerName());
                 this.validationCertSerialNumber = validationCertIssuerSerial.getSerialNumber();
             } else
             {
@@ -194,7 +197,8 @@ public class QualifyingPropertyVerificationContext
 
             try
             {
-                XMLSignatureInput refData = ResourceResolver.getInstance(refAttr, "", true).resolve(refAttr, "", true);
+                ResourceResolverContext resolverContext = new ResourceResolverContext(refAttr, "", true);
+                XMLSignatureInput refData = ResourceResolver.resolve(resolverContext);
                 // This has to be a NodeSet data because it is a same-document reference.
                 Node refNode = refData.getSubNode();
                 if (refNode.getNodeType() != Node.ELEMENT_NODE)

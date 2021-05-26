@@ -17,7 +17,7 @@
 package xades4j.production;
 
 import xades4j.algorithms.Algorithm;
-import com.google.inject.Inject;
+import javax.inject.Inject;
 import java.util.HashMap;
 import java.util.Map;
 import org.apache.xml.security.utils.Constants;

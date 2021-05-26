@@ -52,7 +52,7 @@ import javax.security.auth.callback.UnsupportedCallbackException;
 public class PKCS11KeyStoreKeyingDataProvider extends KeyStoreKeyingDataProvider
 {
     /**
-     * The provider name is used has a key to search for installed providers. If a
+     * The provider name is used as a key to search for installed providers. If a
      * provider exists with the same name, it will be used even if it relies on a
      * different native library.
      * @param nativeLibraryPath the path for the native library of the specific PKCS#11 provider
@@ -60,7 +60,7 @@ public class PKCS11KeyStoreKeyingDataProvider extends KeyStoreKeyingDataProvider
      * @param certificateSelector the selector of signing certificate
      * @param keyStorePasswordProvider the provider of the keystore loading password (may be {@code null})
      * @param entryPasswordProvider the provider of entry passwords (may be {@code null})
-     * @param returnFullChain indicates of the full certificate chain should be returned, if available
+     * @param returnFullChain indicates if the full certificate chain should be returned, if available
      * @throws KeyStoreException
      */
     public PKCS11KeyStoreKeyingDataProvider(
@@ -86,7 +86,7 @@ public class PKCS11KeyStoreKeyingDataProvider extends KeyStoreKeyingDataProvider
      * @param certificateSelector the selector of signing certificate
      * @param keyStorePasswordProvider the provider of the keystore loading password (can be {@code null})
      * @param entryPasswordProvider the provider of entry passwords (may be {@code null})
-     * @param returnFullChain indicates of the full certificate chain should be returned, if available
+     * @param returnFullChain indicates if the full certificate chain should be returned, if available
      * @throws KeyStoreException
      */
     public PKCS11KeyStoreKeyingDataProvider(

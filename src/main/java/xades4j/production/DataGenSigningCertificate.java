@@ -16,12 +16,13 @@
  */
 package xades4j.production;
 
-import com.google.inject.Inject;
+import javax.inject.Inject;
 import xades4j.properties.SigningCertificateProperty;
 import xades4j.properties.data.PropertyDataObject;
 import xades4j.properties.data.SigningCertificateData;
 import xades4j.providers.AlgorithmsProviderEx;
 import xades4j.providers.MessageDigestEngineProvider;
+import xades4j.providers.X500NameStyleProvider;
 
 /**
  *
@@ -34,9 +35,10 @@ class DataGenSigningCertificate
     @Inject
     public DataGenSigningCertificate(
             AlgorithmsProviderEx algorithmsProvider,
-            MessageDigestEngineProvider messageDigestProvider)
+            MessageDigestEngineProvider messageDigestProvider,
+            X500NameStyleProvider x500NameStyleProvider)
     {
-        super(algorithmsProvider, messageDigestProvider);
+        super(algorithmsProvider, messageDigestProvider, x500NameStyleProvider);
     }
 
     @Override
