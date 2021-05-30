@@ -36,7 +36,7 @@ import org.apache.xml.security.utils.resolver.ResourceResolverSpi;
  * <ul>
  *  <li>Properties that apply to ALL the signed data objects</li>
  *  <li>A base URI for the data object references</li>
- *  <li>{@link ResourceResolver}s to be used when processing the current set of
+ *  <li>{@link org.apache.xml.security.utils.resolver.ResourceResolver}s to be used when processing the current set of
  *      data objects, in addition to the globally registered resolvers
  *  </li>
  * </ul>

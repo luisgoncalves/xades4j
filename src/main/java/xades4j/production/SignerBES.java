@@ -18,18 +18,16 @@ package xades4j.production;
 
 import org.apache.xml.security.transforms.Transforms;
 import xades4j.properties.QualifyingProperties;
-import xades4j.properties.DataObjectDesc;
 import javax.inject.Inject;
 import java.security.PrivateKey;
 import java.security.cert.X509Certificate;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
-import java.util.Map;
 import java.util.UUID;
 import org.apache.xml.security.exceptions.XMLSecurityException;
 import org.apache.xml.security.signature.ObjectContainer;
-import org.apache.xml.security.signature.Reference;
+import org.apache.xml.security.signature.Manifest;
 import org.apache.xml.security.signature.XMLSignature;
 import org.apache.xml.security.signature.XMLSignatureException;
 import org.apache.xml.security.utils.Constants;
@@ -172,7 +170,7 @@ class SignerBES implements XadesSigner
         // Process the data object descriptions to get the References and mappings.
         // After this call all the signed data objects References and XMLObjects
         // are added to the signature.
-        Map<DataObjectDesc, Reference> referenceMappings = this.dataObjectDescsProcessor.process(
+        SignedDataObjectsProcessor.Result signedDataObjectsResult = this.dataObjectDescsProcessor.process(
                 signedDataObjects,
                 signature);
         
@@ -214,11 +212,14 @@ class SignerBES implements XadesSigner
             // object references.
             appendingStrategy.append(signature.getElement(), referenceNode);
 
+            // Digest manifests because property data generation may need to get Reference digest values
+            digestManifests(signedDataObjectsResult.manifests);
+
             /* Signed properties */
             // Create the context for signed properties data objects generation.
             PropertiesDataGenerationContext propsDataGenCtx = new PropertiesDataGenerationContext(
                     signedDataObjects.getDataObjectsDescs(),
-                    referenceMappings,
+                    signedDataObjectsResult.referenceMappings,
                     signatureDocument);
             // Generate the signed properties data objects. The data objects structure
             // is verifier in the process.
@@ -339,6 +340,20 @@ class SignerBES implements XadesSigner
             }
         }
         return algorithmElem;
+    }
+
+    private static void digestManifests(Iterable<Manifest> manifests) throws XAdES4jXMLSigException
+    {
+        try
+        {
+            for (Manifest m : manifests)
+            {
+                m.generateDigestValues();
+            }
+        } catch (XMLSignatureException ex)
+        {
+            throw new XAdES4jXMLSigException("Error digesting manifest", ex);
+        }
     }
 
     /**

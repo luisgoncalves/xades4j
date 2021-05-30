@@ -1,23 +1,25 @@
 /*
  * XAdES4j - A Java library for generation and verification of XAdES signatures.
  * Copyright (C) 2012 Luis Goncalves.
- * 
+ *
  * XAdES4j is free software; you can redistribute it and/or modify it under
  * the terms of the GNU Lesser General Public License as published by the Free
  * Software Foundation; either version 3 of the License, or any later version.
- * 
+ *
  * XAdES4j is distributed in the hope that it will be useful, but WITHOUT
  * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
  * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
  * details.
- * 
+ *
  * You should have received a copy of the GNU Lesser General Public License along
  * with XAdES4j. If not, see <http://www.gnu.org/licenses/>.
  */
 package xades4j.verification;
 
 import xades4j.utils.BuiltIn;
+
 import javax.inject.Inject;
+
 import org.junit.Before;
 import xades4j.properties.QualifyingProperty;
 import xades4j.properties.data.SigningTimeData;
@@ -43,7 +45,6 @@ class SigningTimeVerifierThatDependsOnBuiltInVerifier implements QualifyingPrope
 }
 
 /**
- *
  * @author Luís
  */
 public class OtherVerifierTests extends VerifierTestBase
@@ -66,7 +67,7 @@ public class OtherVerifierTests extends VerifierTestBase
             @Override
             public QualifyingProperty verify(
                     SigningTimeData propData,
-                    QualifyingPropertyVerificationContext ctx) throws InvalidPropertyException
+                    QualifyingPropertyVerificationContext ctx)
             {
                 throw new UnsupportedOperationException("Yeah!");
             }
@@ -82,5 +83,14 @@ public class OtherVerifierTests extends VerifierTestBase
                 SigningTimeData.class,
                 SigningTimeVerifierThatDependsOnBuiltInVerifier.class);
         verifySignature("document.signed.bes.xml", mySigsVerificationProfile);
+    }
+
+    @Test
+    public void testVerifyWithManifest() throws Exception
+    {
+        SignatureSpecificVerificationOptions options = new SignatureSpecificVerificationOptions()
+                .useBaseUri("http://luisgoncalves.github.io/xades4j/images/")
+                .followManifests(true);
+        verifySignature("document.signed.bes.manifest.xml", mySigsVerificationProfile, options);
     }
 }

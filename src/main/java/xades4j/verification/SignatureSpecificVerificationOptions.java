@@ -30,8 +30,8 @@ import org.apache.xml.security.utils.resolver.ResourceResolverSpi;
  * <p>
  * It includes base URI, data for anonymous references or resource resolvers
  *
- * @see xades4j.verification.XadesVerifier
  * @author Luís
+ * @see xades4j.verification.XadesVerifier
  */
 public class SignatureSpecificVerificationOptions
 {
@@ -41,6 +41,7 @@ public class SignatureSpecificVerificationOptions
     private InputStream dataForAnonymousReference;
     private Date defaultVerificationDate = new Date();
     private final List<ResourceResolverSpi> resolvers = new ArrayList<ResourceResolverSpi>(0);
+    private boolean followManifests = false;
 
     /**
      * Sets the base URI to be used when resolving <b>all</b> the relative
@@ -97,12 +98,12 @@ public class SignatureSpecificVerificationOptions
      *
      * @param resolver the resolver
      * @return the current instance
-     *
      * @throws NullPointerException if {@code resolver} is {@code null}
      */
     public SignatureSpecificVerificationOptions useResourceResolver(ResourceResolverSpi resolver)
     {
-        if (null == resolver) {
+        if (null == resolver)
+        {
             throw new NullPointerException("Resolver cannot be null");
         }
 
@@ -114,8 +115,8 @@ public class SignatureSpecificVerificationOptions
     {
         return this.resolvers;
     }
-    
-        /**
+
+    /**
      * Allow to specify a verification date for the signatures that are not
      * covered by timestamps.
      *
@@ -125,7 +126,7 @@ public class SignatureSpecificVerificationOptions
      * </p>
      *
      * @param verificationDate the default verification date. If null
-     * {@code System.currentTime()} will be used
+     *                         {@code System.currentTime()} will be used
      * @return the current instance
      */
     public SignatureSpecificVerificationOptions setDefaultVerificationDate(Date verificationDate)
@@ -133,9 +134,27 @@ public class SignatureSpecificVerificationOptions
         this.defaultVerificationDate = (verificationDate != null ? verificationDate : new Date());
         return this;
     }
-    
+
     Date getDefaultVerificationDate()
     {
         return this.defaultVerificationDate;
+    }
+
+    /**
+     * Defines whether {@code ds:Manifest}s referenced by the main signature {@code Reference}s should be automatically
+     * validated.
+     *
+     * @param followManifests whether to follow manifests
+     * @return the current instance
+     */
+    public SignatureSpecificVerificationOptions followManifests(boolean followManifests)
+    {
+        this.followManifests = followManifests;
+        return this;
+    }
+
+    boolean isFollowManifests()
+    {
+        return followManifests;
     }
 }
