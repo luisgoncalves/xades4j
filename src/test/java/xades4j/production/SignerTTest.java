@@ -28,9 +28,7 @@ import xades4j.properties.SignaturePolicyImpliedProperty;
 import xades4j.providers.MessageDigestEngineProvider;
 import xades4j.providers.SignaturePolicyInfoProvider;
 import xades4j.providers.impl.DefaultAlgorithmsProviderEx;
-import xades4j.providers.impl.FirstCertificateSelector;
 import xades4j.providers.impl.HttpTimeStampTokenProvider;
-import xades4j.providers.impl.PKCS11KeyStoreKeyingDataProvider;
 import xades4j.providers.impl.TSAHttpData;
 
 /**
@@ -44,7 +42,7 @@ public class SignerTTest extends SignerTestBase
         @Inject
         public TestTimeStampTokenProvider(MessageDigestEngineProvider messageDigestProvider)
         {
-            super(messageDigestProvider, new TSAHttpData("http://tsa.starfieldtech.com"));
+            super(messageDigestProvider, new TSAHttpData("http://timestamp.digicert.com"));
         }
     }
 
@@ -71,7 +69,7 @@ public class SignerTTest extends SignerTestBase
         Document doc = getTestDocument();
         Element elemToSign = doc.getDocumentElement();
 
-        SignerT signer = (SignerT) new XadesTSigningProfile(keyingProviderMy)
+        XadesSigner signer = new XadesTSigningProfile(keyingProviderMy)
                 .withTimeStampTokenProvider(TestTimeStampTokenProvider.class)
                 .withAlgorithmsProviderEx(ExclusiveC14nForTimeStampsAlgorithmsProvider.class)
                 .newSigner();
@@ -88,7 +86,7 @@ public class SignerTTest extends SignerTestBase
         Document doc = getTestDocument();
         Element elemToSign = doc.getDocumentElement();
 
-        SignerT signer = (SignerT) new XadesTSigningProfile(keyingProviderMy).withPolicyProvider(new SignaturePolicyInfoProvider()
+        XadesSigner signer = new XadesTSigningProfile(keyingProviderMy).withPolicyProvider(new SignaturePolicyInfoProvider()
         {
 
             @Override
