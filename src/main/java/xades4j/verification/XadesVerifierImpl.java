@@ -301,6 +301,8 @@ class XadesVerifierImpl implements XadesVerifier
             }
         }
 
+        signature.setFollowNestedManifests(verificationOptions.isFollowManifests());
+
         InputStream nullURIReferenceData = verificationOptions.getDataForAnonymousReference();
         if (nullURIReferenceData != null)
         {
