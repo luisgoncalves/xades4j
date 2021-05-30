@@ -1,16 +1,16 @@
 /*
  * XAdES4j - A Java library for generation and verification of XAdES signatures.
  * Copyright (C) 2012 Luis Goncalves.
- * 
+ *
  * XAdES4j is free software; you can redistribute it and/or modify it under
  * the terms of the GNU Lesser General Public License as published by the Free
  * Software Foundation; either version 3 of the License, or any later version.
- * 
+ *
  * XAdES4j is distributed in the hope that it will be useful, but WITHOUT
  * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
  * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
  * details.
- * 
+ *
  * You should have received a copy of the GNU Lesser General Public License along
  * with XAdES4j. If not, see <http://www.gnu.org/licenses/>.
  */
@@ -26,15 +26,14 @@ import xades4j.properties.DataObjectDesc;
 import org.junit.Test;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
+
 import static org.junit.Assert.*;
 
 /**
- *
  * @author Luís
  */
 public class OtherSignerTests extends SignerTestBase
 {
-
     @Test
     public void testSignAndAppendAsFirstChild() throws Exception
     {
@@ -55,6 +54,21 @@ public class OtherSignerTests extends SignerTestBase
     }
 
     @Test
+    public void testSignWithManifest() throws Exception
+    {
+        Document doc = getTestDocument();
+        Element root = doc.getDocumentElement();
+        XadesSigner signer = new XadesBesSigningProfile(keyingProviderMy).newSigner();
+
+        DataObjectDesc obj1 = new EnvelopedManifest()
+                .withSignedDataObject(new DataObjectReference("logo-01.png"))
+                .withSignedDataObject(new EnvelopedXmlObject(doc.createTextNode("DATA")));
+        signer.sign(new SignedDataObjects(obj1).withBaseUri("http://luisgoncalves.github.io/xades4j/images/"), root);
+
+        outputDocument(doc, "document.signed.bes.manifest.xml");
+    }
+
+    @Test
     public void testSignUsingCustomResolver() throws Exception
     {
         System.out.println("signUsingCustomResolver");
@@ -72,7 +86,7 @@ public class OtherSignerTests extends SignerTestBase
         assertEquals(1, resolverSpi.resolveCount);
     }
 
-    class MyResolverSpi extends ResourceResolverSpi
+    static class MyResolverSpi extends ResourceResolverSpi
     {
         private int resolveCount = 0;
 

@@ -72,7 +72,7 @@ public final class DataObjectReference extends DataObjectDesc
      * This is represented as a URI."
      * <p>
      * "The Type attribute applies to the item being pointed at, not its contents."
-     * @param type the referece's type
+     * @param type the reference's type
      * @return the current instance
      */
     public DataObjectReference withType(String type)

@@ -20,7 +20,7 @@ import xades4j.properties.DataObjectDesc;
 import org.w3c.dom.Node;
 
 /**
- * Represents content (tipically XML) that will be enveloped in the signature.
+ * Represents content (usually XML) that will be enveloped in the signature.
  * Each instance of this class will result in a {@code ds:Object} in the final
  * XAdES signature, which will contain the data. Also, this {@code Object} will
  * be covered by a {@code ds:Reference} so that it is actually included in the
