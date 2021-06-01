@@ -24,11 +24,32 @@ package xades4j.production;
  */
 public final class BasicSignatureOptions
 {
+    private boolean checkKeyUsage = true;
     private SigningCertificateMode includeSigningCertificateMode;
     private boolean includeSubjectName;
     private boolean includeIssuerSerial;
     private boolean includePublicKey;
     private boolean signKeyInfo;
+
+    /**
+     * Configures whether to check that the keyUsage of the signing certificate
+     * allows use for signing before creating a signature. If enabled (the default)
+     * signing will fail if the keyUsage of the certificate does not allow signing.
+     * You should only disable this for testing.
+     *
+     * @param enabled {@code true} to enable the check, {@code false to disable}
+     * @return the current instance
+     */
+    public BasicSignatureOptions checkKeyUsage(boolean enabled)
+    {
+        this.checkKeyUsage = enabled;
+        return this;
+    }
+
+    boolean checkKeyUsage()
+    {
+        return this.checkKeyUsage;
+    }
 
     /**
      * Configures whether the signing certificate / chain should be included in {@code ds:KeyInfo}.
