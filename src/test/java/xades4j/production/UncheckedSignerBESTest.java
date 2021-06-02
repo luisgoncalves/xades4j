@@ -33,6 +33,8 @@ import static org.junit.Assert.assertEquals;
 import java.io.FileInputStream;
 import java.security.KeyStore;
 import java.security.KeyStoreException;
+import java.security.cert.Certificate;
+import java.security.cert.CertificateFactory;
 
 import org.apache.xml.security.utils.Constants;
 import org.junit.Test;
@@ -82,14 +84,24 @@ public class UncheckedSignerBESTest extends SignerTestBase
         assertEquals(res.getSignatureForm(), XAdESForm.BES);
     }
 
-    private CertificateValidationProvider genValidationProvider(final String store, final String pwd,
-            final String certdir) throws Exception
+    /**
+     * Create validation provider with a single trusted root CA for tests.
+     * @param root the trusted root CA
+     * @param certdir load additional CAs from this directory
+     * @return validation provider with the given content
+     * @throws Exception
+     */
+    private CertificateValidationProvider genValidationProvider(final String root, final String certdir)
+            throws Exception
     {
-        String path = toPlatformSpecificCertDirFilePath(store);
+        String path = toPlatformSpecificCertDirFilePath(root);
         KeyStore ks = KeyStore.getInstance("JKS");
+        // initialize an empty keystore
+        ks.load(null, "password".toCharArray());
         try (FileInputStream fis = new FileInputStream(path))
         {
-            ks.load(fis, pwd.toCharArray());
+            Certificate anchor = CertificateFactory.getInstance("X.509").generateCertificate(fis);
+            ks.setCertificateEntry("testCA", anchor);
         }
         FileSystemDirectoryCertStore certStore = new FileSystemDirectoryCertStore(
                 toPlatformSpecificCertDirFilePath(certdir));
@@ -100,7 +112,7 @@ public class UncheckedSignerBESTest extends SignerTestBase
     public void testUncheckedSignBes() throws Exception
     {
         System.out.println("uncheckedSignBes");
-        CertificateValidationProvider prov = genValidationProvider("my/myStore", "mystorepass", "my");
+        CertificateValidationProvider prov = genValidationProvider("my/TestCA.cer", "my");
         trySignAndVerify(keyingProviderMy, prov, "document.unchecked.signed.bes.xml");
     }
 
@@ -108,7 +120,7 @@ public class UncheckedSignerBESTest extends SignerTestBase
     public void testUncheckedSignBesGood() throws Exception
     {
         System.out.println("uncheckedSignBesGood");
-        CertificateValidationProvider prov = genValidationProvider("unchecked/trust.jks", "password", "unchecked");
+        CertificateValidationProvider prov = genValidationProvider("unchecked/TestCA.cer", "unchecked");
         trySignAndVerify(keyingProviderGood, prov, "document.unchecked.signed.bes.good.xml");
     }
 
@@ -116,7 +128,7 @@ public class UncheckedSignerBESTest extends SignerTestBase
     public void testUncheckedSignBesNoSignKeyUsage() throws Exception
     {
         System.out.println("uncheckedSignBesNoSignKeyUsage");
-        CertificateValidationProvider prov = genValidationProvider("unchecked/trust.jks", "password", "unchecked");
+        CertificateValidationProvider prov = genValidationProvider("unchecked/TestCA.cer", "unchecked");
         // BUG: Validation passes even though the keyUsage is invalid!
         trySignAndVerify(keyingProviderNoSign, prov, "document.unchecked.signed.bes.nosign.xml");
     }

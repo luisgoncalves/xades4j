@@ -41,11 +41,3 @@ certtool --outder --outfile=good.p12 --to-p12 --password=password --p12-name=goo
 certtool -i --inder --infile noSignKeyUsage.cer --outfile noSignKeyUsage.pem
 certtool --outder --outfile=noSignKeyUsage.p12 --to-p12 --password=password --p12-name=good --inder --load-privkey=noSignKeyUsage.key --load-certificate=noSignKeyUsage.pem --load-ca-certificate=TestCA.cer
 ```
-
-## Create Java keystore for signature validation
-
-Just one to trust the test CA.
-
-```
-keytool -importcert -noprompt -alias testCA -file TestCA.cer -keystore trust.jks -storepass password
-```
