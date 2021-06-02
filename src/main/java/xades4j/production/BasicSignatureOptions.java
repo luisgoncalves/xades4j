@@ -37,7 +37,7 @@ public final class BasicSignatureOptions
      * signing will fail if the keyUsage of the certificate does not allow signing.
      * You should only disable this for testing.
      *
-     * @param enabled {@code true} to enable the check, {@code false to disable}
+     * @param enabled {@code true} to enable the check, {@code false} to disable
      * @return the current instance
      */
     public BasicSignatureOptions checkKeyUsage(boolean enabled)
