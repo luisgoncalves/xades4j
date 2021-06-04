@@ -64,14 +64,17 @@ class KeyInfoBuilder
             XMLSignature xmlSig) throws KeyingDataException, UnsupportedAlgorithmException
     {
         X509Certificate signingCertificate = signingCertificateChain.get(0);
-        
-        // Check key usage.
-        // - KeyUsage[0] = digitalSignature
-        // - KeyUsage[1] = nonRepudiation
-        boolean[] keyUsage = signingCertificate.getKeyUsage();
-        if (keyUsage != null && !keyUsage[0] && !keyUsage[1])
+
+        if (this.basicSignatureOptions.checkKeyUsage())
         {
-            throw new SigningCertKeyUsageException(signingCertificate);
+            // Check key usage.
+            // - KeyUsage[0] = digitalSignature
+            // - KeyUsage[1] = nonRepudiation
+            boolean[] keyUsage = signingCertificate.getKeyUsage();
+            if (keyUsage != null && !keyUsage[0] && !keyUsage[1])
+            {
+                throw new SigningCertKeyUsageException(signingCertificate);
+            }
         }
 
         try

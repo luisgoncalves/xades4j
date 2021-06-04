@@ -1,0 +1,5 @@
+cn = "Test User not allowed to sign"
+email = test@xades4j.test
+data_encipherment
+# this is a test certificate, avoid refreshing all the time
+expiration_days = 7300
