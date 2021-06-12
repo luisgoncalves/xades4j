@@ -38,6 +38,7 @@ public class SignatureSpecificVerificationOptions
     static final SignatureSpecificVerificationOptions EMPTY = new SignatureSpecificVerificationOptions();
 
     private String baseUriForRelativeReferences;
+    private boolean checkKeyUsage = true;
     private InputStream dataForAnonymousReference;
     private Date defaultVerificationDate = new Date();
     private final List<ResourceResolverSpi> resolvers = new ArrayList<ResourceResolverSpi>(0);
@@ -59,6 +60,25 @@ public class SignatureSpecificVerificationOptions
     String getBaseUri()
     {
         return this.baseUriForRelativeReferences;
+    }
+
+    public boolean checkKeyUsage()
+    {
+        return checkKeyUsage;
+    }
+
+    /**
+     * Configures whether to check that the keyUsage of the signer certificate
+     * allows use for signing. If enabled (the default) signature validation will
+     * fail if the keyUsage of the certificate does not allow signing.
+     *
+     * @param enabled {@code true} to enable the check, {@code false to disable}
+     * @return the current instance
+     */
+    public SignatureSpecificVerificationOptions checkKeyUsage(boolean enabled)
+    {
+        this.checkKeyUsage = enabled;
+        return this;
     }
 
     /**

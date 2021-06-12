@@ -24,15 +24,16 @@ import xades4j.providers.KeyingDataProvider;
 import xades4j.providers.impl.PKIXCertificateValidationProvider;
 import xades4j.utils.FileSystemDirectoryCertStore;
 import xades4j.verification.SignatureSpecificVerificationOptions;
+import xades4j.verification.SigningCertificateKeyUsageException;
 import xades4j.verification.XAdESForm;
 import xades4j.verification.XAdESVerificationResult;
 import xades4j.verification.XadesVerificationProfile;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.fail;
 
 import java.io.FileInputStream;
 import java.security.KeyStore;
-import java.security.KeyStoreException;
 import java.security.cert.Certificate;
 import java.security.cert.CertificateFactory;
 
@@ -49,16 +50,25 @@ public class UncheckedSignerBESTest extends SignerTestBase
 {
     private KeyingDataProvider keyingProviderGood;
     private KeyingDataProvider keyingProviderNoSign;
+    private CertificateValidationProvider validationProvider;
 
-    public UncheckedSignerBESTest() throws KeyStoreException
+    public UncheckedSignerBESTest() throws Exception
     {
         keyingProviderGood = createFileSystemKeyingDataProvider("PKCS12", "unchecked/good.p12", "password", true);
         keyingProviderNoSign = createFileSystemKeyingDataProvider("PKCS12", "unchecked/noSignKeyUsage.p12", "password",
                 true);
+        validationProvider = genValidationProvider("unchecked/TestCA.cer", "unchecked");
     }
 
     private void trySignAndVerify(final KeyingDataProvider signProvider,
             final CertificateValidationProvider verifyProvider, final String outputName) throws Exception
+    {
+        this.trySignAndVerify(signProvider, verifyProvider, outputName, true);
+    }
+
+    private void trySignAndVerify(final KeyingDataProvider signProvider,
+            final CertificateValidationProvider verifyProvider, final String outputName,
+            final boolean verifySignatureKeyUsage) throws Exception
     {
         Document doc = getTestDocument();
         Element elemToSign = doc.getDocumentElement();
@@ -80,7 +90,9 @@ public class UncheckedSignerBESTest extends SignerTestBase
         XadesVerificationProfile p = new XadesVerificationProfile(verifyProvider);
         Element sig = (Element) doc.getDocumentElement()
                 .getElementsByTagNameNS(Constants.SignatureSpecNS, Constants._TAG_SIGNATURE).item(0);
-        XAdESVerificationResult res = p.newVerifier().verify(sig, new SignatureSpecificVerificationOptions());
+        SignatureSpecificVerificationOptions verifyOpts = new SignatureSpecificVerificationOptions()
+                .checkKeyUsage(verifySignatureKeyUsage);
+        XAdESVerificationResult res = p.newVerifier().verify(sig, verifyOpts);
         assertEquals(res.getSignatureForm(), XAdESForm.BES);
     }
 
@@ -120,16 +132,32 @@ public class UncheckedSignerBESTest extends SignerTestBase
     public void testUncheckedSignBesGood() throws Exception
     {
         System.out.println("uncheckedSignBesGood");
-        CertificateValidationProvider prov = genValidationProvider("unchecked/TestCA.cer", "unchecked");
-        trySignAndVerify(keyingProviderGood, prov, "document.unchecked.signed.bes.good.xml");
+        trySignAndVerify(keyingProviderGood, validationProvider, "document.unchecked.signed.bes.good.xml");
     }
 
     @Test
     public void testUncheckedSignBesNoSignKeyUsage() throws Exception
     {
         System.out.println("uncheckedSignBesNoSignKeyUsage");
-        CertificateValidationProvider prov = genValidationProvider("unchecked/TestCA.cer", "unchecked");
-        // BUG: Validation passes even though the keyUsage is invalid!
-        trySignAndVerify(keyingProviderNoSign, prov, "document.unchecked.signed.bes.nosign.xml");
+
+        try
+        {
+            trySignAndVerify(keyingProviderNoSign, validationProvider, "document.unchecked.signed.bes.nosign.xml");
+            fail("expected SigningCertificateKeyUsageException did not occur");
+        }
+        catch (SigningCertificateKeyUsageException e)
+        {
+            // good, this is what we expect
+        }
+    }
+
+    @Test
+    public void testUncheckedSignBesNoSignKeyUsageUncheckedVerify() throws Exception
+    {
+        System.out.println("uncheckedSignBesNoSignKeyUsageUncheckedVerify");
+
+        // same certificate as in testUncheckedSignBesNoSignKeyUsage(), but keyUsage
+        // check disabled during verification
+        trySignAndVerify(keyingProviderNoSign, validationProvider, "document.unchecked.signed.bes.nosign.xml", false);
     }
 }

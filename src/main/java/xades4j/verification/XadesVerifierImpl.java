@@ -196,6 +196,18 @@ class XadesVerifierImpl implements XadesVerifier
         }
         X509Certificate validationCert = certValidationRes.getCerts().get(0);
 
+        if (verificationOptions.checkKeyUsage())
+        {
+            // Check key usage.
+            // - KeyUsage[0] = digitalSignature
+            // - KeyUsage[1] = nonRepudiation
+            boolean[] keyUsage = validationCert.getKeyUsage();
+            if (keyUsage != null && !keyUsage[0] && !keyUsage[1])
+            {
+                throw new SigningCertificateKeyUsageException();
+            }
+        }
+
         /* Signature verification */
 
         // Core XML-DSIG verification.
