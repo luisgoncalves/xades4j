@@ -30,8 +30,6 @@ import xades4j.verification.XAdESVerificationResult;
 import xades4j.verification.XadesVerificationProfile;
 
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.fail;
-
 import java.io.FileInputStream;
 import java.security.KeyStore;
 import java.security.cert.Certificate;
@@ -135,20 +133,11 @@ public class UncheckedSignerBESTest extends SignerTestBase
         trySignAndVerify(keyingProviderGood, validationProvider, "document.unchecked.signed.bes.good.xml");
     }
 
-    @Test
+    @Test(expected = SigningCertificateKeyUsageException.class)
     public void testUncheckedSignBesNoSignKeyUsage() throws Exception
     {
         System.out.println("uncheckedSignBesNoSignKeyUsage");
-
-        try
-        {
-            trySignAndVerify(keyingProviderNoSign, validationProvider, "document.unchecked.signed.bes.nosign.xml");
-            fail("expected SigningCertificateKeyUsageException did not occur");
-        }
-        catch (SigningCertificateKeyUsageException e)
-        {
-            // good, this is what we expect
-        }
+        trySignAndVerify(keyingProviderNoSign, validationProvider, "document.unchecked.signed.bes.nosign.xml");
     }
 
     @Test
