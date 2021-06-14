@@ -62,7 +62,7 @@ public class SignatureSpecificVerificationOptions
         return this.baseUriForRelativeReferences;
     }
 
-    public boolean checkKeyUsage()
+    protected boolean checkKeyUsage()
     {
         return checkKeyUsage;
     }
