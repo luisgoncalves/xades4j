@@ -22,7 +22,7 @@ package xades4j.verification;
  *
  * @author Fiona Klute
  */
-public class SigningCertificateKeyUsageException extends SigningCertificateVerificationException
+public final class SigningCertificateKeyUsageException extends SigningCertificateVerificationException
 {
 
     @Override
