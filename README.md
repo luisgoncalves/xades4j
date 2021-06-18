@@ -18,6 +18,21 @@ The library is available on [Maven](http://search.maven.org/#search%7Cga%7C1%7Cg
 </dependency>
 ```
 
+# Example
+
+```java
+Document doc = /* parse XML document */;
+// Define the signing key/certificate
+KeyingDataProvider kp = new FileSystemKeyStoreKeyingDataProvider(/* key store location and type */);
+// Define the signed object
+DataObjectDesc obj = new DataObjectReference("")
+        .withTransform(new EnvelopedSignatureTransform())
+        .withDataObjectFormat(new DataObjectFormatProperty("text/xml"));
+// Create the signature
+XadesSigner signer = new XadesBesSigningProfile(kp).newSigner();
+signer.sign(new SignedDataObjects(obj), doc.getDocumentElement());
+```
+
 # Docs and Q&A
 
 - General usage documentation can be found on the project's [wiki](https://github.com/luisgoncalves/xades4j/wiki).
