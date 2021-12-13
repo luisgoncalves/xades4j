@@ -16,11 +16,9 @@
  */
 package xades4j.providers.impl;
 
-import java.io.ByteArrayInputStream;
+import xades4j.utils.FileUtils;
+
 import java.io.IOException;
-import java.io.InputStream;
-import java.lang.reflect.Constructor;
-import java.lang.reflect.InvocationTargetException;
 import java.security.KeyStore;
 import java.security.KeyStore.Builder;
 import java.security.KeyStore.ProtectionParameter;
@@ -37,30 +35,33 @@ import javax.security.auth.callback.UnsupportedCallbackException;
 /**
  * A specification of {@code KeyStoreKeyingDataProvider} for PKCS#11 keystores.
  * This class uses the SUN's PKCS#11 provider, which brigdes with the native PKCS#11
- * library. Note that this provider is not included in some versions of the JRE,
- * namely the 64 bits Windows version. On those scenarios this class will fail at
- * runtime.
+ * library. Note that this provider may not be included in some versions of the JRE,
+ * On those scenarios this class will fail at runtime.
  * <p>
  * The {@code KeyStorePasswordProvider} and {@code KeyEntryPasswordProvider} may
  * be {@code null}. In that case the keystore protection has to be handled by the
  * native library. If the {@code KeyEntryPasswordProvider} is supplied, the protection
  * used to access an entry is a {@code CallbackHandlerProtection} that invokes the
  * {@code KeyEntryPasswordProvider} exactly when when the password is requested.
- * @see xades4j.providers.impl.KeyStoreKeyingDataProvider
+ *
  * @author Luís
+ * @see xades4j.providers.impl.KeyStoreKeyingDataProvider
  */
 public class PKCS11KeyStoreKeyingDataProvider extends KeyStoreKeyingDataProvider
 {
+    private static String SUN_PKCS11_PROVIDER = "SunPKCS11";
+
     /**
      * The provider name is used as a key to search for installed providers. If a
      * provider exists with the same name, it will be used even if it relies on a
      * different native library.
-     * @param nativeLibraryPath the path for the native library of the specific PKCS#11 provider
-     * @param providerName this string is concatenated with the prefix SunPKCS11- to produce this provider instance's name
-     * @param certificateSelector the selector of signing certificate
+     *
+     * @param nativeLibraryPath        the path for the native library of the specific PKCS#11 provider
+     * @param providerName             this string is concatenated with the prefix SunPKCS11- to produce this provider instance's name
+     * @param certificateSelector      the selector of signing certificate
      * @param keyStorePasswordProvider the provider of the keystore loading password (may be {@code null})
-     * @param entryPasswordProvider the provider of entry passwords (may be {@code null})
-     * @param returnFullChain indicates if the full certificate chain should be returned, if available
+     * @param entryPasswordProvider    the provider of entry passwords (may be {@code null})
+     * @param returnFullChain          indicates if the full certificate chain should be returned, if available
      * @throws KeyStoreException
      */
     public PKCS11KeyStoreKeyingDataProvider(
@@ -72,21 +73,22 @@ public class PKCS11KeyStoreKeyingDataProvider extends KeyStoreKeyingDataProvider
             boolean returnFullChain) throws KeyStoreException
     {
         this(nativeLibraryPath, providerName, null,
-             certificateSelector, keyStorePasswordProvider, entryPasswordProvider,
-             returnFullChain);
+                certificateSelector, keyStorePasswordProvider, entryPasswordProvider,
+                returnFullChain);
     }
 
     /**
      * The provider name is used as a key to search for installed providers. If a
      * provider exists with the same name, it will be used even if it relies on a
      * different native library.
-     * @param nativeLibraryPath the path for the native library of the specific PKCS#11 provider
-     * @param providerName this string is concatenated with the prefix SunPKCS11- to produce this provider instance's name
-     * @param slotId the id of the slot that this provider instance is to be associated with (can be {@code null})
-     * @param certificateSelector the selector of signing certificate
+     *
+     * @param nativeLibraryPath        the path for the native library of the specific PKCS#11 provider
+     * @param providerName             this string is concatenated with the prefix SunPKCS11- to produce this provider instance's name
+     * @param slotId                   the id of the slot that this provider instance is to be associated with (can be {@code null})
+     * @param certificateSelector      the selector of signing certificate
      * @param keyStorePasswordProvider the provider of the keystore loading password (can be {@code null})
-     * @param entryPasswordProvider the provider of entry passwords (may be {@code null})
-     * @param returnFullChain indicates if the full certificate chain should be returned, if available
+     * @param entryPasswordProvider    the provider of entry passwords (may be {@code null})
+     * @param returnFullChain          indicates if the full certificate chain should be returned, if available
      * @throws KeyStoreException
      */
     public PKCS11KeyStoreKeyingDataProvider(
@@ -103,30 +105,50 @@ public class PKCS11KeyStoreKeyingDataProvider extends KeyStoreKeyingDataProvider
             @Override
             public Builder getBuilder(ProtectionParameter loadProtection)
             {
-                Provider p = getInstalledProvider(providerName);
-                if (p == null)
+                Provider provider = createProvider(serializeConfiguration(providerName, nativeLibraryPath, slotId));
+                if (Security.addProvider(provider) == -1)
                 {
-                    StringBuilder config = new StringBuilder("name = ").append(providerName);
-                    config.append(System.getProperty("line.separator"));
-                    config.append("library = ").append(nativeLibraryPath);
-                    if(slotId != null)
-                    {
-                        config.append(System.getProperty("line.separator"));
-                        config.append("slot = ").append(slotId);
-                    }
-                    ByteArrayInputStream configStream = new ByteArrayInputStream(config.toString().getBytes());
-                    p = createPkcs11Provider(configStream);
-                    Security.addProvider(p);
+                    throw new ProviderException("PKCS11 provider already installed");
                 }
-
-                return KeyStore.Builder.newInstance("PKCS11", p, loadProtection);
+                return KeyStore.Builder.newInstance("PKCS11", provider, loadProtection);
             }
         }, certificateSelector, keyStorePasswordProvider, entryPasswordProvider, returnFullChain);
+    }
+
+    private static String serializeConfiguration(String name, String nativeLibraryPath, Integer slotId)
+    {
+        String newLine = System.getProperty("line.separator");
+        StringBuilder config = new StringBuilder()
+                .append("name = ").append(name).append(newLine)
+                .append("library = ").append(nativeLibraryPath).append(newLine);
+        if (slotId != null)
+        {
+            config.append("slot = ").append(slotId).append(newLine);
+        }
+        return config.toString();
+    }
+
+    private static Provider createProvider(String configuration)
+    {
+        try
+        {
+            Provider provider = Security.getProvider(SUN_PKCS11_PROVIDER);
+            if (provider == null)
+            {
+                throw new ProviderException("PKCS11 provider not available");
+            }
+            return provider.configure(FileUtils.writeTempFile(configuration));
+        }
+        catch (IOException e)
+        {
+            throw new ProviderException("Cannot configure PKCS11 provider", e);
+        }
     }
 
     /**
      * Shortcut constructor using {@code null} for the password providers and slot
      * and {@code false} for the {@code returnFullChain} parameter.
+     *
      * @param nativeLibraryPath
      * @param providerName
      * @param slotId
@@ -145,6 +167,7 @@ public class PKCS11KeyStoreKeyingDataProvider extends KeyStoreKeyingDataProvider
     /**
      * Shortcut constructor using {@code null} for the password providers and slot,
      * and {@code false} for the {@code returnFullChain} parameter.
+     *
      * @param nativeLibraryPath
      * @param providerName
      * @param certificateSelector
@@ -181,67 +204,8 @@ public class PKCS11KeyStoreKeyingDataProvider extends KeyStoreKeyingDataProvider
         });
     }
 
-    private static Provider getInstalledProvider(String providerName)
-    {
-        Class<Provider> pkcs11Class = getPkcs11ProviderClass();
-        Provider p = Security.getProvider("SunPKCS11-" + providerName);
-        // Throws expcetion if the provider is not of the expected type
-        return pkcs11Class.cast(p);
-    }
-
-    private static Provider createPkcs11Provider(InputStream configStream)
-    {
-        try
-        {
-            Class<Provider> providerClass = getPkcs11ProviderClass();
-            Constructor<Provider> ctor = providerClass.getConstructor(InputStream.class);
-            return ctor.newInstance(configStream);
-        }
-        // Since the provider class was loaded, these exceptions are unexpected
-        catch (IllegalAccessException ex)
-        {
-            throw new ProviderException(ex);
-        }
-        catch (IllegalArgumentException ex)
-        {
-            throw new ProviderException(ex);
-        }
-        catch (InvocationTargetException ex)
-        {
-            throw new ProviderException(ex);
-        }
-        catch (NoSuchMethodException ex)
-        {
-            throw new ProviderException(ex);
-        }
-        catch(InstantiationException ex)
-        {
-            throw new ProviderException(ex);
-        }
-    }
-
-    private static Class getPkcs11ProviderClass()
-    {
-        try
-        {
-            return Class.forName("sun.security.pkcs11.SunPKCS11");
-        }
-        catch (ClassNotFoundException ex)
-        {
-           throw new ProviderException("Cannot find SunPKCS11 provider", ex);
-        }
-    }
-    
     public static boolean isProviderAvailable()
     {
-        try
-        {
-            getPkcs11ProviderClass();
-            return true;
-        }
-        catch(ProviderException ex)
-        {
-            return false;
-        }
+        return Security.getProvider(SUN_PKCS11_PROVIDER) != null;
     }
 }
