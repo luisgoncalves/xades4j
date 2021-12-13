@@ -67,9 +67,14 @@ public class SignatureServicesTestBase
         return toPlatformSpecificFilePath("./src/test/cert/" + fileName);
     }
 
-    public static boolean onWindowsPlatform()
+    public static boolean onWindows()
     {
         return System.getProperty("os.name").contains("Windows");
+    }
+
+    public static boolean onMacOs()
+    {
+        return System.getProperty("os.name").equals("Mac OS X");
     }
 
     /**

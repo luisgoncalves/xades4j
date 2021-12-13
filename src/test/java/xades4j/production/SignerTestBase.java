@@ -18,7 +18,9 @@ package xades4j.production;
 
 import java.io.File;
 import java.security.KeyStoreException;
+
 import static org.junit.Assume.assumeTrue;
+
 import org.w3c.dom.Document;
 import xades4j.providers.impl.DirectPasswordProvider;
 import xades4j.providers.impl.FileSystemKeyStoreKeyingDataProvider;
@@ -28,7 +30,6 @@ import xades4j.providers.impl.PKCS11KeyStoreKeyingDataProvider;
 import xades4j.utils.SignatureServicesTestBase;
 
 /**
- *
  * @author Luís
  */
 public class SignerTestBase extends SignatureServicesTestBase
@@ -38,8 +39,8 @@ public class SignerTestBase extends SignatureServicesTestBase
     static protected KeyingDataProvider keyingProviderMyEc;
     static protected KeyingDataProvider keyingProviderNist;
 
-    static protected String PTCC_PKCS11_LIB_PATH = "C:\\Windows\\System32\\pteidpkcs11.dll";
-    
+    static protected String PTCC_PKCS11_LIB_PATH;
+
     static
     {
         try
@@ -47,10 +48,17 @@ public class SignerTestBase extends SignatureServicesTestBase
             keyingProviderMy = createFileSystemKeyingDataProvider("JKS", "my/LG.jks", "mykeypass", true);
             keyingProviderMyEc = createFileSystemKeyingDataProvider("PKCS12", "my/lg_ec.p12", "mykeypass", true);
             keyingProviderNist = createFileSystemKeyingDataProvider("JKS", "csrc.nist/test4.jks", "password", false);
-        } catch (KeyStoreException e)
+        }
+        catch (KeyStoreException e)
         {
             throw new IllegalStateException("SignerTestBase init failed: " + e.getMessage());
         }
+
+        PTCC_PKCS11_LIB_PATH = onMacOs()
+                ? "/usr/local/lib/libpteidpkcs11.dylib"
+                : onWindows()
+                ? "C:\\Windows\\System32\\pteidpkcs11.dll"
+                : "<unavailable>";
     }
 
     public static Document getTestDocument() throws Exception
@@ -70,14 +78,18 @@ public class SignerTestBase extends SignatureServicesTestBase
                 new DirectPasswordProvider(keyStorePwd),
                 new DirectPasswordProvider(keyStorePwd), returnFullChain);
     }
-    
+
     /**
-     * Skips tests that are not executing on Windows with the PT citizen card.
+     * Skips tests that are executing when the PT citizen card PKCS11 library is not available.
      */
-    protected static void assumePtCcPkcs11OnWindows()
+    protected static void assumePtCcPkcs11()
     {
-        assumeTrue(onWindowsPlatform());
         assumeTrue(PKCS11KeyStoreKeyingDataProvider.isProviderAvailable());
         assumeTrue(new File(PTCC_PKCS11_LIB_PATH).exists());
+    }
+
+    protected static void assumeWindows()
+    {
+        assumeTrue(onWindows());
     }
 }

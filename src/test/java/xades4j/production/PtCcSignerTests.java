@@ -18,7 +18,7 @@ public class PtCcSignerTests extends SignerTestBase
     public void testSignTPtCC() throws Exception
     {
         System.out.println("signTPtCitizenCard");
-        assumePtCcPkcs11OnWindows();
+        assumePtCcPkcs11();
 
         Document doc = getTestDocument();
         Element elemToSign = doc.getDocumentElement();
@@ -27,7 +27,7 @@ public class PtCcSignerTests extends SignerTestBase
                 PTCC_PKCS11_LIB_PATH, "PT_CC",
                 new FirstCertificateSelector(), null, null, false);
 
-        SignerT signer = (SignerT) new XadesTSigningProfile(ptccKeyingDataProv).withAlgorithmsProviderEx(PtCcAlgorithmsProvider.class).newSigner();
+        XadesSigner signer = new XadesTSigningProfile(ptccKeyingDataProv).newSigner();
         new Enveloped(signer).sign(elemToSign);
 
         outputDocument(doc, "document.signed.t.bes.ptcc.xml");
@@ -37,14 +37,15 @@ public class PtCcSignerTests extends SignerTestBase
     public void testSignBesPtCCWindowsMy() throws Exception
     {
         System.out.println("signBESPtCitizenCardWindowsMy");
-        assumePtCcPkcs11OnWindows();
+        assumeWindows();
+        assumePtCcPkcs11();
 
         Document doc = getTestDocument();
         Element elemToSign = doc.getDocumentElement();
 
         KeyStoreKeyingDataProvider windowsMyKeyingDataProv = new WindowsMyKeyingDataProvider();
 
-        XadesSigner signer = new XadesBesSigningProfile(windowsMyKeyingDataProv).withAlgorithmsProviderEx(PtCcAlgorithmsProvider.class).newSigner();
+        XadesSigner signer = new XadesBesSigningProfile(windowsMyKeyingDataProv).newSigner();
         new Enveloped(signer).sign(elemToSign);
     }
 
