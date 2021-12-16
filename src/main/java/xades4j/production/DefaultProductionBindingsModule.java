@@ -40,15 +40,12 @@ import xades4j.properties.SignerRoleProperty;
 import xades4j.properties.SigningCertificateProperty;
 import xades4j.properties.SigningTimeProperty;
 import xades4j.properties.data.CustomPropertiesDataObjsStructureVerifier;
-import xades4j.providers.AlgorithmsProvider;
-import xades4j.providers.AlgorithmsProviderEx;
 import xades4j.providers.BasicSignatureOptionsProvider;
 import xades4j.providers.DataObjectPropertiesProvider;
 import xades4j.providers.MessageDigestEngineProvider;
 import xades4j.providers.SignaturePropertiesProvider;
 import xades4j.providers.TimeStampTokenProvider;
 import xades4j.providers.X500NameStyleProvider;
-import xades4j.providers.impl.DefaultAlgorithmsProviderEx;
 import xades4j.providers.impl.DefaultMessageDigestProvider;
 import xades4j.providers.impl.DefaultSignaturePropertiesProvider;
 import xades4j.providers.impl.DefaultBasicSignatureOptionsProvider;
@@ -77,9 +74,7 @@ class DefaultProductionBindingsModule extends AbstractModule
                 // By default no properties are specified for a data object.
             }
         });
-        bind(AlgorithmsProviderEx.class).to(DefaultAlgorithmsProviderEx.class);
-        // Will wrap the AlgorithmsProviderEx in use
-        bind(AlgorithmsProvider.class).to(AlgorithmsProvider_ExToDeprecated_Adapter.class);
+        bind(SignatureAlgorithms.class).toInstance(new SignatureAlgorithms());
         bind(BasicSignatureOptionsProvider.class).to(DefaultBasicSignatureOptionsProvider.class);
         // Will adapt from the BasicSignatureOptionsProvider in use
         bind(BasicSignatureOptions.class).toProvider(BasicSignatureOptionsProvider_DeprecatedToOptions_Adapter.class);

@@ -23,7 +23,6 @@ import xades4j.properties.QualifyingProperty;
 import xades4j.properties.data.BaseXAdESTimeStampData;
 import xades4j.utils.TimeStampDigestInput;
 import xades4j.properties.data.PropertyDataObject;
-import xades4j.providers.AlgorithmsProviderEx;
 import xades4j.providers.TimeStampTokenGenerationException;
 import xades4j.providers.TimeStampTokenProvider;
 import xades4j.providers.TimeStampTokenProvider.TimeStampTokenRes;
@@ -36,13 +35,13 @@ import xades4j.utils.TimeStampDigestInputFactory;
  */
 abstract class DataGenBaseTimeStamp<TProp extends QualifyingProperty> implements PropertyDataObjectGenerator<TProp>
 {
-    private final AlgorithmsProviderEx algsProvider;
+    private final SignatureAlgorithms algorithms;
     private final TimeStampTokenProvider tsTokenProvider;
     private final TimeStampDigestInputFactory tsInputFactory;
 
-    public DataGenBaseTimeStamp(AlgorithmsProviderEx algsProvider, TimeStampTokenProvider tsTokenProvider, TimeStampDigestInputFactory tsInputFactory)
+    public DataGenBaseTimeStamp(SignatureAlgorithms algorithms, TimeStampTokenProvider tsTokenProvider, TimeStampDigestInputFactory tsInputFactory)
     {
-        this.algsProvider = algsProvider;
+        this.algorithms = algorithms;
         this.tsTokenProvider = tsTokenProvider;
         this.tsInputFactory = tsInputFactory;
     }
@@ -50,7 +49,7 @@ abstract class DataGenBaseTimeStamp<TProp extends QualifyingProperty> implements
     @Override
     public final PropertyDataObject generatePropertyData(TProp prop, PropertiesDataGenerationContext ctx) throws PropertyDataGenerationException
     {
-        Algorithm c14n = this.algsProvider.getCanonicalizationAlgorithmForTimeStampProperties();
+        Algorithm c14n = this.algorithms.getCanonicalizationAlgorithmForTimeStampProperties();
 
         try
         {
@@ -59,7 +58,7 @@ abstract class DataGenBaseTimeStamp<TProp extends QualifyingProperty> implements
 
             TimeStampTokenRes tsTknRes = this.tsTokenProvider.getTimeStampToken(
                     digestInput.getBytes(),
-                    this.algsProvider.getDigestAlgorithmForTimeStampProperties());
+                    this.algorithms.getDigestAlgorithmForTimeStampProperties());
             return createPropDataObj(prop, c14n, tsTknRes, ctx);
         }
         catch (UnsupportedAlgorithmException ex)

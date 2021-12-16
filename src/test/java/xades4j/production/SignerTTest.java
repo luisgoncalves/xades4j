@@ -21,13 +21,11 @@ import javax.inject.Inject;
 import org.junit.Test;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
-import xades4j.algorithms.Algorithm;
 import xades4j.algorithms.ExclusiveCanonicalXMLWithoutComments;
 import xades4j.properties.SignaturePolicyBase;
 import xades4j.properties.SignaturePolicyImpliedProperty;
 import xades4j.providers.MessageDigestEngineProvider;
 import xades4j.providers.SignaturePolicyInfoProvider;
-import xades4j.providers.impl.DefaultAlgorithmsProviderEx;
 import xades4j.providers.impl.HttpTimeStampTokenProvider;
 import xades4j.providers.impl.TSAHttpData;
 
@@ -46,21 +44,6 @@ public class SignerTTest extends SignerTestBase
         }
     }
 
-    static class ExclusiveC14nForTimeStampsAlgorithmsProvider extends DefaultAlgorithmsProviderEx
-    {
-        @Override
-        public Algorithm getCanonicalizationAlgorithmForTimeStampProperties()
-        {
-            return new ExclusiveCanonicalXMLWithoutComments("ds", "xades");
-        }
-
-        @Override
-        public Algorithm getCanonicalizationAlgorithmForSignature()
-        {
-            return new ExclusiveCanonicalXMLWithoutComments();
-        }
-    }
-
     @Test
     public void testSignTExclusiveC14NWithoutPolicy() throws Exception
     {
@@ -69,9 +52,13 @@ public class SignerTTest extends SignerTestBase
         Document doc = getTestDocument();
         Element elemToSign = doc.getDocumentElement();
 
+        SignatureAlgorithms algorithms = new SignatureAlgorithms()
+                .withCanonicalizationAlgorithmForTimeStampProperties(new ExclusiveCanonicalXMLWithoutComments("ds", "xades"))
+                .withCanonicalizationAlgorithmForSignature(new ExclusiveCanonicalXMLWithoutComments());
+
         XadesSigner signer = new XadesTSigningProfile(keyingProviderMy)
                 .withTimeStampTokenProvider(TestTimeStampTokenProvider.class)
-                .withAlgorithmsProviderEx(ExclusiveC14nForTimeStampsAlgorithmsProvider.class)
+                .withSignatureAlgorithms(algorithms)
                 .newSigner();
         new Enveloped(signer).sign(elemToSign);
 

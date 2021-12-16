@@ -25,7 +25,6 @@ import xades4j.UnsupportedAlgorithmException;
 import xades4j.properties.data.BaseCertRefsData;
 import xades4j.properties.data.CertRef;
 import xades4j.properties.data.PropertyDataObject;
-import xades4j.providers.AlgorithmsProviderEx;
 import xades4j.providers.MessageDigestEngineProvider;
 import xades4j.providers.X500NameStyleProvider;
 
@@ -36,15 +35,16 @@ import xades4j.providers.X500NameStyleProvider;
  */
 class DataGenBaseCertRefs
 {
-    private final AlgorithmsProviderEx algorithmsProvider;
+    private final SignatureAlgorithms signatureAlgorithms;
     private final MessageDigestEngineProvider messageDigestProvider;
     private final X500NameStyleProvider x500NameStyleProvider;
+
     protected DataGenBaseCertRefs(
-            AlgorithmsProviderEx algorithmsProvider,
+            SignatureAlgorithms signatureAlgorithms,
             MessageDigestEngineProvider messageDigestProvider,
             X500NameStyleProvider x500NameStyleProvider)
     {
-        this.algorithmsProvider = algorithmsProvider;
+        this.signatureAlgorithms = signatureAlgorithms;
         this.messageDigestProvider = messageDigestProvider;
         this.x500NameStyleProvider = x500NameStyleProvider;
     }
@@ -61,7 +61,7 @@ class DataGenBaseCertRefs
 
         try
         {
-            String digestAlgUri = this.algorithmsProvider.getDigestAlgorithmForReferenceProperties();
+            String digestAlgUri = this.signatureAlgorithms.getDigestAlgorithmForReferenceProperties();
             MessageDigest messageDigest = this.messageDigestProvider.getEngine(digestAlgUri);
 
             for (X509Certificate cert : certs)

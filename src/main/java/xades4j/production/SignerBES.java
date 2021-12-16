@@ -45,7 +45,6 @@ import xades4j.UnsupportedAlgorithmException;
 import xades4j.XAdES4jException;
 import xades4j.XAdES4jXMLSigException;
 import xades4j.properties.data.SigAndDataObjsPropertiesData;
-import xades4j.providers.AlgorithmsProviderEx;
 import xades4j.providers.DataObjectPropertiesProvider;
 import xades4j.providers.KeyingDataProvider;
 import xades4j.providers.SignaturePropertiesProvider;
@@ -73,7 +72,7 @@ class SignerBES implements XadesSigner
     }
     /**/
     private final KeyingDataProvider keyingProvider;
-    private final AlgorithmsProviderEx algorithmsProvider;
+    private final SignatureAlgorithms signatureAlgorithms;
     private final SignedDataObjectsProcessor dataObjectDescsProcessor;
     private final PropertiesDataObjectsGenerator propsDataObjectsGenerator;
     private final SignedPropertiesMarshaller signedPropsMarshaller;
@@ -86,7 +85,7 @@ class SignerBES implements XadesSigner
     @Inject
     protected SignerBES(
             KeyingDataProvider keyingProvider,
-            AlgorithmsProviderEx algorithmsProvider,
+            SignatureAlgorithms signatureAlgorithms,
             BasicSignatureOptions basicSignatureOptions,
             SignedDataObjectsProcessor dataObjectDescsProcessor,
             SignaturePropertiesProvider signaturePropsProvider,
@@ -98,7 +97,7 @@ class SignerBES implements XadesSigner
             X500NameStyleProvider x500NameStyleProvider)
     {
         if (ObjectUtils.anyNull(
-                keyingProvider, algorithmsProvider, basicSignatureOptions,
+                keyingProvider, signatureAlgorithms, basicSignatureOptions,
                 signaturePropsProvider, dataObjPropsProvider, propsDataObjectsGenerator,
                 signedPropsMarshaller, unsignedPropsMarshaller, algorithmsParametersMarshaller,
                 x500NameStyleProvider))
@@ -107,13 +106,13 @@ class SignerBES implements XadesSigner
         }
 
         this.keyingProvider = keyingProvider;
-        this.algorithmsProvider = algorithmsProvider;
+        this.signatureAlgorithms = signatureAlgorithms;
         this.propsDataObjectsGenerator = propsDataObjectsGenerator;
         this.signedPropsMarshaller = signedPropsMarshaller;
         this.unsignedPropsMarshaller = unsignedPropsMarshaller;
         this.algorithmsParametersMarshaller = algorithmsParametersMarshaller;
         this.dataObjectDescsProcessor = dataObjectDescsProcessor;
-        this.keyInfoBuilder = new KeyInfoBuilder(basicSignatureOptions, algorithmsProvider, algorithmsParametersMarshaller, x500NameStyleProvider);
+        this.keyInfoBuilder = new KeyInfoBuilder(basicSignatureOptions, signatureAlgorithms, algorithmsParametersMarshaller, x500NameStyleProvider);
         this.qualifPropsProcessor = new QualifyingPropertiesProcessor(signaturePropsProvider, dataObjPropsProvider);
     }
 
@@ -239,14 +238,14 @@ class SignerBES implements XadesSigner
             // (...) use the Type attribute of this particular ds:Reference element,
             // with its value set to: http://uri.etsi.org/01903#SignedProperties."
 
-            String digestAlgUri = algorithmsProvider.getDigestAlgorithmForDataObjsReferences();
+            String digestAlgUri = this.signatureAlgorithms.getDigestAlgorithmForDataObjectReferences();
             if (StringUtils.isNullOrEmptyString(digestAlgUri))
             {
                 throw new NullPointerException("Digest algorithm URI not provided");
             }
             
             // Use same canonicalization URI as specified in the ds:CanonicalizationMethod for Signature.
-            Algorithm canonAlg = this.algorithmsProvider.getCanonicalizationAlgorithmForSignature();
+            Algorithm canonAlg = this.signatureAlgorithms.getCanonicalizationAlgorithmForSignature();
 
             try
             {
@@ -301,7 +300,7 @@ class SignerBES implements XadesSigner
 
     private XMLSignature createSignature(Document signatureDocument, String baseUri, String signingKeyAlgorithm) throws XAdES4jXMLSigException, UnsupportedAlgorithmException
     {
-        Algorithm signatureAlg = this.algorithmsProvider.getSignatureAlgorithm(signingKeyAlgorithm);
+        Algorithm signatureAlg = this.signatureAlgorithms.getSignatureAlgorithm(signingKeyAlgorithm);
         if (null == signatureAlg)
         {
             throw new NullPointerException("Signature algorithm not provided");
@@ -309,7 +308,7 @@ class SignerBES implements XadesSigner
         Element signatureAlgElem = createElementForAlgorithm(signatureAlg, Constants._TAG_SIGNATUREMETHOD, signatureDocument);
 
 
-        Algorithm canonAlg = this.algorithmsProvider.getCanonicalizationAlgorithmForSignature();
+        Algorithm canonAlg = this.signatureAlgorithms.getCanonicalizationAlgorithmForSignature();
         if (null == canonAlg)
         {
             throw new NullPointerException("Canonicalization algorithm not provided");

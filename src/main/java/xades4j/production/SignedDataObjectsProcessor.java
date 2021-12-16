@@ -31,7 +31,6 @@ import xades4j.UnsupportedAlgorithmException;
 import xades4j.XAdES4jXMLSigException;
 import xades4j.algorithms.Algorithm;
 import xades4j.properties.DataObjectDesc;
-import xades4j.providers.AlgorithmsProviderEx;
 import xades4j.utils.ResolverAnonymous;
 import xades4j.utils.TransformUtils;
 import xades4j.xml.marshalling.algorithms.AlgorithmsParametersMarshallingProvider;
@@ -57,13 +56,13 @@ final class SignedDataObjectsProcessor
         }
     }
 
-    private final AlgorithmsProviderEx algorithmsProvider;
+    private final SignatureAlgorithms signatureAlgorithms;
     private final AlgorithmsParametersMarshallingProvider algorithmsParametersMarshaller;
 
     @Inject
-    SignedDataObjectsProcessor(AlgorithmsProviderEx algorithmsProvider, AlgorithmsParametersMarshallingProvider algorithmsParametersMarshaller)
+    SignedDataObjectsProcessor(SignatureAlgorithms signatureAlgorithms, AlgorithmsParametersMarshallingProvider algorithmsParametersMarshaller)
     {
-        this.algorithmsProvider = algorithmsProvider;
+        this.signatureAlgorithms = signatureAlgorithms;
         this.algorithmsParametersMarshaller = algorithmsParametersMarshaller;
     }
 
@@ -111,7 +110,7 @@ final class SignedDataObjectsProcessor
             container.addResourceResolver(resolver);
         }
 
-        String digestMethodUri = this.algorithmsProvider.getDigestAlgorithmForDataObjsReferences();
+        String digestMethodUri = this.signatureAlgorithms.getDigestAlgorithmForDataObjectReferences();
         /**/
         try
         {

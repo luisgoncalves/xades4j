@@ -29,7 +29,6 @@ import xades4j.properties.IndividualDataObjsTimeStampProperty;
 import xades4j.properties.data.BaseXAdESTimeStampData;
 import xades4j.utils.TimeStampDigestInput;
 import xades4j.properties.data.IndividualDataObjsTimeStampData;
-import xades4j.providers.AlgorithmsProviderEx;
 import xades4j.providers.TimeStampTokenProvider;
 import xades4j.providers.TimeStampTokenProvider.TimeStampTokenRes;
 import xades4j.utils.TimeStampDigestInputFactory;
@@ -43,10 +42,10 @@ class DataGenIndivDataObjsTimeStamp extends DataGenBaseTimeStamp<IndividualDataO
     @Inject
     public DataGenIndivDataObjsTimeStamp(
             TimeStampTokenProvider timeStampTokenProvider,
-            AlgorithmsProviderEx algorithmsProvider,
+            SignatureAlgorithms signatureAlgorithms,
             TimeStampDigestInputFactory timeStampDigestInputFactory)
     {
-        super(algorithmsProvider, timeStampTokenProvider,timeStampDigestInputFactory);
+        super(signatureAlgorithms, timeStampTokenProvider,timeStampDigestInputFactory);
     }
 
     @Override

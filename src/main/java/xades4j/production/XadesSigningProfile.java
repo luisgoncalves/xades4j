@@ -21,8 +21,6 @@ import xades4j.properties.QualifyingProperty;
 import xades4j.providers.X500NameStyleProvider;
 import xades4j.utils.XadesProfileCore;
 import xades4j.utils.XadesProfileResolutionException;
-import xades4j.providers.AlgorithmsProvider;
-import xades4j.providers.AlgorithmsProviderEx;
 import xades4j.providers.BasicSignatureOptionsProvider;
 import xades4j.providers.DataObjectPropertiesProvider;
 import xades4j.providers.KeyingDataProvider;
@@ -161,50 +159,10 @@ public abstract class XadesSigningProfile
     /*
      **********************************************************************
      */
-    /**
-     * @deprecated
-     * <p>
-     * This method is deprecated and might be removed on future versions. Classes
-     * registered using this method will be adapted to the new {@link AlgorithmsProviderEx}
-     * interface. {@link AlgorithmsProvider} and {@link AlgorithmsProviderEx} cannot be
-     * registered simultaneously on the same profile.
-     * @see #withAlgorithmsProviderEx(java.lang.Class)
-     */
-    public XadesSigningProfile withAlgorithmsProvider(
-            AlgorithmsProvider algsProvider)
-    {
-        // Adapt AlgorithmsProviderEx to the AlgorithmsProvider being registered
-        withBinding(AlgorithmsProviderEx.class, AlgorithmsProvider_DeprecatedToEx_Adapter.class);
-        return withBinding(AlgorithmsProvider.class, algsProvider);
-    }
 
-    /**
-     * @deprecated
-     * <p>
-     * This method is deprecated and might be removed on future versions. Classes
-     * registered using this method will be adapted to the new {@link AlgorithmsProviderEx}
-     * interface. {@link AlgorithmsProvider} and {@link AlgorithmsProviderEx} cannot be
-     * registered simultaneously on the same profile.
-     * @see #withAlgorithmsProviderEx(java.lang.Class)
-     */
-    public XadesSigningProfile withAlgorithmsProvider(
-            Class<? extends AlgorithmsProvider> algsProviderClass)
+    public XadesSigningProfile withSignatureAlgorithms(SignatureAlgorithms algorithms)
     {
-        // Adapt AlgorithmsProviderEx to the AlgorithmsProvider being registered
-        withBinding(AlgorithmsProviderEx.class, AlgorithmsProvider_DeprecatedToEx_Adapter.class);
-        return withBinding(AlgorithmsProvider.class, algsProviderClass);
-    }
-
-    public XadesSigningProfile withAlgorithmsProviderEx(
-            AlgorithmsProviderEx algsProvider)
-    {
-        return withBinding(AlgorithmsProviderEx.class, algsProvider);
-    }
-
-    public XadesSigningProfile withAlgorithmsProviderEx(
-            Class<? extends AlgorithmsProviderEx> algsProviderClass)
-    {
-        return withBinding(AlgorithmsProviderEx.class, algsProviderClass);
+        return withBinding(SignatureAlgorithms.class, algorithms);
     }
 
     public XadesSigningProfile withDigestEngineProvider(

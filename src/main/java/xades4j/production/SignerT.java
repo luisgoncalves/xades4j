@@ -25,7 +25,6 @@ import com.google.common.base.Optional;
 import xades4j.properties.SignedSignatureProperty;
 import xades4j.properties.UnsignedSignatureProperty;
 import xades4j.XAdES4jException;
-import xades4j.providers.AlgorithmsProviderEx;
 import xades4j.providers.DataObjectPropertiesProvider;
 import xades4j.providers.KeyingDataProvider;
 import xades4j.providers.SignaturePolicyInfoProvider;
@@ -49,7 +48,7 @@ class SignerT extends SignerBES
     @Inject
     protected SignerT(
             KeyingDataProvider keyingProvider,
-            AlgorithmsProviderEx algorithmsProvider,
+            SignatureAlgorithms signatureAlgorithms,
             BasicSignatureOptions basicSignatureOptions,
             SignedDataObjectsProcessor dataObjectDescsProcessor,
             SignaturePropertiesProvider signaturePropsProvider,
@@ -61,7 +60,7 @@ class SignerT extends SignerBES
             X500NameStyleProvider x500NameStyleProvider,
             Optional<SignaturePolicyInfoProvider> policyInfoProvider)
     {
-        super(keyingProvider, algorithmsProvider, basicSignatureOptions, dataObjectDescsProcessor, signaturePropsProvider, dataObjPropsProvider, propsDataObjectsGenerator, signedPropsMarshaller, unsignedPropsMarshaller, algorithmsParametersMarshaller, x500NameStyleProvider);
+        super(keyingProvider, signatureAlgorithms, basicSignatureOptions, dataObjectDescsProcessor, signaturePropsProvider, dataObjPropsProvider, propsDataObjectsGenerator, signedPropsMarshaller, unsignedPropsMarshaller, algorithmsParametersMarshaller, x500NameStyleProvider);
         this.policyInfoProvider = policyInfoProvider;
     }
 

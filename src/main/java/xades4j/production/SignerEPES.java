@@ -23,7 +23,6 @@ import java.util.List;
 import xades4j.properties.SignedSignatureProperty;
 import xades4j.properties.UnsignedSignatureProperty;
 import xades4j.XAdES4jException;
-import xades4j.providers.AlgorithmsProviderEx;
 import xades4j.providers.DataObjectPropertiesProvider;
 import xades4j.providers.KeyingDataProvider;
 import xades4j.providers.SignaturePolicyInfoProvider;
@@ -46,7 +45,7 @@ class SignerEPES extends SignerBES
     @Inject
     protected SignerEPES(
             KeyingDataProvider keyingProvider,
-            AlgorithmsProviderEx algorithmsProvider,
+            SignatureAlgorithms signatureAlgorithms,
             BasicSignatureOptions basicSignatureOptions,
             SignedDataObjectsProcessor dataObjectDescsProcessor,
             SignaturePolicyInfoProvider policyInfoProvider,
@@ -58,7 +57,7 @@ class SignerEPES extends SignerBES
             AlgorithmsParametersMarshallingProvider algorithmsParametersMarshaller,
             X500NameStyleProvider x500NameStyleProvider)
     {
-        super(keyingProvider, algorithmsProvider, basicSignatureOptions, dataObjectDescsProcessor, signaturePropsProvider, dataObjPropsProvider, propsDataObjectsGenerator, signedPropsMarshaller, unsignedPropsMarshaller, algorithmsParametersMarshaller, x500NameStyleProvider);
+        super(keyingProvider, signatureAlgorithms, basicSignatureOptions, dataObjectDescsProcessor, signaturePropsProvider, dataObjPropsProvider, propsDataObjectsGenerator, signedPropsMarshaller, unsignedPropsMarshaller, algorithmsParametersMarshaller, x500NameStyleProvider);
         this.policyInfoProvider = policyInfoProvider;
     }
 

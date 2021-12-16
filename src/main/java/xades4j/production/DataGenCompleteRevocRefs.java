@@ -30,7 +30,6 @@ import xades4j.UnsupportedAlgorithmException;
 import xades4j.properties.data.CRLRef;
 import xades4j.properties.data.CompleteRevocationRefsData;
 import xades4j.properties.data.PropertyDataObject;
-import xades4j.providers.AlgorithmsProviderEx;
 import xades4j.providers.MessageDigestEngineProvider;
 import xades4j.providers.X500NameStyleProvider;
 import xades4j.utils.CrlExtensionsUtils;
@@ -42,17 +41,17 @@ import xades4j.utils.CrlExtensionsUtils;
 class DataGenCompleteRevocRefs implements PropertyDataObjectGenerator<CompleteRevocationRefsProperty>
 {
     private final MessageDigestEngineProvider messageDigestProvider;
-    private final AlgorithmsProviderEx algorithmsProvider;
+    private final SignatureAlgorithms signatureAlgorithms;
     private final X500NameStyleProvider x500NameStyleProvider;
 
     @Inject
     public DataGenCompleteRevocRefs(
             MessageDigestEngineProvider messageDigestProvider,
-            AlgorithmsProviderEx algorithmsProvider,
+            SignatureAlgorithms signatureAlgorithms,
             X500NameStyleProvider x500NameStyleProvider)
     {
         this.messageDigestProvider = messageDigestProvider;
-        this.algorithmsProvider = algorithmsProvider;
+        this.signatureAlgorithms = signatureAlgorithms;
         this.x500NameStyleProvider = x500NameStyleProvider;
     }
 
@@ -63,7 +62,7 @@ class DataGenCompleteRevocRefs implements PropertyDataObjectGenerator<CompleteRe
     {
         Collection<X509CRL> crls = prop.getCrls();
         Collection<CRLRef> crlRefs = new ArrayList<CRLRef>(crls.size());
-        String digestAlgUri = this.algorithmsProvider.getDigestAlgorithmForReferenceProperties();
+        String digestAlgUri = this.signatureAlgorithms.getDigestAlgorithmForReferenceProperties();
 
         try
         {
