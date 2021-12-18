@@ -27,7 +27,6 @@ import org.apache.xml.security.signature.XMLSignatureException;
 import org.apache.xml.security.transforms.Transforms;
 import xades4j.UnsupportedAlgorithmException;
 import xades4j.algorithms.Algorithm;
-import xades4j.providers.AlgorithmsProviderEx;
 import xades4j.providers.X500NameStyleProvider;
 import xades4j.utils.CanonicalizerUtils;
 import xades4j.utils.TransformUtils;
@@ -43,18 +42,18 @@ import xades4j.xml.marshalling.algorithms.AlgorithmsParametersMarshallingProvide
 class KeyInfoBuilder
 {
     private final BasicSignatureOptions basicSignatureOptions;
-    private final AlgorithmsProviderEx algorithmsProvider;
+    private final SignatureAlgorithms signatureAlgorithms;
     private final AlgorithmsParametersMarshallingProvider algorithmsParametersMarshaller;
     private final X500NameStyleProvider x500NameStyleProvider;
 
     KeyInfoBuilder(
             BasicSignatureOptions basicSignatureOptions,
-            AlgorithmsProviderEx algorithmsProvider,
+            SignatureAlgorithms signatureAlgorithms,
             AlgorithmsParametersMarshallingProvider algorithmsParametersMarshaller,
             X500NameStyleProvider x500NameStyleProvider)
     {
         this.basicSignatureOptions = basicSignatureOptions;
-        this.algorithmsProvider = algorithmsProvider;
+        this.signatureAlgorithms = signatureAlgorithms;
         this.algorithmsParametersMarshaller = algorithmsParametersMarshaller;
         this.x500NameStyleProvider = x500NameStyleProvider;
     }
@@ -136,20 +135,20 @@ class KeyInfoBuilder
                 xmlSig.getKeyInfo().setId(keyInfoId);
 
                 // Use same canonicalization URI as specified in the ds:CanonicalizationMethod for Signature.
-                Algorithm canonAlg = this.algorithmsProvider.getCanonicalizationAlgorithmForSignature();
+                Algorithm canonAlg = this.signatureAlgorithms.getCanonicalizationAlgorithmForSignature();
                 CanonicalizerUtils.checkC14NAlgorithm(canonAlg);
                 Transforms transforms = TransformUtils.createTransforms(canonAlg, this.algorithmsParametersMarshaller, xmlSig.getDocument());
 
                 xmlSig.addDocument(
                     '#' + keyInfoId,
                     transforms,
-                    this.algorithmsProvider.getDigestAlgorithmForDataObjsReferences());
+                    this.signatureAlgorithms.getDigestAlgorithmForDataObjectReferences());
             }
             catch (XMLSignatureException ex)
             {
                 throw new UnsupportedAlgorithmException(
                     "Digest algorithm not supported in the XML Signature provider",
-                    this.algorithmsProvider.getDigestAlgorithmForDataObjsReferences(), ex);
+                    this.signatureAlgorithms.getDigestAlgorithmForDataObjectReferences(), ex);
             }
         }
     }

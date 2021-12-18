@@ -35,7 +35,6 @@ import xades4j.properties.RevocationValuesProperty;
 import xades4j.properties.SignatureTimeStampProperty;
 import xades4j.properties.data.ArchiveTimeStampData;
 import xades4j.properties.data.BaseXAdESTimeStampData;
-import xades4j.providers.AlgorithmsProviderEx;
 import xades4j.providers.TimeStampTokenProvider;
 import xades4j.providers.TimeStampTokenProvider.TimeStampTokenRes;
 import xades4j.utils.CannotAddDataToDigestInputException;
@@ -51,11 +50,11 @@ class DataGenArchiveTimeStamp extends DataGenBaseTimeStamp<ArchiveTimeStampPrope
 {
     @Inject
     public DataGenArchiveTimeStamp(
-            AlgorithmsProviderEx algorithmsProvider,
+            SignatureAlgorithms signatureAlgorithms,
             TimeStampTokenProvider timeStampTokenProvider,
             TimeStampDigestInputFactory timeStampDigestInputFactory)
     {
-        super(algorithmsProvider, timeStampTokenProvider, timeStampDigestInputFactory);
+        super(signatureAlgorithms, timeStampTokenProvider, timeStampDigestInputFactory);
     }
 
     @Override

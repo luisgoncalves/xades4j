@@ -20,8 +20,6 @@ import com.google.inject.Module;
 import xades4j.properties.QualifyingProperty;
 import xades4j.utils.XadesProfileCore;
 import xades4j.utils.XadesProfileResolutionException;
-import xades4j.providers.AlgorithmsProvider;
-import xades4j.providers.AlgorithmsProviderEx;
 import xades4j.providers.MessageDigestEngineProvider;
 import xades4j.providers.TimeStampTokenProvider;
 import xades4j.utils.UtilsBindingsModule;
@@ -87,40 +85,10 @@ public class XadesFormatExtenderProfile
     }
 
     /**/
-    /**
-     * @deprecated This method is deprecated and might be removed on future versions
-     * @see #withAlgorithmsProviderEx(xades4j.providers.AlgorithmsProviderEx)
-     */
-    public XadesFormatExtenderProfile withAlgorithmsProvider(
-            AlgorithmsProvider algsProvider)
-    {
-        // Adapt AlgorithmsProviderEx to the AlgorithmsProvider being registered
-        withBinding(AlgorithmsProviderEx.class, AlgorithmsProvider_DeprecatedToEx_Adapter.class);
-        return withBinding(AlgorithmsProvider.class, algsProvider);
-    }
 
-    /**
-     * @deprecated this method is deprecated and might be removed on future versions
-     * @see #withAlgorithmsProviderEx(java.lang.Class)
-     */
-    public XadesFormatExtenderProfile withAlgorithmsProvider(
-            Class<? extends AlgorithmsProvider> algsProviderClass)
+    public XadesFormatExtenderProfile withSignatureAlgorithms(SignatureAlgorithms algorithms)
     {
-        // Adapt AlgorithmsProviderEx to the AlgorithmsProvider being registered
-        withBinding(AlgorithmsProviderEx.class, AlgorithmsProvider_DeprecatedToEx_Adapter.class);
-        return withBinding(AlgorithmsProvider.class, algsProviderClass);
-    }
-
-    public XadesFormatExtenderProfile withAlgorithmsProviderEx(
-            AlgorithmsProviderEx algsProvider)
-    {
-        return withBinding(AlgorithmsProviderEx.class, algsProvider);
-    }
-
-    public XadesFormatExtenderProfile withAlgorithmsProviderEx(
-            Class<? extends AlgorithmsProviderEx> algsProviderClass)
-    {
-        return withBinding(AlgorithmsProviderEx.class, algsProviderClass);
+        return withBinding(SignatureAlgorithms.class, algorithms);
     }
 
     public XadesFormatExtenderProfile withDigestEngineProvider(

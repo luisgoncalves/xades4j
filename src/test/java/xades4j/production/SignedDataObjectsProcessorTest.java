@@ -68,7 +68,7 @@ public class SignedDataObjectsProcessorTest extends SignatureServicesTestBase
 
         AllwaysNullAlgsParamsMarshaller algsParamsMarshaller = new AllwaysNullAlgsParamsMarshaller();
 
-        SignedDataObjectsProcessor processor = new SignedDataObjectsProcessor(new TestAlgorithmsProvider(), algsParamsMarshaller);
+        SignedDataObjectsProcessor processor = new SignedDataObjectsProcessor(new SignatureAlgorithms(), algsParamsMarshaller);
         SignedDataObjectsProcessor.Result result = processor.process(dataObjsDescs, xmlSignature);
 
         assertEquals(3, result.referenceMappings.size());
@@ -136,7 +136,7 @@ public class SignedDataObjectsProcessorTest extends SignatureServicesTestBase
 
         AllwaysNullAlgsParamsMarshaller algsParamsMarshaller = new AllwaysNullAlgsParamsMarshaller();
 
-        SignedDataObjectsProcessor processor = new SignedDataObjectsProcessor(new TestAlgorithmsProvider(), algsParamsMarshaller);
+        SignedDataObjectsProcessor processor = new SignedDataObjectsProcessor(new SignatureAlgorithms(), algsParamsMarshaller);
         SignedDataObjectsProcessor.Result result = processor.process(signedObjects, xmlSignature);
 
         // Simulate what's done during signature production
@@ -193,7 +193,7 @@ public class SignedDataObjectsProcessorTest extends SignatureServicesTestBase
         XMLSignature xmlSignature = new XMLSignature(doc, "", XMLSignature.ALGO_ID_SIGNATURE_RSA_SHA256);
         xmlSignature.setId("sigId");
 
-        SignedDataObjectsProcessor processor = new SignedDataObjectsProcessor(new TestAlgorithmsProvider(), new AllwaysNullAlgsParamsMarshaller());
+        SignedDataObjectsProcessor processor = new SignedDataObjectsProcessor(new SignatureAlgorithms(), new AllwaysNullAlgsParamsMarshaller());
         SignedDataObjectsProcessor.Result result = processor.process(dataObjsDescs, xmlSignature);
 
         assertEquals(1, result.referenceMappings.size());
@@ -218,7 +218,7 @@ public class SignedDataObjectsProcessorTest extends SignatureServicesTestBase
         XMLSignature xmlSignature = new XMLSignature(doc, "", XMLSignature.ALGO_ID_SIGNATURE_RSA_SHA256);
         xmlSignature.setId("sigId");
 
-        SignedDataObjectsProcessor processor = new SignedDataObjectsProcessor(new TestAlgorithmsProvider(), new AllwaysNullAlgsParamsMarshaller());
+        SignedDataObjectsProcessor processor = new SignedDataObjectsProcessor(new SignatureAlgorithms(), new AllwaysNullAlgsParamsMarshaller());
         processor.process(dataObjsDescs, xmlSignature);
     }
 }

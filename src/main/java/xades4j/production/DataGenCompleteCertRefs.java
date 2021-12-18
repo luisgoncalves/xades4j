@@ -20,7 +20,6 @@ import javax.inject.Inject;
 import xades4j.properties.CompleteCertificateRefsProperty;
 import xades4j.properties.data.CompleteCertificateRefsData;
 import xades4j.properties.data.PropertyDataObject;
-import xades4j.providers.AlgorithmsProviderEx;
 import xades4j.providers.MessageDigestEngineProvider;
 import xades4j.providers.X500NameStyleProvider;
 
@@ -34,11 +33,11 @@ class DataGenCompleteCertRefs
 {
     @Inject
     public DataGenCompleteCertRefs(
-            AlgorithmsProviderEx algorithmsProvider,
+            SignatureAlgorithms signatureAlgorithms,
             MessageDigestEngineProvider messageDigestProvider,
             X500NameStyleProvider x500NameStyleProvider)
     {
-        super(algorithmsProvider, messageDigestProvider, x500NameStyleProvider);
+        super(signatureAlgorithms, messageDigestProvider, x500NameStyleProvider);
     }
 
     @Override
