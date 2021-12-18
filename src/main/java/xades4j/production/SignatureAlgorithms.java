@@ -33,7 +33,7 @@ import java.util.Map;
  * <ul>
  *     <li>Signature: RSA(RSA_SHA256), DSA(DSA_SHA1), EC(ECDSA_SHA256)</li>
  *     <li>Canonicalization: Canonical XML 1.0 without comments</li>
- *     <li>Digest: SHA256 (data objs and refs properties); SHA1 (time-stamps)</li>
+ *     <li>Digest: SHA256</li>
  * </ul>
  *
  * @see XadesSigningProfile#withSignatureAlgorithms(SignatureAlgorithms)
@@ -45,7 +45,7 @@ public final class SignatureAlgorithms
     private Algorithm canonicalizationAlgorithmForTimeStampProperties = new CanonicalXMLWithoutComments();
     private String digestAlgorithmForDataObjectReferences = MessageDigestAlgorithm.ALGO_ID_DIGEST_SHA256;
     private String digestAlgorithmForReferenceProperties = MessageDigestAlgorithm.ALGO_ID_DIGEST_SHA256;
-    private String digestAlgorithmForTimeStampProperties = MessageDigestAlgorithm.ALGO_ID_DIGEST_SHA1; // TODO can this be the same as above? update javadocs
+    private String digestAlgorithmForTimeStampProperties = MessageDigestAlgorithm.ALGO_ID_DIGEST_SHA256;
 
     public SignatureAlgorithms()
     {
