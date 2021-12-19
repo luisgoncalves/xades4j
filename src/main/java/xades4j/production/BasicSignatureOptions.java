@@ -20,16 +20,18 @@ package xades4j.production;
  * Configuration of basic signature options such as whether {@code ds:KeyInfo}
  * elements should be included.
  *
+ * @see XadesSigningProfile#withBasicSignatureOptions(BasicSignatureOptions).
+ *
  * @author luis
  */
 public final class BasicSignatureOptions
 {
     private boolean checkKeyUsage = true;
-    private SigningCertificateMode includeSigningCertificateMode;
-    private boolean includeSubjectName;
-    private boolean includeIssuerSerial;
-    private boolean includePublicKey;
-    private boolean signKeyInfo;
+    private SigningCertificateMode includeSigningCertificateMode = SigningCertificateMode.SIGNING_CERTIFICATE;
+    private boolean includeSubjectName = false;
+    private boolean includeIssuerSerial = false;
+    private boolean includePublicKey = false;
+    private boolean signKeyInfo = false ;
 
     /**
      * Configures whether to check that the keyUsage of the signing certificate
@@ -53,6 +55,7 @@ public final class BasicSignatureOptions
 
     /**
      * Configures whether the signing certificate / chain should be included in {@code ds:KeyInfo}.
+     * Defauls to {@link SigningCertificateMode#SIGNING_CERTIFICATE }.
      * @param includeSigningCertificateMode the include mode
      * @return the current instance
      */
@@ -69,6 +72,7 @@ public final class BasicSignatureOptions
 
     /**
      * Configures whether the subject name should be included in {@code ds:KeyInfo}.
+     * Defaults to false.
      * @param includeSubjectName {@code true} if the subject name should be included; false otherwise
      * @return the current instance
      */
@@ -85,6 +89,7 @@ public final class BasicSignatureOptions
 
     /**
      * Configures whether the issuer/serial should be included in {@code ds:KeyInfo}.
+     * Defaults to false.
      * @param includeIssuerSerial {@code true} if the issuer/serial should be included; false otherwise
      * @return the current instance
      */
@@ -102,6 +107,7 @@ public final class BasicSignatureOptions
     /**
      * Configures whether a {@code ds:KeyValue} element containing the public key's
      * value should be included in {@code ds:KeyInfo}.
+     * Defaults to false.
      * @param includePublicKey {@code true} if the public key should be included; false otherwise
      * @return the current instance
      */
@@ -117,6 +123,7 @@ public final class BasicSignatureOptions
     }
     /**
      * Configures whether the signature should cover the {@code ds:KeyInfo} element.
+     * Defaults to false.
      *
      * @param signKeyInfo {@code true} if the {@code ds:KeyInfo} should be signed; false otherwise
      * @return the current instance

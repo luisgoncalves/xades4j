@@ -40,7 +40,6 @@ import xades4j.properties.SignerRoleProperty;
 import xades4j.properties.SigningCertificateProperty;
 import xades4j.properties.SigningTimeProperty;
 import xades4j.properties.data.CustomPropertiesDataObjsStructureVerifier;
-import xades4j.providers.BasicSignatureOptionsProvider;
 import xades4j.providers.DataObjectPropertiesProvider;
 import xades4j.providers.MessageDigestEngineProvider;
 import xades4j.providers.SignaturePropertiesProvider;
@@ -48,7 +47,6 @@ import xades4j.providers.TimeStampTokenProvider;
 import xades4j.providers.X500NameStyleProvider;
 import xades4j.providers.impl.DefaultMessageDigestProvider;
 import xades4j.providers.impl.DefaultSignaturePropertiesProvider;
-import xades4j.providers.impl.DefaultBasicSignatureOptionsProvider;
 import xades4j.providers.impl.DefaultX500NameStyleProvider;
 import xades4j.providers.impl.HttpTimeStampTokenProvider;
 import xades4j.providers.impl.TSAHttpData;
@@ -75,9 +73,7 @@ class DefaultProductionBindingsModule extends AbstractModule
             }
         });
         bind(SignatureAlgorithms.class).toInstance(new SignatureAlgorithms());
-        bind(BasicSignatureOptionsProvider.class).to(DefaultBasicSignatureOptionsProvider.class);
-        // Will adapt from the BasicSignatureOptionsProvider in use
-        bind(BasicSignatureOptions.class).toProvider(BasicSignatureOptionsProvider_DeprecatedToOptions_Adapter.class);
+        bind(BasicSignatureOptions.class).toInstance(new BasicSignatureOptions());
         bind(MessageDigestEngineProvider.class).to(DefaultMessageDigestProvider.class);
         bind(X500NameStyleProvider.class).to(DefaultX500NameStyleProvider.class);
         bind(TimeStampTokenProvider.class).to(HttpTimeStampTokenProvider.class);
