@@ -4,7 +4,6 @@ import org.junit.Test;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import xades4j.providers.impl.DirectPasswordProvider;
-import xades4j.providers.impl.FirstCertificateSelector;
 import xades4j.providers.impl.KeyStoreKeyingDataProvider;
 import xades4j.providers.impl.PKCS11KeyStoreKeyingDataProvider;
 
@@ -25,7 +24,7 @@ public class PtCcSignerTests extends SignerTestBase
 
         PKCS11KeyStoreKeyingDataProvider ptccKeyingDataProv = new PKCS11KeyStoreKeyingDataProvider(
                 PTCC_PKCS11_LIB_PATH, "PT_CC",
-                new FirstCertificateSelector(), null, null, false);
+                KeyStoreKeyingDataProvider.SigningCertificateSelector.single(), null, null, false);
 
         XadesSigner signer = new XadesTSigningProfile(ptccKeyingDataProv).newSigner();
         new Enveloped(signer).sign(elemToSign);
@@ -60,16 +59,16 @@ public class PtCcSignerTests extends SignerTestBase
                 {
                     return KeyStore.Builder.newInstance("Windows-MY", null, loadProtection);
                 }
-            }, new SigningCertSelector()
+            }, new SigningCertificateSelector()
             {
                 @Override
-                public X509Certificate selectCertificate(List<X509Certificate> availableCertificates)
+                public Entry selectCertificate(List<Entry> availableCertificates)
                 {
-                    for (X509Certificate c : availableCertificates)
+                    for (Entry e : availableCertificates)
                     {
-                        if (c.getIssuerDN().getName().contains("EC de Assinatura Digital"))
+                        if (e.getCertificate().getIssuerDN().getName().contains("EC de Assinatura Digital"))
                         {
-                            return c;
+                            return e;
                         }
                     }
 

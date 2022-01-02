@@ -46,33 +46,33 @@ public class FileSystemKeyStoreKeyingDataProviderTest
     @Parameterized.Parameters
     public static Collection<Object[]> data() throws Exception {
         Security.addProvider(new BouncyCastleProvider());
-        FileSystemKeyStoreKeyingDataProvider  keyingProviderPksc12 = new FileSystemKeyStoreKeyingDataProvider(
+        FileSystemKeyStoreKeyingDataProvider  keyingProviderPkcs12 = new FileSystemKeyStoreKeyingDataProvider(
                 "pkcs12",
                 SignatureServicesTestBase.toPlatformSpecificCertDirFilePath("my/LG.pfx"),
-                new FirstCertificateSelector(),
+                KeyStoreKeyingDataProvider.SigningCertificateSelector.single(),
                 new DirectPasswordProvider("mykeypass"),
                 new DirectPasswordProvider("mykeypass"), true);
         FileSystemKeyStoreKeyingDataProvider  keyingProviderJks = new FileSystemKeyStoreKeyingDataProvider(
                 "JKS",
                 SignatureServicesTestBase.toPlatformSpecificCertDirFilePath("my/LG.jks"),
-                new FirstCertificateSelector(),
+                KeyStoreKeyingDataProvider.SigningCertificateSelector.single(),
                 new DirectPasswordProvider("mykeypass"),
                 new DirectPasswordProvider("mykeypass"), true);
-        FileSystemKeyStoreKeyingDataProvider  keyingProviderPksc12BC = new FileSystemKeyStoreKeyingDataProvider(
+        FileSystemKeyStoreKeyingDataProvider  keyingProviderPkcs12BC = new FileSystemKeyStoreKeyingDataProvider(
                 "pkcs12",
                 SignatureServicesTestBase.toPlatformSpecificCertDirFilePath("my/LG.pfx"),
-                new FirstCertificateSelector(),
+                KeyStoreKeyingDataProvider.SigningCertificateSelector.single(),
                 new DirectPasswordProvider("mykeypass"),
                 new DirectPasswordProvider("mykeypass"), true,new BouncyCastleProvider());
-        CertificateFactory cf = CertificateFactory.getInstance("X.509");
 
+        CertificateFactory cf = CertificateFactory.getInstance("X.509");
         X509Certificate signCert = (X509Certificate)cf.generateCertificate(
                 new FileInputStream(SignatureServicesTestBase.toPlatformSpecificCertDirFilePath("my/LG.cer")));
-        ArrayList<Object[]> result = new ArrayList<Object[]>();
-        result.add(new Object[]{keyingProviderPksc12,signCert});
 
+        ArrayList<Object[]> result = new ArrayList<Object[]>();
+        result.add(new Object[]{keyingProviderPkcs12,signCert});
         //TODO test will break, need find out why
-        //result.add(new Object[]{keyingProviderPksc12BC,signCert});
+        //result.add(new Object[]{keyingProviderPkcs12BC,signCert});
         result.add(new Object[]{keyingProviderJks,signCert});
         return result;
     }

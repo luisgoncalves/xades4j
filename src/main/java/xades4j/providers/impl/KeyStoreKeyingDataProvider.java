@@ -17,6 +17,7 @@
 package xades4j.providers.impl;
 
 import xades4j.providers.*;
+
 import java.io.IOException;
 import java.security.GeneralSecurityException;
 import java.security.KeyStore;
@@ -36,6 +37,7 @@ import javax.security.auth.callback.Callback;
 import javax.security.auth.callback.CallbackHandler;
 import javax.security.auth.callback.PasswordCallback;
 import javax.security.auth.callback.UnsupportedCallbackException;
+
 import xades4j.verification.UnexpectedJCAException;
 
 /**
@@ -57,9 +59,9 @@ import xades4j.verification.UnexpectedJCAException;
  *  <li>Return the entry's private key</li>
  * </ol>
  *
+ * @author Luís
  * @see FileSystemKeyStoreKeyingDataProvider
  * @see PKCS11KeyStoreKeyingDataProvider
- * @author Luís
  */
 public abstract class KeyStoreKeyingDataProvider implements KeyingDataProvider
 {
@@ -76,17 +78,55 @@ public abstract class KeyStoreKeyingDataProvider implements KeyingDataProvider
      */
     public interface KeyEntryPasswordProvider
     {
-        char[] getPassword(String entryAlias, X509Certificate entryCert);
+        char[] getPassword(String alias, X509Certificate certificate);
     }
 
     /**
      * Used to select a certificate from the available certificates. All the
      * X509Certificates in private key entries are passed.
      */
-    public interface SigningCertSelector
+    public interface SigningCertificateSelector
     {
-        X509Certificate selectCertificate(
-                List<X509Certificate> availableCertificates);
+        public class Entry
+        {
+            private final String alias;
+            private final X509Certificate certificate;
+
+            private Entry(String alias, X509Certificate certificate)
+            {
+                this.alias = alias;
+                this.certificate = certificate;
+            }
+
+            public String getAlias()
+            {
+                return alias;
+            }
+
+            public X509Certificate getCertificate()
+            {
+                return certificate;
+            }
+        }
+
+        Entry selectCertificate(List<Entry> availableCertificates);
+
+        /**
+         * Creates a certificate selector that returns the only certificate available in the key store.
+         * If the key store contains more than one private key entry, an exception is thrown.
+         *
+         * @return the certificate selector
+         */
+        static SigningCertificateSelector single()
+        {
+            return availableCertificates -> {
+                if (availableCertificates.size() != 1)
+                {
+                    throw new IllegalStateException("Key store has more than one private key entry");
+                }
+                return availableCertificates.get(0);
+            };
+        }
     }
     /**/
 
@@ -104,9 +144,9 @@ public abstract class KeyStoreKeyingDataProvider implements KeyingDataProvider
     }
     /**/
     /**/
-    
+
     private final KeyStoreBuilderCreator builderCreator;
-    private final SigningCertSelector certificateSelector;
+    private final SigningCertificateSelector certificateSelector;
     private final KeyStorePasswordProvider storePasswordProvider;
     private final KeyEntryPasswordProvider entryPasswordProvider;
     private final boolean returnFullChain;
@@ -116,16 +156,15 @@ public abstract class KeyStoreKeyingDataProvider implements KeyingDataProvider
     private boolean initialized;
 
     /**
-     *
      * @param builderCreator
      * @param certificateSelector
      * @param storePasswordProvider
      * @param entryPasswordProvider
-     * @param returnFullChain return the full certificate chain, if available
+     * @param returnFullChain       return the full certificate chain, if available
      */
     protected KeyStoreKeyingDataProvider(
             KeyStoreBuilderCreator builderCreator,
-            SigningCertSelector certificateSelector,
+            SigningCertificateSelector certificateSelector,
             KeyStorePasswordProvider storePasswordProvider,
             KeyEntryPasswordProvider entryPasswordProvider,
             boolean returnFullChain)
@@ -142,7 +181,7 @@ public abstract class KeyStoreKeyingDataProvider implements KeyingDataProvider
 
     private void ensureInitialized() throws UnexpectedJCAException
     {
-        synchronized(this.lockObj)
+        synchronized (this.lockObj)
         {
             if (!this.initialized)
             {
@@ -150,20 +189,23 @@ public abstract class KeyStoreKeyingDataProvider implements KeyingDataProvider
                 {
                     KeyStore.CallbackHandlerProtection storeLoadProtec = null;
                     if (storePasswordProvider != null)
-                        // Create the load protection with callback.
+                    // Create the load protection with callback.
+                    {
                         storeLoadProtec = new KeyStore.CallbackHandlerProtection(new CallbackHandler()
                         {
                             @Override
                             public void handle(Callback[] callbacks) throws IOException, UnsupportedCallbackException
                             {
-                                PasswordCallback c = (PasswordCallback)callbacks[0];
+                                PasswordCallback c = (PasswordCallback) callbacks[0];
                                 c.setPassword(storePasswordProvider.getPassword());
                             }
                         });
+                    }
                     else
-                        // If no load password provider is supplied is because it shouldn't
-                        // be needed. Create a dummy protection because the keystore
-                        // builder needs it to be non-null.
+                    // If no load password provider is supplied is because it shouldn't
+                    // be needed. Create a dummy protection because the keystore
+                    // builder needs it to be non-null.
+                    {
                         storeLoadProtec = new KeyStore.CallbackHandlerProtection(new CallbackHandler()
                         {
                             @Override
@@ -172,6 +214,7 @@ public abstract class KeyStoreKeyingDataProvider implements KeyingDataProvider
                                 throw new UnsupportedOperationException("No KeyStorePasswordProvider");
                             }
                         });
+                    }
                     this.keyStore = builderCreator.getBuilder(storeLoadProtec).getKeyStore();
                 }
                 catch (KeyStoreException ex)
@@ -189,41 +232,46 @@ public abstract class KeyStoreKeyingDataProvider implements KeyingDataProvider
         ensureInitialized();
         try
         {
-            List<X509Certificate> availableSignCerts = new ArrayList<X509Certificate>(keyStore.size());
+            List<SigningCertificateSelector.Entry> availableSignCerts = new ArrayList<SigningCertificateSelector.Entry>(keyStore.size());
 
-            for (Enumeration<String> aliases = keyStore.aliases(); aliases.hasMoreElements();)
+            for (Enumeration<String> aliases = keyStore.aliases(); aliases.hasMoreElements(); )
             {
                 String alias = aliases.nextElement();
                 if (keyStore.entryInstanceOf(alias, KeyStore.PrivateKeyEntry.class))
                 {
                     Certificate cer = keyStore.getCertificate(alias);
                     if (cer instanceof X509Certificate)
-                        availableSignCerts.add((X509Certificate)cer);
+                    {
+                        availableSignCerts.add(new SigningCertificateSelector.Entry(alias, (X509Certificate) cer));
+                    }
                 }
             }
 
             if (availableSignCerts.isEmpty())
+            {
                 throw new SigningCertChainException("No certificates available in the key store");
+            }
 
-            // Select the signing certificate from the available certificates.
-            X509Certificate signingCert = this.certificateSelector.selectCertificate(availableSignCerts);
+            var selectedCertificate = this.certificateSelector.selectCertificate(availableSignCerts);
 
-            String signingCertAlias = this.keyStore.getCertificateAlias(signingCert);
-            if (null == signingCertAlias)
-                throw new SigningCertChainException("Selected certificate not present in the key store");
-
-            Certificate[] signingCertChain = this.keyStore.getCertificateChain(signingCertAlias);
+            Certificate[] signingCertChain = this.keyStore.getCertificateChain(selectedCertificate.getAlias());
             if (null == signingCertChain)
+            {
                 throw new SigningCertChainException("Selected certificate doesn't match a key and corresponding certificate chain");
+            }
 
             if (this.returnFullChain)
             {
                 List lChain = Arrays.asList(signingCertChain);
                 return Collections.checkedList(lChain, X509Certificate.class);
-            } else
-                return Collections.singletonList((X509Certificate)signingCertChain[0]);
+            }
+            else
+            {
+                return Collections.singletonList((X509Certificate) signingCertChain[0]);
+            }
 
-        } catch (KeyStoreException ex)
+        }
+        catch (KeyStoreException ex)
         {
             // keyStore.getCertificateAlias, keyStore.getCertificateChain -> if the
             // keystore is not loaded.
@@ -242,7 +290,7 @@ public abstract class KeyStoreKeyingDataProvider implements KeyingDataProvider
             // that an entry will always be present. Also, this entry is always
             // a PrivateKeyEntry.
             String entryAlias = this.keyStore.getCertificateAlias(signingCert);
-            KeyStore.PrivateKeyEntry entry = (KeyStore.PrivateKeyEntry)this.keyStore.getEntry(
+            KeyStore.PrivateKeyEntry entry = (KeyStore.PrivateKeyEntry) this.keyStore.getEntry(
                     entryAlias,
                     getKeyProtection(entryAlias, signingCert, this.entryPasswordProvider));
             return entry.getPrivateKey();
@@ -262,10 +310,11 @@ public abstract class KeyStoreKeyingDataProvider implements KeyingDataProvider
 
     /**
      * Gets a protection parameter to access the specified entry.
-     * @param entryAlias the alias of the entry that is being accessed
-     * @param entryCert the cerificate in the entry
+     *
+     * @param entryAlias            the alias of the entry that is being accessed
+     * @param entryCert             the cerificate in the entry
      * @param entryPasswordProvider the password provider that should be used to
-     *      get the actual password (may be {@code null})
+     *                              get the actual password (may be {@code null})
      * @return the protection
      */
     protected abstract KeyStore.ProtectionParameter getKeyProtection(

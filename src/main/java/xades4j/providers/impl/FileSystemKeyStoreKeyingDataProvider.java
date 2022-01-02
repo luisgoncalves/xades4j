@@ -45,7 +45,7 @@ public class FileSystemKeyStoreKeyingDataProvider extends KeyStoreKeyingDataProv
     public FileSystemKeyStoreKeyingDataProvider(
             final String keyStoreType,
             final String keyStorePath,
-            SigningCertSelector certificateSelector,
+            SigningCertificateSelector certificateSelector,
             KeyStorePasswordProvider keyStorePasswordProvider,
             KeyEntryPasswordProvider entryPasswordProvider,
             boolean returnFullChain) throws KeyStoreException
@@ -67,7 +67,7 @@ public class FileSystemKeyStoreKeyingDataProvider extends KeyStoreKeyingDataProv
     public FileSystemKeyStoreKeyingDataProvider(
             final String keyStoreType,
             final String keyStorePath,
-            SigningCertSelector certificateSelector,
+            SigningCertificateSelector certificateSelector,
             KeyStorePasswordProvider keyStorePasswordProvider,
             KeyEntryPasswordProvider entryPasswordProvider,
             boolean returnFullChain,
