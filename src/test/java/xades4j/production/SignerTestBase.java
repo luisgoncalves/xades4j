@@ -24,8 +24,8 @@ import static org.junit.Assume.assumeTrue;
 import org.w3c.dom.Document;
 import xades4j.providers.impl.DirectPasswordProvider;
 import xades4j.providers.impl.FileSystemKeyStoreKeyingDataProvider;
-import xades4j.providers.impl.FirstCertificateSelector;
 import xades4j.providers.KeyingDataProvider;
+import xades4j.providers.impl.KeyStoreKeyingDataProvider;
 import xades4j.providers.impl.PKCS11KeyStoreKeyingDataProvider;
 import xades4j.utils.SignatureServicesTestBase;
 
@@ -74,7 +74,7 @@ public class SignerTestBase extends SignatureServicesTestBase
     {
         keyStorePath = toPlatformSpecificCertDirFilePath(keyStorePath);
         return new FileSystemKeyStoreKeyingDataProvider(keyStoreType, keyStorePath,
-                new FirstCertificateSelector(),
+                KeyStoreKeyingDataProvider.SigningCertificateSelector.single(),
                 new DirectPasswordProvider(keyStorePwd),
                 new DirectPasswordProvider(keyStorePwd), returnFullChain);
     }

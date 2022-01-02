@@ -47,7 +47,7 @@ public class PKCS11KeyStoreKeyingDataProviderTest extends SignerTestBase
         assumePtCcPkcs11();
 
         KeyingDataProvider ptccKeyingDataProv = new PKCS11KeyStoreKeyingDataProvider(
-                PTCC_PKCS11_LIB_PATH, "PT_CC", new FirstCertificateSelector());
+                PTCC_PKCS11_LIB_PATH, "PT_CC", KeyStoreKeyingDataProvider.SigningCertificateSelector.single());
 
         doTestWithJCA(ptccKeyingDataProv);
         doTestWithXades4j(ptccKeyingDataProv);

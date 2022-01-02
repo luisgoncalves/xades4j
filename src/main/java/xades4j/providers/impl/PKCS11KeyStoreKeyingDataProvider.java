@@ -67,7 +67,7 @@ public class PKCS11KeyStoreKeyingDataProvider extends KeyStoreKeyingDataProvider
     public PKCS11KeyStoreKeyingDataProvider(
             final String nativeLibraryPath,
             final String providerName,
-            SigningCertSelector certificateSelector,
+            SigningCertificateSelector certificateSelector,
             KeyStorePasswordProvider keyStorePasswordProvider,
             KeyEntryPasswordProvider entryPasswordProvider,
             boolean returnFullChain) throws KeyStoreException
@@ -95,7 +95,7 @@ public class PKCS11KeyStoreKeyingDataProvider extends KeyStoreKeyingDataProvider
             final String nativeLibraryPath,
             final String providerName,
             final Integer slotId,
-            SigningCertSelector certificateSelector,
+            SigningCertificateSelector certificateSelector,
             KeyStorePasswordProvider keyStorePasswordProvider,
             KeyEntryPasswordProvider entryPasswordProvider,
             boolean returnFullChain) throws KeyStoreException
@@ -159,7 +159,7 @@ public class PKCS11KeyStoreKeyingDataProvider extends KeyStoreKeyingDataProvider
             String nativeLibraryPath,
             String providerName,
             Integer slotId,
-            SigningCertSelector certificateSelector) throws KeyStoreException
+            SigningCertificateSelector certificateSelector) throws KeyStoreException
     {
         this(nativeLibraryPath, providerName, slotId, certificateSelector, null, null, false);
     }
@@ -176,7 +176,7 @@ public class PKCS11KeyStoreKeyingDataProvider extends KeyStoreKeyingDataProvider
     public PKCS11KeyStoreKeyingDataProvider(
             final String nativeLibraryPath,
             final String providerName,
-            SigningCertSelector certificateSelector) throws KeyStoreException
+            SigningCertificateSelector certificateSelector) throws KeyStoreException
     {
         this(nativeLibraryPath, providerName, null, certificateSelector);
     }

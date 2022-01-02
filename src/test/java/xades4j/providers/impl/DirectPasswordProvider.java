@@ -39,7 +39,7 @@ public class DirectPasswordProvider implements KeyStoreKeyingDataProvider.KeySto
     }
 
     @Override
-    public char[] getPassword(String entryAlias, X509Certificate entryCert)
+    public char[] getPassword(String alias, X509Certificate certificate)
     {
         return password;
     }
