@@ -16,24 +16,25 @@
  */
 package xades4j.providers.impl;
 
-import xades4j.production.XadesBesSigningProfile;
-import org.w3c.dom.Element;
-import xades4j.production.SignerTestBase;
+import org.junit.Test;
 import org.w3c.dom.Document;
+import org.w3c.dom.Element;
 import xades4j.production.Enveloped;
+import xades4j.production.SignerTestBase;
+import xades4j.production.XadesBesSigningProfile;
 import xades4j.production.XadesSigner;
+import xades4j.providers.KeyingDataProvider;
+import xades4j.utils.PtCcSigningCertificateSelector;
 
-import java.util.UUID;
-import java.security.Signature;
 import java.security.PrivateKey;
+import java.security.Signature;
 import java.security.cert.X509Certificate;
 import java.util.List;
+import java.util.UUID;
 
-import xades4j.providers.KeyingDataProvider;
-import org.junit.Test;
-
-import static org.junit.Assert.*;
-import static org.junit.Assume.assumeTrue;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertTrue;
 
 /**
  * @author Luís
@@ -46,8 +47,9 @@ public class PKCS11KeyStoreKeyingDataProviderTest extends SignerTestBase
         System.out.println("certAndKeyMatch");
         assumePtCcPkcs11();
 
-        KeyingDataProvider ptccKeyingDataProv = new PKCS11KeyStoreKeyingDataProvider(
-                PTCC_PKCS11_LIB_PATH, "PT_CC", KeyStoreKeyingDataProvider.SigningCertificateSelector.single());
+        KeyingDataProvider ptccKeyingDataProv = PKCS11KeyStoreKeyingDataProvider
+                .builder(PTCC_PKCS11_LIB_PATH, new PtCcSigningCertificateSelector())
+                .build();
 
         doTestWithJCA(ptccKeyingDataProv);
         doTestWithXades4j(ptccKeyingDataProv);

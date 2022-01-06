@@ -47,7 +47,7 @@ import xades4j.verification.UnexpectedJCAException;
  * The following procedure is done to get the signing certificate:
  * <ol>
  *  <li>Get all the X509Certificates in private key entries</li>
- *  <li>Invoke the supplied {@code SigningCertSelector} to choose the certificate and thus the entry</li>
+ *  <li>Invoke the supplied {@code SigningCertificateSelector} to choose the certificate and thus the entry</li>
  *  <li>Get the entry alias matching the selected certificate</li>
  *  <li>Get the certificate chain for that entry</li>
  * </ol>
