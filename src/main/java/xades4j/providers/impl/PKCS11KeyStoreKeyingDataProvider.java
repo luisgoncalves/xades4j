@@ -20,7 +20,6 @@ import xades4j.utils.FileUtils;
 
 import java.io.IOException;
 import java.security.KeyStore;
-import java.security.KeyStore.Builder;
 import java.security.KeyStore.ProtectionParameter;
 import java.security.KeyStoreException;
 import java.security.Provider;
@@ -33,86 +32,54 @@ import javax.security.auth.callback.PasswordCallback;
 import javax.security.auth.callback.UnsupportedCallbackException;
 
 /**
- * A specification of {@code KeyStoreKeyingDataProvider} for PKCS#11 keystores.
- * This class uses the SUN's PKCS#11 provider, which brigdes with the native PKCS#11
+ * A specification of {@link KeyStoreKeyingDataProvider} for PKCS#11 keystores.
+ * This class uses the SUN's PKCS#11 provider, which brigdes with a native PKCS#11
  * library. Note that this provider may not be included in some versions of the JRE,
  * On those scenarios this class will fail at runtime.
  * <p>
- * The {@code KeyStorePasswordProvider} and {@code KeyEntryPasswordProvider} may
- * be {@code null}. In that case the keystore protection has to be handled by the
- * native library. If the {@code KeyEntryPasswordProvider} is supplied, the protection
- * used to access an entry is a {@code CallbackHandlerProtection} that invokes the
- * {@code KeyEntryPasswordProvider} exactly when when the password is requested.
+ * The {@link PKCS11KeyStoreKeyingDataProvider#builder(String, SigningCertificateSelector) builder} method can be used
+ * to configure and create a new instance. If a name for the underlying PKCS#11 provider is not specified, a default
+ * value is used which is based on the native library path. Duplicate names will cause an exception.
+ * <p>
+ * The {@link KeyStorePasswordProvider} and {@link KeyEntryPasswordProvider} may be {@code null}, in which case the
+ * keystore protection has to be handled by the native library. If the {@link KeyEntryPasswordProvider} is supplied,
+ * the protection used to access an entry is a {@link KeyStore.CallbackHandlerProtection} that invokes the
+ * {@link KeyEntryPasswordProvider} exactly when when the password is requested.
  *
  * @author Luís
  * @see xades4j.providers.impl.KeyStoreKeyingDataProvider
  */
-public class PKCS11KeyStoreKeyingDataProvider extends KeyStoreKeyingDataProvider
+public final class PKCS11KeyStoreKeyingDataProvider extends KeyStoreKeyingDataProvider
 {
     private static String SUN_PKCS11_PROVIDER = "SunPKCS11";
 
     /**
-     * The provider name is used as a key to search for installed providers. If a
-     * provider exists with the same name, it will be used even if it relies on a
-     * different native library.
+     * Create a builder to configure a new {@link PKCS11KeyStoreKeyingDataProvider}.
      *
-     * @param nativeLibraryPath        the path for the native library of the specific PKCS#11 provider
-     * @param providerName             this string is concatenated with the prefix SunPKCS11- to produce this provider instance's name
-     * @param certificateSelector      the selector of signing certificate
-     * @param keyStorePasswordProvider the provider of the keystore loading password (may be {@code null})
-     * @param entryPasswordProvider    the provider of entry passwords (may be {@code null})
-     * @param returnFullChain          indicates if the full certificate chain should be returned, if available
-     * @throws KeyStoreException
+     * @param nativeLibraryPath   path for the native library of the specific PKCS#11 provider
+     * @param certificateSelector selector of the signing certificate
+     * @return the builder
      */
-    public PKCS11KeyStoreKeyingDataProvider(
-            final String nativeLibraryPath,
-            final String providerName,
-            SigningCertificateSelector certificateSelector,
-            KeyStorePasswordProvider keyStorePasswordProvider,
-            KeyEntryPasswordProvider entryPasswordProvider,
-            boolean returnFullChain) throws KeyStoreException
+    public static Builder builder(String nativeLibraryPath, SigningCertificateSelector certificateSelector)
     {
-        this(nativeLibraryPath, providerName, null,
-                certificateSelector, keyStorePasswordProvider, entryPasswordProvider,
-                returnFullChain);
+        return new Builder(nativeLibraryPath, certificateSelector);
     }
 
-    /**
-     * The provider name is used as a key to search for installed providers. If a
-     * provider exists with the same name, it will be used even if it relies on a
-     * different native library.
-     *
-     * @param nativeLibraryPath        the path for the native library of the specific PKCS#11 provider
-     * @param providerName             this string is concatenated with the prefix SunPKCS11- to produce this provider instance's name
-     * @param slotId                   the id of the slot that this provider instance is to be associated with (can be {@code null})
-     * @param certificateSelector      the selector of signing certificate
-     * @param keyStorePasswordProvider the provider of the keystore loading password (can be {@code null})
-     * @param entryPasswordProvider    the provider of entry passwords (may be {@code null})
-     * @param returnFullChain          indicates if the full certificate chain should be returned, if available
-     * @throws KeyStoreException
-     */
-    public PKCS11KeyStoreKeyingDataProvider(
-            final String nativeLibraryPath,
-            final String providerName,
-            final Integer slotId,
-            SigningCertificateSelector certificateSelector,
-            KeyStorePasswordProvider keyStorePasswordProvider,
-            KeyEntryPasswordProvider entryPasswordProvider,
-            boolean returnFullChain) throws KeyStoreException
+    private PKCS11KeyStoreKeyingDataProvider(Builder builder)
     {
         super(new KeyStoreBuilderCreator()
         {
             @Override
-            public Builder getBuilder(ProtectionParameter loadProtection)
+            public KeyStore.Builder getBuilder(ProtectionParameter loadProtection)
             {
-                Provider provider = createProvider(serializeConfiguration(providerName, nativeLibraryPath, slotId));
+                Provider provider = createProvider(serializeConfiguration(builder.providerName, builder.nativeLibraryPath, builder.slotId));
                 if (Security.addProvider(provider) == -1)
                 {
                     throw new ProviderException("PKCS11 provider already installed");
                 }
                 return KeyStore.Builder.newInstance("PKCS11", provider, loadProtection);
             }
-        }, certificateSelector, keyStorePasswordProvider, entryPasswordProvider, returnFullChain);
+        }, builder.certificateSelector, builder.storePasswordProvider, builder.entryPasswordProvider, builder.fullChain);
     }
 
     private static String serializeConfiguration(String name, String nativeLibraryPath, Integer slotId)
@@ -145,44 +112,8 @@ public class PKCS11KeyStoreKeyingDataProvider extends KeyStoreKeyingDataProvider
         }
     }
 
-    /**
-     * Shortcut constructor using {@code null} for the password providers and slot
-     * and {@code false} for the {@code returnFullChain} parameter.
-     *
-     * @param nativeLibraryPath
-     * @param providerName
-     * @param slotId
-     * @param certificateSelector
-     * @throws KeyStoreException
-     */
-    public PKCS11KeyStoreKeyingDataProvider(
-            String nativeLibraryPath,
-            String providerName,
-            Integer slotId,
-            SigningCertificateSelector certificateSelector) throws KeyStoreException
-    {
-        this(nativeLibraryPath, providerName, slotId, certificateSelector, null, null, false);
-    }
-
-    /**
-     * Shortcut constructor using {@code null} for the password providers and slot,
-     * and {@code false} for the {@code returnFullChain} parameter.
-     *
-     * @param nativeLibraryPath
-     * @param providerName
-     * @param certificateSelector
-     * @throws KeyStoreException
-     */
-    public PKCS11KeyStoreKeyingDataProvider(
-            final String nativeLibraryPath,
-            final String providerName,
-            SigningCertificateSelector certificateSelector) throws KeyStoreException
-    {
-        this(nativeLibraryPath, providerName, null, certificateSelector);
-    }
-
     @Override
-    protected final KeyStore.ProtectionParameter getKeyProtection(
+    protected KeyStore.ProtectionParameter getKeyProtection(
             final String entryAlias,
             final X509Certificate entryCert,
             final KeyEntryPasswordProvider entryPasswordProvider)
@@ -202,6 +133,96 @@ public class PKCS11KeyStoreKeyingDataProvider extends KeyStoreKeyingDataProvider
                 c.setPassword(entryPasswordProvider.getPassword(entryAlias, entryCert));
             }
         });
+    }
+
+    public static final class Builder
+    {
+        private final String nativeLibraryPath;
+        private final SigningCertificateSelector certificateSelector;
+        private String providerName;
+        private boolean fullChain;
+        private Integer slotId;
+        private KeyStorePasswordProvider storePasswordProvider;
+        private KeyEntryPasswordProvider entryPasswordProvider;
+
+        private Builder(String nativeLibraryPath, SigningCertificateSelector certificateSelector)
+        {
+            this.nativeLibraryPath = nativeLibraryPath;
+            this.certificateSelector = certificateSelector;
+            this.providerName = "xades4j-" + nativeLibraryPath;
+            this.fullChain = false;
+        }
+
+        /**
+         * Create a new {@link PKCS11KeyStoreKeyingDataProvider} based on the current configuration.
+         *
+         * @return the provider
+         */
+        public PKCS11KeyStoreKeyingDataProvider build()
+        {
+            return new PKCS11KeyStoreKeyingDataProvider(this);
+        }
+
+        /**
+         * Sets the underlying PKCS#11 provider name. If the name is already in use, an exception is thrown.
+         *
+         * @param providerName the provider name
+         * @return the current instance
+         */
+        public Builder providerName(String providerName)
+        {
+            this.providerName = providerName;
+            return this;
+        }
+
+        /**
+         * Sets the id of the slot that this provider instance is to be associated with.
+         *
+         * @param slotId the slot ID
+         * @return the current instance
+         */
+        public Builder slot(int slotId)
+        {
+            this.slotId = slotId;
+            return this;
+        }
+
+        /**
+         * Sets the provider of the keystore loading password.
+         *
+         * @param storePasswordProvider keystore password provider
+         * @return the current instance
+         */
+        public Builder keyStorePassword(KeyStorePasswordProvider storePasswordProvider)
+        {
+            this.storePasswordProvider = storePasswordProvider;
+            return this;
+
+        }
+
+        /**
+         * Sets the provider of entry passwords
+         *
+         * @param entryPasswordProvider entry password provider
+         * @return the current instance
+         */
+        public Builder keyEntryPassword(KeyEntryPasswordProvider entryPasswordProvider)
+        {
+            this.entryPasswordProvider = entryPasswordProvider;
+            return this;
+        }
+
+        /**
+         * Sets whether the full certificate chain should be returned, if available.
+         *
+         * @param fullChain {@code true} to return the full certificate chain, false otherwise
+         * @return the current instance
+         */
+        public Builder fullChain(boolean fullChain)
+        {
+            this.fullChain = fullChain;
+            return this;
+        }
     }
 
     public static boolean isProviderAvailable()

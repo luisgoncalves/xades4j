@@ -6,6 +6,7 @@ import org.w3c.dom.Element;
 import xades4j.providers.impl.DirectPasswordProvider;
 import xades4j.providers.impl.KeyStoreKeyingDataProvider;
 import xades4j.providers.impl.PKCS11KeyStoreKeyingDataProvider;
+import xades4j.utils.PtCcSigningCertificateSelector;
 
 import java.security.KeyStore;
 import java.security.cert.X509Certificate;
@@ -22,9 +23,9 @@ public class PtCcSignerTests extends SignerTestBase
         Document doc = getTestDocument();
         Element elemToSign = doc.getDocumentElement();
 
-        PKCS11KeyStoreKeyingDataProvider ptccKeyingDataProv = new PKCS11KeyStoreKeyingDataProvider(
-                PTCC_PKCS11_LIB_PATH, "PT_CC",
-                KeyStoreKeyingDataProvider.SigningCertificateSelector.single(), null, null, false);
+        PKCS11KeyStoreKeyingDataProvider ptccKeyingDataProv = PKCS11KeyStoreKeyingDataProvider
+                .builder(PTCC_PKCS11_LIB_PATH, new PtCcSigningCertificateSelector())
+                .build();
 
         XadesSigner signer = new XadesTSigningProfile(ptccKeyingDataProv).newSigner();
         new Enveloped(signer).sign(elemToSign);
