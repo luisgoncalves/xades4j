@@ -18,77 +18,54 @@ package xades4j.providers.impl;
 
 import java.io.File;
 import java.security.KeyStore;
-import java.security.KeyStore.Builder;
 import java.security.KeyStore.ProtectionParameter;
-import java.security.KeyStoreException;
 import java.security.Provider;
 import java.security.cert.X509Certificate;
 
 /**
- * A specification of {@code KeyStoreKeyingDataProvider} for file-system keystores.
- * The protection parameter to access the entry is a {@code PasswordProtection}
- * with a password obtained directly from the {@code KeyStorePasswordProvider}.
- * @see xades4j.providers.impl.KeyStoreKeyingDataProvider
+ * A specification of {@link KeyStoreKeyingDataProvider} for file-system keystores.
+ * The protection parameter to access the entry is a {@link KeyStore.PasswordProtection}
+ * with a password obtained directly from the {@link KeyStorePasswordProvider}.
+ * <p>
+ * The {@link FileSystemKeyStoreKeyingDataProvider#builder(String, String, SigningCertificateSelector)}  builder} method
+ * can be used to configure and create a new instance.
+ *
  * @author Luís
+ * @see xades4j.providers.impl.KeyStoreKeyingDataProvider
  */
-public class FileSystemKeyStoreKeyingDataProvider extends KeyStoreKeyingDataProvider
+public final class FileSystemKeyStoreKeyingDataProvider extends KeyStoreKeyingDataProvider
 {
     /**
-     * @param keyStoreType the type of the keystore (jks, pkcs12, etc)
-     * @param keyStorePath the file-system path of the keystore
+     * Create a builder to configure a new {@link FileSystemKeyStoreKeyingDataProvider}.
+     *
+     * @param keyStoreType        the type of the keystore (jks, pkcs12, etc)
+     * @param keyStorePath        the file-system path of the keystore
      * @param certificateSelector the selector of signing certificate
-     * @param keyStorePasswordProvider the provider of the keystore loading password
-     * @param entryPasswordProvider the provider of entry passwords
-     * @param returnFullChain indicates of the full certificate chain should be returned, if available
-     * @throws KeyStoreException
+     * @return the builder
      */
-    public FileSystemKeyStoreKeyingDataProvider(
-            final String keyStoreType,
-            final String keyStorePath,
-            SigningCertificateSelector certificateSelector,
-            KeyStorePasswordProvider keyStorePasswordProvider,
-            KeyEntryPasswordProvider entryPasswordProvider,
-            boolean returnFullChain) throws KeyStoreException
+    public static Builder builder(String keyStoreType, String keyStorePath, SigningCertificateSelector certificateSelector)
     {
-       this(keyStoreType,keyStorePath,certificateSelector,keyStorePasswordProvider,entryPasswordProvider,returnFullChain,null);
+        return new Builder(keyStoreType, keyStorePath, certificateSelector);
     }
 
-    /**
-     *
-     * @param keyStoreType the type of the keystore (jks, pkcs12, etc)
-     * @param keyStorePath the file-system path of the keystore
-     * @param certificateSelector the selector of signing certificate
-     * @param keyStorePasswordProvider the provider of the keystore loading password
-     * @param entryPasswordProvider the provider of entry passwords
-     * @param returnFullChain indicates of the full certificate chain should be returned, if available
-     * @param provider provider for parsing this store type, if it is passed <i>null</i> will be used default provider
-     * @throws KeyStoreException
-     */
-    public FileSystemKeyStoreKeyingDataProvider(
-            final String keyStoreType,
-            final String keyStorePath,
-            SigningCertificateSelector certificateSelector,
-            KeyStorePasswordProvider keyStorePasswordProvider,
-            KeyEntryPasswordProvider entryPasswordProvider,
-            boolean returnFullChain,
-            final Provider provider) throws KeyStoreException
+    private FileSystemKeyStoreKeyingDataProvider(Builder builder)
     {
         super(new KeyStoreBuilderCreator()
               {
                   @Override
-                  public Builder getBuilder(ProtectionParameter loadProtection)
+                  public KeyStore.Builder getBuilder(ProtectionParameter loadProtection)
                   {
                       return KeyStore.Builder.newInstance(
-                              keyStoreType,
-                              provider,
-                              new File(keyStorePath),
+                              builder.keyStoreType,
+                              builder.provider,
+                              new File(builder.keyStorePath),
                               loadProtection);
                   }
               },
-                certificateSelector,
-                keyStorePasswordProvider,
-                entryPasswordProvider,
-                returnFullChain);
+                builder.certificateSelector,
+                builder.storePasswordProvider,
+                builder.entryPasswordProvider,
+                builder.fullChain);
     }
 
     @Override
@@ -97,6 +74,88 @@ public class FileSystemKeyStoreKeyingDataProvider extends KeyStoreKeyingDataProv
             X509Certificate entryCert,
             KeyEntryPasswordProvider entryPasswordProvider)
     {
+        if (null == entryPasswordProvider)
+        {
+            return null;
+        }
+
         return new KeyStore.PasswordProtection(entryPasswordProvider.getPassword(entryAlias, entryCert));
+    }
+
+    public static final class Builder
+    {
+        private final String keyStoreType;
+        private final String keyStorePath;
+        private final SigningCertificateSelector certificateSelector;
+        private KeyStorePasswordProvider storePasswordProvider;
+        private KeyEntryPasswordProvider entryPasswordProvider;
+        private boolean fullChain;
+        private Provider provider;
+
+        private Builder(String keyStoreType, String keyStorePath, SigningCertificateSelector certificateSelector)
+        {
+            this.keyStoreType = keyStoreType;
+            this.keyStorePath = keyStorePath;
+            this.certificateSelector = certificateSelector;
+            this.fullChain = false;
+        }
+
+        /**
+         * Create a new {@link PKCS11KeyStoreKeyingDataProvider} based on the current configuration.
+         *
+         * @return the provider
+         */
+        public FileSystemKeyStoreKeyingDataProvider build()
+        {
+            return new FileSystemKeyStoreKeyingDataProvider(this);
+        }
+
+        /**
+         * Sets the provider of the keystore loading password.
+         *
+         * @param storePasswordProvider keystore password provider
+         * @return the current instance
+         */
+        public Builder storePassword(KeyStorePasswordProvider storePasswordProvider)
+        {
+            this.storePasswordProvider = storePasswordProvider;
+            return this;
+        }
+
+        /**
+         * Sets the provider of entry passwords
+         *
+         * @param entryPasswordProvider entry password provider
+         * @return the current instance
+         */
+        public Builder entryPassword(KeyEntryPasswordProvider entryPasswordProvider)
+        {
+            this.entryPasswordProvider = entryPasswordProvider;
+            return this;
+        }
+
+        /**
+         * Sets whether the full certificate chain should be returned, if available.
+         *
+         * @param fullChain {@code true} to return the full certificate chain, false otherwise
+         * @return the current instance
+         */
+        public Builder fullChain(boolean fullChain)
+        {
+            this.fullChain = fullChain;
+            return this;
+        }
+
+        /**
+         * Sets the provider from which the KeyStore is to be instantiated.
+         *
+         * @param provider the provider
+         * @return the current instance
+         */
+        public Builder provider(Provider provider)
+        {
+            this.provider = provider;
+            return this;
+        }
     }
 }

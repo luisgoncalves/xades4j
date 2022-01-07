@@ -193,7 +193,7 @@ public final class PKCS11KeyStoreKeyingDataProvider extends KeyStoreKeyingDataPr
          * @param storePasswordProvider keystore password provider
          * @return the current instance
          */
-        public Builder keyStorePassword(KeyStorePasswordProvider storePasswordProvider)
+        public Builder storePassword(KeyStorePasswordProvider storePasswordProvider)
         {
             this.storePasswordProvider = storePasswordProvider;
             return this;
@@ -206,7 +206,7 @@ public final class PKCS11KeyStoreKeyingDataProvider extends KeyStoreKeyingDataPr
          * @param entryPasswordProvider entry password provider
          * @return the current instance
          */
-        public Builder keyEntryPassword(KeyEntryPasswordProvider entryPasswordProvider)
+        public Builder entryPassword(KeyEntryPasswordProvider entryPasswordProvider)
         {
             this.entryPasswordProvider = entryPasswordProvider;
             return this;
