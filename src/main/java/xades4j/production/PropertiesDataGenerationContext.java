@@ -17,11 +17,13 @@
 package xades4j.production;
 
 import xades4j.properties.DataObjectDesc;
+
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
+
 import org.apache.xml.security.exceptions.XMLSecurityException;
 import org.apache.xml.security.signature.Reference;
 import org.apache.xml.security.signature.SignedInfo;
@@ -35,13 +37,12 @@ import xades4j.utils.DOMHelper;
  * Context used during the generation of the properties low-level data (property
  * data objects). Contains informations about the algorithms in use and the resources
  * being signed.
- * 
- * @see PropertiesDataObjectsGenerator
+ *
  * @author Luís
+ * @see PropertiesDataObjectsGenerator
  */
-public class PropertiesDataGenerationContext
+public final class PropertiesDataGenerationContext
 {
-
     private final List<Reference> references;
     private final Map<DataObjectDesc, Reference> referencesMappings;
     private final Document sigDocument;
@@ -50,6 +51,7 @@ public class PropertiesDataGenerationContext
     /**
      * A simple constructor to be used when only unsigned signature properties
      * will be processed.
+     *
      * @param targetXmlSignature the target signature
      * @param algorithmsProvider algorithms in use
      */
@@ -66,7 +68,8 @@ public class PropertiesDataGenerationContext
             try
             {
                 refs.add(signedInfo.item(i));
-            } catch (XMLSecurityException ex)
+            }
+            catch (XMLSecurityException ex)
             {
                 throw new XAdES4jXMLSigException(String.format("Cannot process the %dth reference", i), ex);
             }
@@ -101,6 +104,7 @@ public class PropertiesDataGenerationContext
      * Gets all the {@code Reference}s present in the signature that is being
      * created, except the signed properties reference, in order of appearence
      * within {@code SignedInfo}.
+     *
      * @return the unmodifiable list of {@code Reference}s
      */
     public List<Reference> getReferences()
@@ -109,23 +113,22 @@ public class PropertiesDataGenerationContext
     }
 
     /**
-     * Gets the mappings from high-level {@code DataObjectDesc}s to {@code Reference}s.
-     * This should be used when a data object property needs any information from
-     * the {@code Reference} that corresponds to the data object.
-     * @return the unmodifiable mapping
+     * Gets the {@code Reference} that corresponds to a given high-level {@code DataObjectDesc}.
+     *
+     * @param dataObject the signed data object
+     * @return the reference
      */
-    public Map<DataObjectDesc, Reference> getReferencesMappings()
+    public Reference getReference(DataObjectDesc dataObject)
     {
-        return referencesMappings;
+        return referencesMappings.get(dataObject);
     }
 
-    /**
-     * Gets the XML Signature that is being created. This is only available when
-     * generating unisgned properties data objects.
-     * @return the target signature or {@code null} if not yet available
-     */
-    public XMLSignature getTargetXmlSignature()
+    XMLSignature getTargetXmlSignature()
     {
+        if (this.targetXmlSignature == null)
+        {
+            throw new IllegalStateException("Target XMLSignature not set");
+        }
         return targetXmlSignature;
     }
 
@@ -133,20 +136,16 @@ public class PropertiesDataGenerationContext
     {
         if (this.targetXmlSignature != null)
         {
-            throw new IllegalStateException("TargetXMLSignature already set");
+            throw new IllegalStateException("Target XMLSignature already set");
         }
         this.targetXmlSignature = targetXmlSignature;
-    }
-
-    Document getSignatureDocument()
-    {
-        return this.sigDocument;
     }
 
     /**
      * Creates a DOM {@code Element} in the signature's document. This can be useful
      * when generating {@link xades4j.properties.data.GenericDOMData} data objects.
-     * @param name the local name of the element
+     *
+     * @param name      the local name of the element
      * @param namespace the namespace where the element will be created
      * @return the created element
      */
