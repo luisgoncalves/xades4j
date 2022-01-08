@@ -22,8 +22,8 @@ import java.util.Date;
  * Provider of time-stamp tokens. Used whenever a time-stamp token property is used.
  * The actual means of obtaining the token depend on the implementation.
  * <p>
- * A default implementation is provided.
- * @see xades4j.providers.impl.DefaultTimeStampTokenProvider
+ * A HTTP-based implementation is provided.
+ * @see xades4j.providers.impl.HttpTimeStampTokenProvider
  * @author Luís
  */
 public interface TimeStampTokenProvider

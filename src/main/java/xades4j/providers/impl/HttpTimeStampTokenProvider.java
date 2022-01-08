@@ -30,13 +30,12 @@ import java.net.URL;
 
 /**
  * Implementation of {@code AbstractTimeStampTokenProvider} that gets time-stamp tokens
- * from a HTTP TSA. Requests are issued with {@code certReq} set to
- * {@code true}. If username and password are set supplied, HTTP basic
- * authenticated will be used.
+ * from a HTTP TSA. Requests are issued with {@code certReq} set to {@code true}.
+ * If username and password are set supplied, HTTP basic authentication will be used.
  *
  * @author luis
  */
-public class HttpTimeStampTokenProvider extends AbstractTimeStampTokenProvider {
+public final class HttpTimeStampTokenProvider extends AbstractTimeStampTokenProvider {
     private final TSAHttpData tsaHttpData;
     private final String base64TsaUsrAndPwd;
 
@@ -93,20 +92,12 @@ public class HttpTimeStampTokenProvider extends AbstractTimeStampTokenProvider {
     }
 
     private HttpURLConnection createHttpConnection() throws IOException {
-        HttpURLConnection connection = (HttpURLConnection) new URL(this.temporaryGetTSAUrl()).openConnection();
+        HttpURLConnection connection = (HttpURLConnection) new URL(this.tsaHttpData.getUrl()).openConnection();
 
         if (this.base64TsaUsrAndPwd != null) {
             connection.setRequestProperty("Authorization", "Basic " + this.base64TsaUsrAndPwd);
         }
 
         return connection;
-    }
-
-    /**
-     * This package-private method is TEMPORARY until the deprecated
-     * {@link DefaultTimeStampTokenProvider} is removed.
-     */
-    String temporaryGetTSAUrl() {
-        return this.tsaHttpData.getUrl();
     }
 }

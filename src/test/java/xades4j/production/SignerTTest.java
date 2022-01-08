@@ -35,15 +35,6 @@ import xades4j.providers.impl.TSAHttpData;
  */
 public class SignerTTest extends SignerTestBase
 {
-    static class TestTimeStampTokenProvider extends HttpTimeStampTokenProvider
-    {
-        @Inject
-        public TestTimeStampTokenProvider(MessageDigestEngineProvider messageDigestProvider)
-        {
-            super(messageDigestProvider, new TSAHttpData("http://timestamp.digicert.com"));
-        }
-    }
-
     @Test
     public void testSignTExclusiveC14NWithoutPolicy() throws Exception
     {
@@ -57,8 +48,8 @@ public class SignerTTest extends SignerTestBase
                 .withCanonicalizationAlgorithmForSignature(new ExclusiveCanonicalXMLWithoutComments());
 
         XadesSigner signer = new XadesTSigningProfile(keyingProviderMy)
-                .withTimeStampTokenProvider(TestTimeStampTokenProvider.class)
                 .withSignatureAlgorithms(algorithms)
+                .withBinding(TSAHttpData.class, new TSAHttpData("http://timestamp.digicert.com"))
                 .newSigner();
         new Enveloped(signer).sign(elemToSign);
 
@@ -75,7 +66,6 @@ public class SignerTTest extends SignerTestBase
 
         XadesSigner signer = new XadesTSigningProfile(keyingProviderMy).withPolicyProvider(new SignaturePolicyInfoProvider()
         {
-
             @Override
             public SignaturePolicyBase getSignaturePolicy()
             {
