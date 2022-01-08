@@ -54,12 +54,9 @@ class DataGenIndivDataObjsTimeStamp extends DataGenBaseTimeStamp<IndividualDataO
             TimeStampDigestInput digestInput,
             PropertiesDataGenerationContext ctx) throws CannotAddDataToDigestInputException
     {
-        Collection<DataObjectDesc> targetDataObjs = prop.getTargetDataObjects();
-        Map<DataObjectDesc, Reference> refsMaps = ctx.getReferencesMappings();
-
-        for (DataObjectDesc dataObj : targetDataObjs)
+        for (DataObjectDesc dataObj : prop.getTargetDataObjects())
         {
-            Reference r = refsMaps.get(dataObj);
+            Reference r = ctx.getReference(dataObj);
             digestInput.addReference(r);
         }
     }
@@ -72,12 +69,11 @@ class DataGenIndivDataObjsTimeStamp extends DataGenBaseTimeStamp<IndividualDataO
             PropertiesDataGenerationContext ctx)
     {
         Collection<DataObjectDesc> targetDataObjs = prop.getTargetDataObjects();
-        Map<DataObjectDesc, Reference> refsMaps = ctx.getReferencesMappings();
 
         List<String> includes = new ArrayList<String>(targetDataObjs.size());
         for (DataObjectDesc dataObj : targetDataObjs)
         {
-            Reference r = refsMaps.get(dataObj);
+            Reference r = ctx.getReference(dataObj);
             includes.add('#' + r.getId());
         }
 

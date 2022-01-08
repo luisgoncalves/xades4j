@@ -47,14 +47,11 @@ class DataGenCommitmentType implements PropertyDataObjectGenerator<CommitmentTyp
          * the AllSignedDataObjects empty element MUST be present.
          */
 
-        Collection<DataObjectDesc> targets = prop.getTargetDataObjects();
-        Map<DataObjectDesc, Reference> referencesMappings = ctx.getReferencesMappings();
-
-        for (DataObjectDesc obj : targets)
+        for (DataObjectDesc obj : prop.getTargetDataObjects())
         {
             // The ObjectReference refers the Reference element. This assumes
             // that the QualifyingProperties are in the signature's document.
-            commTypeData.addObjReferences('#' + referencesMappings.get(obj).getId());
+            commTypeData.addObjReferences('#' + ctx.getReference(obj).getId());
         }
 
         commTypeData.setQualifiers(prop.getQualifiers());

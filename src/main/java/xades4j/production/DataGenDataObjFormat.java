@@ -37,7 +37,7 @@ class DataGenDataObjFormat implements PropertyDataObjectGenerator<DataObjectForm
         // corresponding with the data object qualified by this property.
         // This assumes that the QualifyingProperties are in the signature's document.
         DataObjectDesc targetDataObjInfo = prop.getTargetDataObjects().iterator().next();
-        String objRef = '#' + ctx.getReferencesMappings().get(targetDataObjInfo).getId();
+        String objRef = '#' + ctx.getReference(targetDataObjInfo).getId();
 
         DataObjectFormatData dataObjFormatData = new DataObjectFormatData(objRef);
         dataObjFormatData.setMimeType(prop.getMimeType());
