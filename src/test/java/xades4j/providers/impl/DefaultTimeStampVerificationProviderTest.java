@@ -83,7 +83,10 @@ public class DefaultTimeStampVerificationProviderTest extends VerifierTestBase
     private void doVerifyToken(byte[] tsDigestInput, byte[] tsToken) throws Exception
     {
         KeyStore ks = createAndLoadJKSKeyStore("gva/trustAnchor", "password");
-        PKIXCertificateValidationProvider certificateValidationProvider = new PKIXCertificateValidationProvider(ks, false);
+        PKIXCertificateValidationProvider certificateValidationProvider = PKIXCertificateValidationProvider
+                .builder(ks)
+                .checkRevocation(false)
+                .build();
 
         DefaultTimeStampVerificationProvider timeStampVerificationProvider = new DefaultTimeStampVerificationProvider(
                 certificateValidationProvider,
