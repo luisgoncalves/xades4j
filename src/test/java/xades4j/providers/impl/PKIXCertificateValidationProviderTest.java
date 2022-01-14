@@ -68,7 +68,11 @@ public class PKIXCertificateValidationProviderTest
         certSelector.setSubject(new X500Principal("CN = Luis Goncalves,OU = CC,O = ISEL,C = PT"));
         Collection<X509Certificate> otherCerts = Collections.emptyList();
 
-        PKIXCertificateValidationProvider instance = new PKIXCertificateValidationProvider(ks, false, certStore.getStore());
+        PKIXCertificateValidationProvider instance = PKIXCertificateValidationProvider
+                .builder(ks)
+                .checkRevocation(false)
+                .intermediateCertStores(certStore.getStore())
+                .build();
         ValidationData result = instance.validate(certSelector, new Date(), otherCerts);
         assertEquals(result.getCerts().size(), 3);
     }
@@ -88,7 +92,11 @@ public class PKIXCertificateValidationProviderTest
         certSelector.setSubject(new X500Principal("CN = User1-CP.02.01,OU = Testing,OU = DoD,O = U.S. Government,C = US"));
         Collection<X509Certificate> otherCerts = Collections.emptyList();
 
-        PKIXCertificateValidationProvider instance = new PKIXCertificateValidationProvider(ks, true, certStore.getStore());
+        PKIXCertificateValidationProvider instance = PKIXCertificateValidationProvider
+                .builder(ks)
+                .checkRevocation(true)
+                .intermediateCertStores(certStore.getStore())
+                .build();
         ValidationData result = instance.validate(certSelector, new Date(), otherCerts);
         assertEquals(result.getCerts().size(), 4);
         assertEquals(result.getCrls().size(), 3);

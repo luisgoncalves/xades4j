@@ -30,6 +30,7 @@ import xades4j.verification.XAdESVerificationResult;
 import xades4j.verification.XadesVerificationProfile;
 
 import static org.junit.Assert.assertEquals;
+
 import java.io.FileInputStream;
 import java.security.KeyStore;
 import java.security.cert.Certificate;
@@ -42,6 +43,7 @@ import org.w3c.dom.Element;
 
 /**
  * This class test signing with the keyUsage check disabled.
+ *
  * @author Fiona Klute
  */
 public class UncheckedSignerBESTest extends SignerTestBase
@@ -59,14 +61,14 @@ public class UncheckedSignerBESTest extends SignerTestBase
     }
 
     private void trySignAndVerify(final KeyingDataProvider signProvider,
-            final CertificateValidationProvider verifyProvider, final String outputName) throws Exception
+                                  final CertificateValidationProvider verifyProvider, final String outputName) throws Exception
     {
         this.trySignAndVerify(signProvider, verifyProvider, outputName, true);
     }
 
     private void trySignAndVerify(final KeyingDataProvider signProvider,
-            final CertificateValidationProvider verifyProvider, final String outputName,
-            final boolean verifySignatureKeyUsage) throws Exception
+                                  final CertificateValidationProvider verifyProvider, final String outputName,
+                                  final boolean verifySignatureKeyUsage) throws Exception
     {
         Document doc = getTestDocument();
         Element elemToSign = doc.getDocumentElement();
@@ -96,7 +98,8 @@ public class UncheckedSignerBESTest extends SignerTestBase
 
     /**
      * Create validation provider with a single trusted root CA for tests.
-     * @param root the trusted root CA
+     *
+     * @param root    the trusted root CA
      * @param certdir load additional CAs from this directory
      * @return validation provider with the given content
      * @throws Exception
@@ -115,7 +118,11 @@ public class UncheckedSignerBESTest extends SignerTestBase
         }
         FileSystemDirectoryCertStore certStore = new FileSystemDirectoryCertStore(
                 toPlatformSpecificCertDirFilePath(certdir));
-        return new PKIXCertificateValidationProvider(ks, false, certStore.getStore());
+        return PKIXCertificateValidationProvider
+                .builder(ks)
+                .checkRevocation(false)
+                .intermediateCertStores(certStore.getStore())
+                .build();
     }
 
     @Test

@@ -42,6 +42,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import javax.security.auth.x500.X500Principal;
+
 import xades4j.providers.CannotBuildCertificationPathException;
 import xades4j.providers.CannotSelectCertificateException;
 import xades4j.providers.CertificateValidationException;
@@ -55,9 +56,13 @@ import xades4j.verification.UnexpectedJCAException;
  * Since the Java's PKIX API doesn't allow to access the CRLs used in the certification
  * path validation, this is manually done. There has to be a CRL for each issuer
  * in the path which is valid at the moment of validation (signature and date).
+ * <p>
+ * The {@link PKIXCertificateValidationProvider#builder(KeyStore)} builder} method can be used to configure and create
+ * a new instance.
+ *
  * @author Luís
  */
-public class PKIXCertificateValidationProvider implements CertificateValidationProvider
+public final class PKIXCertificateValidationProvider implements CertificateValidationProvider
 {
     private static final int DEFAULT_MAX_PATH_LENGTH = 6;
 
@@ -69,145 +74,26 @@ public class PKIXCertificateValidationProvider implements CertificateValidationP
     private final String signatureProvider;
 
     /**
-     * Initializes a new instance that uses the specified JCE providers for CertPathBuilder
-     * and Signature.
+     * Create a builder to configure a new {@link PKIXCertificateValidationProvider}.
+     *
      * @param trustAnchors the keystore with the trust-anchors ({@code TrustedCertificateEntry})
-     * @param revocationEnabled whether revocation is enabled
-     * @param maxPathLength the maximum length of the certification paths
-     * @param certPathBuilderProvider the CertPathBuilder provider
-     * @param signatureProvider the Signature provider
-     * @param intermCertsAndCrls a set of {@code CertStore}s that contain certificates to be
-     *      used in the construction of the certification path. May contain CRLs to be used
-     *      if revocation is enabled
-     * @see xades4j.utils.FileSystemDirectoryCertStore
-     * @throws NoSuchAlgorithmException if there is no provider for PKIX CertPathBuilder
+     * @return the builder
      */
-    public PKIXCertificateValidationProvider(
-            KeyStore trustAnchors,
-            boolean revocationEnabled,
-            int maxPathLength,
-            String certPathBuilderProvider,
-            String signatureProvider,
-            CertStore... intermCertsAndCrls) throws NoSuchAlgorithmException, NoSuchProviderException
+    public static Builder builder(KeyStore trustAnchors)
     {
-        if (null == trustAnchors)
-        {
-            throw new NullPointerException("Trust anchors cannot be null");
-        }
-
-        this.trustAnchors = trustAnchors;
-        this.revocationEnabled = revocationEnabled;
-        this.maxPathLength = maxPathLength;
-        this.certPathBuilder = certPathBuilderProvider == null ? CertPathBuilder.getInstance("PKIX") : CertPathBuilder.getInstance("PKIX", certPathBuilderProvider);
-        this.signatureProvider = signatureProvider;
-        this.intermCertsAndCrls = intermCertsAndCrls;
+        return new Builder(trustAnchors);
     }
 
-    /**
-     * Initializes a new instance that uses the specified JCE providers for CertPathBuilder
-     * and Signature.
-     * @param trustAnchors the keystore with the trust-anchors ({@code TrustedCertificateEntry})
-     * @param revocationEnabled whether revocation is enabled
-     * @param certPathBuilderProvider the CertPathBuilder provider
-     * @param signatureProvider the Signature provider
-     * @param intermCertsAndCrls a set of {@code CertStore}s that contain certificates to be
-     *      used in the construction of the certification path. May contain CRLs to be used
-     *      if revocation is enabled
-     * @see xades4j.utils.FileSystemDirectoryCertStore
-     * @throws NoSuchAlgorithmException if there is no provider for PKIX CertPathBuilder
-     */
-    public PKIXCertificateValidationProvider(
-            KeyStore trustAnchors,
-            boolean revocationEnabled,
-            String certPathBuilderProvider,
-            String signatureProvider,
-            CertStore... intermCertsAndCrls) throws NoSuchAlgorithmException, NoSuchProviderException
+    private PKIXCertificateValidationProvider(Builder builder) throws NoSuchAlgorithmException, NoSuchProviderException
     {
-        this(trustAnchors, revocationEnabled, DEFAULT_MAX_PATH_LENGTH, certPathBuilderProvider, signatureProvider, intermCertsAndCrls);
-    }
-
-    /**
-     * Initializes a new instance that uses the specified JCE provider for both
-     * CertPathBuilder and Signature.
-     * @param trustAnchors the keystore with the trust-anchors ({@code TrustedCertificateEntry})
-     * @param revocationEnabled whether revocation is enabled
-     * @param maxPathLength the maximum length of the certification paths
-     * @param jceProvider the CertPathBuilder and Signature provider
-     * @param intermCertsAndCrls a set of {@code CertStore}s that contain certificates to be
-     *      used in the construction of the certification path. May contain CRLs to be used
-     *      if revocation is enabled
-     * @see xades4j.utils.FileSystemDirectoryCertStore
-     * @throws NoSuchAlgorithmException if there is no provider for PKIX CertPathBuilder
-     */
-    public PKIXCertificateValidationProvider(
-            KeyStore trustAnchors,
-            boolean revocationEnabled,
-            int maxPathLength,
-            String jceProvider,
-            CertStore... intermCertsAndCrls) throws NoSuchAlgorithmException, NoSuchProviderException
-    {
-        this(trustAnchors, revocationEnabled, maxPathLength, jceProvider, jceProvider, intermCertsAndCrls);
-    }
-
-    /**
-     * Initializes a new instance that uses the specified JCE provider for both
-     * CertPathBuilder and Signature.
-     * @param trustAnchors the keystore with the trust-anchors ({@code TrustedCertificateEntry})
-     * @param revocationEnabled whether revocation is enabled
-     * @param jceProvider the CertPathBuilder and Signature provider
-     * @param intermCertsAndCrls a set of {@code CertStore}s that contain certificates to be
-     *      used in the construction of the certification path. May contain CRLs to be used
-     *      if revocation is enabled
-     * @see xades4j.utils.FileSystemDirectoryCertStore
-     * @throws NoSuchAlgorithmException if there is no provider for PKIX CertPathBuilder
-     */
-    public PKIXCertificateValidationProvider(
-            KeyStore trustAnchors,
-            boolean revocationEnabled,
-            String jceProvider,
-            CertStore... intermCertsAndCrls) throws NoSuchAlgorithmException, NoSuchProviderException
-    {
-        this(trustAnchors, revocationEnabled, DEFAULT_MAX_PATH_LENGTH, jceProvider, intermCertsAndCrls);
-    }
-
-    /**
-     * Initializes a new instance without specifying the JCE providers for CertPathBuilder
-     * and Signature.
-     * @param trustAnchors the keystore with the trust-anchors ({@code TrustedCertificateEntry})
-     * @param revocationEnabled whether revocation is enabled
-     * @param maxPathLength the maximum length of the certification paths
-     * @param intermCertsAndCrls a set of {@code CertStore}s that contain certificates to be
-     *      used in the construction of the certification path. May contain CRLs to be used
-     *      if revocation is enabled
-     * @see xades4j.utils.FileSystemDirectoryCertStore
-     * @throws NoSuchAlgorithmException if there is no provider for PKIX CertPathBuilder
-     */
-    public PKIXCertificateValidationProvider(
-            KeyStore trustAnchors,
-            boolean revocationEnabled,
-            int maxPathLength,
-            CertStore... intermCertsAndCrls) throws NoSuchAlgorithmException, NoSuchProviderException
-    {
-        this(trustAnchors, revocationEnabled, maxPathLength, null, null, intermCertsAndCrls);
-    }
-
-    /**
-     * Initializes a new instance without specifying the JCE providers for CertPathBuilder
-     * and Signature.
-     * @param trustAnchors the keystore with the trust-anchors ({@code TrustedCertificateEntry})
-     * @param revocationEnabled whether revocation is enabled
-     * @param intermCertsAndCrls a set of {@code CertStore}s that contain certificates to be
-     *      used in the construction of the certification path. May contain CRLs to be used
-     *      if revocation is enabled
-     * @see xades4j.utils.FileSystemDirectoryCertStore
-     * @throws NoSuchAlgorithmException if there is no provider for PKIX CertPathBuilder
-     */
-    public PKIXCertificateValidationProvider(
-            KeyStore trustAnchors,
-            boolean revocationEnabled,
-            CertStore... intermCertsAndCrls) throws NoSuchAlgorithmException, NoSuchProviderException
-    {
-        this(trustAnchors, revocationEnabled, DEFAULT_MAX_PATH_LENGTH, null, null, intermCertsAndCrls);
+        this.trustAnchors = builder.trustAnchors;
+        this.revocationEnabled = builder.revocationEnabled;
+        this.maxPathLength = builder.maxPathLength;
+        this.certPathBuilder = builder.certPathBuilderProvider == null
+                ? CertPathBuilder.getInstance("PKIX")
+                : CertPathBuilder.getInstance("PKIX", builder.certPathBuilderProvider);
+        this.signatureProvider = builder.signatureProvider;
+        this.intermCertsAndCrls = builder.certStores;
     }
 
     @Override
@@ -220,10 +106,12 @@ public class PKIXCertificateValidationProvider implements CertificateValidationP
         try
         {
             builderParams = new PKIXBuilderParameters(trustAnchors, certSelector);
-        } catch (KeyStoreException ex)
+        }
+        catch (KeyStoreException ex)
         {
             throw new CannotBuildCertificationPathException(certSelector, "Trust anchors KeyStore is not initialized", ex);
-        } catch (InvalidAlgorithmParameterException ex)
+        }
+        catch (InvalidAlgorithmParameterException ex)
         {
             throw new CannotBuildCertificationPathException(certSelector, "Trust anchors KeyStore has no trusted certificate entries", ex);
         }
@@ -255,13 +143,15 @@ public class PKIXCertificateValidationProvider implements CertificateValidationP
         catch (CertPathBuilderException ex)
         {
             throw new CannotBuildCertificationPathException(certSelector, ex.getMessage(), ex);
-        } catch (InvalidAlgorithmParameterException ex)
+        }
+        catch (InvalidAlgorithmParameterException ex)
         {
             // SHOULD NOT be thrown due to wrong type of parameters.
             // Seems to be thrown when the CertSelector (in builderParams) criteria
             // cannot be applied.
             throw new CannotSelectCertificateException(certSelector, ex);
-        } catch (NoSuchAlgorithmException ex)
+        }
+        catch (NoSuchAlgorithmException ex)
         {
             // SHOULD NOT be thrown.
             throw new UnexpectedJCAException("No provider for Collection CertStore", ex);
@@ -320,7 +210,8 @@ public class PKIXCertificateValidationProvider implements CertificateValidationP
                 crls.addAll(Collections.checkedCollection(storeCRLs, X509CRL.class));
 
             }
-        } catch (CertStoreException ex)
+        }
+        catch (CertStoreException ex)
         {
             throw new CertificateValidationException(null, "Cannot get CRLs", ex);
         }
@@ -347,5 +238,94 @@ public class PKIXCertificateValidationProvider implements CertificateValidationP
             }
         }
         return crls;
+    }
+
+    public static final class Builder
+    {
+        private final KeyStore trustAnchors;
+        private CertStore[] certStores;
+        private boolean revocationEnabled;
+        private int maxPathLength;
+        private String certPathBuilderProvider;
+        private String signatureProvider;
+
+        private Builder(KeyStore trustAnchors)
+        {
+            if (null == trustAnchors)
+            {
+                throw new NullPointerException("Trust anchors cannot be null");
+            }
+
+            this.trustAnchors = trustAnchors;
+            this.certStores = new CertStore[0];
+            this.revocationEnabled = true;
+            this.maxPathLength = DEFAULT_MAX_PATH_LENGTH;
+        }
+
+        public PKIXCertificateValidationProvider build() throws NoSuchAlgorithmException, NoSuchProviderException
+        {
+            return new PKIXCertificateValidationProvider(this);
+        }
+
+        /**
+         * Sets the {@link CertStore}s that contain intermediate certificates to be used in the construction of the
+         * certification path. May contain CRLs to be used if revocation checking is enabled.
+         *
+         * @param certStores the certificate and CRL stores
+         * @return the current instance
+         */
+        public Builder intermediateCertStores(CertStore... certStores)
+        {
+            this.certStores = certStores;
+            return this;
+        }
+
+        /**
+         * Sets whether revocation checking should be used. Defaults to {@code true}.
+         *
+         * @param revocationEnabled {@code true} to check revocation, {@code false} otherwise
+         * @return the current instance
+         */
+        public Builder checkRevocation(boolean revocationEnabled)
+        {
+            this.revocationEnabled = revocationEnabled;
+            return this;
+        }
+
+        /**
+         * Sets the maximum length of the certification path.
+         *
+         * @param maxPathLength the maximum length
+         * @return the current instance
+         */
+        public Builder maxPathLength(int maxPathLength)
+        {
+            this.maxPathLength = maxPathLength;
+            return this;
+        }
+
+        /**
+         * Sets the {@link CertPathBuilder} provider.
+         *
+         * @param certPathBuilderProvider the provider
+         * @return the current instance
+         */
+        public Builder certPathBuilderProvider(String certPathBuilderProvider)
+        {
+            this.certPathBuilderProvider = certPathBuilderProvider;
+            return this;
+        }
+
+        /**
+         * Sets the provider for {@link java.security.Signature} objects used when building the certification path.
+         *
+         * @param signatureProvider the provider
+         * @return the current instance
+         */
+        public Builder signatureProvider(String signatureProvider)
+        {
+            this.signatureProvider = signatureProvider;
+            return this;
+        }
     }
 }

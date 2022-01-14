@@ -61,20 +61,29 @@ public class VerifierTestBase extends SignatureServicesTestBase
             // signatures without revocation data.
             FileSystemDirectoryCertStore certStore = createDirectoryCertStore("my");
             KeyStore ks = createAndLoadJKSKeyStore("my/myStore", "mystorepass");
-            validationProviderMySigs = new PKIXCertificateValidationProvider(ks, false, certStore.getStore());
+            validationProviderMySigs = PKIXCertificateValidationProvider.builder(ks)
+                    .checkRevocation(false)
+                    .intermediateCertStores(certStore.getStore())
+                    .build();
 
             // Validation provider with certificates/CRL from "csrc.nist" folder
             // and TSA CRL. Used for signatures with complete validation data.
             certStore = createDirectoryCertStore("csrc.nist");
             FileSystemDirectoryCertStore gvaCRLStore = createDirectoryCertStore("gva");
             ks = createAndLoadJKSKeyStore("csrc.nist/trustAnchor", "password");
-            validationProviderNist = new PKIXCertificateValidationProvider(ks, true, certStore.getStore(), gvaCRLStore.getStore());
+            validationProviderNist = PKIXCertificateValidationProvider.builder(ks)
+                    .checkRevocation(true)
+                    .intermediateCertStores(certStore.getStore(), gvaCRLStore.getStore())
+                    .build();
 
             // Validation provider for "pt" folder. Used for signatures produced
             // with the PT citizen card.
             certStore = createDirectoryCertStore("pt");
             ks = createAndLoadJKSKeyStore("pt/trustAnchor", "password");
-            validationProviderPtCc = new PKIXCertificateValidationProvider(ks, false, certStore.getStore(), gvaCRLStore.getStore());
+            validationProviderPtCc = PKIXCertificateValidationProvider.builder(ks)
+                    .checkRevocation(false)
+                    .intermediateCertStores(certStore.getStore(), gvaCRLStore.getStore())
+                    .build();
         } catch (Exception ex)
         {
             throw new NullPointerException("VerifierTestBase init failed: " + ex.getMessage());
