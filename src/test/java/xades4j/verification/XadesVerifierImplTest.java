@@ -17,6 +17,8 @@
 package xades4j.verification;
 
 import java.io.File;
+
+import static junit.framework.TestCase.assertTrue;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 
@@ -25,23 +27,34 @@ import java.io.InputStream;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.GregorianCalendar;
+import java.util.stream.Collectors;
 
+import org.apache.xml.security.signature.XMLSignature;
 import org.junit.Before;
 import org.junit.Test;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.NodeList;
 
+import xades4j.algorithms.CanonicalXMLWithoutComments;
 import xades4j.production.XadesFormatExtenderProfile;
 import xades4j.production.XadesSignatureFormatExtender;
 import xades4j.properties.CertificateValuesProperty;
+import xades4j.properties.CommitmentTypeProperty;
+import xades4j.properties.CommitmentTypePropertyBase;
+import xades4j.properties.CompleteCertificateRefsProperty;
+import xades4j.properties.CounterSignatureProperty;
+import xades4j.properties.DataObjectFormatProperty;
+import xades4j.properties.IndividualDataObjsTimeStampProperty;
 import xades4j.properties.QualifyingProperty;
 import xades4j.properties.RevocationValuesProperty;
 import xades4j.properties.SigAndRefsTimeStampProperty;
+import xades4j.properties.SignatureTimeStampProperty;
+import xades4j.properties.SigningCertificateProperty;
+import xades4j.properties.SigningTimeProperty;
 import xades4j.providers.CannotBuildCertificationPathException;
 
 /**
- *
  * @author Luís
  */
 public class XadesVerifierImplTest extends VerifierTestBase
@@ -59,17 +72,52 @@ public class XadesVerifierImplTest extends VerifierTestBase
     @Test
     public void testVerifyBES() throws Exception
     {
-        System.out.println("verifyBES");
-        XAdESForm f = verifySignature("document.signed.bes.xml");
-        assertEquals(XAdESForm.BES, f);
+        var result = verifySignature("document.signed.bes.xml");
+        assertEquals(XAdESForm.BES, result.getSignatureForm());
+
+        assertEquals(XMLSignature.ALGO_ID_SIGNATURE_RSA_SHA256, result.getSignatureAlgorithmUri());
+        assertEquals(new CanonicalXMLWithoutComments().getUri(), result.getCanonicalizationAlgorithmUri());
+
+        assertEquals("CN=Luis Goncalves,OU=CC,O=ISEL,C=PT", result.getValidationCertificate().getSubjectX500Principal().getName());
+
+        var singingTime = result.getPropertiesFilter().getOfType(SigningTimeProperty.class);
+        assertEquals(1, singingTime.size());
+        var singingCertificate = result.getPropertiesFilter().getOfType(SigningCertificateProperty.class);
+        assertEquals(1, singingCertificate.size());
+
+        var signedObjects = result.getSignedDataObjects();
+        assertEquals(2, signedObjects.size());
+
+        var signedObjectProperties = signedObjects.stream().findFirst().get().getSignedDataObjProps();
+        assertEquals(3, signedObjectProperties.size());
+
+        var dataObjectFormat = signedObjectProperties.stream()
+                .filter(it -> it instanceof DataObjectFormatProperty)
+                .map(it -> (DataObjectFormatProperty) it)
+                .findFirst();
+        assertTrue(dataObjectFormat.isPresent());
+        assertEquals("text/xml", dataObjectFormat.get().getMimeType());
+
+        var commitmentType = signedObjectProperties.stream()
+                .filter(it -> it instanceof CommitmentTypeProperty)
+                .map(it -> (CommitmentTypeProperty) it)
+                .findFirst();
+        assertTrue(commitmentType.isPresent());
+        assertEquals(CommitmentTypePropertyBase.PROOF_OF_CREATION_URI, commitmentType.get().getUri());
+
+        var dataObjectTimeStamp = signedObjectProperties.stream()
+                .filter(it -> it instanceof IndividualDataObjsTimeStampProperty)
+                .map(it -> (IndividualDataObjsTimeStampProperty) it)
+                .findFirst();
+        assertTrue(dataObjectTimeStamp.isPresent());
     }
 
     @Test
     public void testVerifyBESWithoutKeyInfo() throws Exception
     {
         System.out.println("verifyBES");
-        XAdESForm f = verifySignature("document.signed.bes.no-ki.xml");
-        assertEquals(XAdESForm.BES, f);
+        var result = verifySignature("document.signed.bes.no-ki.xml");
+        assertEquals(XAdESForm.BES, result.getSignatureForm());
     }
 
     /**
@@ -102,46 +150,57 @@ public class XadesVerifierImplTest extends VerifierTestBase
                 throw new InvalidSignatureException("Rejected by RawSignatureVerifier");
             }
         });
-        XAdESForm f = verifySignature("document.signed.bes.xml", verificationProfile);
-        assertEquals(XAdESForm.BES, f);
+        var result = verifySignature("document.signed.bes.xml", verificationProfile);
+        assertEquals(XAdESForm.BES, result.getSignatureForm());
     }
 
     @Test
     public void testVerifyBESPTCC() throws Exception
     {
-        System.out.println("verifyBESPtCC");
-
-        XAdESForm f = verifySignature(
+        var result = verifySignature(
                 "document.signed.bes.ptcc.xml",
                 new XadesVerificationProfile(validationProviderPtCc),
                 new SignatureSpecificVerificationOptions().setDefaultVerificationDate(new GregorianCalendar(2014, 0, 1).getTime()));
-        assertEquals(XAdESForm.BES, f);
+
+        assertEquals(XAdESForm.BES, result.getSignatureForm());
     }
-    
+
     @Test
     public void testVerifyDetachedBES() throws Exception
     {
-        System.out.println("verifyDetachedBES");
-        XAdESForm f = verifySignature(
+        var result = verifySignature(
                 "detached.bes.xml",
                 new SignatureSpecificVerificationOptions().useBaseUri(new File("src/test/xml/").toURI().toString()));
-        assertEquals(XAdESForm.BES, f);
+
+        assertEquals(XAdESForm.BES, result.getSignatureForm());
+
+        var uri = result.getSignedDataObjects().stream()
+                .map(it -> it.getReference().getURI())
+                .findFirst();
+
+        assertEquals("document.xml", uri.get());
     }
 
     @Test
     public void testVerifyBESCounterSig() throws Exception
     {
-        System.out.println("verifyBESCounterSig");
-        XAdESForm f = verifySignature("document.signed.bes.cs.xml");
-        assertEquals(XAdESForm.BES, f);
+        var result = verifySignature("document.signed.bes.cs.xml");
+
+        assertEquals(XAdESForm.BES, result.getSignatureForm());
+
+        var counterSignatures = result.getPropertiesFilter().getOfType(CounterSignatureProperty.class);
+        assertEquals(1, counterSignatures.size());
+
+        var counterSignature = counterSignatures.stream().findFirst().get();
+        assertEquals(XAdESForm.BES, counterSignature.getVerificationResult().getSignatureForm());
     }
-    
+
     @Test
     public void testVerifyBESCounterSigCounterSig() throws Exception
     {
         System.out.println("verifyBESCounterSigCounterSig");
-        XAdESForm f = verifySignature("document.signed.bes.cs.cs.xml");
-        assertEquals(XAdESForm.BES, f);
+        var result = verifySignature("document.signed.bes.cs.cs.xml");
+        assertEquals(XAdESForm.BES, result.getSignatureForm());
     }
 
     @Test
@@ -185,45 +244,61 @@ public class XadesVerifierImplTest extends VerifierTestBase
     @Test
     public void testVerifyTBES() throws Exception
     {
-        System.out.println("verifyTBES");
-        XAdESForm f = verifySignature("document.signed.t.bes.xml");
-        assertEquals(XAdESForm.T, f);
+        var result = verifySignature("document.signed.t.bes.xml");
+
+        assertEquals(XAdESForm.T, result.getSignatureForm());
+
+        var signatureTimeStamps = result.getPropertiesFilter().getOfType(SignatureTimeStampProperty.class);
+        assertEquals(1, signatureTimeStamps.size());
     }
 
     @Test
     public void testVerifyEPES1() throws Exception
     {
-        System.out.println("verifyEPES 1");
         verificationProfile.withPolicyDocumentProvider(VerifierTestBase.policyDocumentFinder);
-        XAdESForm f = verifySignature("document.signed.epes_1.xml", verificationProfile);
-        assertEquals(XAdESForm.EPES, f);
+        var result = verifySignature("document.signed.epes_1.xml", verificationProfile);
+
+        assertEquals(XAdESForm.EPES, result.getSignatureForm());
     }
-    
+
     @Test
     public void testVerifyEPES2() throws Exception
     {
-        System.out.println("verifyEPES 2");
         verificationProfile.withPolicyDocumentProvider(VerifierTestBase.policyDocumentFinder);
-        XAdESForm f = verifySignature("document.signed.epes_2.xml", verificationProfile);
-        assertEquals(XAdESForm.EPES, f);
+        var result = verifySignature("document.signed.epes_2.xml", verificationProfile);
+        assertEquals(XAdESForm.EPES, result.getSignatureForm());
     }
 
     @Test
     public void testVerifyTEPES() throws Exception
     {
-        System.out.println("verifyTEPES");
-        XAdESForm f = verifySignature("document.signed.t.epes.xml");
-        assertEquals(XAdESForm.T, f);
+        var result = verifySignature("document.signed.t.epes.xml");
+
+        assertEquals(XAdESForm.T, result.getSignatureForm());
+
+        var signatureTimeStamps = result.getPropertiesFilter().getOfType(SignatureTimeStampProperty.class);
+        assertEquals(1, signatureTimeStamps.size());
     }
 
     @Test
     public void testVerifyC() throws Exception
     {
-        System.out.println("verifyC");
-        XAdESForm f = verifySignature(
+        var result = verifySignature(
                 "document.signed.c.xml",
                 nistVerificationProfile);
-        assertEquals(XAdESForm.C, f);
+
+        assertEquals(XAdESForm.C, result.getSignatureForm());
+
+        var signatureTimeStamps = result.getPropertiesFilter().getOfType(SignatureTimeStampProperty.class);
+        assertEquals(1, signatureTimeStamps.size());
+
+        var certificateRefs = result.getPropertiesFilter().getOfType(CompleteCertificateRefsProperty.class);
+        assertEquals(1, certificateRefs.size());
+        var firstCertificateRefs = certificateRefs.iterator().next();
+        assertEquals(3, firstCertificateRefs.getCertificates().size());
+
+        var revocationRefs = result.getPropertiesFilter().getOfType(CompleteCertificateRefsProperty.class);
+        assertEquals(1, revocationRefs.size());
     }
 
     @Test
