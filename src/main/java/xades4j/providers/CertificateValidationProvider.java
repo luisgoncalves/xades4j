@@ -20,26 +20,36 @@ import java.security.cert.X509CertSelector;
 import java.security.cert.X509Certificate;
 import java.util.Collection;
 import java.util.Date;
+
 import xades4j.verification.UnexpectedJCAException;
 
 /**
  * Provides validation of certificates.
+ *
+ * @author Luís
  * @see xades4j.providers.impl.PKIXCertificateValidationProvider
  * @see xades4j.verification.XadesVerificationProfile
- * @author Luís
  */
 public interface CertificateValidationProvider
 {
     /**
+     * Validates the certificate identified by the given certificate selector and returns the resulting validation data
+     * (certificate chain and possibly CRLs).
+     * <p>
+     * This method receives a set of certificates collected from the validation context that can be used to build the
+     * acertification path. For instance, when verifying the signature's certificate, certificates collected from {@code KeyInfo}
+     * are supplied; when verifying a timestamp token, the certificates contained on the timestamp token itself are supplied.
+     * <p>
+     * Additional certificates may be needed to build a certification path. This means that the provider must have access
+     * to those additional certificates out of band.
      *
-     * @param certSelector the selector of the leaf certificate, created using information
-     *      from a {@code X509Data} element within {@code KeyInfo}
-     *      data on {@code KeyInfo}
+     * @param certSelector   identifies the intended leaf certificate for the current validation. This certificate may or
+     *                       may not be available on the validation context (usually is). This selector is created using
+     *                       information from the different {@code X509Data} elements within {@code KeyInfo}.
      * @param validationDate the time for which the validity of the certification path should be determined
-     * @param otherCerts a set of certificates that can be used to validate the leaf
-     *      certificate, collected from {@code KeyInfo}. May include the certificate
-     *      that will be selected with {@code certSelector}. May be {@code null}
-     * @return the validation data that validates the certificate selected by {@code certSelector}
+     * @param otherCerts     a set of certificates that can be used to validate the leaf certificate, collected from the
+     *                       validation context. May include the certificate that will be selected by {@code certSelector}.
+     * @return the validation data resulting from the validation of the certificate selected by {@code certSelector}
      * @throws CertificateValidationException if the certificate cannot be validated (see subclasses of the exception)
      */
     ValidationData validate(
