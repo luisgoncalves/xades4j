@@ -22,7 +22,6 @@ import com.google.inject.multibindings.MapBinder;
 import org.w3c.dom.Document;
 import org.w3c.dom.Node;
 import xades4j.algorithms.*;
-import xades4j.properties.DataObjectTransform;
 
 import javax.annotation.Nullable;
 import java.util.List;
@@ -46,7 +45,6 @@ public final class AlgorithmParametersBindingsModule extends AbstractModule
         bindMarshaller(ExclusiveCanonicalXMLWithComments.class, ExclusiveCanonicalXMLWithCommentsParamsMarshaller.class);
         bindMarshaller(ExclusiveCanonicalXMLWithoutComments.class, ExclusiveCanonicalXMLWithoutCommentsParamsMarshaller.class);
         bindMarshaller(GenericAlgorithm.class, GenericAlgorithmParamsMarshaller.class);
-        bindMarshaller(DataObjectTransform.class, DeprecatedDataObjectTransformParamsMarshaller.class);
 
         // Algorithms without parameters
 
