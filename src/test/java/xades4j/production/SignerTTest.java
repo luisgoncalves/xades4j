@@ -16,21 +16,16 @@
  */
 package xades4j.production;
 
-import javax.inject.Inject;
-
 import org.junit.Test;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import xades4j.algorithms.ExclusiveCanonicalXMLWithoutComments;
 import xades4j.properties.SignaturePolicyBase;
 import xades4j.properties.SignaturePolicyImpliedProperty;
-import xades4j.providers.MessageDigestEngineProvider;
 import xades4j.providers.SignaturePolicyInfoProvider;
-import xades4j.providers.impl.HttpTimeStampTokenProvider;
-import xades4j.providers.impl.TSAHttpData;
+import xades4j.providers.impl.HttpTsaConfiguration;
 
 /**
- *
  * @author Luís
  */
 public class SignerTTest extends SignerTestBase
@@ -49,7 +44,7 @@ public class SignerTTest extends SignerTestBase
 
         XadesSigner signer = new XadesTSigningProfile(keyingProviderMy)
                 .withSignatureAlgorithms(algorithms)
-                .withBinding(TSAHttpData.class, new TSAHttpData("http://timestamp.digicert.com"))
+                .with(new HttpTsaConfiguration("http://timestamp.digicert.com"))
                 .newSigner();
         new Enveloped(signer).sign(elemToSign);
 
@@ -64,14 +59,17 @@ public class SignerTTest extends SignerTestBase
         Document doc = getTestDocument();
         Element elemToSign = doc.getDocumentElement();
 
-        XadesSigner signer = new XadesTSigningProfile(keyingProviderMy).withPolicyProvider(new SignaturePolicyInfoProvider()
-        {
-            @Override
-            public SignaturePolicyBase getSignaturePolicy()
-            {
-                return new SignaturePolicyImpliedProperty();
-            }
-        }).newSigner();
+        XadesSigner signer = new XadesTSigningProfile(keyingProviderMy)
+                .withPolicyProvider(new SignaturePolicyInfoProvider()
+                {
+                    @Override
+                    public SignaturePolicyBase getSignaturePolicy()
+                    {
+                        return new SignaturePolicyImpliedProperty();
+                    }
+                })
+                .with(DEFAULT_TEST_TSA)
+                .newSigner();
 
         new Enveloped(signer).sign(elemToSign);
 

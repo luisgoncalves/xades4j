@@ -33,7 +33,7 @@ public class HttpTimeStampTokenProviderTest
 
         HttpTimeStampTokenProvider instance = new HttpTimeStampTokenProvider(
                 new DefaultMessageDigestProvider(),
-                new TSAHttpData("http://tss.accv.es:8318/tsa"));
+                new HttpTsaConfiguration("http://tss.accv.es:8318/tsa"));
 
         TimeStampTokenRes result = instance.getTimeStampToken(tsDigestInput, digestAlgUri);
 

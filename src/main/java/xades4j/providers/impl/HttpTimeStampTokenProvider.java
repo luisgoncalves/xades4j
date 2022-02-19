@@ -36,11 +36,11 @@ import java.net.URL;
  * @author luis
  */
 public final class HttpTimeStampTokenProvider extends AbstractTimeStampTokenProvider {
-    private final TSAHttpData tsaHttpData;
+    private final HttpTsaConfiguration tsaHttpData;
     private final String base64TsaUsrAndPwd;
 
     @Inject
-    public HttpTimeStampTokenProvider(MessageDigestEngineProvider messageDigestProvider, TSAHttpData tsaHttpData) {
+    public HttpTimeStampTokenProvider(MessageDigestEngineProvider messageDigestProvider, HttpTsaConfiguration tsaHttpData) {
         super(messageDigestProvider);
         this.tsaHttpData = tsaHttpData;
         if (tsaHttpData.getUsername() != null) {

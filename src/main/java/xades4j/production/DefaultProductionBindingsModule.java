@@ -49,12 +49,12 @@ import xades4j.providers.impl.DefaultMessageDigestProvider;
 import xades4j.providers.impl.DefaultSignaturePropertiesProvider;
 import xades4j.providers.impl.DefaultX500NameStyleProvider;
 import xades4j.providers.impl.HttpTimeStampTokenProvider;
-import xades4j.providers.impl.TSAHttpData;
+import xades4j.providers.impl.HttpTsaConfiguration;
 
 /**
  * Contains the Guice bindings for the default components and the bindings for the
  * needed internal components.
- * 
+ *
  * @author Luís
  */
 class DefaultProductionBindingsModule extends AbstractModule
@@ -77,7 +77,9 @@ class DefaultProductionBindingsModule extends AbstractModule
         bind(MessageDigestEngineProvider.class).to(DefaultMessageDigestProvider.class);
         bind(X500NameStyleProvider.class).to(DefaultX500NameStyleProvider.class);
         bind(TimeStampTokenProvider.class).to(HttpTimeStampTokenProvider.class);
-        bind(TSAHttpData.class).toInstance(new TSAHttpData("http://tss.accv.es:8318/tsa")); // Backwards compatibility
+        bind(HttpTsaConfiguration.class).toProvider(() -> {
+            throw new IllegalStateException("HttpTsaConfiguration must be configured in the profile in order to use an HTTP-based time-stamp token provider.");
+        });
 
         // PropertiesDataObjectsGenerator is not configurable but the individual
         // generators may have dependencies.
