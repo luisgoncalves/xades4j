@@ -23,7 +23,9 @@ The library is available on [Maven](http://search.maven.org/#search%7Cga%7C1%7Cg
 ```java
 Document doc = /* parse XML document */;
 // Define the signing key/certificate
-KeyingDataProvider kp = new FileSystemKeyStoreKeyingDataProvider(/* key store location and type */);
+KeyingDataProvider kp = FileSystemKeyStoreKeyingDataProvider
+        .builder(/* key store location and type */)
+        .build();
 // Define the signed object
 DataObjectDesc obj = new DataObjectReference("")
         .withTransform(new EnvelopedSignatureTransform())
@@ -36,7 +38,7 @@ signer.sign(new SignedDataObjects(obj), doc.getDocumentElement());
 # Docs and Q&A
 
 - General usage documentation can be found on the project's [wiki](https://github.com/luisgoncalves/xades4j/wiki).
-- Javadocs for the latest version can be found [here](http://luisgoncalves.github.io/xades4j/javadocs/1.7.0). 
+- Javadocs for the latest version can be found [here](http://luisgoncalves.github.io/xades4j/javadocs/2.0.0). 
 - Unit tests in the source code illustrate all the features.
 - Overview of the architecture and implementation on the [XAdES4j Prezi](http://prezi.com/06vyxbgohncv/xades4j-en/).
 - `xades4j` tag on [Stack Overflow](http://stackoverflow.com/questions/tagged/xades4j).
