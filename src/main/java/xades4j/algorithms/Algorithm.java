@@ -22,7 +22,7 @@ package xades4j.algorithms;
  * signature algorithms or canonicalization algorithms. Subclasses are provided
  * for some common algorithms.
  *
- * @see xades4j.providers.AlgorithmsProviderEx
+ * @see xades4j.production.SignatureAlgorithms
  * @see xades4j.properties.DataObjectDesc#withTransform(Algorithm)
  *
  * @author Luís

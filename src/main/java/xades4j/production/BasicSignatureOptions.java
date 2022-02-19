@@ -20,7 +20,7 @@ package xades4j.production;
  * Configuration of basic signature options such as whether {@code ds:KeyInfo}
  * elements should be included.
  *
- * @see XadesSigningProfile#withBasicSignatureOptions(BasicSignatureOptions).
+ * @see XadesSigningProfile#withBasicSignatureOptions(BasicSignatureOptions)
  *
  * @author luis
  */
