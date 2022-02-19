@@ -30,12 +30,15 @@ import javax.xml.transform.stream.StreamResult;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
+import xades4j.providers.impl.HttpTsaConfiguration;
 
 /**
  * @author Luís
  */
 public class SignatureServicesTestBase
 {
+
+    static protected HttpTsaConfiguration DEFAULT_TEST_TSA = new HttpTsaConfiguration("http://tss.accv.es:8318/tsa");
 
     static private DocumentBuilder db;
 

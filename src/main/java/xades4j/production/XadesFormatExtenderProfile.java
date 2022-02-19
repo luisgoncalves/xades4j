@@ -62,6 +62,11 @@ public class XadesFormatExtenderProfile
         return this;
     }
 
+    public final XadesFormatExtenderProfile with(Object instance) {
+        this.profileCore.addBinding((Class)instance.getClass(), instance);
+        return this;
+    }
+
     private static final Module[] overridableModules =
     {
         new DefaultProductionBindingsModule(),

@@ -155,6 +155,16 @@ public abstract class XadesSigningProfile
         return this;
     }
 
+    /**
+     * Adds an instance dependency mapping to the profile, using the instance type as dependency.
+     * @param instance the instance that resolves the dependency
+     * @return this profile
+     */
+    public final XadesSigningProfile with(Object instance) {
+        this.profileCore.addBinding((Class)instance.getClass(), instance);
+        return this;
+    }
+
     /*
      **********************************************************************
      */

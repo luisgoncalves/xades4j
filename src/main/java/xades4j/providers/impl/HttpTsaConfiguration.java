@@ -24,13 +24,13 @@ package xades4j.providers.impl;
  *
  * @author Luís
  */
-public final class TSAHttpData
+public final class HttpTsaConfiguration
 {
     private final String url;
     private final String username;
     private final String password;
 
-    public TSAHttpData(String url, String username, String password)
+    public HttpTsaConfiguration(String url, String username, String password)
     {
         if (url == null)
         {
@@ -47,7 +47,7 @@ public final class TSAHttpData
         this.password = password;
     }
 
-    public TSAHttpData(String url)
+    public HttpTsaConfiguration(String url)
     {
         this(url, null, null);
     }

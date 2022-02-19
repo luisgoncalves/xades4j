@@ -21,6 +21,7 @@ import java.io.InputStream;
 import org.junit.Test;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
+import xades4j.providers.impl.HttpTsaConfiguration;
 import xades4j.providers.impl.ValidationDataFromCertValidationProvider;
 import xades4j.providers.ValidationDataProvider;
 import xades4j.verification.VerifierTestBase;
@@ -40,7 +41,7 @@ public class SignerCTest extends SignerTestBase
         Element elemToSign = doc.getDocumentElement();
 
         ValidationDataProvider vdp = new ValidationDataFromCertValidationProvider(VerifierTestBase.validationProviderNist);
-        SignerC signer = (SignerC)new XadesCSigningProfile(keyingProviderNist, vdp).newSigner();
+        XadesSigner signer = new XadesCSigningProfile(keyingProviderNist, vdp).with(DEFAULT_TEST_TSA).newSigner();
         new Enveloped(signer).sign(elemToSign);
 
         outputDocument(doc, "document.signed.c.xml");
@@ -52,7 +53,7 @@ public class SignerCTest extends SignerTestBase
         System.out.println("signFileDetachedC");
 
         ValidationDataProvider vdp = new ValidationDataFromCertValidationProvider(VerifierTestBase.validationProviderNist);
-        SignerC signer = (SignerC)new XadesCSigningProfile(keyingProviderNist, vdp).newSigner();
+        XadesSigner signer = new XadesCSigningProfile(keyingProviderNist, vdp).with(DEFAULT_TEST_TSA).newSigner();
 
         InputStream is = new FileInputStream("license.txt");
         AnonymousDataObjectReference ref = new AnonymousDataObjectReference(is);

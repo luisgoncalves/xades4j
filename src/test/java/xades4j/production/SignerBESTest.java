@@ -32,6 +32,7 @@ import xades4j.properties.IndividualDataObjsTimeStampProperty;
 import xades4j.properties.SignerRoleProperty;
 import xades4j.providers.SignaturePropertiesCollector;
 import xades4j.providers.SignaturePropertiesProvider;
+import xades4j.providers.impl.HttpTsaConfiguration;
 
 import java.io.File;
 
@@ -54,7 +55,7 @@ public class SignerBESTest extends SignerTestBase
         Document doc2 = getDocument("content.xml");
         Node objectContent = doc1.importNode(doc2.getDocumentElement(), true);
         Element elemToSign = doc1.getDocumentElement();
-        SignerBES signer = (SignerBES)new XadesBesSigningProfile(keyingProviderMy).newSigner();
+        XadesSigner signer = new XadesBesSigningProfile(keyingProviderMy).with(DEFAULT_TEST_TSA).newSigner();
 
         IndividualDataObjsTimeStampProperty dataObjsTimeStamp = new IndividualDataObjsTimeStampProperty();
         AllDataObjsCommitmentTypeProperty globalCommitment = AllDataObjsCommitmentTypeProperty.proofOfApproval();
@@ -90,7 +91,7 @@ public class SignerBESTest extends SignerTestBase
         System.out.println("signBESExternalRes");
 
         Document doc = getNewDocument();
-        SignerBES signer = (SignerBES)new XadesBesSigningProfile(keyingProviderNist).newSigner();
+        XadesSigner signer = new XadesBesSigningProfile(keyingProviderNist).with(DEFAULT_TEST_TSA).newSigner();
 
         DataObjectDesc obj1 = new DataObjectReference("logo-01.png")
                 .withDataObjectFormat(new DataObjectFormatProperty("image/png").withDescription("XAdES4j logo"))
@@ -120,7 +121,7 @@ public class SignerBESTest extends SignerTestBase
                 signedPropsCol.setSignerRole(new SignerRoleProperty("CounterSignature maniac"));
             }
         });
-        SignerBES signer = (SignerBES)profile.newSigner();
+        XadesSigner signer = profile.newSigner();
 
         DataObjectDesc obj1 = new DataObjectReference('#' + elemToSign.getAttribute("Id")).withTransform(new EnvelopedSignatureTransform());
         SignedDataObjects dataObjs = new SignedDataObjects().withSignedDataObject(obj1);

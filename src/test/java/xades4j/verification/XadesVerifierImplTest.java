@@ -53,6 +53,7 @@ import xades4j.properties.SignatureTimeStampProperty;
 import xades4j.properties.SigningCertificateProperty;
 import xades4j.properties.SigningTimeProperty;
 import xades4j.providers.CannotBuildCertificationPathException;
+import xades4j.providers.impl.HttpTsaConfiguration;
 
 /**
  * @author Luís
@@ -211,7 +212,7 @@ public class XadesVerifierImplTest extends VerifierTestBase
         Document doc = getDocument("document.signed.bes.xml");
         Element signatureNode = getSigElement(doc);
 
-        XadesSignatureFormatExtender formExt = new XadesFormatExtenderProfile().getFormatExtender();
+        XadesSignatureFormatExtender formExt = new XadesFormatExtenderProfile().with(DEFAULT_TEST_TSA).getFormatExtender();
         XAdESVerificationResult res = verificationProfile.newVerifier().verify(signatureNode, null, formExt, XAdESForm.T);
         assertEquals(XAdESForm.BES, res.getSignatureForm());
 
@@ -230,7 +231,7 @@ public class XadesVerifierImplTest extends VerifierTestBase
         Element signatureNode = getSigElement(doc);
         SignatureSpecificVerificationOptions options = new SignatureSpecificVerificationOptions().useBaseUri("http://luisgoncalves.github.io/xades4j/images/");
 
-        XadesSignatureFormatExtender formExt = new XadesFormatExtenderProfile().getFormatExtender();
+        XadesSignatureFormatExtender formExt = new XadesFormatExtenderProfile().with(DEFAULT_TEST_TSA).getFormatExtender();
 
         XAdESVerificationResult res = nistVerificationProfile.newVerifier().verify(signatureNode, options, formExt, XAdESForm.C);
         assertEquals(XAdESForm.BES, res.getSignatureForm());
@@ -328,7 +329,7 @@ public class XadesVerifierImplTest extends VerifierTestBase
         Document doc = getDocument("document.signed.c.xml");
         Element signatureNode = getSigElement(doc);
 
-        XadesSignatureFormatExtender formExt = new XadesFormatExtenderProfile().getFormatExtender();
+        XadesSignatureFormatExtender formExt = new XadesFormatExtenderProfile().with(DEFAULT_TEST_TSA).getFormatExtender();
         XAdESVerificationResult res = nistVerificationProfile.newVerifier().verify(signatureNode, null, formExt, XAdESForm.X_L);
 
         assertEquals(XAdESForm.C, res.getSignatureForm());
