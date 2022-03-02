@@ -9,7 +9,7 @@
 package xades4j.xml.bind;
 
 import java.io.IOException;
-import javax.xml.bind.annotation.adapters.XmlAdapter;
+import jakarta.xml.bind.annotation.adapters.XmlAdapter;
 
 public class Base64XmlAdapter
     extends XmlAdapter<String, byte[]>

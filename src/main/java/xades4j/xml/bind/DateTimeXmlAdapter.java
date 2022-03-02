@@ -17,7 +17,7 @@
 package xades4j.xml.bind;
 
 import java.util.Calendar;
-import javax.xml.bind.annotation.adapters.XmlAdapter;
+import jakarta.xml.bind.annotation.adapters.XmlAdapter;
 
 /**
  *
@@ -28,7 +28,7 @@ public class DateTimeXmlAdapter extends XmlAdapter<String, Calendar>
     @Override
     public Calendar unmarshal(String value)
     {
-        return (javax.xml.bind.DatatypeConverter.parseDateTime(value));
+        return (jakarta.xml.bind.DatatypeConverter.parseDateTime(value));
     }
 
     @Override
@@ -36,6 +36,6 @@ public class DateTimeXmlAdapter extends XmlAdapter<String, Calendar>
     {
         if (value == null)
             return null;
-        return (javax.xml.bind.DatatypeConverter.printDateTime(value));
+        return (jakarta.xml.bind.DatatypeConverter.printDateTime(value));
     }
 }

@@ -17,7 +17,7 @@
 package xades4j.xml.unmarshalling;
 
 import java.util.List;
-import javax.xml.bind.JAXBElement;
+import jakarta.xml.bind.JAXBElement;
 import xades4j.properties.QualifyingProperty;
 import xades4j.properties.SignaturePolicyBase;
 import xades4j.properties.data.SignaturePolicyData;

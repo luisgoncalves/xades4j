@@ -16,7 +16,7 @@
  */
 package xades4j.xml.marshalling;
 
-import javax.xml.bind.JAXBElement;
+import jakarta.xml.bind.JAXBElement;
 import javax.xml.namespace.QName;
 import org.w3c.dom.Document;
 import xades4j.properties.QualifyingProperty;

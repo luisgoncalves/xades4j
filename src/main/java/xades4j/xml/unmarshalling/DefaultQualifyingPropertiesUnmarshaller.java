@@ -16,10 +16,10 @@
  */
 package xades4j.xml.unmarshalling;
 
-import javax.xml.bind.JAXBContext;
-import javax.xml.bind.JAXBElement;
-import javax.xml.bind.JAXBException;
-import javax.xml.bind.Unmarshaller;
+import jakarta.xml.bind.JAXBContext;
+import jakarta.xml.bind.JAXBElement;
+import jakarta.xml.bind.JAXBException;
+import jakarta.xml.bind.Unmarshaller;
 import org.w3c.dom.Element;
 import xades4j.xml.bind.xades.XmlQualifyingPropertiesType;
 
@@ -69,7 +69,7 @@ final class DefaultQualifyingPropertiesUnmarshaller
             Unmarshaller unmarshaller = jaxbContext.createUnmarshaller();
             JAXBElement<XmlQualifyingPropertiesType> qualifPropsElem = (JAXBElement<XmlQualifyingPropertiesType>)unmarshaller.unmarshal(qualifyingProps);
             xmlQualifyingProps = qualifPropsElem.getValue();
-        } catch (javax.xml.bind.UnmarshalException ex)
+        } catch (jakarta.xml.bind.UnmarshalException ex)
         {
             throw new UnmarshalException("Cannot bind XML elements to Java classes", ex);
         } catch (JAXBException ex)

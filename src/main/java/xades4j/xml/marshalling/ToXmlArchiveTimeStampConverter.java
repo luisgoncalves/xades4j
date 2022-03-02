@@ -16,7 +16,7 @@
  */
 package xades4j.xml.marshalling;
 
-import javax.xml.bind.JAXBElement;
+import jakarta.xml.bind.JAXBElement;
 import xades4j.properties.data.ArchiveTimeStampData;
 import xades4j.xml.bind.xades.ObjectFactory;
 import xades4j.xml.bind.xades.XmlUnsignedPropertiesType;
