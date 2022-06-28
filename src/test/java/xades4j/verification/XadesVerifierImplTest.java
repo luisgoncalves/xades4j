@@ -30,6 +30,8 @@ import java.util.GregorianCalendar;
 import java.util.stream.Collectors;
 
 import org.apache.xml.security.signature.XMLSignature;
+import org.apache.xml.security.utils.resolver.implementations.ResolverDirectHTTP;
+import org.apache.xml.security.utils.resolver.implementations.ResolverLocalFilesystem;
 import org.junit.Before;
 import org.junit.Test;
 import org.w3c.dom.Document;
@@ -171,7 +173,9 @@ public class XadesVerifierImplTest extends VerifierTestBase
     {
         var result = verifySignature(
                 "detached.bes.xml",
-                new SignatureSpecificVerificationOptions().useBaseUri(new File("src/test/xml/").toURI().toString()));
+                new SignatureSpecificVerificationOptions()
+                        .useBaseUri(new File("src/test/xml/").toURI().toString())
+                        .useResourceResolver(new ResolverLocalFilesystem()));
 
         assertEquals(XAdESForm.BES, result.getSignatureForm());
 
@@ -229,7 +233,9 @@ public class XadesVerifierImplTest extends VerifierTestBase
 
         Document doc = getDocument("document.signed.bes.extres.xml");
         Element signatureNode = getSigElement(doc);
-        SignatureSpecificVerificationOptions options = new SignatureSpecificVerificationOptions().useBaseUri("http://luisgoncalves.github.io/xades4j/images/");
+        SignatureSpecificVerificationOptions options = new SignatureSpecificVerificationOptions()
+                .useBaseUri("http://luisgoncalves.github.io/xades4j/images/")
+                .useResourceResolver(new ResolverDirectHTTP());
 
         XadesSignatureFormatExtender formExt = new XadesFormatExtenderProfile().with(DEFAULT_TEST_TSA).getFormatExtender();
 
