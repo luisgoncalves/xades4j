@@ -1,0 +1,6 @@
+cn = "Expired Test User"
+email = test@xades4j.test
+signing_key
+# set dates expired
+activation_date = "2040-02-20 16:21:42"
+expiration_date = "2040-04-20 16:21:41"

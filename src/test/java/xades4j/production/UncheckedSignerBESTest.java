@@ -19,6 +19,7 @@ package xades4j.production;
 import xades4j.algorithms.EnvelopedSignatureTransform;
 import xades4j.algorithms.ExclusiveCanonicalXMLWithoutComments;
 import xades4j.properties.DataObjectDesc;
+import xades4j.providers.CannotBuildCertificationPathException;
 import xades4j.providers.CertificateValidationProvider;
 import xades4j.providers.KeyingDataProvider;
 import xades4j.providers.impl.PKIXCertificateValidationProvider;
@@ -50,32 +51,37 @@ public class UncheckedSignerBESTest extends SignerTestBase
 {
     private KeyingDataProvider keyingProviderGood;
     private KeyingDataProvider keyingProviderNoSign;
+    private KeyingDataProvider keyingProviderExp;
+    private KeyingDataProvider keyingProviderNyv;
     private CertificateValidationProvider validationProvider;
 
     public UncheckedSignerBESTest() throws Exception
     {
         keyingProviderGood = createFileSystemKeyingDataProvider("PKCS12", "unchecked/good.p12", "password", true);
-        keyingProviderNoSign = createFileSystemKeyingDataProvider("PKCS12", "unchecked/noSignKeyUsage.p12", "password",
-                true);
+        keyingProviderNoSign = createFileSystemKeyingDataProvider("PKCS12", "unchecked/noSignKeyUsage.p12", "password",true);
+        keyingProviderExp = createFileSystemKeyingDataProvider("PKCS12", "unchecked/expired.p12", "password", true);
+        keyingProviderNyv = createFileSystemKeyingDataProvider("PKCS12", "unchecked/notYetValid.p12", "password", true);
         validationProvider = genValidationProvider("unchecked/TestCA.cer", "unchecked");
     }
 
     private void trySignAndVerify(final KeyingDataProvider signProvider,
                                   final CertificateValidationProvider verifyProvider, final String outputName) throws Exception
     {
-        this.trySignAndVerify(signProvider, verifyProvider, outputName, true);
+        this.trySignAndVerify(signProvider, verifyProvider, outputName, true, true);
     }
 
     private void trySignAndVerify(final KeyingDataProvider signProvider,
                                   final CertificateValidationProvider verifyProvider, final String outputName,
-                                  final boolean verifySignatureKeyUsage) throws Exception
+                                  final boolean verifySignatureKeyUsage,
+                                  final boolean verifySignerValidity) throws Exception
     {
         Document doc = getTestDocument();
         Element elemToSign = doc.getDocumentElement();
 
         final XadesBesSigningProfile signProfile = new XadesBesSigningProfile(signProvider);
         final BasicSignatureOptions opts = new BasicSignatureOptions();
-        opts.checkKeyUsage(false);
+        opts.checkKeyUsage(false)
+            .checkValidity(false);
         signProfile.withBasicSignatureOptions(opts);
         XadesSigner signer = signProfile.newSigner();
 
@@ -91,7 +97,8 @@ public class UncheckedSignerBESTest extends SignerTestBase
         Element sig = (Element) doc.getDocumentElement()
                 .getElementsByTagNameNS(Constants.SignatureSpecNS, Constants._TAG_SIGNATURE).item(0);
         SignatureSpecificVerificationOptions verifyOpts = new SignatureSpecificVerificationOptions()
-                .checkKeyUsage(verifySignatureKeyUsage);
+                .checkKeyUsage(verifySignatureKeyUsage)
+                .checkValidity(verifySignerValidity);
         XAdESVerificationResult res = p.newVerifier().verify(sig, verifyOpts);
         assertEquals(res.getSignatureForm(), XAdESForm.BES);
     }
@@ -154,6 +161,40 @@ public class UncheckedSignerBESTest extends SignerTestBase
 
         // same certificate as in testUncheckedSignBesNoSignKeyUsage(), but keyUsage
         // check disabled during verification
-        trySignAndVerify(keyingProviderNoSign, validationProvider, "document.unchecked.signed.bes.nosign.xml", false);
+        trySignAndVerify(keyingProviderNoSign, validationProvider, "document.unchecked.signed.bes.nosign.xml", false, true);
     }
+
+    @Test(expected = CannotBuildCertificationPathException.class)
+    public void testUncheckedSignBesExpired() throws Exception
+    {
+        System.out.println("uncheckedSignBesExpired");
+        trySignAndVerify(keyingProviderExp, validationProvider, "document.unchecked.signed.bes.expired.xml");
+    }
+
+    @Test
+    public void testUncheckedSignBesExpiredUncheckedVerify() throws Exception
+    {
+        System.out.println("uncheckedSignBesExpiredUncheckedVerify");
+
+        // same certificate as in testUncheckedSignBesExpired(), but validation check disabled during verification
+        trySignAndVerify(keyingProviderExp, validationProvider, "document.unchecked.signed.bes.expired.xml", true, false);
+    }
+
+    @Test(expected = CannotBuildCertificationPathException.class)
+    public void testUncheckedSignBesNyv() throws Exception
+    {
+        System.out.println("uncheckedSignBesExpired");
+        trySignAndVerify(keyingProviderNyv, validationProvider, "document.unchecked.signed.bes.nyv.xml");
+    }
+
+    @Test
+    public void testUncheckedSignBesNyvUncheckedVerify() throws Exception
+    {
+        System.out.println("uncheckedSignBespNyvUncheckedVerify");
+
+        // same certificate as in testUncheckedSignBesNyv(), but validation check disabled during verification
+        trySignAndVerify(keyingProviderNyv, validationProvider, "document.unchecked.signed.bes.nyv.xml", true, false);
+    }
+
+
 }

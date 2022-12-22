@@ -39,6 +39,7 @@ public class SignatureSpecificVerificationOptions
 
     private String baseUriForRelativeReferences;
     private boolean checkKeyUsage = true;
+    private boolean checkValidity = true;
     private InputStream dataForAnonymousReference;
     private Date defaultVerificationDate = new Date();
     private final List<ResourceResolverSpi> resolvers = new ArrayList<ResourceResolverSpi>(0);
@@ -67,6 +68,11 @@ public class SignatureSpecificVerificationOptions
         return checkKeyUsage;
     }
 
+    protected boolean checkValidity()
+    {
+        return checkValidity;
+    }
+
     /**
      * Configures whether to check that the keyUsage of the signer certificate
      * allows use for signing. If enabled (the default) signature validation will
@@ -78,6 +84,19 @@ public class SignatureSpecificVerificationOptions
     public SignatureSpecificVerificationOptions checkKeyUsage(boolean enabled)
     {
         this.checkKeyUsage = enabled;
+        return this;
+    }
+
+    /**
+     * Configures whether to check the validity (time) of the signer certificate
+     * If enabled (the default) signature validation will fail if certificate is invalid.
+     *
+     * @param enabled {@code true} to enable the check, {@code false} to disable
+     * @return the current instance
+     */
+    public SignatureSpecificVerificationOptions checkValidity(boolean enabled)
+    {
+        this.checkValidity = enabled;
         return this;
     }
 

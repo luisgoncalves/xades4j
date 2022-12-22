@@ -76,13 +76,13 @@ class KeyInfoBuilder
             }
         }
 
-        try
-        {
-            signingCertificate.checkValidity();
-        } catch (CertificateException ce)
-        {
-            // CertificateExpiredException or CertificateNotYetValidException
-            throw new SigningCertValidityException(signingCertificate);
+        if (this.basicSignatureOptions.checkValidity()) {
+            try {
+                signingCertificate.checkValidity();
+            } catch (CertificateException ce) {
+                // CertificateExpiredException or CertificateNotYetValidException
+                throw new SigningCertValidityException(signingCertificate);
+            }
         }
 
         if (this.basicSignatureOptions.includeSigningCertificate() != SigningCertificateMode.NONE
