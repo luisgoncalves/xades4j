@@ -183,20 +183,9 @@ class XadesVerifierImpl implements XadesVerifier
 
         /* Certification path */
 
+        Date validationDate = getValidationDate(qualifPropsData, signature, verificationOptions);
         CertRef signingCertRefAttempt = tryGetSigningCertificateRef(qualifPropsData);
         KeyInfoRes keyInfoRes = KeyInfoProcessor.process(signature.getKeyInfo(), signingCertRefAttempt, this.x500NameStyleProvider);
-
-        Date validationDate;
-        if(verificationOptions.checkValidity())
-        {
-            validationDate = getValidationDate(qualifPropsData, signature, verificationOptions);
-        }
-        else
-        {
-            // use not before of signature certificate instead of sig date or not
-            validationDate = keyInfoRes.certSelector.getCertificate().getNotBefore();
-        }
-
         ValidationData certValidationRes = this.certificateValidator.validate(
                 keyInfoRes.certSelector,
                 validationDate,

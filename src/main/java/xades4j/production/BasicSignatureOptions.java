@@ -27,7 +27,7 @@ package xades4j.production;
 public final class BasicSignatureOptions
 {
     private boolean checkKeyUsage = true;
-    private boolean checkValidity = true;
+    private boolean checkCertificateValidity = true;
     private SigningCertificateMode includeSigningCertificateMode = SigningCertificateMode.SIGNING_CERTIFICATE;
     private boolean includeSubjectName = false;
     private boolean includeIssuerSerial = false;
@@ -58,9 +58,9 @@ public final class BasicSignatureOptions
      * @param enabled {@code true} to enable the check, {@code false} to disable
      * @return the current instance
      */
-    public BasicSignatureOptions checkValidity(boolean enabled)
+    public BasicSignatureOptions checkCertificateValidity(final boolean enabled)
     {
-        this.checkValidity = enabled;
+        this.checkCertificateValidity = enabled;
         return this;
     }
 
@@ -69,9 +69,9 @@ public final class BasicSignatureOptions
         return this.checkKeyUsage;
     }
 
-    boolean checkValidity()
+    boolean checkCertificateValidity()
     {
-        return this.checkValidity;
+        return this.checkCertificateValidity;
     }
 
     /**
