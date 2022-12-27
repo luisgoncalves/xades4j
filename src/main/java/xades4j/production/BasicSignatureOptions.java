@@ -27,6 +27,7 @@ package xades4j.production;
 public final class BasicSignatureOptions
 {
     private boolean checkKeyUsage = true;
+    private boolean checkCertificateValidity = true;
     private SigningCertificateMode includeSigningCertificateMode = SigningCertificateMode.SIGNING_CERTIFICATE;
     private boolean includeSubjectName = false;
     private boolean includeIssuerSerial = false;
@@ -48,9 +49,29 @@ public final class BasicSignatureOptions
         return this;
     }
 
+    /**
+     * Configures whether to check that an invalid (time) signing certificate
+     * is allowed for signing before creating a signature. If enabled (the default)
+     * signing will fail if the certificate is invalid in time (expired or not yet valid).
+     * You should only disable this for testing.
+     *
+     * @param enabled {@code true} to enable the check, {@code false} to disable
+     * @return the current instance
+     */
+    public BasicSignatureOptions checkCertificateValidity(final boolean enabled)
+    {
+        this.checkCertificateValidity = enabled;
+        return this;
+    }
+
     boolean checkKeyUsage()
     {
         return this.checkKeyUsage;
+    }
+
+    boolean checkCertificateValidity()
+    {
+        return this.checkCertificateValidity;
     }
 
     /**
