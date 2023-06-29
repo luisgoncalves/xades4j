@@ -83,9 +83,10 @@ public class OtherSignerTests extends SignerTestBase
         XadesSigner signer = new XadesBesSigningProfile(keyingProviderMy).newSigner();
 
         DataObjectDesc obj1 = new EnvelopedManifest()
-                .withSignedDataObject(new DataObjectReference("logo-01.png"))
+                .withSignedDataObject(new DataObjectReference("#" + root.getAttribute("Id"))
+                        .withTransform(new EnvelopedSignatureTransform()))
                 .withSignedDataObject(new EnvelopedXmlObject(doc.createTextNode("DATA")));
-        signer.sign(new SignedDataObjects(obj1).withBaseUri("http://luisgoncalves.github.io/xades4j/images/"), root);
+        signer.sign(new SignedDataObjects(obj1), root);
 
         outputDocument(doc, "document.signed.bes.manifest.xml");
     }
@@ -139,6 +140,7 @@ public class OtherSignerTests extends SignerTestBase
                         .withSignatureAlgorithm("RSA", ALGO_ID_SIGNATURE_RSA_SHA512)
                         .withCanonicalizationAlgorithmForTimeStampProperties(new ExclusiveCanonicalXMLWithoutComments())
                         .withDigestAlgorithmForReferenceProperties(ALGO_ID_DIGEST_SHA512))
+                .with(DEFAULT_TEST_TSA)
                 .newSigner();
         new Enveloped(signer).sign(elemToSign);
 

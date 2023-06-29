@@ -89,7 +89,6 @@ public class OtherVerifierTests extends VerifierTestBase
     public void testVerifyWithManifest() throws Exception
     {
         SignatureSpecificVerificationOptions options = new SignatureSpecificVerificationOptions()
-                .useBaseUri("http://luisgoncalves.github.io/xades4j/images/")
                 .followManifests(true);
         verifySignature("document.signed.bes.manifest.xml", mySigsVerificationProfile, options);
     }
