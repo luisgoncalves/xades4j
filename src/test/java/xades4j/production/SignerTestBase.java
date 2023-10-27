@@ -19,7 +19,7 @@ package xades4j.production;
 import java.io.File;
 import java.security.KeyStoreException;
 
-import static org.junit.Assume.assumeTrue;
+import static org.junit.jupiter.api.Assumptions.assumeTrue;
 
 import org.w3c.dom.Document;
 import xades4j.providers.impl.DirectPasswordProvider;

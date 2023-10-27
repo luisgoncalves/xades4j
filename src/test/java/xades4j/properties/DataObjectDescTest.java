@@ -16,56 +16,31 @@
  */
 package xades4j.properties;
 
-import xades4j.algorithms.XPath2FilterTransform.XPath2Filter;
-import xades4j.algorithms.GenericAlgorithm;
+import org.junit.jupiter.api.Test;
 import org.w3c.dom.Document;
-import org.junit.After;
-import org.junit.AfterClass;
-import org.junit.Before;
-import org.junit.BeforeClass;
-import org.junit.Test;
 import xades4j.algorithms.Algorithm;
+import xades4j.algorithms.GenericAlgorithm;
 import xades4j.algorithms.XPath2FilterTransform;
+import xades4j.algorithms.XPath2FilterTransform.XPath2Filter;
 import xades4j.algorithms.XPathTransform;
 import xades4j.utils.SignatureServicesTestBase;
-import static org.junit.Assert.*;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 /**
- *
  * @author Luís
  */
 public class DataObjectDescTest
 {
-    @BeforeClass
-    public static void setUpClass() throws Exception
-    {
-    }
-
-    @AfterClass
-    public static void tearDownClass() throws Exception
-    {
-    }
-
-    @Before
-    public void setUp()
-    {
-    }
-
-    @After
-    public void tearDown()
-    {
-    }
-
     @Test
     public void testWithTransform() throws Exception
     {
-        System.out.println("withTransform");
-        
         Document doc = SignatureServicesTestBase.getNewDocument();
         DataObjectDesc instance = new DataObjectDescTestImpl()
-            .withTransform(new XPathTransform("xpath"))
-            .withTransform(XPath2Filter.subtract("xpath1").intersect("xpath2"))
-            .withTransform(new GenericAlgorithm("uri", doc.createElement("param1"),doc.createElement("param2")));
+                .withTransform(new XPathTransform("xpath"))
+                .withTransform(XPath2Filter.subtract("xpath1").intersect("xpath2"))
+                .withTransform(new GenericAlgorithm("uri", doc.createElement("param1"), doc.createElement("param2")));
 
         Algorithm[] transforms = instance.getTransforms().toArray(new Algorithm[0]);
 
@@ -75,16 +50,17 @@ public class DataObjectDescTest
         assertEquals(GenericAlgorithm.class, transforms[2].getClass());
     }
 
-    @Test(expected = IllegalStateException.class)
+    @Test
     public void testWithDataObjectFormatRepeatedInstance()
     {
-        System.out.println("withDataObjectFormatRepeatedInstance");
-
         DataObjectFormatProperty format = new DataObjectFormatProperty();
         DataObjectDesc instance = new DataObjectDescTestImpl();
 
         instance.withDataObjectFormat(format);
-        instance.withDataObjectFormat(format);
+
+        assertThrows(IllegalStateException.class, () -> {
+            instance.withDataObjectFormat(format);
+        });
     }
 
     /**
@@ -92,8 +68,6 @@ public class DataObjectDescTest
      */
     public void testWithDataObjectFormatMultipleTargets()
     {
-        System.out.println("withDataObjectFormatMultipleTargets");
-
         DataObjectFormatProperty format = new DataObjectFormatProperty();
         DataObjectDesc instance = new DataObjectDescTestImpl();
         DataObjectDesc other = new DataObjectDescTestImpl();
@@ -108,8 +82,6 @@ public class DataObjectDescTest
     @Test
     public void testWithCommitmentType()
     {
-        System.out.println("withCommitmentType");
-
         CommitmentTypeProperty commitment1 = CommitmentTypeProperty.proofOfApproval();
         CommitmentTypeProperty commitment2 = CommitmentTypeProperty.proofOfCreation();
 
@@ -124,8 +96,6 @@ public class DataObjectDescTest
     @Test
     public void testHasProperties()
     {
-        System.out.println("hasProperties");
-
         DataObjectDesc instance = new DataObjectDescTestImpl();
         assertEquals(instance.hasProperties(), false);
 
@@ -139,8 +109,6 @@ public class DataObjectDescTest
     @Test
     public void testGetSignedDataObjProps()
     {
-        System.out.println("getSignedDataObjProps");
-
         DataObjectDesc instance = new DataObjectDescTestImpl();
         assertEquals(instance.getSignedDataObjProps().size(), 0);
 

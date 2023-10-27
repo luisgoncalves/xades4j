@@ -16,14 +16,16 @@
  */
 package xades4j.verification;
 
-import java.security.KeyStore;
-import org.junit.Test;
-import org.junit.Before;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import xades4j.providers.CannotSelectCertificateException;
 import xades4j.providers.impl.PKIXCertificateValidationProvider;
 
+import java.security.KeyStore;
+
+import static org.junit.jupiter.api.Assertions.assertThrows;
+
 /**
- *
  * @author Luís
  */
 public class XadesVerifierErrorsTest extends VerifierTestBase
@@ -31,87 +33,94 @@ public class XadesVerifierErrorsTest extends VerifierTestBase
     XadesVerificationProfile mySigsVerificationProfile;
     XadesVerificationProfile nistVerificationProfile;
 
-    @Before
+    @BeforeEach
     public void initialize()
     {
         mySigsVerificationProfile = new XadesVerificationProfile(VerifierTestBase.validationProviderMySigs);
         nistVerificationProfile = new XadesVerificationProfile(VerifierTestBase.validationProviderNist);
     }
 
-    @Test(expected = QualifyingPropertiesIncorporationException.class)
+    @Test
     public void testErrVerifySignedPropsIncorp() throws Exception
     {
-        System.out.println("errVerifySignedPropsIncorp");
-        verifyBadSignature("document.signed.t.bes.badsignedprops.xml", mySigsVerificationProfile);
+        assertThrows(QualifyingPropertiesIncorporationException.class, () -> {
+            verifyBadSignature("document.signed.t.bes.badsignedprops.xml", mySigsVerificationProfile);
+        });
     }
 
-    @Test(expected = QualifyingPropertiesIncorporationException.class)
+    @Test
     public void testErrVerifySignedPropsIncorpNoRefType() throws Exception
     {
-        System.out.println("errVerifySignedPropsIncorpNoRefType");
-
-        verifyBadSignature("document.signed.bes.signedpropsrefnotype.xml",
-                new XadesVerificationProfile(validationProviderPtCc));
+        assertThrows(QualifyingPropertiesIncorporationException.class, () -> {
+            verifyBadSignature("document.signed.bes.signedpropsrefnotype.xml",
+                    new XadesVerificationProfile(validationProviderPtCc));
+        });
     }
 
-    @Test(expected = InvalidXAdESFormException.class)
+    @Test
     public void testErrVerifyIncorrectC() throws Exception
     {
-        System.out.println("errVerifyIncorrectC");
-        verifyBadSignature("document.signed.c.bad.xml",nistVerificationProfile);
+        assertThrows(InvalidXAdESFormException.class, () -> {
+            verifyBadSignature("document.signed.c.bad.xml", nistVerificationProfile);
+        });
     }
 
-    @Test(expected = CannotSelectCertificateException.class)
+    @Test
     public void testErrVerifyNoSignCert() throws Exception
     {
-        System.out.println("ErrVerifyNoSignCert");
-
         KeyStore ks = createAndLoadJKSKeyStore("be/beStore", "bestorepass");
         PKIXCertificateValidationProvider cvp = PKIXCertificateValidationProvider.builder(ks).checkRevocation(false).build();
-        verifyBadSignature("TSL_BE.nocert.xml", new XadesVerificationProfile(cvp));
+        assertThrows(CannotSelectCertificateException.class, () -> {
+            verifyBadSignature("TSL_BE.nocert.xml", new XadesVerificationProfile(cvp));
+        });
     }
 
-    @Test(expected = ReferenceValueException.class)
+    @Test
     public void testErrVerifyChangedDataObj() throws Exception
     {
-        System.out.println("errVerifyChangedDataObj");
-        verifyBadSignature("document.signed.bes.invaliddataobj.xml", mySigsVerificationProfile);
+        assertThrows(ReferenceValueException.class, () -> {
+            verifyBadSignature("document.signed.bes.invaliddataobj.xml", mySigsVerificationProfile);
+        });
     }
 
-    @Test(expected = SignatureValueException.class)
+    @Test
     public void testErrVerifyChangedSigValue() throws Exception
     {
-        System.out.println("errVerifyChangedSigValue");
-        verifyBadSignature("document.signed.bes.invalidsigvalue.xml", mySigsVerificationProfile);
+        assertThrows(SignatureValueException.class, () -> {
+            verifyBadSignature("document.signed.bes.invalidsigvalue.xml", mySigsVerificationProfile);
+        });
     }
 
-    @Test(expected = CompleteCertRefsCertNotFoundException.class)
+    @Test
     public void testErrVerifyCMissingCertRef() throws Exception
     {
-        System.out.println("errVerifyCMissingCertRef");
-        verifyBadSignature("document.signed.c.missingcertref.xml", nistVerificationProfile);
+        assertThrows(CompleteCertRefsCertNotFoundException.class, () -> {
+            verifyBadSignature("document.signed.c.missingcertref.xml", nistVerificationProfile);
+        });
     }
 
-    @Test(expected = TimeStampDigestMismatchException.class)
+    @Test
     public void testErrVerifyUnmatchSigTSDigest() throws Exception
     {
-//        DefaultTimeStampTokenProvider tsProv = new DefaultTimeStampTokenProvider(new DefaultMessageDigestProvider());
-//        byte[] tkn = tsProv.getTimeStampToken("badTimeStamp".getBytes(), Constants.ALGO_ID_DIGEST_SHA1).encodedTimeStampToken;
-//
-//        Document doc = getDocument("document.signed.t.bes.xml");
-//        Element encTS = (Element)doc.getElementsByTagNameNS(QualifyingProperty.XADES_XMLNS, "EncapsulatedTimeStamp").item(0);
-//        encTS.setTextContent(Base64.encodeBytes(tkn));
-//        outputDocument(doc, "bad/document.signed.t.bes.badtsdigest.xml");
+        //        DefaultTimeStampTokenProvider tsProv = new DefaultTimeStampTokenProvider(new DefaultMessageDigestProvider());
+        //        byte[] tkn = tsProv.getTimeStampToken("badTimeStamp".getBytes(), Constants.ALGO_ID_DIGEST_SHA1).encodedTimeStampToken;
+        //
+        //        Document doc = getDocument("document.signed.t.bes.xml");
+        //        Element encTS = (Element)doc.getElementsByTagNameNS(QualifyingProperty.XADES_XMLNS, "EncapsulatedTimeStamp").item(0);
+        //        encTS.setTextContent(Base64.encodeBytes(tkn));
+        //        outputDocument(doc, "bad/document.signed.t.bes.badtsdigest.xml");
 
-        System.out.println("errVerifyUnmatchSigTSDigest");
-        verifyBadSignature("document.signed.t.bes.badtsdigest.xml", mySigsVerificationProfile);
+        assertThrows(TimeStampDigestMismatchException.class, () -> {
+            verifyBadSignature("document.signed.t.bes.badtsdigest.xml", mySigsVerificationProfile);
+        });
     }
-    
-    @Test(expected = CounterSignatureSigValueRefException.class)
+
+    @Test
     public void testErrVerifyCounterSigWithUnallowedTransforms() throws Exception
     {
-        System.out.println("errVerifyCounterSigWithUnallowedTransforms");
-        verifyBadSignature("document.signed.bes.cs.invalidtransforms.xml", mySigsVerificationProfile);
+        assertThrows(CounterSignatureSigValueRefException.class, () -> {
+            verifyBadSignature("document.signed.bes.cs.invalidtransforms.xml", mySigsVerificationProfile);
+        });
     }
 
     private static void verifyBadSignature(String sigFileName, XadesVerificationProfile p) throws Exception

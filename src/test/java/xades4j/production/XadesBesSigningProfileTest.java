@@ -19,10 +19,11 @@ package xades4j.production;
 import java.security.PrivateKey;
 import java.security.cert.X509Certificate;
 import java.util.List;
-import org.junit.Test;
-import static org.junit.Assert.*;
+import org.junit.jupiter.api.Test;
 import xades4j.utils.XadesProfileResolutionException;
 import xades4j.providers.KeyingDataProvider;
+
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 /**
  *

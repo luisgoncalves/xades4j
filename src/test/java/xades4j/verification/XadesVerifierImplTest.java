@@ -16,28 +16,14 @@
  */
 package xades4j.verification;
 
-import java.io.File;
-
-import static junit.framework.TestCase.assertTrue;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-
-import java.io.FileInputStream;
-import java.io.InputStream;
-import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.GregorianCalendar;
-import java.util.stream.Collectors;
-
 import org.apache.xml.security.signature.XMLSignature;
 import org.apache.xml.security.utils.resolver.implementations.ResolverDirectHTTP;
 import org.apache.xml.security.utils.resolver.implementations.ResolverLocalFilesystem;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.NodeList;
-
 import xades4j.algorithms.CanonicalXMLWithoutComments;
 import xades4j.production.XadesFormatExtenderProfile;
 import xades4j.production.XadesSignatureFormatExtender;
@@ -55,7 +41,18 @@ import xades4j.properties.SignatureTimeStampProperty;
 import xades4j.properties.SigningCertificateProperty;
 import xades4j.properties.SigningTimeProperty;
 import xades4j.providers.CannotBuildCertificationPathException;
-import xades4j.providers.impl.HttpTsaConfiguration;
+
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.InputStream;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.GregorianCalendar;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 /**
  * @author Luís
@@ -65,7 +62,7 @@ public class XadesVerifierImplTest extends VerifierTestBase
     XadesVerificationProfile verificationProfile;
     XadesVerificationProfile nistVerificationProfile;
 
-    @Before
+    @BeforeEach
     public void initialize()
     {
         verificationProfile = new XadesVerificationProfile(VerifierTestBase.validationProviderMySigs);
@@ -118,7 +115,6 @@ public class XadesVerifierImplTest extends VerifierTestBase
     @Test
     public void testVerifyBESWithoutKeyInfo() throws Exception
     {
-        System.out.println("verifyBES");
         var result = verifySignature("document.signed.bes.no-ki.xml");
         assertEquals(XAdESForm.BES, result.getSignatureForm());
     }
@@ -127,22 +123,24 @@ public class XadesVerifierImplTest extends VerifierTestBase
      * Try to verify a test xades BES (no timestamp) in year 2041, expect we
      * can't build the certificate path because certificates are expired.
      */
-    @Test(expected = CannotBuildCertificationPathException.class)
+    @Test
     public void testVerifyBESWithVerificationDate() throws Exception
     {
-        System.out.println("testVerifyBESWithVerificationDate");
         String sigFilename = "document.signed.bes.xml";
         Element signatureNode = getSigElement(getDocument(sigFilename));
         XadesVerificationProfile p = new XadesVerificationProfile(VerifierTestBase.validationProviderMySigs);
-        Date verificationDate = new SimpleDateFormat("YYYY").parse("2041");
-        p.newVerifier().verify(signatureNode,
-                new SignatureSpecificVerificationOptions().setDefaultVerificationDate(verificationDate));
+        XadesVerifier verifier = p.newVerifier();
+
+        assertThrows(CannotBuildCertificationPathException.class, () -> {
+            Date verificationDate = new SimpleDateFormat("YYYY").parse("2041");
+            verifier.verify(signatureNode,
+                    new SignatureSpecificVerificationOptions().setDefaultVerificationDate(verificationDate));
+        });
     }
 
-    @Test(expected = InvalidSignatureException.class)
+    @Test
     public void testVerifyWithCustomRawVerifier() throws Exception
     {
-        System.out.println("verifyWithCustomRawVerifier");
         verificationProfile.withRawSignatureVerifier(new RawSignatureVerifier()
         {
             @Override
@@ -153,8 +151,10 @@ public class XadesVerifierImplTest extends VerifierTestBase
                 throw new InvalidSignatureException("Rejected by RawSignatureVerifier");
             }
         });
-        var result = verifySignature("document.signed.bes.xml", verificationProfile);
-        assertEquals(XAdESForm.BES, result.getSignatureForm());
+
+        assertThrows(InvalidSignatureException.class, () -> {
+            verifySignature("document.signed.bes.xml", verificationProfile);
+        });
     }
 
     @Test
@@ -203,7 +203,6 @@ public class XadesVerifierImplTest extends VerifierTestBase
     @Test
     public void testVerifyBESCounterSigCounterSig() throws Exception
     {
-        System.out.println("verifyBESCounterSigCounterSig");
         var result = verifySignature("document.signed.bes.cs.cs.xml");
         assertEquals(XAdESForm.BES, result.getSignatureForm());
     }
@@ -211,8 +210,6 @@ public class XadesVerifierImplTest extends VerifierTestBase
     @Test
     public void testVerifyBESEnrichT() throws Exception
     {
-        System.out.println("verifyBESEnrichT");
-
         Document doc = getDocument("document.signed.bes.xml");
         Element signatureNode = getSigElement(doc);
 
@@ -229,8 +226,6 @@ public class XadesVerifierImplTest extends VerifierTestBase
     @Test
     public void testVerifyBESExtrnlResEnrichC() throws Exception
     {
-        System.out.println("verifyBESExtrnlResEnrichC");
-
         Document doc = getDocument("document.signed.bes.extres.xml");
         Element signatureNode = getSigElement(doc);
         SignatureSpecificVerificationOptions options = new SignatureSpecificVerificationOptions()
@@ -311,8 +306,6 @@ public class XadesVerifierImplTest extends VerifierTestBase
     @Test
     public void testVerifyDetachedC() throws Exception
     {
-        System.out.println("verifyDetachedC");
-
         Document doc = getDocument("detached.c.xml");
         Element signatureNode = getSigElement(doc);
         XadesVerifier verifier = nistVerificationProfile.newVerifier();
@@ -330,8 +323,6 @@ public class XadesVerifierImplTest extends VerifierTestBase
     @Test
     public void testVerifyCEnrichXL() throws Exception
     {
-        System.out.println("verifyCEnrichXL");
-
         Document doc = getDocument("document.signed.c.xml");
         Element signatureNode = getSigElement(doc);
 

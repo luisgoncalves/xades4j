@@ -3,14 +3,10 @@ package xades4j.production;
 import org.bouncycastle.asn1.ASN1Encodable;
 import org.bouncycastle.asn1.DERBMPString;
 import org.bouncycastle.asn1.DERUTF8String;
-
-
 import org.bouncycastle.asn1.x500.AttributeTypeAndValue;
 import org.bouncycastle.asn1.x500.X500Name;
 import org.bouncycastle.asn1.x500.X500NameBuilder;
-
 import org.bouncycastle.asn1.x500.style.RFC4519Style;
-
 import org.bouncycastle.asn1.x509.BasicConstraints;
 import org.bouncycastle.asn1.x509.Extension;
 import org.bouncycastle.asn1.x509.KeyUsage;
@@ -19,56 +15,49 @@ import org.bouncycastle.cert.jcajce.JcaX509CertificateConverter;
 import org.bouncycastle.cert.jcajce.JcaX509v3CertificateBuilder;
 import org.bouncycastle.jce.provider.BouncyCastleProvider;
 import org.bouncycastle.operator.jcajce.JcaContentSignerBuilder;
-import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.junit.runners.Parameterized;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.MethodSource;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import xades4j.algorithms.EnvelopedSignatureTransform;
 import xades4j.properties.DataObjectDesc;
-
 import xades4j.providers.impl.DirectKeyingDataProvider;
-
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.math.BigInteger;
-
 import java.security.KeyPair;
 import java.security.KeyPairGenerator;
 import java.security.SecureRandom;
 import java.security.Security;
 import java.security.cert.X509Certificate;
-import java.util.ArrayList;
-import java.util.Collection;
 import java.util.Date;
+import java.util.List;
 import java.util.Random;
-
 
 /**
  * @author Artem R. Romanenko
  * @version 02/04/2018
  */
-@RunWith(Parameterized.class)
-public class SignerSpecificTest extends SignerTestBase {
+public class SignerSpecificTest extends SignerTestBase
+{
     private static final String NATIONAL_DN_CYRILLIC = "National name '\u043F\u0440\u0438\u043C\u0435\u0440'";
     private static final String NATIONAL_DN_ARABIC = "National name '\u0645\u062B\u0627\u0644'";
 
-    @Parameterized.Parameters
-    public static Collection<ASN1Encodable[]> data() {
-        ArrayList<ASN1Encodable[]> result = new ArrayList<ASN1Encodable[]>();
-        result.add(new ASN1Encodable[]{new DERBMPString(NATIONAL_DN_CYRILLIC)});
-        result.add(new ASN1Encodable[]{new DERUTF8String(NATIONAL_DN_CYRILLIC)});
-        result.add(new ASN1Encodable[]{new DERBMPString(NATIONAL_DN_ARABIC)});
-        result.add(new ASN1Encodable[]{new DERUTF8String(NATIONAL_DN_ARABIC)});
-        return result;
+    public static List<ASN1Encodable> data()
+    {
+        return List.of(
+                new DERBMPString(NATIONAL_DN_CYRILLIC),
+                new DERUTF8String(NATIONAL_DN_CYRILLIC),
+                new DERBMPString(NATIONAL_DN_ARABIC),
+                new DERUTF8String(NATIONAL_DN_ARABIC)
+        );
     }
 
-    @Parameterized.Parameter
-    public ASN1Encodable commonName;
-
-    @Test
-    public void signWithNationalCertificate() throws Exception {
+    @ParameterizedTest
+    @MethodSource("data")
+    public void signWithNationalCertificate(ASN1Encodable commonName) throws Exception
+    {
         Security.addProvider(new BouncyCastleProvider());
         KeyPairGenerator keyGen = KeyPairGenerator.getInstance("RSA", BouncyCastleProvider.PROVIDER_NAME);
         keyGen.initialize(1024, new SecureRandom());
@@ -114,7 +103,5 @@ public class SignerSpecificTest extends SignerTestBase {
         String str = new String(baos.toByteArray());
         //expected without parsing exception
         Document doc = parseDocument(new ByteArrayInputStream(baos.toByteArray()));
-
     }
-
 }

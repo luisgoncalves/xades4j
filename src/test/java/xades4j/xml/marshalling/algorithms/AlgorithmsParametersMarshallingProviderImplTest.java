@@ -16,16 +16,25 @@
  */
 package xades4j.xml.marshalling.algorithms;
 
-import org.w3c.dom.Node;
-import java.util.List;
-import xades4j.algorithms.*;
-import com.google.inject.Injector;
 import com.google.inject.Guice;
+import com.google.inject.Injector;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.w3c.dom.Document;
+import org.w3c.dom.Node;
+import xades4j.algorithms.Algorithm;
+import xades4j.algorithms.CanonicalXMLWithoutComments;
+import xades4j.algorithms.EnvelopedSignatureTransform;
+import xades4j.algorithms.ExclusiveCanonicalXMLWithComments;
+import xades4j.algorithms.GenericAlgorithm;
+import xades4j.algorithms.XPathTransform;
 import xades4j.utils.SignatureServicesTestBase;
-import org.junit.Test;
-import static org.junit.Assert.*;
-import org.junit.Before;
+
+import java.util.List;
+
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertNull;
 
 /**
  *
@@ -36,7 +45,7 @@ public class AlgorithmsParametersMarshallingProviderImplTest
     private Document doc;
     private AlgorithmsParametersMarshallingProviderImpl sut;
     
-    @Before
+    @BeforeEach
     public void setUp() throws Exception
     {
         doc = SignatureServicesTestBase.getNewDocument();

@@ -18,7 +18,7 @@ package xades4j.production;
 
 import java.io.FileInputStream;
 import java.io.InputStream;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import xades4j.providers.impl.HttpTsaConfiguration;
@@ -35,8 +35,6 @@ public class SignerCTest extends SignerTestBase
     @Test
     public void testSignC() throws Exception
     {
-        System.out.println("signC");
-
         Document doc = getTestDocument();
         Element elemToSign = doc.getDocumentElement();
 
@@ -50,8 +48,6 @@ public class SignerCTest extends SignerTestBase
     @Test
     public void testSignFileDetachedC() throws Exception
     {
-        System.out.println("signFileDetachedC");
-
         ValidationDataProvider vdp = new ValidationDataFromCertValidationProvider(VerifierTestBase.validationProviderNist);
         XadesSigner signer = new XadesCSigningProfile(keyingProviderNist, vdp).with(DEFAULT_TEST_TSA).newSigner();
 

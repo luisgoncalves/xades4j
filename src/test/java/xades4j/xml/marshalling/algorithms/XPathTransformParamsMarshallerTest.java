@@ -1,29 +1,30 @@
 package xades4j.xml.marshalling.algorithms;
 
-import java.util.List;
-import java.util.Map;
 import org.apache.xml.security.utils.Constants;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertNotNull;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import xades4j.algorithms.XPathTransform;
 import xades4j.utils.SignatureServicesTestBase;
 
+import java.util.List;
+import java.util.Map;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+
 /**
- *
  * @author Luís
  */
-public class XPathTransformParamsMarshallerTest {
-
+public class XPathTransformParamsMarshallerTest
+{
     private Document doc;
     private XPathTransformParamsMarshaller sut;
 
-    @Before
+    @BeforeEach
     public void setUp() throws Exception
     {
         doc = SignatureServicesTestBase.getNewDocument();
@@ -31,7 +32,7 @@ public class XPathTransformParamsMarshallerTest {
     }
 
     @Test
-    public void testMarshalXPathParametersWithNamespacePrefixes() throws Exception 
+    public void testMarshalXPathParametersWithNamespacePrefixes() throws Exception
     {
         XPathTransform xpath = new XPathTransform("foo:elem1/bar:elem2")
                 .withNamespace("foo", "http://test.xades4j/ns1")
@@ -43,7 +44,8 @@ public class XPathTransformParamsMarshallerTest {
 
         Map<String, String> namespaces = xpath.getNamespaces();
 
-        for (Map.Entry<String, String> entry : namespaces.entrySet()) {
+        for (Map.Entry<String, String> entry : namespaces.entrySet())
+        {
             String ns = paramNode.getAttributeNS(Constants.NamespaceSpecNS, entry.getKey());
             assertNotNull(ns);
             assertFalse(ns.isEmpty());

@@ -16,7 +16,7 @@
  */
 package xades4j.providers.impl;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import xades4j.production.Enveloped;
@@ -32,9 +32,9 @@ import java.security.cert.X509Certificate;
 import java.util.List;
 import java.util.UUID;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 /**
  * @author Luís
@@ -44,7 +44,6 @@ public class PKCS11KeyStoreKeyingDataProviderTest extends SignerTestBase
     @Test
     public void testCertAndKeyMatch() throws Exception
     {
-        System.out.println("certAndKeyMatch");
         assumePtCcPkcs11();
 
         KeyingDataProvider ptccKeyingDataProv = PKCS11KeyStoreKeyingDataProvider

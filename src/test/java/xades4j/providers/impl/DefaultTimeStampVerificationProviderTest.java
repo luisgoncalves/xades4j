@@ -1,16 +1,16 @@
 /*
  * XAdES4j - A Java library for generation and verification of XAdES signatures.
  * Copyright (C) 2012 Luis Goncalves.
- * 
+ *
  * XAdES4j is free software; you can redistribute it and/or modify it under
  * the terms of the GNU Lesser General Public License as published by the Free
  * Software Foundation; either version 3 of the License, or any later version.
- * 
+ *
  * XAdES4j is distributed in the hope that it will be useful, but WITHOUT
  * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
  * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
  * details.
- * 
+ *
  * You should have received a copy of the GNU Lesser General Public License along
  * with XAdES4j. If not, see <http://www.gnu.org/licenses/>.
  */
@@ -19,14 +19,16 @@ package xades4j.providers.impl;
 import java.io.ByteArrayOutputStream;
 import java.io.FileInputStream;
 import java.security.KeyStore;
-import org.junit.Test;
+
+import org.junit.jupiter.api.Test;
 import xades4j.providers.TimeStampTokenDigestException;
 import xades4j.providers.TimeStampTokenVerificationException;
 import xades4j.utils.StreamUtils;
 import xades4j.verification.VerifierTestBase;
 
+import static org.junit.jupiter.api.Assertions.assertThrows;
+
 /**
- *
  * @author Luís
  */
 public class DefaultTimeStampVerificationProviderTest extends VerifierTestBase
@@ -34,37 +36,36 @@ public class DefaultTimeStampVerificationProviderTest extends VerifierTestBase
     @Test
     public void testVerifyTokenSucceeds() throws Exception
     {
-        System.out.println("verifyTokenSucceeds");
-
         byte[] tsDigestInput = "TestDigestInput".getBytes();
         doVerifyToken(tsDigestInput, getTestToken());
     }
 
-    @Test(expected = TimeStampTokenDigestException.class)
+    @Test
     public void testVerifyTokenFailsWithDifferentDigestInput() throws Exception
     {
-        System.out.println("terifyTokenFailsWithDifferentDigestInput");
-
         byte[] tsDigestInput = "Invalid".getBytes();
-        doVerifyToken(tsDigestInput, getTestToken());
+        assertThrows(TimeStampTokenDigestException.class, () -> {
+            doVerifyToken(tsDigestInput, getTestToken());
+        });
     }
 
-    @Test(expected = TimeStampTokenVerificationException.class)
+    @Test
     public void testVerifyTokenFailsWithTamperedToken() throws Exception
     {
-        System.out.println("verifyTokenFailsWithTamperedToken");
-
         byte[] tsDigestInput = "TestDigestInput".getBytes();
         byte[] tsToken = getTestToken();
 
         for (int i = 0; i < tsToken.length; i++)
         {
-            if(i % 10 == 1){
-                tsToken[i] = tsToken[i-1];
+            if (i % 10 == 1)
+            {
+                tsToken[i] = tsToken[i - 1];
             }
         }
 
-        doVerifyToken(tsDigestInput, tsToken);
+        assertThrows(TimeStampTokenVerificationException.class, () -> {
+            doVerifyToken(tsDigestInput, tsToken);
+        });
     }
 
     private byte[] getTestToken() throws Exception

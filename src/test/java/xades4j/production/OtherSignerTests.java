@@ -28,7 +28,7 @@ import org.w3c.dom.Node;
 import xades4j.algorithms.EnvelopedSignatureTransform;
 import xades4j.algorithms.ExclusiveCanonicalXMLWithoutComments;
 import xades4j.properties.DataObjectDesc;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import xades4j.properties.QualifyingProperty;
@@ -49,7 +49,7 @@ import static org.apache.xml.security.c14n.Canonicalizer.ALGO_ID_C14N_EXCL_OMIT_
 import static org.apache.xml.security.c14n.Canonicalizer.ALGO_ID_C14N_OMIT_COMMENTS;
 import static org.apache.xml.security.signature.XMLSignature.ALGO_ID_SIGNATURE_RSA_SHA512;
 import static org.apache.xml.security.utils.Constants.*;
-import static org.junit.Assert.*;
+import static org.junit.jupiter.api.Assertions.*;
 
 /**
  * @author Luís
@@ -59,8 +59,6 @@ public class OtherSignerTests extends SignerTestBase
     @Test
     public void testSignAndAppendAsFirstChild() throws Exception
     {
-        System.out.println("signAndAppendAsFirstChild");
-
         Document doc = getTestDocument();
         Element root = doc.getDocumentElement();
         XadesSigner signer = new XadesBesSigningProfile(keyingProviderMy).newSigner();
@@ -94,8 +92,6 @@ public class OtherSignerTests extends SignerTestBase
     @Test
     public void testSignUsingCustomResolver() throws Exception
     {
-        System.out.println("signUsingCustomResolver");
-
         Document doc = getNewDocument();
         XadesSigner signer = new XadesBesSigningProfile(keyingProviderMy).newSigner();
         MyResolverSpi resolverSpi = new MyResolverSpi();

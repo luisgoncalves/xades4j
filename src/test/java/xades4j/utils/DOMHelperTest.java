@@ -20,11 +20,13 @@ import java.io.StringReader;
 import java.util.Collection;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
-import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.xml.sax.InputSource;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 /**
  *
@@ -44,11 +46,11 @@ public class DOMHelperTest
         
         Collection<Element> elements = DOMHelper.getChildElementsByTagNameNS(doc.getDocumentElement(), "urn:test", "a");
         
-        Assert.assertNotNull(elements);
-        Assert.assertEquals(2, elements.size());
+        assertNotNull(elements);
+        assertEquals(2, elements.size());
         for (Element element : elements)
         {
-            Assert.assertEquals("a", element.getLocalName());
+            assertEquals("a", element.getLocalName());
         }
     }
 }

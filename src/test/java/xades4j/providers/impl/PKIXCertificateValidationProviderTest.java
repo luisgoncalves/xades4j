@@ -16,6 +16,11 @@
  */
 package xades4j.providers.impl;
 
+import org.junit.jupiter.api.Test;
+import xades4j.providers.ValidationData;
+import xades4j.utils.FileSystemDirectoryCertStore;
+
+import javax.security.auth.x500.X500Principal;
 import java.io.FileInputStream;
 import java.security.KeyStore;
 import java.security.cert.X509CertSelector;
@@ -24,40 +29,16 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.Date;
 
-import org.junit.AfterClass;
-import org.junit.BeforeClass;
-import org.junit.Test;
-import static org.junit.Assert.*;
-import xades4j.providers.ValidationData;
-import xades4j.utils.FileSystemDirectoryCertStore;
-
-import javax.security.auth.x500.X500Principal;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 /**
- *
  * @author Luís
  */
 public class PKIXCertificateValidationProviderTest
 {
-    public PKIXCertificateValidationProviderTest()
-    {
-    }
-
-    @BeforeClass
-    public static void setUpClass() throws Exception
-    {
-    }
-
-    @AfterClass
-    public static void tearDownClass() throws Exception
-    {
-    }
-
     @Test
     public void testValidateMy() throws Exception
     {
-        System.out.println("validateMy");
-
         FileSystemDirectoryCertStore certStore = new FileSystemDirectoryCertStore("./src/test/cert/my");
         KeyStore ks = KeyStore.getInstance("jks");
         FileInputStream fis = new FileInputStream("./src/test/cert/my/myStore");
@@ -74,14 +55,12 @@ public class PKIXCertificateValidationProviderTest
                 .intermediateCertStores(certStore.getStore())
                 .build();
         ValidationData result = instance.validate(certSelector, new Date(), otherCerts);
-        assertEquals(result.getCerts().size(), 3);
+        assertEquals(3, result.getCerts().size());
     }
 
     @Test
     public void testValidateNist() throws Exception
     {
-        System.out.println("validateNist");
-
         FileSystemDirectoryCertStore certStore = new FileSystemDirectoryCertStore("./src/test/cert/csrc.nist");
         KeyStore ks = KeyStore.getInstance("jks");
         FileInputStream fis = new FileInputStream("./src/test/cert/csrc.nist/trustAnchor");
@@ -98,7 +77,7 @@ public class PKIXCertificateValidationProviderTest
                 .intermediateCertStores(certStore.getStore())
                 .build();
         ValidationData result = instance.validate(certSelector, new Date(), otherCerts);
-        assertEquals(result.getCerts().size(), 4);
-        assertEquals(result.getCrls().size(), 3);
+        assertEquals(4, result.getCerts().size());
+        assertEquals(3, result.getCrls().size());
     }
 }
