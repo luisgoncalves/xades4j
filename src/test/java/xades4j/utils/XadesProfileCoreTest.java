@@ -16,13 +16,18 @@
  */
 package xades4j.utils;
 
-import java.util.Set;
-import java.util.Map;
 import com.google.inject.AbstractModule;
-import javax.inject.Inject;
 import com.google.inject.Module;
-import org.junit.Test;
-import static org.junit.Assert.*;
+import org.junit.jupiter.api.Test;
+
+import javax.inject.Inject;
+import java.util.Map;
+import java.util.Set;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 /* Test classes/interfaces */
 interface A
@@ -73,6 +78,7 @@ class C
 class D
 {
     public Set<A> as;
+
     @Inject
     public D(Set<A> as)
     {
@@ -84,6 +90,7 @@ class D
 class E
 {
     public Map<String, A> as;
+
     @Inject
     public E(Map<String, A> as)
     {
@@ -93,7 +100,6 @@ class E
 }
 
 /**
- *
  * @author Luís
  */
 public class XadesProfileCoreTest
@@ -101,8 +107,6 @@ public class XadesProfileCoreTest
     @Test
     public void testGetInstance() throws XadesProfileResolutionException
     {
-        System.out.println("getInstance");
-
         Module module = new AbstractModule()
         {
             @Override
@@ -112,24 +116,23 @@ public class XadesProfileCoreTest
             }
         };
         XadesProfileCore instance = new XadesProfileCore();
-        A a = instance.getInstance(A.class, new Module[] {module}, new Module[0]);
+        A a = instance.getInstance(A.class, new Module[]{module}, new Module[0]);
         assertNotNull(a);
         assertTrue(a instanceof AImpl1);
     }
 
-    @Test(expected = XadesProfileResolutionException.class)
+    @Test
     public void testGetInstanceException() throws XadesProfileResolutionException
     {
-        System.out.println("getInstance_Exception");
         XadesProfileCore instance = new XadesProfileCore();
-        instance.getInstance(A.class,  new Module[0], new Module[0]);
+        assertThrows(XadesProfileResolutionException.class, () -> {
+            instance.getInstance(A.class, new Module[0], new Module[0]);
+        });
     }
 
     @Test
     public void testAddBinding() throws XadesProfileResolutionException
     {
-        System.out.println("addBinding");
-
         Module module = new AbstractModule()
         {
             @Override
@@ -140,13 +143,13 @@ public class XadesProfileCoreTest
         };
         XadesProfileCore instance = new XadesProfileCore();
         instance.addBinding(A.class, AImpl2.class);
-        A a = instance.getInstance(A.class,  new Module[] {module}, new Module[0]);
+        A a = instance.getInstance(A.class, new Module[]{module}, new Module[0]);
         assertNotNull(a);
         assertTrue(a instanceof AImpl2);
 
         B b1 = new BImpl();
         instance.addBinding(B.class, b1);
-        B b2 = instance.getInstance(B.class,  new Module[] {module}, new Module[0]);
+        B b2 = instance.getInstance(B.class, new Module[]{module}, new Module[0]);
         assertNotNull(a);
         assertEquals(b1, b2);
     }
@@ -154,33 +157,27 @@ public class XadesProfileCoreTest
     @Test
     public void testAddGenericBinding() throws XadesProfileResolutionException
     {
-        System.out.println("addGenericBinding");
-
         XadesProfileCore instance = new XadesProfileCore();
         instance.addGenericBinding(Action.class, ActionOfA.class, A.class);
-        C c = instance.getInstance(C.class,  new Module[0], new Module[0]);
+        C c = instance.getInstance(C.class, new Module[0], new Module[0]);
         assertTrue(c.action instanceof ActionOfA);
     }
 
     @Test
     public void testAddMultibinding() throws Exception
     {
-        System.out.println("addMultibinding");
-
         XadesProfileCore instance = new XadesProfileCore();
         instance.addMultibinding(A.class, AImpl1.class);
         instance.addMultibinding(A.class, new AImpl1());
         instance.addMultibinding(A.class, AImpl2.class);
 
-        D d = instance.getInstance(D.class,  new Module[0], new Module[0]);
+        D d = instance.getInstance(D.class, new Module[0], new Module[0]);
         assertEquals(3, d.as.size());
     }
 
     @Test
     public void testAddMapBinding() throws Exception
     {
-        System.out.println("addMapBinding");
-
         XadesProfileCore instance = new XadesProfileCore();
         instance.addMapBinding(A.class, "A1", AImpl1.class);
         instance.addMapBinding(A.class, "A2", AImpl2.class);

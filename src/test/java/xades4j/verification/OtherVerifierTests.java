@@ -16,14 +16,16 @@
  */
 package xades4j.verification;
 
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import xades4j.properties.QualifyingProperty;
+import xades4j.properties.data.SigningTimeData;
 import xades4j.utils.BuiltIn;
 
 import javax.inject.Inject;
 
-import org.junit.Before;
-import xades4j.properties.QualifyingProperty;
-import xades4j.properties.data.SigningTimeData;
-import org.junit.Test;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 class SigningTimeVerifierThatDependsOnBuiltInVerifier implements QualifyingPropertyVerifier<SigningTimeData>
 {
@@ -51,16 +53,15 @@ public class OtherVerifierTests extends VerifierTestBase
 {
     XadesVerificationProfile mySigsVerificationProfile;
 
-    @Before
+    @BeforeEach
     public void initialize()
     {
         mySigsVerificationProfile = new XadesVerificationProfile(VerifierTestBase.validationProviderMySigs);
     }
 
-    @Test(expected = UnsupportedOperationException.class)
+    @Test
     public void testVerifyBESCustomPropVer() throws Exception
     {
-        System.out.println("verifyBESCustomPropVer");
         mySigsVerificationProfile.withQualifyingPropertyVerifier(SigningTimeData.class, new QualifyingPropertyVerifier<SigningTimeData>()
         {
 
@@ -72,17 +73,24 @@ public class OtherVerifierTests extends VerifierTestBase
                 throw new UnsupportedOperationException("Yeah!");
             }
         });
-        verifySignature("document.signed.bes.xml", mySigsVerificationProfile);
+
+        Exception e = assertThrows(UnsupportedOperationException.class, () -> {
+            verifySignature("document.signed.bes.xml", mySigsVerificationProfile);
+        });
+
+        assertEquals("Yeah!", e.getMessage());
     }
 
-    @Test(expected = SigningTimeVerificationException.class)
+    @Test
     public void testCustomVerifierCanUseBuiltInVerifier() throws Exception
     {
-        System.out.println("customVerifierCanUseBuiltInVerifier");
         mySigsVerificationProfile.withQualifyingPropertyVerifier(
                 SigningTimeData.class,
                 SigningTimeVerifierThatDependsOnBuiltInVerifier.class);
-        verifySignature("document.signed.bes.xml", mySigsVerificationProfile);
+
+        assertThrows(SigningTimeVerificationException.class, () -> {
+            verifySignature("document.signed.bes.xml", mySigsVerificationProfile);
+        });
     }
 
     @Test

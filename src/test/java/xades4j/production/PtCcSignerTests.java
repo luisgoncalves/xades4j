@@ -1,6 +1,6 @@
 package xades4j.production;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import xades4j.providers.impl.DirectPasswordProvider;
@@ -17,7 +17,6 @@ public class PtCcSignerTests extends SignerTestBase
     @Test
     public void testSignTPtCC() throws Exception
     {
-        System.out.println("signTPtCitizenCard");
         assumePtCcPkcs11();
 
         Document doc = getTestDocument();
@@ -36,7 +35,6 @@ public class PtCcSignerTests extends SignerTestBase
     @Test
     public void testSignBesPtCCWindowsMy() throws Exception
     {
-        System.out.println("signBESPtCitizenCardWindowsMy");
         assumeWindows();
         assumePtCcPkcs11();
 

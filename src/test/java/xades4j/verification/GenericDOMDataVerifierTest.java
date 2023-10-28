@@ -16,22 +16,21 @@
  */
 package xades4j.verification;
 
-import java.util.HashMap;
-import java.util.Map;
-import javax.xml.namespace.QName;
-import javax.xml.parsers.DocumentBuilderFactory;
-import org.junit.After;
-import org.junit.AfterClass;
-import org.junit.Before;
-import org.junit.BeforeClass;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.Test;
 import org.w3c.dom.Document;
-import static org.junit.Assert.*;
 import xades4j.properties.QualifyingProperty;
 import xades4j.properties.data.GenericDOMData;
 
+import javax.xml.namespace.QName;
+import javax.xml.parsers.DocumentBuilderFactory;
+import java.util.HashMap;
+import java.util.Map;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+
 /**
- *
  * @author Luís
  */
 public class GenericDOMDataVerifierTest
@@ -39,11 +38,7 @@ public class GenericDOMDataVerifierTest
     private static Map<QName, QualifyingPropertyVerifier> customElemVerifiers;
     private static Document testDocument;
 
-    public GenericDOMDataVerifierTest()
-    {
-    }
-
-    @BeforeClass
+    @BeforeAll
     public static void setUpClass() throws Exception
     {
         customElemVerifiers = new HashMap<QName, QualifyingPropertyVerifier>(1);
@@ -52,21 +47,6 @@ public class GenericDOMDataVerifierTest
         DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
         dbf.setNamespaceAware(true);
         testDocument = dbf.newDocumentBuilder().newDocument();
-    }
-
-    @AfterClass
-    public static void tearDownClass() throws Exception
-    {
-    }
-
-    @Before
-    public void setUp()
-    {
-    }
-
-    @After
-    public void tearDown()
-    {
     }
 
     @Test
@@ -80,14 +60,16 @@ public class GenericDOMDataVerifierTest
         assertEquals(result.getName(), "Elem");
     }
 
-    @Test(expected = InvalidPropertyException.class)
+    @Test
     public void testVerifyNoVerifier() throws Exception
     {
         GenericDOMData propData = new GenericDOMData(testDocument.createElementNS("http://test.generic.dom", "Elem"));
         QualifyingPropertyVerificationContext ctx = null;
         GenericDOMDataVerifier instance = new GenericDOMDataVerifier(new HashMap<QName, QualifyingPropertyVerifier>(0));
 
-        instance.verify(propData, ctx);
+        assertThrows(InvalidPropertyException.class, () -> {
+            instance.verify(propData, ctx);
+        });
     }
 }
 

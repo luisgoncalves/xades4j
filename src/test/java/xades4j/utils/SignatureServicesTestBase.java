@@ -37,7 +37,6 @@ import xades4j.providers.impl.HttpTsaConfiguration;
  */
 public class SignatureServicesTestBase
 {
-
     static protected HttpTsaConfiguration DEFAULT_TEST_TSA = new HttpTsaConfiguration("http://tss.accv.es:8318/tsa");
 
     static private DocumentBuilder db;

@@ -30,17 +30,18 @@ import xades4j.verification.XAdESForm;
 import xades4j.verification.XAdESVerificationResult;
 import xades4j.verification.XadesVerificationProfile;
 
-import static org.junit.Assert.assertEquals;
-
 import java.io.FileInputStream;
 import java.security.KeyStore;
 import java.security.cert.Certificate;
 import java.security.cert.CertificateFactory;
 
 import org.apache.xml.security.utils.Constants;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 /**
  * This class test signing with the keyUsage check disabled.
@@ -58,7 +59,7 @@ public class UncheckedSignerBESTest extends SignerTestBase
     public UncheckedSignerBESTest() throws Exception
     {
         keyingProviderGood = createFileSystemKeyingDataProvider("PKCS12", "unchecked/good.p12", "password", true);
-        keyingProviderNoSign = createFileSystemKeyingDataProvider("PKCS12", "unchecked/noSignKeyUsage.p12", "password",true);
+        keyingProviderNoSign = createFileSystemKeyingDataProvider("PKCS12", "unchecked/noSignKeyUsage.p12", "password", true);
         keyingProviderExp = createFileSystemKeyingDataProvider("PKCS12", "unchecked/expired.p12", "password", true);
         keyingProviderNyv = createFileSystemKeyingDataProvider("PKCS12", "unchecked/notYetValid.p12", "password", true);
         validationProvider = genValidationProvider("unchecked/TestCA.cer", "unchecked");
@@ -80,7 +81,7 @@ public class UncheckedSignerBESTest extends SignerTestBase
         final XadesBesSigningProfile signProfile = new XadesBesSigningProfile(signProvider);
         final BasicSignatureOptions opts = new BasicSignatureOptions();
         opts.checkKeyUsage(false)
-            .checkCertificateValidity(false);
+                .checkCertificateValidity(false);
         signProfile.withBasicSignatureOptions(opts);
         XadesSigner signer = signProfile.newSigner();
 
@@ -133,7 +134,6 @@ public class UncheckedSignerBESTest extends SignerTestBase
     @Test
     public void testUncheckedSignBes() throws Exception
     {
-        System.out.println("uncheckedSignBes");
         CertificateValidationProvider prov = genValidationProvider("my/TestCA.cer", "my");
         trySignAndVerify(keyingProviderMy, prov, "document.unchecked.signed.bes.xml");
     }
@@ -141,39 +141,38 @@ public class UncheckedSignerBESTest extends SignerTestBase
     @Test
     public void testUncheckedSignBesGood() throws Exception
     {
-        System.out.println("uncheckedSignBesGood");
         trySignAndVerify(keyingProviderGood, validationProvider, "document.unchecked.signed.bes.good.xml");
     }
 
-    @Test(expected = SigningCertificateKeyUsageException.class)
+    @Test
     public void testUncheckedSignBesNoSignKeyUsage() throws Exception
     {
-        System.out.println("uncheckedSignBesNoSignKeyUsage");
-        trySignAndVerify(keyingProviderNoSign, validationProvider, "document.unchecked.signed.bes.nosign.xml");
+        assertThrows(SigningCertificateKeyUsageException.class, () -> {
+            trySignAndVerify(keyingProviderNoSign, validationProvider, "document.unchecked.signed.bes.nosign.xml");
+        });
     }
 
     @Test
     public void testUncheckedSignBesNoSignKeyUsageUncheckedVerify() throws Exception
     {
-        System.out.println("uncheckedSignBesNoSignKeyUsageUncheckedVerify");
-
         // same certificate as in testUncheckedSignBesNoSignKeyUsage(), but keyUsage
         // check disabled during verification
         trySignAndVerify(keyingProviderNoSign, validationProvider, "document.unchecked.signed.bes.nosign.xml", false);
     }
 
-    @Test(expected = CannotBuildCertificationPathException.class)
+    @Test
     public void testUncheckedSignBesExpired() throws Exception
     {
-        System.out.println("uncheckedSignBesExpired");
-        trySignAndVerify(keyingProviderExp, validationProvider, "document.unchecked.signed.bes.expired.xml");
+        assertThrows(CannotBuildCertificationPathException.class, () -> {
+            trySignAndVerify(keyingProviderExp, validationProvider, "document.unchecked.signed.bes.expired.xml");
+        });
     }
 
-    @Test(expected = CannotBuildCertificationPathException.class)
+    @Test
     public void testUncheckedSignBesNyv() throws Exception
     {
-        System.out.println("uncheckedSignBesExpired");
-        trySignAndVerify(keyingProviderNyv, validationProvider, "document.unchecked.signed.bes.nyv.xml");
+        assertThrows(CannotBuildCertificationPathException.class, () -> {
+            trySignAndVerify(keyingProviderNyv, validationProvider, "document.unchecked.signed.bes.nyv.xml");
+        });
     }
-
 }

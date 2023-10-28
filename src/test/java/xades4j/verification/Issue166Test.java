@@ -1,17 +1,21 @@
 package xades4j.verification;
 
+import org.bouncycastle.asn1.x500.X500Name;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import xades4j.utils.SignatureServicesTestBase;
+
+import javax.security.auth.x500.X500Principal;
 import java.io.InputStream;
 import java.security.cert.CertificateFactory;
 import java.security.cert.X509Certificate;
-import javax.security.auth.x500.X500Principal;
-import org.bouncycastle.asn1.x500.X500Name;
-import org.junit.Assert;
-import org.junit.Before;
-import org.junit.Test;
-import xades4j.utils.SignatureServicesTestBase;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 /**
- * Investigation for https://github.com/luisgoncalves/xades4j/issues/166.
+ * Investigation for <a href="https://github.com/luisgoncalves/xades4j/issues/166">issue 166</a>.
  * @author luis
  */
 public class Issue166Test extends SignatureServicesTestBase
@@ -22,7 +26,7 @@ public class Issue166Test extends SignatureServicesTestBase
 
     private X509Certificate cert;
 
-    @Before
+    @BeforeEach
     public void setUp() throws Exception
     {
         CertificateFactory certFactory = CertificateFactory.getInstance("X.509");
@@ -40,8 +44,8 @@ public class Issue166Test extends SignatureServicesTestBase
         X500Principal principal2 = new X500Principal(dnPrintable);
         X500Principal principal3 = new X500Principal(dnPlain);
 
-        Assert.assertFalse(principal1.equals(principal2));
-        Assert.assertFalse(principal1.equals(principal3));
+        assertFalse(principal1.equals(principal2));
+        assertFalse(principal1.equals(principal3));
     }
     
     @Test
@@ -50,7 +54,7 @@ public class Issue166Test extends SignatureServicesTestBase
         X500Principal principal1 = new X500Principal(dnPrintable);
         X500Principal principal2 = new X500Principal(dnPlain);
 
-        Assert.assertTrue(principal1.equals(principal2));
+        assertEquals(principal1, principal2);
     }
 
     @Test
@@ -59,7 +63,7 @@ public class Issue166Test extends SignatureServicesTestBase
         X500Principal principal1 = cert.getIssuerX500Principal();
         X500Principal principal2 = new X500Principal(dnPrintable);
 
-        Assert.assertFalse(principal1.equals(principal2));
+        assertFalse(principal1.equals(principal2));
     }
     
     @Test
@@ -68,7 +72,7 @@ public class Issue166Test extends SignatureServicesTestBase
         X500Principal principal1 = cert.getIssuerX500Principal();
         X500Principal principal2 = new X500Principal(dnUtf8);
 
-        Assert.assertTrue(principal1.equals(principal2));
+        assertTrue(principal1.equals(principal2));
     }
     
     @Test
@@ -77,7 +81,7 @@ public class Issue166Test extends SignatureServicesTestBase
         X500Principal principal1 = cert.getIssuerX500Principal();
         X500Principal principal2 = new X500Principal(dnPlain);
 
-        Assert.assertFalse(principal1.equals(principal2));
+        assertFalse(principal1.equals(principal2));
     }
 
     @Test
@@ -87,9 +91,9 @@ public class Issue166Test extends SignatureServicesTestBase
         X500Name principal2 = new X500Name(dnPrintable);
         X500Name principal3 = new X500Name(dnPlain);
 
-        Assert.assertTrue(principal1.equals(principal2));
-        Assert.assertTrue(principal1.equals(principal3));
-        Assert.assertTrue(principal2.equals(principal3));
+        assertTrue(principal1.equals(principal2));
+        assertTrue(principal1.equals(principal3));
+        assertTrue(principal2.equals(principal3));
     }
 
     @Test
@@ -98,7 +102,7 @@ public class Issue166Test extends SignatureServicesTestBase
         X500Name principal1 = X500Name.getInstance(cert.getIssuerX500Principal().getEncoded());
         X500Name principal2 = new X500Name(dnPrintable);
 
-        Assert.assertTrue(principal1.equals(principal2));
+        assertTrue(principal1.equals(principal2));
     }
     
     @Test
@@ -107,7 +111,7 @@ public class Issue166Test extends SignatureServicesTestBase
         X500Name principal1 = X500Name.getInstance(cert.getIssuerX500Principal().getEncoded());
         X500Name principal2 = new X500Name(dnUtf8);
 
-        Assert.assertTrue(principal1.equals(principal2));
+        assertTrue(principal1.equals(principal2));
     }
     
     @Test
@@ -116,6 +120,6 @@ public class Issue166Test extends SignatureServicesTestBase
         X500Name principal1 = X500Name.getInstance(cert.getIssuerX500Principal().getEncoded());
         X500Name principal2 = new X500Name(dnPlain);
 
-        Assert.assertTrue(principal1.equals(principal2));
+        assertTrue(principal1.equals(principal2));
     }
 }

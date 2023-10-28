@@ -16,7 +16,7 @@
  */
 package xades4j.production;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import xades4j.algorithms.ExclusiveCanonicalXMLWithoutComments;
@@ -33,8 +33,6 @@ public class SignerTTest extends SignerTestBase
     @Test
     public void testSignTExclusiveC14NWithoutPolicy() throws Exception
     {
-        System.out.println("signTExclusiveC14NWithoutPolicy");
-
         Document doc = getTestDocument();
         Element elemToSign = doc.getDocumentElement();
 
@@ -54,8 +52,6 @@ public class SignerTTest extends SignerTestBase
     @Test
     public void testSignTWithPolicy() throws Exception
     {
-        System.out.println("signTWithPolicy");
-
         Document doc = getTestDocument();
         Element elemToSign = doc.getDocumentElement();
 

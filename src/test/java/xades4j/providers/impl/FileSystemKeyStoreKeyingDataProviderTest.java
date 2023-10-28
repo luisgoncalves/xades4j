@@ -16,37 +16,42 @@
  */
 package xades4j.providers.impl;
 
+import org.bouncycastle.jce.provider.BouncyCastleProvider;
+import org.junit.jupiter.api.AfterAll;
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.MethodSource;
+import xades4j.utils.SignatureServicesTestBase;
+
 import java.io.FileInputStream;
 import java.security.Security;
 import java.security.cert.CertificateFactory;
 import java.security.cert.X509Certificate;
-import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
-import org.bouncycastle.jce.provider.BouncyCastleProvider;
-import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.junit.runners.Parameterized;
-import xades4j.utils.SignatureServicesTestBase;
-
-import static org.junit.Assert.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.params.provider.Arguments.arguments;
 
 /**
  * @author Luís
  */
-@RunWith(Parameterized.class)
 public class FileSystemKeyStoreKeyingDataProviderTest
 {
-    @Parameterized.Parameter(0)
-    public FileSystemKeyStoreKeyingDataProvider keyingProvider;
-    @Parameterized.Parameter(1)
-    public X509Certificate signCert;
-
-    @Parameterized.Parameters
-    public static Collection<Object[]> data() throws Exception
+    @BeforeAll
+    public static void setup()
     {
         Security.addProvider(new BouncyCastleProvider());
+    }
+
+    @AfterAll
+    public static void cleanup()
+    {
+        Security.removeProvider(BouncyCastleProvider.PROVIDER_NAME);
+    }
+
+    public static Collection data() throws Exception
+    {
         FileSystemKeyStoreKeyingDataProvider keyingProviderPkcs12 = FileSystemKeyStoreKeyingDataProvider
                 .builder("pkcs12",
                         SignatureServicesTestBase.toPlatformSpecificCertDirFilePath("my/LG.pfx"),
@@ -77,22 +82,24 @@ public class FileSystemKeyStoreKeyingDataProviderTest
         X509Certificate signCert = (X509Certificate) cf.generateCertificate(
                 new FileInputStream(SignatureServicesTestBase.toPlatformSpecificCertDirFilePath("my/LG.cer")));
 
-        ArrayList<Object[]> result = new ArrayList<Object[]>();
-        result.add(new Object[]{keyingProviderPkcs12, signCert});
-        //TODO test will break, need find out why
-        //result.add(new Object[]{keyingProviderPkcs12BC,signCert});
-        result.add(new Object[]{keyingProviderJks, signCert});
-        return result;
+        return List.of(
+                arguments(keyingProviderPkcs12, signCert),
+                //TODO test will break, need find out why
+                //arguments(keyingProviderPkcs12BC, signCert),
+                arguments(keyingProviderJks, signCert)
+        );
     }
 
-    @Test
-    public void testGetSigningKey() throws Exception
+    @ParameterizedTest
+    @MethodSource("data")
+    public void testGetSigningKey(FileSystemKeyStoreKeyingDataProvider keyingProvider, X509Certificate signCert) throws Exception
     {
         keyingProvider.getSigningKey(signCert);
     }
 
-    @Test
-    public void testGetSigningCertificateChain() throws Exception
+    @ParameterizedTest
+    @MethodSource("data")
+    public void testGetSigningCertificateChain(FileSystemKeyStoreKeyingDataProvider keyingProvider, X509Certificate signCert) throws Exception
     {
         List<X509Certificate> certChain = keyingProvider.getSigningCertificateChain();
         assertEquals(certChain.size(), 3);

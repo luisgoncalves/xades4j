@@ -17,17 +17,16 @@
 package xades4j.providers.impl;
 
 import org.apache.xml.security.algorithms.MessageDigestAlgorithm;
-import static org.junit.Assert.assertNotNull;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import xades4j.providers.TimeStampTokenProvider.TimeStampTokenRes;
+
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 public class HttpTimeStampTokenProviderTest
 {
     @Test
     public void testGetTimeStampToken() throws Exception
     {
-        System.out.println("getTimeStampToken");
-
         byte[] tsDigestInput = "TestDigestInput".getBytes();
         String digestAlgUri = MessageDigestAlgorithm.ALGO_ID_DIGEST_SHA1;
 

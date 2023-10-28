@@ -21,7 +21,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import org.apache.xml.security.signature.XMLSignature;
 import org.apache.xml.security.utils.Constants;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.NodeList;
@@ -41,8 +41,6 @@ public class XadesSignatureFormatExtenderImplTest extends SignerTestBase
     @Test
     public void testEnrichSignatureWithNestedCounterSig() throws Exception
     {
-        System.out.println("enrichSignatureWithNestedCounterSig");
-
         Document doc = getDocument("document.signed.bes.cs.xml");
         NodeList signatures = doc.getElementsByTagNameNS(Constants.SignatureSpecNS, Constants._TAG_SIGNATURE);
         // Existing counter signature is the last
@@ -64,8 +62,6 @@ public class XadesSignatureFormatExtenderImplTest extends SignerTestBase
     @Test
     public void testEnrichSignatureWithT() throws Exception
     {
-        System.out.println("enrichSignatureWithT");
-
         Document doc = getDocument("document.signed.bes.xml");
         Element signatureNode = (Element)doc.getElementsByTagNameNS(Constants.SignatureSpecNS, "Signature").item(0);
 
@@ -83,8 +79,6 @@ public class XadesSignatureFormatExtenderImplTest extends SignerTestBase
     @Test
     public void testEnrichSignatureWithA() throws Exception
     {
-        System.out.println("enrichSignatureWithA");
-
         Document doc = getDocument("document.verified.c.xl.xml");
         Element signatureNode = (Element)doc.getElementsByTagNameNS(Constants.SignatureSpecNS, "Signature").item(0);
 

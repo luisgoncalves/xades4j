@@ -19,7 +19,7 @@ package xades4j.production;
 import org.apache.xml.security.stax.impl.resourceResolvers.ResolverHttp;
 import org.apache.xml.security.utils.resolver.implementations.ResolverDirectHTTP;
 import org.apache.xml.security.utils.resolver.implementations.ResolverLocalFilesystem;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
@@ -51,8 +51,6 @@ public class SignerBESTest extends SignerTestBase
     @Test
     public void testSignBES() throws Exception
     {
-        System.out.println("signBES");
-
         Document doc1 = getTestDocument();
         Document doc2 = getDocument("content.xml");
         Node objectContent = doc1.importNode(doc2.getDocumentElement(), true);
@@ -74,8 +72,6 @@ public class SignerBESTest extends SignerTestBase
     @Test
     public void testSignBESWithEllipticCurveKey() throws Exception
     {
-        System.out.println("testSignBESWithEllipticCurveKey");
-
         Document doc = getTestDocument();
         Element elemToSign = doc.getDocumentElement();
 
@@ -90,8 +86,6 @@ public class SignerBESTest extends SignerTestBase
     @Test
     public void testSignBESExternalRes() throws Exception
     {
-        System.out.println("signBESExternalRes");
-
         Document doc = getNewDocument();
         XadesSigner signer = new XadesBesSigningProfile(keyingProviderNist).with(DEFAULT_TEST_TSA).newSigner();
 
@@ -109,8 +103,6 @@ public class SignerBESTest extends SignerTestBase
     @Test
     public void testSignBESWithCounterSig() throws Exception
     {
-        System.out.println("signBESWithCounterSig");
-
         Document doc = getTestDocument();
         Element elemToSign = doc.getDocumentElement();
 
@@ -139,8 +131,6 @@ public class SignerBESTest extends SignerTestBase
     @Test
     public void testSignBESDetachedWithXPathAndNamespaces() throws Exception
     {
-        System.out.println("signBESDetachedWithXPathAndNamespaces");
-
         Document doc = getNewDocument();
 
         XadesSigner signer = new XadesBesSigningProfile(keyingProviderMy)

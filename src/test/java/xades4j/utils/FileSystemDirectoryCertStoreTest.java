@@ -16,31 +16,17 @@
  */
 package xades4j.utils;
 
+import org.junit.jupiter.api.Test;
+
 import java.util.Collection;
-import org.junit.AfterClass;
-import org.junit.BeforeClass;
-import org.junit.Test;
-import static org.junit.Assert.*;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 /**
- *
  * @author Luís
  */
-public class FileSystemDirectoryCertStoreTest {
-
-    public FileSystemDirectoryCertStoreTest() {
-    }
-
-    @BeforeClass
-    public static void setUpClass() throws Exception
-    {
-    }
-
-    @AfterClass
-    public static void tearDownClass() throws Exception
-    {
-    }
-
+public class FileSystemDirectoryCertStoreTest
+{
     @Test
     public void testGetStoreMy() throws Exception
     {
@@ -48,6 +34,7 @@ public class FileSystemDirectoryCertStoreTest {
         Collection certs = certStore.getStore().getCertificates(null);
         assertEquals(certs.size(), 4);
     }
+
     @Test
     public void testGetStoreNist() throws Exception
     {

@@ -16,59 +16,34 @@
  */
 package xades4j.properties;
 
+import org.junit.jupiter.api.Test;
+
 import java.util.ArrayList;
 import java.util.Collection;
-import org.junit.After;
-import org.junit.AfterClass;
-import org.junit.Before;
-import org.junit.BeforeClass;
-import org.junit.Test;
-import static org.junit.Assert.*;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 /**
- *
  * @author Luís
  */
 public class DataObjectFormatPropertyTest
 {
-    public DataObjectFormatPropertyTest()
-    {
-    }
-
-    @BeforeClass
-    public static void setUpClass() throws Exception
-    {
-    }
-
-    @AfterClass
-    public static void tearDownClass() throws Exception
-    {
-    }
-
-    @Before
-    public void setUp()
-    {
-    }
-
-    @After
-    public void tearDown()
-    {
-    }
-
     /**
      * Test of withIdentifier method, of class DataObjectFormatProperty.
      */
     @Test
     public void testWithIdentifier_String()
     {
-        System.out.println("withIdentifier");
         String uri = "uri";
 
         DataObjectFormatProperty instance = new DataObjectFormatProperty();
         instance.withIdentifier(uri);
         assertEquals(instance.getIdentifier().getIdentifier(), uri);
 
-        instance.withIdentifier((ObjectIdentifier)null);
+        instance.withIdentifier((ObjectIdentifier) null);
         assertNull(instance.getIdentifier());
     }
 
@@ -77,7 +52,6 @@ public class DataObjectFormatPropertyTest
      */
     public void testWithIdentifier_String_IdentifierType()
     {
-        System.out.println("withIdentifier");
         String identifier = "uri";
         IdentifierType type = IdentifierType.URI;
         DataObjectFormatProperty instance = new DataObjectFormatProperty();
@@ -88,26 +62,12 @@ public class DataObjectFormatPropertyTest
         assertEquals(type, instance.getIdentifier().getIdentifierType());
     }
 
-//    /**
-//     * Test of withIdentifier method, of class DataObjectFormatProperty.
-//     */
-//    @Test(expected = NullPointerException.class)
-//    public void testWithIdentifier_String_IdentifierType_Null()
-//    {
-//        System.out.println("withIdentifier");
-//        String identifier = "uri";
-//        DataObjectFormatProperty instance = new DataObjectFormatProperty();
-//
-//        instance.withIdentifier(identifier, null);
-//    }
-
     /**
      * Test of withDocumentationUri method, of class DataObjectFormatProperty.
      */
     @Test
     public void testWithDocumentationUri()
     {
-        System.out.println("withDocumentationUri");
         String documentationUri = "doc";
         DataObjectFormatProperty instance = new DataObjectFormatProperty();
         instance.withDocumentationUri(null);
@@ -124,7 +84,6 @@ public class DataObjectFormatPropertyTest
     @Test
     public void testWithDocumentationUris()
     {
-        System.out.println("withDocumentationUris");
         Collection<String> documentationUris = new ArrayList<String>(1);
         DataObjectFormatProperty instance = new DataObjectFormatProperty();
 
@@ -140,11 +99,12 @@ public class DataObjectFormatPropertyTest
     /**
      * Test of withDocumentationUris method, of class DataObjectFormatProperty.
      */
-    @Test(expected = NullPointerException.class)
+    @Test
     public void testWithDocumentationUris_Null()
     {
-        System.out.println("withDocumentationUris");
         DataObjectFormatProperty instance = new DataObjectFormatProperty();
-        instance.withDocumentationUris(null);
+        assertThrows(NullPointerException.class, () -> {
+            instance.withDocumentationUris(null);
+        });
     }
 }

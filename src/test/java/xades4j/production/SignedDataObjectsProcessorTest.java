@@ -30,22 +30,22 @@ import java.util.Map;
 import org.apache.xml.security.signature.ObjectContainer;
 import org.apache.xml.security.signature.Reference;
 import org.apache.xml.security.signature.XMLSignature;
-import org.junit.BeforeClass;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.Test;
 import org.w3c.dom.Document;
 import xades4j.properties.DataObjectDesc;
 import xades4j.utils.DOMHelper;
 import xades4j.utils.SignatureServicesTestBase;
 import xades4j.utils.StringUtils;
 
-import static org.junit.Assert.*;
+import static org.junit.jupiter.api.Assertions.*;
 
 /**
  * @author Luís
  */
 public class SignedDataObjectsProcessorTest extends SignatureServicesTestBase
 {
-    @BeforeClass
+    @BeforeAll
     public static void setUpClass()
     {
         Init.initXMLSec();
@@ -54,8 +54,6 @@ public class SignedDataObjectsProcessorTest extends SignatureServicesTestBase
     @Test
     public void testProcess() throws Exception
     {
-        System.out.println("process");
-
         Document doc = getNewDocument();
 
         SignedDataObjects dataObjsDescs = new SignedDataObjects()
@@ -183,8 +181,6 @@ public class SignedDataObjectsProcessorTest extends SignatureServicesTestBase
     @Test
     public void testAddNullReference() throws Exception
     {
-        System.out.println("addNullReference");
-
         Document doc = SignatureServicesTestBase.getNewDocument();
 
         SignedDataObjects dataObjsDescs = new SignedDataObjects()
@@ -204,21 +200,14 @@ public class SignedDataObjectsProcessorTest extends SignatureServicesTestBase
         assertNull(r.getElement().getAttributeNodeNS(Constants.SignatureSpecNS, "URI"));
     }
 
-    @Test(expected = IllegalStateException.class)
+    @Test
     public void testAddMultipleNullReferencesFails() throws Exception
     {
-        System.out.println("addMultipleNullReferencesFails");
-
-        Document doc = SignatureServicesTestBase.getNewDocument();
-
-        SignedDataObjects dataObjsDescs = new SignedDataObjects()
-                .withSignedDataObject(new AnonymousDataObjectReference("data1".getBytes()))
-                .withSignedDataObject(new AnonymousDataObjectReference("data2".getBytes()));
-
-        XMLSignature xmlSignature = new XMLSignature(doc, "", XMLSignature.ALGO_ID_SIGNATURE_RSA_SHA256);
-        xmlSignature.setId("sigId");
-
-        SignedDataObjectsProcessor processor = new SignedDataObjectsProcessor(new SignatureAlgorithms(), new AllwaysNullAlgsParamsMarshaller());
-        processor.process(dataObjsDescs, xmlSignature);
+        SignedDataObjects dataObjsDescs = new SignedDataObjects();
+        assertThrows(IllegalStateException.class, () -> {
+            dataObjsDescs
+                    .withSignedDataObject(new AnonymousDataObjectReference("data1".getBytes()))
+                    .withSignedDataObject(new AnonymousDataObjectReference("data2".getBytes()));
+        });
     }
 }

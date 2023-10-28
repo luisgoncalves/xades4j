@@ -1,20 +1,22 @@
 package xades4j.xml.marshalling.algorithms;
 
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
 import org.apache.xml.security.utils.Constants;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertNotNull;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import xades4j.algorithms.XPath2FilterTransform;
 import xades4j.algorithms.XPath2FilterTransform.XPath2Filter;
 import xades4j.utils.SignatureServicesTestBase;
+
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 /**
  *
@@ -25,7 +27,7 @@ public class XPath2FilterTransformParamsMarshallerTest {
     private Document doc;
     private XPath2FilterTransformParamsMarshaller sut;
 
-    @Before
+    @BeforeEach
     public void setUp() throws Exception {
         doc = SignatureServicesTestBase.getNewDocument();
         sut = new XPath2FilterTransformParamsMarshaller();
