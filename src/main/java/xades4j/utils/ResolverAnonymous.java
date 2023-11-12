@@ -18,6 +18,7 @@ package xades4j.utils;
 
 import java.io.InputStream;
 import org.apache.xml.security.signature.XMLSignatureInput;
+import org.apache.xml.security.signature.XMLSignatureStreamInput;
 import org.apache.xml.security.utils.resolver.ResourceResolverContext;
 import org.apache.xml.security.utils.resolver.ResourceResolverException;
 import org.apache.xml.security.utils.resolver.ResourceResolverSpi;
@@ -40,7 +41,7 @@ public final class ResolverAnonymous extends ResourceResolverSpi
     @Override
     public XMLSignatureInput engineResolveURI(ResourceResolverContext context) throws ResourceResolverException
     {
-        return new XMLSignatureInput(this.data);
+        return new XMLSignatureStreamInput(this.data);
     }
 
     @Override

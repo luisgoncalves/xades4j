@@ -16,15 +16,12 @@
  */
 package xades4j.production;
 
-import org.apache.xml.security.c14n.Canonicalizer;
 import org.apache.xml.security.signature.XMLSignatureInput;
-import org.apache.xml.security.utils.Constants;
-import org.apache.xml.security.utils.DOMNamespaceContext;
+import org.apache.xml.security.signature.XMLSignatureStreamInput;
 import org.apache.xml.security.utils.resolver.ResourceResolverContext;
 import org.apache.xml.security.utils.resolver.ResourceResolverException;
 import org.apache.xml.security.utils.resolver.ResourceResolverSpi;
 import org.w3c.dom.Attr;
-import org.w3c.dom.Node;
 import xades4j.algorithms.EnvelopedSignatureTransform;
 import xades4j.algorithms.ExclusiveCanonicalXMLWithoutComments;
 import xades4j.properties.DataObjectDesc;
@@ -41,6 +38,7 @@ import javax.xml.xpath.XPath;
 import javax.xml.xpath.XPathConstants;
 import javax.xml.xpath.XPathFactory;
 
+import java.io.ByteArrayInputStream;
 import java.util.Iterator;
 
 import static org.apache.xml.security.algorithms.MessageDigestAlgorithm.ALGO_ID_DIGEST_SHA256;
@@ -112,7 +110,7 @@ public class OtherSignerTests extends SignerTestBase
         @Override
         public XMLSignatureInput engineResolveURI(ResourceResolverContext context) throws ResourceResolverException
         {
-            XMLSignatureInput input = new XMLSignatureInput(context.attr.getValue().getBytes());
+            XMLSignatureInput input = new XMLSignatureStreamInput(new ByteArrayInputStream(context.attr.getValue().getBytes()));
             resolveCount++;
             return input;
         }
