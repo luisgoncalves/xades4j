@@ -16,11 +16,8 @@
  */
 package xades4j.production;
 
-import xades4j.properties.DataObjectDesc;
-import java.util.Collection;
-import java.util.Map;
-import org.apache.xml.security.signature.Reference;
 import xades4j.properties.CommitmentTypeProperty;
+import xades4j.properties.DataObjectDesc;
 import xades4j.properties.data.CommitmentTypeData;
 import xades4j.properties.data.PropertyDataObject;
 

@@ -16,11 +16,8 @@
  */
 package xades4j.utils;
 
-import com.google.inject.Binder;
-import com.google.inject.Guice;
-import com.google.inject.Key;
 import com.google.inject.Module;
-import com.google.inject.TypeLiteral;
+import com.google.inject.*;
 import com.google.inject.multibindings.MapBinder;
 import com.google.inject.multibindings.Multibinder;
 import com.google.inject.multibindings.OptionalBinder;
@@ -67,14 +64,7 @@ public final class XadesProfileCore
         if (null == from || null == to)
             throw new NullPointerException();
 
-        this.bindings.add(new BindingAction()
-        {
-            @Override
-            public void bind(Binder b)
-            {
-                b.bind(from).to(to);
-            }
-        });
+        this.bindings.add(b -> b.bind(from).to(to));
     }
 
     /**
@@ -85,14 +75,7 @@ public final class XadesProfileCore
         if (null == from || null == to)
             throw new NullPointerException();
 
-        this.bindings.add(new BindingAction()
-        {
-            @Override
-            public void bind(Binder b)
-            {
-                b.bind(from).toInstance(to);
-            }
-        });
+        this.bindings.add(b -> b.bind(from).toInstance(to));
     }
 
     public void addGenericBinding(
@@ -103,15 +86,10 @@ public final class XadesProfileCore
         if (ObjectUtils.anyNull(genericClass, genericClassParams, to))
             throw new NullPointerException();
 
-        this.bindings.add(new BindingAction()
-        {
-            @Override
-            public void bind(Binder b)
-            {
-                ParameterizedType pt = Types.newParameterizedType(genericClass, genericClassParams);
-                Key k = Key.get(TypeLiteral.get(pt));
-                b.bind(k).to(to);
-            }
+        this.bindings.add(b -> {
+            ParameterizedType pt = Types.newParameterizedType(genericClass, genericClassParams);
+            Key k = Key.get(TypeLiteral.get(pt));
+            b.bind(k).to(to);
         });
     }
 
@@ -123,28 +101,16 @@ public final class XadesProfileCore
         if (ObjectUtils.anyNull(genericClass, genericClassParams, to))
             throw new NullPointerException();
 
-        this.bindings.add(new BindingAction()
-        {
-            @Override
-            public void bind(Binder b)
-            {
-                ParameterizedType pt = Types.newParameterizedType(genericClass, genericClassParams);
-                Key k = Key.get(TypeLiteral.get(pt));
-                b.bind(k).toInstance(to);
-            }
+        this.bindings.add(b -> {
+            ParameterizedType pt = Types.newParameterizedType(genericClass, genericClassParams);
+            Key k = Key.get(TypeLiteral.get(pt));
+            b.bind(k).toInstance(to);
         });
     }
 
-    public final <T> void addOptionalBinding(final Class<T> clazz)
+    public <T> void addOptionalBinding(final Class<T> clazz)
     {
-        this.bindings.add(new BindingAction()
-        {
-            @Override
-            public void bind(Binder b)
-            {
-                OptionalBinder.newOptionalBinder(b, clazz);
-            }
-        });
+        this.bindings.add(b -> OptionalBinder.newOptionalBinder(b, clazz));
     }
 
     public <T> void addMultibinding(final Class<T> from, final Class<? extends T> to)
@@ -152,14 +118,9 @@ public final class XadesProfileCore
         if (null == from || null == to)
             throw new NullPointerException();
 
-        this.bindings.add(new BindingAction()
-        {
-            @Override
-            public void bind(Binder b)
-            {
-                Multibinder<T> multibinder = Multibinder.newSetBinder(b, from);
-                multibinder.addBinding().to(to);
-            }
+        this.bindings.add(b -> {
+            Multibinder<T> multibinder = Multibinder.newSetBinder(b, from);
+            multibinder.addBinding().to(to);
         });
     }
 
@@ -168,14 +129,9 @@ public final class XadesProfileCore
         if (null == from || null == to)
             throw new NullPointerException();
 
-        this.bindings.add(new BindingAction()
-        {
-            @Override
-            public void bind(Binder b)
-            {
-                Multibinder<T> multibinder = Multibinder.newSetBinder(b, from);
-                multibinder.addBinding().toInstance(to);
-            }
+        this.bindings.add(b -> {
+            Multibinder<T> multibinder = Multibinder.newSetBinder(b, from);
+            multibinder.addBinding().toInstance(to);
         });
     }
 
@@ -184,14 +140,9 @@ public final class XadesProfileCore
         if (null == key || null == value)
             throw new NullPointerException();
 
-        this.bindings.add(new BindingAction()
-        {
-            @Override
-            public void bind(Binder b)
-            {
-                MapBinder mapBinder = MapBinder.newMapBinder(b, key.getClass(), valueClass);
-                mapBinder.addBinding(key).toInstance(value);
-            }
+        this.bindings.add(b -> {
+            MapBinder mapBinder = MapBinder.newMapBinder(b, key.getClass(), valueClass);
+            mapBinder.addBinding(key).toInstance(value);
         });
     }
 
@@ -200,14 +151,9 @@ public final class XadesProfileCore
         if (null == key || null == to)
             throw new NullPointerException();
 
-        this.bindings.add(new BindingAction()
-        {
-            @Override
-            public void bind(Binder b)
-            {
-                MapBinder mapBinder = MapBinder.newMapBinder(b, key.getClass(), valueClass);
-                mapBinder.addBinding(key).to(to);
-            }
+        this.bindings.add(b -> {
+            MapBinder mapBinder = MapBinder.newMapBinder(b, key.getClass(), valueClass);
+            mapBinder.addBinding(key).to(to);
         });
     }
 
@@ -216,19 +162,14 @@ public final class XadesProfileCore
             Module[] overridableModules,
             Module[] sealedModules) throws XadesProfileResolutionException
     {
-        Module userBindingsModule = new Module()
-        {
-            @Override
-            public void configure(Binder b)
+        Module userBindingsModule = b -> {
+            for (BindingAction ba : bindings)
             {
-                for (BindingAction ba : bindings)
-                {
-                    ba.bind(b);
-                }
+                ba.bind(b);
             }
         };
         Module overridesModule = Modules.override(overridableModules).with(userBindingsModule);
-        // Concat sealed modules with overrides module
+        // Concat sealed modules with override module
         Module[] finalModules = Arrays.copyOf(sealedModules, sealedModules.length + 1);
         finalModules[finalModules.length - 1] = overridesModule;
         try

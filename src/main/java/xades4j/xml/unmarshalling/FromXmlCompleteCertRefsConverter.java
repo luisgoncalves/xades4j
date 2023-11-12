@@ -29,8 +29,7 @@ class FromXmlCompleteCertRefsConverter implements UnsignedSigPropFromXmlConv
     @Override
     public void convertFromObjectTree(
             XmlUnsignedSignaturePropertiesType xmlProps,
-            QualifyingPropertiesDataCollector propertyDataCollector) throws PropertyUnmarshalException
-    {
+            QualifyingPropertiesDataCollector propertyDataCollector) {
         XmlCompleteCertificateRefsType xmlCompleteCertRefs = xmlProps.getCompleteCertificateRefs();
         if (null == xmlCompleteCertRefs)
             return;

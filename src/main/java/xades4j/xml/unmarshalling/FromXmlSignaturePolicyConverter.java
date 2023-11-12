@@ -61,8 +61,7 @@ class FromXmlSignaturePolicyConverter implements SignedSigPropFromXmlConv
                 getLocationUrl(xmlPolicyId)));
     }
 
-    private static String getLocationUrl(XmlSignaturePolicyIdType xmlPolicyId) throws PropertyUnmarshalException
-    {
+    private static String getLocationUrl(XmlSignaturePolicyIdType xmlPolicyId) {
         XmlSigPolicyQualifiersListType sigPolicyQualifiers = xmlPolicyId.getSigPolicyQualifiers();
         if(null == sigPolicyQualifiers)
         {

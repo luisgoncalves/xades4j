@@ -16,22 +16,15 @@
  */
 package xades4j.verification;
 
-import java.security.cert.X509Certificate;
-import java.util.Collection;
 import org.apache.xml.security.signature.XMLSignature;
-import xades4j.properties.QualifyingProperties;
-import xades4j.properties.QualifyingProperty;
-import xades4j.properties.SignedDataObjectProperty;
-import xades4j.properties.SignedProperties;
-import xades4j.properties.SignedSignatureProperty;
-import xades4j.properties.UnsignedDataObjectProperty;
-import xades4j.properties.UnsignedProperties;
-import xades4j.properties.UnsignedSignatureProperty;
-import xades4j.utils.DataGetter;
-import xades4j.utils.DataGetterImpl;
+import xades4j.properties.*;
 import xades4j.providers.ValidationData;
 import xades4j.utils.CollectionUtils;
-import xades4j.utils.CollectionUtils.Projector;
+import xades4j.utils.DataGetter;
+import xades4j.utils.DataGetterImpl;
+
+import java.security.cert.X509Certificate;
+import java.util.Collection;
 
 /**
  * The result of signature verification. It includes the signature form, the qualifying
@@ -69,16 +62,9 @@ public class XAdESVerificationResult
     private DataGetter<QualifyingProperty> createPropsGetter(
             Collection<PropertyInfo> propsInfo)
     {
-        Collection<QualifyingProperty> props = CollectionUtils.project(propsInfo, new Projector<PropertyInfo, QualifyingProperty>()
-        {
-            @Override
-            public QualifyingProperty project(PropertyInfo e)
-            {
-                return e.getProperty();
-            }
-        });
+        Collection<QualifyingProperty> props = CollectionUtils.project(propsInfo, PropertyInfo::getProperty);
 
-        return new DataGetterImpl<QualifyingProperty>(props);
+        return new DataGetterImpl<>(props);
     }
 
     private QualifyingProperties createQualifProps()

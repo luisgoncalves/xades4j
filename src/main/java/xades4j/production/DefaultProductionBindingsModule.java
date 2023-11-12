@@ -19,37 +19,10 @@ package xades4j.production;
 import com.google.inject.AbstractModule;
 import com.google.inject.TypeLiteral;
 import com.google.inject.multibindings.Multibinder;
-import xades4j.properties.AllDataObjsCommitmentTypeProperty;
-import xades4j.properties.AllDataObjsTimeStampProperty;
-import xades4j.properties.ArchiveTimeStampProperty;
-import xades4j.properties.CertificateValuesProperty;
-import xades4j.properties.CommitmentTypeProperty;
-import xades4j.properties.CompleteCertificateRefsProperty;
-import xades4j.properties.CompleteRevocationRefsProperty;
-import xades4j.properties.CounterSignatureProperty;
-import xades4j.properties.DataObjectDesc;
-import xades4j.properties.DataObjectFormatProperty;
-import xades4j.properties.IndividualDataObjsTimeStampProperty;
-import xades4j.properties.RevocationValuesProperty;
-import xades4j.properties.SigAndRefsTimeStampProperty;
-import xades4j.properties.SignaturePolicyIdentifierProperty;
-import xades4j.properties.SignaturePolicyImpliedProperty;
-import xades4j.properties.SignatureProductionPlaceProperty;
-import xades4j.properties.SignatureTimeStampProperty;
-import xades4j.properties.SignerRoleProperty;
-import xades4j.properties.SigningCertificateProperty;
-import xades4j.properties.SigningTimeProperty;
+import xades4j.properties.*;
 import xades4j.properties.data.CustomPropertiesDataObjsStructureVerifier;
-import xades4j.providers.DataObjectPropertiesProvider;
-import xades4j.providers.MessageDigestEngineProvider;
-import xades4j.providers.SignaturePropertiesProvider;
-import xades4j.providers.TimeStampTokenProvider;
-import xades4j.providers.X500NameStyleProvider;
-import xades4j.providers.impl.DefaultMessageDigestProvider;
-import xades4j.providers.impl.DefaultSignaturePropertiesProvider;
-import xades4j.providers.impl.DefaultX500NameStyleProvider;
-import xades4j.providers.impl.HttpTimeStampTokenProvider;
-import xades4j.providers.impl.HttpTsaConfiguration;
+import xades4j.providers.*;
+import xades4j.providers.impl.*;
 
 /**
  * Contains the Guice bindings for the default components and the bindings for the
@@ -64,13 +37,8 @@ class DefaultProductionBindingsModule extends AbstractModule
     {
         // Defaults for configurable components.
         bind(SignaturePropertiesProvider.class).to(DefaultSignaturePropertiesProvider.class);
-        bind(DataObjectPropertiesProvider.class).toInstance(new DataObjectPropertiesProvider()
-        {
-            @Override
-            public void provideProperties(DataObjectDesc dataObj)
-            {
-                // By default no properties are specified for a data object.
-            }
+        bind(DataObjectPropertiesProvider.class).toInstance(dataObj -> {
+            // By default no properties are specified for a data object.
         });
         bind(SignatureAlgorithms.class).toInstance(new SignatureAlgorithms());
         bind(BasicSignatureOptions.class).toInstance(new BasicSignatureOptions());

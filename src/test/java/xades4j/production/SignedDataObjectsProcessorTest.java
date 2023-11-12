@@ -17,23 +17,18 @@
 package xades4j.production;
 
 import org.apache.xml.security.signature.*;
-import org.apache.xml.security.utils.resolver.ResourceResolverContext;
-import org.apache.xml.security.utils.resolver.ResourceResolverException;
-import org.apache.xml.security.utils.resolver.ResourceResolverSpi;
-import org.w3c.dom.Element;
-import xades4j.algorithms.EnvelopedSignatureTransform;
 import org.apache.xml.security.utils.Constants;
-
-import java.io.ByteArrayInputStream;
-import java.util.Map;
-
+import org.apache.xml.security.utils.resolver.ResourceResolverContext;
+import org.apache.xml.security.utils.resolver.ResourceResolverSpi;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.w3c.dom.Document;
-import xades4j.properties.DataObjectDesc;
+import xades4j.algorithms.EnvelopedSignatureTransform;
 import xades4j.utils.DOMHelper;
 import xades4j.utils.SignatureServicesTestBase;
 import xades4j.utils.StringUtils;
+
+import java.io.ByteArrayInputStream;
 
 import static org.junit.jupiter.api.Assertions.*;
 

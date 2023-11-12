@@ -16,12 +16,7 @@
  */
 package xades4j.utils;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * Provides some utility methods over collections.
@@ -152,21 +147,7 @@ public class CollectionUtils
 
     public static<T, T1 extends T> List<T1> filterByType(Collection<T> c, final Class<T1> clazz){
         return project(
-                filter(c,new Predicate<T>()
-                {
-                    @Override
-                    public boolean verifiedBy(T elem)
-                    {
-                        return clazz.isAssignableFrom(elem.getClass());
-                    }
-                }),
-                new Projector<T, T1>()
-                {
-                    @Override
-                    public T1 project(T e)
-                    {
-                        return (T1)e;
-                    }
-                });
+                filter(c, elem -> clazz.isAssignableFrom(elem.getClass())),
+                e -> (T1)e);
     }
 }

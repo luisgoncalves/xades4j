@@ -29,8 +29,7 @@ class FromXmlSigningTimeConverter implements SignedSigPropFromXmlConv
     @Override
     public void convertFromObjectTree(
             XmlSignedSignaturePropertiesType xmlProps,
-            QualifyingPropertiesDataCollector propertyDataCollector) throws PropertyUnmarshalException
-    {
+            QualifyingPropertiesDataCollector propertyDataCollector) {
         Calendar sigTime = xmlProps.getSigningTime();
         if (null == sigTime)
             return;

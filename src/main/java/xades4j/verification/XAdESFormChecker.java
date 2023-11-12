@@ -16,18 +16,11 @@
  */
 package xades4j.verification;
 
+import xades4j.properties.*;
+
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.Set;
-import xades4j.properties.ArchiveTimeStampProperty;
-import xades4j.properties.CertificateValuesProperty;
-import xades4j.properties.CompleteCertificateRefsProperty;
-import xades4j.properties.CompleteRevocationRefsProperty;
-import xades4j.properties.RevocationValuesProperty;
-import xades4j.properties.SigAndRefsTimeStampProperty;
-import xades4j.properties.SignaturePolicyBase;
-import xades4j.properties.SignatureTimeStampProperty;
-import xades4j.properties.SigningCertificateProperty;
 
 /**
  *
@@ -95,11 +88,10 @@ class XAdESFormChecker
             if (baseForms.length == 0)
                 return true;
 
-            for (int i = 0; i < baseForms.length; i++)
-            {
-                if (baseForms[i].check(availablePropsNames))
-                    return true;
-            }
+          for (XAdESFormDesc baseForm : baseForms) {
+            if (baseForm.check(availablePropsNames))
+              return true;
+          }
 
             throw new InvalidXAdESFormException(String.format("Required base forms for %s are not present", this.getForm().toString()));
         }
@@ -225,8 +217,7 @@ class XAdESFormChecker
         }
 
         @Override
-        protected boolean checkProps(Set<String> availablePropsNames) throws InvalidXAdESFormException
-        {
+        protected boolean checkProps(Set<String> availablePropsNames) {
             return availablePropsNames.contains(SigAndRefsTimeStampProperty.PROP_NAME) ||
                     availablePropsNames.contains("RefsOnlyTimeStamp");
         }
@@ -278,8 +269,7 @@ class XAdESFormChecker
         }
 
         @Override
-        protected boolean checkProps(Set<String> availablePropsNames) throws InvalidXAdESFormException
-        {
+        protected boolean checkProps(Set<String> availablePropsNames) {
             return availablePropsNames.contains(ArchiveTimeStampProperty.PROP_NAME);
         }
 

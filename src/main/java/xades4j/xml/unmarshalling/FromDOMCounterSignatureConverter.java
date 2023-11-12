@@ -32,8 +32,7 @@ class FromDOMCounterSignatureConverter implements QualifyingPropertyFromDOMConve
     @Override
     public void convertFromDOMTree(
             Element props,
-            QualifyingPropertiesDataCollector propertyDataCollector) throws PropertyUnmarshalException
-    {
+            QualifyingPropertiesDataCollector propertyDataCollector) {
         Collection<Element> counterSigs = DOMHelper.getChildElementsByTagNameNS(
             props,
             QualifyingProperty.XADES_XMLNS,

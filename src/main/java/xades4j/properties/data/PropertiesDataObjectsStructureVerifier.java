@@ -16,21 +16,16 @@
  */
 package xades4j.properties.data;
 
-import xades4j.utils.DataGetterImpl;
-import xades4j.utils.DataGetter;
 import jakarta.inject.Inject;
+import xades4j.properties.*;
+import xades4j.utils.DataGetter;
+import xades4j.utils.DataGetterImpl;
+
+import java.lang.reflect.InvocationTargetException;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
-import xades4j.properties.AllDataObjsTimeStampProperty;
-import xades4j.properties.ArchiveTimeStampProperty;
-import xades4j.properties.CertificateValuesProperty;
-import xades4j.properties.CompleteCertificateRefsProperty;
-import xades4j.properties.RevocationValuesProperty;
-import xades4j.properties.SigAndRefsTimeStampProperty;
-import xades4j.properties.SignatureTimeStampProperty;
-import xades4j.properties.SigningCertificateProperty;
 
 /**
  *
@@ -156,14 +151,12 @@ public class PropertiesDataObjectsStructureVerifier
             throw new PropertyDataStructureVerifierNotAvailableException(propData.getClass().getSimpleName());
         try
         {
-            v = verifierAnnot.value().newInstance();
+            v = verifierAnnot.value().getDeclaredConstructor().newInstance();
             structureVerifiers.put(propData.getClass(), v);
             return v;
-        } catch (InstantiationException ex)
-        {
-        } catch (IllegalAccessException ex)
+        } catch (InstantiationException | IllegalAccessException | NoSuchMethodException | InvocationTargetException ignored)
         {
         }
-        throw new PropertyDataStructureException("cannot create data structure verifier", propData.getClass().getSimpleName());
+      throw new PropertyDataStructureException("cannot create data structure verifier", propData.getClass().getSimpleName());
     }
 }

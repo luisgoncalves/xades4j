@@ -16,20 +16,19 @@
  */
 package xades4j.verification;
 
-import java.lang.reflect.Method;
-import java.util.Date;
-import java.util.List;
-import xades4j.UnsupportedAlgorithmException;
 import xades4j.properties.QualifyingProperty;
 import xades4j.properties.data.BaseXAdESTimeStampData;
 import xades4j.providers.TimeStampTokenDigestException;
 import xades4j.providers.TimeStampTokenSignatureException;
 import xades4j.providers.TimeStampTokenStructureException;
-import xades4j.providers.TimeStampTokenVerificationException;
 import xades4j.providers.TimeStampVerificationProvider;
 import xades4j.utils.CannotAddDataToDigestInputException;
 import xades4j.utils.TimeStampDigestInput;
 import xades4j.utils.TimeStampDigestInputFactory;
+
+import java.lang.reflect.Method;
+import java.util.Date;
+import java.util.List;
 
 /**
  *
@@ -76,23 +75,11 @@ abstract class TimeStampVerifierBase<TData extends BaseXAdESTimeStampData> imple
             setTimeMethod.invoke(prop, ts);
             return prop;
         }
-        catch(UnsupportedAlgorithmException ex)
+        catch(Exception ex)
         {
             throw getEx(ex, this.propName);
         }
-        catch (CannotAddDataToDigestInputException ex)
-        {
-            throw new TimeStampDigestInputException(this.propName, ex);
-        }
-        catch (TimeStampTokenVerificationException ex)
-        {
-            throw getEx(ex, this.propName);
-        }
-        catch (Exception ex)
-        {
-            // Exceptions related to setTimeMethod.invoke(...)
-            throw getEx(ex, this.propName);
-        }
+
     }
 
     protected abstract QualifyingProperty addPropSpecificTimeStampInputAndCreateProperty(

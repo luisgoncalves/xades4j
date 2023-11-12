@@ -21,37 +21,22 @@ import com.google.inject.TypeLiteral;
 import com.google.inject.multibindings.MapBinder;
 import com.google.inject.multibindings.Multibinder;
 import com.google.inject.util.Types;
-import java.io.InputStream;
-import java.lang.reflect.ParameterizedType;
-import javax.xml.namespace.QName;
 import xades4j.properties.CounterSignatureProperty;
-import xades4j.properties.ObjectIdentifier;
 import xades4j.properties.QualifyingProperty;
-import xades4j.properties.data.AllDataObjsTimeStampData;
-import xades4j.properties.data.CommitmentTypeData;
-import xades4j.properties.data.CompleteCertificateRefsData;
-import xades4j.properties.data.CompleteRevocationRefsData;
-import xades4j.properties.data.CustomPropertiesDataObjsStructureVerifier;
-import xades4j.properties.data.DataObjectFormatData;
-import xades4j.properties.data.GenericDOMData;
-import xades4j.properties.data.IndividualDataObjsTimeStampData;
-import xades4j.properties.data.PropertyDataObject;
-import xades4j.properties.data.SignaturePolicyData;
-import xades4j.properties.data.SignatureProdPlaceData;
-import xades4j.properties.data.SignatureTimeStampData;
-import xades4j.properties.data.SignerRoleData;
-import xades4j.properties.data.SigningCertificateData;
-import xades4j.properties.data.SigningTimeData;
-import xades4j.providers.X500NameStyleProvider;
-import xades4j.providers.impl.DefaultMessageDigestProvider;
-import xades4j.providers.impl.DefaultTimeStampVerificationProvider;
+import xades4j.properties.data.*;
 import xades4j.providers.MessageDigestEngineProvider;
 import xades4j.providers.SignaturePolicyDocumentProvider;
 import xades4j.providers.TimeStampVerificationProvider;
+import xades4j.providers.X500NameStyleProvider;
+import xades4j.providers.impl.DefaultMessageDigestProvider;
+import xades4j.providers.impl.DefaultTimeStampVerificationProvider;
 import xades4j.providers.impl.DefaultX500NameStyleProvider;
 import xades4j.utils.BuiltIn;
 import xades4j.utils.RFC4519ExtensibleStyle;
 import xades4j.utils.X500ExtensibleNameStyle;
+
+import javax.xml.namespace.QName;
+import java.lang.reflect.ParameterizedType;
 
 /**
  * Contains the Guice bindings for the default components and the bindings for the
@@ -77,17 +62,9 @@ class DefaultVerificationBindingsModule extends AbstractModule
     {
         bind(MessageDigestEngineProvider.class).to(DefaultMessageDigestProvider.class);
         bind(TimeStampVerificationProvider.class).to(DefaultTimeStampVerificationProvider.class);
-        bind(SignaturePolicyDocumentProvider.class).toInstance(new SignaturePolicyDocumentProvider()
-        {
-            @Override
-            public InputStream getSignaturePolicyDocumentStream(
-                    ObjectIdentifier sigPolicyId)
-            {
-                return null;
-            }
-        });
+        bind(SignaturePolicyDocumentProvider.class).toInstance(sigPolicyId -> null);
 
-        // QualifyingPropertiesVerifier is not configurable but the individual
+        // QualifyingPropertiesVerifier is not configurable, but the individual
         // verifiers may have dependencies.
         bind(QualifyingPropertiesVerifier.class).to(QualifyingPropertiesVerifierImpl.class);
         bind(QualifyingPropertyVerifiersMapper.class).to(QualifyingPropertyVerifiersMapperImpl.class);

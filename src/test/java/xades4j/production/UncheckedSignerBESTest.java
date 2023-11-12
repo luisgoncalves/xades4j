@@ -16,6 +16,10 @@
  */
 package xades4j.production;
 
+import org.apache.xml.security.utils.Constants;
+import org.junit.jupiter.api.Test;
+import org.w3c.dom.Document;
+import org.w3c.dom.Element;
 import xades4j.algorithms.EnvelopedSignatureTransform;
 import xades4j.algorithms.ExclusiveCanonicalXMLWithoutComments;
 import xades4j.properties.DataObjectDesc;
@@ -24,21 +28,12 @@ import xades4j.providers.CertificateValidationProvider;
 import xades4j.providers.KeyingDataProvider;
 import xades4j.providers.impl.PKIXCertificateValidationProvider;
 import xades4j.utils.FileSystemDirectoryCertStore;
-import xades4j.verification.SignatureSpecificVerificationOptions;
-import xades4j.verification.SigningCertificateKeyUsageException;
-import xades4j.verification.XAdESForm;
-import xades4j.verification.XAdESVerificationResult;
-import xades4j.verification.XadesVerificationProfile;
+import xades4j.verification.*;
 
 import java.io.FileInputStream;
 import java.security.KeyStore;
 import java.security.cert.Certificate;
 import java.security.cert.CertificateFactory;
-
-import org.apache.xml.security.utils.Constants;
-import org.junit.jupiter.api.Test;
-import org.w3c.dom.Document;
-import org.w3c.dom.Element;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
@@ -99,7 +94,7 @@ public class UncheckedSignerBESTest extends SignerTestBase
         SignatureSpecificVerificationOptions verifyOpts = new SignatureSpecificVerificationOptions()
                 .checkKeyUsage(verifySignatureKeyUsage);
         XAdESVerificationResult res = p.newVerifier().verify(sig, verifyOpts);
-        assertEquals(res.getSignatureForm(), XAdESForm.BES);
+        assertEquals(XAdESForm.BES, res.getSignatureForm());
     }
 
     /**

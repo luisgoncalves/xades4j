@@ -16,15 +16,12 @@
  */
 package xades4j.verification;
 
-import com.google.inject.ConfigurationException;
-import jakarta.inject.Inject;
-import com.google.inject.Injector;
-import com.google.inject.Key;
-import com.google.inject.ProvisionException;
-import com.google.inject.TypeLiteral;
+import com.google.inject.*;
 import com.google.inject.util.Types;
-import java.lang.reflect.ParameterizedType;
+import jakarta.inject.Inject;
 import xades4j.properties.data.PropertyDataObject;
+
+import java.lang.reflect.ParameterizedType;
 
 /**
  *
@@ -48,11 +45,9 @@ class QualifyingPropertyVerifiersMapperImpl implements QualifyingPropertyVerifie
         {
             ParameterizedType pt = Types.newParameterizedType(QualifyingPropertyVerifier.class, p.getClass());
             return (QualifyingPropertyVerifier)injector.getInstance(Key.get(TypeLiteral.get(pt)));
-        } catch (ConfigurationException ex)
-        {
-        } catch (ProvisionException ex)
+        } catch (ConfigurationException | ProvisionException ignored)
         {
         }
-        throw new QualifyingPropertyVerifierNotAvailableException(p);
+      throw new QualifyingPropertyVerifierNotAvailableException(p);
     }
 }

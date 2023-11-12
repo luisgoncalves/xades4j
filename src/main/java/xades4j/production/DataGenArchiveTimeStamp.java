@@ -61,7 +61,7 @@ class DataGenArchiveTimeStamp extends DataGenBaseTimeStamp<ArchiveTimeStampPrope
     protected void addPropSpecificTimeStampInput(
             ArchiveTimeStampProperty prop,
             TimeStampDigestInput digestInput,
-            PropertiesDataGenerationContext ctx) throws CannotAddDataToDigestInputException, PropertyDataGenerationException
+            PropertiesDataGenerationContext ctx) throws PropertyDataGenerationException
     {
         Element unsignedSigPropsElem = DOMHelper.getFirstDescendant(
                 ctx.getTargetXmlSignature().getElement(),

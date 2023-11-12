@@ -16,29 +16,18 @@
  */
 package xades4j.providers.impl;
 
-import xades4j.providers.*;
+import xades4j.providers.KeyingDataProvider;
+import xades4j.providers.SigningCertChainException;
+import xades4j.providers.SigningKeyException;
+import xades4j.verification.UnexpectedJCAException;
 
-import java.io.IOException;
-import java.security.GeneralSecurityException;
-import java.security.KeyStore;
+import javax.security.auth.callback.PasswordCallback;
+import java.security.*;
 import java.security.KeyStore.Builder;
 import java.security.KeyStore.ProtectionParameter;
-import java.security.KeyStoreException;
-import java.security.PrivateKey;
-import java.security.UnrecoverableKeyException;
 import java.security.cert.Certificate;
 import java.security.cert.X509Certificate;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.Enumeration;
-import java.util.List;
-import javax.security.auth.callback.Callback;
-import javax.security.auth.callback.CallbackHandler;
-import javax.security.auth.callback.PasswordCallback;
-import javax.security.auth.callback.UnsupportedCallbackException;
-
-import xades4j.verification.UnexpectedJCAException;
+import java.util.*;
 
 /**
  * A KeyStore-based implementation of {@code KeyingDataProvider}. The keystore is
@@ -191,28 +180,18 @@ public abstract class KeyStoreKeyingDataProvider implements KeyingDataProvider
                     if (storePasswordProvider != null)
                     // Create the load protection with callback.
                     {
-                        storeLoadProtec = new KeyStore.CallbackHandlerProtection(new CallbackHandler()
-                        {
-                            @Override
-                            public void handle(Callback[] callbacks) throws IOException, UnsupportedCallbackException
-                            {
-                                PasswordCallback c = (PasswordCallback) callbacks[0];
-                                c.setPassword(storePasswordProvider.getPassword());
-                            }
+                        storeLoadProtec = new KeyStore.CallbackHandlerProtection(callbacks -> {
+                            PasswordCallback c = (PasswordCallback) callbacks[0];
+                            c.setPassword(storePasswordProvider.getPassword());
                         });
                     }
                     else
                     // If no load password provider is supplied is because it shouldn't
-                    // be needed. Create a dummy protection because the keystore
+                    // be needed. Create dummy protection because the keystore
                     // builder needs it to be non-null.
                     {
-                        storeLoadProtec = new KeyStore.CallbackHandlerProtection(new CallbackHandler()
-                        {
-                            @Override
-                            public void handle(Callback[] callbacks) throws IOException, UnsupportedCallbackException
-                            {
-                                throw new UnsupportedOperationException("No KeyStorePasswordProvider");
-                            }
+                        storeLoadProtec = new KeyStore.CallbackHandlerProtection(callbacks -> {
+                            throw new UnsupportedOperationException("No KeyStorePasswordProvider");
                         });
                     }
                     this.keyStore = builderCreator.getBuilder(storeLoadProtec).getKeyStore();

@@ -29,11 +29,10 @@ public class StringUtils
 
     public static boolean allNullOrEmptyStrings(String... srts)
     {
-        for (int i = 0; i < srts.length; i++)
-        {
-            if (!isNullOrEmptyString(srts[i]))
-                return false;
-        }
+      for (String srt : srts) {
+        if (!isNullOrEmptyString(srt))
+          return false;
+      }
         return true;
     }
 

@@ -17,13 +17,8 @@
 package xades4j.utils;
 
 import xades4j.properties.PropertyTargetException;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Map;
-import java.util.Set;
+
+import java.util.*;
 
 /**
  * A generic bag of properties used to store properties that apply to a specific
@@ -84,14 +79,9 @@ public class PropertiesSet<T>
         if (null == prop)
             throw new NullPointerException("Property cannot be null");
 
-        Set<T> propsOfCurrType = properties.get(prop.getClass());
-        if (null == propsOfCurrType)
-        {
-            // No properties of this type have been added.
-            propsOfCurrType = new HashSet<T>(1);
-            properties.put(prop.getClass(), propsOfCurrType);
-        }
-        // Repeated instances are not allowed.
+      Set<T> propsOfCurrType = properties.computeIfAbsent(prop.getClass(), k -> new HashSet<T>(1));
+      // No properties of this type have been added.
+      // Repeated instances are not allowed.
         if (!propsOfCurrType.add(prop))
             throw new PropertyTargetException("Property instance already present");
     }

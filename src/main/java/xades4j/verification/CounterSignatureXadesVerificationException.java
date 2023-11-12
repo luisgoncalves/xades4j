@@ -29,10 +29,4 @@ public class CounterSignatureXadesVerificationException extends CounterSignature
     {
         super(cause);
     }
-
-    @Override
-    protected String getVerificationMessage()
-    {
-        return getCause().getMessage();
-    }
 }

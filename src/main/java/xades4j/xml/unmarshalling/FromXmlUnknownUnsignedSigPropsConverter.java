@@ -16,10 +16,11 @@
  */
 package xades4j.xml.unmarshalling;
 
-import java.util.List;
 import org.w3c.dom.Element;
 import xades4j.properties.data.GenericDOMData;
 import xades4j.xml.bind.xades.XmlUnsignedSignaturePropertiesType;
+
+import java.util.List;
 
 /**
  *
@@ -45,7 +46,7 @@ class FromXmlUnknownUnsignedSigPropsConverter implements UnsignedSigPropFromXmlC
             QualifyingPropertiesDataCollector propertyDataCollector) throws PropertyUnmarshalException
     {
         List<Object> any = xmlProps.getAny();
-        if (any.size() > 0 && !this.acceptUnknown)
+        if (!any.isEmpty() && !this.acceptUnknown)
             throw new PropertyUnmarshalException("Unknown properties were found", "Unknown");
 
         for (Object anyObj : any)

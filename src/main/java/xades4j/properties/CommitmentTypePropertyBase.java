@@ -16,10 +16,10 @@
  */
 package xades4j.properties;
 
-import java.util.Collection;
-import java.util.List;
 import org.w3c.dom.Element;
 import xades4j.utils.CollectionUtils;
+
+import java.util.Collection;
 
 /**
  * Base class for the {@code CommitmentTypeIndication} property. This is a signed property

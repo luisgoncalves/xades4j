@@ -136,8 +136,7 @@ abstract class BaseJAXBMarshaller<TXml>
     private Collection<PropertyDataObject> convert(
             Collection<PropertyDataObject> props,
             TXml xmlProps,
-            Document doc) throws MarshalException
-    {
+            Document doc) {
         Collection<PropertyDataObject> unknownProps = null;
 
         // Convert each property to the corresponding JAXB object. Each converter

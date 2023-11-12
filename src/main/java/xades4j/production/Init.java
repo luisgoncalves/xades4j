@@ -39,7 +39,7 @@ class Init
             ElementProxy.setDefaultPrefix(Constants.SignatureSpecNS, "ds");
             ElementProxy.setDefaultPrefix(QualifyingProperty.XADES_XMLNS, "xades");
             ElementProxy.setDefaultPrefix(QualifyingProperty.XADESV141_XMLNS, "xades141");
-        } catch (XMLSecurityException ex)
+        } catch (XMLSecurityException ignored)
         {
         }
     }

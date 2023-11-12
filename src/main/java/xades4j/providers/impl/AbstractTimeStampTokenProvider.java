@@ -43,7 +43,7 @@ public abstract class AbstractTimeStampTokenProvider implements TimeStampTokenPr
     private static final Map<String, ASN1ObjectIdentifier> digestUriToOidMappings;
 
     static {
-        digestUriToOidMappings = new HashMap<String, ASN1ObjectIdentifier>(6);
+        digestUriToOidMappings = new HashMap<>(6);
         digestUriToOidMappings.put(MessageDigestAlgorithm.ALGO_ID_DIGEST_NOT_RECOMMENDED_MD5, TSPAlgorithms.MD5);
         digestUriToOidMappings.put(MessageDigestAlgorithm.ALGO_ID_DIGEST_RIPEMD160, TSPAlgorithms.RIPEMD160);
         digestUriToOidMappings.put(MessageDigestAlgorithm.ALGO_ID_DIGEST_SHA1, TSPAlgorithms.SHA1);

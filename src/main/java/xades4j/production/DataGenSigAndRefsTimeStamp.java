@@ -55,7 +55,7 @@ class DataGenSigAndRefsTimeStamp extends DataGenBaseTimeStamp<SigAndRefsTimeStam
     protected void addPropSpecificTimeStampInput(
             SigAndRefsTimeStampProperty prop,
             TimeStampDigestInput digestInput,
-            PropertiesDataGenerationContext ctx) throws CannotAddDataToDigestInputException, PropertyDataGenerationException
+            PropertiesDataGenerationContext ctx) throws PropertyDataGenerationException
     {
         Element unsignedSigPropsElem = DOMHelper.getFirstDescendant(
             ctx.getTargetXmlSignature().getElement(),

@@ -16,26 +16,19 @@
  */
 package xades4j.production;
 
-import java.util.Collection;
-import java.util.Collections;
-import java.util.HashSet;
-import java.util.IdentityHashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
+import jakarta.inject.Inject;
 import org.apache.xml.security.signature.*;
 import org.apache.xml.security.transforms.Transforms;
 import org.apache.xml.security.utils.resolver.ResourceResolverSpi;
 import org.w3c.dom.Document;
 import xades4j.UnsupportedAlgorithmException;
-import xades4j.XAdES4jXMLSigException;
 import xades4j.algorithms.Algorithm;
 import xades4j.properties.DataObjectDesc;
 import xades4j.utils.ResolverAnonymous;
 import xades4j.utils.TransformUtils;
 import xades4j.xml.marshalling.algorithms.AlgorithmsParametersMarshallingProvider;
 
-import jakarta.inject.Inject;
+import java.util.*;
 
 /**
  * Helper class that processes a set of data object descriptions.
@@ -74,12 +67,10 @@ final class SignedDataObjectsProcessor
      * @return result with reference mappings resulting from the data object descriptions and manifests to be digested
      * @throws UnsupportedAlgorithmException if the reference digest algorithm is not supported
      * @throws IllegalStateException         if the signature already contains {@code Reference}s
-     * @throws XAdES4jXMLSigException        if a Manifest cannot be digested
      */
     SignedDataObjectsProcessor.Result process(
             SignedDataObjects signedDataObjects,
-            XMLSignature xmlSignature) throws UnsupportedAlgorithmException, XAdES4jXMLSigException
-    {
+            XMLSignature xmlSignature) throws UnsupportedAlgorithmException {
         if (xmlSignature.getSignedInfo().getLength() != 0)
         {
             throw new IllegalStateException("XMLSignature already contains references");
@@ -100,8 +91,7 @@ final class SignedDataObjectsProcessor
             String idPrefix,
             List<ResourceResolverSpi> resourceResolvers,
             XMLSignature xmlSignature,
-            boolean hasNullURIReference) throws UnsupportedAlgorithmException, XAdES4jXMLSigException
-    {
+            boolean hasNullURIReference) throws UnsupportedAlgorithmException {
         Map<DataObjectDesc, Reference> referenceMappings = new IdentityHashMap<DataObjectDesc, Reference>(dataObjects.size());
         Set<Manifest> manifests = new HashSet<Manifest>();
 

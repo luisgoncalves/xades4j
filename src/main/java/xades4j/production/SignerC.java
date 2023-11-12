@@ -17,19 +17,19 @@
 package xades4j.production;
 
 import jakarta.inject.Inject;
-import java.security.cert.X509Certificate;
-import java.util.Collection;
-import java.util.List;
-
-import com.google.common.base.Optional;
+import xades4j.XAdES4jException;
 import xades4j.properties.SignedSignatureProperty;
 import xades4j.properties.UnsignedSignatureProperty;
-import xades4j.XAdES4jException;
 import xades4j.providers.*;
 import xades4j.utils.PropertiesUtils;
 import xades4j.xml.marshalling.SignedPropertiesMarshaller;
 import xades4j.xml.marshalling.UnsignedPropertiesMarshaller;
 import xades4j.xml.marshalling.algorithms.AlgorithmsParametersMarshallingProvider;
+
+import java.security.cert.X509Certificate;
+import java.util.Collection;
+import java.util.List;
+import java.util.Optional;
 
 /**
  * Produces XAdES-C signatures.

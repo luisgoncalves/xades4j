@@ -69,21 +69,17 @@ public final class HttpTimeStampTokenProvider extends AbstractTimeStampTokenProv
                 throw new TimeStampTokenGenerationException(String.format("TSA returned HTTP %d %s", connection.getResponseCode(), connection.getResponseMessage()));
             }
 
-            BufferedInputStream input = null;
-            try {
-                input = new BufferedInputStream(connection.getInputStream());
-                ByteArrayOutputStream baos = new ByteArrayOutputStream();
-                byte[] buffer = new byte[1024];
-                int len;
-                while ((len = input.read(buffer)) > -1) {
-                    baos.write(buffer, 0, len);
-                }
-                baos.flush();
-
-                return baos.toByteArray();
-            } finally {
-                if (input != null) input.close();
+          try (BufferedInputStream input = new BufferedInputStream(connection.getInputStream())) {
+            ByteArrayOutputStream baos = new ByteArrayOutputStream();
+            byte[] buffer = new byte[1024];
+            int len;
+            while ((len = input.read(buffer)) > -1) {
+              baos.write(buffer, 0, len);
             }
+            baos.flush();
+
+            return baos.toByteArray();
+          }
         } catch (IOException ex) {
             throw new TimeStampTokenGenerationException("Error when connecting to the TSA", ex);
         } finally {

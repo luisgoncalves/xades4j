@@ -16,15 +16,16 @@
  */
 package xades4j.verification;
 
+import xades4j.UnsupportedAlgorithmException;
+import xades4j.XAdES4jException;
+import xades4j.properties.data.CertRef;
+import xades4j.providers.MessageDigestEngineProvider;
+
 import java.security.MessageDigest;
 import java.security.cert.CertificateEncodingException;
 import java.security.cert.X509Certificate;
 import java.util.Arrays;
 import java.util.Collection;
-import xades4j.UnsupportedAlgorithmException;
-import xades4j.XAdES4jException;
-import xades4j.properties.data.CertRef;
-import xades4j.providers.MessageDigestEngineProvider;
 
 /**
  *
@@ -84,13 +85,10 @@ class CertRefUtils
             if (!Arrays.equals(certRef.digestValue, actualDigest))
                 throw new InvalidCertRefException("digests mismatch");
             return;
-        } catch (UnsupportedAlgorithmException ex)
-        {
-            t = ex;
-        } catch (CertificateEncodingException ex)
+        } catch (UnsupportedAlgorithmException | CertificateEncodingException ex)
         {
             t = ex;
         }
-        throw new InvalidCertRefException(t.getMessage());
+      throw new InvalidCertRefException(t.getMessage());
     }
 }

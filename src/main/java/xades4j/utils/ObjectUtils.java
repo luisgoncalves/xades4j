@@ -29,12 +29,11 @@ public class ObjectUtils
      */
     public static boolean allNull(Object... objs)
     {
-        for (int i = 0; i < objs.length; i++)
-        {
-            if (null != objs[i])
-                return false;
+      for (Object obj : objs) {
+        if (null != obj)
+          return false;
 
-        }
+      }
         return true;
     }
 
@@ -45,11 +44,10 @@ public class ObjectUtils
      */
     public static boolean anyNull(Object... objs)
     {
-        for (int i = 0; i < objs.length; i++)
-        {
-            if (null == objs[i])
-                return true;
-        }
+      for (Object obj : objs) {
+        if (null == obj)
+          return true;
+      }
         return false;
     }
 }

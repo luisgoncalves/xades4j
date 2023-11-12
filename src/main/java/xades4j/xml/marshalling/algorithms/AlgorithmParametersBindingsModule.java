@@ -19,12 +19,9 @@ package xades4j.xml.marshalling.algorithms;
 import com.google.inject.AbstractModule;
 import com.google.inject.TypeLiteral;
 import com.google.inject.multibindings.MapBinder;
-import org.w3c.dom.Document;
-import org.w3c.dom.Node;
 import xades4j.algorithms.*;
 
 import javax.annotation.Nullable;
-import java.util.List;
 
 /**
  * Contains the Guice bindings for the components on this package.
@@ -72,14 +69,7 @@ public final class AlgorithmParametersBindingsModule extends AbstractModule
         }
         else
         {
-            mapBinder.addBinding(algorithmClass).toInstance(new AlgorithmParametersMarshaller<T>()
-            {
-                @Override
-                public List<Node> marshalParameters(T alg, Document doc)
-                {
-                    return null;
-                }
-            });
+            mapBinder.addBinding(algorithmClass).toInstance((AlgorithmParametersMarshaller<T>) (alg, doc) -> null);
         }
     }
 }

@@ -17,6 +17,14 @@
 package xades4j.verification;
 
 import jakarta.inject.Inject;
+import xades4j.UnsupportedAlgorithmException;
+import xades4j.properties.CompleteRevocationRefsProperty;
+import xades4j.properties.QualifyingProperty;
+import xades4j.properties.data.CRLRef;
+import xades4j.properties.data.CompleteRevocationRefsData;
+import xades4j.providers.MessageDigestEngineProvider;
+import xades4j.utils.CrlExtensionsUtils;
+
 import java.io.IOException;
 import java.math.BigInteger;
 import java.security.MessageDigest;
@@ -25,14 +33,6 @@ import java.security.cert.X509CRL;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
-
-import xades4j.properties.CompleteRevocationRefsProperty;
-import xades4j.properties.QualifyingProperty;
-import xades4j.UnsupportedAlgorithmException;
-import xades4j.properties.data.CRLRef;
-import xades4j.properties.data.CompleteRevocationRefsData;
-import xades4j.providers.MessageDigestEngineProvider;
-import xades4j.utils.CrlExtensionsUtils;
 
 /**
  * XAdES G.2.2.13
@@ -97,15 +97,7 @@ class CompleteRevocRefsVerifier implements QualifyingPropertyVerifier<CompleteRe
                         break;
                     }
                 } 
-                catch(IOException ex)
-                {
-                    throw new CompleteRevocRefsReferenceException(crl, ex.getMessage());
-                }
-                catch (CRLException ex)
-                {
-                    throw new CompleteRevocRefsReferenceException(crl, ex.getMessage());
-                }
-                catch (UnsupportedAlgorithmException ex)
+                catch(IOException | CRLException | UnsupportedAlgorithmException ex)
                 {
                     throw new CompleteRevocRefsReferenceException(crl, ex.getMessage());
                 }

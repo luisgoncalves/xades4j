@@ -16,13 +16,9 @@
  */
 package xades4j.utils;
 
-import java.util.Collection;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Map;
-import java.util.Set;
 import xades4j.utils.CollectionUtils.Predicate;
+
+import java.util.*;
 
 /**
  *
@@ -45,13 +41,8 @@ public class DataGetterImpl<T> implements DataGetter<T>
 
         for (T e : all)
         {
-            Set<T> typeTs = res.get(e.getClass());
-            if (null == typeTs)
-            {
-                typeTs = new HashSet<T>();
-                res.put(e.getClass(), typeTs);
-            }
-            typeTs.add(e);
+          Set<T> typeTs = res.computeIfAbsent(e.getClass(), k -> new HashSet<T>());
+          typeTs.add(e);
         }
         return res;
     }
