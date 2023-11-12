@@ -26,7 +26,8 @@ import xades4j.XAdES4jException;
  */
 public class InvalidFormExtensionException extends XAdES4jException
 {
-    private final XAdESForm actualForm, finalForm;
+    private final XAdESForm actualForm;
+    private final XAdESForm finalForm;
 
     public InvalidFormExtensionException(
             XAdESForm actualForm,

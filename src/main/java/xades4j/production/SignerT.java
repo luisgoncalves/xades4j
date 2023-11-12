@@ -17,7 +17,6 @@
 package xades4j.production;
 
 import jakarta.inject.Inject;
-import xades4j.XAdES4jException;
 import xades4j.properties.SignedSignatureProperty;
 import xades4j.properties.UnsignedSignatureProperty;
 import xades4j.providers.*;
@@ -64,8 +63,7 @@ class SignerT extends SignerBES
     protected void getFormatSpecificSignatureProperties(
             Collection<SignedSignatureProperty> formatSpecificSignedSigProps,
             Collection<UnsignedSignatureProperty> formatSpecificUnsignedSigProps,
-            List<X509Certificate> signingCertificateChain) throws XAdES4jException
-    {
+            List<X509Certificate> signingCertificateChain) throws ValidationDataException {
         super.getFormatSpecificSignatureProperties(
                 formatSpecificSignedSigProps, formatSpecificUnsignedSigProps, signingCertificateChain);
 

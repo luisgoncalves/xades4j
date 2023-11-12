@@ -16,8 +16,9 @@
  */
 package xades4j.properties;
 
-import java.util.Collection;
 import xades4j.utils.CollectionUtils;
+
+import java.util.Collection;
 
 /**
  * Represents the DataObjectFormat signed data object property. The DataObjectFormat
@@ -40,7 +41,8 @@ public class DataObjectFormatProperty extends SignedDataObjectProperty
 {
     public static final String PROP_NAME = "DataObjectFormat";
     /**/
-    private final String mimeType, encoding;
+    private final String mimeType;
+    private final String encoding;
     private String description;
     private ObjectIdentifier identifier;
     private Collection<String> documentationUris;

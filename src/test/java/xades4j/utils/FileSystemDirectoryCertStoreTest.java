@@ -18,6 +18,8 @@ package xades4j.utils;
 
 import org.junit.jupiter.api.Test;
 
+import java.security.cert.CRL;
+import java.security.cert.Certificate;
 import java.util.Collection;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -25,23 +27,23 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 /**
  * @author Luís
  */
-public class FileSystemDirectoryCertStoreTest
+class FileSystemDirectoryCertStoreTest
 {
     @Test
-    public void testGetStoreMy() throws Exception
+    void testGetStoreMy() throws Exception
     {
         FileSystemDirectoryCertStore certStore = new FileSystemDirectoryCertStore("./src/test/cert/my");
-        Collection certs = certStore.getStore().getCertificates(null);
-        assertEquals(certs.size(), 4);
+        Collection<? extends Certificate> certs = certStore.getStore().getCertificates(null);
+        assertEquals(4, certs.size());
     }
 
     @Test
-    public void testGetStoreNist() throws Exception
+    void testGetStoreNist() throws Exception
     {
         FileSystemDirectoryCertStore certStore = new FileSystemDirectoryCertStore("./src/test/cert/csrc.nist");
-        Collection certs = certStore.getStore().getCertificates(null);
-        assertEquals(certs.size(), 4);
-        Collection crls = certStore.getStore().getCRLs(null);
-        assertEquals(crls.size(), 3);
+        Collection<? extends Certificate> certs = certStore.getStore().getCertificates(null);
+        assertEquals(4, certs.size());
+        Collection<? extends CRL> crls = certStore.getStore().getCRLs(null);
+        assertEquals(3, crls.size());
     }
 }

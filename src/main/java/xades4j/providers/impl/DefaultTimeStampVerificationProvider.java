@@ -94,11 +94,9 @@ public class DefaultTimeStampVerificationProvider implements TimeStampVerificati
     public Date verifyToken(byte[] timeStampToken, byte[] tsDigestInput) throws TimeStampTokenVerificationException
     {
         TimeStampToken tsToken;
-        try
+        try(ASN1InputStream asn1is = new ASN1InputStream(timeStampToken))
         {
-            ASN1InputStream asn1is = new ASN1InputStream(timeStampToken);
             ContentInfo tsContentInfo = ContentInfo.getInstance(asn1is.readObject());
-            asn1is.close();
             tsToken = new TimeStampToken(tsContentInfo);
         } catch (IOException ex)
         {

@@ -80,7 +80,7 @@ public class DistinguishedNameComparerTest extends SignatureServicesTestBase
 
     @ParameterizedTest
     @MethodSource("data")
-    public void canCompare(String issuerDn, X509Certificate cert)
+    void canCompare(String issuerDn, X509Certificate cert)
     {
         X500Principal principal = cert.getIssuerX500Principal();
         DistinguishedNameComparer comparer = new DistinguishedNameComparer(this.nameStyle, this.x500NameStyleProvider);

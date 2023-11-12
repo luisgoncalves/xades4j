@@ -22,7 +22,7 @@ package xades4j.verification;
  */
 public abstract class TimeStampVerificationException extends InvalidPropertyException
 {
-    private String propName;
+    private final String propName;
 
     protected TimeStampVerificationException(String propName, Throwable cause)
     {

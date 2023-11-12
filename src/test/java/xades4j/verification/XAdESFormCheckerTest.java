@@ -25,10 +25,10 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 /**
  * @author luis
  */
-public class XAdESFormCheckerTest
+class XAdESFormCheckerTest
 {
     @Test
-    public void checkFormThrowsIfMinimumPropertiesAreNotPresent() throws InvalidXAdESFormException
+    void checkFormThrowsIfMinimumPropertiesAreNotPresent() throws InvalidXAdESFormException
     {
         assertThrows(InvalidXAdESFormException.class, () -> {
             XAdESFormChecker.checkForm(new ArrayList<PropertyInfo>(0));

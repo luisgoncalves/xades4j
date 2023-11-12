@@ -16,48 +16,37 @@
  */
 package xades4j.production;
 
-import org.apache.xml.security.transforms.Transforms;
-import xades4j.properties.QualifyingProperties;
 import jakarta.inject.Inject;
-import java.security.PrivateKey;
-import java.security.cert.X509Certificate;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
-import java.util.UUID;
 import org.apache.xml.security.exceptions.XMLSecurityException;
-import org.apache.xml.security.signature.ObjectContainer;
 import org.apache.xml.security.signature.Manifest;
+import org.apache.xml.security.signature.ObjectContainer;
 import org.apache.xml.security.signature.XMLSignature;
 import org.apache.xml.security.signature.XMLSignatureException;
+import org.apache.xml.security.transforms.Transforms;
 import org.apache.xml.security.utils.Constants;
 import org.apache.xml.security.utils.ElementProxy;
 import org.apache.xml.security.utils.XMLUtils;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
-import xades4j.algorithms.Algorithm;
-import xades4j.properties.QualifyingProperty;
-import xades4j.properties.SignedSignatureProperty;
-import xades4j.properties.SigningCertificateProperty;
-import xades4j.properties.UnsignedSignatureProperty;
 import xades4j.UnsupportedAlgorithmException;
 import xades4j.XAdES4jException;
 import xades4j.XAdES4jXMLSigException;
+import xades4j.algorithms.Algorithm;
+import xades4j.properties.*;
 import xades4j.properties.data.SigAndDataObjsPropertiesData;
-import xades4j.providers.DataObjectPropertiesProvider;
-import xades4j.providers.KeyingDataProvider;
-import xades4j.providers.SignaturePropertiesProvider;
-import xades4j.providers.SigningCertChainException;
-import xades4j.providers.X500NameStyleProvider;
-import xades4j.utils.CanonicalizerUtils;
-import xades4j.utils.DOMHelper;
-import xades4j.utils.ObjectUtils;
-import xades4j.utils.StringUtils;
-import xades4j.utils.TransformUtils;
+import xades4j.providers.*;
+import xades4j.utils.*;
 import xades4j.xml.marshalling.SignedPropertiesMarshaller;
 import xades4j.xml.marshalling.UnsignedPropertiesMarshaller;
 import xades4j.xml.marshalling.algorithms.AlgorithmsParametersMarshallingProvider;
+
+import java.security.PrivateKey;
+import java.security.cert.X509Certificate;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
+import java.util.UUID;
 
 /**
  * Base logic for producing XAdES signatures (XAdES-BES).
@@ -362,8 +351,7 @@ class SignerBES implements XadesSigner
     protected void getFormatSpecificSignatureProperties(
             Collection<SignedSignatureProperty> formatSpecificSignedSigProps,
             Collection<UnsignedSignatureProperty> formatSpecificUnsignedSigProps,
-            List<X509Certificate> signingCertificateChain) throws XAdES4jException
-    {
+            List<X509Certificate> signingCertificateChain) throws ValidationDataException {
         SigningCertificateProperty scp = new SigningCertificateProperty(signingCertificateChain);
         formatSpecificSignedSigProps.add(scp);
     }

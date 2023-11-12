@@ -16,13 +16,14 @@
  */
 package xades4j.verification;
 
-import java.util.Collection;
 import org.apache.xml.security.signature.ObjectContainer;
 import org.apache.xml.security.signature.Reference;
 import xades4j.properties.DataObjectFormatProperty;
 import xades4j.properties.QualifyingProperty;
 import xades4j.properties.data.DataObjectFormatData;
 import xades4j.utils.StringUtils;
+
+import java.util.Collection;
 
 /**
  * XAdES section G.2.2.8
@@ -36,7 +37,8 @@ class DataObjFormatVerifier implements QualifyingPropertyVerifier<DataObjectForm
             QualifyingPropertyVerificationContext ctx) throws DataObjectFormatVerificationException
     {
         QualifyingPropertyVerificationContext.SignedObjectsData signedObjsData = ctx.getSignedObjectsData();
-        String encoding = propData.getEncoding(), mimeType = propData.getMimeType();
+        String encoding = propData.getEncoding();
+        String mimeType = propData.getMimeType();
 
         // XAdES G.2.2.8: "The verifier should check that the ObjectReference element
         // actually references one ds:Reference element from the signature."
@@ -55,8 +57,8 @@ class DataObjFormatVerifier implements QualifyingPropertyVerifier<DataObjectForm
             if (null == signedObjObj)
                 throw new DataObjectFormatReferenceException(signedObjRef.getURI());
 
-            String objEncoding = signedObjObj.getEncoding(),
-                    objMimeType = signedObjObj.getMimeType();
+            String objEncoding = signedObjObj.getEncoding();
+            String objMimeType = signedObjObj.getMimeType();
             // Compare 'encoding' and 'mimeType', if present on both.
             if (StringUtils.differentStringsIfNotNullNorEmpty(objEncoding, encoding) ||
                     StringUtils.differentStringsIfNotNullNorEmpty(objMimeType, mimeType))

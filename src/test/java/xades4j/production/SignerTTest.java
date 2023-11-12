@@ -28,10 +28,10 @@ import xades4j.providers.impl.HttpTsaConfiguration;
 /**
  * @author Luís
  */
-public class SignerTTest extends SignerTestBase
+class SignerTTest extends SignerTestBase
 {
     @Test
-    public void testSignTExclusiveC14NWithoutPolicy() throws Exception
+    void testSignTExclusiveC14NWithoutPolicy() throws Exception
     {
         Document doc = getTestDocument();
         Element elemToSign = doc.getDocumentElement();
@@ -50,7 +50,7 @@ public class SignerTTest extends SignerTestBase
     }
 
     @Test
-    public void testSignTWithPolicy() throws Exception
+    void testSignTWithPolicy() throws Exception
     {
         Document doc = getTestDocument();
         Element elemToSign = doc.getDocumentElement();

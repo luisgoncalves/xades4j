@@ -16,14 +16,15 @@
  */
 package xades4j.utils;
 
-import java.io.StringReader;
-import java.util.Collection;
-import javax.xml.parsers.DocumentBuilder;
-import javax.xml.parsers.DocumentBuilderFactory;
 import org.junit.jupiter.api.Test;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.xml.sax.InputSource;
+
+import javax.xml.parsers.DocumentBuilder;
+import javax.xml.parsers.DocumentBuilderFactory;
+import java.io.StringReader;
+import java.util.Collection;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
@@ -32,10 +33,10 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
  *
  * @author luis
  */
-public class DOMHelperTest
+class DOMHelperTest
 {
     @Test
-    public void testGetChildElementsByTagNameNS() throws Exception
+    void testGetChildElementsByTagNameNS() throws Exception
     {
         String xml = "<root><a xmlns='urn:test'/><b/><n:a xmlns:n='urn:test'/><c/></root>";
         

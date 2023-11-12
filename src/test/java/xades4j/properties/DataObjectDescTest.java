@@ -16,6 +16,7 @@
  */
 package xades4j.properties;
 
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.w3c.dom.Document;
 import xades4j.algorithms.Algorithm;
@@ -31,10 +32,10 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 /**
  * @author Luís
  */
-public class DataObjectDescTest
+class DataObjectDescTest
 {
     @Test
-    public void testWithTransform() throws Exception
+    void testWithTransform() throws Exception
     {
         Document doc = SignatureServicesTestBase.getNewDocument();
         DataObjectDesc instance = new DataObjectDescTestImpl()
@@ -51,7 +52,7 @@ public class DataObjectDescTest
     }
 
     @Test
-    public void testWithDataObjectFormatRepeatedInstance()
+    void testWithDataObjectFormatRepeatedInstance()
     {
         DataObjectFormatProperty format = new DataObjectFormatProperty();
         DataObjectDesc instance = new DataObjectDescTestImpl();
@@ -66,7 +67,9 @@ public class DataObjectDescTest
     /**
      * Test of withDataObjectFormat method, of class DataObjectDesc.
      */
-    public void testWithDataObjectFormatMultipleTargets()
+    @Test
+    @Disabled("test is failing")
+    void testWithDataObjectFormatMultipleTargets()
     {
         DataObjectFormatProperty format = new DataObjectFormatProperty();
         DataObjectDesc instance = new DataObjectDescTestImpl();
@@ -80,7 +83,7 @@ public class DataObjectDescTest
      * Test of withCommitmentType method, of class DataObjectDesc.
      */
     @Test
-    public void testWithCommitmentType()
+    void testWithCommitmentType()
     {
         CommitmentTypeProperty commitment1 = CommitmentTypeProperty.proofOfApproval();
         CommitmentTypeProperty commitment2 = CommitmentTypeProperty.proofOfCreation();
@@ -94,20 +97,20 @@ public class DataObjectDescTest
      * Test of hasProperties method, of class DataObjectDesc.
      */
     @Test
-    public void testHasProperties()
+    void testHasProperties()
     {
         DataObjectDesc instance = new DataObjectDescTestImpl();
-        assertEquals(instance.hasProperties(), false);
+        assertEquals(false, instance.hasProperties());
 
         instance.withDataObjectFormat(new DataObjectFormatProperty());
-        assertEquals(instance.hasProperties(), true);
+        assertEquals(true, instance.hasProperties());
     }
 
     /**
      * Test of getSignedDataObjProps method, of class DataObjectDesc.
      */
     @Test
-    public void testGetSignedDataObjProps()
+    void testGetSignedDataObjProps()
     {
         DataObjectDesc instance = new DataObjectDescTestImpl();
         assertEquals(instance.getSignedDataObjProps().size(), 0);

@@ -32,17 +32,15 @@ import java.security.cert.X509Certificate;
 import java.util.List;
 import java.util.UUID;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.*;
 
 /**
  * @author Luís
  */
-public class PKCS11KeyStoreKeyingDataProviderTest extends SignerTestBase
+class PKCS11KeyStoreKeyingDataProviderTest extends SignerTestBase
 {
     @Test
-    public void testCertAndKeyMatch() throws Exception
+    void testCertAndKeyMatch() throws Exception
     {
         assumePtCcPkcs11();
 

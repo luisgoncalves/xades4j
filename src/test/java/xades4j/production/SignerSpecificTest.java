@@ -56,13 +56,13 @@ public class SignerSpecificTest extends SignerTestBase
 
     @ParameterizedTest
     @MethodSource("data")
-    public void signWithNationalCertificate(ASN1Encodable commonName) throws Exception
+    void signWithNationalCertificate(ASN1Encodable commonName) throws Exception
     {
         Security.addProvider(new BouncyCastleProvider());
         KeyPairGenerator keyGen = KeyPairGenerator.getInstance("RSA", BouncyCastleProvider.PROVIDER_NAME);
         keyGen.initialize(1024, new SecureRandom());
         Date validityBeginDate = new Date(System.currentTimeMillis() - 24 * 60 * 60 * 1000);
-        long add = (1L * 365L * 24L * 60L * 60L * 1000L);  //1 year
+        long add = (365L * 24L * 60L * 60L * 1000L);  //1 year
         Date validityEndDate = new Date(System.currentTimeMillis() + add);
         KeyPair keyPair = keyGen.generateKeyPair();
 

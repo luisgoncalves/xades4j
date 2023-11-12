@@ -46,7 +46,7 @@ import java.security.cert.X509Certificate;
  */
 public final class PKCS11KeyStoreKeyingDataProvider extends KeyStoreKeyingDataProvider
 {
-    private static String SUN_PKCS11_PROVIDER = "SunPKCS11";
+    private static final String SUN_PKCS11_PROVIDER = "SunPKCS11";
 
     /**
      * Create a builder to configure a new {@link PKCS11KeyStoreKeyingDataProvider}.

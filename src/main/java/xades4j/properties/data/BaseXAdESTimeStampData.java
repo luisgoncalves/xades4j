@@ -60,6 +60,9 @@ public abstract class BaseXAdESTimeStampData implements PropertyDataObject
         return this.c14n;
     }
 
+   /**
+    * @deprecated
+    */
     @Deprecated
     public String getCanonicalizationAlgorithmUri()
     {

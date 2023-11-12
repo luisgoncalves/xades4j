@@ -15,14 +15,14 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
  * @see <a href="https://github.com/luisgoncalves/xades4j/issues/157">Issues-157</a>
  */
 
-public class X500NameStyleProviderTest
+class X500NameStyleProviderTest
 {
     private static final String NAME_SIMPLE = "C=CO,L=Bogota D.C.,O=Andes SCD.,OU=Division de certificacion entidad final,CN=CA ANDES SCD S.A. Clase II, E=info@andesscd.com.co";
     private static final String NAME_SIMPLE_NORMAL = "C=CO,L=Bogota D.C.,O=Andes SCD.,OU=Division de certificacion entidad final,CN=CA ANDES SCD S.A. Clase II, EMAILADDRESS=info@andesscd.com.co";
     private static final String NAME_CANONICAL = "C=CO,L=Bogota D.C.,O=Andes SCD.,OU=Division de certificacion entidad final,CN=CA ANDES SCD S.A. Clase II, 1.2.840.113549.1.9.1=#1614696e666f40616e6465737363642e636f6d2e636f";
 
     @Test
-    public void errorDefaultParsing()
+    void errorDefaultParsing()
     {
         assertThrows(Exception.class, () -> {
             new X500Principal(NAME_SIMPLE);
@@ -30,7 +30,7 @@ public class X500NameStyleProviderTest
     }
 
     @Test
-    public void errorParsingWithProvider()
+    void errorParsingWithProvider()
     {
         assertThrows(Exception.class, () -> {
             new DefaultX500NameStyleProvider().fromString(NAME_SIMPLE);
@@ -38,14 +38,14 @@ public class X500NameStyleProviderTest
     }
 
     @Test
-    public void normal()
+    void normal()
     {
         new X500Principal(NAME_CANONICAL);
         new X500Principal(NAME_SIMPLE_NORMAL);
     }
 
     @Test
-    public void normalWithExtendKeywords()
+    void normalWithExtendKeywords()
     {
         X500NameStyleProvider x500NameStyleProvider = new DefaultX500NameStyleProvider();
         X500Principal name1 = x500NameStyleProvider.fromString(NAME_CANONICAL);

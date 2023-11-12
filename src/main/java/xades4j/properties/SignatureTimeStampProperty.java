@@ -31,6 +31,7 @@ public final class SignatureTimeStampProperty extends UnsignedSignatureProperty
 
     public SignatureTimeStampProperty()
     {
+        // TODO document why this constructor is empty
     }
 
     @Override

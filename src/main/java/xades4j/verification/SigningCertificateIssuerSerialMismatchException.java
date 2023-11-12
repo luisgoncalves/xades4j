@@ -26,8 +26,10 @@ import java.math.BigInteger;
  */
 public class SigningCertificateIssuerSerialMismatchException extends SigningCertificateVerificationException
 {
-    private final String signingCertIssuerName, keyInfoIssuerName;
-    private final BigInteger signingCertSerialNumber, keyInfoSerialNumber;
+    private final String signingCertIssuerName;
+    private final String keyInfoIssuerName;
+    private final BigInteger signingCertSerialNumber;
+    private final BigInteger keyInfoSerialNumber;
 
     public SigningCertificateIssuerSerialMismatchException(
             String signingCertIssuerName,

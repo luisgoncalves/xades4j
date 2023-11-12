@@ -17,7 +17,7 @@
 package xades4j.properties.data;
 
 import xades4j.properties.ObjectIdentifier;
-import xades4j.properties.SignaturePolicyIdentifierProperty;
+import xades4j.properties.SignaturePolicyBase;
 import xades4j.utils.ObjectUtils;
 
 /**
@@ -36,6 +36,6 @@ class SignaturePolicyDataStructureVerifier implements PropertyDataObjectStructur
         ObjectIdentifier id = sigPolicyData.getIdentifier();
 
         if (!ObjectUtils.allNull(alg, dig, id) && ObjectUtils.anyNull(alg, dig, id))
-            throw new PropertyDataStructureException("all the properties must be specified", SignaturePolicyIdentifierProperty.PROP_NAME);
+            throw new PropertyDataStructureException("all the properties must be specified", SignaturePolicyBase.PROP_NAME);
     }
 }

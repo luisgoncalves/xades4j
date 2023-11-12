@@ -16,10 +16,11 @@
  */
 package xades4j.verification;
 
+import xades4j.properties.SigningTimeProperty;
+
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
-import xades4j.properties.SigningTimeProperty;
 
 /**
  * Thrown during verification of the {@code SigningTime} property if the time contained
@@ -28,7 +29,8 @@ import xades4j.properties.SigningTimeProperty;
  */
 public class SigningTimeVerificationException extends InvalidPropertyException
 {
-    private final Date sigTime, maximumExpectedTime;
+    private final Date sigTime;
+    private final Date maximumExpectedTime;
 
     public SigningTimeVerificationException(
             Date sigTime,

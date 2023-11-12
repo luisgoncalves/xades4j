@@ -31,14 +31,14 @@ import java.io.ByteArrayInputStream;
 /**
  * @author Luís
  */
-public class SignerEPESTest extends SignerTestBase
+class SignerEPESTest extends SignerTestBase
 {
     @ParameterizedTest
     @CsvSource({
             "http://www.example.com/policy, document.signed.epes_1.xml",
             ", document.signed.epes_2.xml"
     })
-    public void testSignEPES(String locationUrl, String output) throws Exception
+    void testSignEPES(String locationUrl, String output) throws Exception
     {
         Document doc = getTestDocument();
         Element elemToSign = doc.getDocumentElement();

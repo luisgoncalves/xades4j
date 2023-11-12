@@ -12,14 +12,12 @@ import xades4j.utils.SignatureServicesTestBase;
 import java.util.List;
 import java.util.Map;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertFalse;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.*;
 
 /**
  * @author Luís
  */
-public class XPathTransformParamsMarshallerTest
+class XPathTransformParamsMarshallerTest
 {
     private Document doc;
     private XPathTransformParamsMarshaller sut;
@@ -32,7 +30,7 @@ public class XPathTransformParamsMarshallerTest
     }
 
     @Test
-    public void testMarshalXPathParametersWithNamespacePrefixes() throws Exception
+    void testMarshalXPathParametersWithNamespacePrefixes() throws Exception
     {
         XPathTransform xpath = new XPathTransform("foo:elem1/bar:elem2")
                 .withNamespace("foo", "http://test.xades4j/ns1")

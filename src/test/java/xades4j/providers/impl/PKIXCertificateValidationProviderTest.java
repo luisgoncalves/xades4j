@@ -34,10 +34,10 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 /**
  * @author Luís
  */
-public class PKIXCertificateValidationProviderTest
+class PKIXCertificateValidationProviderTest
 {
     @Test
-    public void testValidateMy() throws Exception
+    void testValidateMy() throws Exception
     {
         FileSystemDirectoryCertStore certStore = new FileSystemDirectoryCertStore("./src/test/cert/my");
         KeyStore ks = KeyStore.getInstance("jks");
@@ -59,7 +59,7 @@ public class PKIXCertificateValidationProviderTest
     }
 
     @Test
-    public void testValidateNist() throws Exception
+    void testValidateNist() throws Exception
     {
         FileSystemDirectoryCertStore certStore = new FileSystemDirectoryCertStore("./src/test/cert/csrc.nist");
         KeyStore ks = KeyStore.getInstance("jks");

@@ -27,19 +27,7 @@ import org.w3c.dom.NodeList;
 import xades4j.algorithms.CanonicalXMLWithoutComments;
 import xades4j.production.XadesFormatExtenderProfile;
 import xades4j.production.XadesSignatureFormatExtender;
-import xades4j.properties.CertificateValuesProperty;
-import xades4j.properties.CommitmentTypeProperty;
-import xades4j.properties.CommitmentTypePropertyBase;
-import xades4j.properties.CompleteCertificateRefsProperty;
-import xades4j.properties.CounterSignatureProperty;
-import xades4j.properties.DataObjectFormatProperty;
-import xades4j.properties.IndividualDataObjsTimeStampProperty;
-import xades4j.properties.QualifyingProperty;
-import xades4j.properties.RevocationValuesProperty;
-import xades4j.properties.SigAndRefsTimeStampProperty;
-import xades4j.properties.SignatureTimeStampProperty;
-import xades4j.properties.SigningCertificateProperty;
-import xades4j.properties.SigningTimeProperty;
+import xades4j.properties.*;
 import xades4j.providers.CannotBuildCertificationPathException;
 
 import java.io.File;
@@ -49,15 +37,12 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.GregorianCalendar;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertFalse;
-import static org.junit.jupiter.api.Assertions.assertThrows;
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.*;
 
 /**
  * @author Luís
  */
-public class XadesVerifierImplTest extends VerifierTestBase
+class XadesVerifierImplTest extends VerifierTestBase
 {
     XadesVerificationProfile verificationProfile;
     XadesVerificationProfile nistVerificationProfile;
@@ -70,7 +55,7 @@ public class XadesVerifierImplTest extends VerifierTestBase
     }
 
     @Test
-    public void testVerifyBES() throws Exception
+    void testVerifyBES() throws Exception
     {
         var result = verifySignature("document.signed.bes.xml");
         assertEquals(XAdESForm.BES, result.getSignatureForm());
@@ -113,7 +98,7 @@ public class XadesVerifierImplTest extends VerifierTestBase
     }
 
     @Test
-    public void testVerifyBESWithoutKeyInfo() throws Exception
+    void testVerifyBESWithoutKeyInfo() throws Exception
     {
         var result = verifySignature("document.signed.bes.no-ki.xml");
         assertEquals(XAdESForm.BES, result.getSignatureForm());
@@ -124,7 +109,7 @@ public class XadesVerifierImplTest extends VerifierTestBase
      * can't build the certificate path because certificates are expired.
      */
     @Test
-    public void testVerifyBESWithVerificationDate() throws Exception
+    void testVerifyBESWithVerificationDate() throws Exception
     {
         String sigFilename = "document.signed.bes.xml";
         Element signatureNode = getSigElement(getDocument(sigFilename));
@@ -139,7 +124,7 @@ public class XadesVerifierImplTest extends VerifierTestBase
     }
 
     @Test
-    public void testVerifyWithCustomRawVerifier() throws Exception
+    void testVerifyWithCustomRawVerifier() throws Exception
     {
         verificationProfile.withRawSignatureVerifier(new RawSignatureVerifier()
         {
@@ -158,7 +143,7 @@ public class XadesVerifierImplTest extends VerifierTestBase
     }
 
     @Test
-    public void testVerifyBESPTCC() throws Exception
+    void testVerifyBESPTCC() throws Exception
     {
         var result = verifySignature(
                 "document.signed.bes.ptcc.xml",
@@ -169,7 +154,7 @@ public class XadesVerifierImplTest extends VerifierTestBase
     }
 
     @Test
-    public void testVerifyDetachedBES() throws Exception
+    void testVerifyDetachedBES() throws Exception
     {
         var result = verifySignature(
                 "detached.bes.xml",
@@ -187,7 +172,7 @@ public class XadesVerifierImplTest extends VerifierTestBase
     }
 
     @Test
-    public void testVerifyBESCounterSig() throws Exception
+    void testVerifyBESCounterSig() throws Exception
     {
         var result = verifySignature("document.signed.bes.cs.xml");
 
@@ -201,14 +186,14 @@ public class XadesVerifierImplTest extends VerifierTestBase
     }
 
     @Test
-    public void testVerifyBESCounterSigCounterSig() throws Exception
+    void testVerifyBESCounterSigCounterSig() throws Exception
     {
         var result = verifySignature("document.signed.bes.cs.cs.xml");
         assertEquals(XAdESForm.BES, result.getSignatureForm());
     }
 
     @Test
-    public void testVerifyBESEnrichT() throws Exception
+    void testVerifyBESEnrichT() throws Exception
     {
         Document doc = getDocument("document.signed.bes.xml");
         Element signatureNode = getSigElement(doc);
@@ -224,7 +209,7 @@ public class XadesVerifierImplTest extends VerifierTestBase
     }
 
     @Test
-    public void testVerifyBESExtrnlResEnrichC() throws Exception
+    void testVerifyBESExtrnlResEnrichC() throws Exception
     {
         Document doc = getDocument("document.signed.bes.extres.xml");
         Element signatureNode = getSigElement(doc);
@@ -244,7 +229,7 @@ public class XadesVerifierImplTest extends VerifierTestBase
     }
 
     @Test
-    public void testVerifyTBES() throws Exception
+    void testVerifyTBES() throws Exception
     {
         var result = verifySignature("document.signed.t.bes.xml");
 
@@ -255,7 +240,7 @@ public class XadesVerifierImplTest extends VerifierTestBase
     }
 
     @Test
-    public void testVerifyEPES1() throws Exception
+    void testVerifyEPES1() throws Exception
     {
         verificationProfile.withPolicyDocumentProvider(VerifierTestBase.policyDocumentFinder);
         var result = verifySignature("document.signed.epes_1.xml", verificationProfile);
@@ -264,7 +249,7 @@ public class XadesVerifierImplTest extends VerifierTestBase
     }
 
     @Test
-    public void testVerifyEPES2() throws Exception
+    void testVerifyEPES2() throws Exception
     {
         verificationProfile.withPolicyDocumentProvider(VerifierTestBase.policyDocumentFinder);
         var result = verifySignature("document.signed.epes_2.xml", verificationProfile);
@@ -272,7 +257,7 @@ public class XadesVerifierImplTest extends VerifierTestBase
     }
 
     @Test
-    public void testVerifyTEPES() throws Exception
+    void testVerifyTEPES() throws Exception
     {
         var result = verifySignature("document.signed.t.epes.xml");
 
@@ -283,7 +268,7 @@ public class XadesVerifierImplTest extends VerifierTestBase
     }
 
     @Test
-    public void testVerifyC() throws Exception
+    void testVerifyC() throws Exception
     {
         var result = verifySignature(
                 "document.signed.c.xml",
@@ -304,7 +289,7 @@ public class XadesVerifierImplTest extends VerifierTestBase
     }
 
     @Test
-    public void testVerifyDetachedC() throws Exception
+    void testVerifyDetachedC() throws Exception
     {
         Document doc = getDocument("detached.c.xml");
         Element signatureNode = getSigElement(doc);
@@ -321,7 +306,7 @@ public class XadesVerifierImplTest extends VerifierTestBase
     }
 
     @Test
-    public void testVerifyCEnrichXL() throws Exception
+    void testVerifyCEnrichXL() throws Exception
     {
         Document doc = getDocument("document.signed.c.xml");
         Element signatureNode = getSigElement(doc);
@@ -342,6 +327,6 @@ public class XadesVerifierImplTest extends VerifierTestBase
             String elemName)
     {
         NodeList props = sigElem.getElementsByTagNameNS(QualifyingProperty.XADES_XMLNS, elemName);
-        assertFalse(props.getLength() == 0);
+      assertNotEquals(0, props.getLength());
     }
 }

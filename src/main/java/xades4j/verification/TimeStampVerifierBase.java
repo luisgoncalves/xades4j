@@ -41,7 +41,7 @@ abstract class TimeStampVerifierBase<TData extends BaseXAdESTimeStampData> imple
     private final TimeStampDigestInputFactory tsInputFactory;
     private final String propName;
 
-    public TimeStampVerifierBase(TimeStampVerificationProvider tsVerifier, TimeStampDigestInputFactory tsInputFactory, String propName)
+    protected TimeStampVerifierBase(TimeStampVerificationProvider tsVerifier, TimeStampDigestInputFactory tsInputFactory, String propName)
     {
         this.tsVerifier = tsVerifier;
         this.tsInputFactory = tsInputFactory;

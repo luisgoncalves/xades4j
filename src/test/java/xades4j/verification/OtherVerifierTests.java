@@ -16,13 +16,12 @@
  */
 package xades4j.verification;
 
+import jakarta.inject.Inject;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import xades4j.properties.QualifyingProperty;
 import xades4j.properties.data.SigningTimeData;
 import xades4j.utils.BuiltIn;
-
-import jakarta.inject.Inject;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
@@ -49,7 +48,7 @@ class SigningTimeVerifierThatDependsOnBuiltInVerifier implements QualifyingPrope
 /**
  * @author Luís
  */
-public class OtherVerifierTests extends VerifierTestBase
+class OtherVerifierTests extends VerifierTestBase
 {
     XadesVerificationProfile mySigsVerificationProfile;
 
@@ -60,7 +59,7 @@ public class OtherVerifierTests extends VerifierTestBase
     }
 
     @Test
-    public void testVerifyBESCustomPropVer() throws Exception
+    void testVerifyBESCustomPropVer() throws Exception
     {
         mySigsVerificationProfile.withQualifyingPropertyVerifier(SigningTimeData.class, new QualifyingPropertyVerifier<SigningTimeData>()
         {
@@ -82,7 +81,7 @@ public class OtherVerifierTests extends VerifierTestBase
     }
 
     @Test
-    public void testCustomVerifierCanUseBuiltInVerifier() throws Exception
+    void testCustomVerifierCanUseBuiltInVerifier() throws Exception
     {
         mySigsVerificationProfile.withQualifyingPropertyVerifier(
                 SigningTimeData.class,
@@ -94,7 +93,7 @@ public class OtherVerifierTests extends VerifierTestBase
     }
 
     @Test
-    public void testVerifyWithManifest() throws Exception
+    void testVerifyWithManifest() throws Exception
     {
         SignatureSpecificVerificationOptions options = new SignatureSpecificVerificationOptions()
                 .followManifests(true);

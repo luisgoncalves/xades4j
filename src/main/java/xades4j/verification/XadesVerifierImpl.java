@@ -50,7 +50,6 @@ import xades4j.xml.unmarshalling.QualifyingPropertiesUnmarshaller;
 import xades4j.xml.unmarshalling.UnmarshalException;
 
 import java.io.InputStream;
-import java.security.cert.X509CRL;
 import java.security.cert.X509Certificate;
 import java.util.*;
 

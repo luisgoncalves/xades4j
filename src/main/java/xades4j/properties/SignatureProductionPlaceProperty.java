@@ -29,7 +29,10 @@ public final class SignatureProductionPlaceProperty extends SignedSignaturePrope
 {
     public static final String PROP_NAME = "SignatureProductionPlace";
     /**/
-    private final String city, stateOrProvince, postalCode, country;
+    private final String city;
+    private final String stateOrProvince;
+    private final String postalCode;
+    private final String country;
 
     public SignatureProductionPlaceProperty(String city, String country)
     {

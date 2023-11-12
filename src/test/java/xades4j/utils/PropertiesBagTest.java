@@ -20,14 +20,12 @@ import org.junit.jupiter.api.Test;
 import xades4j.properties.DataObjectFormatProperty;
 import xades4j.properties.SigningTimeProperty;
 
-import static org.junit.jupiter.api.Assertions.assertFalse;
-import static org.junit.jupiter.api.Assertions.assertThrows;
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.*;
 
 /**
  * @author Luís
  */
-public class PropertiesBagTest
+class PropertiesBagTest
 {
     //    @Test
     //    public void jaxbTest() throws Exception
@@ -59,7 +57,7 @@ public class PropertiesBagTest
      * Test of put method, of class PropertiesSet.
      */
     @Test
-    public void testPut()
+    void testPut()
     {
         SigningTimeProperty prop1 = new SigningTimeProperty(), prop2 = new SigningTimeProperty();
         DataObjectFormatProperty prop3 = new DataObjectFormatProperty();
@@ -77,7 +75,7 @@ public class PropertiesBagTest
      * Test of add method, of class PropertiesSet, with {@code null} value.
      */
     @Test
-    public void testAddNull()
+    void testAddNull()
     {
         PropertiesSet instance = new PropertiesSet(0);
         assertThrows(NullPointerException.class, () -> {
@@ -89,7 +87,7 @@ public class PropertiesBagTest
      * Test of add method, of class PropertiesSet.
      */
     @Test
-    public void testAdd()
+    void testAdd()
     {
         SigningTimeProperty prop1 = new SigningTimeProperty(), prop2 = new SigningTimeProperty();
         PropertiesSet instance = new PropertiesSet(1);
@@ -118,7 +116,7 @@ public class PropertiesBagTest
      * Test of remove method, of class PropertiesSet.
      */
     @Test
-    public void testRemoveNotPresent()
+    void testRemoveNotPresent()
     {
         SigningTimeProperty prop1 = new SigningTimeProperty(), prop2 = new SigningTimeProperty();
         PropertiesSet instance = new PropertiesSet(1);
@@ -133,7 +131,7 @@ public class PropertiesBagTest
      * Test of isEmpty method, of class PropertiesSet.
      */
     @Test
-    public void testIsEmpty()
+    void testIsEmpty()
     {
         System.out.println("isEmpty");
 

@@ -33,7 +33,7 @@ public abstract class DataObjectProperty implements QualifyingProperty
     /**
      * Represents the number of data objects that a property can be applied to.
      */
-    protected static enum TargetMultiplicity
+    protected enum TargetMultiplicity
     {
         /**
          * The property applies to all the data objects in the signature. It cannot
@@ -49,7 +49,8 @@ public abstract class DataObjectProperty implements QualifyingProperty
          */
         N(Integer.MAX_VALUE, 2);
         /**/
-        private final int multiplicity, initialSize;
+        private final int multiplicity;
+        private final int initialSize;
 
         private TargetMultiplicity(int mult)
         {

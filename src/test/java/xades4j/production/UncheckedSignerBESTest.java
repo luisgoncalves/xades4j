@@ -43,13 +43,13 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
  *
  * @author Fiona Klute
  */
-public class UncheckedSignerBESTest extends SignerTestBase
+class UncheckedSignerBESTest extends SignerTestBase
 {
-    private KeyingDataProvider keyingProviderGood;
-    private KeyingDataProvider keyingProviderNoSign;
-    private KeyingDataProvider keyingProviderExp;
-    private KeyingDataProvider keyingProviderNyv;
-    private CertificateValidationProvider validationProvider;
+    private final KeyingDataProvider keyingProviderGood;
+    private final KeyingDataProvider keyingProviderNoSign;
+    private final KeyingDataProvider keyingProviderExp;
+    private final KeyingDataProvider keyingProviderNyv;
+    private final CertificateValidationProvider validationProvider;
 
     public UncheckedSignerBESTest() throws Exception
     {
@@ -127,20 +127,20 @@ public class UncheckedSignerBESTest extends SignerTestBase
     }
 
     @Test
-    public void testUncheckedSignBes() throws Exception
+    void testUncheckedSignBes() throws Exception
     {
         CertificateValidationProvider prov = genValidationProvider("my/TestCA.cer", "my");
         trySignAndVerify(keyingProviderMy, prov, "document.unchecked.signed.bes.xml");
     }
 
     @Test
-    public void testUncheckedSignBesGood() throws Exception
+    void testUncheckedSignBesGood() throws Exception
     {
         trySignAndVerify(keyingProviderGood, validationProvider, "document.unchecked.signed.bes.good.xml");
     }
 
     @Test
-    public void testUncheckedSignBesNoSignKeyUsage() throws Exception
+    void testUncheckedSignBesNoSignKeyUsage() throws Exception
     {
         assertThrows(SigningCertificateKeyUsageException.class, () -> {
             trySignAndVerify(keyingProviderNoSign, validationProvider, "document.unchecked.signed.bes.nosign.xml");
@@ -148,7 +148,7 @@ public class UncheckedSignerBESTest extends SignerTestBase
     }
 
     @Test
-    public void testUncheckedSignBesNoSignKeyUsageUncheckedVerify() throws Exception
+    void testUncheckedSignBesNoSignKeyUsageUncheckedVerify() throws Exception
     {
         // same certificate as in testUncheckedSignBesNoSignKeyUsage(), but keyUsage
         // check disabled during verification
@@ -156,7 +156,7 @@ public class UncheckedSignerBESTest extends SignerTestBase
     }
 
     @Test
-    public void testUncheckedSignBesExpired() throws Exception
+    void testUncheckedSignBesExpired() throws Exception
     {
         assertThrows(CannotBuildCertificationPathException.class, () -> {
             trySignAndVerify(keyingProviderExp, validationProvider, "document.unchecked.signed.bes.expired.xml");
@@ -164,7 +164,7 @@ public class UncheckedSignerBESTest extends SignerTestBase
     }
 
     @Test
-    public void testUncheckedSignBesNyv() throws Exception
+    void testUncheckedSignBesNyv() throws Exception
     {
         assertThrows(CannotBuildCertificationPathException.class, () -> {
             trySignAndVerify(keyingProviderNyv, validationProvider, "document.unchecked.signed.bes.nyv.xml");

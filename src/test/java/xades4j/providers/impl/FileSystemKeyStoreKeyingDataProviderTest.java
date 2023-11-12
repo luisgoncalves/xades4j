@@ -92,14 +92,14 @@ public class FileSystemKeyStoreKeyingDataProviderTest
 
     @ParameterizedTest
     @MethodSource("data")
-    public void testGetSigningKey(FileSystemKeyStoreKeyingDataProvider keyingProvider, X509Certificate signCert) throws Exception
+    void testGetSigningKey(FileSystemKeyStoreKeyingDataProvider keyingProvider, X509Certificate signCert) throws Exception
     {
         keyingProvider.getSigningKey(signCert);
     }
 
     @ParameterizedTest
     @MethodSource("data")
-    public void testGetSigningCertificateChain(FileSystemKeyStoreKeyingDataProvider keyingProvider, X509Certificate signCert) throws Exception
+    void testGetSigningCertificateChain(FileSystemKeyStoreKeyingDataProvider keyingProvider, X509Certificate signCert) throws Exception
     {
         List<X509Certificate> certChain = keyingProvider.getSigningCertificateChain();
         assertEquals(certChain.size(), 3);

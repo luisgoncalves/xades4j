@@ -16,8 +16,8 @@
  */
 package xades4j.production;
 
-import xades4j.properties.DataObjectDesc;
 import org.w3c.dom.Node;
+import xades4j.properties.DataObjectDesc;
 
 /**
  * Represents content (usually XML) that will be enveloped in the signature.
@@ -36,7 +36,8 @@ import org.w3c.dom.Node;
 public final class EnvelopedXmlObject extends DataObjectDesc
 {
     private final Node content;
-    private final String mimeType, encoding;
+    private final String mimeType;
+    private final String encoding;
 
     /**
      * Creates a new instance with the given context.

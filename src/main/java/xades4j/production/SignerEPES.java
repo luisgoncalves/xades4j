@@ -17,21 +17,17 @@
 package xades4j.production;
 
 import jakarta.inject.Inject;
-import java.security.cert.X509Certificate;
-import java.util.Collection;
-import java.util.List;
 import xades4j.properties.SignedSignatureProperty;
 import xades4j.properties.UnsignedSignatureProperty;
-import xades4j.XAdES4jException;
-import xades4j.providers.DataObjectPropertiesProvider;
-import xades4j.providers.KeyingDataProvider;
-import xades4j.providers.SignaturePolicyInfoProvider;
-import xades4j.providers.SignaturePropertiesProvider;
-import xades4j.providers.X500NameStyleProvider;
+import xades4j.providers.*;
 import xades4j.utils.PropertiesUtils;
 import xades4j.xml.marshalling.SignedPropertiesMarshaller;
 import xades4j.xml.marshalling.UnsignedPropertiesMarshaller;
 import xades4j.xml.marshalling.algorithms.AlgorithmsParametersMarshallingProvider;
+
+import java.security.cert.X509Certificate;
+import java.util.Collection;
+import java.util.List;
 
 /**
  * Produces XAdES-EPES signatures.
@@ -65,8 +61,7 @@ class SignerEPES extends SignerBES
     protected void getFormatSpecificSignatureProperties(
             Collection<SignedSignatureProperty> formatSpecificSignedSigProps,
             Collection<UnsignedSignatureProperty> formatSpecificUnsignedSigProps,
-            List<X509Certificate> signingCertificateChain) throws XAdES4jException
-    {
+            List<X509Certificate> signingCertificateChain) throws ValidationDataException {
         super.getFormatSpecificSignatureProperties(formatSpecificSignedSigProps, formatSpecificUnsignedSigProps, signingCertificateChain);
 
         PropertiesUtils.addXadesEpesProperties(formatSpecificSignedSigProps, this.policyInfoProvider);

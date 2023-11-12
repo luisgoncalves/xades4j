@@ -16,12 +16,6 @@
  */
 package xades4j.production;
 
-import java.io.FileInputStream;
-import java.security.cert.CertificateFactory;
-import java.security.cert.X509Certificate;
-import java.util.Arrays;
-import java.util.List;
-
 import org.apache.xml.security.keys.content.KeyValue;
 import org.apache.xml.security.keys.content.x509.XMLX509Certificate;
 import org.apache.xml.security.signature.SignedInfo;
@@ -32,6 +26,12 @@ import org.w3c.dom.Document;
 import org.w3c.dom.Node;
 import xades4j.providers.impl.DefaultX500NameStyleProvider;
 import xades4j.utils.SignatureServicesTestBase;
+
+import java.io.FileInputStream;
+import java.security.cert.CertificateFactory;
+import java.security.cert.X509Certificate;
+import java.util.Arrays;
+import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -56,7 +56,7 @@ public class KeyInfoBuilderTest extends SignatureServicesTestBase
     }
 
     @Test
-    public void testIncludeCertAndKey() throws Exception
+    void testIncludeCertAndKey() throws Exception
     {
         KeyInfoBuilder keyInfoBuilder = new KeyInfoBuilder(
                 new BasicSignatureOptions().includeSigningCertificate(SigningCertificateMode.SIGNING_CERTIFICATE).includePublicKey(true),
@@ -77,7 +77,7 @@ public class KeyInfoBuilderTest extends SignatureServicesTestBase
     }
 
     @Test
-    public void testIncludeCertChain() throws Exception
+    void testIncludeCertChain() throws Exception
     {
         KeyInfoBuilder keyInfoBuilder = new KeyInfoBuilder(
                 new BasicSignatureOptions().includeSigningCertificate(SigningCertificateMode.FULL_CHAIN),
@@ -101,7 +101,7 @@ public class KeyInfoBuilderTest extends SignatureServicesTestBase
     }
 
     @Test
-    public void testIncludeIssuerSerial() throws Exception
+    void testIncludeIssuerSerial() throws Exception
     {
         KeyInfoBuilder keyInfoBuilder = new KeyInfoBuilder(
                 new BasicSignatureOptions().includeIssuerSerial(true),
@@ -117,7 +117,7 @@ public class KeyInfoBuilderTest extends SignatureServicesTestBase
     }
 
     @Test
-    public void testIncludeSubjectName() throws Exception
+    void testIncludeSubjectName() throws Exception
     {
         KeyInfoBuilder keyInfoBuilder = new KeyInfoBuilder(
                 new BasicSignatureOptions().includeSubjectName(true),
@@ -133,7 +133,7 @@ public class KeyInfoBuilderTest extends SignatureServicesTestBase
     }
 
     @Test
-    public void testSignKeyInfo() throws Exception
+    void testSignKeyInfo() throws Exception
     {
         KeyInfoBuilder keyInfoBuilder = new KeyInfoBuilder(
                 new BasicSignatureOptions().signKeyInfo(true),

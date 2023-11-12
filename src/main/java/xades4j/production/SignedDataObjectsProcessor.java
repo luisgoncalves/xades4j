@@ -106,7 +106,8 @@ final class SignedDataObjectsProcessor
         {
             for (DataObjectDesc dataObjDesc : dataObjects)
             {
-                String refUri, refType;
+                String refUri;
+                String refType;
                 int index = container.getLength();
 
                 if (dataObjDesc instanceof DataObjectReference)

@@ -31,7 +31,8 @@ public enum XAdESForm
     A("A", "Archival electronic signatures");
 
     /**/
-    private final String alias, fullName;
+    private final String alias;
+    private final String fullName;
 
     private XAdESForm(String alias, String fullName)
     {

@@ -44,7 +44,7 @@ public class SignedDataObjectsProcessorTest extends SignatureServicesTestBase
     }
 
     @Test
-    public void testProcess() throws Exception
+    void testProcess() throws Exception
     {
         Document doc = getNewDocument();
 
@@ -94,7 +94,7 @@ public class SignedDataObjectsProcessorTest extends SignatureServicesTestBase
     }
 
     @Test
-    public void testAddManifest() throws Exception
+    void testAddManifest() throws Exception
     {
         Document doc = getNewDocument();
 
@@ -171,7 +171,7 @@ public class SignedDataObjectsProcessorTest extends SignatureServicesTestBase
     }
 
     @Test
-    public void testAddNullReference() throws Exception
+    void testAddNullReference() throws Exception
     {
         Document doc = SignatureServicesTestBase.getNewDocument();
 
@@ -193,7 +193,7 @@ public class SignedDataObjectsProcessorTest extends SignatureServicesTestBase
     }
 
     @Test
-    public void testAddMultipleNullReferencesFails() throws Exception
+    void testAddMultipleNullReferencesFails() throws Exception
     {
         SignedDataObjects dataObjsDescs = new SignedDataObjects();
         assertThrows(IllegalStateException.class, () -> {

@@ -57,18 +57,18 @@ class XAdESFormChecker
         throw new InvalidXAdESFormException("Signature doesn't follow any of the XAdES forms");
 
     }
-    static final XAdESFormDesc XADES_BES_DESC = new XAdES_BES_Desc(),
-            XADES_EPES_DESC = new XAdES_EPES_Desc(),
-            XADES_T_DESC = new XAdES_T_Desc(),
-            XADES_C_DESC = new XAdES_C_Desc(),
-            XADES_X_DESC = new XAdES_X_Desc(),
-            XADES_X_L_DESC = new XAdES_X_L_Desc();
+    static final XAdESFormDesc XADES_BES_DESC = new XAdES_BES_Desc();
+    static final XAdESFormDesc XADES_EPES_DESC = new XAdES_EPES_Desc();
+    static final XAdESFormDesc XADES_T_DESC = new XAdES_T_Desc();
+    static final XAdESFormDesc XADES_C_DESC = new XAdES_C_Desc();
+    static final XAdESFormDesc XADES_X_DESC = new XAdES_X_Desc();
+    static final XAdESFormDesc XADES_X_L_DESC = new XAdES_X_L_Desc();
 
     /**************************************************************************/
     /**/
-    private static abstract class XAdESFormDesc
+    private abstract static class XAdESFormDesc
     {
-        private XAdESFormDesc[] baseForms;
+        private final XAdESFormDesc[] baseForms;
 
         // Ordered from the top format to the lower format.
         public XAdESFormDesc(XAdESFormDesc... baseForms)

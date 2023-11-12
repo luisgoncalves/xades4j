@@ -12,10 +12,10 @@ import java.security.KeyStore;
 import java.security.cert.X509Certificate;
 import java.util.List;
 
-public class PtCcSignerTests extends SignerTestBase
+class PtCcSignerTests extends SignerTestBase
 {
     @Test
-    public void testSignTPtCC() throws Exception
+    void testSignTPtCC() throws Exception
     {
         assumePtCcPkcs11();
 
@@ -33,7 +33,7 @@ public class PtCcSignerTests extends SignerTestBase
     }
 
     @Test
-    public void testSignBesPtCCWindowsMy() throws Exception
+    void testSignBesPtCCWindowsMy() throws Exception
     {
         assumeWindows();
         assumePtCcPkcs11();
@@ -65,7 +65,7 @@ public class PtCcSignerTests extends SignerTestBase
                 {
                     for (Entry e : availableCertificates)
                     {
-                        if (e.getCertificate().getIssuerDN().getName().contains("EC de Assinatura Digital"))
+                        if (e.getCertificate().getIssuerX500Principal().getName().contains("EC de Assinatura Digital"))
                         {
                             return e;
                         }

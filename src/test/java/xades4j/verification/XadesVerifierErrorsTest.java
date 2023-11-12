@@ -28,7 +28,7 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 /**
  * @author Luís
  */
-public class XadesVerifierErrorsTest extends VerifierTestBase
+class XadesVerifierErrorsTest extends VerifierTestBase
 {
     XadesVerificationProfile mySigsVerificationProfile;
     XadesVerificationProfile nistVerificationProfile;
@@ -41,7 +41,7 @@ public class XadesVerifierErrorsTest extends VerifierTestBase
     }
 
     @Test
-    public void testErrVerifySignedPropsIncorp() throws Exception
+    void testErrVerifySignedPropsIncorp() throws Exception
     {
         assertThrows(QualifyingPropertiesIncorporationException.class, () -> {
             verifyBadSignature("document.signed.t.bes.badsignedprops.xml", mySigsVerificationProfile);
@@ -49,7 +49,7 @@ public class XadesVerifierErrorsTest extends VerifierTestBase
     }
 
     @Test
-    public void testErrVerifySignedPropsIncorpNoRefType() throws Exception
+    void testErrVerifySignedPropsIncorpNoRefType() throws Exception
     {
         assertThrows(QualifyingPropertiesIncorporationException.class, () -> {
             verifyBadSignature("document.signed.bes.signedpropsrefnotype.xml",
@@ -58,7 +58,7 @@ public class XadesVerifierErrorsTest extends VerifierTestBase
     }
 
     @Test
-    public void testErrVerifyIncorrectC() throws Exception
+    void testErrVerifyIncorrectC() throws Exception
     {
         assertThrows(InvalidXAdESFormException.class, () -> {
             verifyBadSignature("document.signed.c.bad.xml", nistVerificationProfile);
@@ -66,7 +66,7 @@ public class XadesVerifierErrorsTest extends VerifierTestBase
     }
 
     @Test
-    public void testErrVerifyNoSignCert() throws Exception
+    void testErrVerifyNoSignCert() throws Exception
     {
         KeyStore ks = createAndLoadJKSKeyStore("be/beStore", "bestorepass");
         PKIXCertificateValidationProvider cvp = PKIXCertificateValidationProvider.builder(ks).checkRevocation(false).build();
@@ -76,7 +76,7 @@ public class XadesVerifierErrorsTest extends VerifierTestBase
     }
 
     @Test
-    public void testErrVerifyChangedDataObj() throws Exception
+    void testErrVerifyChangedDataObj() throws Exception
     {
         assertThrows(ReferenceValueException.class, () -> {
             verifyBadSignature("document.signed.bes.invaliddataobj.xml", mySigsVerificationProfile);
@@ -84,7 +84,7 @@ public class XadesVerifierErrorsTest extends VerifierTestBase
     }
 
     @Test
-    public void testErrVerifyChangedSigValue() throws Exception
+    void testErrVerifyChangedSigValue() throws Exception
     {
         assertThrows(SignatureValueException.class, () -> {
             verifyBadSignature("document.signed.bes.invalidsigvalue.xml", mySigsVerificationProfile);
@@ -92,7 +92,7 @@ public class XadesVerifierErrorsTest extends VerifierTestBase
     }
 
     @Test
-    public void testErrVerifyCMissingCertRef() throws Exception
+    void testErrVerifyCMissingCertRef() throws Exception
     {
         assertThrows(CompleteCertRefsCertNotFoundException.class, () -> {
             verifyBadSignature("document.signed.c.missingcertref.xml", nistVerificationProfile);
@@ -100,7 +100,7 @@ public class XadesVerifierErrorsTest extends VerifierTestBase
     }
 
     @Test
-    public void testErrVerifyUnmatchSigTSDigest() throws Exception
+    void testErrVerifyUnmatchSigTSDigest() throws Exception
     {
         //        DefaultTimeStampTokenProvider tsProv = new DefaultTimeStampTokenProvider(new DefaultMessageDigestProvider());
         //        byte[] tkn = tsProv.getTimeStampToken("badTimeStamp".getBytes(), Constants.ALGO_ID_DIGEST_SHA1).encodedTimeStampToken;
@@ -116,7 +116,7 @@ public class XadesVerifierErrorsTest extends VerifierTestBase
     }
 
     @Test
-    public void testErrVerifyCounterSigWithUnallowedTransforms() throws Exception
+    void testErrVerifyCounterSigWithUnallowedTransforms() throws Exception
     {
         assertThrows(CounterSignatureSigValueRefException.class, () -> {
             verifyBadSignature("document.signed.bes.cs.invalidtransforms.xml", mySigsVerificationProfile);
