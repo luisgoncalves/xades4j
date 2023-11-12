@@ -52,7 +52,7 @@ public class QualifyingProperties
     {
         if (null == allProperties)
         {
-            allProperties = new ArrayList<QualifyingProperty>(signedProperties.getSigProps());
+            allProperties = new ArrayList<>(signedProperties.getSigProps());
             allProperties.addAll(signedProperties.getDataObjProps());
             allProperties.addAll(unsignedProperties.getSigProps());
             allProperties.addAll(unsignedProperties.getDataObjProps());

@@ -44,7 +44,7 @@ public final class IndividualDataObjsTimeStampData extends BaseXAdESTimeStampDat
     public IndividualDataObjsTimeStampData(Algorithm c14n)
     {
         super(c14n);
-        this.includes = new ArrayList<String>(3);
+        this.includes = new ArrayList<>(3);
     }
 
     public void addInclude(String inc)

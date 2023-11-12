@@ -282,13 +282,13 @@ class XadesVerifierImpl implements XadesVerifier
         QualifyingPropertyVerificationContext ctx = new QualifyingPropertyVerificationContext(
                 signature,
                 new QualifyingPropertyVerificationContext.CertificationChainData(
-                new ArrayList<X509Certificate>(0),
-                new ArrayList<X509CRL>(0),
+                        new ArrayList<>(0),
+                        new ArrayList<>(0),
                 null,
                 this.x500NameStyleProvider),
                 /**/
                 new QualifyingPropertyVerificationContext.SignedObjectsData(
-                new ArrayList<RawDataObjectDesc>(0),
+                        new ArrayList<>(0),
                 signature));
         Collection<PropertyInfo> props = this.qualifyingPropertiesVerifier.verifyProperties(sigTsData, ctx);
         QualifyingProperty sigTs = props.iterator().next().getProperty();
@@ -442,7 +442,7 @@ class XadesVerifierImpl implements XadesVerifier
                 throw new InvalidFormExtensionException(actualForm, finalForm);
             }
 
-            Collection<UnsignedSignatureProperty> usp = new ArrayList<UnsignedSignatureProperty>(3);
+            Collection<UnsignedSignatureProperty> usp = new ArrayList<>(3);
             finalFormPropsColector.addProps(usp, res);
 
             formatExtender.enrichSignature(res.getXmlSignature(), new UnsignedProperties(usp));

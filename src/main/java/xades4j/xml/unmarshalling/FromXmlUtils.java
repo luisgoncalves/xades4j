@@ -65,7 +65,7 @@ class FromXmlUtils
 
     static
     {
-        identifierTypeConv = new HashMap<XmlQualifierType, IdentifierType>(3);
+        identifierTypeConv = new HashMap<>(3);
         identifierTypeConv.put(null, IdentifierType.URI);
         identifierTypeConv.put(XmlQualifierType.OID_AS_URI, IdentifierType.OIDAsURI);
         identifierTypeConv.put(XmlQualifierType.OID_AS_URN, IdentifierType.OIDAsURN);

@@ -197,8 +197,8 @@ class SignerBES implements XadesSigner
 
         /* Collect the properties */
         // Get the format specific signature properties.
-        Collection<SignedSignatureProperty> fsssp = new ArrayList<SignedSignatureProperty>(2);
-        Collection<UnsignedSignatureProperty> fsusp = new ArrayList<UnsignedSignatureProperty>(2);
+        Collection<SignedSignatureProperty> fsssp = new ArrayList<>(2);
+        Collection<UnsignedSignatureProperty> fsusp = new ArrayList<>(2);
         getFormatSpecificSignatureProperties(fsssp, fsusp, signingCertificateChain);
         // Gather all the signature and data objects properties.
         QualifyingProperties qualifProps = qualifPropsProcessor.getQualifyingProperties(

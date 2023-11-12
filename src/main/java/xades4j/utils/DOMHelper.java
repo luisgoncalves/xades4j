@@ -166,7 +166,7 @@ public class DOMHelper
     public static Collection<Element> getChildElementsByTagNameNS(Element e, String namespaceURI, String localName)
     {
         Node node = e.getFirstChild();
-        Collection<Element> elements = new ArrayList<Element>();
+        Collection<Element> elements = new ArrayList<>();
 
         while (node != null)
         {

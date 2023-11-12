@@ -37,7 +37,7 @@ public final class SignerRoleProperty extends SignedSignatureProperty
 
     public SignerRoleProperty()
     {
-        this.claimedRoles = new HashSet<String>();
+        this.claimedRoles = new HashSet<>();
     }
 
     public SignerRoleProperty(String... claimedRoles)

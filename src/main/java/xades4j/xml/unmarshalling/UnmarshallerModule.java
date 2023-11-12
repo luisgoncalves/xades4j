@@ -16,11 +16,12 @@
  */
 package xades4j.xml.unmarshalling;
 
-import java.util.ArrayList;
-import java.util.Collection;
 import org.w3c.dom.Element;
 import xades4j.utils.CollectionUtils;
 import xades4j.xml.bind.xades.XmlQualifyingPropertiesType;
+
+import java.util.ArrayList;
+import java.util.Collection;
 
 /**
  * Helper class that convertes proeprties of a given type. The converters are
@@ -36,7 +37,7 @@ abstract class UnmarshallerModule<TXml>
 
     protected UnmarshallerModule(int nConvs)
     {
-        this.converters = new ArrayList<QualifyingPropertyFromXmlConverter<TXml>>(nConvs);
+        this.converters = new ArrayList<>(nConvs);
     }
 
     protected void addConverter(QualifyingPropertyFromXmlConverter<TXml> c)

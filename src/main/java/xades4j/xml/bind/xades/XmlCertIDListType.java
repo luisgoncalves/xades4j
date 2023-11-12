@@ -68,7 +68,7 @@ public class XmlCertIDListType {
      */
     public List<XmlCertIDType> getCert() {
         if (cert == null) {
-            cert = new ArrayList<XmlCertIDType>();
+            cert = new ArrayList<>();
         }
         return this.cert;
     }

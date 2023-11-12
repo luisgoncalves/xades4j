@@ -75,7 +75,7 @@ class ToXmlSignaturePolicyConverter implements SignedPropertyDataToXmlConverter
         String url = sigPolicyData.getLocationUrl();
         if (url != null)
         {
-            JAXBElement<String> xmlSPURI = new JAXBElement<String>(new QName(QualifyingProperty.XADES_XMLNS, "SPURI"), String.class, url);
+            JAXBElement<String> xmlSPURI = new JAXBElement<>(new QName(QualifyingProperty.XADES_XMLNS, "SPURI"), String.class, url);
             XmlAnyType xmlQualifier = new XmlAnyType();
             xmlQualifier.getContent().add(xmlSPURI);
             

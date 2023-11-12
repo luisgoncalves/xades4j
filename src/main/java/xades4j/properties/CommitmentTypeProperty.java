@@ -100,6 +100,6 @@ public final class CommitmentTypeProperty extends CommitmentTypePropertyBase
      */
     public CommitmentTypeProperty(String uri, String description)
     {
-        super(uri, description, SignedDataObjectProperty.TargetMultiplicity.N);
+        super(uri, description, DataObjectProperty.TargetMultiplicity.N);
     }
 }

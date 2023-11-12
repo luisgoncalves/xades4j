@@ -109,7 +109,7 @@ public class XmlCommitmentTypeIndicationType
     public List<String> getObjectReference()
     {
         if (objectReference == null)
-            objectReference = new ArrayList<String>();
+            objectReference = new ArrayList<>();
         return this.objectReference;
     }
 

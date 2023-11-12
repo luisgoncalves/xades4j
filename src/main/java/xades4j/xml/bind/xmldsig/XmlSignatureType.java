@@ -165,7 +165,7 @@ public class XmlSignatureType {
      */
     public List<XmlObjectType> getObject() {
         if (object == null) {
-            object = new ArrayList<XmlObjectType>();
+            object = new ArrayList<>();
         }
         return this.object;
     }

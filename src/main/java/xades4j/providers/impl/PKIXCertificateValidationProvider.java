@@ -135,7 +135,7 @@ public final class PKIXCertificateValidationProvider implements CertificateValid
         // verification.
         List<X509Certificate> certPath = (List<X509Certificate>) builderRes.getCertPath().getCertificates();
         // - Create a new list since the previous is immutable.
-        certPath = new ArrayList<X509Certificate>(certPath);
+        certPath = new ArrayList<>(certPath);
         // - Add the trust anchor certificate.
         certPath.add(builderRes.getTrustAnchor().getTrustedCert());
 
@@ -152,7 +152,7 @@ public final class PKIXCertificateValidationProvider implements CertificateValid
     {
         // Map the issuers certificates in the chain. This is used to know the issuers
         // and later to verify the signatures in the CRLs.
-        Map<X500Principal, X509Certificate> issuersCerts = new HashMap<X500Principal, X509Certificate>(certPath.size() - 1);
+        Map<X500Principal, X509Certificate> issuersCerts = new HashMap<>(certPath.size() - 1);
         for (int i = 0; i < certPath.size() - 1; i++)
         {
             // The issuer of one certificate is the subject of the following one.
@@ -173,7 +173,7 @@ public final class PKIXCertificateValidationProvider implements CertificateValid
         //   nextUpdate component."
         crlSelector.setDateAndTime(validationDate);
 
-        Set<X509CRL> crls = new HashSet<X509CRL>();
+        Set<X509CRL> crls = new HashSet<>();
         try
         {
             // Get the CRLs on each CertStore.

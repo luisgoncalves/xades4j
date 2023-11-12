@@ -34,7 +34,7 @@ public class CollectionUtils
     public static <T> Collection<T> newIfNull(Collection<T> c, int size)
     {
         if (null == c)
-            c = new ArrayList<T>(size);
+            c = new ArrayList<>(size);
         return c;
     }
 
@@ -48,7 +48,7 @@ public class CollectionUtils
             Map<TK, TV> m, int size)
     {
         if (null == m)
-            m = new HashMap<TK, TV>(size);
+            m = new HashMap<>(size);
         return m;
     }
 
@@ -87,18 +87,18 @@ public class CollectionUtils
     public static <T> Collection<T> cloneOrEmptyIfNull(Collection<T> c)
     {
         if (null == c)
-            c = new ArrayList<T>(0);
+            c = new ArrayList<>(0);
         else
-            c = new ArrayList<T>(c);
+            c = new ArrayList<>(c);
         return c;
     }
 
     public static <TK, TV> Map<TK, TV> cloneOrEmptyIfNull(Map<TK, TV> m)
     {
         if (null == m)
-            m = new HashMap<TK, TV>(0);
+            m = new HashMap<>(0);
         else
-            m = new HashMap<TK, TV>(m);
+            m = new HashMap<>(m);
         return m;
     }
 
@@ -119,7 +119,7 @@ public class CollectionUtils
 
     public static <T> List<T> filter(Collection<T> c, Predicate<T> p)
     {
-        List<T> filtered = new ArrayList<T>();
+        List<T> filtered = new ArrayList<>();
         for (T e : c)
         {
             if (p.verifiedBy(e))
@@ -137,7 +137,7 @@ public class CollectionUtils
             Collection<TSrc> c,
             Projector<TSrc, TDest> p)
     {
-        List<TDest> projected = new ArrayList<TDest>();
+        List<TDest> projected = new ArrayList<>();
         for (TSrc e : c)
         {
             projected.add(p.project(e));

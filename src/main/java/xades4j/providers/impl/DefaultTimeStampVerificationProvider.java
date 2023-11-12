@@ -56,7 +56,7 @@ public class DefaultTimeStampVerificationProvider implements TimeStampVerificati
 
     static
     {
-        digestOidToUriMappings = new HashMap<ASN1ObjectIdentifier, String>(5);
+        digestOidToUriMappings = new HashMap<>(5);
         digestOidToUriMappings.put(TSPAlgorithms.MD5, MessageDigestAlgorithm.ALGO_ID_DIGEST_NOT_RECOMMENDED_MD5);
         digestOidToUriMappings.put(TSPAlgorithms.RIPEMD160, MessageDigestAlgorithm.ALGO_ID_DIGEST_RIPEMD160);
         digestOidToUriMappings.put(TSPAlgorithms.SHA1, MessageDigestAlgorithm.ALGO_ID_DIGEST_SHA1);
@@ -112,7 +112,7 @@ public class DefaultTimeStampVerificationProvider implements TimeStampVerificati
         try
         {
             /* Validate the TSA certificate */
-            LinkedList<X509Certificate> certs = new LinkedList<X509Certificate>();
+            LinkedList<X509Certificate> certs = new LinkedList<>();
             for (Object certHolder : tsToken.getCertificates().getMatches(new AllCertificatesSelector()))
             {
                 certs.add(this.x509CertificateConverter.getCertificate((X509CertificateHolder) certHolder));

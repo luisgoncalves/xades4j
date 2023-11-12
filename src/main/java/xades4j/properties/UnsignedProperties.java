@@ -35,6 +35,6 @@ public class UnsignedProperties extends SigAndDataObjPropsPair<UnsignedSignature
 
     public UnsignedProperties(Collection<UnsignedSignatureProperty> sigProps)
     {
-        super(sigProps, new ArrayList<UnsignedDataObjectProperty>(0));
+        super(sigProps, new ArrayList<>(0));
     }
 }

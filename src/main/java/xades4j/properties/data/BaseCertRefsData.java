@@ -29,12 +29,12 @@ public class BaseCertRefsData implements PropertyDataObject
 
     protected BaseCertRefsData(Collection<CertRef> certRefs)
     {
-        this.certRefs = new ArrayList<CertRef>(certRefs);
+        this.certRefs = new ArrayList<>(certRefs);
     }
 
     public BaseCertRefsData()
     {
-        this.certRefs = new ArrayList<CertRef>(3);
+        this.certRefs = new ArrayList<>(3);
     }
 
     public void addCertRef(CertRef ref)

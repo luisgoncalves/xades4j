@@ -16,9 +16,10 @@
  */
 package xades4j.properties.data;
 
-import java.util.Collection;
-import xades4j.properties.CommitmentTypeProperty;
+import xades4j.properties.CommitmentTypePropertyBase;
 import xades4j.utils.StringUtils;
+
+import java.util.Collection;
 
 /**
  *
@@ -32,10 +33,10 @@ class CommitmentTypeDataStructureVerifier implements PropertyDataObjectStructure
         CommitmentTypeData commTypeData = (CommitmentTypeData)propData;
 
         if (StringUtils.isNullOrEmptyString(commTypeData.getUri()))
-            throw new PropertyDataStructureException("null URI", CommitmentTypeProperty.PROP_NAME);
+            throw new PropertyDataStructureException("null URI", CommitmentTypePropertyBase.PROP_NAME);
 
         Collection<String> objReferences = commTypeData.getObjReferences();
         if (objReferences != null && objReferences.isEmpty())
-            throw new PropertyDataStructureException("Object references is empty", CommitmentTypeProperty.PROP_NAME);
+            throw new PropertyDataStructureException("Object references is empty", CommitmentTypePropertyBase.PROP_NAME);
     }
 }

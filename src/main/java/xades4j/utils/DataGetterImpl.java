@@ -37,11 +37,11 @@ public class DataGetterImpl<T> implements DataGetter<T>
 
     private Map<Class, Set<T>> getAllByType(Collection<T> all)
     {
-        Map<Class, Set<T>> res = new HashMap<Class, Set<T>>();
+        Map<Class, Set<T>> res = new HashMap<>();
 
         for (T e : all)
         {
-          Set<T> typeTs = res.computeIfAbsent(e.getClass(), k -> new HashSet<T>());
+          Set<T> typeTs = res.computeIfAbsent(e.getClass(), k -> new HashSet<>());
           typeTs.add(e);
         }
         return res;

@@ -52,7 +52,7 @@ public class XmlAnyType {
     @XmlAnyElement(lax = true)
     protected List<Object> content;
     @XmlAnyAttribute
-    private Map<QName, String> otherAttributes = new HashMap<QName, String>();
+    private Map<QName, String> otherAttributes = new HashMap<>();
 
     /**
      * Gets the value of the content property.
@@ -80,7 +80,7 @@ public class XmlAnyType {
      */
     public List<Object> getContent() {
         if (content == null) {
-            content = new ArrayList<Object>();
+            content = new ArrayList<>();
         }
         return this.content;
     }

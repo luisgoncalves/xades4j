@@ -33,7 +33,7 @@ public abstract class ExclusiveCanonicalXML extends Algorithm{
 
     protected ExclusiveCanonicalXML(String uri, String... inclusiveNamespacePrefixes)
     {
-        this(uri, new HashSet<String>(Arrays.asList(inclusiveNamespacePrefixes)));
+        this(uri, new HashSet<>(Arrays.asList(inclusiveNamespacePrefixes)));
     }
 
     protected ExclusiveCanonicalXML(String uri, Set<String> inclusiveNamespacePrefixes)

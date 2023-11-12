@@ -65,7 +65,7 @@ public class PropertiesUtils
     {
         // Remove the leaf certificate.
         List<X509Certificate> caCerts = vData.getCerts();
-        caCerts = new ArrayList<X509Certificate>(caCerts.subList(1, caCerts.size()));
+        caCerts = new ArrayList<>(caCerts.subList(1, caCerts.size()));
 
         usp.add(new CompleteCertificateRefsProperty(caCerts));
         usp.add(new CompleteRevocationRefsProperty(vData.getCrls()));

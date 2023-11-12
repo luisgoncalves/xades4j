@@ -68,7 +68,7 @@ public class XmlCertifiedRolesListType {
      */
     public List<XmlEncapsulatedPKIDataType> getCertifiedRole() {
         if (certifiedRole == null) {
-            certifiedRole = new ArrayList<XmlEncapsulatedPKIDataType>();
+            certifiedRole = new ArrayList<>();
         }
         return this.certifiedRole;
     }

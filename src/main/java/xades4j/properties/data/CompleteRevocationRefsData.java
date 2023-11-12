@@ -29,12 +29,12 @@ public final class CompleteRevocationRefsData implements PropertyDataObject
 
     public CompleteRevocationRefsData(Collection<CRLRef> crlRefs)
     {
-        this.crlRefs = new ArrayList<CRLRef>(crlRefs);
+        this.crlRefs = new ArrayList<>(crlRefs);
     }
 
     public CompleteRevocationRefsData()
     {
-        this.crlRefs = new ArrayList<CRLRef>(3);
+        this.crlRefs = new ArrayList<>(3);
     }
 
     public void addCRLRef(CRLRef ref)

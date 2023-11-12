@@ -70,7 +70,7 @@ class DataGenIndivDataObjsTimeStamp extends DataGenBaseTimeStamp<IndividualDataO
     {
         Collection<DataObjectDesc> targetDataObjs = prop.getTargetDataObjects();
 
-        List<String> includes = new ArrayList<String>(targetDataObjs.size());
+        List<String> includes = new ArrayList<>(targetDataObjs.size());
         for (DataObjectDesc dataObj : targetDataObjs)
         {
             Reference r = ctx.getReference(dataObj);

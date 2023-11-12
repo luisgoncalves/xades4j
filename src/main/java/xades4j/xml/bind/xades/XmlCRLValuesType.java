@@ -68,7 +68,7 @@ public class XmlCRLValuesType {
      */
     public List<XmlEncapsulatedPKIDataType> getEncapsulatedCRLValue() {
         if (encapsulatedCRLValue == null) {
-            encapsulatedCRLValue = new ArrayList<XmlEncapsulatedPKIDataType>();
+            encapsulatedCRLValue = new ArrayList<>();
         }
         return this.encapsulatedCRLValue;
     }

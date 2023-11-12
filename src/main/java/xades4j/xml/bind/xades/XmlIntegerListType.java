@@ -69,7 +69,7 @@ public class XmlIntegerListType {
      */
     public List<BigInteger> getInt() {
         if (_int == null) {
-            _int = new ArrayList<BigInteger>();
+            _int = new ArrayList<>();
         }
         return this._int;
     }

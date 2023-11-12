@@ -92,8 +92,8 @@ final class SignedDataObjectsProcessor
             List<ResourceResolverSpi> resourceResolvers,
             XMLSignature xmlSignature,
             boolean hasNullURIReference) throws UnsupportedAlgorithmException {
-        Map<DataObjectDesc, Reference> referenceMappings = new IdentityHashMap<DataObjectDesc, Reference>(dataObjects.size());
-        Set<Manifest> manifests = new HashSet<Manifest>();
+        Map<DataObjectDesc, Reference> referenceMappings = new IdentityHashMap<>(dataObjects.size());
+        Set<Manifest> manifests = new HashSet<>();
 
         for (ResourceResolverSpi resolver : resourceResolvers)
         {

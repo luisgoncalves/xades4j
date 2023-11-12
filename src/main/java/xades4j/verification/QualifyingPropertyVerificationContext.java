@@ -146,7 +146,7 @@ public class QualifyingPropertyVerificationContext
             this.signatureDoc = signature.getDocument();
 
             // Map elements to References.
-            this.references = new HashMap<Element, RawDataObjectDesc>(references.size());
+            this.references = new HashMap<>(references.size());
             for (RawDataObjectDesc obj : references)
             {
                 this.references.put(obj.getReference().getElement(), obj);
@@ -154,7 +154,7 @@ public class QualifyingPropertyVerificationContext
 
             // Map elements to XMLObjects.
             int nXmlObjs = signature.getObjectLength();
-            this.objects = new HashMap<Element, ObjectContainer>(nXmlObjs);
+            this.objects = new HashMap<>(nXmlObjs);
             for (int i = 0; i < nXmlObjs; i++)
             {
                 ObjectContainer xmlObj = signature.getObjectItem(i);

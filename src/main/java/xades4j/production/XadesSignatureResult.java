@@ -39,7 +39,7 @@ public class XadesSignatureResult
     {
         this.signature = signature;
         this.qualifyingProperties = qualifyingProperties;
-        this.propertyFilter = new DataGetterImpl<QualifyingProperty>(qualifyingProperties.all());
+        this.propertyFilter = new DataGetterImpl<>(qualifyingProperties.all());
     }
 
     /**

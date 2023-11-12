@@ -106,7 +106,7 @@ public abstract class XmlGenericTimeStampType {
      */
     public List<XmlIncludeType> getInclude() {
         if (include == null) {
-            include = new ArrayList<XmlIncludeType>();
+            include = new ArrayList<>();
         }
         return this.include;
     }
@@ -135,7 +135,7 @@ public abstract class XmlGenericTimeStampType {
      */
     public List<XmlReferenceInfoType> getReferenceInfo() {
         if (referenceInfo == null) {
-            referenceInfo = new ArrayList<XmlReferenceInfoType>();
+            referenceInfo = new ArrayList<>();
         }
         return this.referenceInfo;
     }
@@ -189,7 +189,7 @@ public abstract class XmlGenericTimeStampType {
      */
     public List<Object> getEncapsulatedTimeStampOrXMLTimeStamp() {
         if (encapsulatedTimeStampOrXMLTimeStamp == null) {
-            encapsulatedTimeStampOrXMLTimeStamp = new ArrayList<Object>();
+            encapsulatedTimeStampOrXMLTimeStamp = new ArrayList<>();
         }
         return this.encapsulatedTimeStampOrXMLTimeStamp;
     }

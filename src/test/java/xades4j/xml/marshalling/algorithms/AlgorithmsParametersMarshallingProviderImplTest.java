@@ -22,25 +22,18 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.w3c.dom.Document;
 import org.w3c.dom.Node;
-import xades4j.algorithms.Algorithm;
-import xades4j.algorithms.CanonicalXMLWithoutComments;
-import xades4j.algorithms.EnvelopedSignatureTransform;
-import xades4j.algorithms.ExclusiveCanonicalXMLWithComments;
-import xades4j.algorithms.GenericAlgorithm;
-import xades4j.algorithms.XPathTransform;
+import xades4j.algorithms.*;
 import xades4j.utils.SignatureServicesTestBase;
 
 import java.util.List;
 
-import static org.junit.jupiter.api.Assertions.assertFalse;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
-import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.jupiter.api.Assertions.*;
 
 /**
  *
  * @author Luís
  */
-public class AlgorithmsParametersMarshallingProviderImplTest
+class AlgorithmsParametersMarshallingProviderImplTest
 {
     private Document doc;
     private AlgorithmsParametersMarshallingProviderImpl sut;
@@ -54,7 +47,7 @@ public class AlgorithmsParametersMarshallingProviderImplTest
     }
     
     @Test
-    public void testMarshalParametersWithDefaultConfiguration() throws Exception
+    void testMarshalParametersWithDefaultConfiguration() throws Exception
     {
         Algorithm[] algorithms = new Algorithm[]
         {

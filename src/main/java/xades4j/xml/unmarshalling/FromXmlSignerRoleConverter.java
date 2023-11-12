@@ -43,7 +43,7 @@ class FromXmlSignerRoleConverter implements SignedSigPropFromXmlConv
         if(xmlSignerRole.getCertifiedRoles() != null)
             throw new PropertyUnmarshalException("certified roles not supported", SignerRoleProperty.PROP_NAME);
 
-        Set<String> claimedRoles = new HashSet<String>();
+        Set<String> claimedRoles = new HashSet<>();
 
         for (XmlAnyType xmlRole : xmlSignerRole.getClaimedRoles().getClaimedRole())
         {

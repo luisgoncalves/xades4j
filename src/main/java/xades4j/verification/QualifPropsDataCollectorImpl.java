@@ -45,7 +45,7 @@ class QualifPropsDataCollectorImpl implements QualifyingPropertiesDataCollector
 
     public QualifPropsDataCollectorImpl()
     {
-        propsData = new PropertiesSet<PropertyDataObject>(1);
+        propsData = new PropertiesSet<>(1);
     }
 
     @Override

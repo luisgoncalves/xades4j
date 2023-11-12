@@ -72,7 +72,7 @@ class DataGenSigAndRefsTimeStamp extends DataGenBaseTimeStamp<SigAndRefsTimeStam
          * "Those (...) that appear before SigAndRefsTimeStamp, in their order of
          * appearance within the UnsignedSignatureProperties element."
          */
-        Map<String, Integer> elegiblePropsCnt = new HashMap<String, Integer>(5);
+        Map<String, Integer> elegiblePropsCnt = new HashMap<>(5);
         elegiblePropsCnt.put(CompleteCertificateRefsProperty.PROP_NAME, 0);
         elegiblePropsCnt.put(CompleteRevocationRefsProperty.PROP_NAME, 0);
         elegiblePropsCnt.put(SignatureTimeStampProperty.PROP_NAME, 0);

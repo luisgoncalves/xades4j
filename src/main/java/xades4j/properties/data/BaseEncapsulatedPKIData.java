@@ -30,12 +30,12 @@ public class BaseEncapsulatedPKIData implements PropertyDataObject
 
     public BaseEncapsulatedPKIData(Collection<byte[]> data)
     {
-        this.data = new ArrayList<byte[]>(data);
+        this.data = new ArrayList<>(data);
     }
 
     public BaseEncapsulatedPKIData()
     {
-        this.data = new ArrayList<byte[]>(3);
+        this.data = new ArrayList<>(3);
     }
 
     public void addData(byte[] d)

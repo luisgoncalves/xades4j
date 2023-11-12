@@ -56,7 +56,7 @@ public final class PropertiesDataGenerationContext
         this.referencesMappings = null;
 
         SignedInfo signedInfo = targetXmlSignature.getSignedInfo();
-        List<Reference> refs = new ArrayList<Reference>(signedInfo.getLength());
+        List<Reference> refs = new ArrayList<>(signedInfo.getLength());
         for (int i = 0; i < signedInfo.getLength(); i++)
         {
             try
@@ -84,7 +84,7 @@ public final class PropertiesDataGenerationContext
         this.referencesMappings = referencesMappings;
         this.sigDocument = sigDocument;
 
-        List<Reference> orderedRefs = new ArrayList<Reference>(orderedDataObjs.size());
+        List<Reference> orderedRefs = new ArrayList<>(orderedDataObjs.size());
         for (DataObjectDesc dataObjDesc : orderedDataObjs)
         {
             orderedRefs.add(referencesMappings.get(dataObjDesc));

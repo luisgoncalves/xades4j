@@ -117,7 +117,7 @@ public final class XPath2FilterTransform extends XPathTransformBase
     private XPath2FilterTransform()
     {
         super(Transforms.TRANSFORM_XPATH2FILTER);
-        this.filters = new ArrayList<XPath2Filter>(2);
+        this.filters = new ArrayList<>(2);
     }
 
     /**

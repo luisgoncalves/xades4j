@@ -79,7 +79,7 @@ public class XmlUnsignedDataObjectPropertiesType {
      */
     public List<XmlAnyType> getUnsignedDataObjectProperty() {
         if (unsignedDataObjectProperty == null) {
-            unsignedDataObjectProperty = new ArrayList<XmlAnyType>();
+            unsignedDataObjectProperty = new ArrayList<>();
         }
         return this.unsignedDataObjectProperty;
     }

@@ -39,8 +39,8 @@ class SignaturePropertiesCollectorImpl implements SignaturePropertiesCollector
     public SignaturePropertiesCollectorImpl()
     {
 
-        this.signedSigProps = new PropertiesSet<SignedSignatureProperty>(2);
-        this.unsignedSigProps = new PropertiesSet<UnsignedSignatureProperty>(0);
+        this.signedSigProps = new PropertiesSet<>(2);
+        this.unsignedSigProps = new PropertiesSet<>(0);
     }
 
     /***** Signed signature properties *****/

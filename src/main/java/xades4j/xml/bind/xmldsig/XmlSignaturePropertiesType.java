@@ -79,7 +79,7 @@ public class XmlSignaturePropertiesType {
      */
     public List<XmlSignaturePropertyType> getSignatureProperty() {
         if (signatureProperty == null) {
-            signatureProperty = new ArrayList<XmlSignaturePropertyType>();
+            signatureProperty = new ArrayList<>();
         }
         return this.signatureProperty;
     }

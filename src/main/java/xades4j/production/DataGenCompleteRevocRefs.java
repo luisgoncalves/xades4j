@@ -61,7 +61,7 @@ class DataGenCompleteRevocRefs implements PropertyDataObjectGenerator<CompleteRe
             PropertiesDataGenerationContext ctx) throws PropertyDataGenerationException
     {
         Collection<X509CRL> crls = prop.getCrls();
-        Collection<CRLRef> crlRefs = new ArrayList<CRLRef>(crls.size());
+        Collection<CRLRef> crlRefs = new ArrayList<>(crls.size());
         String digestAlgUri = this.signatureAlgorithms.getDigestAlgorithmForReferenceProperties();
 
         try

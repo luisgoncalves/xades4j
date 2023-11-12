@@ -58,7 +58,7 @@ class CompleteRevocRefsVerifier implements QualifyingPropertyVerifier<CompleteRe
             QualifyingPropertyVerificationContext ctx) throws InvalidPropertyException
     {
         Collection<X509CRL> crls = ctx.getCertChainData().getCrls();
-        Collection<CRLRef> crlRefs = new ArrayList<CRLRef>(propData.getCrlRefs());
+        Collection<CRLRef> crlRefs = new ArrayList<>(propData.getCrlRefs());
 
         if(crls.isEmpty())
             throw new CompleteRevocRefsCRLsNotAvailableException();

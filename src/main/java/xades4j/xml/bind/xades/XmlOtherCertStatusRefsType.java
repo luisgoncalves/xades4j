@@ -68,7 +68,7 @@ public class XmlOtherCertStatusRefsType {
      */
     public List<XmlAnyType> getOtherRef() {
         if (otherRef == null) {
-            otherRef = new ArrayList<XmlAnyType>();
+            otherRef = new ArrayList<>();
         }
         return this.otherRef;
     }

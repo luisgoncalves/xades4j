@@ -56,11 +56,9 @@ public final class AlgorithmParametersBindingsModule extends AbstractModule
     {
         MapBinder<Class<? extends Algorithm>, AlgorithmParametersMarshaller<? extends Algorithm>> mapBinder = MapBinder.newMapBinder(
                 binder(),
-                new TypeLiteral<Class<? extends Algorithm>>()
-                {
+                new TypeLiteral<>() {
                 },
-                new TypeLiteral<AlgorithmParametersMarshaller<? extends Algorithm>>()
-                {
+                new TypeLiteral<>() {
                 });
 
         if (marshallerClass != null)

@@ -72,7 +72,7 @@ public abstract class DataObjectProperty implements QualifyingProperty
             throw new NullPointerException("Target multiplicity cannot be null");
 
         this.targetMultiplicity = targetMultiplicity;
-        this.targetDataObjs = new HashSet<DataObjectDesc>(targetMultiplicity.initialSize);
+        this.targetDataObjs = new HashSet<>(targetMultiplicity.initialSize);
     }
 
     @Override

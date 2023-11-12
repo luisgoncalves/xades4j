@@ -85,7 +85,7 @@ public class XmlCertificateValuesType {
      */
     public List<Object> getEncapsulatedX509CertificateOrOtherCertificate() {
         if (encapsulatedX509CertificateOrOtherCertificate == null) {
-            encapsulatedX509CertificateOrOtherCertificate = new ArrayList<Object>();
+            encapsulatedX509CertificateOrOtherCertificate = new ArrayList<>();
         }
         return this.encapsulatedX509CertificateOrOtherCertificate;
     }

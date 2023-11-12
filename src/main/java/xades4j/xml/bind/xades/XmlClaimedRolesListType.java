@@ -68,7 +68,7 @@ public class XmlClaimedRolesListType {
      */
     public List<XmlAnyType> getClaimedRole() {
         if (claimedRole == null) {
-            claimedRole = new ArrayList<XmlAnyType>();
+            claimedRole = new ArrayList<>();
         }
         return this.claimedRole;
     }

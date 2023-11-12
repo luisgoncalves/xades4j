@@ -38,7 +38,7 @@ public class PropertiesDataObjectsStructureVerifier
 
     static
     {
-        structureVerifiers = new HashMap<Class<? extends PropertyDataObject>, PropertyDataObjectStructureVerifier>(10);
+        structureVerifiers = new HashMap<>(10);
         structureVerifiers.put(CommitmentTypeData.class,
                 new CommitmentTypeDataStructureVerifier());
 
@@ -119,7 +119,7 @@ public class PropertiesDataObjectsStructureVerifier
         if (customGlobalVerifiers.isEmpty())
             return;
 
-        DataGetter<PropertyDataObject> dataGetter = new DataGetterImpl<PropertyDataObject>(propsData);
+        DataGetter<PropertyDataObject> dataGetter = new DataGetterImpl<>(propsData);
 
         for (CustomPropertiesDataObjsStructureVerifier customVer : customGlobalVerifiers)
         {

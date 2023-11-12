@@ -34,7 +34,7 @@ class XAdESFormChecker
 
     static XAdESForm checkForm(Collection<PropertyInfo> props) throws InvalidXAdESFormException
     {
-        Set<String> availablePropsNames = new HashSet<String>();
+        Set<String> availablePropsNames = new HashSet<>();
         for (PropertyInfo propInfo : props)
         {
             availablePropsNames.add(propInfo.getProperty().getName());

@@ -16,8 +16,9 @@
  */
 package xades4j.properties.data;
 
-import java.util.Collection;
 import xades4j.utils.CollectionUtils;
+
+import java.util.Collection;
 
 /**
  *
@@ -25,7 +26,8 @@ import xades4j.utils.CollectionUtils;
  */
 public final class CommitmentTypeData implements PropertyDataObject
 {
-    private String description, uri;
+    private String description;
+    private String uri;
     private Collection<String> objReferences;
     private Collection qualifiers;
 

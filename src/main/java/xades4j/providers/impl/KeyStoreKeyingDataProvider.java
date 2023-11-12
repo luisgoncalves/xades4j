@@ -211,7 +211,7 @@ public abstract class KeyStoreKeyingDataProvider implements KeyingDataProvider
         ensureInitialized();
         try
         {
-            List<SigningCertificateSelector.Entry> availableSignCerts = new ArrayList<SigningCertificateSelector.Entry>(keyStore.size());
+            List<SigningCertificateSelector.Entry> availableSignCerts = new ArrayList<>(keyStore.size());
 
             for (Enumeration<String> aliases = keyStore.aliases(); aliases.hasMoreElements(); )
             {

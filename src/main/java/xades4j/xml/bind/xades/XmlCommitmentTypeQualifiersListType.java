@@ -68,7 +68,7 @@ public class XmlCommitmentTypeQualifiersListType {
      */
     public List<XmlAnyType> getCommitmentTypeQualifier() {
         if (commitmentTypeQualifier == null) {
-            commitmentTypeQualifier = new ArrayList<XmlAnyType>();
+            commitmentTypeQualifier = new ArrayList<>();
         }
         return this.commitmentTypeQualifier;
     }

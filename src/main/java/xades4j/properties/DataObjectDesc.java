@@ -45,8 +45,8 @@ public abstract class DataObjectDesc
 
     protected DataObjectDesc()
     {
-        signedDataObjProps = new PropertiesSet<SignedDataObjectProperty>(2);
-        unsignedDataObjProps = new PropertiesSet<UnsignedDataObjectProperty>(0);
+        signedDataObjProps = new PropertiesSet<>(2);
+        unsignedDataObjProps = new PropertiesSet<>(0);
     }
 
     /**

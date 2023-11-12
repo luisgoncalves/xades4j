@@ -37,7 +37,7 @@ public class PropertiesSet<T>
      */
     public PropertiesSet(int initialNPropTypes)
     {
-        this.properties = new HashMap<Class, Set<T>>(initialNPropTypes);
+        this.properties = new HashMap<>(initialNPropTypes);
     }
 
     /**
@@ -79,7 +79,7 @@ public class PropertiesSet<T>
         if (null == prop)
             throw new NullPointerException("Property cannot be null");
 
-      Set<T> propsOfCurrType = properties.computeIfAbsent(prop.getClass(), k -> new HashSet<T>(1));
+      Set<T> propsOfCurrType = properties.computeIfAbsent(prop.getClass(), k -> new HashSet<>(1));
       // No properties of this type have been added.
       // Repeated instances are not allowed.
         if (!propsOfCurrType.add(prop))
@@ -127,7 +127,7 @@ public class PropertiesSet<T>
         if (properties.isEmpty())
             return Collections.emptyList();
 
-        Collection<T> props = new ArrayList<T>(properties.size() + 3);
+        Collection<T> props = new ArrayList<>(properties.size() + 3);
         for (Set<T> propsOfType : properties.values())
         {
             props.addAll(propsOfType);

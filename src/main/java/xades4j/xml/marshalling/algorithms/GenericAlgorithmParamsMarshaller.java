@@ -38,7 +38,7 @@ final class GenericAlgorithmParamsMarshaller implements AlgorithmParametersMarsh
             return null;
         }
 
-        List<Node> result = new ArrayList<Node>(originalParams.size());
+        List<Node> result = new ArrayList<>(originalParams.size());
         for (Node node : originalParams)
         {
             result.add(node.getOwnerDocument() == doc ? node : doc.importNode(node, true));

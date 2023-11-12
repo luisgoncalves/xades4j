@@ -68,7 +68,7 @@ public class XmlTransformsType {
      */
     public List<XmlTransformType> getTransform() {
         if (transform == null) {
-            transform = new ArrayList<XmlTransformType>();
+            transform = new ArrayList<>();
         }
         return this.transform;
     }
