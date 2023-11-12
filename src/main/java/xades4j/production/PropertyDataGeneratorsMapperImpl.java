@@ -16,7 +16,7 @@
  */
 package xades4j.production;
 
-import javax.inject.Inject;
+import jakarta.inject.Inject;
 import com.google.inject.Injector;
 import com.google.inject.Key;
 import com.google.inject.TypeLiteral;

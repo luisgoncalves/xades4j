@@ -17,7 +17,7 @@
 package xades4j.verification;
 
 import com.google.inject.ConfigurationException;
-import javax.inject.Inject;
+import jakarta.inject.Inject;
 import com.google.inject.Injector;
 import com.google.inject.Key;
 import com.google.inject.ProvisionException;

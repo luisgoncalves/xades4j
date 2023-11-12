@@ -16,7 +16,7 @@
  */
 package xades4j.providers.impl;
 
-import javax.inject.Inject;
+import jakarta.inject.Inject;
 import org.apache.xml.security.algorithms.MessageDigestAlgorithm;
 import org.bouncycastle.asn1.ASN1ObjectIdentifier;
 import org.bouncycastle.asn1.cmp.PKIStatus;

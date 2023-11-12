@@ -22,7 +22,7 @@ import xades4j.properties.QualifyingProperty;
 import xades4j.properties.data.SigningTimeData;
 import xades4j.utils.BuiltIn;
 
-import javax.inject.Inject;
+import jakarta.inject.Inject;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;

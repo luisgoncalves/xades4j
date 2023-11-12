@@ -16,7 +16,7 @@
  */
 package xades4j.verification;
 
-import javax.inject.Inject;
+import jakarta.inject.Inject;
 import java.io.InputStream;
 import java.security.cert.X509CRL;
 import java.security.cert.X509Certificate;

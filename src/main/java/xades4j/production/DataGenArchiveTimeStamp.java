@@ -17,7 +17,7 @@
 package xades4j.production;
 
 import xades4j.algorithms.Algorithm;
-import javax.inject.Inject;
+import jakarta.inject.Inject;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;

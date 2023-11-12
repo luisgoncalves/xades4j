@@ -17,7 +17,7 @@
 package xades4j.production;
 
 import xades4j.properties.UnsignedProperties;
-import javax.inject.Inject;
+import jakarta.inject.Inject;
 import org.apache.xml.security.signature.XMLSignature;
 import org.apache.xml.security.utils.Constants;
 import org.w3c.dom.Element;

@@ -16,7 +16,7 @@
  */
 package xades4j.providers.impl;
 
-import javax.inject.Inject;
+import jakarta.inject.Inject;
 import xades4j.providers.MessageDigestEngineProvider;
 import xades4j.providers.TimeStampTokenGenerationException;
 import xades4j.utils.Base64;

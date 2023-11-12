@@ -16,7 +16,7 @@
  */
 package xades4j.verification;
 
-import javax.inject.Inject;
+import jakarta.inject.Inject;
 import org.apache.xml.security.utils.Constants;
 import org.w3c.dom.Element;
 import xades4j.utils.CannotAddDataToDigestInputException;

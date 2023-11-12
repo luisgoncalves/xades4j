@@ -35,7 +35,7 @@ import xades4j.utils.ResolverAnonymous;
 import xades4j.utils.TransformUtils;
 import xades4j.xml.marshalling.algorithms.AlgorithmsParametersMarshallingProvider;
 
-import javax.inject.Inject;
+import jakarta.inject.Inject;
 
 /**
  * Helper class that processes a set of data object descriptions.

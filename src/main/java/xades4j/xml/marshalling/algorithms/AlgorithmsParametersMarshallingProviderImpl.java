@@ -16,7 +16,7 @@
  */
 package xades4j.xml.marshalling.algorithms;
 
-import javax.inject.Inject;
+import jakarta.inject.Inject;
 import org.w3c.dom.Document;
 import org.w3c.dom.Node;
 import xades4j.UnsupportedAlgorithmException;

@@ -20,7 +20,7 @@ import com.google.inject.AbstractModule;
 import com.google.inject.Module;
 import org.junit.jupiter.api.Test;
 
-import javax.inject.Inject;
+import jakarta.inject.Inject;
 import java.util.Map;
 import java.util.Set;
 
