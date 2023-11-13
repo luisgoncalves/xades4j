@@ -16,14 +16,15 @@
  */
 package xades4j.xml.unmarshalling;
 
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
 import xades4j.properties.SignerRoleProperty;
 import xades4j.properties.data.SignerRoleData;
 import xades4j.xml.bind.xades.XmlAnyType;
 import xades4j.xml.bind.xades.XmlSignedSignaturePropertiesType;
 import xades4j.xml.bind.xades.XmlSignerRoleType;
+
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
 
 /**
  *
@@ -47,7 +48,7 @@ class FromXmlSignerRoleConverter implements SignedSigPropFromXmlConv
 
         for (XmlAnyType xmlRole : xmlSignerRole.getClaimedRoles().getClaimedRole())
         {
-            List contents = xmlRole.getContent();
+            List<Object> contents = xmlRole.getContent();
             if(contents.size() != 1 || !(contents.get(0) instanceof String))
                 throw new PropertyUnmarshalException("unsupported claimed role. Only one string is supported", SignerRoleProperty.PROP_NAME);
             claimedRoles.add((String)contents.get(0));

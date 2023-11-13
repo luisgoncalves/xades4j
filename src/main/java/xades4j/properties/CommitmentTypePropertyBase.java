@@ -51,7 +51,7 @@ public abstract class CommitmentTypePropertyBase extends SignedDataObjectPropert
     /**/
     private final String uri;
     private final String description;
-    private Collection qualifiers;
+    private Collection<String> qualifiers;
 
     protected CommitmentTypePropertyBase(String uri, String description,
             TargetMultiplicity targetMult)
@@ -94,11 +94,11 @@ public abstract class CommitmentTypePropertyBase extends SignedDataObjectPropert
     
     private CommitmentTypePropertyBase addQualifier(Object qualifier){
         this.qualifiers = CollectionUtils.newIfNull(this.qualifiers, 2);
-        this.qualifiers.add(qualifier);
+        this.qualifiers.add((String) qualifier);
         return this;
     }
     
-    public Collection getQualifiers(){
+    public Collection<String> getQualifiers(){
         return CollectionUtils.emptyIfNull(this.qualifiers);
     }
 }

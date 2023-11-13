@@ -1,6 +1,7 @@
 package xades4j.verification;
 
 import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
 import xades4j.providers.X500NameStyleProvider;
 import xades4j.providers.impl.DefaultX500NameStyleProvider;
@@ -24,7 +25,7 @@ import static org.junit.jupiter.params.provider.Arguments.arguments;
  */
 public class DistinguishedNameComparerTest extends SignatureServicesTestBase
 {
-    public static Collection data() throws Exception
+    public static Collection<Arguments> data() throws Exception
     {
         return List.of(
                 // Certificate includes the value of OID.2.5.4.97 as UTF8String

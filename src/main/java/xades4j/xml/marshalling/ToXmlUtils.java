@@ -16,8 +16,6 @@
  */
 package xades4j.xml.marshalling;
 
-import java.util.EnumMap;
-import java.util.List;
 import xades4j.properties.IdentifierType;
 import xades4j.properties.ObjectIdentifier;
 import xades4j.properties.data.BaseCertRefsData;
@@ -31,6 +29,9 @@ import xades4j.xml.bind.xades.XmlQualifierType;
 import xades4j.xml.bind.xmldsig.XmlDigestMethodType;
 import xades4j.xml.bind.xmldsig.XmlX509IssuerSerialType;
 
+import java.util.EnumMap;
+import java.util.List;
+
 /**
  * @author Luís
  */
@@ -43,7 +44,7 @@ class ToXmlUtils
 
     static
     {
-        identifierTypeConv = new EnumMap(IdentifierType.class);
+        identifierTypeConv = new EnumMap<>(IdentifierType.class);
         identifierTypeConv.put(IdentifierType.OIDAsURI, XmlQualifierType.OID_AS_URI);
         identifierTypeConv.put(IdentifierType.OIDAsURN, XmlQualifierType.OID_AS_URN);
     }

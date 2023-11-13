@@ -22,6 +22,8 @@ import xades4j.providers.SigningKeyException;
 import xades4j.verification.UnexpectedJCAException;
 
 import javax.security.auth.callback.PasswordCallback;
+import java.io.ByteArrayInputStream;
+import java.io.IOException;
 import java.security.GeneralSecurityException;
 import java.security.KeyStore;
 import java.security.KeyStore.Builder;
@@ -30,12 +32,16 @@ import java.security.KeyStoreException;
 import java.security.PrivateKey;
 import java.security.UnrecoverableKeyException;
 import java.security.cert.Certificate;
+import java.security.cert.CertificateException;
+import java.security.cert.CertificateFactory;
 import java.security.cert.X509Certificate;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.Enumeration;
 import java.util.List;
+
+import static xades4j.providers.impl.KeyStoreKeyingDataProvider.SigningCertificateSelector.Entry;
 
 /**
  * A KeyStore-based implementation of {@code KeyingDataProvider}. The keystore is
@@ -229,7 +235,7 @@ public abstract class KeyStoreKeyingDataProvider implements KeyingDataProvider
                     Certificate cer = keyStore.getCertificate(alias);
                     if (cer instanceof X509Certificate)
                     {
-                        availableSignCerts.add(new SigningCertificateSelector.Entry(alias, (X509Certificate) cer));
+                        availableSignCerts.add(new Entry(alias, (X509Certificate) cer));
                     }
                 }
             }
@@ -239,7 +245,7 @@ public abstract class KeyStoreKeyingDataProvider implements KeyingDataProvider
                 throw new SigningCertChainException("No certificates available in the key store");
             }
 
-            var selectedCertificate = this.certificateSelector.selectCertificate(availableSignCerts);
+            Entry selectedCertificate = this.certificateSelector.selectCertificate(availableSignCerts);
 
             Certificate[] signingCertChain = this.keyStore.getCertificateChain(selectedCertificate.getAlias());
             if (null == signingCertChain)
@@ -249,8 +255,8 @@ public abstract class KeyStoreKeyingDataProvider implements KeyingDataProvider
 
             if (this.returnFullChain)
             {
-                List lChain = Arrays.asList(signingCertChain);
-                return Collections.checkedList(lChain, X509Certificate.class);
+                List<Certificate> lChain = Arrays.asList( signingCertChain);
+                return Collections.checkedList(getX509Certificates(lChain), X509Certificate.class);
             }
             else
             {
@@ -258,12 +264,24 @@ public abstract class KeyStoreKeyingDataProvider implements KeyingDataProvider
             }
 
         }
-        catch (KeyStoreException ex)
+        catch (KeyStoreException | CertificateException | IOException ex)
         {
             // keyStore.getCertificateAlias, keyStore.getCertificateChain -> if the
             // keystore is not loaded.
             throw new UnexpectedJCAException(ex.getMessage(), ex);
         }
+    }
+
+    private static List<X509Certificate> getX509Certificates(List<Certificate> lChain) throws CertificateException, IOException {
+        List<X509Certificate> lChainX509 = new ArrayList<>();
+        CertificateFactory cf = CertificateFactory.getInstance("X.509");
+        for(Certificate certificate : lChain) {
+            try (ByteArrayInputStream bais = new ByteArrayInputStream(certificate.getEncoded())) {
+                X509Certificate x509 = (X509Certificate) cf.generateCertificate(bais);
+                lChainX509.add(x509);
+            }
+        }
+        return lChainX509;
     }
 
     @Override

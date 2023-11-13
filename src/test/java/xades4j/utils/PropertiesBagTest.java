@@ -18,6 +18,7 @@ package xades4j.utils;
 
 import org.junit.jupiter.api.Test;
 import xades4j.properties.DataObjectFormatProperty;
+import xades4j.properties.QualifyingProperty;
 import xades4j.properties.SigningTimeProperty;
 
 import static org.junit.jupiter.api.Assertions.assertFalse;
@@ -64,7 +65,7 @@ class PropertiesBagTest
         SigningTimeProperty prop1 = new SigningTimeProperty(), prop2 = new SigningTimeProperty();
         DataObjectFormatProperty prop3 = new DataObjectFormatProperty();
 
-        PropertiesSet instance = new PropertiesSet(2);
+        PropertiesSet<QualifyingProperty> instance = new PropertiesSet<>(2);
         instance.put(prop1);
         instance.put(prop3);
 
@@ -77,7 +78,7 @@ class PropertiesBagTest
     @Test
     void testAddNull()
     {
-        PropertiesSet instance = new PropertiesSet(0);
+        PropertiesSet<String> instance = new PropertiesSet<>(0);
         assertThrows(NullPointerException.class, () -> instance.add(null));
     }
 
@@ -88,7 +89,7 @@ class PropertiesBagTest
     void testAdd()
     {
         SigningTimeProperty prop1 = new SigningTimeProperty(), prop2 = new SigningTimeProperty();
-        PropertiesSet instance = new PropertiesSet(1);
+        PropertiesSet<SigningTimeProperty> instance = new PropertiesSet<>(1);
         instance.add(prop1);
         instance.add(prop2);
 
@@ -103,7 +104,7 @@ class PropertiesBagTest
     {
         System.out.println("remove");
         SigningTimeProperty prop1 = new SigningTimeProperty();
-        PropertiesSet instance = new PropertiesSet(1);
+        PropertiesSet<SigningTimeProperty> instance = new PropertiesSet<>(1);
         instance.add(prop1);
         instance.remove(prop1);
         assertTrue(instance.isEmpty());
@@ -116,7 +117,7 @@ class PropertiesBagTest
     void testRemoveNotPresent()
     {
         SigningTimeProperty prop1 = new SigningTimeProperty(), prop2 = new SigningTimeProperty();
-        PropertiesSet instance = new PropertiesSet(1);
+        PropertiesSet<SigningTimeProperty> instance = new PropertiesSet<>(1);
         instance.add(prop1);
 
         assertThrows(IllegalStateException.class, () -> instance.remove(prop2));
@@ -131,7 +132,7 @@ class PropertiesBagTest
         System.out.println("isEmpty");
 
         SigningTimeProperty prop = new SigningTimeProperty();
-        PropertiesSet instance = new PropertiesSet(1);
+        PropertiesSet<SigningTimeProperty> instance = new PropertiesSet<>(1);
         assertTrue(instance.isEmpty());
         instance.add(prop);
         assertFalse(instance.isEmpty());

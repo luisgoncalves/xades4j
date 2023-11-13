@@ -16,13 +16,14 @@
  */
 package xades4j.production;
 
-import jakarta.inject.Inject;
 import com.google.inject.Injector;
 import com.google.inject.Key;
 import com.google.inject.TypeLiteral;
 import com.google.inject.util.Types;
-import java.lang.reflect.ParameterizedType;
+import jakarta.inject.Inject;
 import xades4j.properties.QualifyingProperty;
+
+import java.lang.reflect.ParameterizedType;
 
 /**
  * Resolves the generators through the injector.
@@ -45,7 +46,7 @@ class PropertyDataGeneratorsMapperImpl implements PropertyDataGeneratorsMapper
         try
         {
             ParameterizedType pt = Types.newParameterizedType(PropertyDataObjectGenerator.class, p.getClass());
-            return (PropertyDataObjectGenerator)injector.getInstance(Key.get(TypeLiteral.get(pt)));
+            return (PropertyDataObjectGenerator<TProp>)injector.getInstance(Key.get(TypeLiteral.get(pt)));
         } catch (RuntimeException ex)
         {
             throw new PropertyDataGeneratorNotAvailableException(p, ex);

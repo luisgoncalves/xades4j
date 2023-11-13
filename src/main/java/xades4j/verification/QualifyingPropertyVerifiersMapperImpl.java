@@ -48,7 +48,7 @@ class QualifyingPropertyVerifiersMapperImpl implements QualifyingPropertyVerifie
         try
         {
             ParameterizedType pt = Types.newParameterizedType(QualifyingPropertyVerifier.class, p.getClass());
-            return (QualifyingPropertyVerifier)injector.getInstance(Key.get(TypeLiteral.get(pt)));
+            return (QualifyingPropertyVerifier<TData>)injector.getInstance(Key.get(TypeLiteral.get(pt)));
         } catch (ConfigurationException | ProvisionException ignored)
         {
         }

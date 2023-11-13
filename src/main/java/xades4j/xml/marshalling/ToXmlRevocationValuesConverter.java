@@ -16,8 +16,6 @@
  */
 package xades4j.xml.marshalling;
 
-import java.util.Collection;
-import java.util.List;
 import org.w3c.dom.Document;
 import xades4j.properties.data.PropertyDataObject;
 import xades4j.properties.data.RevocationValuesData;
@@ -25,6 +23,9 @@ import xades4j.xml.bind.xades.XmlCRLValuesType;
 import xades4j.xml.bind.xades.XmlEncapsulatedPKIDataType;
 import xades4j.xml.bind.xades.XmlRevocationValuesType;
 import xades4j.xml.bind.xades.XmlUnsignedPropertiesType;
+
+import java.util.Collection;
+import java.util.List;
 
 /**
  *
@@ -44,7 +45,7 @@ class ToXmlRevocationValuesConverter implements UnsignedPropertyDataToXmlConvert
         XmlCRLValuesType xmlCRLValues = new XmlCRLValuesType();
         xmlRevocValues.setCRLValues(xmlCRLValues);
 
-        List xmlCRLs = xmlCRLValues.getEncapsulatedCRLValue();
+        List<XmlEncapsulatedPKIDataType> xmlCRLs = xmlCRLValues.getEncapsulatedCRLValue();
 
         for (byte[] encodCrl : crlValues)
         {

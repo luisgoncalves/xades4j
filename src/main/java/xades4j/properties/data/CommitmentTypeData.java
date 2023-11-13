@@ -27,9 +27,9 @@ import java.util.Collection;
 public final class CommitmentTypeData implements PropertyDataObject
 {
     private String description;
-    private String uri;
+    private final String uri;
     private Collection<String> objReferences;
-    private Collection qualifiers;
+    private Collection<String> qualifiers;
 
     public CommitmentTypeData(String uri)
     {
@@ -73,11 +73,11 @@ public final class CommitmentTypeData implements PropertyDataObject
         return uri;
     }
     
-    public void setQualifiers(Collection qualifiers){
+    public void setQualifiers(Collection<String> qualifiers){
         this.qualifiers = qualifiers;
     }
     
-    public Collection getQualifiers(){
+    public Collection<String> getQualifiers(){
         return this.qualifiers;
     }
 }

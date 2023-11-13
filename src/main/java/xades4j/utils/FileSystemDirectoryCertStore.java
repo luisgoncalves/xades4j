@@ -129,7 +129,7 @@ public class FileSystemDirectoryCertStore
         if (!dir.exists() || !dir.isDirectory())
             throw new IllegalArgumentException("Specified path doesn't exist or doesn't refer a directory");
 
-        Collection contentList = new ArrayList();
+        Collection<Object> contentList = new ArrayList<>();
         transverseDirToFindContent(dir, contentList, certsFilesExts, crlsFilesExts, cf);
 
         try
@@ -145,7 +145,7 @@ public class FileSystemDirectoryCertStore
 
     private void transverseDirToFindContent(
             File dir,
-            Collection contentList,
+            Collection<Object> contentList,
             String[] certsFilesExts,
             String[] crlsFilesExts,
             CertificateFactory cf) throws CertificateException, CRLException
