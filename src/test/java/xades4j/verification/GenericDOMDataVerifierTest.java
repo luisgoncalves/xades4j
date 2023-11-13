@@ -65,7 +65,7 @@ public class GenericDOMDataVerifierTest
     {
         GenericDOMData propData = new GenericDOMData(testDocument.createElementNS("http://test.generic.dom", "Elem"));
         QualifyingPropertyVerificationContext ctx = null;
-        GenericDOMDataVerifier instance = new GenericDOMDataVerifier(new HashMap<QName, QualifyingPropertyVerifier>(0));
+        GenericDOMDataVerifier instance = new GenericDOMDataVerifier(new HashMap<>(0));
 
         assertThrows(InvalidPropertyException.class, () -> instance.verify(propData, ctx));
     }

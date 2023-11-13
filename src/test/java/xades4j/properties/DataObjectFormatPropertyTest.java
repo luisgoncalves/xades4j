@@ -85,7 +85,7 @@ class DataObjectFormatPropertyTest
     @Test
     void testWithDocumentationUris()
     {
-        Collection<String> documentationUris = new ArrayList<String>(1);
+        Collection<String> documentationUris = new ArrayList<>(1);
         DataObjectFormatProperty instance = new DataObjectFormatProperty();
 
         instance.withDocumentationUris(documentationUris);

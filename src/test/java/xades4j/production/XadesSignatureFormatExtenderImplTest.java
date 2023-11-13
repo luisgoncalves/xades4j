@@ -50,7 +50,7 @@ class XadesSignatureFormatExtenderImplTest extends SignerTestBase
         XadesSignatureFormatExtender extender = new XadesFormatExtenderProfile().getFormatExtender();
 
         XMLSignature sig = new XMLSignature(signatureNode, signatureNode.getOwnerDocument().getBaseURI());
-        Collection<UnsignedSignatureProperty> usp = new ArrayList<UnsignedSignatureProperty>(1);
+        Collection<UnsignedSignatureProperty> usp = new ArrayList<>(1);
         usp.add(new CounterSignatureProperty(signer));
         
         extender.enrichSignature(sig, new UnsignedProperties(usp));
@@ -67,7 +67,7 @@ class XadesSignatureFormatExtenderImplTest extends SignerTestBase
         XadesSignatureFormatExtender instance = new XadesFormatExtenderProfile().with(DEFAULT_TEST_TSA).getFormatExtender();
 
         XMLSignature sig = new XMLSignature(signatureNode, "");
-        Collection<UnsignedSignatureProperty> usp = new ArrayList<UnsignedSignatureProperty>(1);
+        Collection<UnsignedSignatureProperty> usp = new ArrayList<>(1);
         usp.add(new SignatureTimeStampProperty());
 
         instance.enrichSignature(sig, new UnsignedProperties(usp));
@@ -84,7 +84,7 @@ class XadesSignatureFormatExtenderImplTest extends SignerTestBase
         XadesSignatureFormatExtender instance = new XadesFormatExtenderProfile().with(DEFAULT_TEST_TSA).getFormatExtender();
 
         XMLSignature sig = new XMLSignature(signatureNode, "");
-        Collection<UnsignedSignatureProperty> usp = new ArrayList<UnsignedSignatureProperty>(1);
+        Collection<UnsignedSignatureProperty> usp = new ArrayList<>(1);
         usp.add(new ArchiveTimeStampProperty());
 
         instance.enrichSignature(sig, new UnsignedProperties(usp));
