@@ -17,7 +17,14 @@
 package xades4j.verification;
 
 import org.apache.xml.security.signature.XMLSignature;
-import xades4j.properties.*;
+import xades4j.properties.QualifyingProperties;
+import xades4j.properties.QualifyingProperty;
+import xades4j.properties.SignedDataObjectProperty;
+import xades4j.properties.SignedProperties;
+import xades4j.properties.SignedSignatureProperty;
+import xades4j.properties.UnsignedDataObjectProperty;
+import xades4j.properties.UnsignedProperties;
+import xades4j.properties.UnsignedSignatureProperty;
 import xades4j.providers.ValidationData;
 import xades4j.utils.CollectionUtils;
 import xades4j.utils.DataGetter;

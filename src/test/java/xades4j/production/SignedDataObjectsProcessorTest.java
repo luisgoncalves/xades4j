@@ -16,7 +16,12 @@
  */
 package xades4j.production;
 
-import org.apache.xml.security.signature.*;
+import org.apache.xml.security.signature.Manifest;
+import org.apache.xml.security.signature.ObjectContainer;
+import org.apache.xml.security.signature.Reference;
+import org.apache.xml.security.signature.XMLSignature;
+import org.apache.xml.security.signature.XMLSignatureInput;
+import org.apache.xml.security.signature.XMLSignatureStreamInput;
 import org.apache.xml.security.utils.Constants;
 import org.apache.xml.security.utils.resolver.ResourceResolverContext;
 import org.apache.xml.security.utils.resolver.ResourceResolverSpi;
@@ -30,7 +35,11 @@ import xades4j.utils.StringUtils;
 
 import java.io.ByteArrayInputStream;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotEquals;
+import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 /**
  * @author Luís

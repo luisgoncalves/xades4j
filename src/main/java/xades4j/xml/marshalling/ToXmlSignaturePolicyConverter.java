@@ -21,7 +21,12 @@ import org.w3c.dom.Document;
 import xades4j.properties.QualifyingProperty;
 import xades4j.properties.data.PropertyDataObject;
 import xades4j.properties.data.SignaturePolicyData;
-import xades4j.xml.bind.xades.*;
+import xades4j.xml.bind.xades.XmlAnyType;
+import xades4j.xml.bind.xades.XmlDigestAlgAndValueType;
+import xades4j.xml.bind.xades.XmlSigPolicyQualifiersListType;
+import xades4j.xml.bind.xades.XmlSignaturePolicyIdType;
+import xades4j.xml.bind.xades.XmlSignaturePolicyIdentifierType;
+import xades4j.xml.bind.xades.XmlSignedPropertiesType;
 import xades4j.xml.bind.xmldsig.XmlDigestMethodType;
 
 import javax.xml.namespace.QName;

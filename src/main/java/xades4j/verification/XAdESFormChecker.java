@@ -16,7 +16,15 @@
  */
 package xades4j.verification;
 
-import xades4j.properties.*;
+import xades4j.properties.ArchiveTimeStampProperty;
+import xades4j.properties.CertificateValuesProperty;
+import xades4j.properties.CompleteCertificateRefsProperty;
+import xades4j.properties.CompleteRevocationRefsProperty;
+import xades4j.properties.RevocationValuesProperty;
+import xades4j.properties.SigAndRefsTimeStampProperty;
+import xades4j.properties.SignaturePolicyBase;
+import xades4j.properties.SignatureTimeStampProperty;
+import xades4j.properties.SigningCertificateProperty;
 
 import java.util.Collection;
 import java.util.HashSet;

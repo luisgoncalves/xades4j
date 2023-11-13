@@ -25,7 +25,13 @@ import org.w3c.dom.Node;
 import xades4j.algorithms.EnvelopedSignatureTransform;
 import xades4j.algorithms.XPath2FilterTransform.XPath2Filter;
 import xades4j.algorithms.XPathTransform;
-import xades4j.properties.*;
+import xades4j.properties.AllDataObjsCommitmentTypeProperty;
+import xades4j.properties.CommitmentTypeProperty;
+import xades4j.properties.CounterSignatureProperty;
+import xades4j.properties.DataObjectDesc;
+import xades4j.properties.DataObjectFormatProperty;
+import xades4j.properties.IndividualDataObjsTimeStampProperty;
+import xades4j.properties.SignerRoleProperty;
 import xades4j.providers.SignaturePropertiesCollector;
 import xades4j.providers.SignaturePropertiesProvider;
 

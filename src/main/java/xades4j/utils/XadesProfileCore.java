@@ -16,8 +16,11 @@
  */
 package xades4j.utils;
 
+import com.google.inject.Binder;
+import com.google.inject.Guice;
+import com.google.inject.Key;
 import com.google.inject.Module;
-import com.google.inject.*;
+import com.google.inject.TypeLiteral;
 import com.google.inject.multibindings.MapBinder;
 import com.google.inject.multibindings.Multibinder;
 import com.google.inject.multibindings.OptionalBinder;

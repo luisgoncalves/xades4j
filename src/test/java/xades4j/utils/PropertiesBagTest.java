@@ -20,7 +20,9 @@ import org.junit.jupiter.api.Test;
 import xades4j.properties.DataObjectFormatProperty;
 import xades4j.properties.SigningTimeProperty;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 /**
  * @author Luís
@@ -102,7 +104,8 @@ class PropertiesBagTest
     /**
      * Test of remove method, of class PropertiesSet.
      */
-    public void testRemove()
+    @Test
+    void testRemove()
     {
         System.out.println("remove");
         SigningTimeProperty prop1 = new SigningTimeProperty();

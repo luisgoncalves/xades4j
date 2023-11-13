@@ -16,13 +16,39 @@
  */
 package xades4j.providers.impl;
 
-import xades4j.providers.*;
+import xades4j.providers.CannotBuildCertificationPathException;
+import xades4j.providers.CannotSelectCertificateException;
+import xades4j.providers.CertificateValidationException;
+import xades4j.providers.CertificateValidationProvider;
+import xades4j.providers.ValidationData;
 import xades4j.verification.UnexpectedJCAException;
 
 import javax.security.auth.x500.X500Principal;
-import java.security.*;
-import java.security.cert.*;
-import java.util.*;
+import java.security.InvalidAlgorithmParameterException;
+import java.security.KeyStore;
+import java.security.KeyStoreException;
+import java.security.NoSuchAlgorithmException;
+import java.security.NoSuchProviderException;
+import java.security.cert.CertPathBuilder;
+import java.security.cert.CertPathBuilderException;
+import java.security.cert.CertStore;
+import java.security.cert.CertStoreException;
+import java.security.cert.CollectionCertStoreParameters;
+import java.security.cert.PKIXBuilderParameters;
+import java.security.cert.PKIXCertPathBuilderResult;
+import java.security.cert.X509CRL;
+import java.security.cert.X509CRLSelector;
+import java.security.cert.X509CertSelector;
+import java.security.cert.X509Certificate;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
 /**
  * Implementation of {@code CertificateValidationProvider} using a PKIX {@code CertPathBuilder}.

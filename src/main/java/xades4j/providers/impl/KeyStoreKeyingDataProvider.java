@@ -22,12 +22,20 @@ import xades4j.providers.SigningKeyException;
 import xades4j.verification.UnexpectedJCAException;
 
 import javax.security.auth.callback.PasswordCallback;
-import java.security.*;
+import java.security.GeneralSecurityException;
+import java.security.KeyStore;
 import java.security.KeyStore.Builder;
 import java.security.KeyStore.ProtectionParameter;
+import java.security.KeyStoreException;
+import java.security.PrivateKey;
+import java.security.UnrecoverableKeyException;
 import java.security.cert.Certificate;
 import java.security.cert.X509Certificate;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.Enumeration;
+import java.util.List;
 
 /**
  * A KeyStore-based implementation of {@code KeyingDataProvider}. The keystore is

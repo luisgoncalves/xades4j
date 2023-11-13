@@ -18,14 +18,13 @@ package xades4j.providers.impl;
 
 import org.apache.xml.security.Init;
 import org.apache.xml.security.algorithms.JCEMapper;
-import xades4j.providers.*;
+import xades4j.UnsupportedAlgorithmException;
+import xades4j.providers.MessageDigestEngineProvider;
 
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.security.NoSuchProviderException;
 import java.security.Security;
-
-import xades4j.UnsupportedAlgorithmException;
 
 /**
  * The default implementation of {@code MessageDigestEngineProvider}. It supports

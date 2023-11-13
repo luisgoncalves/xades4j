@@ -51,7 +51,11 @@ import xades4j.xml.unmarshalling.UnmarshalException;
 
 import java.io.InputStream;
 import java.security.cert.X509Certificate;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Date;
+import java.util.List;
+import java.util.Set;
 
 /**
  *

@@ -19,7 +19,15 @@ package xades4j.xml.marshalling.algorithms;
 import com.google.inject.AbstractModule;
 import com.google.inject.TypeLiteral;
 import com.google.inject.multibindings.MapBinder;
-import xades4j.algorithms.*;
+import xades4j.algorithms.Algorithm;
+import xades4j.algorithms.CanonicalXMLWithComments;
+import xades4j.algorithms.CanonicalXMLWithoutComments;
+import xades4j.algorithms.EnvelopedSignatureTransform;
+import xades4j.algorithms.ExclusiveCanonicalXMLWithComments;
+import xades4j.algorithms.ExclusiveCanonicalXMLWithoutComments;
+import xades4j.algorithms.GenericAlgorithm;
+import xades4j.algorithms.XPath2FilterTransform;
+import xades4j.algorithms.XPathTransform;
 
 import javax.annotation.Nullable;
 

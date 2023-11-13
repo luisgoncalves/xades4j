@@ -28,7 +28,11 @@ import xades4j.providers.CertificateValidationProvider;
 import xades4j.providers.KeyingDataProvider;
 import xades4j.providers.impl.PKIXCertificateValidationProvider;
 import xades4j.utils.FileSystemDirectoryCertStore;
-import xades4j.verification.*;
+import xades4j.verification.SignatureSpecificVerificationOptions;
+import xades4j.verification.SigningCertificateKeyUsageException;
+import xades4j.verification.XAdESForm;
+import xades4j.verification.XAdESVerificationResult;
+import xades4j.verification.XadesVerificationProfile;
 
 import java.io.FileInputStream;
 import java.security.KeyStore;

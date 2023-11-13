@@ -27,7 +27,19 @@ import org.w3c.dom.NodeList;
 import xades4j.algorithms.CanonicalXMLWithoutComments;
 import xades4j.production.XadesFormatExtenderProfile;
 import xades4j.production.XadesSignatureFormatExtender;
-import xades4j.properties.*;
+import xades4j.properties.CertificateValuesProperty;
+import xades4j.properties.CommitmentTypeProperty;
+import xades4j.properties.CommitmentTypePropertyBase;
+import xades4j.properties.CompleteCertificateRefsProperty;
+import xades4j.properties.CounterSignatureProperty;
+import xades4j.properties.DataObjectFormatProperty;
+import xades4j.properties.IndividualDataObjsTimeStampProperty;
+import xades4j.properties.QualifyingProperty;
+import xades4j.properties.RevocationValuesProperty;
+import xades4j.properties.SigAndRefsTimeStampProperty;
+import xades4j.properties.SignatureTimeStampProperty;
+import xades4j.properties.SigningCertificateProperty;
+import xades4j.properties.SigningTimeProperty;
 import xades4j.providers.CannotBuildCertificationPathException;
 
 import java.io.File;
@@ -37,7 +49,10 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.GregorianCalendar;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 /**
  * @author Luís

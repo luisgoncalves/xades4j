@@ -16,8 +16,9 @@
  */
 package xades4j.providers.impl;
 
-import xades4j.providers.*;
 import xades4j.properties.SigningTimeProperty;
+import xades4j.providers.SignaturePropertiesCollector;
+import xades4j.providers.SignaturePropertiesProvider;
 
 /**
  * The default implementation of {@link SignaturePropertiesProvider}. It provides

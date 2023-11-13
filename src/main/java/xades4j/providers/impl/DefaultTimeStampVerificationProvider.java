@@ -33,14 +33,26 @@ import org.bouncycastle.tsp.TimeStampToken;
 import org.bouncycastle.util.Selector;
 import xades4j.UnsupportedAlgorithmException;
 import xades4j.XAdES4jException;
-import xades4j.providers.*;
+import xades4j.providers.CertificateValidationProvider;
+import xades4j.providers.MessageDigestEngineProvider;
+import xades4j.providers.TimeStampTokenDigestException;
+import xades4j.providers.TimeStampTokenSignatureException;
+import xades4j.providers.TimeStampTokenStructureException;
+import xades4j.providers.TimeStampTokenTSACertException;
+import xades4j.providers.TimeStampTokenVerificationException;
+import xades4j.providers.TimeStampVerificationProvider;
+import xades4j.providers.ValidationData;
 
 import java.io.IOException;
 import java.security.MessageDigest;
 import java.security.Provider;
 import java.security.cert.CertificateException;
 import java.security.cert.X509Certificate;
-import java.util.*;
+import java.util.Arrays;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.LinkedList;
+import java.util.Map;
 
 /**
  * Default implementation of {@code TimeStampVerificationProvider}. It verifies

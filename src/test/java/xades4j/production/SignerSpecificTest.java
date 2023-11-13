@@ -100,7 +100,7 @@ public class SignerSpecificTest extends SignerTestBase
         signer.sign(signDataObject, doc1.getDocumentElement());
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
         outputDOM(doc1, baos);
-        String str = new String(baos.toByteArray());
+        String str = baos.toString();
         //expected without parsing exception
         Document doc = parseDocument(new ByteArrayInputStream(baos.toByteArray()));
     }

@@ -16,7 +16,11 @@
  */
 package xades4j.verification;
 
-import com.google.inject.*;
+import com.google.inject.ConfigurationException;
+import com.google.inject.Injector;
+import com.google.inject.Key;
+import com.google.inject.ProvisionException;
+import com.google.inject.TypeLiteral;
 import com.google.inject.util.Types;
 import jakarta.inject.Inject;
 import xades4j.properties.data.PropertyDataObject;

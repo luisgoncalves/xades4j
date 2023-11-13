@@ -22,7 +22,11 @@ import org.junit.jupiter.api.Test;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.NodeList;
-import xades4j.properties.*;
+import xades4j.properties.ArchiveTimeStampProperty;
+import xades4j.properties.CounterSignatureProperty;
+import xades4j.properties.SignatureTimeStampProperty;
+import xades4j.properties.UnsignedProperties;
+import xades4j.properties.UnsignedSignatureProperty;
 
 import java.util.ArrayList;
 import java.util.Collection;

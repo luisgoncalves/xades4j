@@ -17,7 +17,14 @@
 package xades4j.properties.data;
 
 import jakarta.inject.Inject;
-import xades4j.properties.*;
+import xades4j.properties.AllDataObjsTimeStampProperty;
+import xades4j.properties.ArchiveTimeStampProperty;
+import xades4j.properties.CertificateValuesProperty;
+import xades4j.properties.CompleteCertificateRefsProperty;
+import xades4j.properties.RevocationValuesProperty;
+import xades4j.properties.SigAndRefsTimeStampProperty;
+import xades4j.properties.SignatureTimeStampProperty;
+import xades4j.properties.SigningCertificateProperty;
 import xades4j.utils.DataGetter;
 import xades4j.utils.DataGetterImpl;
 

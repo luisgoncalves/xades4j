@@ -17,7 +17,11 @@
 package xades4j.production;
 
 import jakarta.inject.Inject;
-import org.apache.xml.security.signature.*;
+import org.apache.xml.security.signature.Manifest;
+import org.apache.xml.security.signature.ObjectContainer;
+import org.apache.xml.security.signature.Reference;
+import org.apache.xml.security.signature.XMLSignature;
+import org.apache.xml.security.signature.XMLSignatureException;
 import org.apache.xml.security.transforms.Transforms;
 import org.apache.xml.security.utils.resolver.ResourceResolverSpi;
 import org.w3c.dom.Document;
@@ -28,7 +32,13 @@ import xades4j.utils.ResolverAnonymous;
 import xades4j.utils.TransformUtils;
 import xades4j.xml.marshalling.algorithms.AlgorithmsParametersMarshallingProvider;
 
-import java.util.*;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.HashSet;
+import java.util.IdentityHashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
 /**
  * Helper class that processes a set of data object descriptions.

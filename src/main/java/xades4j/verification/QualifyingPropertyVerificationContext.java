@@ -33,7 +33,11 @@ import javax.security.auth.x500.X500Principal;
 import java.math.BigInteger;
 import java.security.cert.X509CRL;
 import java.security.cert.X509Certificate;
-import java.util.*;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 /**
  * The context available during the verification of the qualifying properties.
