@@ -19,7 +19,6 @@ package xades4j.providers.impl;
 import jakarta.inject.Inject;
 import xades4j.providers.MessageDigestEngineProvider;
 import xades4j.providers.TimeStampTokenGenerationException;
-import xades4j.utils.Base64;
 
 import java.io.BufferedInputStream;
 import java.io.ByteArrayOutputStream;
@@ -27,6 +26,7 @@ import java.io.IOException;
 import java.io.OutputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.util.Base64;
 
 /**
  * Implementation of {@code AbstractTimeStampTokenProvider} that gets time-stamp tokens
@@ -45,7 +45,7 @@ public final class HttpTimeStampTokenProvider extends AbstractTimeStampTokenProv
         this.tsaHttpData = tsaHttpData;
         if (tsaHttpData.getUsername() != null) {
             String usrAndPwd = tsaHttpData.getUsername() + ":" + tsaHttpData.getPassword();
-            base64TsaUsrAndPwd = Base64.encodeBytes(usrAndPwd.getBytes());
+            base64TsaUsrAndPwd = Base64.getMimeEncoder().encodeToString(usrAndPwd.getBytes());
         } else {
             base64TsaUsrAndPwd = null;
         }
