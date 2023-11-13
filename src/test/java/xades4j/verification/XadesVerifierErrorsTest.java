@@ -43,26 +43,20 @@ class XadesVerifierErrorsTest extends VerifierTestBase
     @Test
     void testErrVerifySignedPropsIncorp() throws Exception
     {
-        assertThrows(QualifyingPropertiesIncorporationException.class, () -> {
-            verifyBadSignature("document.signed.t.bes.badsignedprops.xml", mySigsVerificationProfile);
-        });
+        assertThrows(QualifyingPropertiesIncorporationException.class, () -> verifyBadSignature("document.signed.t.bes.badsignedprops.xml", mySigsVerificationProfile));
     }
 
     @Test
     void testErrVerifySignedPropsIncorpNoRefType() throws Exception
     {
-        assertThrows(QualifyingPropertiesIncorporationException.class, () -> {
-            verifyBadSignature("document.signed.bes.signedpropsrefnotype.xml",
-                    new XadesVerificationProfile(validationProviderPtCc));
-        });
+        assertThrows(QualifyingPropertiesIncorporationException.class, () -> verifyBadSignature("document.signed.bes.signedpropsrefnotype.xml",
+                new XadesVerificationProfile(validationProviderPtCc)));
     }
 
     @Test
     void testErrVerifyIncorrectC() throws Exception
     {
-        assertThrows(InvalidXAdESFormException.class, () -> {
-            verifyBadSignature("document.signed.c.bad.xml", nistVerificationProfile);
-        });
+        assertThrows(InvalidXAdESFormException.class, () -> verifyBadSignature("document.signed.c.bad.xml", nistVerificationProfile));
     }
 
     @Test
@@ -70,33 +64,25 @@ class XadesVerifierErrorsTest extends VerifierTestBase
     {
         KeyStore ks = createAndLoadJKSKeyStore("be/beStore", "bestorepass");
         PKIXCertificateValidationProvider cvp = PKIXCertificateValidationProvider.builder(ks).checkRevocation(false).build();
-        assertThrows(CannotSelectCertificateException.class, () -> {
-            verifyBadSignature("TSL_BE.nocert.xml", new XadesVerificationProfile(cvp));
-        });
+        assertThrows(CannotSelectCertificateException.class, () -> verifyBadSignature("TSL_BE.nocert.xml", new XadesVerificationProfile(cvp)));
     }
 
     @Test
     void testErrVerifyChangedDataObj() throws Exception
     {
-        assertThrows(ReferenceValueException.class, () -> {
-            verifyBadSignature("document.signed.bes.invaliddataobj.xml", mySigsVerificationProfile);
-        });
+        assertThrows(ReferenceValueException.class, () -> verifyBadSignature("document.signed.bes.invaliddataobj.xml", mySigsVerificationProfile));
     }
 
     @Test
     void testErrVerifyChangedSigValue() throws Exception
     {
-        assertThrows(SignatureValueException.class, () -> {
-            verifyBadSignature("document.signed.bes.invalidsigvalue.xml", mySigsVerificationProfile);
-        });
+        assertThrows(SignatureValueException.class, () -> verifyBadSignature("document.signed.bes.invalidsigvalue.xml", mySigsVerificationProfile));
     }
 
     @Test
     void testErrVerifyCMissingCertRef() throws Exception
     {
-        assertThrows(CompleteCertRefsCertNotFoundException.class, () -> {
-            verifyBadSignature("document.signed.c.missingcertref.xml", nistVerificationProfile);
-        });
+        assertThrows(CompleteCertRefsCertNotFoundException.class, () -> verifyBadSignature("document.signed.c.missingcertref.xml", nistVerificationProfile));
     }
 
     @Test
@@ -110,17 +96,13 @@ class XadesVerifierErrorsTest extends VerifierTestBase
         //        encTS.setTextContent(Base64.encodeBytes(tkn));
         //        outputDocument(doc, "bad/document.signed.t.bes.badtsdigest.xml");
 
-        assertThrows(TimeStampDigestMismatchException.class, () -> {
-            verifyBadSignature("document.signed.t.bes.badtsdigest.xml", mySigsVerificationProfile);
-        });
+        assertThrows(TimeStampDigestMismatchException.class, () -> verifyBadSignature("document.signed.t.bes.badtsdigest.xml", mySigsVerificationProfile));
     }
 
     @Test
     void testErrVerifyCounterSigWithUnallowedTransforms() throws Exception
     {
-        assertThrows(CounterSignatureSigValueRefException.class, () -> {
-            verifyBadSignature("document.signed.bes.cs.invalidtransforms.xml", mySigsVerificationProfile);
-        });
+        assertThrows(CounterSignatureSigValueRefException.class, () -> verifyBadSignature("document.signed.bes.cs.invalidtransforms.xml", mySigsVerificationProfile));
     }
 
     private static void verifyBadSignature(String sigFileName, XadesVerificationProfile p) throws Exception

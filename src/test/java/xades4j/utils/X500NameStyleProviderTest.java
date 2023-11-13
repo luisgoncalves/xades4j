@@ -24,17 +24,13 @@ class X500NameStyleProviderTest
     @Test
     void errorDefaultParsing()
     {
-        assertThrows(Exception.class, () -> {
-            new X500Principal(NAME_SIMPLE);
-        });
+        assertThrows(Exception.class, () -> new X500Principal(NAME_SIMPLE));
     }
 
     @Test
     void errorParsingWithProvider()
     {
-        assertThrows(Exception.class, () -> {
-            new DefaultX500NameStyleProvider().fromString(NAME_SIMPLE);
-        });
+        assertThrows(Exception.class, () -> new DefaultX500NameStyleProvider().fromString(NAME_SIMPLE));
     }
 
     @Test

@@ -205,10 +205,8 @@ public class SignedDataObjectsProcessorTest extends SignatureServicesTestBase
     void testAddMultipleNullReferencesFails() throws Exception
     {
         SignedDataObjects dataObjsDescs = new SignedDataObjects();
-        assertThrows(IllegalStateException.class, () -> {
-            dataObjsDescs
-                    .withSignedDataObject(new AnonymousDataObjectReference("data1".getBytes()))
-                    .withSignedDataObject(new AnonymousDataObjectReference("data2".getBytes()));
-        });
+        assertThrows(IllegalStateException.class, () -> dataObjsDescs
+                .withSignedDataObject(new AnonymousDataObjectReference("data1".getBytes()))
+                .withSignedDataObject(new AnonymousDataObjectReference("data2".getBytes())));
     }
 }

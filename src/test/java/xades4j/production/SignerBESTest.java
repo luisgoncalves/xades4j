@@ -32,8 +32,6 @@ import xades4j.properties.DataObjectDesc;
 import xades4j.properties.DataObjectFormatProperty;
 import xades4j.properties.IndividualDataObjsTimeStampProperty;
 import xades4j.properties.SignerRoleProperty;
-import xades4j.providers.SignaturePropertiesCollector;
-import xades4j.providers.SignaturePropertiesProvider;
 
 import java.io.File;
 
@@ -106,15 +104,9 @@ class SignerBESTest extends SignerTestBase
 
         XadesBesSigningProfile profile = new XadesBesSigningProfile(keyingProviderMy);
         final XadesSigner counterSigner = profile.newSigner();
-        profile.withSignaturePropertiesProvider(new SignaturePropertiesProvider()
-        {
-            @Override
-            public void provideProperties(
-                    SignaturePropertiesCollector signedPropsCol)
-            {
-                signedPropsCol.addCounterSignature(new CounterSignatureProperty(counterSigner));
-                signedPropsCol.setSignerRole(new SignerRoleProperty("CounterSignature maniac"));
-            }
+        profile.withSignaturePropertiesProvider(signedPropsCol -> {
+            signedPropsCol.addCounterSignature(new CounterSignatureProperty(counterSigner));
+            signedPropsCol.setSignerRole(new SignerRoleProperty("CounterSignature maniac"));
         });
         XadesSigner signer = profile.newSigner();
 

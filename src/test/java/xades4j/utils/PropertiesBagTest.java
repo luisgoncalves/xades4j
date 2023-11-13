@@ -68,9 +68,7 @@ class PropertiesBagTest
         instance.put(prop1);
         instance.put(prop3);
 
-        assertThrows(IllegalStateException.class, () -> {
-            instance.put(prop2);
-        });
+        assertThrows(IllegalStateException.class, () -> instance.put(prop2));
     }
 
     /**
@@ -80,9 +78,7 @@ class PropertiesBagTest
     void testAddNull()
     {
         PropertiesSet instance = new PropertiesSet(0);
-        assertThrows(NullPointerException.class, () -> {
-            instance.add(null);
-        });
+        assertThrows(NullPointerException.class, () -> instance.add(null));
     }
 
     /**
@@ -96,9 +92,7 @@ class PropertiesBagTest
         instance.add(prop1);
         instance.add(prop2);
 
-        assertThrows(IllegalStateException.class, () -> {
-            instance.add(prop1);
-        });
+        assertThrows(IllegalStateException.class, () -> instance.add(prop1));
     }
 
     /**
@@ -125,9 +119,7 @@ class PropertiesBagTest
         PropertiesSet instance = new PropertiesSet(1);
         instance.add(prop1);
 
-        assertThrows(IllegalStateException.class, () -> {
-            instance.remove(prop2);
-        });
+        assertThrows(IllegalStateException.class, () -> instance.remove(prop2));
     }
 
     /**

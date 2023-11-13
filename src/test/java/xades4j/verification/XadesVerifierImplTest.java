@@ -139,22 +139,14 @@ class XadesVerifierImplTest extends VerifierTestBase
     }
 
     @Test
-    void testVerifyWithCustomRawVerifier() throws Exception
-    {
-        verificationProfile.withRawSignatureVerifier(new RawSignatureVerifier()
-        {
-            @Override
-            public void verify(RawSignatureVerifierContext ctx) throws InvalidSignatureException
-            {
-                // Do something usefull with the signature
-                // ctx.getSignature().getSignedInfo().item(0)...
-                throw new InvalidSignatureException("Rejected by RawSignatureVerifier");
-            }
+    void testVerifyWithCustomRawVerifier() {
+        verificationProfile.withRawSignatureVerifier(ctx -> {
+            // Do something usefull with the signature
+            // ctx.getSignature().getSignedInfo().item(0)...
+            throw new InvalidSignatureException("Rejected by RawSignatureVerifier");
         });
 
-        assertThrows(InvalidSignatureException.class, () -> {
-            verifySignature("document.signed.bes.xml", verificationProfile);
-        });
+        assertThrows(InvalidSignatureException.class, () -> verifySignature("document.signed.bes.xml", verificationProfile));
     }
 
     @Test

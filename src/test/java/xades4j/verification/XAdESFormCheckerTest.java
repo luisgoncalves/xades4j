@@ -30,9 +30,6 @@ class XAdESFormCheckerTest
     @Test
     void checkFormThrowsIfMinimumPropertiesAreNotPresent() throws InvalidXAdESFormException
     {
-        assertThrows(InvalidXAdESFormException.class, () -> {
-            XAdESFormChecker.checkForm(new ArrayList<PropertyInfo>(0));
-
-        });
+        assertThrows(InvalidXAdESFormException.class, () -> XAdESFormChecker.checkForm(new ArrayList<PropertyInfo>(0)));
     }
 }

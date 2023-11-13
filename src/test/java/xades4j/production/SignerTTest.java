@@ -20,9 +20,7 @@ import org.junit.jupiter.api.Test;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import xades4j.algorithms.ExclusiveCanonicalXMLWithoutComments;
-import xades4j.properties.SignaturePolicyBase;
 import xades4j.properties.SignaturePolicyImpliedProperty;
-import xades4j.providers.SignaturePolicyInfoProvider;
 import xades4j.providers.impl.HttpTsaConfiguration;
 
 /**
@@ -56,14 +54,7 @@ class SignerTTest extends SignerTestBase
         Element elemToSign = doc.getDocumentElement();
 
         XadesSigner signer = new XadesTSigningProfile(keyingProviderMy)
-                .withPolicyProvider(new SignaturePolicyInfoProvider()
-                {
-                    @Override
-                    public SignaturePolicyBase getSignaturePolicy()
-                    {
-                        return new SignaturePolicyImpliedProperty();
-                    }
-                })
+                .withPolicyProvider(() -> new SignaturePolicyImpliedProperty())
                 .with(DEFAULT_TEST_TSA)
                 .newSigner();
 

@@ -59,9 +59,7 @@ class DataObjectDescTest
 
         instance.withDataObjectFormat(format);
 
-        assertThrows(IllegalStateException.class, () -> {
-            instance.withDataObjectFormat(format);
-        });
+        assertThrows(IllegalStateException.class, () -> instance.withDataObjectFormat(format));
     }
 
     /**

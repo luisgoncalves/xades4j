@@ -44,9 +44,7 @@ class DefaultTimeStampVerificationProviderTest extends VerifierTestBase
     void testVerifyTokenFailsWithDifferentDigestInput() throws Exception
     {
         byte[] tsDigestInput = "Invalid".getBytes();
-        assertThrows(TimeStampTokenDigestException.class, () -> {
-            doVerifyToken(tsDigestInput, getTestToken());
-        });
+        assertThrows(TimeStampTokenDigestException.class, () -> doVerifyToken(tsDigestInput, getTestToken()));
     }
 
     @Test
@@ -63,9 +61,7 @@ class DefaultTimeStampVerificationProviderTest extends VerifierTestBase
             }
         }
 
-        assertThrows(TimeStampTokenVerificationException.class, () -> {
-            doVerifyToken(tsDigestInput, tsToken);
-        });
+        assertThrows(TimeStampTokenVerificationException.class, () -> doVerifyToken(tsDigestInput, tsToken));
     }
 
     private byte[] getTestToken() throws Exception

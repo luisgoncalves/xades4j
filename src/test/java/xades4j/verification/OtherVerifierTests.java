@@ -61,21 +61,11 @@ class OtherVerifierTests extends VerifierTestBase
     @Test
     void testVerifyBESCustomPropVer() throws Exception
     {
-        mySigsVerificationProfile.withQualifyingPropertyVerifier(SigningTimeData.class, new QualifyingPropertyVerifier<SigningTimeData>()
-        {
-
-            @Override
-            public QualifyingProperty verify(
-                    SigningTimeData propData,
-                    QualifyingPropertyVerificationContext ctx)
-            {
-                throw new UnsupportedOperationException("Yeah!");
-            }
+        mySigsVerificationProfile.withQualifyingPropertyVerifier(SigningTimeData.class, (propData, ctx) -> {
+            throw new UnsupportedOperationException("Yeah!");
         });
 
-        Exception e = assertThrows(UnsupportedOperationException.class, () -> {
-            verifySignature("document.signed.bes.xml", mySigsVerificationProfile);
-        });
+        Exception e = assertThrows(UnsupportedOperationException.class, () -> verifySignature("document.signed.bes.xml", mySigsVerificationProfile));
 
         assertEquals("Yeah!", e.getMessage());
     }
@@ -87,9 +77,8 @@ class OtherVerifierTests extends VerifierTestBase
                 SigningTimeData.class,
                 SigningTimeVerifierThatDependsOnBuiltInVerifier.class);
 
-        assertThrows(SigningTimeVerificationException.class, () -> {
-            verifySignature("document.signed.bes.xml", mySigsVerificationProfile);
-        });
+        assertThrows(SigningTimeVerificationException.class, () ->
+                verifySignature("document.signed.bes.xml", mySigsVerificationProfile));
     }
 
     @Test

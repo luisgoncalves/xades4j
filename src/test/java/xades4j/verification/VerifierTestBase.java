@@ -16,21 +16,20 @@
  */
 package xades4j.verification;
 
-import java.io.ByteArrayInputStream;
-import java.io.FileInputStream;
-import java.io.InputStream;
-import java.security.KeyStore;
-import java.security.cert.CRLException;
-import java.security.cert.CertificateException;
 import org.apache.xml.security.utils.Constants;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
-import xades4j.properties.ObjectIdentifier;
 import xades4j.providers.CertificateValidationProvider;
-import xades4j.utils.FileSystemDirectoryCertStore;
-import xades4j.providers.impl.PKIXCertificateValidationProvider;
 import xades4j.providers.SignaturePolicyDocumentProvider;
+import xades4j.providers.impl.PKIXCertificateValidationProvider;
+import xades4j.utils.FileSystemDirectoryCertStore;
 import xades4j.utils.SignatureServicesTestBase;
+
+import java.io.ByteArrayInputStream;
+import java.io.FileInputStream;
+import java.security.KeyStore;
+import java.security.cert.CRLException;
+import java.security.cert.CertificateException;
 
 /**
  *
@@ -47,15 +46,7 @@ public class VerifierTestBase extends SignatureServicesTestBase
     {
         try
         {
-            policyDocumentFinder = new SignaturePolicyDocumentProvider()
-            {
-                @Override
-                public InputStream getSignaturePolicyDocumentStream(
-                        ObjectIdentifier sigPolicyId)
-                {
-                    return new ByteArrayInputStream("Test policy input stream".getBytes());
-                }
-            };
+            policyDocumentFinder = sigPolicyId -> new ByteArrayInputStream("Test policy input stream".getBytes());
 
             // Validation provider with certificates from "my" folder. Used for
             // signatures without revocation data.

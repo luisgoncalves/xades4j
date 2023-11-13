@@ -146,9 +146,7 @@ class UncheckedSignerBESTest extends SignerTestBase
     @Test
     void testUncheckedSignBesNoSignKeyUsage() throws Exception
     {
-        assertThrows(SigningCertificateKeyUsageException.class, () -> {
-            trySignAndVerify(keyingProviderNoSign, validationProvider, "document.unchecked.signed.bes.nosign.xml");
-        });
+        assertThrows(SigningCertificateKeyUsageException.class, () -> trySignAndVerify(keyingProviderNoSign, validationProvider, "document.unchecked.signed.bes.nosign.xml"));
     }
 
     @Test
@@ -162,16 +160,12 @@ class UncheckedSignerBESTest extends SignerTestBase
     @Test
     void testUncheckedSignBesExpired() throws Exception
     {
-        assertThrows(CannotBuildCertificationPathException.class, () -> {
-            trySignAndVerify(keyingProviderExp, validationProvider, "document.unchecked.signed.bes.expired.xml");
-        });
+        assertThrows(CannotBuildCertificationPathException.class, () -> trySignAndVerify(keyingProviderExp, validationProvider, "document.unchecked.signed.bes.expired.xml"));
     }
 
     @Test
     void testUncheckedSignBesNyv() throws Exception
     {
-        assertThrows(CannotBuildCertificationPathException.class, () -> {
-            trySignAndVerify(keyingProviderNyv, validationProvider, "document.unchecked.signed.bes.nyv.xml");
-        });
+        assertThrows(CannotBuildCertificationPathException.class, () -> trySignAndVerify(keyingProviderNyv, validationProvider, "document.unchecked.signed.bes.nyv.xml"));
     }
 }

@@ -104,8 +104,6 @@ class DataObjectFormatPropertyTest
     void testWithDocumentationUris_Null()
     {
         DataObjectFormatProperty instance = new DataObjectFormatProperty();
-        assertThrows(NullPointerException.class, () -> {
-            instance.withDocumentationUris(null);
-        });
+        assertThrows(NullPointerException.class, () -> instance.withDocumentationUris(null));
     }
 }

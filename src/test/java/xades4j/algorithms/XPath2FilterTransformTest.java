@@ -35,9 +35,7 @@ class XPath2FilterTransformTest
      void testChangeFiltersListFails()
     {
         XPath2FilterTransform t = XPath2Filter.intersect("1").union("2");
-        assertThrows(UnsupportedOperationException.class, () -> {
-            t.getFilters().clear();
-        });
+        assertThrows(UnsupportedOperationException.class, () -> t.getFilters().clear());
     }
 
     @Test

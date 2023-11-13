@@ -125,9 +125,7 @@ class XadesProfileCoreTest
     void testGetInstanceException() throws XadesProfileResolutionException
     {
         XadesProfileCore instance = new XadesProfileCore();
-        assertThrows(XadesProfileResolutionException.class, () -> {
-            instance.getInstance(A.class, new Module[0], new Module[0]);
-        });
+        assertThrows(XadesProfileResolutionException.class, () -> instance.getInstance(A.class, new Module[0], new Module[0]));
     }
 
     @Test
