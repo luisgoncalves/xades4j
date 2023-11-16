@@ -48,7 +48,6 @@ import java.security.MessageDigest;
 import java.security.Provider;
 import java.security.cert.CertificateException;
 import java.security.cert.X509Certificate;
-import java.util.Arrays;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.LinkedList;
@@ -163,8 +162,7 @@ public class DefaultTimeStampVerificationProvider implements TimeStampVerificati
         {
             String digestAlgUri = uriForDigest(tsTokenInfo.getMessageImprintAlgOID());
             MessageDigest md = messageDigestProvider.getEngine(digestAlgUri);
-
-            if (!Arrays.equals(md.digest(tsDigestInput), tsTokenInfo.getMessageImprintDigest()))
+            if (!MessageDigest.isEqual(md.digest(tsDigestInput), tsTokenInfo.getMessageImprintDigest()))
             {
                 throw new TimeStampTokenDigestException();
             }

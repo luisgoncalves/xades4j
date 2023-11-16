@@ -31,7 +31,6 @@ import java.security.MessageDigest;
 import java.security.cert.CRLException;
 import java.security.cert.X509CRL;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collection;
 
 /**
@@ -91,7 +90,7 @@ class CompleteRevocRefsVerifier implements QualifyingPropertyVerifier<CompleteRe
 
                     // Check digest value.
                     MessageDigest md = this.digestEngineProvider.getEngine(crlRef.digestAlgUri);
-                    if (Arrays.equals(md.digest(crl.getEncoded()), crlRef.digestValue))
+                    if (MessageDigest.isEqual(md.digest(crl.getEncoded()), crlRef.digestValue))
                     {
                         match = crlRef;
                         break;
