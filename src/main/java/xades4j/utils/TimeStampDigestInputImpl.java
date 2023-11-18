@@ -20,7 +20,6 @@ import java.io.ByteArrayOutputStream;
 import org.apache.xml.security.signature.Reference;
 import org.apache.xml.security.signature.XMLSignatureException;
 import org.apache.xml.security.signature.XMLSignatureInput;
-import org.apache.xml.security.signature.XMLSignatureNodeInput;
 import org.apache.xml.security.transforms.Transform;
 import org.w3c.dom.Document;
 import org.w3c.dom.Node;
@@ -77,7 +76,7 @@ class TimeStampDigestInputImpl implements TimeStampDigestInput
             throw new NullPointerException();
         }
 
-        addToDigestInput(new XMLSignatureNodeInput(n), n.getOwnerDocument());
+        addToDigestInput(new XMLSignatureInput(n), n.getOwnerDocument());
     }
 
     private void addToDigestInput(XMLSignatureInput refData, Document doc) throws CannotAddDataToDigestInputException
@@ -91,9 +90,13 @@ class TimeStampDigestInputImpl implements TimeStampDigestInput
                 // Fall through to add the bytes resulting from the canonicalization.
             }
 
-            digestInput.write(refData.getBytes());
-            digestInput.close();
-
+            if (refData.isByteArray())
+            {
+                digestInput.write(refData.getBytes());
+            } else if (refData.isOctetStream())
+            {
+                StreamUtils.readWrite(refData.getOctetStream(), digestInput);
+            }
         }
         catch (Exception ex)
         {

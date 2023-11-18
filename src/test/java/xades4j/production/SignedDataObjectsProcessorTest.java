@@ -21,7 +21,6 @@ import org.apache.xml.security.signature.ObjectContainer;
 import org.apache.xml.security.signature.Reference;
 import org.apache.xml.security.signature.XMLSignature;
 import org.apache.xml.security.signature.XMLSignatureInput;
-import org.apache.xml.security.signature.XMLSignatureStreamInput;
 import org.apache.xml.security.utils.Constants;
 import org.apache.xml.security.utils.resolver.ResourceResolverContext;
 import org.apache.xml.security.utils.resolver.ResourceResolverSpi;
@@ -32,8 +31,6 @@ import xades4j.algorithms.EnvelopedSignatureTransform;
 import xades4j.utils.DOMHelper;
 import xades4j.utils.SignatureServicesTestBase;
 import xades4j.utils.StringUtils;
-
-import java.io.ByteArrayInputStream;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotEquals;
@@ -120,7 +117,7 @@ public class SignedDataObjectsProcessorTest extends SignatureServicesTestBase
                     @Override
                     public XMLSignatureInput engineResolveURI(ResourceResolverContext context)
                     {
-                        return new XMLSignatureStreamInput(new ByteArrayInputStream(context.uriToResolve.getBytes()));
+                        return new XMLSignatureInput(context.uriToResolve.getBytes());
                     }
 
                     @Override

@@ -17,7 +17,6 @@
 package xades4j.production;
 
 import org.apache.xml.security.signature.XMLSignatureInput;
-import org.apache.xml.security.signature.XMLSignatureStreamInput;
 import org.apache.xml.security.utils.resolver.ResourceResolverContext;
 import org.apache.xml.security.utils.resolver.ResourceResolverException;
 import org.apache.xml.security.utils.resolver.ResourceResolverSpi;
@@ -37,7 +36,6 @@ import javax.xml.namespace.NamespaceContext;
 import javax.xml.xpath.XPath;
 import javax.xml.xpath.XPathConstants;
 import javax.xml.xpath.XPathFactory;
-import java.io.ByteArrayInputStream;
 import java.util.Iterator;
 
 import static org.apache.xml.security.algorithms.MessageDigestAlgorithm.ALGO_ID_DIGEST_SHA256;
@@ -110,7 +108,7 @@ class OtherSignerTests extends SignerTestBase
         @Override
         public XMLSignatureInput engineResolveURI(ResourceResolverContext context) throws ResourceResolverException
         {
-            XMLSignatureInput input = new XMLSignatureStreamInput(new ByteArrayInputStream(context.attr.getValue().getBytes()));
+            XMLSignatureInput input = new XMLSignatureInput(context.attr.getValue().getBytes());
             resolveCount++;
             return input;
         }
