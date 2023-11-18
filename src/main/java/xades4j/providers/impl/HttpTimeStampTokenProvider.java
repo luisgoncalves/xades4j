@@ -45,7 +45,7 @@ public final class HttpTimeStampTokenProvider extends AbstractTimeStampTokenProv
         this.tsaHttpData = tsaHttpData;
         if (tsaHttpData.getUsername() != null) {
             String usrAndPwd = tsaHttpData.getUsername() + ":" + tsaHttpData.getPassword();
-            base64TsaUsrAndPwd = Base64.getMimeEncoder().encodeToString(usrAndPwd.getBytes());
+            base64TsaUsrAndPwd = Base64.getEncoder().encodeToString(usrAndPwd.getBytes());
         } else {
             base64TsaUsrAndPwd = null;
         }

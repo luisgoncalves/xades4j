@@ -17,7 +17,7 @@
 package xades4j.xml.unmarshalling;
 
 import org.apache.xml.security.c14n.Canonicalizer;
-import org.w3c.dom.Node;
+import org.w3c.dom.Element;
 import xades4j.algorithms.Algorithm;
 import xades4j.algorithms.GenericAlgorithm;
 import xades4j.properties.data.BaseXAdESTimeStampData;
@@ -61,7 +61,7 @@ abstract class FromXmlBaseTimeStampConverter<TPropData extends BaseXAdESTimeStam
             }
             else
             {
-                List<Node> params = CollectionUtils.filterByType(xmlCanonMethod.getContent(), Node.class);
+                List params = CollectionUtils.filterByType(xmlCanonMethod.getContent(), Element.class);
                 c14n = new GenericAlgorithm(xmlCanonMethod.getAlgorithm(), params);
             }
             TPropData tsData = createTSData(c14n);

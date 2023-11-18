@@ -16,16 +16,19 @@
  */
 package xades4j.verification;
 
+import xades4j.UnsupportedAlgorithmException;
 import xades4j.properties.QualifyingProperty;
 import xades4j.properties.data.BaseXAdESTimeStampData;
 import xades4j.providers.TimeStampTokenDigestException;
 import xades4j.providers.TimeStampTokenSignatureException;
 import xades4j.providers.TimeStampTokenStructureException;
+import xades4j.providers.TimeStampTokenVerificationException;
 import xades4j.providers.TimeStampVerificationProvider;
 import xades4j.utils.CannotAddDataToDigestInputException;
 import xades4j.utils.TimeStampDigestInput;
 import xades4j.utils.TimeStampDigestInputFactory;
 
+import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.Date;
 import java.util.List;
@@ -59,7 +62,7 @@ abstract class TimeStampVerifierBase<TData extends BaseXAdESTimeStampData> imple
 
             QualifyingProperty prop = addPropSpecificTimeStampInputAndCreateProperty(propData, digestInput, ctx);
             byte[] data = digestInput.getBytes();
-            /**
+            /*
              * Verify the time-stamp tokens on a time-stamp property data object. All
              * the tokens are verified, but the returned time-stamp is from the last token.
              */
@@ -70,14 +73,19 @@ abstract class TimeStampVerifierBase<TData extends BaseXAdESTimeStampData> imple
                 ts = this.tsVerifier.verifyToken(tkn, data);
             }
 
-            // By convention all timestamp property types have a setTime(Date) method
+            // By convention, all timestamp property types have a setTime(Date) method
             Method setTimeMethod = prop.getClass().getMethod("setTime", Date.class);
             setTimeMethod.invoke(prop, ts);
             return prop;
         }
-        catch(Exception ex)
+        catch(UnsupportedAlgorithmException | IllegalAccessException | InvocationTargetException |
+              NoSuchMethodException | TimeStampTokenVerificationException ex)
         {
             throw getEx(ex, this.propName);
+        }
+        catch (final CannotAddDataToDigestInputException e)
+        {
+            throw new TimeStampDigestInputException(this.propName, e);
         }
 
     }

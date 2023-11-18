@@ -151,21 +151,24 @@ public class FileSystemDirectoryCertStore
             CertificateFactory cf) throws CertificateException, CRLException
     {
         File[] dirContents = dir.listFiles();
-      assert dirContents != null;
-      for (File f : dirContents) {
-        if (f.isDirectory())
-          transverseDirToFindContent(f, contentList, certsFilesExts, crlsFilesExts, cf);
-        else if (f.isFile())
-          try {
-            if (hasExt(f, certsFilesExts))
-              contentList.add(cf.generateCertificate(new FileInputStream(f)));
-            else if (hasExt(f, crlsFilesExts))
-              contentList.add(cf.generateCRL(new FileInputStream(f)));
-          } catch (FileNotFoundException ex) {
-            // The file existed right up there! If somehow it doesn't exist
-            // now, nevermind.
-          }
-      }
+        assert dirContents != null;
+        for (File f : dirContents)
+        {
+            if (f.isDirectory())
+                transverseDirToFindContent(f, contentList, certsFilesExts, crlsFilesExts, cf);
+            else if (f.isFile())
+            {
+                try {
+                    if (hasExt(f, certsFilesExts))
+                        contentList.add(cf.generateCertificate(new FileInputStream(f)));
+                    else if (hasExt(f, crlsFilesExts))
+                        contentList.add(cf.generateCRL(new FileInputStream(f)));
+                } catch (FileNotFoundException ex) {
+                    // The file existed right up there! If somehow it doesn't exist
+                    // now, nevermind.
+                }
+            }
+        }
     }
 
     private boolean hasExt(File f, String[] filesExts)

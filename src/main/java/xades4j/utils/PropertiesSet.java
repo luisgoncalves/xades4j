@@ -86,7 +86,7 @@ public class PropertiesSet<T>
             throw new NullPointerException("Property cannot be null");
 
       Set<T> propsOfCurrType = properties.computeIfAbsent(prop.getClass(), k -> new HashSet<>(1));
-      // No properties of this type have been added.
+
       // Repeated instances are not allowed.
         if (!propsOfCurrType.add(prop))
             throw new PropertyTargetException("Property instance already present");
