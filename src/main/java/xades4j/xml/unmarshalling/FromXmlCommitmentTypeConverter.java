@@ -16,16 +16,15 @@
  */
 package xades4j.xml.unmarshalling;
 
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
 import xades4j.properties.CommitmentTypePropertyBase;
 import xades4j.properties.data.CommitmentTypeData;
 import xades4j.xml.bind.xades.XmlAnyType;
 import xades4j.xml.bind.xades.XmlCommitmentTypeIndicationType;
 import xades4j.xml.bind.xades.XmlCommitmentTypeQualifiersListType;
 import xades4j.xml.bind.xades.XmlSignedDataObjectPropertiesType;
-
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
 
 /**
  *
@@ -70,7 +69,7 @@ class FromXmlCommitmentTypeConverter implements SignedDataObjPropFromXmlConv
             XmlCommitmentTypeQualifiersListType xmlQualifiers = xmlCommitment.getCommitmentTypeQualifiers();
             if (xmlQualifiers != null)
             {
-                Collection<String> qualifiers = new ArrayList<>();
+                Collection<Object> qualifiers = new ArrayList<>();
                 for (XmlAnyType xmlQualifier : xmlQualifiers.getCommitmentTypeQualifier())
                 {
                     if (!xmlQualifier.getContent().isEmpty())

@@ -16,9 +16,8 @@
  */
 package xades4j.properties.data;
 
-import xades4j.utils.CollectionUtils;
-
 import java.util.Collection;
+import xades4j.utils.CollectionUtils;
 
 /**
  *
@@ -29,7 +28,7 @@ public final class CommitmentTypeData implements PropertyDataObject
     private String description;
     private final String uri;
     private Collection<String> objReferences;
-    private Collection<String> qualifiers;
+    private Collection<Object> qualifiers;
 
     public CommitmentTypeData(String uri)
     {
@@ -73,11 +72,11 @@ public final class CommitmentTypeData implements PropertyDataObject
         return uri;
     }
     
-    public void setQualifiers(Collection<String> qualifiers){
+    public void setQualifiers(Collection<Object> qualifiers){
         this.qualifiers = qualifiers;
     }
     
-    public Collection<String> getQualifiers(){
+    public Collection<Object> getQualifiers(){
         return this.qualifiers;
     }
 }
