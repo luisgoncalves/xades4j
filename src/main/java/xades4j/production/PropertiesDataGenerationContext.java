@@ -16,14 +16,6 @@
  */
 package xades4j.production;
 
-import xades4j.properties.DataObjectDesc;
-
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.List;
-import java.util.Map;
-
 import org.apache.xml.security.exceptions.XMLSecurityException;
 import org.apache.xml.security.signature.Reference;
 import org.apache.xml.security.signature.SignedInfo;
@@ -31,7 +23,14 @@ import org.apache.xml.security.signature.XMLSignature;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import xades4j.XAdES4jXMLSigException;
+import xades4j.properties.DataObjectDesc;
 import xades4j.utils.DOMHelper;
+
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.List;
+import java.util.Map;
 
 /**
  * Context used during the generation of the properties low-level data (property
@@ -53,7 +52,6 @@ public final class PropertiesDataGenerationContext
      * will be processed.
      *
      * @param targetXmlSignature the target signature
-     * @param algorithmsProvider algorithms in use
      */
     PropertiesDataGenerationContext(XMLSignature targetXmlSignature) throws XAdES4jXMLSigException
     {
@@ -62,7 +60,7 @@ public final class PropertiesDataGenerationContext
         this.referencesMappings = null;
 
         SignedInfo signedInfo = targetXmlSignature.getSignedInfo();
-        List<Reference> refs = new ArrayList<Reference>(signedInfo.getLength());
+        List<Reference> refs = new ArrayList<>(signedInfo.getLength());
         for (int i = 0; i < signedInfo.getLength(); i++)
         {
             try
@@ -80,8 +78,7 @@ public final class PropertiesDataGenerationContext
     /**
      * @param orderedDataObjs
      * @param referencesMappings should be unmodifiable
-     * @param elemInSigDoc
-     * @param algorithmsProvider
+     * @param sigDocument
      */
     PropertiesDataGenerationContext(
             Collection<DataObjectDesc> orderedDataObjs,
@@ -91,7 +88,7 @@ public final class PropertiesDataGenerationContext
         this.referencesMappings = referencesMappings;
         this.sigDocument = sigDocument;
 
-        List<Reference> orderedRefs = new ArrayList<Reference>(orderedDataObjs.size());
+        List<Reference> orderedRefs = new ArrayList<>(orderedDataObjs.size());
         for (DataObjectDesc dataObjDesc : orderedDataObjs)
         {
             orderedRefs.add(referencesMappings.get(dataObjDesc));

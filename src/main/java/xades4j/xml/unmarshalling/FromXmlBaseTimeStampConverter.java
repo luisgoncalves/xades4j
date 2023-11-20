@@ -60,7 +60,7 @@ abstract class FromXmlBaseTimeStampConverter<TPropData extends BaseXAdESTimeStam
             }
             else
             {
-                List params = CollectionUtils.filterByType(xmlCanonMethod.getContent(), Element.class);
+                List<Element> params = CollectionUtils.filterByType(xmlCanonMethod.getContent(), Element.class);
                 c14n = new GenericAlgorithm(xmlCanonMethod.getAlgorithm(), params);
             }
             TPropData tsData = createTSData(c14n);

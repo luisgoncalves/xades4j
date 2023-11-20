@@ -17,14 +17,15 @@
 
 package xades4j.xml.marshalling.algorithms;
 
-import java.util.Collections;
-import java.util.List;
-import java.util.Map;
 import org.apache.xml.security.exceptions.XMLSecurityException;
 import org.apache.xml.security.transforms.params.XPathContainer;
 import org.w3c.dom.Document;
 import org.w3c.dom.Node;
 import xades4j.algorithms.XPathTransform;
+
+import java.util.Collections;
+import java.util.List;
+import java.util.Map;
 
 /**
  * @author Luís
@@ -48,6 +49,6 @@ final class XPathTransformParamsMarshaller implements AlgorithmParametersMarshal
             }
         }
 
-        return Collections.singletonList((Node)xpathContainer.getElement());
+        return Collections.singletonList(xpathContainer.getElement());
     }
 }

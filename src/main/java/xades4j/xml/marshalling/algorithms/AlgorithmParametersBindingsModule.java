@@ -19,12 +19,17 @@ package xades4j.xml.marshalling.algorithms;
 import com.google.inject.AbstractModule;
 import com.google.inject.TypeLiteral;
 import com.google.inject.multibindings.MapBinder;
-import org.w3c.dom.Document;
-import org.w3c.dom.Node;
-import xades4j.algorithms.*;
+import xades4j.algorithms.Algorithm;
+import xades4j.algorithms.CanonicalXMLWithComments;
+import xades4j.algorithms.CanonicalXMLWithoutComments;
+import xades4j.algorithms.EnvelopedSignatureTransform;
+import xades4j.algorithms.ExclusiveCanonicalXMLWithComments;
+import xades4j.algorithms.ExclusiveCanonicalXMLWithoutComments;
+import xades4j.algorithms.GenericAlgorithm;
+import xades4j.algorithms.XPath2FilterTransform;
+import xades4j.algorithms.XPathTransform;
 
 import javax.annotation.Nullable;
-import java.util.List;
 
 /**
  * Contains the Guice bindings for the components on this package.
@@ -59,11 +64,9 @@ public final class AlgorithmParametersBindingsModule extends AbstractModule
     {
         MapBinder<Class<? extends Algorithm>, AlgorithmParametersMarshaller<? extends Algorithm>> mapBinder = MapBinder.newMapBinder(
                 binder(),
-                new TypeLiteral<Class<? extends Algorithm>>()
-                {
+                new TypeLiteral<>() {
                 },
-                new TypeLiteral<AlgorithmParametersMarshaller<? extends Algorithm>>()
-                {
+                new TypeLiteral<>() {
                 });
 
         if (marshallerClass != null)
@@ -72,14 +75,7 @@ public final class AlgorithmParametersBindingsModule extends AbstractModule
         }
         else
         {
-            mapBinder.addBinding(algorithmClass).toInstance(new AlgorithmParametersMarshaller<T>()
-            {
-                @Override
-                public List<Node> marshalParameters(T alg, Document doc)
-                {
-                    return null;
-                }
-            });
+            mapBinder.addBinding(algorithmClass).toInstance((AlgorithmParametersMarshaller<T>) (alg, doc) -> null);
         }
     }
 }

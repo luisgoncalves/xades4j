@@ -8,7 +8,6 @@
 
 package xades4j.xml.bind.xmldsig;
 
-import xades4j.xml.bind.xmldsig.XmlDigestMethodType;
 import jakarta.xml.bind.annotation.XmlAccessType;
 import jakarta.xml.bind.annotation.XmlAccessorType;
 import jakarta.xml.bind.annotation.XmlAttribute;

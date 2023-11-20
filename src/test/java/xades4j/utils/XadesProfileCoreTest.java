@@ -18,9 +18,9 @@ package xades4j.utils;
 
 import com.google.inject.AbstractModule;
 import com.google.inject.Module;
+import jakarta.inject.Inject;
 import org.junit.jupiter.api.Test;
 
-import javax.inject.Inject;
 import java.util.Map;
 import java.util.Set;
 
@@ -102,10 +102,10 @@ class E
 /**
  * @author Luís
  */
-public class XadesProfileCoreTest
+class XadesProfileCoreTest
 {
     @Test
-    public void testGetInstance() throws XadesProfileResolutionException
+    void testGetInstance() throws XadesProfileResolutionException
     {
         Module module = new AbstractModule()
         {
@@ -122,16 +122,14 @@ public class XadesProfileCoreTest
     }
 
     @Test
-    public void testGetInstanceException() throws XadesProfileResolutionException
+    void testGetInstanceException() throws XadesProfileResolutionException
     {
         XadesProfileCore instance = new XadesProfileCore();
-        assertThrows(XadesProfileResolutionException.class, () -> {
-            instance.getInstance(A.class, new Module[0], new Module[0]);
-        });
+        assertThrows(XadesProfileResolutionException.class, () -> instance.getInstance(A.class, new Module[0], new Module[0]));
     }
 
     @Test
-    public void testAddBinding() throws XadesProfileResolutionException
+    void testAddBinding() throws XadesProfileResolutionException
     {
         Module module = new AbstractModule()
         {
@@ -155,7 +153,7 @@ public class XadesProfileCoreTest
     }
 
     @Test
-    public void testAddGenericBinding() throws XadesProfileResolutionException
+    void testAddGenericBinding() throws XadesProfileResolutionException
     {
         XadesProfileCore instance = new XadesProfileCore();
         instance.addGenericBinding(Action.class, ActionOfA.class, A.class);
@@ -164,7 +162,7 @@ public class XadesProfileCoreTest
     }
 
     @Test
-    public void testAddMultibinding() throws Exception
+    void testAddMultibinding() throws Exception
     {
         XadesProfileCore instance = new XadesProfileCore();
         instance.addMultibinding(A.class, AImpl1.class);
@@ -176,7 +174,7 @@ public class XadesProfileCoreTest
     }
 
     @Test
-    public void testAddMapBinding() throws Exception
+     void testAddMapBinding() throws Exception
     {
         XadesProfileCore instance = new XadesProfileCore();
         instance.addMapBinding(A.class, "A1", AImpl1.class);

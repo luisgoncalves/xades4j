@@ -68,7 +68,7 @@ public class XmlOCSPRefsType {
      */
     public List<XmlOCSPRefType> getOCSPRef() {
         if (ocspRef == null) {
-            ocspRef = new ArrayList<XmlOCSPRefType>();
+            ocspRef = new ArrayList<>();
         }
         return this.ocspRef;
     }

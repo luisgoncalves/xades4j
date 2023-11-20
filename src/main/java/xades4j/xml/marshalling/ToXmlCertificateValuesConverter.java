@@ -16,14 +16,15 @@
  */
 package xades4j.xml.marshalling;
 
-import java.util.Collection;
-import java.util.List;
 import org.w3c.dom.Document;
 import xades4j.properties.data.CertificateValuesData;
 import xades4j.properties.data.PropertyDataObject;
 import xades4j.xml.bind.xades.XmlCertificateValuesType;
 import xades4j.xml.bind.xades.XmlEncapsulatedPKIDataType;
 import xades4j.xml.bind.xades.XmlUnsignedPropertiesType;
+
+import java.util.Collection;
+import java.util.List;
 
 /**
  *
@@ -40,7 +41,7 @@ class ToXmlCertificateValuesConverter implements UnsignedPropertyDataToXmlConver
         Collection<byte[]> certValues = ((CertificateValuesData)propData).getData();
 
         XmlCertificateValuesType xmlCertValues = new XmlCertificateValuesType();
-        List xmlCerts = xmlCertValues.getEncapsulatedX509CertificateOrOtherCertificate();
+        List<Object> xmlCerts = xmlCertValues.getEncapsulatedX509CertificateOrOtherCertificate();
 
         for (byte[] encodCer : certValues)
         {

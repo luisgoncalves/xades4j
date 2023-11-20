@@ -27,8 +27,6 @@ import java.security.cert.CertStore;
 import java.security.cert.CertificateException;
 import java.security.cert.CertificateFactory;
 import java.security.cert.CollectionCertStoreParameters;
-import java.security.cert.X509CRL;
-import java.security.cert.X509Certificate;
 import java.util.ArrayList;
 import java.util.Collection;
 
@@ -131,59 +129,54 @@ public class FileSystemDirectoryCertStore
         if (!dir.exists() || !dir.isDirectory())
             throw new IllegalArgumentException("Specified path doesn't exist or doesn't refer a directory");
 
-        Collection contentList = new ArrayList();
+        Collection<Object> contentList = new ArrayList<>();
         transverseDirToFindContent(dir, contentList, certsFilesExts, crlsFilesExts, cf);
 
         try
         {
             this.content = CertStore.getInstance("Collection", new CollectionCertStoreParameters(contentList));
             return;
-        } catch (InvalidAlgorithmParameterException ex)
-        {
-        } catch (NoSuchAlgorithmException ex)
+        } catch (InvalidAlgorithmParameterException | NoSuchAlgorithmException ignored)
         {
         }
-        // ToDo: this is a bit ugly!
+      // ToDo: this is a bit ugly!
         throw new CertificateException("Error getting Collection CertStore");
     }
 
     private void transverseDirToFindContent(
             File dir,
-            Collection contentList,
+            Collection<Object> contentList,
             String[] certsFilesExts,
             String[] crlsFilesExts,
             CertificateFactory cf) throws CertificateException, CRLException
     {
         File[] dirContents = dir.listFiles();
-        for (int i = 0; i < dirContents.length; i++)
+        assert dirContents != null;
+        for (File f : dirContents)
         {
-            File f = dirContents[i];
-
             if (f.isDirectory())
                 transverseDirToFindContent(f, contentList, certsFilesExts, crlsFilesExts, cf);
             else if (f.isFile())
-                try
-                {
+            {
+                try {
                     if (hasExt(f, certsFilesExts))
-                        contentList.add((X509Certificate)cf.generateCertificate(new FileInputStream(f)));
+                        contentList.add(cf.generateCertificate(new FileInputStream(f)));
                     else if (hasExt(f, crlsFilesExts))
-                        contentList.add((X509CRL)cf.generateCRL(new FileInputStream(f)));
-                } catch (FileNotFoundException ex)
-                {
+                        contentList.add(cf.generateCRL(new FileInputStream(f)));
+                } catch (FileNotFoundException ex) {
                     // The file existed right up there! If somehow it doesn't exist
                     // now, nevermind.
                 }
+            }
         }
     }
 
     private boolean hasExt(File f, String[] filesExts)
     {
-        for (int j = 0; j <
-                filesExts.length; j++)
-        {
-            if (f.getName().endsWith('.' + filesExts[j]))
-                return true;
-        }
+      for (String filesExt : filesExts) {
+        if (f.getName().endsWith('.' + filesExt))
+          return true;
+      }
         return false;
     }
 

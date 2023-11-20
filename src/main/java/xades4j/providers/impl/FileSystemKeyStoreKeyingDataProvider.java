@@ -18,7 +18,6 @@ package xades4j.providers.impl;
 
 import java.io.File;
 import java.security.KeyStore;
-import java.security.KeyStore.ProtectionParameter;
 import java.security.Provider;
 import java.security.cert.X509Certificate;
 
@@ -50,18 +49,11 @@ public final class FileSystemKeyStoreKeyingDataProvider extends KeyStoreKeyingDa
 
     private FileSystemKeyStoreKeyingDataProvider(Builder builder)
     {
-        super(new KeyStoreBuilderCreator()
-              {
-                  @Override
-                  public KeyStore.Builder getBuilder(ProtectionParameter loadProtection)
-                  {
-                      return KeyStore.Builder.newInstance(
-                              builder.keyStoreType,
-                              builder.provider,
-                              new File(builder.keyStorePath),
-                              loadProtection);
-                  }
-              },
+        super(loadProtection -> KeyStore.Builder.newInstance(
+                builder.keyStoreType,
+                builder.provider,
+                new File(builder.keyStorePath),
+                loadProtection),
                 builder.certificateSelector,
                 builder.storePasswordProvider,
                 builder.entryPasswordProvider,

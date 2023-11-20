@@ -91,7 +91,7 @@ public class XmlSignedDataObjectPropertiesType {
      */
     public List<XmlDataObjectFormatType> getDataObjectFormat() {
         if (dataObjectFormat == null) {
-            dataObjectFormat = new ArrayList<XmlDataObjectFormatType>();
+            dataObjectFormat = new ArrayList<>();
         }
         return this.dataObjectFormat;
     }
@@ -120,7 +120,7 @@ public class XmlSignedDataObjectPropertiesType {
      */
     public List<XmlCommitmentTypeIndicationType> getCommitmentTypeIndication() {
         if (commitmentTypeIndication == null) {
-            commitmentTypeIndication = new ArrayList<XmlCommitmentTypeIndicationType>();
+            commitmentTypeIndication = new ArrayList<>();
         }
         return this.commitmentTypeIndication;
     }
@@ -149,7 +149,7 @@ public class XmlSignedDataObjectPropertiesType {
      */
     public List<XmlXAdESTimeStampType> getAllDataObjectsTimeStamp() {
         if (allDataObjectsTimeStamp == null) {
-            allDataObjectsTimeStamp = new ArrayList<XmlXAdESTimeStampType>();
+            allDataObjectsTimeStamp = new ArrayList<>();
         }
         return this.allDataObjectsTimeStamp;
     }
@@ -178,7 +178,7 @@ public class XmlSignedDataObjectPropertiesType {
      */
     public List<XmlXAdESTimeStampType> getIndividualDataObjectsTimeStamp() {
         if (individualDataObjectsTimeStamp == null) {
-            individualDataObjectsTimeStamp = new ArrayList<XmlXAdESTimeStampType>();
+            individualDataObjectsTimeStamp = new ArrayList<>();
         }
         return this.individualDataObjectsTimeStamp;
     }

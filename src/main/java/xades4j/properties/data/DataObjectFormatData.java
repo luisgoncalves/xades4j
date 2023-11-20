@@ -16,8 +16,9 @@
  */
 package xades4j.properties.data;
 
-import java.util.Collection;
 import xades4j.properties.ObjectIdentifier;
+
+import java.util.Collection;
 
 /**
  *
@@ -27,7 +28,9 @@ public final class DataObjectFormatData implements PropertyDataObject
 {
     /**/
     private final String objectRef;
-    private String description, mimeType, encoding;
+    private String description;
+    private String mimeType;
+    private String encoding;
     private ObjectIdentifier identifier;
     private Collection<String> documentationUris;
 

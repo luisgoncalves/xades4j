@@ -16,10 +16,6 @@
  */
 package xades4j.xml.marshalling;
 
-import java.util.Collection;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.Map;
 import jakarta.xml.bind.JAXBContext;
 import jakarta.xml.bind.JAXBException;
 import jakarta.xml.bind.Marshaller;
@@ -30,11 +26,16 @@ import xades4j.properties.QualifyingProperty;
 import xades4j.properties.data.GenericDOMData;
 import xades4j.properties.data.PropertyDataObject;
 import xades4j.properties.data.SigAndDataObjsPropertiesData;
+import xades4j.utils.CollectionUtils;
+import xades4j.utils.DOMHelper;
 import xades4j.xml.bind.xades.ObjectFactory;
 import xades4j.xml.bind.xades.XmlSignedPropertiesType;
 import xades4j.xml.bind.xades.XmlUnsignedPropertiesType;
-import xades4j.utils.CollectionUtils;
-import xades4j.utils.DOMHelper;
+
+import java.util.Collection;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  *
@@ -47,7 +48,7 @@ abstract class BaseJAXBMarshaller<TXml>
     {
         try
         {
-            Map<Class, JAXBContext> contexts = new HashMap<Class, JAXBContext>();
+            Map<Class, JAXBContext> contexts = new HashMap<>();
             contexts.put(XmlSignedPropertiesType.class, JAXBContext.newInstance(XmlSignedPropertiesType.class));
             contexts.put(XmlUnsignedPropertiesType.class, JAXBContext.newInstance(XmlUnsignedPropertiesType.class));
             jaxbContexts = Collections.unmodifiableMap(contexts);
@@ -62,7 +63,7 @@ abstract class BaseJAXBMarshaller<TXml>
 
     protected BaseJAXBMarshaller(int convertersInitialSize, String propsElemName)
     {
-        this.converters = new HashMap<Class, QualifyingPropertyDataToXmlConverter<TXml>>(convertersInitialSize);
+        this.converters = new HashMap<>(convertersInitialSize);
         this.propsElemName = propsElemName;
     }
 
@@ -136,8 +137,7 @@ abstract class BaseJAXBMarshaller<TXml>
     private Collection<PropertyDataObject> convert(
             Collection<PropertyDataObject> props,
             TXml xmlProps,
-            Document doc) throws MarshalException
-    {
+            Document doc) {
         Collection<PropertyDataObject> unknownProps = null;
 
         // Convert each property to the corresponding JAXB object. Each converter

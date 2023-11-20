@@ -92,7 +92,7 @@ public class XmlX509DataType {
      */
     public List<Object> getX509IssuerSerialOrX509SKIOrX509SubjectName() {
         if (x509IssuerSerialOrX509SKIOrX509SubjectName == null) {
-            x509IssuerSerialOrX509SKIOrX509SubjectName = new ArrayList<Object>();
+            x509IssuerSerialOrX509SKIOrX509SubjectName = new ArrayList<>();
         }
         return this.x509IssuerSerialOrX509SKIOrX509SubjectName;
     }

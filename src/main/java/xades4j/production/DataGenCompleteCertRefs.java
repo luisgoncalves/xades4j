@@ -16,7 +16,7 @@
  */
 package xades4j.production;
 
-import javax.inject.Inject;
+import jakarta.inject.Inject;
 import xades4j.properties.CompleteCertificateRefsProperty;
 import xades4j.properties.data.CompleteCertificateRefsData;
 import xades4j.properties.data.PropertyDataObject;

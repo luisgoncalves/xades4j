@@ -16,11 +16,16 @@
  */
 package xades4j.providers.impl;
 
-import javax.inject.Inject;
+import jakarta.inject.Inject;
 import org.apache.xml.security.algorithms.MessageDigestAlgorithm;
 import org.bouncycastle.asn1.ASN1ObjectIdentifier;
 import org.bouncycastle.asn1.cmp.PKIStatus;
-import org.bouncycastle.tsp.*;
+import org.bouncycastle.tsp.TSPAlgorithms;
+import org.bouncycastle.tsp.TSPException;
+import org.bouncycastle.tsp.TimeStampRequest;
+import org.bouncycastle.tsp.TimeStampRequestGenerator;
+import org.bouncycastle.tsp.TimeStampResponse;
+import org.bouncycastle.tsp.TimeStampToken;
 import xades4j.UnsupportedAlgorithmException;
 import xades4j.providers.MessageDigestEngineProvider;
 import xades4j.providers.TimeStampTokenGenerationException;
@@ -43,7 +48,7 @@ public abstract class AbstractTimeStampTokenProvider implements TimeStampTokenPr
     private static final Map<String, ASN1ObjectIdentifier> digestUriToOidMappings;
 
     static {
-        digestUriToOidMappings = new HashMap<String, ASN1ObjectIdentifier>(6);
+        digestUriToOidMappings = new HashMap<>(6);
         digestUriToOidMappings.put(MessageDigestAlgorithm.ALGO_ID_DIGEST_NOT_RECOMMENDED_MD5, TSPAlgorithms.MD5);
         digestUriToOidMappings.put(MessageDigestAlgorithm.ALGO_ID_DIGEST_RIPEMD160, TSPAlgorithms.RIPEMD160);
         digestUriToOidMappings.put(MessageDigestAlgorithm.ALGO_ID_DIGEST_SHA1, TSPAlgorithms.SHA1);

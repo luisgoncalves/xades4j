@@ -16,13 +16,7 @@
  */
 package xades4j.properties.data;
 
-import xades4j.utils.DataGetterImpl;
-import xades4j.utils.DataGetter;
-import javax.inject.Inject;
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Set;
+import jakarta.inject.Inject;
 import xades4j.properties.AllDataObjsTimeStampProperty;
 import xades4j.properties.ArchiveTimeStampProperty;
 import xades4j.properties.CertificateValuesProperty;
@@ -31,6 +25,14 @@ import xades4j.properties.RevocationValuesProperty;
 import xades4j.properties.SigAndRefsTimeStampProperty;
 import xades4j.properties.SignatureTimeStampProperty;
 import xades4j.properties.SigningCertificateProperty;
+import xades4j.utils.DataGetter;
+import xades4j.utils.DataGetterImpl;
+
+import java.lang.reflect.InvocationTargetException;
+import java.util.Collection;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Set;
 
 /**
  *
@@ -43,7 +45,7 @@ public class PropertiesDataObjectsStructureVerifier
 
     static
     {
-        structureVerifiers = new HashMap<Class<? extends PropertyDataObject>, PropertyDataObjectStructureVerifier>(10);
+        structureVerifiers = new HashMap<>(10);
         structureVerifiers.put(CommitmentTypeData.class,
                 new CommitmentTypeDataStructureVerifier());
 
@@ -124,7 +126,7 @@ public class PropertiesDataObjectsStructureVerifier
         if (customGlobalVerifiers.isEmpty())
             return;
 
-        DataGetter<PropertyDataObject> dataGetter = new DataGetterImpl<PropertyDataObject>(propsData);
+        DataGetter<PropertyDataObject> dataGetter = new DataGetterImpl<>(propsData);
 
         for (CustomPropertiesDataObjsStructureVerifier customVer : customGlobalVerifiers)
         {
@@ -156,14 +158,12 @@ public class PropertiesDataObjectsStructureVerifier
             throw new PropertyDataStructureVerifierNotAvailableException(propData.getClass().getSimpleName());
         try
         {
-            v = verifierAnnot.value().newInstance();
+            v = verifierAnnot.value().getDeclaredConstructor().newInstance();
             structureVerifiers.put(propData.getClass(), v);
             return v;
-        } catch (InstantiationException ex)
-        {
-        } catch (IllegalAccessException ex)
+        } catch (InstantiationException | IllegalAccessException | NoSuchMethodException | InvocationTargetException ignored)
         {
         }
-        throw new PropertyDataStructureException("cannot create data structure verifier", propData.getClass().getSimpleName());
+      throw new PropertyDataStructureException("cannot create data structure verifier", propData.getClass().getSimpleName());
     }
 }

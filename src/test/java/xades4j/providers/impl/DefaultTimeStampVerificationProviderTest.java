@@ -16,41 +16,39 @@
  */
 package xades4j.providers.impl;
 
-import java.io.ByteArrayOutputStream;
-import java.io.FileInputStream;
-import java.security.KeyStore;
-
 import org.junit.jupiter.api.Test;
 import xades4j.providers.TimeStampTokenDigestException;
 import xades4j.providers.TimeStampTokenVerificationException;
 import xades4j.utils.StreamUtils;
 import xades4j.verification.VerifierTestBase;
 
+import java.io.ByteArrayOutputStream;
+import java.io.FileInputStream;
+import java.security.KeyStore;
+
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
 /**
  * @author Luís
  */
-public class DefaultTimeStampVerificationProviderTest extends VerifierTestBase
+class DefaultTimeStampVerificationProviderTest extends VerifierTestBase
 {
     @Test
-    public void testVerifyTokenSucceeds() throws Exception
+    void testVerifyTokenSucceeds() throws Exception
     {
         byte[] tsDigestInput = "TestDigestInput".getBytes();
         doVerifyToken(tsDigestInput, getTestToken());
     }
 
     @Test
-    public void testVerifyTokenFailsWithDifferentDigestInput() throws Exception
+    void testVerifyTokenFailsWithDifferentDigestInput() throws Exception
     {
         byte[] tsDigestInput = "Invalid".getBytes();
-        assertThrows(TimeStampTokenDigestException.class, () -> {
-            doVerifyToken(tsDigestInput, getTestToken());
-        });
+        assertThrows(TimeStampTokenDigestException.class, () -> doVerifyToken(tsDigestInput, getTestToken()));
     }
 
     @Test
-    public void testVerifyTokenFailsWithTamperedToken() throws Exception
+    void testVerifyTokenFailsWithTamperedToken() throws Exception
     {
         byte[] tsDigestInput = "TestDigestInput".getBytes();
         byte[] tsToken = getTestToken();
@@ -63,9 +61,7 @@ public class DefaultTimeStampVerificationProviderTest extends VerifierTestBase
             }
         }
 
-        assertThrows(TimeStampTokenVerificationException.class, () -> {
-            doVerifyToken(tsDigestInput, tsToken);
-        });
+        assertThrows(TimeStampTokenVerificationException.class, () -> doVerifyToken(tsDigestInput, tsToken));
     }
 
     private byte[] getTestToken() throws Exception

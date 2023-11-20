@@ -30,8 +30,7 @@ class FromXmlSigningCertificateConverter
     @Override
     public void convertFromObjectTree(
             XmlSignedSignaturePropertiesType xmlProps,
-            QualifyingPropertiesDataCollector propertyDataCollector) throws PropertyUnmarshalException
-    {
+            QualifyingPropertiesDataCollector propertyDataCollector) {
         XmlCertIDListType xmlSigningCertificate = xmlProps.getSigningCertificate();
         if (null == xmlSigningCertificate)
             return;

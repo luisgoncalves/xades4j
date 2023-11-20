@@ -68,7 +68,7 @@ public class XmlOtherCertStatusValuesType {
      */
     public List<XmlAnyType> getOtherValue() {
         if (otherValue == null) {
-            otherValue = new ArrayList<XmlAnyType>();
+            otherValue = new ArrayList<>();
         }
         return this.otherValue;
     }

@@ -16,21 +16,17 @@
  */
 package xades4j.production;
 
-import org.apache.xml.security.c14n.Canonicalizer;
 import org.apache.xml.security.signature.XMLSignatureInput;
-import org.apache.xml.security.utils.Constants;
-import org.apache.xml.security.utils.DOMNamespaceContext;
 import org.apache.xml.security.utils.resolver.ResourceResolverContext;
 import org.apache.xml.security.utils.resolver.ResourceResolverException;
 import org.apache.xml.security.utils.resolver.ResourceResolverSpi;
+import org.junit.jupiter.api.Test;
 import org.w3c.dom.Attr;
-import org.w3c.dom.Node;
+import org.w3c.dom.Document;
+import org.w3c.dom.Element;
 import xades4j.algorithms.EnvelopedSignatureTransform;
 import xades4j.algorithms.ExclusiveCanonicalXMLWithoutComments;
 import xades4j.properties.DataObjectDesc;
-import org.junit.jupiter.api.Test;
-import org.w3c.dom.Document;
-import org.w3c.dom.Element;
 import xades4j.properties.QualifyingProperty;
 import xades4j.providers.ValidationDataProvider;
 import xades4j.providers.impl.ValidationDataFromCertValidationProvider;
@@ -40,7 +36,6 @@ import javax.xml.namespace.NamespaceContext;
 import javax.xml.xpath.XPath;
 import javax.xml.xpath.XPathConstants;
 import javax.xml.xpath.XPathFactory;
-
 import java.util.Iterator;
 
 import static org.apache.xml.security.algorithms.MessageDigestAlgorithm.ALGO_ID_DIGEST_SHA256;
@@ -48,16 +43,17 @@ import static org.apache.xml.security.algorithms.MessageDigestAlgorithm.ALGO_ID_
 import static org.apache.xml.security.c14n.Canonicalizer.ALGO_ID_C14N_EXCL_OMIT_COMMENTS;
 import static org.apache.xml.security.c14n.Canonicalizer.ALGO_ID_C14N_OMIT_COMMENTS;
 import static org.apache.xml.security.signature.XMLSignature.ALGO_ID_SIGNATURE_RSA_SHA512;
-import static org.apache.xml.security.utils.Constants.*;
-import static org.junit.jupiter.api.Assertions.*;
+import static org.apache.xml.security.utils.Constants.SignatureSpecNS;
+import static org.apache.xml.security.utils.Constants._TAG_SIGNATURE;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 /**
  * @author Luís
  */
-public class OtherSignerTests extends SignerTestBase
+class OtherSignerTests extends SignerTestBase
 {
     @Test
-    public void testSignAndAppendAsFirstChild() throws Exception
+    void testSignAndAppendAsFirstChild() throws Exception
     {
         Document doc = getTestDocument();
         Element root = doc.getDocumentElement();
@@ -74,7 +70,7 @@ public class OtherSignerTests extends SignerTestBase
     }
 
     @Test
-    public void testSignWithManifest() throws Exception
+    void testSignWithManifest() throws Exception
     {
         Document doc = getTestDocument();
         Element root = doc.getDocumentElement();
@@ -90,7 +86,7 @@ public class OtherSignerTests extends SignerTestBase
     }
 
     @Test
-    public void testSignUsingCustomResolver() throws Exception
+    void testSignUsingCustomResolver() throws Exception
     {
         Document doc = getNewDocument();
         XadesSigner signer = new XadesBesSigningProfile(keyingProviderMy).newSigner();
@@ -125,7 +121,7 @@ public class OtherSignerTests extends SignerTestBase
     }
 
     @Test
-    public void testSignatureAlgorithms() throws Exception
+    void testSignatureAlgorithms() throws Exception
     {
         Document doc = getTestDocument();
         Element elemToSign = doc.getDocumentElement();

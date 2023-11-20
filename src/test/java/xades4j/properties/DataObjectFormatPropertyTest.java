@@ -29,13 +29,13 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 /**
  * @author Luís
  */
-public class DataObjectFormatPropertyTest
+class DataObjectFormatPropertyTest
 {
     /**
      * Test of withIdentifier method, of class DataObjectFormatProperty.
      */
     @Test
-    public void testWithIdentifier_String()
+    void testWithIdentifier_String()
     {
         String uri = "uri";
 
@@ -50,7 +50,8 @@ public class DataObjectFormatPropertyTest
     /**
      * Test of withIdentifier method, of class DataObjectFormatProperty.
      */
-    public void testWithIdentifier_String_IdentifierType()
+    @Test
+    void testWithIdentifier_String_IdentifierType()
     {
         String identifier = "uri";
         IdentifierType type = IdentifierType.URI;
@@ -66,7 +67,7 @@ public class DataObjectFormatPropertyTest
      * Test of withDocumentationUri method, of class DataObjectFormatProperty.
      */
     @Test
-    public void testWithDocumentationUri()
+    void testWithDocumentationUri()
     {
         String documentationUri = "doc";
         DataObjectFormatProperty instance = new DataObjectFormatProperty();
@@ -75,16 +76,16 @@ public class DataObjectFormatPropertyTest
         assertTrue(instance.getDocumentationUris().isEmpty());
 
         instance.withDocumentationUri(documentationUri);
-        assertEquals(instance.getDocumentationUris().size(), 1);
+        assertEquals(1, instance.getDocumentationUris().size());
     }
 
     /**
      * Test of withDocumentationUris method, of class DataObjectFormatProperty.
      */
     @Test
-    public void testWithDocumentationUris()
+    void testWithDocumentationUris()
     {
-        Collection<String> documentationUris = new ArrayList<String>(1);
+        Collection<String> documentationUris = new ArrayList<>(1);
         DataObjectFormatProperty instance = new DataObjectFormatProperty();
 
         instance.withDocumentationUris(documentationUris);
@@ -100,11 +101,9 @@ public class DataObjectFormatPropertyTest
      * Test of withDocumentationUris method, of class DataObjectFormatProperty.
      */
     @Test
-    public void testWithDocumentationUris_Null()
+    void testWithDocumentationUris_Null()
     {
         DataObjectFormatProperty instance = new DataObjectFormatProperty();
-        assertThrows(NullPointerException.class, () -> {
-            instance.withDocumentationUris(null);
-        });
+        assertThrows(NullPointerException.class, () -> instance.withDocumentationUris(null));
     }
 }

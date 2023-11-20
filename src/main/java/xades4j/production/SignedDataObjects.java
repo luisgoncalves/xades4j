@@ -67,13 +67,13 @@ public final class SignedDataObjects
      */
     public SignedDataObjects()
     {
-        this.dataObjs = new ArrayList<DataObjectDesc>();
+        this.dataObjs = new ArrayList<>();
         this.baseUriForRelativeReferences = null;
         this.hasNullURIReference = false;
-        this.resourceResolvers = new ArrayList<ResourceResolverSpi>(0);
+        this.resourceResolvers = new ArrayList<>(0);
 
-        this.signedDataObjsProperties = new PropertiesSet<SignedDataObjectProperty>(0);
-        this.unsignedDataObjsProperties = new PropertiesSet<UnsignedDataObjectProperty>(0);
+        this.signedDataObjsProperties = new PropertiesSet<>(0);
+        this.unsignedDataObjsProperties = new PropertiesSet<>(0);
     }
 
     /**

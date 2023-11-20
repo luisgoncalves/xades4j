@@ -16,15 +16,7 @@
  */
 package xades4j.verification;
 
-import javax.inject.Inject;
-import java.io.InputStream;
-import java.security.cert.X509CRL;
-import java.security.cert.X509Certificate;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Date;
-import java.util.List;
-import java.util.Set;
+import jakarta.inject.Inject;
 import org.apache.xml.security.exceptions.XMLSecurityException;
 import org.apache.xml.security.signature.Reference;
 import org.apache.xml.security.signature.SignedInfo;
@@ -33,15 +25,15 @@ import org.apache.xml.security.signature.XMLSignatureException;
 import org.apache.xml.security.utils.resolver.ResourceResolverSpi;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
-import xades4j.properties.QualifyingProperty;
-import xades4j.properties.UnsignedSignatureProperty;
 import xades4j.XAdES4jException;
 import xades4j.XAdES4jXMLSigException;
+import xades4j.production.XadesSignatureFormatExtender;
+import xades4j.properties.QualifyingProperty;
+import xades4j.properties.SignatureTimeStampProperty;
+import xades4j.properties.UnsignedProperties;
+import xades4j.properties.UnsignedSignatureProperty;
 import xades4j.properties.data.CertRef;
 import xades4j.properties.data.PropertyDataObject;
-import xades4j.properties.UnsignedProperties;
-import xades4j.production.XadesSignatureFormatExtender;
-import xades4j.properties.SignatureTimeStampProperty;
 import xades4j.properties.data.SignatureTimeStampData;
 import xades4j.properties.data.SigningCertificateData;
 import xades4j.providers.CertificateValidationProvider;
@@ -56,6 +48,14 @@ import xades4j.verification.RawSignatureVerifier.RawSignatureVerifierContext;
 import xades4j.verification.SignatureUtils.ReferencesRes;
 import xades4j.xml.unmarshalling.QualifyingPropertiesUnmarshaller;
 import xades4j.xml.unmarshalling.UnmarshalException;
+
+import java.io.InputStream;
+import java.security.cert.X509Certificate;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Date;
+import java.util.List;
+import java.util.Set;
 
 /**
  *
@@ -285,13 +285,13 @@ class XadesVerifierImpl implements XadesVerifier
         QualifyingPropertyVerificationContext ctx = new QualifyingPropertyVerificationContext(
                 signature,
                 new QualifyingPropertyVerificationContext.CertificationChainData(
-                new ArrayList<X509Certificate>(0),
-                new ArrayList<X509CRL>(0),
+                        new ArrayList<>(0),
+                        new ArrayList<>(0),
                 null,
                 this.x500NameStyleProvider),
                 /**/
                 new QualifyingPropertyVerificationContext.SignedObjectsData(
-                new ArrayList<RawDataObjectDesc>(0),
+                        new ArrayList<>(0),
                 signature));
         Collection<PropertyInfo> props = this.qualifyingPropertiesVerifier.verifyProperties(sigTsData, ctx);
         QualifyingProperty sigTs = props.iterator().next().getProperty();
@@ -377,76 +377,30 @@ class XadesVerifierImpl implements XadesVerifier
         formsExtensionTransitions = new FormExtensionPropsCollector[forms.length][forms.length];
 
         // BES/EPES -> T
-        FormExtensionPropsCollector tPropsCol = new FormExtensionPropsCollector()
-        {
-
-            @Override
-            public void addProps(
-                    Collection<UnsignedSignatureProperty> usp,
-                    XAdESVerificationResult res)
-            {
-                PropertiesUtils.addXadesTProperties(usp);
-            }
-        };
+        FormExtensionPropsCollector tPropsCol = (usp, res) -> PropertiesUtils.addXadesTProperties(usp);
         formsExtensionTransitions[XAdESForm.BES.ordinal()][XAdESForm.T.ordinal()] = tPropsCol;
         formsExtensionTransitions[XAdESForm.EPES.ordinal()][XAdESForm.T.ordinal()] = tPropsCol;
 
         // BES/EPES -> C
-        FormExtensionPropsCollector cAndTPropsCol = new FormExtensionPropsCollector()
-        {
-
-            @Override
-            public void addProps(
-                    Collection<UnsignedSignatureProperty> usp,
-                    XAdESVerificationResult res)
-            {
-                PropertiesUtils.addXadesCProperties(usp, res.getValidationData());
-                PropertiesUtils.addXadesTProperties(usp);
-            }
+        FormExtensionPropsCollector cAndTPropsCol = (usp, res) -> {
+            PropertiesUtils.addXadesCProperties(usp, res.getValidationData());
+            PropertiesUtils.addXadesTProperties(usp);
         };
         formsExtensionTransitions[XAdESForm.BES.ordinal()][XAdESForm.C.ordinal()] = cAndTPropsCol;
         formsExtensionTransitions[XAdESForm.EPES.ordinal()][XAdESForm.C.ordinal()] = cAndTPropsCol;
 
         // T -> C
-        FormExtensionPropsCollector cPropsCol = new FormExtensionPropsCollector()
-        {
-
-            @Override
-            public void addProps(
-                    Collection<UnsignedSignatureProperty> usp,
-                    XAdESVerificationResult res)
-            {
-                PropertiesUtils.addXadesCProperties(usp, res.getValidationData());
-            }
-        };
+        FormExtensionPropsCollector cPropsCol = (usp, res) -> PropertiesUtils.addXadesCProperties(usp, res.getValidationData());
         formsExtensionTransitions[XAdESForm.T.ordinal()][XAdESForm.C.ordinal()] = cPropsCol;
 
         // C -> X
-        FormExtensionPropsCollector xPropsCol = new FormExtensionPropsCollector()
-        {
-
-            @Override
-            public void addProps(
-                    Collection<UnsignedSignatureProperty> usp,
-                    XAdESVerificationResult res)
-            {
-                PropertiesUtils.addXadesXProperties(usp);
-            }
-        };
+        FormExtensionPropsCollector xPropsCol = (usp, res) -> PropertiesUtils.addXadesXProperties(usp);
         formsExtensionTransitions[XAdESForm.C.ordinal()][XAdESForm.X.ordinal()] = xPropsCol;
 
         // C -> X-L
-        FormExtensionPropsCollector xlAndXPropsCol = new FormExtensionPropsCollector()
-        {
-
-            @Override
-            public void addProps(
-                    Collection<UnsignedSignatureProperty> usp,
-                    XAdESVerificationResult res)
-            {
-                PropertiesUtils.addXadesXLProperties(usp, res.getValidationData());
-                PropertiesUtils.addXadesXProperties(usp);
-            }
+        FormExtensionPropsCollector xlAndXPropsCol = (usp, res) -> {
+            PropertiesUtils.addXadesXLProperties(usp, res.getValidationData());
+            PropertiesUtils.addXadesXProperties(usp);
         };
         formsExtensionTransitions[XAdESForm.C.ordinal()][XAdESForm.X_L.ordinal()] = xlAndXPropsCol;
     }
@@ -491,7 +445,7 @@ class XadesVerifierImpl implements XadesVerifier
                 throw new InvalidFormExtensionException(actualForm, finalForm);
             }
 
-            Collection<UnsignedSignatureProperty> usp = new ArrayList<UnsignedSignatureProperty>(3);
+            Collection<UnsignedSignatureProperty> usp = new ArrayList<>(3);
             finalFormPropsColector.addProps(usp, res);
 
             formatExtender.enrichSignature(res.getXmlSignature(), new UnsignedProperties(usp));

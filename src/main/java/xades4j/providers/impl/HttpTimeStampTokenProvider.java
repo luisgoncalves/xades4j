@@ -16,10 +16,9 @@
  */
 package xades4j.providers.impl;
 
-import javax.inject.Inject;
+import jakarta.inject.Inject;
 import xades4j.providers.MessageDigestEngineProvider;
 import xades4j.providers.TimeStampTokenGenerationException;
-import xades4j.utils.Base64;
 
 import java.io.BufferedInputStream;
 import java.io.ByteArrayOutputStream;
@@ -27,6 +26,7 @@ import java.io.IOException;
 import java.io.OutputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.util.Base64;
 
 /**
  * Implementation of {@code AbstractTimeStampTokenProvider} that gets time-stamp tokens
@@ -45,7 +45,7 @@ public final class HttpTimeStampTokenProvider extends AbstractTimeStampTokenProv
         this.tsaHttpData = tsaHttpData;
         if (tsaHttpData.getUsername() != null) {
             String usrAndPwd = tsaHttpData.getUsername() + ":" + tsaHttpData.getPassword();
-            base64TsaUsrAndPwd = Base64.encodeBytes(usrAndPwd.getBytes());
+            base64TsaUsrAndPwd = Base64.getEncoder().encodeToString(usrAndPwd.getBytes());
         } else {
             base64TsaUsrAndPwd = null;
         }
@@ -69,21 +69,17 @@ public final class HttpTimeStampTokenProvider extends AbstractTimeStampTokenProv
                 throw new TimeStampTokenGenerationException(String.format("TSA returned HTTP %d %s", connection.getResponseCode(), connection.getResponseMessage()));
             }
 
-            BufferedInputStream input = null;
-            try {
-                input = new BufferedInputStream(connection.getInputStream());
-                ByteArrayOutputStream baos = new ByteArrayOutputStream();
-                byte[] buffer = new byte[1024];
-                int len;
-                while ((len = input.read(buffer)) > -1) {
-                    baos.write(buffer, 0, len);
-                }
-                baos.flush();
-
-                return baos.toByteArray();
-            } finally {
-                if (input != null) input.close();
+          try (BufferedInputStream input = new BufferedInputStream(connection.getInputStream())) {
+            ByteArrayOutputStream baos = new ByteArrayOutputStream();
+            byte[] buffer = new byte[1024];
+            int len;
+            while ((len = input.read(buffer)) > -1) {
+              baos.write(buffer, 0, len);
             }
+            baos.flush();
+
+            return baos.toByteArray();
+          }
         } catch (IOException ex) {
             throw new TimeStampTokenGenerationException("Error when connecting to the TSA", ex);
         } finally {

@@ -16,20 +16,30 @@
  */
 package xades4j.algorithms;
 
-import java.util.List;
-
 import org.junit.jupiter.api.Test;
 import xades4j.algorithms.XPath2FilterTransform.XPath2Filter;
 
-import static org.junit.jupiter.api.Assertions.*;
+import java.util.List;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertSame;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+
 
 /**
  * @author Luís
  */
-public class XPath2FilterTransformTest
+class XPath2FilterTransformTest
 {
     @Test
-    public void testCreation()
+     void testChangeFiltersListFails()
+    {
+        XPath2FilterTransform t = XPath2Filter.intersect("1").union("2");
+        assertThrows(UnsupportedOperationException.class, () -> t.getFilters().clear());
+    }
+
+    @Test
+    void testCreation()
     {
         XPath2FilterTransform t1 = XPath2Filter.intersect("1");
         XPath2FilterTransform t2 = t1.union("2");
@@ -52,14 +62,5 @@ public class XPath2FilterTransformTest
         f = filters.get(2);
         assertEquals("3", f.getXPath());
         assertEquals("subtract", f.getFilterType());
-    }
-
-    @Test
-    public void testChangeFiltersListFails()
-    {
-        XPath2FilterTransform t = XPath2Filter.intersect("1").union("2");
-        assertThrows(UnsupportedOperationException.class, () -> {
-            t.getFilters().clear();
-        });
     }
 }

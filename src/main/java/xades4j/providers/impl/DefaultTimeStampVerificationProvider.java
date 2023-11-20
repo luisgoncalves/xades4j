@@ -16,18 +16,7 @@
  */
 package xades4j.providers.impl;
 
-import javax.inject.Inject;
-import java.io.IOException;
-import java.security.MessageDigest;
-import java.security.Provider;
-import java.security.cert.CertificateException;
-import java.security.cert.X509Certificate;
-import java.util.Arrays;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.LinkedList;
-import java.util.Map;
+import jakarta.inject.Inject;
 import org.apache.xml.security.algorithms.MessageDigestAlgorithm;
 import org.bouncycastle.asn1.ASN1InputStream;
 import org.bouncycastle.asn1.ASN1ObjectIdentifier;
@@ -54,6 +43,16 @@ import xades4j.providers.TimeStampTokenVerificationException;
 import xades4j.providers.TimeStampVerificationProvider;
 import xades4j.providers.ValidationData;
 
+import java.io.IOException;
+import java.security.MessageDigest;
+import java.security.Provider;
+import java.security.cert.CertificateException;
+import java.security.cert.X509Certificate;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.LinkedList;
+import java.util.Map;
+
 /**
  * Default implementation of {@code TimeStampVerificationProvider}. It verifies
  * the token signature, including the TSA certificate, and the digest imprint.
@@ -68,7 +67,7 @@ public class DefaultTimeStampVerificationProvider implements TimeStampVerificati
 
     static
     {
-        digestOidToUriMappings = new HashMap<ASN1ObjectIdentifier, String>(5);
+        digestOidToUriMappings = new HashMap<>(5);
         digestOidToUriMappings.put(TSPAlgorithms.MD5, MessageDigestAlgorithm.ALGO_ID_DIGEST_NOT_RECOMMENDED_MD5);
         digestOidToUriMappings.put(TSPAlgorithms.RIPEMD160, MessageDigestAlgorithm.ALGO_ID_DIGEST_RIPEMD160);
         digestOidToUriMappings.put(TSPAlgorithms.SHA1, MessageDigestAlgorithm.ALGO_ID_DIGEST_SHA1);
@@ -106,11 +105,9 @@ public class DefaultTimeStampVerificationProvider implements TimeStampVerificati
     public Date verifyToken(byte[] timeStampToken, byte[] tsDigestInput) throws TimeStampTokenVerificationException
     {
         TimeStampToken tsToken;
-        try
+        try(ASN1InputStream asn1is = new ASN1InputStream(timeStampToken))
         {
-            ASN1InputStream asn1is = new ASN1InputStream(timeStampToken);
             ContentInfo tsContentInfo = ContentInfo.getInstance(asn1is.readObject());
-            asn1is.close();
             tsToken = new TimeStampToken(tsContentInfo);
         } catch (IOException ex)
         {
@@ -124,7 +121,7 @@ public class DefaultTimeStampVerificationProvider implements TimeStampVerificati
         try
         {
             /* Validate the TSA certificate */
-            LinkedList<X509Certificate> certs = new LinkedList<X509Certificate>();
+            LinkedList<X509Certificate> certs = new LinkedList<>();
             for (Object certHolder : tsToken.getCertificates().getMatches(new AllCertificatesSelector()))
             {
                 certs.add(this.x509CertificateConverter.getCertificate((X509CertificateHolder) certHolder));
@@ -165,8 +162,7 @@ public class DefaultTimeStampVerificationProvider implements TimeStampVerificati
         {
             String digestAlgUri = uriForDigest(tsTokenInfo.getMessageImprintAlgOID());
             MessageDigest md = messageDigestProvider.getEngine(digestAlgUri);
-
-            if (!Arrays.equals(md.digest(tsDigestInput), tsTokenInfo.getMessageImprintDigest()))
+            if (!MessageDigest.isEqual(md.digest(tsDigestInput), tsTokenInfo.getMessageImprintDigest()))
             {
                 throw new TimeStampTokenDigestException();
             }

@@ -39,10 +39,10 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 /**
  * @author Luís
  */
-public class PKCS11KeyStoreKeyingDataProviderTest extends SignerTestBase
+class PKCS11KeyStoreKeyingDataProviderTest extends SignerTestBase
 {
     @Test
-    public void testCertAndKeyMatch() throws Exception
+    void testCertAndKeyMatch() throws Exception
     {
         assumePtCcPkcs11();
 

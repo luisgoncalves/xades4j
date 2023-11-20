@@ -16,7 +16,6 @@
  */
 package xades4j.production;
 
-import org.apache.xml.security.stax.impl.resourceResolvers.ResolverHttp;
 import org.apache.xml.security.utils.resolver.implementations.ResolverDirectHTTP;
 import org.apache.xml.security.utils.resolver.implementations.ResolverLocalFilesystem;
 import org.junit.jupiter.api.Test;
@@ -33,23 +32,20 @@ import xades4j.properties.DataObjectDesc;
 import xades4j.properties.DataObjectFormatProperty;
 import xades4j.properties.IndividualDataObjsTimeStampProperty;
 import xades4j.properties.SignerRoleProperty;
-import xades4j.providers.SignaturePropertiesCollector;
-import xades4j.providers.SignaturePropertiesProvider;
-import xades4j.providers.impl.HttpTsaConfiguration;
 
 import java.io.File;
 
 /**
  * @author Luís
  */
-public class SignerBESTest extends SignerTestBase
+class SignerBESTest extends SignerTestBase
 {
     public SignerBESTest()
     {
     }
 
     @Test
-    public void testSignBES() throws Exception
+    void testSignBES() throws Exception
     {
         Document doc1 = getTestDocument();
         Document doc2 = getDocument("content.xml");
@@ -70,7 +66,7 @@ public class SignerBESTest extends SignerTestBase
     }
 
     @Test
-    public void testSignBESWithEllipticCurveKey() throws Exception
+    void testSignBESWithEllipticCurveKey() throws Exception
     {
         Document doc = getTestDocument();
         Element elemToSign = doc.getDocumentElement();
@@ -84,7 +80,7 @@ public class SignerBESTest extends SignerTestBase
     }
 
     @Test
-    public void testSignBESExternalRes() throws Exception
+    void testSignBESExternalRes() throws Exception
     {
         Document doc = getNewDocument();
         XadesSigner signer = new XadesBesSigningProfile(keyingProviderNist).with(DEFAULT_TEST_TSA).newSigner();
@@ -101,22 +97,16 @@ public class SignerBESTest extends SignerTestBase
     }
 
     @Test
-    public void testSignBESWithCounterSig() throws Exception
+    void testSignBESWithCounterSig() throws Exception
     {
         Document doc = getTestDocument();
         Element elemToSign = doc.getDocumentElement();
 
         XadesBesSigningProfile profile = new XadesBesSigningProfile(keyingProviderMy);
         final XadesSigner counterSigner = profile.newSigner();
-        profile.withSignaturePropertiesProvider(new SignaturePropertiesProvider()
-        {
-            @Override
-            public void provideProperties(
-                    SignaturePropertiesCollector signedPropsCol)
-            {
-                signedPropsCol.addCounterSignature(new CounterSignatureProperty(counterSigner));
-                signedPropsCol.setSignerRole(new SignerRoleProperty("CounterSignature maniac"));
-            }
+        profile.withSignaturePropertiesProvider(signedPropsCol -> {
+            signedPropsCol.addCounterSignature(new CounterSignatureProperty(counterSigner));
+            signedPropsCol.setSignerRole(new SignerRoleProperty("CounterSignature maniac"));
         });
         XadesSigner signer = profile.newSigner();
 
@@ -129,7 +119,7 @@ public class SignerBESTest extends SignerTestBase
     }
 
     @Test
-    public void testSignBESDetachedWithXPathAndNamespaces() throws Exception
+    void testSignBESDetachedWithXPathAndNamespaces() throws Exception
     {
         Document doc = getNewDocument();
 

@@ -17,16 +17,16 @@
 
 package xades4j.production;
 
-import xades4j.algorithms.Algorithm;
 import xades4j.UnsupportedAlgorithmException;
+import xades4j.algorithms.Algorithm;
 import xades4j.properties.QualifyingProperty;
 import xades4j.properties.data.BaseXAdESTimeStampData;
-import xades4j.utils.TimeStampDigestInput;
 import xades4j.properties.data.PropertyDataObject;
 import xades4j.providers.TimeStampTokenGenerationException;
 import xades4j.providers.TimeStampTokenProvider;
 import xades4j.providers.TimeStampTokenProvider.TimeStampTokenRes;
 import xades4j.utils.CannotAddDataToDigestInputException;
+import xades4j.utils.TimeStampDigestInput;
 import xades4j.utils.TimeStampDigestInputFactory;
 
 /**
@@ -39,7 +39,7 @@ abstract class DataGenBaseTimeStamp<TProp extends QualifyingProperty> implements
     private final TimeStampTokenProvider tsTokenProvider;
     private final TimeStampDigestInputFactory tsInputFactory;
 
-    public DataGenBaseTimeStamp(SignatureAlgorithms algorithms, TimeStampTokenProvider tsTokenProvider, TimeStampDigestInputFactory tsInputFactory)
+    protected DataGenBaseTimeStamp(SignatureAlgorithms algorithms, TimeStampTokenProvider tsTokenProvider, TimeStampDigestInputFactory tsInputFactory)
     {
         this.algorithms = algorithms;
         this.tsTokenProvider = tsTokenProvider;

@@ -16,7 +16,6 @@
  */
 package xades4j.verification;
 
-import java.util.Collection;
 import org.w3c.dom.Element;
 import xades4j.properties.AllDataObjsCommitmentTypeProperty;
 import xades4j.properties.CommitmentTypeProperty;
@@ -24,6 +23,8 @@ import xades4j.properties.CommitmentTypePropertyBase;
 import xades4j.properties.QualifyingProperty;
 import xades4j.properties.data.CommitmentTypeData;
 import xades4j.verification.QualifyingPropertyVerificationContext.SignedObjectsData;
+
+import java.util.Collection;
 
 /**
  * XAdES section G.2.2.9
@@ -36,7 +37,8 @@ class CommitmentTypeVerifier implements QualifyingPropertyVerifier<CommitmentTyp
             CommitmentTypeData propData,
             QualifyingPropertyVerificationContext ctx) throws CommitmentTypeVerificationException
     {
-        String uri = propData.getUri(), desc = propData.getDescription();
+        String uri = propData.getUri();
+        String desc = propData.getDescription();
         Collection<String> objsReferences = propData.getObjReferences();
 
         CommitmentTypePropertyBase property;

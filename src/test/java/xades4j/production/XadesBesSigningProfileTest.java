@@ -16,12 +16,13 @@
  */
 package xades4j.production;
 
+import org.junit.jupiter.api.Test;
+import xades4j.providers.KeyingDataProvider;
+import xades4j.utils.XadesProfileResolutionException;
+
 import java.security.PrivateKey;
 import java.security.cert.X509Certificate;
 import java.util.List;
-import org.junit.jupiter.api.Test;
-import xades4j.utils.XadesProfileResolutionException;
-import xades4j.providers.KeyingDataProvider;
 
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
@@ -29,10 +30,10 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
  *
  * @author Luís
  */
-public class XadesBesSigningProfileTest
+class XadesBesSigningProfileTest
 {
     @Test
-    public void testGetSigner() throws XadesProfileResolutionException
+    void testGetSigner() throws XadesProfileResolutionException
     {
         XadesSigner s = new XadesBesSigningProfile(new KeyingDataProvider()
         {

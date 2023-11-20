@@ -42,7 +42,7 @@ public abstract class BaseXAdESTimeStampData implements PropertyDataObject
     protected BaseXAdESTimeStampData(Algorithm c14n)
     {
         this.c14n = c14n;
-        this.timeStampTokens = new ArrayList<byte[]>(1);
+        this.timeStampTokens = new ArrayList<>(1);
     }
 
     /**
@@ -60,6 +60,9 @@ public abstract class BaseXAdESTimeStampData implements PropertyDataObject
         return this.c14n;
     }
 
+   /**
+    * @deprecated
+    */
     @Deprecated
     public String getCanonicalizationAlgorithmUri()
     {

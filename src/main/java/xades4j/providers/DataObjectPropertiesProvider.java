@@ -32,5 +32,5 @@ public interface DataObjectPropertiesProvider
      * Asks the provider to add properties to the given data object description.
      * @param dataObj the target data object description
      */
-    public void provideProperties(DataObjectDesc dataObj);
+    void provideProperties(DataObjectDesc dataObj);
 }

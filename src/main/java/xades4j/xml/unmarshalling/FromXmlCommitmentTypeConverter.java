@@ -20,11 +20,11 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 import xades4j.properties.CommitmentTypePropertyBase;
-import xades4j.xml.bind.xades.XmlCommitmentTypeIndicationType;
-import xades4j.xml.bind.xades.XmlSignedDataObjectPropertiesType;
 import xades4j.properties.data.CommitmentTypeData;
 import xades4j.xml.bind.xades.XmlAnyType;
+import xades4j.xml.bind.xades.XmlCommitmentTypeIndicationType;
 import xades4j.xml.bind.xades.XmlCommitmentTypeQualifiersListType;
+import xades4j.xml.bind.xades.XmlSignedDataObjectPropertiesType;
 
 /**
  *
@@ -69,7 +69,7 @@ class FromXmlCommitmentTypeConverter implements SignedDataObjPropFromXmlConv
             XmlCommitmentTypeQualifiersListType xmlQualifiers = xmlCommitment.getCommitmentTypeQualifiers();
             if (xmlQualifiers != null)
             {
-                Collection qualifiers = new ArrayList();
+                Collection<Object> qualifiers = new ArrayList<>();
                 for (XmlAnyType xmlQualifier : xmlQualifiers.getCommitmentTypeQualifier())
                 {
                     if (!xmlQualifier.getContent().isEmpty())
@@ -79,7 +79,7 @@ class FromXmlCommitmentTypeConverter implements SignedDataObjPropFromXmlConv
                             throw new PropertyUnmarshalException("Qualifiers with multiple children are not support", CommitmentTypePropertyBase.PROP_NAME);
                         }
 
-                        qualifiers.add(xmlQualifier.getContent().get(0));
+                        qualifiers.add((String) xmlQualifier.getContent().get(0));
                     }
                 }
                 

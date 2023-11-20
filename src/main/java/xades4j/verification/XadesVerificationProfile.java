@@ -145,7 +145,7 @@ public final class XadesVerificationProfile
      * @return a {@code XadesVerifier} accordingly to this profile.
      * @throws XadesProfileResolutionException if the dependencies of the signer (direct and indirect) cannot be resolved
      */
-    public final XadesVerifier newVerifier() throws XadesProfileResolutionException
+    public XadesVerifier newVerifier() throws XadesProfileResolutionException
     {
         XadesVerifierImpl v = profileCore.getInstance(XadesVerifierImpl.class, overridableModules, sealedModules);
         v.setAcceptUnknownProperties(acceptUnknownProperties);

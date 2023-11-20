@@ -10,12 +10,11 @@ import xades4j.utils.PtCcSigningCertificateSelector;
 
 import java.security.KeyStore;
 import java.security.cert.X509Certificate;
-import java.util.List;
 
-public class PtCcSignerTests extends SignerTestBase
+class PtCcSignerTests extends SignerTestBase
 {
     @Test
-    public void testSignTPtCC() throws Exception
+    void testSignTPtCC() throws Exception
     {
         assumePtCcPkcs11();
 
@@ -33,7 +32,7 @@ public class PtCcSignerTests extends SignerTestBase
     }
 
     @Test
-    public void testSignBesPtCCWindowsMy() throws Exception
+    void testSignBesPtCCWindowsMy() throws Exception
     {
         assumeWindows();
         assumePtCcPkcs11();
@@ -51,28 +50,16 @@ public class PtCcSignerTests extends SignerTestBase
     {
         public WindowsMyKeyingDataProvider()
         {
-            super(new KeyStoreBuilderCreator()
-            {
-                @Override
-                public KeyStore.Builder getBuilder(KeyStore.ProtectionParameter loadProtection)
+            super(loadProtection -> KeyStore.Builder.newInstance("Windows-MY", null, loadProtection), availableCertificates -> {
+                for (SigningCertificateSelector.Entry e : availableCertificates)
                 {
-                    return KeyStore.Builder.newInstance("Windows-MY", null, loadProtection);
-                }
-            }, new SigningCertificateSelector()
-            {
-                @Override
-                public Entry selectCertificate(List<Entry> availableCertificates)
-                {
-                    for (Entry e : availableCertificates)
+                    if (e.getCertificate().getIssuerX500Principal().getName().contains("EC de Assinatura Digital"))
                     {
-                        if (e.getCertificate().getIssuerDN().getName().contains("EC de Assinatura Digital"))
-                        {
-                            return e;
-                        }
+                        return e;
                     }
-
-                    throw new RuntimeException("Cannot find PT CC certificate");
                 }
+
+                throw new RuntimeException("Cannot find PT CC certificate");
             }, new DirectPasswordProvider(""), null, true);
         }
 

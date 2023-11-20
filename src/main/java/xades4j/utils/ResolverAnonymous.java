@@ -16,14 +16,14 @@
  */
 package xades4j.utils;
 
-import java.io.InputStream;
 import org.apache.xml.security.signature.XMLSignatureInput;
 import org.apache.xml.security.utils.resolver.ResourceResolverContext;
-import org.apache.xml.security.utils.resolver.ResourceResolverException;
 import org.apache.xml.security.utils.resolver.ResourceResolverSpi;
 
+import java.io.InputStream;
+
 /**
- * Resource resolver for References without an URI attribute.
+ * Resource resolver for References without a URI attribute.
  * 
  * @author luis
  */
@@ -38,7 +38,7 @@ public final class ResolverAnonymous extends ResourceResolverSpi
     }
     
     @Override
-    public XMLSignatureInput engineResolveURI(ResourceResolverContext context) throws ResourceResolverException
+    public XMLSignatureInput engineResolveURI(ResourceResolverContext context)
     {
         return new XMLSignatureInput(this.data);
     }

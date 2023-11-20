@@ -18,7 +18,7 @@ package xades4j.production;
 
 import xades4j.properties.UnsignedProperties;
 import xades4j.properties.SignedProperties;
-import javax.inject.Inject;
+import jakarta.inject.Inject;
 import java.util.ArrayList;
 import java.util.Collection;
 import xades4j.properties.QualifyingProperty;

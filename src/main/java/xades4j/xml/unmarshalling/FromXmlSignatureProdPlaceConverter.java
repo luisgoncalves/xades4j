@@ -29,8 +29,7 @@ class FromXmlSignatureProdPlaceConverter implements SignedSigPropFromXmlConv
     @Override
     public void convertFromObjectTree(
             XmlSignedSignaturePropertiesType xmlProps,
-            QualifyingPropertiesDataCollector propertyDataCollector) throws PropertyUnmarshalException
-    {
+            QualifyingPropertiesDataCollector propertyDataCollector) {
         XmlSignatureProductionPlaceType xmlSigProdPlace = xmlProps.getSignatureProductionPlace();
         if (null == xmlSigProdPlace)
             return;

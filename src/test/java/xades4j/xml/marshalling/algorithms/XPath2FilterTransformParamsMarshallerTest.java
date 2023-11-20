@@ -22,7 +22,7 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
  *
  * @author Luís
  */
-public class XPath2FilterTransformParamsMarshallerTest {
+class XPath2FilterTransformParamsMarshallerTest {
 
     private Document doc;
     private XPath2FilterTransformParamsMarshaller sut;
@@ -34,7 +34,7 @@ public class XPath2FilterTransformParamsMarshallerTest {
     }
 
     @Test
-    public void testMarshalXPathParametersWithNamespacePrefixes() throws Exception {
+    void testMarshalXPathParametersWithNamespacePrefixes() throws Exception {
         XPath2FilterTransform xpath = XPath2Filter
                 .intersect("foo:elem1")
                 .union("bar:elem2")

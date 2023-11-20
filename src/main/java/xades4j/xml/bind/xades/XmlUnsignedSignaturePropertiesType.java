@@ -131,7 +131,7 @@ public class XmlUnsignedSignaturePropertiesType
     public List<XmlCounterSignatureType> getCounterSignature()
     {
         if (counterSignature == null)
-            counterSignature = new ArrayList<XmlCounterSignatureType>();
+            counterSignature = new ArrayList<>();
         return this.counterSignature;
     }
 
@@ -160,7 +160,7 @@ public class XmlUnsignedSignaturePropertiesType
     public List<XmlXAdESTimeStampType> getSignatureTimeStamp()
     {
         if (signatureTimeStamp == null)
-            signatureTimeStamp = new ArrayList<XmlXAdESTimeStampType>();
+            signatureTimeStamp = new ArrayList<>();
         return this.signatureTimeStamp;
     }
 
@@ -293,7 +293,7 @@ public class XmlUnsignedSignaturePropertiesType
     public List<XmlXAdESTimeStampType> getSigAndRefsTimeStamp()
     {
         if (sigAndRefsTimeStamp == null)
-            sigAndRefsTimeStamp = new ArrayList<XmlXAdESTimeStampType>();
+            sigAndRefsTimeStamp = new ArrayList<>();
         return this.sigAndRefsTimeStamp;
     }
 
@@ -322,7 +322,7 @@ public class XmlUnsignedSignaturePropertiesType
     public List<XmlXAdESTimeStampType> getRefsOnlyTimeStamp()
     {
         if (refsOnlyTimeStamp == null)
-            refsOnlyTimeStamp = new ArrayList<XmlXAdESTimeStampType>();
+            refsOnlyTimeStamp = new ArrayList<>();
         return this.refsOnlyTimeStamp;
     }
 
@@ -455,7 +455,7 @@ public class XmlUnsignedSignaturePropertiesType
     public List<XmlXAdESTimeStampType> getArchiveTimeStamp()
     {
         if (archiveTimeStamp == null)
-            archiveTimeStamp = new ArrayList<XmlXAdESTimeStampType>();
+            archiveTimeStamp = new ArrayList<>();
         return this.archiveTimeStamp;
     }
 
@@ -484,7 +484,7 @@ public class XmlUnsignedSignaturePropertiesType
     public List<Object> getAny()
     {
         if (any == null)
-            any = new ArrayList<Object>();
+            any = new ArrayList<>();
         return this.any;
     }
 

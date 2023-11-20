@@ -68,7 +68,7 @@ public class XmlCRLRefsType {
      */
     public List<XmlCRLRefType> getCRLRef() {
         if (crlRef == null) {
-            crlRef = new ArrayList<XmlCRLRefType>();
+            crlRef = new ArrayList<>();
         }
         return this.crlRef;
     }

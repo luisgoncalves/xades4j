@@ -68,7 +68,7 @@ public class XmlSigPolicyQualifiersListType {
      */
     public List<XmlAnyType> getSigPolicyQualifier() {
         if (sigPolicyQualifier == null) {
-            sigPolicyQualifier = new ArrayList<XmlAnyType>();
+            sigPolicyQualifier = new ArrayList<>();
         }
         return this.sigPolicyQualifier;
     }

@@ -70,7 +70,7 @@ public class XmlDocumentationReferencesType {
      */
     public List<String> getDocumentationReference() {
         if (documentationReference == null) {
-            documentationReference = new ArrayList<String>();
+            documentationReference = new ArrayList<>();
         }
         return this.documentationReference;
     }

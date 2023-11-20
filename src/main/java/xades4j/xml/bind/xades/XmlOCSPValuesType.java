@@ -68,7 +68,7 @@ public class XmlOCSPValuesType {
      */
     public List<XmlEncapsulatedPKIDataType> getEncapsulatedOCSPValue() {
         if (encapsulatedOCSPValue == null) {
-            encapsulatedOCSPValue = new ArrayList<XmlEncapsulatedPKIDataType>();
+            encapsulatedOCSPValue = new ArrayList<>();
         }
         return this.encapsulatedOCSPValue;
     }

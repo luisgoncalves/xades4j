@@ -16,30 +16,29 @@
  */
 package xades4j.production;
 
-import xades4j.properties.UnsignedProperties;
-import java.util.ArrayList;
-import java.util.Collection;
 import org.apache.xml.security.signature.XMLSignature;
 import org.apache.xml.security.utils.Constants;
 import org.junit.jupiter.api.Test;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.NodeList;
-import static xades4j.production.SignerTestBase.keyingProviderMy;
 import xades4j.properties.ArchiveTimeStampProperty;
 import xades4j.properties.CounterSignatureProperty;
 import xades4j.properties.SignatureTimeStampProperty;
+import xades4j.properties.UnsignedProperties;
 import xades4j.properties.UnsignedSignatureProperty;
-import xades4j.providers.impl.HttpTsaConfiguration;
+
+import java.util.ArrayList;
+import java.util.Collection;
 
 /**
  *
  * @author Luís
  */
-public class XadesSignatureFormatExtenderImplTest extends SignerTestBase
+class XadesSignatureFormatExtenderImplTest extends SignerTestBase
 {
     @Test
-    public void testEnrichSignatureWithNestedCounterSig() throws Exception
+    void testEnrichSignatureWithNestedCounterSig() throws Exception
     {
         Document doc = getDocument("document.signed.bes.cs.xml");
         NodeList signatures = doc.getElementsByTagNameNS(Constants.SignatureSpecNS, Constants._TAG_SIGNATURE);
@@ -51,7 +50,7 @@ public class XadesSignatureFormatExtenderImplTest extends SignerTestBase
         XadesSignatureFormatExtender extender = new XadesFormatExtenderProfile().getFormatExtender();
 
         XMLSignature sig = new XMLSignature(signatureNode, signatureNode.getOwnerDocument().getBaseURI());
-        Collection<UnsignedSignatureProperty> usp = new ArrayList<UnsignedSignatureProperty>(1);
+        Collection<UnsignedSignatureProperty> usp = new ArrayList<>(1);
         usp.add(new CounterSignatureProperty(signer));
         
         extender.enrichSignature(sig, new UnsignedProperties(usp));
@@ -60,7 +59,7 @@ public class XadesSignatureFormatExtenderImplTest extends SignerTestBase
     }
     
     @Test
-    public void testEnrichSignatureWithT() throws Exception
+    void testEnrichSignatureWithT() throws Exception
     {
         Document doc = getDocument("document.signed.bes.xml");
         Element signatureNode = (Element)doc.getElementsByTagNameNS(Constants.SignatureSpecNS, "Signature").item(0);
@@ -68,7 +67,7 @@ public class XadesSignatureFormatExtenderImplTest extends SignerTestBase
         XadesSignatureFormatExtender instance = new XadesFormatExtenderProfile().with(DEFAULT_TEST_TSA).getFormatExtender();
 
         XMLSignature sig = new XMLSignature(signatureNode, "");
-        Collection<UnsignedSignatureProperty> usp = new ArrayList<UnsignedSignatureProperty>(1);
+        Collection<UnsignedSignatureProperty> usp = new ArrayList<>(1);
         usp.add(new SignatureTimeStampProperty());
 
         instance.enrichSignature(sig, new UnsignedProperties(usp));
@@ -77,7 +76,7 @@ public class XadesSignatureFormatExtenderImplTest extends SignerTestBase
     }
 
     @Test
-    public void testEnrichSignatureWithA() throws Exception
+    void testEnrichSignatureWithA() throws Exception
     {
         Document doc = getDocument("document.verified.c.xl.xml");
         Element signatureNode = (Element)doc.getElementsByTagNameNS(Constants.SignatureSpecNS, "Signature").item(0);
@@ -85,7 +84,7 @@ public class XadesSignatureFormatExtenderImplTest extends SignerTestBase
         XadesSignatureFormatExtender instance = new XadesFormatExtenderProfile().with(DEFAULT_TEST_TSA).getFormatExtender();
 
         XMLSignature sig = new XMLSignature(signatureNode, "");
-        Collection<UnsignedSignatureProperty> usp = new ArrayList<UnsignedSignatureProperty>(1);
+        Collection<UnsignedSignatureProperty> usp = new ArrayList<>(1);
         usp.add(new ArchiveTimeStampProperty());
 
         instance.enrichSignature(sig, new UnsignedProperties(usp));

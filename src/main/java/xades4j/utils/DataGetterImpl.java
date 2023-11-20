@@ -16,13 +16,14 @@
  */
 package xades4j.utils;
 
+import xades4j.utils.CollectionUtils.Predicate;
+
 import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
-import xades4j.utils.CollectionUtils.Predicate;
 
 /**
  *
@@ -41,17 +42,12 @@ public class DataGetterImpl<T> implements DataGetter<T>
 
     private Map<Class, Set<T>> getAllByType(Collection<T> all)
     {
-        Map<Class, Set<T>> res = new HashMap<Class, Set<T>>();
+        Map<Class, Set<T>> res = new HashMap<>();
 
         for (T e : all)
         {
-            Set<T> typeTs = res.get(e.getClass());
-            if (null == typeTs)
-            {
-                typeTs = new HashSet<T>();
-                res.put(e.getClass(), typeTs);
-            }
-            typeTs.add(e);
+          Set<T> typeTs = res.computeIfAbsent(e.getClass(), k -> new HashSet<>());
+          typeTs.add(e);
         }
         return res;
     }

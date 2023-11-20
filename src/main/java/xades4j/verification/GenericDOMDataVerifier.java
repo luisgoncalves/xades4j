@@ -16,12 +16,13 @@
  */
 package xades4j.verification;
 
-import javax.inject.Inject;
-import java.util.Map;
-import javax.xml.namespace.QName;
+import jakarta.inject.Inject;
 import org.w3c.dom.Element;
 import xades4j.properties.QualifyingProperty;
 import xades4j.properties.data.GenericDOMData;
+
+import javax.xml.namespace.QName;
+import java.util.Map;
 
 /**
  *

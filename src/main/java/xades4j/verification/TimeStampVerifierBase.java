@@ -16,9 +16,6 @@
  */
 package xades4j.verification;
 
-import java.lang.reflect.Method;
-import java.util.Date;
-import java.util.List;
 import xades4j.UnsupportedAlgorithmException;
 import xades4j.properties.QualifyingProperty;
 import xades4j.properties.data.BaseXAdESTimeStampData;
@@ -31,6 +28,11 @@ import xades4j.utils.CannotAddDataToDigestInputException;
 import xades4j.utils.TimeStampDigestInput;
 import xades4j.utils.TimeStampDigestInputFactory;
 
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
+import java.util.Date;
+import java.util.List;
+
 /**
  *
  * @author Luís
@@ -42,7 +44,7 @@ abstract class TimeStampVerifierBase<TData extends BaseXAdESTimeStampData> imple
     private final TimeStampDigestInputFactory tsInputFactory;
     private final String propName;
 
-    public TimeStampVerifierBase(TimeStampVerificationProvider tsVerifier, TimeStampDigestInputFactory tsInputFactory, String propName)
+    protected TimeStampVerifierBase(TimeStampVerificationProvider tsVerifier, TimeStampDigestInputFactory tsInputFactory, String propName)
     {
         this.tsVerifier = tsVerifier;
         this.tsInputFactory = tsInputFactory;
@@ -60,7 +62,7 @@ abstract class TimeStampVerifierBase<TData extends BaseXAdESTimeStampData> imple
 
             QualifyingProperty prop = addPropSpecificTimeStampInputAndCreateProperty(propData, digestInput, ctx);
             byte[] data = digestInput.getBytes();
-            /**
+            /*
              * Verify the time-stamp tokens on a time-stamp property data object. All
              * the tokens are verified, but the returned time-stamp is from the last token.
              */
@@ -71,28 +73,21 @@ abstract class TimeStampVerifierBase<TData extends BaseXAdESTimeStampData> imple
                 ts = this.tsVerifier.verifyToken(tkn, data);
             }
 
-            // By convention all timestamp property types have a setTime(Date) method
+            // By convention, all timestamp property types have a setTime(Date) method
             Method setTimeMethod = prop.getClass().getMethod("setTime", Date.class);
             setTimeMethod.invoke(prop, ts);
             return prop;
         }
-        catch(UnsupportedAlgorithmException ex)
+        catch(UnsupportedAlgorithmException | IllegalAccessException | InvocationTargetException |
+              NoSuchMethodException | TimeStampTokenVerificationException ex)
         {
             throw getEx(ex, this.propName);
         }
-        catch (CannotAddDataToDigestInputException ex)
+        catch (final CannotAddDataToDigestInputException e)
         {
-            throw new TimeStampDigestInputException(this.propName, ex);
+            throw new TimeStampDigestInputException(this.propName, e);
         }
-        catch (TimeStampTokenVerificationException ex)
-        {
-            throw getEx(ex, this.propName);
-        }
-        catch (Exception ex)
-        {
-            // Exceptions related to setTimeMethod.invoke(...)
-            throw getEx(ex, this.propName);
-        }
+
     }
 
     protected abstract QualifyingProperty addPropSpecificTimeStampInputAndCreateProperty(

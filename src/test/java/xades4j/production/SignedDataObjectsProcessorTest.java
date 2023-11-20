@@ -17,28 +17,26 @@
 package xades4j.production;
 
 import org.apache.xml.security.signature.Manifest;
-import org.apache.xml.security.signature.XMLSignatureInput;
-import org.apache.xml.security.utils.resolver.ResourceResolverContext;
-import org.apache.xml.security.utils.resolver.ResourceResolverException;
-import org.apache.xml.security.utils.resolver.ResourceResolverSpi;
-import org.w3c.dom.Element;
-import xades4j.algorithms.EnvelopedSignatureTransform;
-import org.apache.xml.security.utils.Constants;
-
-import java.util.Map;
-
 import org.apache.xml.security.signature.ObjectContainer;
 import org.apache.xml.security.signature.Reference;
 import org.apache.xml.security.signature.XMLSignature;
+import org.apache.xml.security.signature.XMLSignatureInput;
+import org.apache.xml.security.utils.Constants;
+import org.apache.xml.security.utils.resolver.ResourceResolverContext;
+import org.apache.xml.security.utils.resolver.ResourceResolverSpi;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.w3c.dom.Document;
-import xades4j.properties.DataObjectDesc;
+import xades4j.algorithms.EnvelopedSignatureTransform;
 import xades4j.utils.DOMHelper;
 import xades4j.utils.SignatureServicesTestBase;
 import xades4j.utils.StringUtils;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotEquals;
+import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 /**
  * @author Luís
@@ -52,7 +50,7 @@ public class SignedDataObjectsProcessorTest extends SignatureServicesTestBase
     }
 
     @Test
-    public void testProcess() throws Exception
+    void testProcess() throws Exception
     {
         Document doc = getNewDocument();
 
@@ -102,7 +100,7 @@ public class SignedDataObjectsProcessorTest extends SignatureServicesTestBase
     }
 
     @Test
-    public void testAddManifest() throws Exception
+    void testAddManifest() throws Exception
     {
         Document doc = getNewDocument();
 
@@ -179,7 +177,7 @@ public class SignedDataObjectsProcessorTest extends SignatureServicesTestBase
     }
 
     @Test
-    public void testAddNullReference() throws Exception
+    void testAddNullReference() throws Exception
     {
         Document doc = SignatureServicesTestBase.getNewDocument();
 
@@ -201,13 +199,11 @@ public class SignedDataObjectsProcessorTest extends SignatureServicesTestBase
     }
 
     @Test
-    public void testAddMultipleNullReferencesFails() throws Exception
+    void testAddMultipleNullReferencesFails() throws Exception
     {
         SignedDataObjects dataObjsDescs = new SignedDataObjects();
-        assertThrows(IllegalStateException.class, () -> {
-            dataObjsDescs
-                    .withSignedDataObject(new AnonymousDataObjectReference("data1".getBytes()))
-                    .withSignedDataObject(new AnonymousDataObjectReference("data2".getBytes()));
-        });
+        assertThrows(IllegalStateException.class, () -> dataObjsDescs
+                .withSignedDataObject(new AnonymousDataObjectReference("data1".getBytes()))
+                .withSignedDataObject(new AnonymousDataObjectReference("data2".getBytes())));
     }
 }

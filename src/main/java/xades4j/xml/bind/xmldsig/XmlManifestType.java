@@ -79,7 +79,7 @@ public class XmlManifestType {
      */
     public List<XmlReferenceType> getReference() {
         if (reference == null) {
-            reference = new ArrayList<XmlReferenceType>();
+            reference = new ArrayList<>();
         }
         return this.reference;
     }

@@ -22,7 +22,6 @@ import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import xades4j.properties.IdentifierType;
 import xades4j.properties.ObjectIdentifier;
-import xades4j.properties.SignaturePolicyBase;
 import xades4j.properties.SignaturePolicyIdentifierProperty;
 import xades4j.providers.SignaturePolicyInfoProvider;
 
@@ -31,29 +30,22 @@ import java.io.ByteArrayInputStream;
 /**
  * @author Luís
  */
-public class SignerEPESTest extends SignerTestBase
+class SignerEPESTest extends SignerTestBase
 {
     @ParameterizedTest
     @CsvSource({
             "http://www.example.com/policy, document.signed.epes_1.xml",
             ", document.signed.epes_2.xml"
     })
-    public void testSignEPES(String locationUrl, String output) throws Exception
+    void testSignEPES(String locationUrl, String output) throws Exception
     {
         Document doc = getTestDocument();
         Element elemToSign = doc.getDocumentElement();
 
-        SignaturePolicyInfoProvider policyInfoProvider = new SignaturePolicyInfoProvider()
-        {
-            @Override
-            public SignaturePolicyBase getSignaturePolicy()
-            {
-                return new SignaturePolicyIdentifierProperty(
-                        new ObjectIdentifier("oid:/1.2.4.0.9.4.5", IdentifierType.OIDAsURI, "Policy description"),
-                        new ByteArrayInputStream("Test policy input stream".getBytes()))
-                        .withLocationUrl(locationUrl);
-            }
-        };
+        SignaturePolicyInfoProvider policyInfoProvider = () -> new SignaturePolicyIdentifierProperty(
+                new ObjectIdentifier("oid:/1.2.4.0.9.4.5", IdentifierType.OIDAsURI, "Policy description"),
+                new ByteArrayInputStream("Test policy input stream".getBytes()))
+                .withLocationUrl(locationUrl);
 
         SignerEPES signer = (SignerEPES) new XadesEpesSigningProfile(keyingProviderMy, policyInfoProvider).newSigner();
         new Enveloped(signer).sign(elemToSign);

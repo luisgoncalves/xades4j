@@ -19,7 +19,7 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 /**
  * @author Luís
  */
-public class XPathTransformParamsMarshallerTest
+class XPathTransformParamsMarshallerTest
 {
     private Document doc;
     private XPathTransformParamsMarshaller sut;
@@ -32,7 +32,7 @@ public class XPathTransformParamsMarshallerTest
     }
 
     @Test
-    public void testMarshalXPathParametersWithNamespacePrefixes() throws Exception
+    void testMarshalXPathParametersWithNamespacePrefixes() throws Exception
     {
         XPathTransform xpath = new XPathTransform("foo:elem1/bar:elem2")
                 .withNamespace("foo", "http://test.xades4j/ns1")

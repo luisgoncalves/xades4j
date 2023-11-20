@@ -16,12 +16,16 @@
  */
 package xades4j.providers.impl;
 
-import xades4j.providers.*;
+import xades4j.XAdES4jException;
+import xades4j.providers.CertificateValidationProvider;
+import xades4j.providers.ValidationData;
+import xades4j.providers.ValidationDataException;
+import xades4j.providers.ValidationDataProvider;
+
 import java.security.cert.X509CertSelector;
 import java.security.cert.X509Certificate;
 import java.util.Date;
 import java.util.List;
-import xades4j.XAdES4jException;
 
 /**
  * An implementation of {@code ValidationDataProvider} that obtains the validation

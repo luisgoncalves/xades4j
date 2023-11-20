@@ -16,7 +16,7 @@
  */
 package xades4j.verification;
 
-import javax.inject.Inject;
+import jakarta.inject.Inject;
 import java.util.Collection;
 import xades4j.properties.AllDataObjsTimeStampProperty;
 import xades4j.utils.CannotAddDataToDigestInputException;

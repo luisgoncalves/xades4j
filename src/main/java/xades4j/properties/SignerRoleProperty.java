@@ -16,6 +16,7 @@
  */
 package xades4j.properties;
 
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.Set;
@@ -36,25 +37,19 @@ public final class SignerRoleProperty extends SignedSignatureProperty
 
     public SignerRoleProperty()
     {
-        this.claimedRoles = new HashSet<String>();
+        this.claimedRoles = new HashSet<>();
     }
 
     public SignerRoleProperty(String... claimedRoles)
     {
         this();
-        for (String role : claimedRoles)
-        {
-            this.claimedRoles.add(role);
-        }
+        this.claimedRoles.addAll(Arrays.asList(claimedRoles));
     }
 
     public SignerRoleProperty(Collection<String> claimedRoles)
     {
         this();
-        for (String role : claimedRoles)
-        {
-            this.claimedRoles.add(role);
-        }
+        this.claimedRoles.addAll(claimedRoles);
     }
 
     public SignerRoleProperty withClaimedRole(String role)

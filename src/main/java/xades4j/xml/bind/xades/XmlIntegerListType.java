@@ -8,13 +8,14 @@
 
 package xades4j.xml.bind.xades;
 
-import java.math.BigInteger;
-import java.util.ArrayList;
-import java.util.List;
 import jakarta.xml.bind.annotation.XmlAccessType;
 import jakarta.xml.bind.annotation.XmlAccessorType;
 import jakarta.xml.bind.annotation.XmlElement;
 import jakarta.xml.bind.annotation.XmlType;
+
+import java.math.BigInteger;
+import java.util.ArrayList;
+import java.util.List;
 
 
 /**
@@ -69,7 +70,7 @@ public class XmlIntegerListType {
      */
     public List<BigInteger> getInt() {
         if (_int == null) {
-            _int = new ArrayList<BigInteger>();
+            _int = new ArrayList<>();
         }
         return this._int;
     }

@@ -16,21 +16,22 @@
  */
 package xades4j.utils;
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
-import java.io.InputStream;
-import java.io.OutputStream;
+import org.w3c.dom.Document;
+import org.w3c.dom.Element;
+import org.w3c.dom.Node;
+import xades4j.providers.impl.HttpTsaConfiguration;
+
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.transform.TransformerFactory;
 import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.stream.StreamResult;
-import org.w3c.dom.Document;
-import org.w3c.dom.Element;
-import org.w3c.dom.Node;
-import xades4j.providers.impl.HttpTsaConfiguration;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.InputStream;
+import java.io.OutputStream;
 
 /**
  * @author Luís
@@ -39,7 +40,7 @@ public class SignatureServicesTestBase
 {
     static protected HttpTsaConfiguration DEFAULT_TEST_TSA = new HttpTsaConfiguration("http://tss.accv.es:8318/tsa");
 
-    static private DocumentBuilder db;
+    static private final DocumentBuilder db;
 
     static
     {
@@ -86,12 +87,9 @@ public class SignatureServicesTestBase
     public static Document getDocument(String fileName) throws Exception
     {
         String path = toPlatformSpecificXMLDirFilePath(fileName);
-        FileInputStream fis = new FileInputStream(path);
-        try {
-            return parseDocument(fis);
-        } finally {
-            fis.close();
-        }
+      try (FileInputStream fis = new FileInputStream(path)) {
+        return parseDocument(fis);
+      }
     }
 
     public static Document parseDocument(InputStream is) throws Exception
@@ -111,12 +109,9 @@ public class SignatureServicesTestBase
     protected static void outputDocument(Document doc, String fileName) throws Exception
     {
         File outDir = ensureOutputDir();
-        FileOutputStream out = new FileOutputStream(new File(outDir, fileName));
-        try {
-            outputDOM(doc, out);
-        } finally {
-            out.close();
-        }
+      try (FileOutputStream out = new FileOutputStream(new File(outDir, fileName))) {
+        outputDOM(doc, out);
+      }
 
     }
 

@@ -32,8 +32,8 @@ import xades4j.verification.XAdESVerificationResult;
  */
 public final class CounterSignatureProperty extends UnsignedSignatureProperty
 {
-    public static final String COUNTER_SIGNATURE_TYPE_URI = "http://uri.etsi.org/01903#CountersignedSignature",
-            PROP_NAME = "CounterSignature";
+    public static final String COUNTER_SIGNATURE_TYPE_URI = "http://uri.etsi.org/01903#CountersignedSignature";
+    public static final String PROP_NAME = "CounterSignature";
     private XadesSigner counterSigSigner;
     private SignedDataObjects signedDataObjectsForCounterSig;
     private XAdESVerificationResult verificationResult;

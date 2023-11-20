@@ -16,10 +16,11 @@
  */
 package xades4j.verification;
 
-import java.util.Date;
 import xades4j.properties.QualifyingProperty;
 import xades4j.properties.SigningTimeProperty;
 import xades4j.properties.data.SigningTimeData;
+
+import java.util.Date;
 
 /**
  *
@@ -32,7 +33,8 @@ class SigningTimeVerifier implements QualifyingPropertyVerifier<SigningTimeData>
             SigningTimeData propData,
             QualifyingPropertyVerificationContext ctx) throws SigningTimeVerificationException
     {
-        Date now = new Date(), sigTime = propData.getSigningTime().getTime();
+        Date now = new Date();
+        Date sigTime = propData.getSigningTime().getTime();
         if (!sigTime.before(now))
             throw new SigningTimeVerificationException(sigTime, now);
         return new SigningTimeProperty(propData.getSigningTime());

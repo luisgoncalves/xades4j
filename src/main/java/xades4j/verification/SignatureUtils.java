@@ -70,7 +70,7 @@ class SignatureUtils
     {
         SignedInfo signedInfo = signature.getSignedInfo();
 
-        List<RawDataObjectDesc> dataObjsReferences = new ArrayList<RawDataObjectDesc>(signedInfo.getLength() - 1);
+        List<RawDataObjectDesc> dataObjsReferences = new ArrayList<>(signedInfo.getLength() - 1);
         Reference signedPropsRef = null;
 
         for (int i = 0; i < signedInfo.getLength(); i++)
@@ -193,7 +193,7 @@ class SignatureUtils
     private static Collection<Element> getXAdESChildElements(
             Element xmlObjectElem)
     {
-        Collection<Element> xadesElems = new ArrayList<Element>(1);
+        Collection<Element> xadesElems = new ArrayList<>(1);
 
         Node child = xmlObjectElem.getFirstChild();
         while (child != null)

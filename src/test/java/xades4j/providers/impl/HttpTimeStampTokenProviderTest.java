@@ -22,10 +22,10 @@ import xades4j.providers.TimeStampTokenProvider.TimeStampTokenRes;
 
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
-public class HttpTimeStampTokenProviderTest
+class HttpTimeStampTokenProviderTest
 {
     @Test
-    public void testGetTimeStampToken() throws Exception
+    void testGetTimeStampToken() throws Exception
     {
         byte[] tsDigestInput = "TestDigestInput".getBytes();
         String digestAlgUri = MessageDigestAlgorithm.ALGO_ID_DIGEST_SHA1;

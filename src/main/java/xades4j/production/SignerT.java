@@ -16,24 +16,24 @@
  */
 package xades4j.production;
 
-import javax.inject.Inject;
-import java.security.cert.X509Certificate;
-import java.util.Collection;
-import java.util.List;
-
-import com.google.common.base.Optional;
+import jakarta.inject.Inject;
 import xades4j.properties.SignedSignatureProperty;
 import xades4j.properties.UnsignedSignatureProperty;
-import xades4j.XAdES4jException;
 import xades4j.providers.DataObjectPropertiesProvider;
 import xades4j.providers.KeyingDataProvider;
 import xades4j.providers.SignaturePolicyInfoProvider;
 import xades4j.providers.SignaturePropertiesProvider;
+import xades4j.providers.ValidationDataException;
 import xades4j.providers.X500NameStyleProvider;
 import xades4j.utils.PropertiesUtils;
 import xades4j.xml.marshalling.SignedPropertiesMarshaller;
 import xades4j.xml.marshalling.UnsignedPropertiesMarshaller;
 import xades4j.xml.marshalling.algorithms.AlgorithmsParametersMarshallingProvider;
+
+import java.security.cert.X509Certificate;
+import java.util.Collection;
+import java.util.List;
+import java.util.Optional;
 
 /**
  * Produces XAdES-T signatures. Doesn't extend SignerEPES because XAdES-T may be
@@ -68,16 +68,12 @@ class SignerT extends SignerBES
     protected void getFormatSpecificSignatureProperties(
             Collection<SignedSignatureProperty> formatSpecificSignedSigProps,
             Collection<UnsignedSignatureProperty> formatSpecificUnsignedSigProps,
-            List<X509Certificate> signingCertificateChain) throws XAdES4jException
-    {
+            List<X509Certificate> signingCertificateChain) throws ValidationDataException {
         super.getFormatSpecificSignatureProperties(
                 formatSpecificSignedSigProps, formatSpecificUnsignedSigProps, signingCertificateChain);
 
         // Check if this is based on XAdES-EPES.
-        if (this.policyInfoProvider.isPresent())
-        {
-            PropertiesUtils.addXadesEpesProperties(formatSpecificSignedSigProps, this.policyInfoProvider.get());
-        }
+      this.policyInfoProvider.ifPresent(signaturePolicyInfoProvider -> PropertiesUtils.addXadesEpesProperties(formatSpecificSignedSigProps, signaturePolicyInfoProvider));
         // Add XAdES-T.
         PropertiesUtils.addXadesTProperties(formatSpecificUnsignedSigProps);
     }

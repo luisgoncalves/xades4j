@@ -27,7 +27,6 @@ import xades4j.properties.CommitmentTypeProperty;
 import xades4j.properties.CompleteCertificateRefsProperty;
 import xades4j.properties.CompleteRevocationRefsProperty;
 import xades4j.properties.CounterSignatureProperty;
-import xades4j.properties.DataObjectDesc;
 import xades4j.properties.DataObjectFormatProperty;
 import xades4j.properties.IndividualDataObjsTimeStampProperty;
 import xades4j.properties.RevocationValuesProperty;
@@ -64,13 +63,8 @@ class DefaultProductionBindingsModule extends AbstractModule
     {
         // Defaults for configurable components.
         bind(SignaturePropertiesProvider.class).to(DefaultSignaturePropertiesProvider.class);
-        bind(DataObjectPropertiesProvider.class).toInstance(new DataObjectPropertiesProvider()
-        {
-            @Override
-            public void provideProperties(DataObjectDesc dataObj)
-            {
-                // By default no properties are specified for a data object.
-            }
+        bind(DataObjectPropertiesProvider.class).toInstance(dataObj -> {
+            // By default no properties are specified for a data object.
         });
         bind(SignatureAlgorithms.class).toInstance(new SignatureAlgorithms());
         bind(BasicSignatureOptions.class).toInstance(new BasicSignatureOptions());

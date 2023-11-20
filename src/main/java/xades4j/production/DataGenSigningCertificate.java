@@ -16,7 +16,7 @@
  */
 package xades4j.production;
 
-import javax.inject.Inject;
+import jakarta.inject.Inject;
 import xades4j.properties.SigningCertificateProperty;
 import xades4j.properties.data.PropertyDataObject;
 import xades4j.properties.data.SigningCertificateData;

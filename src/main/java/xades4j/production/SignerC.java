@@ -16,20 +16,26 @@
  */
 package xades4j.production;
 
-import javax.inject.Inject;
-import java.security.cert.X509Certificate;
-import java.util.Collection;
-import java.util.List;
-
-import com.google.common.base.Optional;
+import jakarta.inject.Inject;
 import xades4j.properties.SignedSignatureProperty;
 import xades4j.properties.UnsignedSignatureProperty;
-import xades4j.XAdES4jException;
-import xades4j.providers.*;
+import xades4j.providers.DataObjectPropertiesProvider;
+import xades4j.providers.KeyingDataProvider;
+import xades4j.providers.SignaturePolicyInfoProvider;
+import xades4j.providers.SignaturePropertiesProvider;
+import xades4j.providers.ValidationData;
+import xades4j.providers.ValidationDataException;
+import xades4j.providers.ValidationDataProvider;
+import xades4j.providers.X500NameStyleProvider;
 import xades4j.utils.PropertiesUtils;
 import xades4j.xml.marshalling.SignedPropertiesMarshaller;
 import xades4j.xml.marshalling.UnsignedPropertiesMarshaller;
 import xades4j.xml.marshalling.algorithms.AlgorithmsParametersMarshallingProvider;
+
+import java.security.cert.X509Certificate;
+import java.util.Collection;
+import java.util.List;
+import java.util.Optional;
 
 /**
  * Produces XAdES-C signatures.
@@ -66,8 +72,7 @@ class SignerC extends SignerT
     protected void getFormatSpecificSignatureProperties(
             Collection<SignedSignatureProperty> formatSpecificSignedSigProps,
             Collection<UnsignedSignatureProperty> formatSpecificUnsignedSigProps,
-            List<X509Certificate> signingCertificateChain) throws XAdES4jException
-    {
+            List<X509Certificate> signingCertificateChain) throws ValidationDataException {
         super.getFormatSpecificSignatureProperties(formatSpecificSignedSigProps, formatSpecificUnsignedSigProps, signingCertificateChain);
 
         ValidationData vData = this.validationDataProvider.getValidationData(signingCertificateChain);

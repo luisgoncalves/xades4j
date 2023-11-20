@@ -16,15 +16,6 @@
  */
 package xades4j.verification;
 
-import java.math.BigInteger;
-import java.security.cert.X509CRL;
-import java.security.cert.X509Certificate;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import javax.security.auth.x500.X500Principal;
 import org.apache.xml.security.keys.content.x509.XMLX509IssuerSerial;
 import org.apache.xml.security.signature.ObjectContainer;
 import org.apache.xml.security.signature.XMLSignature;
@@ -37,6 +28,16 @@ import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import xades4j.providers.X500NameStyleProvider;
+
+import javax.security.auth.x500.X500Principal;
+import java.math.BigInteger;
+import java.security.cert.X509CRL;
+import java.security.cert.X509Certificate;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 /**
  * The context available during the verification of the qualifying properties.
@@ -146,7 +147,7 @@ public class QualifyingPropertyVerificationContext
             this.signatureDoc = signature.getDocument();
 
             // Map elements to References.
-            this.references = new HashMap<Element, RawDataObjectDesc>(references.size());
+            this.references = new HashMap<>(references.size());
             for (RawDataObjectDesc obj : references)
             {
                 this.references.put(obj.getReference().getElement(), obj);
@@ -154,7 +155,7 @@ public class QualifyingPropertyVerificationContext
 
             // Map elements to XMLObjects.
             int nXmlObjs = signature.getObjectLength();
-            this.objects = new HashMap<Element, ObjectContainer>(nXmlObjs);
+            this.objects = new HashMap<>(nXmlObjs);
             for (int i = 0; i < nXmlObjs; i++)
             {
                 ObjectContainer xmlObj = signature.getObjectItem(i);
@@ -204,7 +205,7 @@ public class QualifyingPropertyVerificationContext
                 if (refNode.getNodeType() != Node.ELEMENT_NODE)
                     return null;
                 // May return null.
-                return mapper.get((Element)refNode);
+                return mapper.get(refNode);
             } catch (ResourceResolverException ex)
             {
                 // Maybe an exception should be thrown...

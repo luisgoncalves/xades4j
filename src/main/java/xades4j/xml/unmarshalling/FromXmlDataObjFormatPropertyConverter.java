@@ -32,8 +32,7 @@ class FromXmlDataObjFormatPropertyConverter implements SignedDataObjPropFromXmlC
     @Override
     public void convertFromObjectTree(
             XmlSignedDataObjectPropertiesType xmlProps,
-            QualifyingPropertiesDataCollector propertyDataCollector) throws PropertyUnmarshalException
-    {
+            QualifyingPropertiesDataCollector propertyDataCollector) {
         List<XmlDataObjectFormatType> xmlFormats = xmlProps.getDataObjectFormat();
         if (xmlFormats.isEmpty())
             return;

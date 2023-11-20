@@ -18,8 +18,8 @@ package xades4j.xml.marshalling;
 
 import java.util.Collection;
 import org.w3c.dom.Document;
-import xades4j.properties.data.PropertyDataObject;
 import xades4j.properties.data.CommitmentTypeData;
+import xades4j.properties.data.PropertyDataObject;
 import xades4j.xml.bind.xades.XmlAnyType;
 import xades4j.xml.bind.xades.XmlCommitmentTypeIndicationType;
 import xades4j.xml.bind.xades.XmlCommitmentTypeQualifiersListType;
@@ -62,7 +62,7 @@ class ToXmlCommitmentTypeConverter implements SignedPropertyDataToXmlConverter
             xmlCommitmentTypeProp.getObjectReference().addAll(refsUris);
         }
 
-        Collection qualifiers = commitmentTypeData.getQualifiers();
+        Collection<Object> qualifiers = commitmentTypeData.getQualifiers();
         if (!qualifiers.isEmpty())
         {
             XmlCommitmentTypeQualifiersListType xmlQualifiers = new XmlCommitmentTypeQualifiersListType();

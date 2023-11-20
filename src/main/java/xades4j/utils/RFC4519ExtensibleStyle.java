@@ -57,7 +57,7 @@ public class RFC4519ExtensibleStyle extends RFC4519Style implements X500Extensib
     private void updateKeyWordsMap()
     {
         Set<Map.Entry<String,ASN1ObjectIdentifier>> es = defaultLookUp.entrySet();
-        Map<String, String> tmpMap = new HashMap<String, String>();
+        Map<String, String> tmpMap = new HashMap<>();
         for(Map.Entry<String,ASN1ObjectIdentifier> e : es){
             tmpMap.put(e.getKey().toUpperCase(), e.getValue().getId());
         }

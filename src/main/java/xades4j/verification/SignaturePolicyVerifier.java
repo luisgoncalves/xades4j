@@ -16,20 +16,21 @@
  */
 package xades4j.verification;
 
-import javax.inject.Inject;
-import java.io.IOException;
-import java.io.InputStream;
-import java.security.MessageDigest;
-import java.util.Arrays;
+import jakarta.inject.Inject;
+import xades4j.UnsupportedAlgorithmException;
 import xades4j.properties.ObjectIdentifier;
 import xades4j.properties.QualifyingProperty;
 import xades4j.properties.SignaturePolicyIdentifierProperty;
 import xades4j.properties.SignaturePolicyImpliedProperty;
-import xades4j.UnsupportedAlgorithmException;
 import xades4j.properties.data.SignaturePolicyData;
 import xades4j.providers.MessageDigestEngineProvider;
 import xades4j.providers.SignaturePolicyDocumentProvider;
 import xades4j.utils.MessageDigestUtils;
+
+import java.io.IOException;
+import java.io.InputStream;
+import java.security.MessageDigest;
+import java.util.Arrays;
 
 /**
  *
@@ -94,6 +95,7 @@ class SignaturePolicyVerifier implements QualifyingPropertyVerifier<SignaturePol
                 sigDocStream.close();
             } catch (IOException ex)
             {
+                // TODO: remove throwing exceptions in finally block
                 throw new SignaturePolicyNotAvailableException(policyId, ex);
             }
         }

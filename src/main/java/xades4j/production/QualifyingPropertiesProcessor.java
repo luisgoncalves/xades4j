@@ -61,13 +61,13 @@ class QualifyingPropertiesProcessor
         sigPropsProvider.provideProperties(signaturePropsCollector);
 
         Collection<SignedSignatureProperty> collectedSignedSigProps = signaturePropsCollector.getSignedSigProps();
-        Collection<SignedSignatureProperty> signedSigProps = new ArrayList<SignedSignatureProperty>(
+        Collection<SignedSignatureProperty> signedSigProps = new ArrayList<>(
                 collectedSignedSigProps.size() + formatSpecificSignedSigProps.size());
         signedSigProps.addAll(collectedSignedSigProps);
         signedSigProps.addAll(formatSpecificSignedSigProps);
 
         Collection<UnsignedSignatureProperty> collectedUnsignedSigProps = signaturePropsCollector.getUnsignedSigProps();
-        Collection<UnsignedSignatureProperty> unsignedSigProps = new ArrayList<UnsignedSignatureProperty>(
+        Collection<UnsignedSignatureProperty> unsignedSigProps = new ArrayList<>(
                 collectedUnsignedSigProps.size() + formatSpecificUnsignedSigProps.size());
         unsignedSigProps.addAll(collectedUnsignedSigProps);
         unsignedSigProps.addAll(formatSpecificUnsignedSigProps);
@@ -79,8 +79,8 @@ class QualifyingPropertiesProcessor
         // The containers for all the specified signed data object properties. Since
         // some properties can be applied to multiple data objects, we need to rule
         // out repeated references (a Set is used).
-        Set<SignedDataObjectProperty> signedDataObjProps = new HashSet<SignedDataObjectProperty>(dataObjsInfo.size());
-        Set<UnsignedDataObjectProperty> unsignedDataObjProps = new HashSet<UnsignedDataObjectProperty>(0);
+        Set<SignedDataObjectProperty> signedDataObjProps = new HashSet<>(dataObjsInfo.size());
+        Set<UnsignedDataObjectProperty> unsignedDataObjProps = new HashSet<>(0);
 
         // Add the global data object properties.
         signedDataObjProps.addAll(dataObjs.getSignedDataObjsProperties());

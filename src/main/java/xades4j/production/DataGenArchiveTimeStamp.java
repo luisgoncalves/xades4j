@@ -17,7 +17,7 @@
 package xades4j.production;
 
 import xades4j.algorithms.Algorithm;
-import javax.inject.Inject;
+import jakarta.inject.Inject;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -61,7 +61,7 @@ class DataGenArchiveTimeStamp extends DataGenBaseTimeStamp<ArchiveTimeStampPrope
     protected void addPropSpecificTimeStampInput(
             ArchiveTimeStampProperty prop,
             TimeStampDigestInput digestInput,
-            PropertiesDataGenerationContext ctx) throws CannotAddDataToDigestInputException, PropertyDataGenerationException
+            PropertiesDataGenerationContext ctx) throws PropertyDataGenerationException
     {
         Element unsignedSigPropsElem = DOMHelper.getFirstDescendant(
                 ctx.getTargetXmlSignature().getElement(),
@@ -94,7 +94,7 @@ class DataGenArchiveTimeStamp extends DataGenBaseTimeStamp<ArchiveTimeStampPrope
                 digestInput.addNode(ki.getElement());
 
             // Unsigned properties, in order of appearance.
-            Map<String, Integer> propsCnt = new HashMap<String, Integer>(5);
+            Map<String, Integer> propsCnt = new HashMap<>(5);
             propsCnt.put(CertificateValuesProperty.PROP_NAME, 0);
             propsCnt.put(RevocationValuesProperty.PROP_NAME, 0);
             propsCnt.put(CompleteCertificateRefsProperty.PROP_NAME, 0);

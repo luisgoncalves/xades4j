@@ -37,7 +37,7 @@ final class XPath2FilterTransformParamsMarshaller implements AlgorithmParameters
     public List<Node> marshalParameters(XPath2FilterTransform alg, Document doc)
     {
         List<XPath2Filter> filters = alg.getFilters();
-        List<Node> params = new ArrayList<Node>(filters.size());
+        List<Node> params = new ArrayList<>(filters.size());
         
         Set<Map.Entry<String, String>> namespaces = alg.getNamespaces().entrySet();
         

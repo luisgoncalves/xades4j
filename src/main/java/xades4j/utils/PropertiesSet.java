@@ -17,6 +17,7 @@
 package xades4j.utils;
 
 import xades4j.properties.PropertyTargetException;
+
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
@@ -42,7 +43,7 @@ public class PropertiesSet<T>
      */
     public PropertiesSet(int initialNPropTypes)
     {
-        this.properties = new HashMap<Class, Set<T>>(initialNPropTypes);
+        this.properties = new HashMap<>(initialNPropTypes);
     }
 
     /**
@@ -84,14 +85,9 @@ public class PropertiesSet<T>
         if (null == prop)
             throw new NullPointerException("Property cannot be null");
 
-        Set<T> propsOfCurrType = properties.get(prop.getClass());
-        if (null == propsOfCurrType)
-        {
-            // No properties of this type have been added.
-            propsOfCurrType = new HashSet<T>(1);
-            properties.put(prop.getClass(), propsOfCurrType);
-        }
-        // Repeated instances are not allowed.
+      Set<T> propsOfCurrType = properties.computeIfAbsent(prop.getClass(), k -> new HashSet<>(1));
+
+      // Repeated instances are not allowed.
         if (!propsOfCurrType.add(prop))
             throw new PropertyTargetException("Property instance already present");
     }
@@ -137,7 +133,7 @@ public class PropertiesSet<T>
         if (properties.isEmpty())
             return Collections.emptyList();
 
-        Collection<T> props = new ArrayList<T>(properties.size() + 3);
+        Collection<T> props = new ArrayList<>(properties.size() + 3);
         for (Set<T> propsOfType : properties.values())
         {
             props.addAll(propsOfType);

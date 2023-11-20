@@ -41,7 +41,7 @@ public class SignatureSpecificVerificationOptions
     private boolean checkKeyUsage = true;
     private InputStream dataForAnonymousReference;
     private Date defaultVerificationDate = new Date();
-    private final List<ResourceResolverSpi> resolvers = new ArrayList<ResourceResolverSpi>(0);
+    private final List<ResourceResolverSpi> resolvers = new ArrayList<>(0);
     private boolean followManifests = false;
 
     /**

@@ -17,7 +17,7 @@
 package xades4j.production;
 
 import xades4j.algorithms.Algorithm;
-import javax.inject.Inject;
+import jakarta.inject.Inject;
 import java.util.List;
 import org.apache.xml.security.signature.Reference;
 import xades4j.properties.AllDataObjsTimeStampProperty;

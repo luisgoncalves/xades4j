@@ -16,22 +16,22 @@
  */
 package xades4j.production;
 
+import jakarta.inject.Inject;
+import org.apache.xml.security.signature.Reference;
 import xades4j.algorithms.Algorithm;
 import xades4j.properties.DataObjectDesc;
-import javax.inject.Inject;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
-import java.util.Map;
-import org.apache.xml.security.signature.Reference;
-import xades4j.utils.CannotAddDataToDigestInputException;
 import xades4j.properties.IndividualDataObjsTimeStampProperty;
 import xades4j.properties.data.BaseXAdESTimeStampData;
-import xades4j.utils.TimeStampDigestInput;
 import xades4j.properties.data.IndividualDataObjsTimeStampData;
 import xades4j.providers.TimeStampTokenProvider;
 import xades4j.providers.TimeStampTokenProvider.TimeStampTokenRes;
+import xades4j.utils.CannotAddDataToDigestInputException;
+import xades4j.utils.TimeStampDigestInput;
 import xades4j.utils.TimeStampDigestInputFactory;
+
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
 
 /**
  *
@@ -70,7 +70,7 @@ class DataGenIndivDataObjsTimeStamp extends DataGenBaseTimeStamp<IndividualDataO
     {
         Collection<DataObjectDesc> targetDataObjs = prop.getTargetDataObjects();
 
-        List<String> includes = new ArrayList<String>(targetDataObjs.size());
+        List<String> includes = new ArrayList<>(targetDataObjs.size());
         for (DataObjectDesc dataObj : targetDataObjs)
         {
             Reference r = ctx.getReference(dataObj);

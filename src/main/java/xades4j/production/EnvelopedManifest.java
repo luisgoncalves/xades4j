@@ -37,7 +37,7 @@ public final class EnvelopedManifest extends DataObjectDesc
 
     public EnvelopedManifest()
     {
-        this.dataObjs = new LinkedHashSet<DataObjectDesc>(2);
+        this.dataObjs = new LinkedHashSet<>(2);
     }
 
     /**

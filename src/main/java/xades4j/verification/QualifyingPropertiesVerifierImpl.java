@@ -16,7 +16,7 @@
  */
 package xades4j.verification;
 
-import javax.inject.Inject;
+import jakarta.inject.Inject;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
@@ -50,7 +50,7 @@ class QualifyingPropertiesVerifierImpl implements QualifyingPropertiesVerifier
     {
         dataObjectsStructureVerifier.verifiyPropertiesDataStructure(unmarshalledProperties);
 
-        Collection<PropertyInfo> props = new ArrayList<PropertyInfo>(unmarshalledProperties.size());
+        Collection<PropertyInfo> props = new ArrayList<>(unmarshalledProperties.size());
         
         for (PropertyDataObject propData : unmarshalledProperties)
         {

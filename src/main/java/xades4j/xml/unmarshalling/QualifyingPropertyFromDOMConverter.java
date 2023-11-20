@@ -25,5 +25,5 @@ import org.w3c.dom.Element;
 interface QualifyingPropertyFromDOMConverter
 {
     void convertFromDOMTree(Element props,
-            QualifyingPropertiesDataCollector propertyDataCollector) throws PropertyUnmarshalException;
+            QualifyingPropertiesDataCollector propertyDataCollector);
 }

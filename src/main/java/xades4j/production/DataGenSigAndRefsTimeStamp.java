@@ -17,7 +17,7 @@
 package xades4j.production;
 
 import xades4j.algorithms.Algorithm;
-import javax.inject.Inject;
+import jakarta.inject.Inject;
 import java.util.HashMap;
 import java.util.Map;
 import org.apache.xml.security.utils.Constants;
@@ -55,7 +55,7 @@ class DataGenSigAndRefsTimeStamp extends DataGenBaseTimeStamp<SigAndRefsTimeStam
     protected void addPropSpecificTimeStampInput(
             SigAndRefsTimeStampProperty prop,
             TimeStampDigestInput digestInput,
-            PropertiesDataGenerationContext ctx) throws CannotAddDataToDigestInputException, PropertyDataGenerationException
+            PropertiesDataGenerationContext ctx) throws PropertyDataGenerationException
     {
         Element unsignedSigPropsElem = DOMHelper.getFirstDescendant(
             ctx.getTargetXmlSignature().getElement(),
@@ -72,7 +72,7 @@ class DataGenSigAndRefsTimeStamp extends DataGenBaseTimeStamp<SigAndRefsTimeStam
          * "Those (...) that appear before SigAndRefsTimeStamp, in their order of
          * appearance within the UnsignedSignatureProperties element."
          */
-        Map<String, Integer> elegiblePropsCnt = new HashMap<String, Integer>(5);
+        Map<String, Integer> elegiblePropsCnt = new HashMap<>(5);
         elegiblePropsCnt.put(CompleteCertificateRefsProperty.PROP_NAME, 0);
         elegiblePropsCnt.put(CompleteRevocationRefsProperty.PROP_NAME, 0);
         elegiblePropsCnt.put(SignatureTimeStampProperty.PROP_NAME, 0);

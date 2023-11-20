@@ -29,8 +29,7 @@ class SignerRoleVerifier implements QualifyingPropertyVerifier<SignerRoleData>
     @Override
     public QualifyingProperty verify(
             SignerRoleData propData,
-            QualifyingPropertyVerificationContext ctx) throws InvalidPropertyException
-    {
+            QualifyingPropertyVerificationContext ctx) {
         return new SignerRoleProperty(propData.getClaimedRoles());
     }
 }

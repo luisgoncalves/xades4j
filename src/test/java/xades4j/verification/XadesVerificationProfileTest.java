@@ -24,10 +24,10 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 /**
  * @author Luís
  */
-public class XadesVerificationProfileTest
+class XadesVerificationProfileTest
 {
     @Test
-    public void testGetVerifier() throws XadesProfileResolutionException
+    void testGetVerifier() throws XadesProfileResolutionException
     {
         XadesVerificationProfile instance = new XadesVerificationProfile(VerifierTestBase.validationProviderMySigs);
         XadesVerifier result = instance.newVerifier();

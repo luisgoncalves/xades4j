@@ -50,7 +50,7 @@ public final class GenericAlgorithm extends Algorithm
      * @param uri the algorithm's URI
      * @param params the algorithm parameter nodes
      */
-    public GenericAlgorithm(String uri, List<Node> params)
+    public GenericAlgorithm(String uri, List<? extends Node> params)
     {
         super(uri);
         this.params = params.isEmpty() ? null : Collections.unmodifiableList(params);

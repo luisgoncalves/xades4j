@@ -41,7 +41,7 @@ public class GenericDOMDataVerifierTest
     @BeforeAll
     public static void setUpClass() throws Exception
     {
-        customElemVerifiers = new HashMap<QName, QualifyingPropertyVerifier>(1);
+        customElemVerifiers = new HashMap<>(1);
         customElemVerifiers.put(new QName("http://test.generic.dom", "Elem"), new TestElemDOMVerifier());
 
         DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
@@ -50,26 +50,24 @@ public class GenericDOMDataVerifierTest
     }
 
     @Test
-    public void testVerify() throws Exception
+    void testVerify() throws Exception
     {
         GenericDOMData propData = new GenericDOMData(testDocument.createElementNS("http://test.generic.dom", "Elem"));
         QualifyingPropertyVerificationContext ctx = null;
         GenericDOMDataVerifier instance = new GenericDOMDataVerifier(customElemVerifiers);
 
         QualifyingProperty result = instance.verify(propData, ctx);
-        assertEquals(result.getName(), "Elem");
+        assertEquals("Elem", result.getName());
     }
 
     @Test
-    public void testVerifyNoVerifier() throws Exception
+    void testVerifyNoVerifier() throws Exception
     {
         GenericDOMData propData = new GenericDOMData(testDocument.createElementNS("http://test.generic.dom", "Elem"));
         QualifyingPropertyVerificationContext ctx = null;
-        GenericDOMDataVerifier instance = new GenericDOMDataVerifier(new HashMap<QName, QualifyingPropertyVerifier>(0));
+        GenericDOMDataVerifier instance = new GenericDOMDataVerifier(new HashMap<>(0));
 
-        assertThrows(InvalidPropertyException.class, () -> {
-            instance.verify(propData, ctx);
-        });
+        assertThrows(InvalidPropertyException.class, () -> instance.verify(propData, ctx));
     }
 }
 

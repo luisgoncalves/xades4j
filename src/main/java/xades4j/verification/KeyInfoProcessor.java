@@ -74,7 +74,7 @@ class KeyInfoProcessor
             return tryUseSigningCertificateReference(signingCertRef, x500NameStyleProvider);
         }
         
-        List<X509Certificate> keyInfoCerts = new ArrayList<X509Certificate>(1);
+        List<X509Certificate> keyInfoCerts = new ArrayList<>(1);
         XMLX509IssuerSerial issuerSerial = null;
         X509CertSelector certSelector = new X509CertSelector();
 

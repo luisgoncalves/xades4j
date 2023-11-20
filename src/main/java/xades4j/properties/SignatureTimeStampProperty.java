@@ -29,10 +29,6 @@ public final class SignatureTimeStampProperty extends UnsignedSignatureProperty
     /**/
     private Date time;
 
-    public SignatureTimeStampProperty()
-    {
-    }
-
     @Override
     public String getName()
     {

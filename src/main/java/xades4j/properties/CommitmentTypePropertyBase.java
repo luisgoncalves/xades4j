@@ -17,7 +17,6 @@
 package xades4j.properties;
 
 import java.util.Collection;
-import java.util.List;
 import org.w3c.dom.Element;
 import xades4j.utils.CollectionUtils;
 
@@ -35,22 +34,23 @@ import xades4j.utils.CollectionUtils;
  */
 public abstract class CommitmentTypePropertyBase extends SignedDataObjectProperty
 {
-    public static final String PROOF_OF_ORIGIN_URI = "http://uri.etsi.org/01903/v1.2.2#ProofOfOrigin",
-            PROOF_OF_ORIGIN_DESC = "Indicates that the signer recognizes to have created, approved and sent the signed data object",
-            PROOF_OF_RECEIPT_URI = "http://uri.etsi.org/01903/v1.2.2#ProofOfReceipt",
-            PROOF_OF_RECEIPT_DESC = "Indicates that signer recognizes to have received the content of the signed data object",
-            PROOF_OF_DELIVERY_URI = "http://uri.etsi.org/01903/v1.2.2#ProofOfDelivery",
-            PROOF_OF_DELIVERY_DESC = "Indicates that the TSP providing that indication has delivered a signed data object in a local store accessible to the recipient of the signed data object",
-            PROOF_OF_SENDER_URI = "http://uri.etsi.org/01903/v1.2.2#ProofOfSender",
-            PROOF_OF_SENDER_DESC = "Indicates that the entity providing that indication has sent the signed data object (but not necessarily created it)",
-            PROOF_OF_APPROVAL_URI = "http://uri.etsi.org/01903/v1.2.2#ProofOfApproval",
-            PROOF_OF_APPROVAL_DESC = "Indicates that the signer has approved the content of the signed data object",
-            PROOF_OF_CREATION_URI = "http://uri.etsi.org/01903/v1.2.2#ProofOfCreation",
-            PROOF_OF_CREATION_DESC = "Indicates that the signer has created the signed data object (but not necessarily approved, nor sent it)";
+    public static final String PROOF_OF_ORIGIN_URI = "http://uri.etsi.org/01903/v1.2.2#ProofOfOrigin";
+    public static final String PROOF_OF_ORIGIN_DESC = "Indicates that the signer recognizes to have created, approved and sent the signed data object";
+    public static final String PROOF_OF_RECEIPT_URI = "http://uri.etsi.org/01903/v1.2.2#ProofOfReceipt";
+    public static final String PROOF_OF_RECEIPT_DESC = "Indicates that signer recognizes to have received the content of the signed data object";
+    public static final String PROOF_OF_DELIVERY_URI = "http://uri.etsi.org/01903/v1.2.2#ProofOfDelivery";
+    public static final String PROOF_OF_DELIVERY_DESC = "Indicates that the TSP providing that indication has delivered a signed data object in a local store accessible to the recipient of the signed data object";
+    public static final String PROOF_OF_SENDER_URI = "http://uri.etsi.org/01903/v1.2.2#ProofOfSender";
+    public static final String PROOF_OF_SENDER_DESC = "Indicates that the entity providing that indication has sent the signed data object (but not necessarily created it)";
+    public static final String PROOF_OF_APPROVAL_URI = "http://uri.etsi.org/01903/v1.2.2#ProofOfApproval";
+    public static final String PROOF_OF_APPROVAL_DESC = "Indicates that the signer has approved the content of the signed data object";
+    public static final String PROOF_OF_CREATION_URI = "http://uri.etsi.org/01903/v1.2.2#ProofOfCreation";
+    public static final String PROOF_OF_CREATION_DESC = "Indicates that the signer has created the signed data object (but not necessarily approved, nor sent it)";
     public static final String PROP_NAME = "CommitmentTypeIndication";
     /**/
-    private final String uri, description;
-    private Collection qualifiers;
+    private final String uri;
+    private final String description;
+    private Collection<Object> qualifiers;
 
     protected CommitmentTypePropertyBase(String uri, String description,
             TargetMultiplicity targetMult)
@@ -97,7 +97,7 @@ public abstract class CommitmentTypePropertyBase extends SignedDataObjectPropert
         return this;
     }
     
-    public Collection getQualifiers(){
+    public Collection<Object> getQualifiers(){
         return CollectionUtils.emptyIfNull(this.qualifiers);
     }
 }

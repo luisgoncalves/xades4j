@@ -17,7 +17,6 @@
 package xades4j.xml.marshalling;
 
 import jakarta.xml.bind.JAXBElement;
-import javax.xml.namespace.QName;
 import org.w3c.dom.Document;
 import xades4j.properties.QualifyingProperty;
 import xades4j.properties.data.PropertyDataObject;
@@ -29,6 +28,8 @@ import xades4j.xml.bind.xades.XmlSignaturePolicyIdType;
 import xades4j.xml.bind.xades.XmlSignaturePolicyIdentifierType;
 import xades4j.xml.bind.xades.XmlSignedPropertiesType;
 import xades4j.xml.bind.xmldsig.XmlDigestMethodType;
+
+import javax.xml.namespace.QName;
 
 /**
  *
@@ -51,12 +52,12 @@ class ToXmlSignaturePolicyConverter implements SignedPropertyDataToXmlConverter
         }
         else
         {
-            xmlSigPolicy.setSignaturePolicyId(getSignaturePolicy(sigPolicyData, doc));
+            xmlSigPolicy.setSignaturePolicyId(getSignaturePolicy(sigPolicyData));
         }
         xmlProps.getSignedSignatureProperties().setSignaturePolicyIdentifier(xmlSigPolicy);
     }
 
-    private XmlSignaturePolicyIdType getSignaturePolicy(SignaturePolicyData sigPolicyData, Document doc)
+    private XmlSignaturePolicyIdType getSignaturePolicy(SignaturePolicyData sigPolicyData)
     {
         XmlSignaturePolicyIdType xmlSigPolicyId = new XmlSignaturePolicyIdType();
         
@@ -75,7 +76,7 @@ class ToXmlSignaturePolicyConverter implements SignedPropertyDataToXmlConverter
         String url = sigPolicyData.getLocationUrl();
         if (url != null)
         {
-            JAXBElement<String> xmlSPURI = new JAXBElement<String>(new QName(QualifyingProperty.XADES_XMLNS, "SPURI"), String.class, url);
+            JAXBElement<String> xmlSPURI = new JAXBElement<>(new QName(QualifyingProperty.XADES_XMLNS, "SPURI"), String.class, url);
             XmlAnyType xmlQualifier = new XmlAnyType();
             xmlQualifier.getContent().add(xmlSPURI);
             

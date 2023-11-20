@@ -16,7 +16,7 @@
  */
 package xades4j.production;
 
-import javax.inject.Inject;
+import jakarta.inject.Inject;
 import java.io.IOException;
 import java.math.BigInteger;
 import java.security.MessageDigest;
@@ -61,7 +61,7 @@ class DataGenCompleteRevocRefs implements PropertyDataObjectGenerator<CompleteRe
             PropertiesDataGenerationContext ctx) throws PropertyDataGenerationException
     {
         Collection<X509CRL> crls = prop.getCrls();
-        Collection<CRLRef> crlRefs = new ArrayList<CRLRef>(crls.size());
+        Collection<CRLRef> crlRefs = new ArrayList<>(crls.size());
         String digestAlgUri = this.signatureAlgorithms.getDigestAlgorithmForReferenceProperties();
 
         try

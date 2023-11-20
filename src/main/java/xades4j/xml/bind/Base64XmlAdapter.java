@@ -8,8 +8,9 @@
 
 package xades4j.xml.bind;
 
-import java.io.IOException;
 import jakarta.xml.bind.annotation.adapters.XmlAdapter;
+
+import java.util.Base64;
 
 public class Base64XmlAdapter
     extends XmlAdapter<String, byte[]>
@@ -17,13 +18,15 @@ public class Base64XmlAdapter
 
 
     @Override
-    public byte[] unmarshal(String value) throws Exception {
-        return (xades4j.utils.Base64.decode(value));
+    public byte[] unmarshal(String value) {
+        return Base64.getMimeDecoder().decode(value);
     }
 
     @Override
-    public String marshal(byte[] value) throws IOException {
-        return (xades4j.utils.Base64.encodeBytes(value, xades4j.utils.Base64.DO_BREAK_LINES));
+    public String marshal(byte[] value) {
+
+        return Base64.getMimeEncoder().encodeToString(value);
+
     }
 
 }

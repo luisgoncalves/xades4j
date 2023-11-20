@@ -16,9 +16,6 @@
  */
 package xades4j.verification;
 
-import java.util.Collection;
-import java.util.HashSet;
-import java.util.Set;
 import xades4j.properties.ArchiveTimeStampProperty;
 import xades4j.properties.CertificateValuesProperty;
 import xades4j.properties.CompleteCertificateRefsProperty;
@@ -28,6 +25,10 @@ import xades4j.properties.SigAndRefsTimeStampProperty;
 import xades4j.properties.SignaturePolicyBase;
 import xades4j.properties.SignatureTimeStampProperty;
 import xades4j.properties.SigningCertificateProperty;
+
+import java.util.Collection;
+import java.util.HashSet;
+import java.util.Set;
 
 /**
  *
@@ -41,7 +42,7 @@ class XAdESFormChecker
 
     static XAdESForm checkForm(Collection<PropertyInfo> props) throws InvalidXAdESFormException
     {
-        Set<String> availablePropsNames = new HashSet<String>();
+        Set<String> availablePropsNames = new HashSet<>();
         for (PropertyInfo propInfo : props)
         {
             availablePropsNames.add(propInfo.getProperty().getName());
@@ -64,18 +65,18 @@ class XAdESFormChecker
         throw new InvalidXAdESFormException("Signature doesn't follow any of the XAdES forms");
 
     }
-    static final XAdESFormDesc XADES_BES_DESC = new XAdES_BES_Desc(),
-            XADES_EPES_DESC = new XAdES_EPES_Desc(),
-            XADES_T_DESC = new XAdES_T_Desc(),
-            XADES_C_DESC = new XAdES_C_Desc(),
-            XADES_X_DESC = new XAdES_X_Desc(),
-            XADES_X_L_DESC = new XAdES_X_L_Desc();
+    static final XAdESFormDesc XADES_BES_DESC = new XAdES_BES_Desc();
+    static final XAdESFormDesc XADES_EPES_DESC = new XAdES_EPES_Desc();
+    static final XAdESFormDesc XADES_T_DESC = new XAdES_T_Desc();
+    static final XAdESFormDesc XADES_C_DESC = new XAdES_C_Desc();
+    static final XAdESFormDesc XADES_X_DESC = new XAdES_X_Desc();
+    static final XAdESFormDesc XADES_X_L_DESC = new XAdES_X_L_Desc();
 
     /**************************************************************************/
     /**/
-    private static abstract class XAdESFormDesc
+    private abstract static class XAdESFormDesc
     {
-        private XAdESFormDesc[] baseForms;
+        private final XAdESFormDesc[] baseForms;
 
         // Ordered from the top format to the lower format.
         public XAdESFormDesc(XAdESFormDesc... baseForms)
@@ -95,11 +96,10 @@ class XAdESFormChecker
             if (baseForms.length == 0)
                 return true;
 
-            for (int i = 0; i < baseForms.length; i++)
-            {
-                if (baseForms[i].check(availablePropsNames))
-                    return true;
-            }
+          for (XAdESFormDesc baseForm : baseForms) {
+            if (baseForm.check(availablePropsNames))
+              return true;
+          }
 
             throw new InvalidXAdESFormException(String.format("Required base forms for %s are not present", this.getForm().toString()));
         }
@@ -225,8 +225,7 @@ class XAdESFormChecker
         }
 
         @Override
-        protected boolean checkProps(Set<String> availablePropsNames) throws InvalidXAdESFormException
-        {
+        protected boolean checkProps(Set<String> availablePropsNames) {
             return availablePropsNames.contains(SigAndRefsTimeStampProperty.PROP_NAME) ||
                     availablePropsNames.contains("RefsOnlyTimeStamp");
         }
@@ -278,8 +277,7 @@ class XAdESFormChecker
         }
 
         @Override
-        protected boolean checkProps(Set<String> availablePropsNames) throws InvalidXAdESFormException
-        {
+        protected boolean checkProps(Set<String> availablePropsNames) {
             return availablePropsNames.contains(ArchiveTimeStampProperty.PROP_NAME);
         }
 

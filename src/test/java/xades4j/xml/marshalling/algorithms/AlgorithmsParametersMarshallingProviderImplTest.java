@@ -40,7 +40,7 @@ import static org.junit.jupiter.api.Assertions.assertNull;
  *
  * @author Luís
  */
-public class AlgorithmsParametersMarshallingProviderImplTest
+class AlgorithmsParametersMarshallingProviderImplTest
 {
     private Document doc;
     private AlgorithmsParametersMarshallingProviderImpl sut;
@@ -54,7 +54,7 @@ public class AlgorithmsParametersMarshallingProviderImplTest
     }
     
     @Test
-    public void testMarshalParametersWithDefaultConfiguration() throws Exception
+    void testMarshalParametersWithDefaultConfiguration() throws Exception
     {
         Algorithm[] algorithms = new Algorithm[]
         {
