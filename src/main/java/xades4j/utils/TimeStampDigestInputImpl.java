@@ -20,6 +20,7 @@ import java.io.ByteArrayOutputStream;
 import org.apache.xml.security.signature.Reference;
 import org.apache.xml.security.signature.XMLSignatureException;
 import org.apache.xml.security.signature.XMLSignatureInput;
+import org.apache.xml.security.signature.XMLSignatureNodeInput;
 import org.apache.xml.security.transforms.Transform;
 import org.w3c.dom.Document;
 import org.w3c.dom.Node;
@@ -39,7 +40,7 @@ class TimeStampDigestInputImpl implements TimeStampDigestInput
 
     TimeStampDigestInputImpl(Algorithm c14n, AlgorithmsParametersMarshallingProvider parametersMarshallingProvider)
     {
-        // It would be better to have a Canonicalizer passed on the constructor
+        // It would be better to have a Canonicalizer passed on the constructor,
         // but it doesn't have a method that receives a XMlSignatureInput. Apache's
         // C14N transforms have some bug circumvent checks when mapping XMLSignatureInput
         // to the Canonicalizer methods, so it's better to keep using C14N via Transform.
@@ -76,7 +77,7 @@ class TimeStampDigestInputImpl implements TimeStampDigestInput
             throw new NullPointerException();
         }
 
-        addToDigestInput(new XMLSignatureInput(n), n.getOwnerDocument());
+        addToDigestInput(new XMLSignatureNodeInput(n), n.getOwnerDocument());
     }
 
     private void addToDigestInput(XMLSignatureInput refData, Document doc) throws CannotAddDataToDigestInputException
@@ -89,14 +90,7 @@ class TimeStampDigestInputImpl implements TimeStampDigestInput
                 refData = c14nTransform.performTransform(refData, true);
                 // Fall through to add the bytes resulting from the canonicalization.
             }
-
-            if (refData.isByteArray())
-            {
-                digestInput.write(refData.getBytes());
-            } else if (refData.isOctetStream())
-            {
-                StreamUtils.readWrite(refData.getOctetStream(), digestInput);
-            }
+            refData.write(digestInput);
         }
         catch (Exception ex)
         {

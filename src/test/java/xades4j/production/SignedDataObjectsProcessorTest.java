@@ -16,10 +16,17 @@
  */
 package xades4j.production;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotEquals;
+import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+
 import org.apache.xml.security.signature.Manifest;
 import org.apache.xml.security.signature.ObjectContainer;
 import org.apache.xml.security.signature.Reference;
 import org.apache.xml.security.signature.XMLSignature;
+import org.apache.xml.security.signature.XMLSignatureByteInput;
 import org.apache.xml.security.signature.XMLSignatureInput;
 import org.apache.xml.security.utils.Constants;
 import org.apache.xml.security.utils.resolver.ResourceResolverContext;
@@ -31,12 +38,6 @@ import xades4j.algorithms.EnvelopedSignatureTransform;
 import xades4j.utils.DOMHelper;
 import xades4j.utils.SignatureServicesTestBase;
 import xades4j.utils.StringUtils;
-
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotEquals;
-import static org.junit.jupiter.api.Assertions.assertNull;
-import static org.junit.jupiter.api.Assertions.assertThrows;
-import static org.junit.jupiter.api.Assertions.assertTrue;
 
 /**
  * @author Luís
@@ -117,7 +118,7 @@ public class SignedDataObjectsProcessorTest extends SignatureServicesTestBase
                     @Override
                     public XMLSignatureInput engineResolveURI(ResourceResolverContext context)
                     {
-                        return new XMLSignatureInput(context.uriToResolve.getBytes());
+                        return new XMLSignatureByteInput(context.uriToResolve.getBytes());
                     }
 
                     @Override
