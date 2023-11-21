@@ -16,6 +16,21 @@
  */
 package xades4j.production;
 
+import static org.apache.xml.security.algorithms.MessageDigestAlgorithm.ALGO_ID_DIGEST_SHA256;
+import static org.apache.xml.security.algorithms.MessageDigestAlgorithm.ALGO_ID_DIGEST_SHA512;
+import static org.apache.xml.security.c14n.Canonicalizer.ALGO_ID_C14N_EXCL_OMIT_COMMENTS;
+import static org.apache.xml.security.c14n.Canonicalizer.ALGO_ID_C14N_OMIT_COMMENTS;
+import static org.apache.xml.security.signature.XMLSignature.ALGO_ID_SIGNATURE_RSA_SHA512;
+import static org.apache.xml.security.utils.Constants.SignatureSpecNS;
+import static org.apache.xml.security.utils.Constants._TAG_SIGNATURE;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+
+import java.util.Iterator;
+import javax.xml.namespace.NamespaceContext;
+import javax.xml.xpath.XPath;
+import javax.xml.xpath.XPathConstants;
+import javax.xml.xpath.XPathFactory;
+import org.apache.xml.security.signature.XMLSignatureByteInput;
 import org.apache.xml.security.signature.XMLSignatureInput;
 import org.apache.xml.security.utils.resolver.ResourceResolverContext;
 import org.apache.xml.security.utils.resolver.ResourceResolverException;
@@ -31,21 +46,6 @@ import xades4j.properties.QualifyingProperty;
 import xades4j.providers.ValidationDataProvider;
 import xades4j.providers.impl.ValidationDataFromCertValidationProvider;
 import xades4j.verification.VerifierTestBase;
-
-import javax.xml.namespace.NamespaceContext;
-import javax.xml.xpath.XPath;
-import javax.xml.xpath.XPathConstants;
-import javax.xml.xpath.XPathFactory;
-import java.util.Iterator;
-
-import static org.apache.xml.security.algorithms.MessageDigestAlgorithm.ALGO_ID_DIGEST_SHA256;
-import static org.apache.xml.security.algorithms.MessageDigestAlgorithm.ALGO_ID_DIGEST_SHA512;
-import static org.apache.xml.security.c14n.Canonicalizer.ALGO_ID_C14N_EXCL_OMIT_COMMENTS;
-import static org.apache.xml.security.c14n.Canonicalizer.ALGO_ID_C14N_OMIT_COMMENTS;
-import static org.apache.xml.security.signature.XMLSignature.ALGO_ID_SIGNATURE_RSA_SHA512;
-import static org.apache.xml.security.utils.Constants.SignatureSpecNS;
-import static org.apache.xml.security.utils.Constants._TAG_SIGNATURE;
-import static org.junit.jupiter.api.Assertions.assertEquals;
 
 /**
  * @author Luís
@@ -108,7 +108,7 @@ class OtherSignerTests extends SignerTestBase
         @Override
         public XMLSignatureInput engineResolveURI(ResourceResolverContext context) throws ResourceResolverException
         {
-            XMLSignatureInput input = new XMLSignatureInput(context.attr.getValue().getBytes());
+            XMLSignatureByteInput input = new XMLSignatureByteInput(context.attr.getValue().getBytes());
             resolveCount++;
             return input;
         }
