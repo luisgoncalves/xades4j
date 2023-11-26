@@ -22,6 +22,9 @@ package xades4j.utils;
  */
 public class StringUtils
 {
+    private StringUtils() {
+        throw new IllegalStateException("Utility class");
+    }
     public static boolean isNullOrEmptyString(String s)
     {
         return null == s || s.isEmpty();

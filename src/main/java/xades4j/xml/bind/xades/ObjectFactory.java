@@ -11,7 +11,6 @@ package xades4j.xml.bind.xades;
 import jakarta.xml.bind.JAXBElement;
 import jakarta.xml.bind.annotation.XmlElementDecl;
 import jakarta.xml.bind.annotation.XmlRegistry;
-
 import javax.xml.datatype.XMLGregorianCalendar;
 import javax.xml.namespace.QName;
 
@@ -33,51 +32,53 @@ import javax.xml.namespace.QName;
 @XmlRegistry
 public class ObjectFactory {
 
-    private static final QName _UnsignedDataObjectProperties_QNAME = new QName("http://uri.etsi.org/01903/v1.3.2#", "UnsignedDataObjectProperties");
-    private static final QName _SignatureTimeStamp_QNAME = new QName("http://uri.etsi.org/01903/v1.3.2#", "SignatureTimeStamp");
-    private static final QName _IndividualDataObjectsTimeStamp_QNAME = new QName("http://uri.etsi.org/01903/v1.3.2#", "IndividualDataObjectsTimeStamp");
-    private static final QName _AttrAuthoritiesCertValues_QNAME = new QName("http://uri.etsi.org/01903/v1.3.2#", "AttrAuthoritiesCertValues");
-    private static final QName _ArchiveTimeStamp_QNAME = new QName("http://uri.etsi.org/01903/v1.3.2#", "ArchiveTimeStamp");
-    private static final QName _SPUserNotice_QNAME = new QName("http://uri.etsi.org/01903/v1.3.2#", "SPUserNotice");
-    private static final QName _UnsignedProperties_QNAME = new QName("http://uri.etsi.org/01903/v1.3.2#", "UnsignedProperties");
-    private static final QName _CompleteRevocationRefs_QNAME = new QName("http://uri.etsi.org/01903/v1.3.2#", "CompleteRevocationRefs");
-    private static final QName _AttributeRevocationValues_QNAME = new QName("http://uri.etsi.org/01903/v1.3.2#", "AttributeRevocationValues");
-    private static final QName _SignedSignatureProperties_QNAME = new QName("http://uri.etsi.org/01903/v1.3.2#", "SignedSignatureProperties");
-    private static final QName _ObjectIdentifier_QNAME = new QName("http://uri.etsi.org/01903/v1.3.2#", "ObjectIdentifier");
-    private static final QName _OtherTimeStamp_QNAME = new QName("http://uri.etsi.org/01903/v1.3.2#", "OtherTimeStamp");
-    private static final QName _RefsOnlyTimeStamp_QNAME = new QName("http://uri.etsi.org/01903/v1.3.2#", "RefsOnlyTimeStamp");
-    private static final QName _SPURI_QNAME = new QName("http://uri.etsi.org/01903/v1.3.2#", "SPURI");
-    private static final QName _SignedDataObjectProperties_QNAME = new QName("http://uri.etsi.org/01903/v1.3.2#", "SignedDataObjectProperties");
-    private static final QName _CounterSignature_QNAME = new QName("http://uri.etsi.org/01903/v1.3.2#", "CounterSignature");
-    private static final QName _QualifyingProperties_QNAME = new QName("http://uri.etsi.org/01903/v1.3.2#", "QualifyingProperties");
-    private static final QName _SigningCertificate_QNAME = new QName("http://uri.etsi.org/01903/v1.3.2#", "SigningCertificate");
-    private static final QName _ReferenceInfo_QNAME = new QName("http://uri.etsi.org/01903/v1.3.2#", "ReferenceInfo");
-    private static final QName _XAdESTimeStamp_QNAME = new QName("http://uri.etsi.org/01903/v1.3.2#", "XAdESTimeStamp");
-    private static final QName _SignatureProductionPlace_QNAME = new QName("http://uri.etsi.org/01903/v1.3.2#", "SignatureProductionPlace");
-    private static final QName _EncapsulatedPKIData_QNAME = new QName("http://uri.etsi.org/01903/v1.3.2#", "EncapsulatedPKIData");
-    private static final QName _UnsignedSignatureProperties_QNAME = new QName("http://uri.etsi.org/01903/v1.3.2#", "UnsignedSignatureProperties");
-    private static final QName _CommitmentTypeIndication_QNAME = new QName("http://uri.etsi.org/01903/v1.3.2#", "CommitmentTypeIndication");
-    private static final QName _AllDataObjectsTimeStamp_QNAME = new QName("http://uri.etsi.org/01903/v1.3.2#", "AllDataObjectsTimeStamp");
-    private static final QName _SignerRole_QNAME = new QName("http://uri.etsi.org/01903/v1.3.2#", "SignerRole");
-    private static final QName _RevocationValues_QNAME = new QName("http://uri.etsi.org/01903/v1.3.2#", "RevocationValues");
-    private static final QName _ArchiveTimeStampV2_QNAME = new QName("http://uri.etsi.org/01903/v1.4.1#", "ArchiveTimeStampV2");
-    private static final QName _QualifyingPropertiesReference_QNAME = new QName("http://uri.etsi.org/01903/v1.3.2#", "QualifyingPropertiesReference");
-    private static final QName _CertificateValues_QNAME = new QName("http://uri.etsi.org/01903/v1.3.2#", "CertificateValues");
-    private static final QName _Any_QNAME = new QName("http://uri.etsi.org/01903/v1.3.2#", "Any");
-    private static final QName _SignaturePolicyIdentifier_QNAME = new QName("http://uri.etsi.org/01903/v1.3.2#", "SignaturePolicyIdentifier");
-    private static final QName _SigningTime_QNAME = new QName("http://uri.etsi.org/01903/v1.3.2#", "SigningTime");
-    private static final QName _Include_QNAME = new QName("http://uri.etsi.org/01903/v1.3.2#", "Include");
-    private static final QName _SigAndRefsTimeStamp_QNAME = new QName("http://uri.etsi.org/01903/v1.3.2#", "SigAndRefsTimeStamp");
-    private static final QName _DataObjectFormat_QNAME = new QName("http://uri.etsi.org/01903/v1.3.2#", "DataObjectFormat");
-    private static final QName _AttributeCertificateRefs_QNAME = new QName("http://uri.etsi.org/01903/v1.3.2#", "AttributeCertificateRefs");
-    private static final QName _TimeStampValidationData_QNAME = new QName("http://uri.etsi.org/01903/v1.4.1#", "TimeStampValidationData");
-    private static final QName _SignedProperties_QNAME = new QName("http://uri.etsi.org/01903/v1.3.2#", "SignedProperties");
-    private static final QName _CompleteCertificateRefs_QNAME = new QName("http://uri.etsi.org/01903/v1.3.2#", "CompleteCertificateRefs");
-    private static final QName _AttributeRevocationRefs_QNAME = new QName("http://uri.etsi.org/01903/v1.3.2#", "AttributeRevocationRefs");
+    public static final String ORG_01903_V_1_3_2 = "http://uri.etsi.org/01903/v1.3.2#";
+    public static final String ORG_01903_V_1_4_1 = "http://uri.etsi.org/01903/v1.4.1#";
+    private static final QName _UnsignedDataObjectProperties_QNAME = new QName(ORG_01903_V_1_3_2, "UnsignedDataObjectProperties");
+    private static final QName _SignatureTimeStamp_QNAME = new QName(ORG_01903_V_1_3_2, "SignatureTimeStamp");
+    private static final QName _IndividualDataObjectsTimeStamp_QNAME = new QName(ORG_01903_V_1_3_2, "IndividualDataObjectsTimeStamp");
+    private static final QName _AttrAuthoritiesCertValues_QNAME = new QName(ORG_01903_V_1_3_2, "AttrAuthoritiesCertValues");
+    private static final QName _ArchiveTimeStamp_QNAME = new QName(ORG_01903_V_1_3_2, "ArchiveTimeStamp");
+    private static final QName _SPUserNotice_QNAME = new QName(ORG_01903_V_1_3_2, "SPUserNotice");
+    private static final QName _UnsignedProperties_QNAME = new QName(ORG_01903_V_1_3_2, "UnsignedProperties");
+    private static final QName _CompleteRevocationRefs_QNAME = new QName(ORG_01903_V_1_3_2, "CompleteRevocationRefs");
+    private static final QName _AttributeRevocationValues_QNAME = new QName(ORG_01903_V_1_3_2, "AttributeRevocationValues");
+    private static final QName _SignedSignatureProperties_QNAME = new QName(ORG_01903_V_1_3_2, "SignedSignatureProperties");
+    private static final QName _ObjectIdentifier_QNAME = new QName(ORG_01903_V_1_3_2, "ObjectIdentifier");
+    private static final QName _OtherTimeStamp_QNAME = new QName(ORG_01903_V_1_3_2, "OtherTimeStamp");
+    private static final QName _RefsOnlyTimeStamp_QNAME = new QName(ORG_01903_V_1_3_2, "RefsOnlyTimeStamp");
+    private static final QName _SPURI_QNAME = new QName(ORG_01903_V_1_3_2, "SPURI");
+    private static final QName _SignedDataObjectProperties_QNAME = new QName(ORG_01903_V_1_3_2, "SignedDataObjectProperties");
+    private static final QName _CounterSignature_QNAME = new QName(ORG_01903_V_1_3_2, "CounterSignature");
+    private static final QName _QualifyingProperties_QNAME = new QName(ORG_01903_V_1_3_2, "QualifyingProperties");
+    private static final QName _SigningCertificate_QNAME = new QName(ORG_01903_V_1_3_2, "SigningCertificate");
+    private static final QName _ReferenceInfo_QNAME = new QName(ORG_01903_V_1_3_2, "ReferenceInfo");
+    private static final QName _XAdESTimeStamp_QNAME = new QName(ORG_01903_V_1_3_2, "XAdESTimeStamp");
+    private static final QName _SignatureProductionPlace_QNAME = new QName(ORG_01903_V_1_3_2, "SignatureProductionPlace");
+    private static final QName _EncapsulatedPKIData_QNAME = new QName(ORG_01903_V_1_3_2, "EncapsulatedPKIData");
+    private static final QName _UnsignedSignatureProperties_QNAME = new QName(ORG_01903_V_1_3_2, "UnsignedSignatureProperties");
+    private static final QName _CommitmentTypeIndication_QNAME = new QName(ORG_01903_V_1_3_2, "CommitmentTypeIndication");
+    private static final QName _AllDataObjectsTimeStamp_QNAME = new QName(ORG_01903_V_1_3_2, "AllDataObjectsTimeStamp");
+    private static final QName _SignerRole_QNAME = new QName(ORG_01903_V_1_3_2, "SignerRole");
+    private static final QName _RevocationValues_QNAME = new QName(ORG_01903_V_1_3_2, "RevocationValues");
+    private static final QName _ArchiveTimeStampV2_QNAME = new QName(ORG_01903_V_1_4_1, "ArchiveTimeStampV2");
+    private static final QName _QualifyingPropertiesReference_QNAME = new QName(ORG_01903_V_1_3_2, "QualifyingPropertiesReference");
+    private static final QName _CertificateValues_QNAME = new QName(ORG_01903_V_1_3_2, "CertificateValues");
+    private static final QName _Any_QNAME = new QName(ORG_01903_V_1_3_2, "Any");
+    private static final QName _SignaturePolicyIdentifier_QNAME = new QName(ORG_01903_V_1_3_2, "SignaturePolicyIdentifier");
+    private static final QName _SigningTime_QNAME = new QName(ORG_01903_V_1_3_2, "SigningTime");
+    private static final QName _Include_QNAME = new QName(ORG_01903_V_1_3_2, "Include");
+    private static final QName _SigAndRefsTimeStamp_QNAME = new QName(ORG_01903_V_1_3_2, "SigAndRefsTimeStamp");
+    private static final QName _DataObjectFormat_QNAME = new QName(ORG_01903_V_1_3_2, "DataObjectFormat");
+    private static final QName _AttributeCertificateRefs_QNAME = new QName(ORG_01903_V_1_3_2, "AttributeCertificateRefs");
+    private static final QName _TimeStampValidationData_QNAME = new QName("ORG_01903_V_1_4_1", "TimeStampValidationData");
+    private static final QName _SignedProperties_QNAME = new QName(ORG_01903_V_1_3_2, "SignedProperties");
+    private static final QName _CompleteCertificateRefs_QNAME = new QName(ORG_01903_V_1_3_2, "CompleteCertificateRefs");
+    private static final QName _AttributeRevocationRefs_QNAME = new QName(ORG_01903_V_1_3_2, "AttributeRevocationRefs");
 
     /**
      * Create a new ObjectFactory that can be used to create new instances of schema derived classes for package: xades4j.marshalling.xades
-     * 
+     *
      */
     public ObjectFactory() {
         // TODO document why this constructor is empty
@@ -85,7 +86,7 @@ public class ObjectFactory {
 
     /**
      * Create an instance of {@link XmlCertifiedRolesListType }
-     * 
+     *
      */
     public XmlCertifiedRolesListType createXmlCertifiedRolesListType() {
         return new XmlCertifiedRolesListType();
@@ -93,7 +94,7 @@ public class ObjectFactory {
 
     /**
      * Create an instance of {@link XmlCommitmentTypeIndicationType }
-     * 
+     *
      */
     public XmlCommitmentTypeIndicationType createXmlCommitmentTypeIndicationType() {
         return new XmlCommitmentTypeIndicationType();
@@ -101,7 +102,7 @@ public class ObjectFactory {
 
     /**
      * Create an instance of {@link XmlRevocationValuesType }
-     * 
+     *
      */
     public XmlRevocationValuesType createXmlRevocationValuesType() {
         return new XmlRevocationValuesType();
@@ -109,7 +110,7 @@ public class ObjectFactory {
 
     /**
      * Create an instance of {@link XmlDocumentationReferencesType }
-     * 
+     *
      */
     public XmlDocumentationReferencesType createXmlDocumentationReferencesType() {
         return new XmlDocumentationReferencesType();
@@ -117,7 +118,7 @@ public class ObjectFactory {
 
     /**
      * Create an instance of {@link XmlSPUserNoticeType }
-     * 
+     *
      */
     public XmlSPUserNoticeType createXmlSPUserNoticeType() {
         return new XmlSPUserNoticeType();
@@ -125,7 +126,7 @@ public class ObjectFactory {
 
     /**
      * Create an instance of {@link XmlCertIDListType }
-     * 
+     *
      */
     public XmlCertIDListType createXmlCertIDListType() {
         return new XmlCertIDListType();
@@ -133,7 +134,7 @@ public class ObjectFactory {
 
     /**
      * Create an instance of {@link XmlSignedPropertiesType }
-     * 
+     *
      */
     public XmlSignedPropertiesType createXmlSignedPropertiesType() {
         return new XmlSignedPropertiesType();
@@ -141,7 +142,7 @@ public class ObjectFactory {
 
     /**
      * Create an instance of {@link XmlSignaturePolicyIdType }
-     * 
+     *
      */
     public XmlSignaturePolicyIdType createXmlSignaturePolicyIdType() {
         return new XmlSignaturePolicyIdType();
@@ -149,7 +150,7 @@ public class ObjectFactory {
 
     /**
      * Create an instance of {@link XmlReferenceInfoType }
-     * 
+     *
      */
     public XmlReferenceInfoType createXmlReferenceInfoType() {
         return new XmlReferenceInfoType();
@@ -157,7 +158,7 @@ public class ObjectFactory {
 
     /**
      * Create an instance of {@link XmlOCSPRefsType }
-     * 
+     *
      */
     public XmlOCSPRefsType createXmlOCSPRefsType() {
         return new XmlOCSPRefsType();
@@ -165,7 +166,7 @@ public class ObjectFactory {
 
     /**
      * Create an instance of {@link XmlEncapsulatedPKIDataType }
-     * 
+     *
      */
     public XmlEncapsulatedPKIDataType createXmlEncapsulatedPKIDataType() {
         return new XmlEncapsulatedPKIDataType();
@@ -173,7 +174,7 @@ public class ObjectFactory {
 
     /**
      * Create an instance of {@link XmlCompleteCertificateRefsType }
-     * 
+     *
      */
     public XmlCompleteCertificateRefsType createXmlCompleteCertificateRefsType() {
         return new XmlCompleteCertificateRefsType();
@@ -181,7 +182,7 @@ public class ObjectFactory {
 
     /**
      * Create an instance of {@link XmlDigestAlgAndValueType }
-     * 
+     *
      */
     public XmlDigestAlgAndValueType createXmlDigestAlgAndValueType() {
         return new XmlDigestAlgAndValueType();
@@ -189,7 +190,7 @@ public class ObjectFactory {
 
     /**
      * Create an instance of {@link XmlObjectIdentifierType }
-     * 
+     *
      */
     public XmlObjectIdentifierType createXmlObjectIdentifierType() {
         return new XmlObjectIdentifierType();
@@ -197,7 +198,7 @@ public class ObjectFactory {
 
     /**
      * Create an instance of {@link XmlOCSPRefType }
-     * 
+     *
      */
     public XmlOCSPRefType createXmlOCSPRefType() {
         return new XmlOCSPRefType();
@@ -205,7 +206,7 @@ public class ObjectFactory {
 
     /**
      * Create an instance of {@link XmlCRLRefType }
-     * 
+     *
      */
     public XmlCRLRefType createXmlCRLRefType() {
         return new XmlCRLRefType();
@@ -213,7 +214,7 @@ public class ObjectFactory {
 
     /**
      * Create an instance of {@link XmlUnsignedSignaturePropertiesType }
-     * 
+     *
      */
     public XmlUnsignedSignaturePropertiesType createXmlUnsignedSignaturePropertiesType() {
         return new XmlUnsignedSignaturePropertiesType();
@@ -221,7 +222,7 @@ public class ObjectFactory {
 
     /**
      * Create an instance of {@link XmlSignerRoleType }
-     * 
+     *
      */
     public XmlSignerRoleType createXmlSignerRoleType() {
         return new XmlSignerRoleType();
@@ -229,7 +230,7 @@ public class ObjectFactory {
 
     /**
      * Create an instance of {@link XmlUnsignedDataObjectPropertiesType }
-     * 
+     *
      */
     public XmlUnsignedDataObjectPropertiesType createXmlUnsignedDataObjectPropertiesType() {
         return new XmlUnsignedDataObjectPropertiesType();
@@ -237,7 +238,7 @@ public class ObjectFactory {
 
     /**
      * Create an instance of {@link XmlIdentifierType }
-     * 
+     *
      */
     public XmlIdentifierType createXmlIdentifierType() {
         return new XmlIdentifierType();
@@ -245,7 +246,7 @@ public class ObjectFactory {
 
     /**
      * Create an instance of {@link XmlCounterSignatureType }
-     * 
+     *
      */
     public XmlCounterSignatureType createXmlCounterSignatureType() {
         return new XmlCounterSignatureType();
@@ -253,7 +254,7 @@ public class ObjectFactory {
 
     /**
      * Create an instance of {@link XmlSignedDataObjectPropertiesType }
-     * 
+     *
      */
     public XmlSignedDataObjectPropertiesType createXmlSignedDataObjectPropertiesType() {
         return new XmlSignedDataObjectPropertiesType();
@@ -261,7 +262,7 @@ public class ObjectFactory {
 
     /**
      * Create an instance of {@link XmlUnsignedPropertiesType }
-     * 
+     *
      */
     public XmlUnsignedPropertiesType createXmlUnsignedPropertiesType() {
         return new XmlUnsignedPropertiesType();
@@ -269,7 +270,7 @@ public class ObjectFactory {
 
     /**
      * Create an instance of {@link XmlNoticeReferenceType }
-     * 
+     *
      */
     public XmlNoticeReferenceType createXmlNoticeReferenceType() {
         return new XmlNoticeReferenceType();
@@ -277,7 +278,7 @@ public class ObjectFactory {
 
     /**
      * Create an instance of {@link XmlCertificateValuesType }
-     * 
+     *
      */
     public XmlCertificateValuesType createXmlCertificateValuesType() {
         return new XmlCertificateValuesType();
@@ -285,7 +286,7 @@ public class ObjectFactory {
 
     /**
      * Create an instance of {@link XmlOtherCertStatusRefsType }
-     * 
+     *
      */
     public XmlOtherCertStatusRefsType createXmlOtherCertStatusRefsType() {
         return new XmlOtherCertStatusRefsType();
@@ -293,7 +294,7 @@ public class ObjectFactory {
 
     /**
      * Create an instance of {@link XmlQualifyingPropertiesType }
-     * 
+     *
      */
     public XmlQualifyingPropertiesType createXmlQualifyingPropertiesType() {
         return new XmlQualifyingPropertiesType();
@@ -301,7 +302,7 @@ public class ObjectFactory {
 
     /**
      * Create an instance of {@link XmlCommitmentTypeQualifiersListType }
-     * 
+     *
      */
     public XmlCommitmentTypeQualifiersListType createXmlCommitmentTypeQualifiersListType() {
         return new XmlCommitmentTypeQualifiersListType();
@@ -309,7 +310,7 @@ public class ObjectFactory {
 
     /**
      * Create an instance of {@link XmlSignatureProductionPlaceType }
-     * 
+     *
      */
     public XmlSignatureProductionPlaceType createXmlSignatureProductionPlaceType() {
         return new XmlSignatureProductionPlaceType();
@@ -317,7 +318,7 @@ public class ObjectFactory {
 
     /**
      * Create an instance of {@link XmlSignedSignaturePropertiesType }
-     * 
+     *
      */
     public XmlSignedSignaturePropertiesType createXmlSignedSignaturePropertiesType() {
         return new XmlSignedSignaturePropertiesType();
@@ -325,7 +326,7 @@ public class ObjectFactory {
 
     /**
      * Create an instance of {@link XmlOtherTimeStampType }
-     * 
+     *
      */
     public XmlOtherTimeStampType createXmlOtherTimeStampType() {
         return new XmlOtherTimeStampType();
@@ -333,7 +334,7 @@ public class ObjectFactory {
 
     /**
      * Create an instance of {@link XmlCRLValuesType }
-     * 
+     *
      */
     public XmlCRLValuesType createXmlCRLValuesType() {
         return new XmlCRLValuesType();
@@ -341,7 +342,7 @@ public class ObjectFactory {
 
     /**
      * Create an instance of {@link XmlXAdESTimeStampType }
-     * 
+     *
      */
     public XmlXAdESTimeStampType createXmlXAdESTimeStampType() {
         return new XmlXAdESTimeStampType();
@@ -349,7 +350,7 @@ public class ObjectFactory {
 
     /**
      * Create an instance of {@link XmlSigPolicyQualifiersListType }
-     * 
+     *
      */
     public XmlSigPolicyQualifiersListType createXmlSigPolicyQualifiersListType() {
         return new XmlSigPolicyQualifiersListType();
@@ -357,7 +358,7 @@ public class ObjectFactory {
 
     /**
      * Create an instance of {@link XmlCompleteRevocationRefsType }
-     * 
+     *
      */
     public XmlCompleteRevocationRefsType createXmlCompleteRevocationRefsType() {
         return new XmlCompleteRevocationRefsType();
@@ -365,7 +366,7 @@ public class ObjectFactory {
 
     /**
      * Create an instance of {@link XmlOCSPValuesType }
-     * 
+     *
      */
     public XmlOCSPValuesType createXmlOCSPValuesType() {
         return new XmlOCSPValuesType();
@@ -373,7 +374,7 @@ public class ObjectFactory {
 
     /**
      * Create an instance of {@link XmlCRLIdentifierType }
-     * 
+     *
      */
     public XmlCRLIdentifierType createXmlCRLIdentifierType() {
         return new XmlCRLIdentifierType();
@@ -381,7 +382,7 @@ public class ObjectFactory {
 
     /**
      * Create an instance of {@link XmlClaimedRolesListType }
-     * 
+     *
      */
     public XmlClaimedRolesListType createXmlClaimedRolesListType() {
         return new XmlClaimedRolesListType();
@@ -389,7 +390,7 @@ public class ObjectFactory {
 
     /**
      * Create an instance of {@link XmlResponderIDType }
-     * 
+     *
      */
     public XmlResponderIDType createXmlResponderIDType() {
         return new XmlResponderIDType();
@@ -397,7 +398,7 @@ public class ObjectFactory {
 
     /**
      * Create an instance of {@link XmlQualifyingPropertiesReferenceType }
-     * 
+     *
      */
     public XmlQualifyingPropertiesReferenceType createXmlQualifyingPropertiesReferenceType() {
         return new XmlQualifyingPropertiesReferenceType();
@@ -405,7 +406,7 @@ public class ObjectFactory {
 
     /**
      * Create an instance of {@link XmlOtherCertStatusValuesType }
-     * 
+     *
      */
     public XmlOtherCertStatusValuesType createXmlOtherCertStatusValuesType() {
         return new XmlOtherCertStatusValuesType();
@@ -413,7 +414,7 @@ public class ObjectFactory {
 
     /**
      * Create an instance of {@link XmlIncludeType }
-     * 
+     *
      */
     public XmlIncludeType createXmlIncludeType() {
         return new XmlIncludeType();
@@ -421,7 +422,7 @@ public class ObjectFactory {
 
     /**
      * Create an instance of {@link XmlCRLRefsType }
-     * 
+     *
      */
     public XmlCRLRefsType createXmlCRLRefsType() {
         return new XmlCRLRefsType();
@@ -429,7 +430,7 @@ public class ObjectFactory {
 
     /**
      * Create an instance of {@link XmlAnyType }
-     * 
+     *
      */
     public XmlAnyType createXmlAnyType() {
         return new XmlAnyType();
@@ -437,7 +438,7 @@ public class ObjectFactory {
 
     /**
      * Create an instance of {@link XmlSignaturePolicyIdentifierType }
-     * 
+     *
      */
     public XmlSignaturePolicyIdentifierType createXmlSignaturePolicyIdentifierType() {
         return new XmlSignaturePolicyIdentifierType();
@@ -445,7 +446,7 @@ public class ObjectFactory {
 
     /**
      * Create an instance of {@link XmlCertIDType }
-     * 
+     *
      */
     public XmlCertIDType createXmlCertIDType() {
         return new XmlCertIDType();
@@ -453,7 +454,7 @@ public class ObjectFactory {
 
     /**
      * Create an instance of {@link XmlIntegerListType }
-     * 
+     *
      */
     public XmlIntegerListType createXmlIntegerListType() {
         return new XmlIntegerListType();
@@ -461,7 +462,7 @@ public class ObjectFactory {
 
     /**
      * Create an instance of {@link XmlOCSPIdentifierType }
-     * 
+     *
      */
     public XmlOCSPIdentifierType createXmlOCSPIdentifierType() {
         return new XmlOCSPIdentifierType();
@@ -469,7 +470,7 @@ public class ObjectFactory {
 
     /**
      * Create an instance of {@link XmlDataObjectFormatType }
-     * 
+     *
      */
     public XmlDataObjectFormatType createXmlDataObjectFormatType() {
         return new XmlDataObjectFormatType();
@@ -477,7 +478,7 @@ public class ObjectFactory {
 
     /**
      * Create an instance of {@link XmlValidationDataType }
-     * 
+     *
      */
     public XmlValidationDataType createXmlValidationDataType() {
         return new XmlValidationDataType();
@@ -485,250 +486,250 @@ public class ObjectFactory {
 
     /**
      * Create an instance of {@link JAXBElement }{@code <}{@link XmlUnsignedDataObjectPropertiesType }{@code >}}
-     * 
+     *
      */
-    @XmlElementDecl(namespace = "http://uri.etsi.org/01903/v1.3.2#", name = "UnsignedDataObjectProperties")
+    @XmlElementDecl(namespace = ORG_01903_V_1_3_2, name = "UnsignedDataObjectProperties")
     public JAXBElement<XmlUnsignedDataObjectPropertiesType> createUnsignedDataObjectProperties(XmlUnsignedDataObjectPropertiesType value) {
         return new JAXBElement<>(_UnsignedDataObjectProperties_QNAME, XmlUnsignedDataObjectPropertiesType.class, null, value);
     }
 
     /**
      * Create an instance of {@link JAXBElement }{@code <}{@link XmlXAdESTimeStampType }{@code >}}
-     * 
+     *
      */
-    @XmlElementDecl(namespace = "http://uri.etsi.org/01903/v1.3.2#", name = "SignatureTimeStamp")
+    @XmlElementDecl(namespace = ORG_01903_V_1_3_2, name = "SignatureTimeStamp")
     public JAXBElement<XmlXAdESTimeStampType> createSignatureTimeStamp(XmlXAdESTimeStampType value) {
         return new JAXBElement<>(_SignatureTimeStamp_QNAME, XmlXAdESTimeStampType.class, null, value);
     }
 
     /**
      * Create an instance of {@link JAXBElement }{@code <}{@link XmlXAdESTimeStampType }{@code >}}
-     * 
+     *
      */
-    @XmlElementDecl(namespace = "http://uri.etsi.org/01903/v1.3.2#", name = "IndividualDataObjectsTimeStamp")
+    @XmlElementDecl(namespace = ORG_01903_V_1_3_2, name = "IndividualDataObjectsTimeStamp")
     public JAXBElement<XmlXAdESTimeStampType> createIndividualDataObjectsTimeStamp(XmlXAdESTimeStampType value) {
         return new JAXBElement<>(_IndividualDataObjectsTimeStamp_QNAME, XmlXAdESTimeStampType.class, null, value);
     }
 
     /**
      * Create an instance of {@link JAXBElement }{@code <}{@link XmlCertificateValuesType }{@code >}}
-     * 
+     *
      */
-    @XmlElementDecl(namespace = "http://uri.etsi.org/01903/v1.3.2#", name = "AttrAuthoritiesCertValues")
+    @XmlElementDecl(namespace = ORG_01903_V_1_3_2, name = "AttrAuthoritiesCertValues")
     public JAXBElement<XmlCertificateValuesType> createAttrAuthoritiesCertValues(XmlCertificateValuesType value) {
         return new JAXBElement<>(_AttrAuthoritiesCertValues_QNAME, XmlCertificateValuesType.class, null, value);
     }
 
     /**
      * Create an instance of {@link JAXBElement }{@code <}{@link XmlXAdESTimeStampType }{@code >}}
-     * 
+     *
      */
-    @XmlElementDecl(namespace = "http://uri.etsi.org/01903/v1.3.2#", name = "ArchiveTimeStamp")
+    @XmlElementDecl(namespace = ORG_01903_V_1_3_2, name = "ArchiveTimeStamp")
     public JAXBElement<XmlXAdESTimeStampType> createArchiveTimeStamp(XmlXAdESTimeStampType value) {
         return new JAXBElement<>(_ArchiveTimeStamp_QNAME, XmlXAdESTimeStampType.class, null, value);
     }
 
     /**
      * Create an instance of {@link JAXBElement }{@code <}{@link XmlSPUserNoticeType }{@code >}}
-     * 
+     *
      */
-    @XmlElementDecl(namespace = "http://uri.etsi.org/01903/v1.3.2#", name = "SPUserNotice")
+    @XmlElementDecl(namespace = ORG_01903_V_1_3_2, name = "SPUserNotice")
     public JAXBElement<XmlSPUserNoticeType> createSPUserNotice(XmlSPUserNoticeType value) {
         return new JAXBElement<>(_SPUserNotice_QNAME, XmlSPUserNoticeType.class, null, value);
     }
 
     /**
      * Create an instance of {@link JAXBElement }{@code <}{@link XmlUnsignedPropertiesType }{@code >}}
-     * 
+     *
      */
-    @XmlElementDecl(namespace = "http://uri.etsi.org/01903/v1.3.2#", name = "UnsignedProperties")
+    @XmlElementDecl(namespace = ORG_01903_V_1_3_2, name = "UnsignedProperties")
     public JAXBElement<XmlUnsignedPropertiesType> createUnsignedProperties(XmlUnsignedPropertiesType value) {
         return new JAXBElement<>(_UnsignedProperties_QNAME, XmlUnsignedPropertiesType.class, null, value);
     }
 
     /**
      * Create an instance of {@link JAXBElement }{@code <}{@link XmlCompleteRevocationRefsType }{@code >}}
-     * 
+     *
      */
-    @XmlElementDecl(namespace = "http://uri.etsi.org/01903/v1.3.2#", name = "CompleteRevocationRefs")
+    @XmlElementDecl(namespace = ORG_01903_V_1_3_2, name = "CompleteRevocationRefs")
     public JAXBElement<XmlCompleteRevocationRefsType> createCompleteRevocationRefs(XmlCompleteRevocationRefsType value) {
         return new JAXBElement<>(_CompleteRevocationRefs_QNAME, XmlCompleteRevocationRefsType.class, null, value);
     }
 
     /**
      * Create an instance of {@link JAXBElement }{@code <}{@link XmlRevocationValuesType }{@code >}}
-     * 
+     *
      */
-    @XmlElementDecl(namespace = "http://uri.etsi.org/01903/v1.3.2#", name = "AttributeRevocationValues")
+    @XmlElementDecl(namespace = ORG_01903_V_1_3_2, name = "AttributeRevocationValues")
     public JAXBElement<XmlRevocationValuesType> createAttributeRevocationValues(XmlRevocationValuesType value) {
         return new JAXBElement<>(_AttributeRevocationValues_QNAME, XmlRevocationValuesType.class, null, value);
     }
 
     /**
      * Create an instance of {@link JAXBElement }{@code <}{@link XmlSignedSignaturePropertiesType }{@code >}}
-     * 
+     *
      */
-    @XmlElementDecl(namespace = "http://uri.etsi.org/01903/v1.3.2#", name = "SignedSignatureProperties")
+    @XmlElementDecl(namespace = ORG_01903_V_1_3_2, name = "SignedSignatureProperties")
     public JAXBElement<XmlSignedSignaturePropertiesType> createSignedSignatureProperties(XmlSignedSignaturePropertiesType value) {
         return new JAXBElement<>(_SignedSignatureProperties_QNAME, XmlSignedSignaturePropertiesType.class, null, value);
     }
 
     /**
      * Create an instance of {@link JAXBElement }{@code <}{@link XmlObjectIdentifierType }{@code >}}
-     * 
+     *
      */
-    @XmlElementDecl(namespace = "http://uri.etsi.org/01903/v1.3.2#", name = "ObjectIdentifier")
+    @XmlElementDecl(namespace = ORG_01903_V_1_3_2, name = "ObjectIdentifier")
     public JAXBElement<XmlObjectIdentifierType> createObjectIdentifier(XmlObjectIdentifierType value) {
         return new JAXBElement<>(_ObjectIdentifier_QNAME, XmlObjectIdentifierType.class, null, value);
     }
 
     /**
      * Create an instance of {@link JAXBElement }{@code <}{@link XmlOtherTimeStampType }{@code >}}
-     * 
+     *
      */
-    @XmlElementDecl(namespace = "http://uri.etsi.org/01903/v1.3.2#", name = "OtherTimeStamp")
+    @XmlElementDecl(namespace = ORG_01903_V_1_3_2, name = "OtherTimeStamp")
     public JAXBElement<XmlOtherTimeStampType> createOtherTimeStamp(XmlOtherTimeStampType value) {
         return new JAXBElement<>(_OtherTimeStamp_QNAME, XmlOtherTimeStampType.class, null, value);
     }
 
     /**
      * Create an instance of {@link JAXBElement }{@code <}{@link XmlXAdESTimeStampType }{@code >}}
-     * 
+     *
      */
-    @XmlElementDecl(namespace = "http://uri.etsi.org/01903/v1.3.2#", name = "RefsOnlyTimeStamp")
+    @XmlElementDecl(namespace = ORG_01903_V_1_3_2, name = "RefsOnlyTimeStamp")
     public JAXBElement<XmlXAdESTimeStampType> createRefsOnlyTimeStamp(XmlXAdESTimeStampType value) {
         return new JAXBElement<>(_RefsOnlyTimeStamp_QNAME, XmlXAdESTimeStampType.class, null, value);
     }
 
     /**
      * Create an instance of {@link JAXBElement }{@code <}{@link String }{@code >}}
-     * 
+     *
      */
-    @XmlElementDecl(namespace = "http://uri.etsi.org/01903/v1.3.2#", name = "SPURI")
+    @XmlElementDecl(namespace = ORG_01903_V_1_3_2, name = "SPURI")
     public JAXBElement<String> createSPURI(String value) {
         return new JAXBElement<>(_SPURI_QNAME, String.class, null, value);
     }
 
     /**
      * Create an instance of {@link JAXBElement }{@code <}{@link XmlSignedDataObjectPropertiesType }{@code >}}
-     * 
+     *
      */
-    @XmlElementDecl(namespace = "http://uri.etsi.org/01903/v1.3.2#", name = "SignedDataObjectProperties")
+    @XmlElementDecl(namespace = ORG_01903_V_1_3_2, name = "SignedDataObjectProperties")
     public JAXBElement<XmlSignedDataObjectPropertiesType> createSignedDataObjectProperties(XmlSignedDataObjectPropertiesType value) {
         return new JAXBElement<>(_SignedDataObjectProperties_QNAME, XmlSignedDataObjectPropertiesType.class, null, value);
     }
 
     /**
      * Create an instance of {@link JAXBElement }{@code <}{@link XmlCounterSignatureType }{@code >}}
-     * 
+     *
      */
-    @XmlElementDecl(namespace = "http://uri.etsi.org/01903/v1.3.2#", name = "CounterSignature")
+    @XmlElementDecl(namespace = ORG_01903_V_1_3_2, name = "CounterSignature")
     public JAXBElement<XmlCounterSignatureType> createCounterSignature(XmlCounterSignatureType value) {
         return new JAXBElement<>(_CounterSignature_QNAME, XmlCounterSignatureType.class, null, value);
     }
 
     /**
      * Create an instance of {@link JAXBElement }{@code <}{@link XmlQualifyingPropertiesType }{@code >}}
-     * 
+     *
      */
-    @XmlElementDecl(namespace = "http://uri.etsi.org/01903/v1.3.2#", name = "QualifyingProperties")
+    @XmlElementDecl(namespace = ORG_01903_V_1_3_2, name = "QualifyingProperties")
     public JAXBElement<XmlQualifyingPropertiesType> createQualifyingProperties(XmlQualifyingPropertiesType value) {
         return new JAXBElement<>(_QualifyingProperties_QNAME, XmlQualifyingPropertiesType.class, null, value);
     }
 
     /**
      * Create an instance of {@link JAXBElement }{@code <}{@link XmlCertIDListType }{@code >}}
-     * 
+     *
      */
-    @XmlElementDecl(namespace = "http://uri.etsi.org/01903/v1.3.2#", name = "SigningCertificate")
+    @XmlElementDecl(namespace = ORG_01903_V_1_3_2, name = "SigningCertificate")
     public JAXBElement<XmlCertIDListType> createSigningCertificate(XmlCertIDListType value) {
         return new JAXBElement<>(_SigningCertificate_QNAME, XmlCertIDListType.class, null, value);
     }
 
     /**
      * Create an instance of {@link JAXBElement }{@code <}{@link XmlReferenceInfoType }{@code >}}
-     * 
+     *
      */
-    @XmlElementDecl(namespace = "http://uri.etsi.org/01903/v1.3.2#", name = "ReferenceInfo")
+    @XmlElementDecl(namespace = ORG_01903_V_1_3_2, name = "ReferenceInfo")
     public JAXBElement<XmlReferenceInfoType> createReferenceInfo(XmlReferenceInfoType value) {
         return new JAXBElement<>(_ReferenceInfo_QNAME, XmlReferenceInfoType.class, null, value);
     }
 
     /**
      * Create an instance of {@link JAXBElement }{@code <}{@link XmlXAdESTimeStampType }{@code >}}
-     * 
+     *
      */
-    @XmlElementDecl(namespace = "http://uri.etsi.org/01903/v1.3.2#", name = "XAdESTimeStamp")
+    @XmlElementDecl(namespace = ORG_01903_V_1_3_2, name = "XAdESTimeStamp")
     public JAXBElement<XmlXAdESTimeStampType> createXAdESTimeStamp(XmlXAdESTimeStampType value) {
         return new JAXBElement<>(_XAdESTimeStamp_QNAME, XmlXAdESTimeStampType.class, null, value);
     }
 
     /**
      * Create an instance of {@link JAXBElement }{@code <}{@link XmlSignatureProductionPlaceType }{@code >}}
-     * 
+     *
      */
-    @XmlElementDecl(namespace = "http://uri.etsi.org/01903/v1.3.2#", name = "SignatureProductionPlace")
+    @XmlElementDecl(namespace = ORG_01903_V_1_3_2, name = "SignatureProductionPlace")
     public JAXBElement<XmlSignatureProductionPlaceType> createSignatureProductionPlace(XmlSignatureProductionPlaceType value) {
         return new JAXBElement<>(_SignatureProductionPlace_QNAME, XmlSignatureProductionPlaceType.class, null, value);
     }
 
     /**
      * Create an instance of {@link JAXBElement }{@code <}{@link XmlEncapsulatedPKIDataType }{@code >}}
-     * 
+     *
      */
-    @XmlElementDecl(namespace = "http://uri.etsi.org/01903/v1.3.2#", name = "EncapsulatedPKIData")
+    @XmlElementDecl(namespace = ORG_01903_V_1_3_2, name = "EncapsulatedPKIData")
     public JAXBElement<XmlEncapsulatedPKIDataType> createEncapsulatedPKIData(XmlEncapsulatedPKIDataType value) {
         return new JAXBElement<>(_EncapsulatedPKIData_QNAME, XmlEncapsulatedPKIDataType.class, null, value);
     }
 
     /**
      * Create an instance of {@link JAXBElement }{@code <}{@link XmlUnsignedSignaturePropertiesType }{@code >}}
-     * 
+     *
      */
-    @XmlElementDecl(namespace = "http://uri.etsi.org/01903/v1.3.2#", name = "UnsignedSignatureProperties")
+    @XmlElementDecl(namespace = ORG_01903_V_1_3_2, name = "UnsignedSignatureProperties")
     public JAXBElement<XmlUnsignedSignaturePropertiesType> createUnsignedSignatureProperties(XmlUnsignedSignaturePropertiesType value) {
         return new JAXBElement<>(_UnsignedSignatureProperties_QNAME, XmlUnsignedSignaturePropertiesType.class, null, value);
     }
 
     /**
      * Create an instance of {@link JAXBElement }{@code <}{@link XmlCommitmentTypeIndicationType }{@code >}}
-     * 
+     *
      */
-    @XmlElementDecl(namespace = "http://uri.etsi.org/01903/v1.3.2#", name = "CommitmentTypeIndication")
+    @XmlElementDecl(namespace = ORG_01903_V_1_3_2, name = "CommitmentTypeIndication")
     public JAXBElement<XmlCommitmentTypeIndicationType> createCommitmentTypeIndication(XmlCommitmentTypeIndicationType value) {
         return new JAXBElement<>(_CommitmentTypeIndication_QNAME, XmlCommitmentTypeIndicationType.class, null, value);
     }
 
     /**
      * Create an instance of {@link JAXBElement }{@code <}{@link XmlXAdESTimeStampType }{@code >}}
-     * 
+     *
      */
-    @XmlElementDecl(namespace = "http://uri.etsi.org/01903/v1.3.2#", name = "AllDataObjectsTimeStamp")
+    @XmlElementDecl(namespace = ORG_01903_V_1_3_2, name = "AllDataObjectsTimeStamp")
     public JAXBElement<XmlXAdESTimeStampType> createAllDataObjectsTimeStamp(XmlXAdESTimeStampType value) {
         return new JAXBElement<>(_AllDataObjectsTimeStamp_QNAME, XmlXAdESTimeStampType.class, null, value);
     }
 
     /**
      * Create an instance of {@link JAXBElement }{@code <}{@link XmlSignerRoleType }{@code >}}
-     * 
+     *
      */
-    @XmlElementDecl(namespace = "http://uri.etsi.org/01903/v1.3.2#", name = "SignerRole")
+    @XmlElementDecl(namespace = ORG_01903_V_1_3_2, name = "SignerRole")
     public JAXBElement<XmlSignerRoleType> createSignerRole(XmlSignerRoleType value) {
         return new JAXBElement<>(_SignerRole_QNAME, XmlSignerRoleType.class, null, value);
     }
 
     /**
      * Create an instance of {@link JAXBElement }{@code <}{@link XmlRevocationValuesType }{@code >}}
-     * 
+     *
      */
-    @XmlElementDecl(namespace = "http://uri.etsi.org/01903/v1.3.2#", name = "RevocationValues")
+    @XmlElementDecl(namespace = ORG_01903_V_1_3_2, name = "RevocationValues")
     public JAXBElement<XmlRevocationValuesType> createRevocationValues(XmlRevocationValuesType value) {
         return new JAXBElement<>(_RevocationValues_QNAME, XmlRevocationValuesType.class, null, value);
     }
 
     /**
      * Create an instance of {@link JAXBElement }{@code <}{@link XmlXAdESTimeStampType }{@code >}}
-     * 
+     *
      */
     @XmlElementDecl(namespace = "http://uri.etsi.org/01903/v1.4.1#", name = "ArchiveTimeStampV2")
     public JAXBElement<XmlXAdESTimeStampType> createArchiveTimeStampV2(XmlXAdESTimeStampType value) {
@@ -737,88 +738,88 @@ public class ObjectFactory {
 
     /**
      * Create an instance of {@link JAXBElement }{@code <}{@link XmlQualifyingPropertiesReferenceType }{@code >}}
-     * 
+     *
      */
-    @XmlElementDecl(namespace = "http://uri.etsi.org/01903/v1.3.2#", name = "QualifyingPropertiesReference")
+    @XmlElementDecl(namespace = ORG_01903_V_1_3_2, name = "QualifyingPropertiesReference")
     public JAXBElement<XmlQualifyingPropertiesReferenceType> createQualifyingPropertiesReference(XmlQualifyingPropertiesReferenceType value) {
         return new JAXBElement<>(_QualifyingPropertiesReference_QNAME, XmlQualifyingPropertiesReferenceType.class, null, value);
     }
 
     /**
      * Create an instance of {@link JAXBElement }{@code <}{@link XmlCertificateValuesType }{@code >}}
-     * 
+     *
      */
-    @XmlElementDecl(namespace = "http://uri.etsi.org/01903/v1.3.2#", name = "CertificateValues")
+    @XmlElementDecl(namespace = ORG_01903_V_1_3_2, name = "CertificateValues")
     public JAXBElement<XmlCertificateValuesType> createCertificateValues(XmlCertificateValuesType value) {
         return new JAXBElement<>(_CertificateValues_QNAME, XmlCertificateValuesType.class, null, value);
     }
 
     /**
      * Create an instance of {@link JAXBElement }{@code <}{@link XmlAnyType }{@code >}}
-     * 
+     *
      */
-    @XmlElementDecl(namespace = "http://uri.etsi.org/01903/v1.3.2#", name = "Any")
+    @XmlElementDecl(namespace = ORG_01903_V_1_3_2, name = "Any")
     public JAXBElement<XmlAnyType> createAny(XmlAnyType value) {
         return new JAXBElement<>(_Any_QNAME, XmlAnyType.class, null, value);
     }
 
     /**
      * Create an instance of {@link JAXBElement }{@code <}{@link XmlSignaturePolicyIdentifierType }{@code >}}
-     * 
+     *
      */
-    @XmlElementDecl(namespace = "http://uri.etsi.org/01903/v1.3.2#", name = "SignaturePolicyIdentifier")
+    @XmlElementDecl(namespace = ORG_01903_V_1_3_2, name = "SignaturePolicyIdentifier")
     public JAXBElement<XmlSignaturePolicyIdentifierType> createSignaturePolicyIdentifier(XmlSignaturePolicyIdentifierType value) {
         return new JAXBElement<>(_SignaturePolicyIdentifier_QNAME, XmlSignaturePolicyIdentifierType.class, null, value);
     }
 
     /**
      * Create an instance of {@link JAXBElement }{@code <}{@link XMLGregorianCalendar }{@code >}}
-     * 
+     *
      */
-    @XmlElementDecl(namespace = "http://uri.etsi.org/01903/v1.3.2#", name = "SigningTime")
+    @XmlElementDecl(namespace = ORG_01903_V_1_3_2, name = "SigningTime")
     public JAXBElement<XMLGregorianCalendar> createSigningTime(XMLGregorianCalendar value) {
         return new JAXBElement<>(_SigningTime_QNAME, XMLGregorianCalendar.class, null, value);
     }
 
     /**
      * Create an instance of {@link JAXBElement }{@code <}{@link XmlIncludeType }{@code >}}
-     * 
+     *
      */
-    @XmlElementDecl(namespace = "http://uri.etsi.org/01903/v1.3.2#", name = "Include")
+    @XmlElementDecl(namespace = ORG_01903_V_1_3_2, name = "Include")
     public JAXBElement<XmlIncludeType> createInclude(XmlIncludeType value) {
         return new JAXBElement<>(_Include_QNAME, XmlIncludeType.class, null, value);
     }
 
     /**
      * Create an instance of {@link JAXBElement }{@code <}{@link XmlXAdESTimeStampType }{@code >}}
-     * 
+     *
      */
-    @XmlElementDecl(namespace = "http://uri.etsi.org/01903/v1.3.2#", name = "SigAndRefsTimeStamp")
+    @XmlElementDecl(namespace = ORG_01903_V_1_3_2, name = "SigAndRefsTimeStamp")
     public JAXBElement<XmlXAdESTimeStampType> createSigAndRefsTimeStamp(XmlXAdESTimeStampType value) {
         return new JAXBElement<>(_SigAndRefsTimeStamp_QNAME, XmlXAdESTimeStampType.class, null, value);
     }
 
     /**
      * Create an instance of {@link JAXBElement }{@code <}{@link XmlDataObjectFormatType }{@code >}}
-     * 
+     *
      */
-    @XmlElementDecl(namespace = "http://uri.etsi.org/01903/v1.3.2#", name = "DataObjectFormat")
+    @XmlElementDecl(namespace = ORG_01903_V_1_3_2, name = "DataObjectFormat")
     public JAXBElement<XmlDataObjectFormatType> createDataObjectFormat(XmlDataObjectFormatType value) {
         return new JAXBElement<>(_DataObjectFormat_QNAME, XmlDataObjectFormatType.class, null, value);
     }
 
     /**
      * Create an instance of {@link JAXBElement }{@code <}{@link XmlCompleteCertificateRefsType }{@code >}}
-     * 
+     *
      */
-    @XmlElementDecl(namespace = "http://uri.etsi.org/01903/v1.3.2#", name = "AttributeCertificateRefs")
+    @XmlElementDecl(namespace = ORG_01903_V_1_3_2, name = "AttributeCertificateRefs")
     public JAXBElement<XmlCompleteCertificateRefsType> createAttributeCertificateRefs(XmlCompleteCertificateRefsType value) {
         return new JAXBElement<>(_AttributeCertificateRefs_QNAME, XmlCompleteCertificateRefsType.class, null, value);
     }
 
     /**
      * Create an instance of {@link JAXBElement }{@code <}{@link XmlValidationDataType }{@code >}}
-     * 
+     *
      */
     @XmlElementDecl(namespace = "http://uri.etsi.org/01903/v1.4.1#", name = "TimeStampValidationData")
     public JAXBElement<XmlValidationDataType> createTimeStampValidationData(XmlValidationDataType value) {
@@ -827,144 +828,144 @@ public class ObjectFactory {
 
     /**
      * Create an instance of {@link JAXBElement }{@code <}{@link XmlSignedPropertiesType }{@code >}}
-     * 
+     *
      */
-    @XmlElementDecl(namespace = "http://uri.etsi.org/01903/v1.3.2#", name = "SignedProperties")
+    @XmlElementDecl(namespace = ORG_01903_V_1_3_2, name = "SignedProperties")
     public JAXBElement<XmlSignedPropertiesType> createSignedProperties(XmlSignedPropertiesType value) {
         return new JAXBElement<>(_SignedProperties_QNAME, XmlSignedPropertiesType.class, null, value);
     }
 
     /**
      * Create an instance of {@link JAXBElement }{@code <}{@link XmlCompleteCertificateRefsType }{@code >}}
-     * 
+     *
      */
-    @XmlElementDecl(namespace = "http://uri.etsi.org/01903/v1.3.2#", name = "CompleteCertificateRefs")
+    @XmlElementDecl(namespace = ORG_01903_V_1_3_2, name = "CompleteCertificateRefs")
     public JAXBElement<XmlCompleteCertificateRefsType> createCompleteCertificateRefs(XmlCompleteCertificateRefsType value) {
         return new JAXBElement<>(_CompleteCertificateRefs_QNAME, XmlCompleteCertificateRefsType.class, null, value);
     }
 
     /**
      * Create an instance of {@link JAXBElement }{@code <}{@link XmlCompleteRevocationRefsType }{@code >}}
-     * 
+     *
      */
-    @XmlElementDecl(namespace = "http://uri.etsi.org/01903/v1.3.2#", name = "AttributeRevocationRefs")
+    @XmlElementDecl(namespace = ORG_01903_V_1_3_2, name = "AttributeRevocationRefs")
     public JAXBElement<XmlCompleteRevocationRefsType> createAttributeRevocationRefs(XmlCompleteRevocationRefsType value) {
         return new JAXBElement<>(_AttributeRevocationRefs_QNAME, XmlCompleteRevocationRefsType.class, null, value);
     }
 
     /**
      * Create an instance of {@link JAXBElement }{@code <}{@link XmlXAdESTimeStampType }{@code >}}
-     * 
+     *
      */
-    @XmlElementDecl(namespace = "http://uri.etsi.org/01903/v1.3.2#", name = "SignatureTimeStamp", scope = XmlUnsignedSignaturePropertiesType.class)
+    @XmlElementDecl(namespace = ORG_01903_V_1_3_2, name = "SignatureTimeStamp", scope = XmlUnsignedSignaturePropertiesType.class)
     public JAXBElement<XmlXAdESTimeStampType> createXmlUnsignedSignaturePropertiesTypeSignatureTimeStamp(XmlXAdESTimeStampType value) {
         return new JAXBElement<>(_SignatureTimeStamp_QNAME, XmlXAdESTimeStampType.class, XmlUnsignedSignaturePropertiesType.class, value);
     }
 
     /**
      * Create an instance of {@link JAXBElement }{@code <}{@link XmlCertificateValuesType }{@code >}}
-     * 
+     *
      */
-    @XmlElementDecl(namespace = "http://uri.etsi.org/01903/v1.3.2#", name = "CertificateValues", scope = XmlUnsignedSignaturePropertiesType.class)
+    @XmlElementDecl(namespace = ORG_01903_V_1_3_2, name = "CertificateValues", scope = XmlUnsignedSignaturePropertiesType.class)
     public JAXBElement<XmlCertificateValuesType> createXmlUnsignedSignaturePropertiesTypeCertificateValues(XmlCertificateValuesType value) {
         return new JAXBElement<>(_CertificateValues_QNAME, XmlCertificateValuesType.class, XmlUnsignedSignaturePropertiesType.class, value);
     }
 
     /**
      * Create an instance of {@link JAXBElement }{@code <}{@link XmlXAdESTimeStampType }{@code >}}
-     * 
+     *
      */
-    @XmlElementDecl(namespace = "http://uri.etsi.org/01903/v1.3.2#", name = "RefsOnlyTimeStamp", scope = XmlUnsignedSignaturePropertiesType.class)
+    @XmlElementDecl(namespace = ORG_01903_V_1_3_2, name = "RefsOnlyTimeStamp", scope = XmlUnsignedSignaturePropertiesType.class)
     public JAXBElement<XmlXAdESTimeStampType> createXmlUnsignedSignaturePropertiesTypeRefsOnlyTimeStamp(XmlXAdESTimeStampType value) {
         return new JAXBElement<>(_RefsOnlyTimeStamp_QNAME, XmlXAdESTimeStampType.class, XmlUnsignedSignaturePropertiesType.class, value);
     }
 
     /**
      * Create an instance of {@link JAXBElement }{@code <}{@link XmlCertificateValuesType }{@code >}}
-     * 
+     *
      */
-    @XmlElementDecl(namespace = "http://uri.etsi.org/01903/v1.3.2#", name = "AttrAuthoritiesCertValues", scope = XmlUnsignedSignaturePropertiesType.class)
+    @XmlElementDecl(namespace = ORG_01903_V_1_3_2, name = "AttrAuthoritiesCertValues", scope = XmlUnsignedSignaturePropertiesType.class)
     public JAXBElement<XmlCertificateValuesType> createXmlUnsignedSignaturePropertiesTypeAttrAuthoritiesCertValues(XmlCertificateValuesType value) {
         return new JAXBElement<>(_AttrAuthoritiesCertValues_QNAME, XmlCertificateValuesType.class, XmlUnsignedSignaturePropertiesType.class, value);
     }
 
     /**
      * Create an instance of {@link JAXBElement }{@code <}{@link XmlXAdESTimeStampType }{@code >}}
-     * 
+     *
      */
-    @XmlElementDecl(namespace = "http://uri.etsi.org/01903/v1.3.2#", name = "ArchiveTimeStamp", scope = XmlUnsignedSignaturePropertiesType.class)
+    @XmlElementDecl(namespace = ORG_01903_V_1_3_2, name = "ArchiveTimeStamp", scope = XmlUnsignedSignaturePropertiesType.class)
     public JAXBElement<XmlXAdESTimeStampType> createXmlUnsignedSignaturePropertiesTypeArchiveTimeStamp(XmlXAdESTimeStampType value) {
         return new JAXBElement<>(_ArchiveTimeStamp_QNAME, XmlXAdESTimeStampType.class, XmlUnsignedSignaturePropertiesType.class, value);
     }
 
     /**
      * Create an instance of {@link JAXBElement }{@code <}{@link XmlXAdESTimeStampType }{@code >}}
-     * 
+     *
      */
-    @XmlElementDecl(namespace = "http://uri.etsi.org/01903/v1.3.2#", name = "SigAndRefsTimeStamp", scope = XmlUnsignedSignaturePropertiesType.class)
+    @XmlElementDecl(namespace = ORG_01903_V_1_3_2, name = "SigAndRefsTimeStamp", scope = XmlUnsignedSignaturePropertiesType.class)
     public JAXBElement<XmlXAdESTimeStampType> createXmlUnsignedSignaturePropertiesTypeSigAndRefsTimeStamp(XmlXAdESTimeStampType value) {
         return new JAXBElement<>(_SigAndRefsTimeStamp_QNAME, XmlXAdESTimeStampType.class, XmlUnsignedSignaturePropertiesType.class, value);
     }
 
     /**
      * Create an instance of {@link JAXBElement }{@code <}{@link XmlCounterSignatureType }{@code >}}
-     * 
+     *
      */
-    @XmlElementDecl(namespace = "http://uri.etsi.org/01903/v1.3.2#", name = "CounterSignature", scope = XmlUnsignedSignaturePropertiesType.class)
+    @XmlElementDecl(namespace = ORG_01903_V_1_3_2, name = "CounterSignature", scope = XmlUnsignedSignaturePropertiesType.class)
     public JAXBElement<XmlCounterSignatureType> createXmlUnsignedSignaturePropertiesTypeCounterSignature(XmlCounterSignatureType value) {
         return new JAXBElement<>(_CounterSignature_QNAME, XmlCounterSignatureType.class, XmlUnsignedSignaturePropertiesType.class, value);
     }
 
     /**
      * Create an instance of {@link JAXBElement }{@code <}{@link XmlCompleteRevocationRefsType }{@code >}}
-     * 
+     *
      */
-    @XmlElementDecl(namespace = "http://uri.etsi.org/01903/v1.3.2#", name = "CompleteRevocationRefs", scope = XmlUnsignedSignaturePropertiesType.class)
+    @XmlElementDecl(namespace = ORG_01903_V_1_3_2, name = "CompleteRevocationRefs", scope = XmlUnsignedSignaturePropertiesType.class)
     public JAXBElement<XmlCompleteRevocationRefsType> createXmlUnsignedSignaturePropertiesTypeCompleteRevocationRefs(XmlCompleteRevocationRefsType value) {
         return new JAXBElement<>(_CompleteRevocationRefs_QNAME, XmlCompleteRevocationRefsType.class, XmlUnsignedSignaturePropertiesType.class, value);
     }
 
     /**
      * Create an instance of {@link JAXBElement }{@code <}{@link XmlCompleteCertificateRefsType }{@code >}}
-     * 
+     *
      */
-    @XmlElementDecl(namespace = "http://uri.etsi.org/01903/v1.3.2#", name = "AttributeCertificateRefs", scope = XmlUnsignedSignaturePropertiesType.class)
+    @XmlElementDecl(namespace = ORG_01903_V_1_3_2, name = "AttributeCertificateRefs", scope = XmlUnsignedSignaturePropertiesType.class)
     public JAXBElement<XmlCompleteCertificateRefsType> createXmlUnsignedSignaturePropertiesTypeAttributeCertificateRefs(XmlCompleteCertificateRefsType value) {
         return new JAXBElement<>(_AttributeCertificateRefs_QNAME, XmlCompleteCertificateRefsType.class, XmlUnsignedSignaturePropertiesType.class, value);
     }
 
     /**
      * Create an instance of {@link JAXBElement }{@code <}{@link XmlRevocationValuesType }{@code >}}
-     * 
+     *
      */
-    @XmlElementDecl(namespace = "http://uri.etsi.org/01903/v1.3.2#", name = "AttributeRevocationValues", scope = XmlUnsignedSignaturePropertiesType.class)
+    @XmlElementDecl(namespace = ORG_01903_V_1_3_2, name = "AttributeRevocationValues", scope = XmlUnsignedSignaturePropertiesType.class)
     public JAXBElement<XmlRevocationValuesType> createXmlUnsignedSignaturePropertiesTypeAttributeRevocationValues(XmlRevocationValuesType value) {
         return new JAXBElement<>(_AttributeRevocationValues_QNAME, XmlRevocationValuesType.class, XmlUnsignedSignaturePropertiesType.class, value);
     }
 
     /**
      * Create an instance of {@link JAXBElement }{@code <}{@link XmlCompleteCertificateRefsType }{@code >}}
-     * 
+     *
      */
-    @XmlElementDecl(namespace = "http://uri.etsi.org/01903/v1.3.2#", name = "CompleteCertificateRefs", scope = XmlUnsignedSignaturePropertiesType.class)
+    @XmlElementDecl(namespace = ORG_01903_V_1_3_2, name = "CompleteCertificateRefs", scope = XmlUnsignedSignaturePropertiesType.class)
     public JAXBElement<XmlCompleteCertificateRefsType> createXmlUnsignedSignaturePropertiesTypeCompleteCertificateRefs(XmlCompleteCertificateRefsType value) {
         return new JAXBElement<>(_CompleteCertificateRefs_QNAME, XmlCompleteCertificateRefsType.class, XmlUnsignedSignaturePropertiesType.class, value);
     }
 
     /**
      * Create an instance of {@link JAXBElement }{@code <}{@link XmlRevocationValuesType }{@code >}}
-     * 
+     *
      */
-    @XmlElementDecl(namespace = "http://uri.etsi.org/01903/v1.3.2#", name = "RevocationValues", scope = XmlUnsignedSignaturePropertiesType.class)
+    @XmlElementDecl(namespace = ORG_01903_V_1_3_2, name = "RevocationValues", scope = XmlUnsignedSignaturePropertiesType.class)
     public JAXBElement<XmlRevocationValuesType> createXmlUnsignedSignaturePropertiesTypeRevocationValues(XmlRevocationValuesType value) {
         return new JAXBElement<>(_RevocationValues_QNAME, XmlRevocationValuesType.class, XmlUnsignedSignaturePropertiesType.class, value);
     }
 
     /**
      * Create an instance of {@link JAXBElement }{@code <}{@link XmlCompleteRevocationRefsType }{@code >}}
-     * 
+     *
      */
-    @XmlElementDecl(namespace = "http://uri.etsi.org/01903/v1.3.2#", name = "AttributeRevocationRefs", scope = XmlUnsignedSignaturePropertiesType.class)
+    @XmlElementDecl(namespace = ORG_01903_V_1_3_2, name = "AttributeRevocationRefs", scope = XmlUnsignedSignaturePropertiesType.class)
     public JAXBElement<XmlCompleteRevocationRefsType> createXmlUnsignedSignaturePropertiesTypeAttributeRevocationRefs(XmlCompleteRevocationRefsType value) {
         return new JAXBElement<>(_AttributeRevocationRefs_QNAME, XmlCompleteRevocationRefsType.class, XmlUnsignedSignaturePropertiesType.class, value);
     }

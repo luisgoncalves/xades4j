@@ -25,12 +25,16 @@ import java.util.GregorianCalendar;
  */
 public class CRLRef extends CertRef
 {
-    public GregorianCalendar issueTime;
+    private final GregorianCalendar issueTime;
 
     public CRLRef(String issuerDN, BigInteger serialNumber,
             String digestAlgUri, byte[] digestValue, GregorianCalendar issueTime)
     {
         super(issuerDN, serialNumber, digestAlgUri, digestValue);
         this.issueTime = issueTime;
+    }
+
+    public GregorianCalendar getIssueTime() {
+        return issueTime;
     }
 }

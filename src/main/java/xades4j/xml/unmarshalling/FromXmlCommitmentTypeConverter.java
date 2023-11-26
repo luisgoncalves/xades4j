@@ -45,21 +45,7 @@ class FromXmlCommitmentTypeConverter implements SignedDataObjPropFromXmlConv
 
         for (XmlCommitmentTypeIndicationType xmlCommitment : xmlCommitments)
         {
-            List<String> objsRefs = xmlCommitment.getObjectReference();
-            Object allDataObjs = xmlCommitment.getAllSignedDataObjects();
-
-            if (objsRefs.isEmpty())
-            {
-                // Should be AllSignedDataObjects.
-                objsRefs = null;
-                if (null == allDataObjs)
-                {
-                    throw new PropertyUnmarshalException("ObjectReference or AllSignedDataObjects have to be present", CommitmentTypePropertyBase.PROP_NAME);
-                }
-            } else if (allDataObjs != null)
-            {
-                throw new PropertyUnmarshalException("Both ObjectReference and AllSignedDataObjects are present", CommitmentTypePropertyBase.PROP_NAME);
-            }
+            List<String> objsRefs = getObjsRefs(xmlCommitment);
 
             CommitmentTypeData commTypeData = new CommitmentTypeData(
                     xmlCommitment.getCommitmentTypeId().getIdentifier().getValue(),
@@ -79,7 +65,7 @@ class FromXmlCommitmentTypeConverter implements SignedDataObjPropFromXmlConv
                             throw new PropertyUnmarshalException("Qualifiers with multiple children are not support", CommitmentTypePropertyBase.PROP_NAME);
                         }
 
-                        qualifiers.add((String) xmlQualifier.getContent().get(0));
+                        qualifiers.add(xmlQualifier.getContent().get(0));
                     }
                 }
                 
@@ -88,5 +74,24 @@ class FromXmlCommitmentTypeConverter implements SignedDataObjPropFromXmlConv
 
             propertyDataCollector.addCommitmentType(commTypeData);
         }
+    }
+
+    private static List<String> getObjsRefs(XmlCommitmentTypeIndicationType xmlCommitment) throws PropertyUnmarshalException {
+        List<String> objsRefs = xmlCommitment.getObjectReference();
+        Object allDataObjs = xmlCommitment.getAllSignedDataObjects();
+
+        if (objsRefs.isEmpty())
+        {
+            // Should be AllSignedDataObjects.
+            objsRefs = null;
+            if (null == allDataObjs)
+            {
+                throw new PropertyUnmarshalException("ObjectReference or AllSignedDataObjects have to be present", CommitmentTypePropertyBase.PROP_NAME);
+            }
+        } else if (allDataObjs != null)
+        {
+            throw new PropertyUnmarshalException("Both ObjectReference and AllSignedDataObjects are present", CommitmentTypePropertyBase.PROP_NAME);
+        }
+        return objsRefs;
     }
 }

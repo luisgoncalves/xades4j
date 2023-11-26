@@ -16,6 +16,11 @@
  */
 package xades4j.properties;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.w3c.dom.Document;
@@ -25,9 +30,6 @@ import xades4j.algorithms.XPath2FilterTransform;
 import xades4j.algorithms.XPath2FilterTransform.XPath2Filter;
 import xades4j.algorithms.XPathTransform;
 import xades4j.utils.SignatureServicesTestBase;
-
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertThrows;
 
 /**
  * @author Luís
@@ -98,10 +100,10 @@ class DataObjectDescTest
     void testHasProperties()
     {
         DataObjectDesc instance = new DataObjectDescTestImpl();
-        assertEquals(false, instance.hasProperties());
+        assertFalse(instance.hasProperties());
 
         instance.withDataObjectFormat(new DataObjectFormatProperty());
-        assertEquals(true, instance.hasProperties());
+        assertTrue(instance.hasProperties());
     }
 
     /**
@@ -111,13 +113,13 @@ class DataObjectDescTest
     void testGetSignedDataObjProps()
     {
         DataObjectDesc instance = new DataObjectDescTestImpl();
-        assertEquals(instance.getSignedDataObjProps().size(), 0);
+        assertEquals(0, instance.getSignedDataObjProps().size());
 
         instance.withDataObjectFormat(new DataObjectFormatProperty());
-        assertEquals(instance.getSignedDataObjProps().size(), 1);
+        assertEquals(1, instance.getSignedDataObjProps().size());
     }
 
-    public class DataObjectDescTestImpl extends DataObjectDesc
+    public static class DataObjectDescTestImpl extends DataObjectDesc
     {
     }
 }

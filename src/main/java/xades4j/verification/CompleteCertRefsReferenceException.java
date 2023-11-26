@@ -28,7 +28,7 @@ import xades4j.properties.data.CertRef;
 public class CompleteCertRefsReferenceException extends CompleteCertRefsVerificationException
 {
     private final X509Certificate certificate;
-    private final CertRef certificateRef;
+    private final transient CertRef certificateRef;
     private final String msg;
 
     public CompleteCertRefsReferenceException(

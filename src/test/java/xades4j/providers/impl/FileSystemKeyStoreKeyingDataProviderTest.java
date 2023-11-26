@@ -16,13 +16,8 @@
  */
 package xades4j.providers.impl;
 
-import org.bouncycastle.jce.provider.BouncyCastleProvider;
-import org.junit.jupiter.api.AfterAll;
-import org.junit.jupiter.api.BeforeAll;
-import org.junit.jupiter.params.ParameterizedTest;
-import org.junit.jupiter.params.provider.Arguments;
-import org.junit.jupiter.params.provider.MethodSource;
-import xades4j.utils.SignatureServicesTestBase;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.params.provider.Arguments.arguments;
 
 import java.io.FileInputStream;
 import java.security.Security;
@@ -30,9 +25,13 @@ import java.security.cert.CertificateFactory;
 import java.security.cert.X509Certificate;
 import java.util.Collection;
 import java.util.List;
-
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.params.provider.Arguments.arguments;
+import org.bouncycastle.jce.provider.BouncyCastleProvider;
+import org.junit.jupiter.api.AfterAll;
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.Arguments;
+import org.junit.jupiter.params.provider.MethodSource;
+import xades4j.utils.SignatureServicesTestBase;
 
 /**
  * @author Luís
@@ -103,7 +102,7 @@ public class FileSystemKeyStoreKeyingDataProviderTest
     void testGetSigningCertificateChain(FileSystemKeyStoreKeyingDataProvider keyingProvider, X509Certificate signCert) throws Exception
     {
         List<X509Certificate> certChain = keyingProvider.getSigningCertificateChain();
-        assertEquals(certChain.size(), 3);
+        assertEquals(3, certChain.size());
         assertEquals(certChain.get(0), signCert);
     }
 }

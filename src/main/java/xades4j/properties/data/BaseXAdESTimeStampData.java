@@ -63,7 +63,7 @@ public abstract class BaseXAdESTimeStampData implements PropertyDataObject
    /**
     * @deprecated
     */
-    @Deprecated
+    @Deprecated(since = "1.3.1")
     public String getCanonicalizationAlgorithmUri()
     {
         return this.c14n.getUri();

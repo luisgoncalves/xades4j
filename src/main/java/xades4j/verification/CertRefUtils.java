@@ -16,16 +16,15 @@
  */
 package xades4j.verification;
 
-import xades4j.UnsupportedAlgorithmException;
-import xades4j.XAdES4jException;
-import xades4j.properties.data.CertRef;
-import xades4j.providers.MessageDigestEngineProvider;
-
 import java.security.MessageDigest;
 import java.security.cert.CertificateEncodingException;
 import java.security.cert.X509Certificate;
 import java.util.Arrays;
 import java.util.Collection;
+import xades4j.UnsupportedAlgorithmException;
+import xades4j.XAdES4jException;
+import xades4j.properties.data.CertRef;
+import xades4j.providers.MessageDigestEngineProvider;
 
 /**
  *
@@ -33,6 +32,10 @@ import java.util.Collection;
  */
 class CertRefUtils
 {
+    private CertRefUtils() {
+        throw new IllegalStateException("Utility class");
+    }
+
     static CertRef findCertRef(
             X509Certificate cert,
             Collection<CertRef> certRefs,
@@ -42,8 +45,8 @@ class CertRefUtils
         {
             try
             {
-                if (dnComparer.areEqual(cert.getIssuerX500Principal(), certRef.issuerDN) &&
-                    certRef.serialNumber.equals(cert.getSerialNumber()))
+                if (dnComparer.areEqual(cert.getIssuerX500Principal(), certRef.getIssuerDN()) &&
+                    certRef.getSerialNumber().equals(cert.getSerialNumber()))
                 {
                     return certRef;
                 }
@@ -55,7 +58,7 @@ class CertRefUtils
                     @Override
                     protected String getVerificationMessage()
                     {
-                        return String.format("Invalid issue name: %s", certRef.issuerDN);
+                        return String.format("Invalid issue name: %s", certRef.getIssuerDN());
                     }
                 };
             }
@@ -80,9 +83,9 @@ class CertRefUtils
         Throwable t = null;
         try
         {
-            messageDigest = messageDigestProvider.getEngine(certRef.digestAlgUri);
+            messageDigest = messageDigestProvider.getEngine(certRef.getDigestAlgUri());
             byte[] actualDigest = messageDigest.digest(cert.getEncoded());
-            if (!Arrays.equals(certRef.digestValue, actualDigest))
+            if (!Arrays.equals(certRef.getDigestValue(), actualDigest))
                 throw new InvalidCertRefException("digests mismatch");
             return;
         } catch (UnsupportedAlgorithmException | CertificateEncodingException ex)

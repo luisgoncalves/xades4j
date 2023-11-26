@@ -16,7 +16,6 @@
  */
 package xades4j.production;
 
-import xades4j.algorithms.Algorithm;
 import jakarta.inject.Inject;
 import java.util.HashMap;
 import java.util.List;
@@ -26,6 +25,7 @@ import org.apache.xml.security.signature.ObjectContainer;
 import org.apache.xml.security.signature.Reference;
 import org.apache.xml.security.utils.Constants;
 import org.w3c.dom.Element;
+import xades4j.algorithms.Algorithm;
 import xades4j.properties.ArchiveTimeStampProperty;
 import xades4j.properties.CertificateValuesProperty;
 import xades4j.properties.CompleteCertificateRefsProperty;
@@ -109,7 +109,7 @@ class DataGenArchiveTimeStamp extends DataGenBaseTimeStamp<ArchiveTimeStampPrope
 
                 Integer pCnt = propsCnt.get(e.getLocalName());
                 if (pCnt != null)
-                    propsCnt.put(e.getLocalName(), pCnt += 1);
+                    propsCnt.put(e.getLocalName(), pCnt + 1);
 
             } while ((e = DOMHelper.getNextSiblingElement(e)) != null);
 

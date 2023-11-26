@@ -19,7 +19,6 @@ package xades4j.production;
 import java.security.cert.CertificateException;
 import java.security.cert.X509Certificate;
 import java.util.List;
-
 import org.apache.xml.security.exceptions.XMLSecurityException;
 import org.apache.xml.security.keys.content.X509Data;
 import org.apache.xml.security.signature.XMLSignature;
@@ -62,28 +61,7 @@ class KeyInfoBuilder
             List<X509Certificate> signingCertificateChain,
             XMLSignature xmlSig) throws KeyingDataException, UnsupportedAlgorithmException
     {
-        X509Certificate signingCertificate = signingCertificateChain.get(0);
-
-        if (this.basicSignatureOptions.checkKeyUsage())
-        {
-            // Check key usage.
-            // - KeyUsage[0] = digitalSignature
-            // - KeyUsage[1] = nonRepudiation
-            boolean[] keyUsage = signingCertificate.getKeyUsage();
-            if (keyUsage != null && !keyUsage[0] && !keyUsage[1])
-            {
-                throw new SigningCertKeyUsageException(signingCertificate);
-            }
-        }
-
-        if (this.basicSignatureOptions.checkCertificateValidity()) {
-            try {
-                signingCertificate.checkValidity();
-            } catch (final CertificateException ce) {
-                // CertificateExpiredException or CertificateNotYetValidException
-                throw new SigningCertValidityException(signingCertificate);
-            }
-        }
+        X509Certificate signingCertificate = getSigningCertificate(signingCertificateChain);
 
         if (this.basicSignatureOptions.includeSigningCertificate() != SigningCertificateMode.NONE
             || this.basicSignatureOptions.includeIssuerSerial()
@@ -151,5 +129,31 @@ class KeyInfoBuilder
                     this.signatureAlgorithms.getDigestAlgorithmForDataObjectReferences(), ex);
             }
         }
+    }
+
+    private X509Certificate getSigningCertificate(List<X509Certificate> signingCertificateChain) throws SigningCertKeyUsageException, SigningCertValidityException {
+        X509Certificate signingCertificate = signingCertificateChain.get(0);
+
+        if (this.basicSignatureOptions.checkKeyUsage())
+        {
+            // Check key usage.
+            // - KeyUsage[0] = digitalSignature
+            // - KeyUsage[1] = nonRepudiation
+            boolean[] keyUsage = signingCertificate.getKeyUsage();
+            if (keyUsage != null && !keyUsage[0] && !keyUsage[1])
+            {
+                throw new SigningCertKeyUsageException(signingCertificate);
+            }
+        }
+
+        if (this.basicSignatureOptions.checkCertificateValidity()) {
+            try {
+                signingCertificate.checkValidity();
+            } catch (final CertificateException ce) {
+                // CertificateExpiredException or CertificateNotYetValidException
+                throw new SigningCertValidityException(signingCertificate);
+            }
+        }
+        return signingCertificate;
     }
 }

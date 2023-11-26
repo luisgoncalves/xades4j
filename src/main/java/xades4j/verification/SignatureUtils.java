@@ -20,7 +20,6 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
-
 import org.apache.xml.security.exceptions.XMLSecurityException;
 import org.apache.xml.security.signature.Reference;
 import org.apache.xml.security.signature.SignedInfo;
@@ -29,7 +28,6 @@ import org.apache.xml.security.signature.XMLSignatureException;
 import org.apache.xml.security.transforms.Transforms;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
-
 import xades4j.XAdES4jXMLSigException;
 import xades4j.algorithms.GenericAlgorithm;
 import xades4j.properties.QualifyingProperty;
@@ -230,14 +228,7 @@ class SignatureUtils
 
         try
         {
-            Node sPropsNode = signedPropsRef.getNodesetBeforeFirstCanonicalization().getSubNode();
-            if (sPropsNode == null || sPropsNode.getNodeType() != Node.ELEMENT_NODE)
-            {
-                throw new QualifyingPropertiesIncorporationException("The supposed reference over signed properties doesn't cover an element.");
-            }
-
-            // The referenced signed properties element must be the child of qualifying properties.
-            Element referencedSignedPropsElem = (Element) sPropsNode;
+            Element referencedSignedPropsElem = getReferencedSignedPropsElem(signedPropsRef);
             if (referencedSignedPropsElem != signedPropsElem)
             {
                 throw new QualifyingPropertiesIncorporationException("The referenced SignedProperties are not contained by the proper QualifyingProperties element");
@@ -246,5 +237,16 @@ class SignatureUtils
         {
             throw new QualifyingPropertiesIncorporationException("Cannot get the referenced SignedProperties", ex);
         }
+    }
+
+    private static Element getReferencedSignedPropsElem(Reference signedPropsRef) throws XMLSignatureException, QualifyingPropertiesIncorporationException {
+        Node sPropsNode = signedPropsRef.getNodesetBeforeFirstCanonicalization().getSubNode();
+        if (sPropsNode == null || sPropsNode.getNodeType() != Node.ELEMENT_NODE)
+        {
+            throw new QualifyingPropertiesIncorporationException("The supposed reference over signed properties doesn't cover an element.");
+        }
+
+        // The referenced signed properties element must be the child of qualifying properties.
+        return (Element) sPropsNode;
     }
 }

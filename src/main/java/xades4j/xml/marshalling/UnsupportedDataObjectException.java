@@ -25,7 +25,7 @@ import xades4j.properties.data.PropertyDataObject;
  */
 public class UnsupportedDataObjectException extends MarshalException
 {
-    private final PropertyDataObject dataObject;
+    private final transient PropertyDataObject dataObject;
 
     public UnsupportedDataObjectException(PropertyDataObject dataObject)
     {

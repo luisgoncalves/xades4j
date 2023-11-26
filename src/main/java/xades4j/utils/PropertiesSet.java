@@ -16,8 +16,6 @@
  */
 package xades4j.utils;
 
-import xades4j.properties.PropertyTargetException;
-
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
@@ -25,6 +23,7 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
+import xades4j.properties.PropertyTargetException;
 
 /**
  * A generic bag of properties used to store properties that apply to a specific
@@ -35,7 +34,8 @@ import java.util.Set;
  */
 public class PropertiesSet<T>
 {
-    private final Map<Class, Set<T>> properties;
+    public static final String CANNOT_BE_NULL = "Property cannot be null";
+    private final Map<Class<?>, Set<T>> properties;
 
     /**
      * Initializes the property bag with the given initial diferent property types.
@@ -48,7 +48,7 @@ public class PropertiesSet<T>
 
     /**
      * Puts a property in the bag. The put operation doesn't allow repeated
-     * property types. If a property of this type was previously added an exception
+     * property types. If a property of this type was previously added, an exception
      * is thrown.
      *
      * @param prop the property
@@ -60,9 +60,9 @@ public class PropertiesSet<T>
     public void put(T prop)
     {
         if (null == prop)
-            throw new NullPointerException("Property cannot be null");
+            throw new NullPointerException(CANNOT_BE_NULL);
 
-        // If an entry for the property's type is already present it means that a
+        // If an entry for the property's type is already present, it means that a
         // property of this type was previously added. Adding another property of
         // this type is not allowed.
         if (properties.containsKey(prop.getClass()))
@@ -83,7 +83,7 @@ public class PropertiesSet<T>
     public void add(T prop)
     {
         if (null == prop)
-            throw new NullPointerException("Property cannot be null");
+            throw new NullPointerException(CANNOT_BE_NULL);
 
       Set<T> propsOfCurrType = properties.computeIfAbsent(prop.getClass(), k -> new HashSet<>(1));
 
@@ -103,7 +103,7 @@ public class PropertiesSet<T>
     public void remove(T prop)
     {
         if (null == prop)
-            throw new NullPointerException("Property cannot be null");
+            throw new NullPointerException(CANNOT_BE_NULL);
 
         Set<T> propsOfCurrType = properties.get(prop.getClass());
         if (null == propsOfCurrType || !propsOfCurrType.remove(prop))

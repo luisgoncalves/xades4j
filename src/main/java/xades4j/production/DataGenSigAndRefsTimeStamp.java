@@ -16,12 +16,12 @@
  */
 package xades4j.production;
 
-import xades4j.algorithms.Algorithm;
 import jakarta.inject.Inject;
 import java.util.HashMap;
 import java.util.Map;
 import org.apache.xml.security.utils.Constants;
 import org.w3c.dom.Element;
+import xades4j.algorithms.Algorithm;
 import xades4j.properties.CompleteCertificateRefsProperty;
 import xades4j.properties.CompleteRevocationRefsProperty;
 import xades4j.properties.QualifyingProperty;
@@ -94,7 +94,7 @@ class DataGenSigAndRefsTimeStamp extends DataGenBaseTimeStamp<SigAndRefsTimeStam
                 Integer pCnt = elegiblePropsCnt.get(e.getLocalName());
                 if (pCnt != null)
                 {
-                    elegiblePropsCnt.put(e.getLocalName(), pCnt += 1);
+                    elegiblePropsCnt.put(e.getLocalName(), pCnt + 1);
                     digestInput.addNode(e);
                 }
 

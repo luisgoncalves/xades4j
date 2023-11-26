@@ -29,8 +29,8 @@ public class DataObjectFormatMismatchException extends DataObjectFormatVerificat
 {
     private final String mimeType;
     private final String encoding;
-    private final ObjectContainer object;
-    private final Reference reference;
+    private final transient ObjectContainer object;
+    private final transient Reference reference;
 
     public DataObjectFormatMismatchException(
             String mimeType, String encoding,

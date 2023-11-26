@@ -16,6 +16,7 @@
  */
 package xades4j.production;
 
+import java.io.ByteArrayInputStream;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvSource;
 import org.w3c.dom.Document;
@@ -24,8 +25,6 @@ import xades4j.properties.IdentifierType;
 import xades4j.properties.ObjectIdentifier;
 import xades4j.properties.SignaturePolicyIdentifierProperty;
 import xades4j.providers.SignaturePolicyInfoProvider;
-
-import java.io.ByteArrayInputStream;
 
 /**
  * @author Luís
@@ -43,7 +42,7 @@ class SignerEPESTest extends SignerTestBase
         Element elemToSign = doc.getDocumentElement();
 
         SignaturePolicyInfoProvider policyInfoProvider = () -> new SignaturePolicyIdentifierProperty(
-                new ObjectIdentifier("oid:/1.2.4.0.9.4.5", IdentifierType.OIDAsURI, "Policy description"),
+                new ObjectIdentifier("oid:/1.2.4.0.9.4.5", IdentifierType.OID_AS_URI, "Policy description"),
                 new ByteArrayInputStream("Test policy input stream".getBytes()))
                 .withLocationUrl(locationUrl);
 

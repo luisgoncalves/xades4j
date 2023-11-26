@@ -38,15 +38,15 @@ package xades4j.properties;
 public enum IdentifierType
 {
     /**
-     * The identifier is an URI.
+     * The identifier is a URI.
      */
     URI,
     /**
-     * The identifier is an Object IDentifier encoded as an URI
+     * The identifier is an Object Identifier encoded as a URI
      */
-    OIDAsURI,
+    OID_AS_URI,
     /**
-     * The identifier is an Object IDentifier encoded as an URN
+     * The identifier is an Object Identifier encoded as a URN
      */
-    OIDAsURN
+    OID_AS_URN
 }

@@ -17,6 +17,13 @@
 package xades4j.verification;
 
 import jakarta.inject.Inject;
+import java.io.InputStream;
+import java.security.cert.X509Certificate;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Date;
+import java.util.List;
+import java.util.Set;
 import org.apache.xml.security.exceptions.XMLSecurityException;
 import org.apache.xml.security.signature.Reference;
 import org.apache.xml.security.signature.SignedInfo;
@@ -48,14 +55,6 @@ import xades4j.verification.RawSignatureVerifier.RawSignatureVerifierContext;
 import xades4j.verification.SignatureUtils.ReferencesRes;
 import xades4j.xml.unmarshalling.QualifyingPropertiesUnmarshaller;
 import xades4j.xml.unmarshalling.UnmarshalException;
-
-import java.io.InputStream;
-import java.security.cert.X509Certificate;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Date;
-import java.util.List;
-import java.util.Set;
 
 /**
  *
@@ -158,16 +157,7 @@ class XadesVerifierImpl implements XadesVerifier
         SignatureUtils.checkSignedPropertiesIncorporation(qualifyingPropsElem, referencesRes.signedPropsReference);
 
         // Check the QualifyingProperties 'Target' attribute.
-        Node targetAttr = qualifyingPropsElem.getAttributeNodeNS(null, QualifyingProperty.TARGET_ATTR);
-        if (null == targetAttr)
-        {
-            targetAttr = qualifyingPropsElem.getAttributeNodeNS(QualifyingProperty.XADES_XMLNS, QualifyingProperty.TARGET_ATTR);
-            if (null == targetAttr)
-            {
-                throw new QualifyingPropertiesIncorporationException("QualifyingProperties Target attribute not present");
-            }
-        }
-        String targetValue = targetAttr.getNodeValue();
+        String targetValue = getTargetValue(qualifyingPropsElem);
         if (null == targetValue
                 || !targetValue.startsWith("#")
                 || !targetValue.substring(1).equals(signatureId))
@@ -213,7 +203,7 @@ class XadesVerifierImpl implements XadesVerifier
         // Core XML-DSIG verification.
         doCoreVerification(signature, verificationOptions, validationCert);
 
-        // Create the properties verification context.
+        // Create the property verification context.
         QualifyingPropertyVerificationContext qPropsCtx = new QualifyingPropertyVerificationContext(
                 signature,
                 new QualifyingPropertyVerificationContext.CertificationChainData(
@@ -244,7 +234,20 @@ class XadesVerifierImpl implements XadesVerifier
 
         return res;
     }
-    
+
+    private static String getTargetValue(Element qualifyingPropsElem) throws QualifyingPropertiesIncorporationException {
+        Node targetAttr = qualifyingPropsElem.getAttributeNodeNS(null, QualifyingProperty.TARGET_ATTR);
+        if (null == targetAttr)
+        {
+            targetAttr = qualifyingPropsElem.getAttributeNodeNS(QualifyingProperty.XADES_XMLNS, QualifyingProperty.TARGET_ATTR);
+            if (null == targetAttr)
+            {
+                throw new QualifyingPropertiesIncorporationException("QualifyingProperties Target attribute not present");
+            }
+        }
+        return targetAttr.getNodeValue();
+    }
+
     /*************************************************************************************/
 
     private CertRef tryGetSigningCertificateRef(Collection<PropertyDataObject> qualifPropsData){
@@ -270,7 +273,7 @@ class XadesVerifierImpl implements XadesVerifier
             XMLSignature signature,
             SignatureSpecificVerificationOptions verificationOptions) throws XAdES4jException
     {
-        List sigTsData = CollectionUtils.filterByType(qualifPropsData, SignatureTimeStampData.class);
+        List<? extends PropertyDataObject> sigTsData = CollectionUtils.filterByType(qualifPropsData, SignatureTimeStampData.class);
 
         // If no signature time-stamp is present, use the current date.
         if (sigTsData.isEmpty())
@@ -293,7 +296,7 @@ class XadesVerifierImpl implements XadesVerifier
                 new QualifyingPropertyVerificationContext.SignedObjectsData(
                         new ArrayList<>(0),
                 signature));
-        Collection<PropertyInfo> props = this.qualifyingPropertiesVerifier.verifyProperties(sigTsData, ctx);
+        Collection<PropertyInfo> props = this.qualifyingPropertiesVerifier.verifyProperties((Collection<PropertyDataObject>) sigTsData, ctx);
         QualifyingProperty sigTs = props.iterator().next().getProperty();
 
         return ((SignatureTimeStampProperty) sigTs).getTime();
@@ -417,7 +420,7 @@ class XadesVerifierImpl implements XadesVerifier
             throw new NullPointerException("'finalForm' and 'formatExtender' cannot be null");
         }
 
-        // The transitions matrix won't allow this, but this way I avoid the
+        // The transition matrix won't allow this, but this way I avoid the
         // unnecessary processing.
         if (finalForm.before(XAdESForm.T) || finalForm.after(XAdESForm.X_L))
         {
@@ -438,18 +441,23 @@ class XadesVerifierImpl implements XadesVerifier
             // * X -> X-L (not supported with the library defaults: X cannot be verified)
             // * X-L -> A (not supported with the library defaults: X-L cannot be verified)
 
-            FormExtensionPropsCollector finalFormPropsColector = formsExtensionTransitions[actualForm.ordinal()][finalForm.ordinal()];
-
-            if (null == finalFormPropsColector)
-            {
-                throw new InvalidFormExtensionException(actualForm, finalForm);
-            }
+            FormExtensionPropsCollector finalFormPropsCollector = getFinalFormPropsColector(finalForm, actualForm);
 
             Collection<UnsignedSignatureProperty> usp = new ArrayList<>(3);
-            finalFormPropsColector.addProps(usp, res);
+            finalFormPropsCollector.addProps(usp, res);
 
             formatExtender.enrichSignature(res.getXmlSignature(), new UnsignedProperties(usp));
         }
         return res;
+    }
+
+    private static FormExtensionPropsCollector getFinalFormPropsColector(XAdESForm finalForm, XAdESForm actualForm) throws InvalidFormExtensionException {
+        FormExtensionPropsCollector finalFormPropsCollector = formsExtensionTransitions[actualForm.ordinal()][finalForm.ordinal()];
+
+        if (null == finalFormPropsCollector)
+        {
+            throw new InvalidFormExtensionException(actualForm, finalForm);
+        }
+        return finalFormPropsCollector;
     }
 }

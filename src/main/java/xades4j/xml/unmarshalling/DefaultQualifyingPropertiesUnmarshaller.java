@@ -46,7 +46,7 @@ final class DefaultQualifyingPropertiesUnmarshaller
         }
     }
 
-    private final UnmarshallerModule[] modules;
+    private final UnmarshallerModule<?>[] modules;
 
     public DefaultQualifyingPropertiesUnmarshaller()
     {
@@ -78,7 +78,7 @@ final class DefaultQualifyingPropertiesUnmarshaller
         }
 
         // Iterate the modules to convert the different types of properties.
-        for (UnmarshallerModule module : modules)
+        for (UnmarshallerModule<?> module : modules)
         {
             module.convertProperties(xmlQualifyingProps, qualifyingProps, propertyDataCollector);
         }
@@ -87,7 +87,7 @@ final class DefaultQualifyingPropertiesUnmarshaller
     @Override
     public void setAcceptUnknownProperties(boolean accept)
     {
-        for (UnmarshallerModule module : modules)
+        for (UnmarshallerModule<?> module : modules)
         {
             module.setAcceptUnknownProperties(accept);
         }

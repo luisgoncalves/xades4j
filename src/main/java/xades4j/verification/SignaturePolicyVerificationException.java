@@ -26,7 +26,7 @@ import xades4j.properties.SignaturePolicyBase;
  */
 public abstract class SignaturePolicyVerificationException extends InvalidPropertyException
 {
-    private final ObjectIdentifier signaturePolicyId;
+    private final transient ObjectIdentifier signaturePolicyId;
 
     protected SignaturePolicyVerificationException(
             ObjectIdentifier signaturePolicyId)

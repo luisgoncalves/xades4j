@@ -16,15 +16,14 @@
  */
 package xades4j.properties;
 
-import org.junit.jupiter.api.Test;
-
-import java.util.ArrayList;
-import java.util.Collection;
-
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
+
+import java.util.ArrayList;
+import java.util.Collection;
+import org.junit.jupiter.api.Test;
 
 /**
  * @author Luís
@@ -94,7 +93,7 @@ class DataObjectFormatPropertyTest
         documentationUris.add("doc");
 
         instance.withDocumentationUris(documentationUris);
-        assertEquals(instance.getDocumentationUris().size(), 1);
+        assertEquals(1, instance.getDocumentationUris().size());
     }
 
     /**

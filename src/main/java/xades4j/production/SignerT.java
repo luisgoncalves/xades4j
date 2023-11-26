@@ -17,6 +17,10 @@
 package xades4j.production;
 
 import jakarta.inject.Inject;
+import java.security.cert.X509Certificate;
+import java.util.Collection;
+import java.util.List;
+import java.util.Optional;
 import xades4j.properties.SignedSignatureProperty;
 import xades4j.properties.UnsignedSignatureProperty;
 import xades4j.providers.DataObjectPropertiesProvider;
@@ -30,11 +34,6 @@ import xades4j.xml.marshalling.SignedPropertiesMarshaller;
 import xades4j.xml.marshalling.UnsignedPropertiesMarshaller;
 import xades4j.xml.marshalling.algorithms.AlgorithmsParametersMarshallingProvider;
 
-import java.security.cert.X509Certificate;
-import java.util.Collection;
-import java.util.List;
-import java.util.Optional;
-
 /**
  * Produces XAdES-T signatures. Doesn't extend SignerEPES because XAdES-T may be
  * based on XAdES-BES. If T+EPES is needed, a {@code SignaturePolicyInfoProvider}
@@ -43,7 +42,7 @@ import java.util.Optional;
  */
 class SignerT extends SignerBES
 {
-    private Optional<SignaturePolicyInfoProvider> policyInfoProvider;
+    private final Optional<SignaturePolicyInfoProvider> policyInfoProvider;
 
     @Inject
     protected SignerT(

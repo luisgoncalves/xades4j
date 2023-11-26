@@ -34,6 +34,10 @@ import xades4j.xml.marshalling.algorithms.AlgorithmsParametersMarshallingProvide
  */
 public final class TransformUtils
 {
+
+    private TransformUtils() {
+        throw new IllegalStateException("Utility class");
+    }
     /**
      * Creates a Transform element for a given algorithm.
      * @param algorithm algorithm

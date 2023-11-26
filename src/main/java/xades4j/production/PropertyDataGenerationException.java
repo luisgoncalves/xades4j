@@ -16,8 +16,8 @@
  */
 package xades4j.production;
 
-import xades4j.properties.QualifyingProperty;
 import xades4j.XAdES4jException;
+import xades4j.properties.QualifyingProperty;
 
 /**
  * Thrown when there is an error generating a property data object.
@@ -25,7 +25,7 @@ import xades4j.XAdES4jException;
  */
 public class PropertyDataGenerationException extends XAdES4jException
 {
-    private final QualifyingProperty sourceProperty;
+    private final transient QualifyingProperty sourceProperty;
 
     public PropertyDataGenerationException(QualifyingProperty sourceProperty, String message)
     {

@@ -24,7 +24,7 @@ import org.apache.xml.security.signature.XMLSignature;
  */
 public abstract class CoreVerificationException extends InvalidSignatureException
 {
-    private final XMLSignature signature;
+    private final transient XMLSignature signature;
 
     protected CoreVerificationException(XMLSignature sig)
     {
