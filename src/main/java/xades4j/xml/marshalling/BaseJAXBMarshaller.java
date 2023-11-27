@@ -19,6 +19,10 @@ package xades4j.xml.marshalling;
 import jakarta.xml.bind.JAXBContext;
 import jakarta.xml.bind.JAXBException;
 import jakarta.xml.bind.Marshaller;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.Map;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
@@ -32,23 +36,18 @@ import xades4j.xml.bind.xades.ObjectFactory;
 import xades4j.xml.bind.xades.XmlSignedPropertiesType;
 import xades4j.xml.bind.xades.XmlUnsignedPropertiesType;
 
-import java.util.Collection;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.Map;
-
 /**
  *
  * @author Luís
  */
 abstract class BaseJAXBMarshaller<TXml>
 {
-    private static final Map<Class, JAXBContext> jaxbContexts;
+    private static final Map<Class<?>, JAXBContext> jaxbContexts;
     static
     {
         try
         {
-            Map<Class, JAXBContext> contexts = new HashMap<>();
+            Map<Class<?>, JAXBContext> contexts = new HashMap<>();
             contexts.put(XmlSignedPropertiesType.class, JAXBContext.newInstance(XmlSignedPropertiesType.class));
             contexts.put(XmlUnsignedPropertiesType.class, JAXBContext.newInstance(XmlUnsignedPropertiesType.class));
             jaxbContexts = Collections.unmodifiableMap(contexts);
@@ -58,7 +57,7 @@ abstract class BaseJAXBMarshaller<TXml>
             throw new UnsupportedOperationException(e);
         }
     }
-    private final Map<Class, QualifyingPropertyDataToXmlConverter<TXml>> converters;
+    private final Map<Class<? extends PropertyDataObject>, QualifyingPropertyDataToXmlConverter<TXml>> converters;
     private final String propsElemName;
 
     protected BaseJAXBMarshaller(int convertersInitialSize, String propsElemName)
@@ -102,7 +101,7 @@ abstract class BaseJAXBMarshaller<TXml>
 
         if (propsNotAlreadyPresent(qualifyingPropsNode))
         // If the QualifyingProperties node doesn't already have an element
-        // for the current type of properties, do a JAXB marshalling into it.
+        // for the current type of properties, do a JAXB marshaling into it.
         {
             doJAXBMarshalling(qualifyingPropsNode, xmlProps);
         } else
@@ -111,8 +110,8 @@ abstract class BaseJAXBMarshaller<TXml>
             // nodes into the appropriate QualifyingProperties children.
             Node tempNode = DOMHelper.createElement(
                     qualifyingPropsNode.getOwnerDocument(), "temp", null, QualifyingProperty.XADES_XMLNS);
-            // - A little work around to inherit the namespace node defined in
-            //   the document. Its just a matter of style.
+            // - A little workaround to inherit the namespace node defined in
+            //   the document. It's just a matter of style.
             qualifyingPropsNode.appendChild(tempNode);
             doJAXBMarshalling(tempNode, xmlProps);
             qualifyingPropsNode.removeChild(tempNode);

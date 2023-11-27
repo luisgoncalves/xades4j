@@ -17,12 +17,12 @@
 package xades4j.verification;
 
 import jakarta.inject.Inject;
+import java.util.Map;
+import javax.xml.namespace.QName;
 import org.w3c.dom.Element;
 import xades4j.properties.QualifyingProperty;
 import xades4j.properties.data.GenericDOMData;
-
-import javax.xml.namespace.QName;
-import java.util.Map;
+import xades4j.properties.data.PropertyDataObject;
 
 /**
  *
@@ -46,7 +46,7 @@ class GenericDOMDataVerifier implements QualifyingPropertyVerifier<GenericDOMDat
         final Element propElem = propData.getPropertyElement();
         QName propElemQName = new QName(propElem.getNamespaceURI(), propElem.getLocalName());
 
-        QualifyingPropertyVerifier propVerifier = customElemVerifiers.get(propElemQName);
+        QualifyingPropertyVerifier<PropertyDataObject> propVerifier = customElemVerifiers.get(propElemQName);
         if (null == propVerifier)
             throw new InvalidPropertyException()
             {

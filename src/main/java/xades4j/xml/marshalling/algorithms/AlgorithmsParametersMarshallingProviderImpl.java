@@ -40,7 +40,7 @@ final class AlgorithmsParametersMarshallingProviderImpl implements AlgorithmsPar
     @Override
     public List<Node> marshalParameters(Algorithm alg, Document doc) throws UnsupportedAlgorithmException
     {
-        AlgorithmParametersMarshaller marshaller = this.marshallers.get(alg.getClass());
+        AlgorithmParametersMarshaller<Algorithm> marshaller = (AlgorithmParametersMarshaller<Algorithm>) this.marshallers.get(alg.getClass());
         if (marshaller == null)
         {
             throw new UnsupportedAlgorithmException("AlgorithmParametersMarshaller not available", alg.getUri());

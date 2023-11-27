@@ -18,15 +18,15 @@ package xades4j.production;
 
 import com.google.inject.Module;
 import xades4j.properties.QualifyingProperty;
-import xades4j.providers.X500NameStyleProvider;
-import xades4j.utils.XadesProfileCore;
-import xades4j.utils.XadesProfileResolutionException;
 import xades4j.providers.DataObjectPropertiesProvider;
 import xades4j.providers.KeyingDataProvider;
 import xades4j.providers.MessageDigestEngineProvider;
 import xades4j.providers.SignaturePropertiesProvider;
 import xades4j.providers.TimeStampTokenProvider;
+import xades4j.providers.X500NameStyleProvider;
 import xades4j.utils.UtilsBindingsModule;
+import xades4j.utils.XadesProfileCore;
+import xades4j.utils.XadesProfileResolutionException;
 import xades4j.xml.marshalling.MarshallingBindingsModule;
 import xades4j.xml.marshalling.SignedPropertiesMarshaller;
 import xades4j.xml.marshalling.UnsignedPropertiesMarshaller;
@@ -161,7 +161,7 @@ public abstract class XadesSigningProfile
      * @return this profile
      */
     public final XadesSigningProfile with(Object instance) {
-        this.profileCore.addBinding((Class)instance.getClass(), instance);
+        this.profileCore.addBinding((Class<Object>)instance.getClass(), instance);
         return this;
     }
 
