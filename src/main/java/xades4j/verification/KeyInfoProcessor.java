@@ -42,9 +42,9 @@ class KeyInfoProcessor
 
     static class KeyInfoRes
     {
-        X509CertSelector certSelector;
-        List<X509Certificate> keyInfoCerts;
-        XMLX509IssuerSerial issuerSerial;
+        final X509CertSelector certSelector;
+        final List<X509Certificate> keyInfoCerts;
+        final XMLX509IssuerSerial issuerSerial;
 
         KeyInfoRes(
             X509CertSelector certSelector,

@@ -51,8 +51,8 @@ class SignatureUtils
         /**
          * In signature order.
          */
-        List<RawDataObjectDesc> dataObjsReferences;
-        Reference signedPropsReference;
+        final List<RawDataObjectDesc> dataObjsReferences;
+        final Reference signedPropsReference;
 
         ReferencesRes(
                 List<RawDataObjectDesc> dataObjsReferences,
