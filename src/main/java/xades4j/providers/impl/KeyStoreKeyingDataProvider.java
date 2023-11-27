@@ -86,7 +86,7 @@ public abstract class KeyStoreKeyingDataProvider implements KeyingDataProvider
      */
     public interface SigningCertificateSelector
     {
-        public class Entry
+        class Entry
         {
             private final String alias;
             private final X509Certificate certificate;

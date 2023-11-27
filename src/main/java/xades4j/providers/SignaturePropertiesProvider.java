@@ -38,5 +38,5 @@ public interface SignaturePropertiesProvider
      *
      * @see SignaturePropertiesCollector
      */
-    public void provideProperties(SignaturePropertiesCollector signedPropsCol);
+    void provideProperties(SignaturePropertiesCollector signedPropsCol);
 }

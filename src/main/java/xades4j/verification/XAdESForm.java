@@ -34,7 +34,7 @@ public enum XAdESForm
     private final String alias;
     private final String fullName;
 
-    private XAdESForm(String alias, String fullName)
+    XAdESForm(String alias, String fullName)
     {
         this.alias = alias;
         this.fullName = fullName;

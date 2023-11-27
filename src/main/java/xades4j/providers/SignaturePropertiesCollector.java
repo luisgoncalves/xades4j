@@ -16,13 +16,13 @@
  */
 package xades4j.providers;
 
-import xades4j.properties.SigningTimeProperty;
-import xades4j.properties.SignatureProductionPlaceProperty;
 import xades4j.properties.CounterSignatureProperty;
-import xades4j.properties.OtherUnsignedSignatureProperty;
 import xades4j.properties.OtherSignedSignatureProperty;
+import xades4j.properties.OtherUnsignedSignatureProperty;
 import xades4j.properties.PropertyTargetException;
+import xades4j.properties.SignatureProductionPlaceProperty;
 import xades4j.properties.SignerRoleProperty;
+import xades4j.properties.SigningTimeProperty;
 
 /**
  * Interface for the collector of signature properties.
@@ -38,7 +38,7 @@ public interface SignaturePropertiesCollector
      * @throws NullPointerException if {@code sigTime} is {@code null}
      * @throws PropertyTargetException if {@code SigningTime} is set more than once
      */
-    public void setSigningTime(SigningTimeProperty sigTime);
+    void setSigningTime(SigningTimeProperty sigTime);
 
     /**
      * Sets the {@code SignatureProductionPlace} signed property. This can be set
@@ -47,7 +47,7 @@ public interface SignaturePropertiesCollector
      * @throws NullPointerException if {@code sigProdPlace} is {@code null}
      * @throws PropertyTargetException if {@code SignatureProductionPlace} is set more than once
      */
-    public void setSignatureProductionPlace(
+    void setSignatureProductionPlace(
             SignatureProductionPlaceProperty sigProdPlace);
 
     /**
@@ -56,7 +56,7 @@ public interface SignaturePropertiesCollector
      * @throws NullPointerException if {@code signerRole} is {@code null}
      * @throws PropertyTargetException if {@code SignerRole} is set more than once
      */
-    public void setSignerRole(SignerRoleProperty signerRole);
+    void setSignerRole(SignerRoleProperty signerRole);
 
     /**
      * Adds a {@code CounterSignature} unsigned property. Multiple counter signatures
@@ -65,7 +65,7 @@ public interface SignaturePropertiesCollector
      * @throws NullPointerException if {@code counterSig} is {@code null}
      * @throws PropertyTargetException if the property (instance) is already present
      */
-    public void addCounterSignature(CounterSignatureProperty counterSig);
+    void addCounterSignature(CounterSignatureProperty counterSig);
 
     /**
      * Adds a custom signed property. Multiple custom signed properties can be
@@ -80,7 +80,7 @@ public interface SignaturePropertiesCollector
      * @throws PropertyTargetException if the property (instance) is already present
      * @throws IllegalArgumentException if the property is not properly annotated
      */
-    public void addOtherSignatureProperty(
+    void addOtherSignatureProperty(
             OtherSignedSignatureProperty otherSignedProp);
 
     /**
@@ -96,6 +96,6 @@ public interface SignaturePropertiesCollector
      * @throws PropertyTargetException if the property (instance) is already present
      * @throws IllegalArgumentException if the property is not properly annotated
      */
-    public void addOtherSignatureProperty(
+    void addOtherSignatureProperty(
             OtherUnsignedSignatureProperty otherUnsignedProp);
 }

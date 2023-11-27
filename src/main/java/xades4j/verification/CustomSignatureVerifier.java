@@ -26,7 +26,7 @@ package xades4j.verification;
  */
 public interface CustomSignatureVerifier
 {
-    public void verify(
+    void verify(
             XAdESVerificationResult verificationData,
             QualifyingPropertyVerificationContext ctx) throws InvalidSignatureException;
 }

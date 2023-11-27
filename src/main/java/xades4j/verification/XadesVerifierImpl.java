@@ -366,7 +366,7 @@ class XadesVerifierImpl implements XadesVerifier
     }
 
     /*************************************************************************************/
-    private static interface FormExtensionPropsCollector
+    private interface FormExtensionPropsCollector
     {
 
         void addProps(Collection<UnsignedSignatureProperty> usp,

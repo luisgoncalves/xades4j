@@ -36,7 +36,7 @@ public interface RawSignatureVerifier
     /**
      * The context for {@code RawSignatureVerifier}s.
      */
-    public static class RawSignatureVerifierContext
+    class RawSignatureVerifierContext
     {
         private final XMLSignature signature;
 

@@ -33,7 +33,7 @@ public interface QualifyingPropertiesUnmarshaller
      * should be returned with instances of {@code GenericDOMData}.
      * @param accept {@code true} if unknown properties should be accepted
      */
-    public void setAcceptUnknownProperties(boolean accept);
+    void setAcceptUnknownProperties(boolean accept);
 
     /**
      * Unmarshal the properties in the given {@code QualifyingProperties} node.
@@ -42,7 +42,7 @@ public interface QualifyingPropertiesUnmarshaller
      * @param propertyDataCollector the collector of property data objects
      * @throws UnmarshalException if there's an error (may be {@link PropertyUnmarshalException})
      */
-    public void unmarshalProperties(
+    void unmarshalProperties(
             Element qualifyingProps,
             QualifyingPropertiesDataCollector propertyDataCollector) throws UnmarshalException;
 }

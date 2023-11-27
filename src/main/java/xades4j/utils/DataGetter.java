@@ -25,10 +25,10 @@ import xades4j.utils.CollectionUtils.Predicate;
  */
 public interface DataGetter<T>
 {
-    public Collection<T> getAll();
+    Collection<T> getAll();
 
-    public <TP extends T> Collection<TP> getOfType(
+    <TP extends T> Collection<TP> getOfType(
             Class<TP> clazz);
 
-    public Collection<T> getFiltered(Predicate<T> filter);
+    Collection<T> getFiltered(Predicate<T> filter);
 }

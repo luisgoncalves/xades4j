@@ -24,5 +24,5 @@ import xades4j.utils.DataGetter;
  */
 public interface CustomPropertiesDataObjsStructureVerifier
 {
-    public void verifiy(DataGetter<PropertyDataObject> dataObjsGetter) throws PropertyDataStructureException;
+    void verifiy(DataGetter<PropertyDataObject> dataObjsGetter) throws PropertyDataStructureException;
 }

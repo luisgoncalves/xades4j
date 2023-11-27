@@ -22,7 +22,7 @@ package xades4j.xml.unmarshalling;
  */
 interface QualifyingPropertyFromXmlConverter<TXml>
 {
-    public void convertFromObjectTree(
+    void convertFromObjectTree(
             TXml xmlProps,
             QualifyingPropertiesDataCollector propertyDataCollector) throws PropertyUnmarshalException;
 }

@@ -33,6 +33,6 @@ public interface SignaturePolicyDocumentProvider
      * @param sigPolicyId the identifier of the signature policy
      * @return the policy document stream or {@code null} if not available
      */
-    public InputStream getSignaturePolicyDocumentStream(
+    InputStream getSignaturePolicyDocumentStream(
             ObjectIdentifier sigPolicyId);
 }

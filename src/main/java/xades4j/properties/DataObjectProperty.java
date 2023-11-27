@@ -52,12 +52,12 @@ public abstract class DataObjectProperty implements QualifyingProperty
         private final int multiplicity;
         private final int initialSize;
 
-        private TargetMultiplicity(int mult)
+        TargetMultiplicity(int mult)
         {
             this(mult, mult);
         }
 
-        private TargetMultiplicity(int mult, int size)
+        TargetMultiplicity(int mult, int size)
         {
             this.multiplicity = mult;
             this.initialSize = size;

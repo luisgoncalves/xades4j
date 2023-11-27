@@ -47,7 +47,7 @@ public interface PropertiesMarshaller
      * @param qualifyingPropsNode the destination node
      * @throws MarshalException if there's an error
      */
-    public void marshal(
+    void marshal(
             SigAndDataObjsPropertiesData props,
             Node qualifyingPropsNode) throws MarshalException;
 }
