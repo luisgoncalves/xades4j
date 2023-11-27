@@ -116,7 +116,7 @@ public class DefaultTimeStampVerificationProvider implements TimeStampVerificati
             throw new TimeStampTokenStructureException("Invalid token", ex);
         }
 
-        X509Certificate tsaCert = null;
+        X509Certificate tsaCert;
         try
         {
             /* Validate the TSA certificate */

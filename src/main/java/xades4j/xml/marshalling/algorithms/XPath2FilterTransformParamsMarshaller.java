@@ -43,7 +43,7 @@ final class XPath2FilterTransformParamsMarshaller implements AlgorithmParameters
         
         for (XPath2Filter filter : filters)
         {
-            XPath2FilterContainer c = null;
+            XPath2FilterContainer c;
             String filterType = filter.getFilterType();
             if (XPath2FilterContainer.INTERSECT.equals(filterType))
             {

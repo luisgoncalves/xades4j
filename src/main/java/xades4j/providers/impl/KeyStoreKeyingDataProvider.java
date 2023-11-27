@@ -186,7 +186,7 @@ public abstract class KeyStoreKeyingDataProvider implements KeyingDataProvider
             {
                 try
                 {
-                    KeyStore.CallbackHandlerProtection storeLoadProtec = null;
+                    KeyStore.CallbackHandlerProtection storeLoadProtec;
                     if (storePasswordProvider != null)
                     // Create the load protection with callback.
                     {

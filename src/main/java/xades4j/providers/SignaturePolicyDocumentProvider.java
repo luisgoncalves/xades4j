@@ -29,7 +29,7 @@ import xades4j.properties.ObjectIdentifier;
 public interface SignaturePolicyDocumentProvider
 {
     /**
-     * Gets a stream to the a policy document
+     * Gets a stream to a policy document
      * @param sigPolicyId the identifier of the signature policy
      * @return the policy document stream or {@code null} if not available
      */

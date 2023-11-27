@@ -62,7 +62,7 @@ final class DefaultQualifyingPropertiesUnmarshaller
             Element qualifyingProps,
             QualifyingPropertiesDataCollector propertyDataCollector) throws UnmarshalException
     {
-        XmlQualifyingPropertiesType xmlQualifyingProps = null;
+        XmlQualifyingPropertiesType xmlQualifyingProps;
         try
         {
             // Create the JAXB unmarshaller and unmarshalProperties the root JAXB element

@@ -80,7 +80,7 @@ class CertRefUtils
             MessageDigestEngineProvider messageDigestProvider) throws InvalidCertRefException
     {
         MessageDigest messageDigest;
-        Throwable t = null;
+        Throwable t;
         try
         {
             messageDigest = messageDigestProvider.getEngine(certRef.getDigestAlgUri());
