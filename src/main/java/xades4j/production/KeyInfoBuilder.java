@@ -132,6 +132,20 @@ class KeyInfoBuilder
     }
 
     private X509Certificate getSigningCertificate(List<X509Certificate> signingCertificateChain) throws SigningCertKeyUsageException, SigningCertValidityException {
+        X509Certificate signingCertificate = getX509Certificate(signingCertificateChain);
+
+        if (this.basicSignatureOptions.checkCertificateValidity()) {
+            try {
+                signingCertificate.checkValidity();
+            } catch (final CertificateException ce) {
+                // CertificateExpiredException or CertificateNotYetValidException
+                throw new SigningCertValidityException(signingCertificate);
+            }
+        }
+        return signingCertificate;
+    }
+
+    private X509Certificate getX509Certificate(List<X509Certificate> signingCertificateChain) throws SigningCertKeyUsageException {
         X509Certificate signingCertificate = signingCertificateChain.get(0);
 
         if (this.basicSignatureOptions.checkKeyUsage())
@@ -143,15 +157,6 @@ class KeyInfoBuilder
             if (keyUsage != null && !keyUsage[0] && !keyUsage[1])
             {
                 throw new SigningCertKeyUsageException(signingCertificate);
-            }
-        }
-
-        if (this.basicSignatureOptions.checkCertificateValidity()) {
-            try {
-                signingCertificate.checkValidity();
-            } catch (final CertificateException ce) {
-                // CertificateExpiredException or CertificateNotYetValidException
-                throw new SigningCertValidityException(signingCertificate);
             }
         }
         return signingCertificate;

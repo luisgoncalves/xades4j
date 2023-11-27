@@ -183,6 +183,8 @@ public class DefaultTimeStampVerificationProvider implements TimeStampVerificati
             return true;
 }
 
+        // TODO: Classes that override "clone" should be "Cloneable" and call "super.clone()"
+        // "clone" should not be overridden A copy constructor, copy factory or a custom copy function are suitable alternatives to the Object.clone
         @Override
         public Object clone()
         {
