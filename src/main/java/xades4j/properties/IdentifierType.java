@@ -45,8 +45,12 @@ public enum IdentifierType
      * The identifier is an Object Identifier encoded as a URI
      */
     OID_AS_URI,
+    @Deprecated(since="2.2.2")
+    OIDAsURI,
     /**
      * The identifier is an Object Identifier encoded as a URN
      */
-    OID_AS_URN
+    OID_AS_URN,
+    @Deprecated(since="2.2.2")
+    OIDAsURN
 }

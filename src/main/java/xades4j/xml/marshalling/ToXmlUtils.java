@@ -46,6 +46,8 @@ class ToXmlUtils
         identifierTypeConv = new EnumMap<>(IdentifierType.class);
         identifierTypeConv.put(IdentifierType.OID_AS_URI, XmlQualifierType.OID_AS_URI);
         identifierTypeConv.put(IdentifierType.OID_AS_URN, XmlQualifierType.OID_AS_URN);
+        identifierTypeConv.put(IdentifierType.OIDAsURI, XmlQualifierType.OIDAsURI);
+        identifierTypeConv.put(IdentifierType.OIDAsURN, XmlQualifierType.OIDAsURN);
     }
 
     static XmlObjectIdentifierType getXmlObjectId(ObjectIdentifier objId)

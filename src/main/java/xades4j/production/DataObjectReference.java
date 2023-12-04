@@ -49,9 +49,6 @@ public final class DataObjectReference extends DataObjectDesc
         {
             throw new NullPointerException("Reference URI cannot be null");
         }
-
-        uri = uri.trim();
-
         this.uri = URI.create(uri.trim()).toString();
     }
 
