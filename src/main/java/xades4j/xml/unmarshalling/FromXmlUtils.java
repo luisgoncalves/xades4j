@@ -69,8 +69,6 @@ class FromXmlUtils
         identifierTypeConv.put(null, IdentifierType.URI);
         identifierTypeConv.put(XmlQualifierType.OID_AS_URI, IdentifierType.OID_AS_URI);
         identifierTypeConv.put(XmlQualifierType.OID_AS_URN, IdentifierType.OID_AS_URN);
-        identifierTypeConv.put(XmlQualifierType.OIDAsURI, IdentifierType.OIDAsURI);
-        identifierTypeConv.put(XmlQualifierType.OIDAsURN, IdentifierType.OIDAsURN);
     }
 
     static ObjectIdentifier getObjectIdentifier(XmlObjectIdentifierType xmlObjId)

@@ -35,13 +35,7 @@ public enum XmlQualifierType {
     @XmlEnumValue("OIDAsURI")
     OID_AS_URI("OIDAsURI"),
     @XmlEnumValue("OIDAsURN")
-    OID_AS_URN("OIDAsURN"),
-    @Deprecated(since="2.2.2")
-    @XmlEnumValue("OIDAsURI")
-    OIDAsURI("OIDAsURI"),
-    @Deprecated(since="2.2.2")
-    @XmlEnumValue("OIDAsURN")
-    OIDAsURN("OIDAsURN");
+    OID_AS_URN("OIDAsURN");
     private final String value;
 
     XmlQualifierType(String v) {
