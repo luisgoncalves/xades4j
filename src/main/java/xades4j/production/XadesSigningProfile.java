@@ -101,7 +101,7 @@ public abstract class XadesSigningProfile
     /**
      * Creates a new {@code XadesSigner} based on the current state of the profile.
      * If any changes are made after this call, the previously returned signer will
-     * not be afected. Other signers can be created, accumulating the profile changes.
+     * not be affected. Other signers can be created, accumulating the profile changes.
      * @return a {@code XadesSigner} accordingly to this profile
      * @throws XadesProfileResolutionException if the dependencies of the signer (direct and indirect) cannot be resolved
      */
