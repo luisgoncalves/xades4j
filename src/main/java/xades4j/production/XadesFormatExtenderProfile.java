@@ -18,11 +18,11 @@ package xades4j.production;
 
 import com.google.inject.Module;
 import xades4j.properties.QualifyingProperty;
-import xades4j.utils.XadesProfileCore;
-import xades4j.utils.XadesProfileResolutionException;
 import xades4j.providers.MessageDigestEngineProvider;
 import xades4j.providers.TimeStampTokenProvider;
 import xades4j.utils.UtilsBindingsModule;
+import xades4j.utils.XadesProfileCore;
+import xades4j.utils.XadesProfileResolutionException;
 import xades4j.xml.marshalling.MarshallingBindingsModule;
 import xades4j.xml.marshalling.UnsignedPropertiesMarshaller;
 import xades4j.xml.marshalling.algorithms.AlgorithmParametersBindingsModule;
@@ -63,7 +63,7 @@ public class XadesFormatExtenderProfile
     }
 
     public final XadesFormatExtenderProfile with(Object instance) {
-        this.profileCore.addBinding((Class)instance.getClass(), instance);
+        this.profileCore.addBinding((Class<Object>)instance.getClass(), instance);
         return this;
     }
 

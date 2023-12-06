@@ -28,7 +28,7 @@ import java.util.Date;
  */
 public interface TimeStampTokenProvider
 {
-    public static class TimeStampTokenRes
+    class TimeStampTokenRes
     {
         public final byte[] encodedTimeStampToken;
         public final Date timeStampTime;
@@ -48,7 +48,7 @@ public interface TimeStampTokenProvider
      * @return the time-stamp token data
      * @throws TimeStampTokenGenerationException if there's an error getting the time-stamp
      */
-    public TimeStampTokenRes getTimeStampToken(
+    TimeStampTokenRes getTimeStampToken(
             byte[] tsDigestInput,
             String digestAlgUri) throws TimeStampTokenGenerationException;
 }

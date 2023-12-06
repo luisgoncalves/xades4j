@@ -26,7 +26,6 @@ import com.google.inject.multibindings.Multibinder;
 import com.google.inject.multibindings.OptionalBinder;
 import com.google.inject.util.Modules;
 import com.google.inject.util.Types;
-
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
 import java.util.ArrayList;
@@ -91,7 +90,7 @@ public final class XadesProfileCore
 
         this.bindings.add(b -> {
             ParameterizedType pt = Types.newParameterizedType(genericClass, genericClassParams);
-            Key k = Key.get(TypeLiteral.get(pt));
+            Key<Object> k = (Key<Object>) Key.get(TypeLiteral.get(pt));
             b.bind(k).to(to);
         });
     }
@@ -106,7 +105,7 @@ public final class XadesProfileCore
 
         this.bindings.add(b -> {
             ParameterizedType pt = Types.newParameterizedType(genericClass, genericClassParams);
-            Key k = Key.get(TypeLiteral.get(pt));
+            Key<Object> k = (Key<Object>) Key.get(TypeLiteral.get(pt));
             b.bind(k).toInstance(to);
         });
     }
@@ -144,7 +143,7 @@ public final class XadesProfileCore
             throw new NullPointerException();
 
         this.bindings.add(b -> {
-            MapBinder mapBinder = MapBinder.newMapBinder(b, key.getClass(), valueClass);
+            MapBinder<Object,Object> mapBinder = (MapBinder<Object, Object>) MapBinder.newMapBinder(b, key.getClass(), valueClass);
             mapBinder.addBinding(key).toInstance(value);
         });
     }
@@ -155,7 +154,7 @@ public final class XadesProfileCore
             throw new NullPointerException();
 
         this.bindings.add(b -> {
-            MapBinder mapBinder = MapBinder.newMapBinder(b, key.getClass(), valueClass);
+            MapBinder<Object,Object> mapBinder = (MapBinder<Object, Object>) MapBinder.newMapBinder(b, key.getClass(), valueClass);
             mapBinder.addBinding(key).to(to);
         });
     }

@@ -25,7 +25,7 @@ import java.security.cert.X509CRL;
  */
 public class CompleteRevocRefsReferenceException extends CompleteRevocRefsVerificationException
 {
-    private final X509CRL crl;
+    private final transient X509CRL crl;
     private final String msg;
 
     public CompleteRevocRefsReferenceException(X509CRL crl, String msg)

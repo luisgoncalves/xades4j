@@ -8,16 +8,16 @@
 
 package xades4j.xml.bind.xades;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
 import jakarta.xml.bind.annotation.XmlAccessType;
 import jakarta.xml.bind.annotation.XmlAccessorType;
 import jakarta.xml.bind.annotation.XmlAnyAttribute;
 import jakarta.xml.bind.annotation.XmlAnyElement;
 import jakarta.xml.bind.annotation.XmlMixed;
 import jakarta.xml.bind.annotation.XmlType;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 import javax.xml.namespace.QName;
 import org.w3c.dom.Element;
 
@@ -52,14 +52,14 @@ public class XmlAnyType {
     @XmlAnyElement(lax = true)
     protected List<Object> content;
     @XmlAnyAttribute
-    private Map<QName, String> otherAttributes = new HashMap<>();
+    private final Map<QName, String> otherAttributes = new HashMap<>();
 
     /**
      * Gets the value of the content property.
      * 
      * <p>
      * This accessor method returns a reference to the live list,
-     * not a snapshot. Therefore any modification you make to the
+     * not a snapshot. Therefore, any modification you make to the
      * returned list will be present inside the JAXB object.
      * This is why there is not a <CODE>set</CODE> method for the content property.
      * 

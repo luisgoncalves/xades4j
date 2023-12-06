@@ -26,5 +26,5 @@ import xades4j.properties.SignaturePolicyBase;
  */
 public interface SignaturePolicyInfoProvider
 {
-    public SignaturePolicyBase getSignaturePolicy();
+    SignaturePolicyBase getSignaturePolicy();
 }

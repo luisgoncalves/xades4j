@@ -39,10 +39,10 @@ class CompleteRevocationRefsDataStructureVerifier implements PropertyDataObjectS
             if (null == r)
                 throw new PropertyDataStructureException("null CRL reference", CompleteRevocationRefsProperty.PROP_NAME);
             if (ObjectUtils.anyNull(
-                    r.issuerDN,
-                    r.digestAlgUri,
-                    r.digestValue,
-                    r.issueTime))
+                    r.getIssuerDN(),
+                    r.getDigestAlgUri(),
+                    r.getDigestValue(),
+                    r.getIssueTime()))
                 throw new PropertyDataStructureException("empty data on one or more CRL references", CompleteRevocationRefsProperty.PROP_NAME);
         }
     }

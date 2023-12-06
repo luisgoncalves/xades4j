@@ -35,7 +35,7 @@ class ExclusiveCanonicalXMLParamsMarshaller
         }else
         {
             InclusiveNamespaces inclusive = new InclusiveNamespaces(doc, alg.getInclusiveNamespacePrefixes());
-            return Collections.singletonList((Node) inclusive.getElement());
+            return Collections.singletonList(inclusive.getElement());
         }
     }
 }

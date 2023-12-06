@@ -17,6 +17,7 @@
 package xades4j.xml.unmarshalling;
 
 import jakarta.xml.bind.JAXBElement;
+import java.util.List;
 import xades4j.properties.QualifyingProperty;
 import xades4j.properties.SignaturePolicyBase;
 import xades4j.properties.data.SignaturePolicyData;
@@ -25,8 +26,6 @@ import xades4j.xml.bind.xades.XmlSigPolicyQualifiersListType;
 import xades4j.xml.bind.xades.XmlSignaturePolicyIdType;
 import xades4j.xml.bind.xades.XmlSignaturePolicyIdentifierType;
 import xades4j.xml.bind.xades.XmlSignedSignaturePropertiesType;
-
-import java.util.List;
 
 /**
  *
@@ -75,10 +74,10 @@ class FromXmlSignaturePolicyConverter implements SignedSigPropFromXmlConv
             List<Object> content = xmlQualifier.getContent();
             if (content.size() == 1 && content.get(0) instanceof JAXBElement)
             {
-                JAXBElement xmlSPURI = (JAXBElement)content.get(0);
+                JAXBElement<String> xmlSPURI = (JAXBElement<String>)content.get(0);
                 if (xmlSPURI.getName().getLocalPart().equals("SPURI") && xmlSPURI.getName().getNamespaceURI().equals(QualifyingProperty.XADES_XMLNS))
                 {
-                    return (String) xmlSPURI.getValue();
+                    return xmlSPURI.getValue();
                 }
             }
         }

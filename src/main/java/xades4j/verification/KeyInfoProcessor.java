@@ -21,12 +21,10 @@ import java.security.cert.X509Certificate;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
-
 import org.apache.xml.security.exceptions.XMLSecurityException;
 import org.apache.xml.security.keys.KeyInfo;
 import org.apache.xml.security.keys.content.X509Data;
 import org.apache.xml.security.keys.content.x509.XMLX509IssuerSerial;
-
 import xades4j.properties.data.CertRef;
 import xades4j.providers.CertificateValidationException;
 import xades4j.providers.X500NameStyleProvider;
@@ -44,9 +42,9 @@ class KeyInfoProcessor
 
     static class KeyInfoRes
     {
-        X509CertSelector certSelector;
-        List<X509Certificate> keyInfoCerts;
-        XMLX509IssuerSerial issuerSerial;
+        final X509CertSelector certSelector;
+        final List<X509Certificate> keyInfoCerts;
+        final XMLX509IssuerSerial issuerSerial;
 
         KeyInfoRes(
             X509CertSelector certSelector,
@@ -149,8 +147,8 @@ class KeyInfoProcessor
         }
 
         X509CertSelector certSelector = new X509CertSelector();
-        certSelector.setIssuer(x500NameStyleProvider.fromString(signingCertRef.issuerDN));
-        certSelector.setSerialNumber(signingCertRef.serialNumber);
+        certSelector.setIssuer(x500NameStyleProvider.fromString(signingCertRef.getIssuerDN()));
+        certSelector.setSerialNumber(signingCertRef.getSerialNumber());
         
         return new KeyInfoRes(certSelector);     
     }

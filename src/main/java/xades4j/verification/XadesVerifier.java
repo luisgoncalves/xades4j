@@ -57,7 +57,7 @@ public interface XadesVerifier
      * @throws XAdES4jException if an error occurs, including if signature verification fails
      * @throws NullPointerException if {@code signatureElem} is {@code null}
      */
-    public XAdESVerificationResult verify(
+    XAdESVerificationResult verify(
             Element signatureElem,
             SignatureSpecificVerificationOptions verificationOptions) throws XAdES4jException;
 
@@ -106,7 +106,7 @@ public interface XadesVerifier
      * @throws XAdES4jException if an error occurs, including if signature verification fails
      * @throws NullPointerException if any parameter is {@code null}
      */
-    public XAdESVerificationResult verify(
+    XAdESVerificationResult verify(
             Element signatureElem,
             SignatureSpecificVerificationOptions verificationOptions,
             XadesSignatureFormatExtender formatExtender,

@@ -28,7 +28,7 @@ import xades4j.XAdES4jException;
  */
 public class CertificateValidationException extends XAdES4jException
 {
-    private final X509CertSelector certSelector;
+    private final transient X509CertSelector certSelector;
 
     public CertificateValidationException(X509CertSelector s, String message, Throwable cause)
     {

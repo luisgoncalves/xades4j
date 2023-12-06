@@ -25,5 +25,5 @@ import xades4j.properties.data.PropertyDataObject;
  */
 interface QualifyingPropertyDataToXmlConverter<TXml>
 {
-    public void convertIntoObjectTree(PropertyDataObject propData, TXml xmlProps, Document doc);
+    void convertIntoObjectTree(PropertyDataObject propData, TXml xmlProps, Document doc);
 }

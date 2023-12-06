@@ -16,6 +16,8 @@
  */
 package xades4j.xml.marshalling;
 
+import java.util.EnumMap;
+import java.util.List;
 import xades4j.properties.IdentifierType;
 import xades4j.properties.ObjectIdentifier;
 import xades4j.properties.data.BaseCertRefsData;
@@ -28,9 +30,6 @@ import xades4j.xml.bind.xades.XmlObjectIdentifierType;
 import xades4j.xml.bind.xades.XmlQualifierType;
 import xades4j.xml.bind.xmldsig.XmlDigestMethodType;
 import xades4j.xml.bind.xmldsig.XmlX509IssuerSerialType;
-
-import java.util.EnumMap;
-import java.util.List;
 
 /**
  * @author Luís
@@ -45,8 +44,10 @@ class ToXmlUtils
     static
     {
         identifierTypeConv = new EnumMap<>(IdentifierType.class);
-        identifierTypeConv.put(IdentifierType.OIDAsURI, XmlQualifierType.OID_AS_URI);
-        identifierTypeConv.put(IdentifierType.OIDAsURN, XmlQualifierType.OID_AS_URN);
+        identifierTypeConv.put(IdentifierType.OID_AS_URI, XmlQualifierType.OID_AS_URI);
+        identifierTypeConv.put(IdentifierType.OID_AS_URN, XmlQualifierType.OID_AS_URN);
+        identifierTypeConv.put(IdentifierType.OIDAsURI, XmlQualifierType.OIDAsURI);
+        identifierTypeConv.put(IdentifierType.OIDAsURN, XmlQualifierType.OIDAsURN);
     }
 
     static XmlObjectIdentifierType getXmlObjectId(ObjectIdentifier objId)
@@ -81,14 +82,14 @@ class ToXmlUtils
         for (CertRef certRef : certRefsData.getCertRefs())
         {
             certDigestMethod = new XmlDigestMethodType();
-            certDigestMethod.setAlgorithm(certRef.digestAlgUri);
+            certDigestMethod.setAlgorithm(certRef.getDigestAlgUri());
             certDigest = new XmlDigestAlgAndValueType();
             certDigest.setDigestMethod(certDigestMethod);
-            certDigest.setDigestValue(certRef.digestValue);
+            certDigest.setDigestValue(certRef.getDigestValue());
 
             issuerSerial = new XmlX509IssuerSerialType();
-            issuerSerial.setX509IssuerName(certRef.issuerDN);
-            issuerSerial.setX509SerialNumber(certRef.serialNumber);
+            issuerSerial.setX509IssuerName(certRef.getIssuerDN());
+            issuerSerial.setX509SerialNumber(certRef.getSerialNumber());
 
             certID = new XmlCertIDType();
             certID.setCertDigest(certDigest);

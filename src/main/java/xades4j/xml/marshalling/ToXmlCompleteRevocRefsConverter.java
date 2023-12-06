@@ -53,14 +53,14 @@ class ToXmlCompleteRevocRefsConverter implements UnsignedPropertyDataToXmlConver
             for (CRLRef crlRef : complRevocRefsData.getCrlRefs())
             {
                 XmlCRLIdentifierType xmlCrlId = new XmlCRLIdentifierType();
-                xmlCrlId.setIssueTime(DatatypeFactory.newInstance().newXMLGregorianCalendar(crlRef.issueTime));
-                xmlCrlId.setIssuer(crlRef.issuerDN);
-                xmlCrlId.setNumber(crlRef.serialNumber); // May be null.
+                xmlCrlId.setIssueTime(DatatypeFactory.newInstance().newXMLGregorianCalendar(crlRef.getIssueTime()));
+                xmlCrlId.setIssuer(crlRef.getIssuerDN());
+                xmlCrlId.setNumber(crlRef.getSerialNumber()); // May be null.
 
                 XmlDigestAlgAndValueType xmlDigest = new XmlDigestAlgAndValueType();
                 XmlDigestMethodType xmlDigestMethod = new XmlDigestMethodType();
-                xmlDigestMethod.setAlgorithm(crlRef.digestAlgUri);
-                xmlDigest.setDigestValue(crlRef.digestValue);
+                xmlDigestMethod.setAlgorithm(crlRef.getDigestAlgUri());
+                xmlDigest.setDigestValue(crlRef.getDigestValue());
                 xmlDigest.setDigestMethod(xmlDigestMethod);
 
                 XmlCRLRefType xmlCrlRef = new XmlCRLRefType();

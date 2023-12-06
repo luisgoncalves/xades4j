@@ -82,6 +82,7 @@ class CounterSignatureVerifier implements QualifyingPropertyVerifier<GenericDOMD
                 {
                     // The signature references the SignatureValue element with
                     // C14N transforms only.
+                    // TODO: same return value as before
                     return new CounterSignatureProperty(res);
                 }
             }

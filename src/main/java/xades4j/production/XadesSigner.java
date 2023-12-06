@@ -42,7 +42,7 @@ public interface XadesSigner
      * @see SignedDataObjects
      * @throws XAdES4jException if an error occurs
      */
-    public XadesSignatureResult sign(
+    XadesSignatureResult sign(
             SignedDataObjects signedDataObjects,
             Node parent) throws XAdES4jException;
 
@@ -52,7 +52,7 @@ public interface XadesSigner
      * or last child of a node.
      * @see SignatureAppendingStrategies
      */
-    public interface SignatureAppendingStrategy
+    interface SignatureAppendingStrategy
     {
         /**
          * Appends the signature element to the DOM tree using the given node as
@@ -82,7 +82,7 @@ public interface XadesSigner
      * @see SignatureAppendingStrategies
      * @throws XAdES4jException if an error occurs
      */
-    public XadesSignatureResult sign(
+    XadesSignatureResult sign(
             SignedDataObjects signedDataObjects,
             Node referenceNode,
             SignatureAppendingStrategy appendingStrategy) throws XAdES4jException;

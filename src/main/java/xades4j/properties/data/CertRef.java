@@ -24,13 +24,10 @@ import java.math.BigInteger;
  */
 public class CertRef
 {
-    public String digestAlgUri;
-    /**
-     * The digest value for the certificate, already decoded from base-64.
-     */
-    public byte[] digestValue;
-    public String issuerDN;
-    public BigInteger serialNumber;
+    private final String digestAlgUri;
+    private final byte[] digestValue;
+    private final String issuerDN;
+    private final BigInteger serialNumber;
 
     public CertRef(
             String issuerDN, BigInteger serialNumber,
@@ -40,5 +37,24 @@ public class CertRef
         this.digestValue = digestValue;
         this.issuerDN = issuerDN;
         this.serialNumber = serialNumber;
+    }
+
+    public String getDigestAlgUri() {
+        return digestAlgUri;
+    }
+
+    /**
+     * The digest value for the certificate, already decoded from base-64.
+     */
+    public byte[] getDigestValue() {
+        return digestValue;
+    }
+
+    public String getIssuerDN() {
+        return issuerDN;
+    }
+
+    public BigInteger getSerialNumber() {
+        return serialNumber;
     }
 }

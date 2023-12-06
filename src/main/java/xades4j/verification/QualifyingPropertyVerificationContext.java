@@ -16,6 +16,15 @@
  */
 package xades4j.verification;
 
+import java.math.BigInteger;
+import java.security.cert.X509CRL;
+import java.security.cert.X509Certificate;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import javax.security.auth.x500.X500Principal;
 import org.apache.xml.security.keys.content.x509.XMLX509IssuerSerial;
 import org.apache.xml.security.signature.ObjectContainer;
 import org.apache.xml.security.signature.XMLSignature;
@@ -28,16 +37,6 @@ import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import xades4j.providers.X500NameStyleProvider;
-
-import javax.security.auth.x500.X500Principal;
-import java.math.BigInteger;
-import java.security.cert.X509CRL;
-import java.security.cert.X509Certificate;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
 
 /**
  * The context available during the verification of the qualifying properties.
@@ -200,7 +199,7 @@ public class QualifyingPropertyVerificationContext
             {
                 ResourceResolverContext resolverContext = new ResourceResolverContext(refAttr, "", true);
                 XMLSignatureInput refData = ResourceResolver.resolve(resolverContext);
-                // This has to be a NodeSet data because it is a same-document reference.
+                // This has to be NodeSet data because it is a same-document reference.
                 Node refNode = refData.getSubNode();
                 if (refNode.getNodeType() != Node.ELEMENT_NODE)
                     return null;

@@ -33,7 +33,7 @@ public interface TimeStampVerificationProvider
      * @return the time-stamp
      * @throws TimeStampTokenVerificationException if the token cannot be validated (see subclasses of the exception)
      */
-    public Date verifyToken(
+    Date verifyToken(
             byte[] timeStampToken,
             byte[] tsDigestInput) throws TimeStampTokenVerificationException;
 }

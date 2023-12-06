@@ -40,7 +40,7 @@ public interface QualifyingPropertyVerifier<TData extends PropertyDataObject>
      * @return the verified QualifyingProperty (never {@code null})
      * @throws InvalidPropertyException (or subclasses) if the property validation fails
      */
-    public QualifyingProperty verify(
+    QualifyingProperty verify(
             TData propData,
             QualifyingPropertyVerificationContext ctx) throws InvalidPropertyException;
 }

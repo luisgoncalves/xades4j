@@ -38,15 +38,19 @@ package xades4j.properties;
 public enum IdentifierType
 {
     /**
-     * The identifier is an URI.
+     * The identifier is a URI.
      */
     URI,
     /**
-     * The identifier is an Object IDentifier encoded as an URI
+     * The identifier is an Object Identifier encoded as a URI
      */
+    OID_AS_URI,
+    @Deprecated(since="2.2.2")
     OIDAsURI,
     /**
-     * The identifier is an Object IDentifier encoded as an URN
+     * The identifier is an Object Identifier encoded as a URN
      */
+    OID_AS_URN,
+    @Deprecated(since="2.2.2")
     OIDAsURN
 }

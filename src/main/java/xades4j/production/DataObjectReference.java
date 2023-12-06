@@ -16,8 +16,8 @@
  */
 package xades4j.production;
 
-import xades4j.properties.DataObjectDesc;
 import java.net.URI;
+import xades4j.properties.DataObjectDesc;
 
 /**
  * A reference to a signed data object. Each instance of this class will result
@@ -49,10 +49,7 @@ public final class DataObjectReference extends DataObjectDesc
         {
             throw new NullPointerException("Reference URI cannot be null");
         }
-
-        uri = uri.trim();
-        URI.create(uri.trim());
-        this.uri = uri;
+        this.uri = URI.create(uri.trim()).toString();
     }
 
     /**

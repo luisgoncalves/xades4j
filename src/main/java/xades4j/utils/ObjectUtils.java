@@ -22,6 +22,10 @@ package xades4j.utils;
  */
 public class ObjectUtils
 {
+    private ObjectUtils() {
+        throw new IllegalStateException("Utility class");
+    }
+
     /**
      * Indicates whether all the objects are {@code null}.
      * @param objs the set of objects to be checked

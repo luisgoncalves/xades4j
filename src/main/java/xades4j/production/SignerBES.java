@@ -16,7 +16,15 @@
  */
 package xades4j.production;
 
+import static xades4j.utils.CanonicalizerUtils.checkC14NAlgorithm;
+
 import jakarta.inject.Inject;
+import java.security.PrivateKey;
+import java.security.cert.X509Certificate;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
+import java.util.UUID;
 import org.apache.xml.security.exceptions.XMLSecurityException;
 import org.apache.xml.security.signature.Manifest;
 import org.apache.xml.security.signature.ObjectContainer;
@@ -52,15 +60,6 @@ import xades4j.utils.TransformUtils;
 import xades4j.xml.marshalling.SignedPropertiesMarshaller;
 import xades4j.xml.marshalling.UnsignedPropertiesMarshaller;
 import xades4j.xml.marshalling.algorithms.AlgorithmsParametersMarshallingProvider;
-
-import java.security.PrivateKey;
-import java.security.cert.X509Certificate;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
-import java.util.UUID;
-
-import static xades4j.utils.CanonicalizerUtils.checkC14NAlgorithm;
 
 /**
  * Base logic for producing XAdES signatures (XAdES-BES).
@@ -241,12 +240,8 @@ class SignerBES implements XadesSigner
             // (...) use the Type attribute of this particular ds:Reference element,
             // with its value set to: http://uri.etsi.org/01903#SignedProperties."
 
-            String digestAlgUri = this.signatureAlgorithms.getDigestAlgorithmForDataObjectReferences();
-            if (StringUtils.isNullOrEmptyString(digestAlgUri))
-            {
-                throw new NullPointerException("Digest algorithm URI not provided");
-            }
-            
+            String digestAlgUri = getDigestAlgUri();
+
             // Use same canonicalization URI as specified in the ds:CanonicalizationMethod for Signature.
             Algorithm canonAlg = this.signatureAlgorithms.getCanonicalizationAlgorithmForSignature();
 
@@ -301,15 +296,19 @@ class SignerBES implements XadesSigner
         return new XadesSignatureResult(signature, qualifProps);
     }
 
+    private String getDigestAlgUri() {
+        String digestAlgUri = this.signatureAlgorithms.getDigestAlgorithmForDataObjectReferences();
+        if (StringUtils.isNullOrEmptyString(digestAlgUri))
+        {
+            throw new NullPointerException("Digest algorithm URI not provided");
+        }
+        return digestAlgUri;
+    }
+
     private XMLSignature createSignature(Document signatureDocument, String baseUri, String signingKeyAlgorithm) throws XAdES4jXMLSigException, UnsupportedAlgorithmException
     {
         Algorithm signatureAlg = this.signatureAlgorithms.getSignatureAlgorithm(signingKeyAlgorithm);
-        if (null == signatureAlg)
-        {
-            throw new NullPointerException("Signature algorithm not provided");
-        }
         Element signatureAlgElem = createElementForAlgorithm(signatureAlg, Constants._TAG_SIGNATUREMETHOD, signatureDocument);
-
 
         Algorithm canonAlg = this.signatureAlgorithms.getCanonicalizationAlgorithmForSignature();
         if (null == canonAlg)

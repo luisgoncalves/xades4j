@@ -119,7 +119,7 @@ public class CollectionUtils
 
     public interface Predicate<T>
     {
-        public boolean verifiedBy(T elem);
+        boolean verifiedBy(T elem);
     }
 
     public static <T> List<T> filter(Collection<T> c, Predicate<T> p)
@@ -135,7 +135,7 @@ public class CollectionUtils
 
     public interface Projector<T1, T2>
     {
-        public T2 project(T1 e);
+        T2 project(T1 e);
     }
 
     public static <TSrc, TDest> List<TDest> project(

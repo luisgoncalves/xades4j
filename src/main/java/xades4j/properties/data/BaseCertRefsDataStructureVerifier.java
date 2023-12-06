@@ -44,7 +44,7 @@ class BaseCertRefsDataStructureVerifier implements PropertyDataObjectStructureVe
         {
             if (null == certRef)
                 throw new PropertyDataStructureException("null certificate reference", propName);
-            if (ObjectUtils.anyNull(certRef.issuerDN, certRef.serialNumber, certRef.digestAlgUri, certRef.digestValue))
+            if (ObjectUtils.anyNull(certRef.getIssuerDN(), certRef.getSerialNumber(), certRef.getDigestAlgUri(), certRef.getDigestValue()))
                 throw new PropertyDataStructureException("empty data on one or more certificate references", propName);
         }
     }

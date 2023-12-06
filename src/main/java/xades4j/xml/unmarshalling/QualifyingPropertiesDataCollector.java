@@ -17,19 +17,19 @@
 package xades4j.xml.unmarshalling;
 
 import xades4j.properties.data.AllDataObjsTimeStampData;
-import xades4j.properties.data.SigningTimeData;
-import xades4j.properties.data.SigningCertificateData;
-import xades4j.properties.data.SignatureProdPlaceData;
-import xades4j.properties.data.DataObjectFormatData;
 import xades4j.properties.data.CommitmentTypeData;
 import xades4j.properties.data.CompleteCertificateRefsData;
 import xades4j.properties.data.CompleteRevocationRefsData;
+import xades4j.properties.data.DataObjectFormatData;
 import xades4j.properties.data.GenericDOMData;
 import xades4j.properties.data.IndividualDataObjsTimeStampData;
 import xades4j.properties.data.OtherPropertyData;
 import xades4j.properties.data.SignaturePolicyData;
+import xades4j.properties.data.SignatureProdPlaceData;
 import xades4j.properties.data.SignatureTimeStampData;
 import xades4j.properties.data.SignerRoleData;
+import xades4j.properties.data.SigningCertificateData;
+import xades4j.properties.data.SigningTimeData;
 
 /**
  * Passed to a {@link QualifyingPropertiesUnmarshaller} to collect the property
@@ -44,34 +44,34 @@ import xades4j.properties.data.SignerRoleData;
  */
 public interface QualifyingPropertiesDataCollector
 {
-    public void setSigningTime(SigningTimeData sigTimeData);
+    void setSigningTime(SigningTimeData sigTimeData);
 
-    public void setSignatureProdPlace(SignatureProdPlaceData sigProdPlaceData);
+    void setSignatureProdPlace(SignatureProdPlaceData sigProdPlaceData);
 
-    public void setSignerRole(SignerRoleData signerRoleData);
+    void setSignerRole(SignerRoleData signerRoleData);
 
-    public void setSigningCertificate(SigningCertificateData signingCertData);
+    void setSigningCertificate(SigningCertificateData signingCertData);
 
-    public void setSignaturePolicy(SignaturePolicyData sigPolicyData);
+    void setSignaturePolicy(SignaturePolicyData sigPolicyData);
 
-    public void setCompleteCertificateRefs(
+    void setCompleteCertificateRefs(
             CompleteCertificateRefsData completeCertRefsData);
 
-    public void setCompleteRevocRefs(
+    void setCompleteRevocRefs(
             CompleteRevocationRefsData completeRecovRefsData);
 
-    public void addSignatureTimeStamp(SignatureTimeStampData sigTSData);
+    void addSignatureTimeStamp(SignatureTimeStampData sigTSData);
 
-    public void addCommitmentType(CommitmentTypeData commitmentData);
+    void addCommitmentType(CommitmentTypeData commitmentData);
 
-    public void addDataObjectFormat(DataObjectFormatData formatData);
+    void addDataObjectFormat(DataObjectFormatData formatData);
 
-    public void addAllDataObjsTimeStamp(AllDataObjsTimeStampData objsTSData);
+    void addAllDataObjsTimeStamp(AllDataObjsTimeStampData objsTSData);
 
-    public void addIndividualDataObjsTimeStamp(
+    void addIndividualDataObjsTimeStamp(
             IndividualDataObjsTimeStampData objsTSData);
 
-    public void addGenericDOMData(GenericDOMData domData);
+    void addGenericDOMData(GenericDOMData domData);
 
-    public void addOther(OtherPropertyData otherData);
+    void addOther(OtherPropertyData otherData);
 }

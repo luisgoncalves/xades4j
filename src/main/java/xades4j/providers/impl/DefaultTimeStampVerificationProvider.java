@@ -17,6 +17,15 @@
 package xades4j.providers.impl;
 
 import jakarta.inject.Inject;
+import java.io.IOException;
+import java.security.MessageDigest;
+import java.security.Provider;
+import java.security.cert.CertificateException;
+import java.security.cert.X509Certificate;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.LinkedList;
+import java.util.Map;
 import org.apache.xml.security.algorithms.MessageDigestAlgorithm;
 import org.bouncycastle.asn1.ASN1InputStream;
 import org.bouncycastle.asn1.ASN1ObjectIdentifier;
@@ -42,16 +51,6 @@ import xades4j.providers.TimeStampTokenTSACertException;
 import xades4j.providers.TimeStampTokenVerificationException;
 import xades4j.providers.TimeStampVerificationProvider;
 import xades4j.providers.ValidationData;
-
-import java.io.IOException;
-import java.security.MessageDigest;
-import java.security.Provider;
-import java.security.cert.CertificateException;
-import java.security.cert.X509Certificate;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.LinkedList;
-import java.util.Map;
 
 /**
  * Default implementation of {@code TimeStampVerificationProvider}. It verifies
@@ -117,14 +116,14 @@ public class DefaultTimeStampVerificationProvider implements TimeStampVerificati
             throw new TimeStampTokenStructureException("Invalid token", ex);
         }
 
-        X509Certificate tsaCert = null;
+        X509Certificate tsaCert;
         try
         {
             /* Validate the TSA certificate */
             LinkedList<X509Certificate> certs = new LinkedList<>();
-            for (Object certHolder : tsToken.getCertificates().getMatches(new AllCertificatesSelector()))
+            for (X509CertificateHolder certHolder : tsToken.getCertificates().getMatches(new AllCertificatesSelector()))
             {
-                certs.add(this.x509CertificateConverter.getCertificate((X509CertificateHolder) certHolder));
+                certs.add(this.x509CertificateConverter.getCertificate(certHolder));
             }
 
             ValidationData vData = this.certificateValidationProvider.validate(
@@ -176,19 +175,21 @@ public class DefaultTimeStampVerificationProvider implements TimeStampVerificati
     }
     
     /** Selector selecting all certificates. */
-    private static class AllCertificatesSelector implements Selector {
+    private static class AllCertificatesSelector implements Selector<X509CertificateHolder> {
 
         @Override
-        public boolean match(Object o)
+        public boolean match(X509CertificateHolder x509CertHolder)
         {
             return true;
 }
 
+        // TODO: Classes that override "clone" should be "Cloneable" and call "super.clone()"
+        // "clone" should not be overridden A copy constructor, copy factory or a custom copy function are suitable alternatives to the Object.clone
         @Override
         public Object clone()
         {
             return this;
-        }        
-        
+        }
+
     }
 }

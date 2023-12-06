@@ -17,14 +17,6 @@
 package xades4j.verification;
 
 import jakarta.inject.Inject;
-import xades4j.UnsupportedAlgorithmException;
-import xades4j.properties.CompleteRevocationRefsProperty;
-import xades4j.properties.QualifyingProperty;
-import xades4j.properties.data.CRLRef;
-import xades4j.properties.data.CompleteRevocationRefsData;
-import xades4j.providers.MessageDigestEngineProvider;
-import xades4j.utils.CrlExtensionsUtils;
-
 import java.io.IOException;
 import java.math.BigInteger;
 import java.security.MessageDigest;
@@ -32,6 +24,13 @@ import java.security.cert.CRLException;
 import java.security.cert.X509CRL;
 import java.util.ArrayList;
 import java.util.Collection;
+import xades4j.UnsupportedAlgorithmException;
+import xades4j.properties.CompleteRevocationRefsProperty;
+import xades4j.properties.QualifyingProperty;
+import xades4j.properties.data.CRLRef;
+import xades4j.properties.data.CompleteRevocationRefsData;
+import xades4j.providers.MessageDigestEngineProvider;
+import xades4j.utils.CrlExtensionsUtils;
 
 /**
  * XAdES G.2.2.13
@@ -74,23 +73,23 @@ class CompleteRevocRefsVerifier implements QualifyingPropertyVerifier<CompleteRe
 
                 // Check issuer and issue time.
 
-                if (!this.dnComparer.areEqual(crl.getIssuerX500Principal(), crlRef.issuerDN) ||
-                        !crl.getThisUpdate().equals(crlRef.issueTime.getTime()))
+                if (!this.dnComparer.areEqual(crl.getIssuerX500Principal(), crlRef.getIssuerDN()) ||
+                        !crl.getThisUpdate().equals(crlRef.getIssueTime().getTime()))
                     continue;
                 
                 try
                 {
                     // Check CRL number, if present.
-                    if (crlRef.serialNumber != null)
+                    if (crlRef.getSerialNumber() != null)
                     {
                         BigInteger crlNum = CrlExtensionsUtils.getCrlNumber(crl);
-                        if (crlNum != null && !crlRef.serialNumber.equals(crlNum))
+                        if (crlNum != null && !crlRef.getSerialNumber().equals(crlNum))
                             continue;
                     }
 
                     // Check digest value.
-                    MessageDigest md = this.digestEngineProvider.getEngine(crlRef.digestAlgUri);
-                    if (MessageDigest.isEqual(md.digest(crl.getEncoded()), crlRef.digestValue))
+                    MessageDigest md = this.digestEngineProvider.getEngine(crlRef.getDigestAlgUri());
+                    if (MessageDigest.isEqual(md.digest(crl.getEncoded()), crlRef.getDigestValue()))
                     {
                         match = crlRef;
                         break;

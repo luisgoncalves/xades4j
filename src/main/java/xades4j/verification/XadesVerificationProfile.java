@@ -18,17 +18,16 @@ package xades4j.verification;
 
 import com.google.inject.Module;
 import javax.xml.namespace.QName;
-
-import xades4j.providers.X500NameStyleProvider;
-import xades4j.utils.XadesProfileCore;
-import xades4j.utils.XadesProfileResolutionException;
 import xades4j.properties.data.CustomPropertiesDataObjsStructureVerifier;
 import xades4j.properties.data.PropertyDataObject;
 import xades4j.providers.CertificateValidationProvider;
 import xades4j.providers.MessageDigestEngineProvider;
 import xades4j.providers.SignaturePolicyDocumentProvider;
 import xades4j.providers.TimeStampVerificationProvider;
+import xades4j.providers.X500NameStyleProvider;
 import xades4j.utils.UtilsBindingsModule;
+import xades4j.utils.XadesProfileCore;
+import xades4j.utils.XadesProfileResolutionException;
 import xades4j.xml.marshalling.algorithms.AlgorithmParametersBindingsModule;
 import xades4j.xml.unmarshalling.QualifyingPropertiesUnmarshaller;
 import xades4j.xml.unmarshalling.UnmarshallingBindingsModule;
@@ -321,7 +320,7 @@ public final class XadesVerificationProfile
     }
 
     public XadesVerificationProfile withElementVerifier(
-            QName elemName, Class<? extends QualifyingPropertyVerifier<?>> vClass)
+            QName elemName, Class<? extends QualifyingPropertyVerifier<PropertyDataObject>> vClass)
     {
         if (null == elemName || null == vClass)
             throw new NullPointerException();

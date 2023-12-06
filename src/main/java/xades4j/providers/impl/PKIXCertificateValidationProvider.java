@@ -16,14 +16,6 @@
  */
 package xades4j.providers.impl;
 
-import xades4j.providers.CannotBuildCertificationPathException;
-import xades4j.providers.CannotSelectCertificateException;
-import xades4j.providers.CertificateValidationException;
-import xades4j.providers.CertificateValidationProvider;
-import xades4j.providers.ValidationData;
-import xades4j.verification.UnexpectedJCAException;
-
-import javax.security.auth.x500.X500Principal;
 import java.security.InvalidAlgorithmParameterException;
 import java.security.KeyStore;
 import java.security.KeyStoreException;
@@ -49,6 +41,13 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import javax.security.auth.x500.X500Principal;
+import xades4j.providers.CannotBuildCertificationPathException;
+import xades4j.providers.CannotSelectCertificateException;
+import xades4j.providers.CertificateValidationException;
+import xades4j.providers.CertificateValidationProvider;
+import xades4j.providers.ValidationData;
+import xades4j.verification.UnexpectedJCAException;
 
 /**
  * Implementation of {@code CertificateValidationProvider} using a PKIX {@code CertPathBuilder}.
@@ -102,19 +101,7 @@ public final class PKIXCertificateValidationProvider implements CertificateValid
             Date validationDate,
             Collection<X509Certificate> otherCerts) throws CertificateValidationException, UnexpectedJCAException
     {
-        PKIXBuilderParameters builderParams;
-        try
-        {
-            builderParams = new PKIXBuilderParameters(trustAnchors, certSelector);
-        }
-        catch (KeyStoreException ex)
-        {
-            throw new CannotBuildCertificationPathException(certSelector, "Trust anchors KeyStore is not initialized", ex);
-        }
-        catch (InvalidAlgorithmParameterException ex)
-        {
-            throw new CannotBuildCertificationPathException(certSelector, "Trust anchors KeyStore has no trusted certificate entries", ex);
-        }
+        PKIXBuilderParameters builderParams = getPkixBuilderParameters(certSelector);
 
         PKIXCertPathBuilderResult builderRes;
         try
@@ -172,11 +159,28 @@ public final class PKIXCertificateValidationProvider implements CertificateValid
         return new ValidationData(certPath);
     }
 
+    private PKIXBuilderParameters getPkixBuilderParameters(X509CertSelector certSelector) throws CannotBuildCertificationPathException {
+        PKIXBuilderParameters builderParams;
+        try
+        {
+            builderParams = new PKIXBuilderParameters(trustAnchors, certSelector);
+        }
+        catch (KeyStoreException ex)
+        {
+            throw new CannotBuildCertificationPathException(certSelector, "Trust anchors KeyStore is not initialized", ex);
+        }
+        catch (InvalidAlgorithmParameterException ex)
+        {
+            throw new CannotBuildCertificationPathException(certSelector, "Trust anchors KeyStore has no trusted certificate entries", ex);
+        }
+        return builderParams;
+    }
+
     private Collection<X509CRL> getCRLsForCertPath(
             List<X509Certificate> certPath,
             Date validationDate) throws CertificateValidationException
     {
-        // Map the issuers certificates in the chain. This is used to know the issuers
+        // Map the issuer certificates in the chain. This is used to know the issuers
         // and later to verify the signatures in the CRLs.
         Map<X500Principal, X509Certificate> issuersCerts = new HashMap<>(certPath.size() - 1);
         for (int i = 0; i < certPath.size() - 1; i++)
@@ -204,7 +208,7 @@ public final class PKIXCertificateValidationProvider implements CertificateValid
         {
             // Get the CRLs on each CertStore.
           for (CertStore intermCertsAndCrl : intermCertsAndCrls) {
-            Collection storeCRLs = intermCertsAndCrl.getCRLs(crlSelector);
+            Collection<X509CRL> storeCRLs = (Collection<X509CRL>) intermCertsAndCrl.getCRLs(crlSelector);
             crls.addAll(Collections.checkedCollection(storeCRLs, X509CRL.class));
 
           }

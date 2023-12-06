@@ -17,13 +17,12 @@
 package xades4j.xml.marshalling.algorithms;
 
 import jakarta.inject.Inject;
+import java.util.List;
+import java.util.Map;
 import org.w3c.dom.Document;
 import org.w3c.dom.Node;
 import xades4j.UnsupportedAlgorithmException;
 import xades4j.algorithms.Algorithm;
-
-import java.util.List;
-import java.util.Map;
 
 /**
  * @author Luís
@@ -41,7 +40,7 @@ final class AlgorithmsParametersMarshallingProviderImpl implements AlgorithmsPar
     @Override
     public List<Node> marshalParameters(Algorithm alg, Document doc) throws UnsupportedAlgorithmException
     {
-        AlgorithmParametersMarshaller marshaller = this.marshallers.get(alg.getClass());
+        AlgorithmParametersMarshaller<Algorithm> marshaller = (AlgorithmParametersMarshaller<Algorithm>) this.marshallers.get(alg.getClass());
         if (marshaller == null)
         {
             throw new UnsupportedAlgorithmException("AlgorithmParametersMarshaller not available", alg.getUri());

@@ -26,7 +26,7 @@ import org.apache.xml.security.signature.XMLSignature;
  */
 public class ReferenceValueException extends CoreVerificationException
 {
-    private final Reference reference;
+    private final transient Reference reference;
 
     public ReferenceValueException(XMLSignature sig, Reference reference)
     {

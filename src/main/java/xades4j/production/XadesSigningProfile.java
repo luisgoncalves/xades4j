@@ -18,15 +18,15 @@ package xades4j.production;
 
 import com.google.inject.Module;
 import xades4j.properties.QualifyingProperty;
-import xades4j.providers.X500NameStyleProvider;
-import xades4j.utils.XadesProfileCore;
-import xades4j.utils.XadesProfileResolutionException;
 import xades4j.providers.DataObjectPropertiesProvider;
 import xades4j.providers.KeyingDataProvider;
 import xades4j.providers.MessageDigestEngineProvider;
 import xades4j.providers.SignaturePropertiesProvider;
 import xades4j.providers.TimeStampTokenProvider;
+import xades4j.providers.X500NameStyleProvider;
 import xades4j.utils.UtilsBindingsModule;
+import xades4j.utils.XadesProfileCore;
+import xades4j.utils.XadesProfileResolutionException;
 import xades4j.xml.marshalling.MarshallingBindingsModule;
 import xades4j.xml.marshalling.SignedPropertiesMarshaller;
 import xades4j.xml.marshalling.UnsignedPropertiesMarshaller;
@@ -101,7 +101,7 @@ public abstract class XadesSigningProfile
     /**
      * Creates a new {@code XadesSigner} based on the current state of the profile.
      * If any changes are made after this call, the previously returned signer will
-     * not be afected. Other signers can be created, accumulating the profile changes.
+     * not be affected. Other signers can be created, accumulating the profile changes.
      * @return a {@code XadesSigner} accordingly to this profile
      * @throws XadesProfileResolutionException if the dependencies of the signer (direct and indirect) cannot be resolved
      */
@@ -161,7 +161,7 @@ public abstract class XadesSigningProfile
      * @return this profile
      */
     public final XadesSigningProfile with(Object instance) {
-        this.profileCore.addBinding((Class)instance.getClass(), instance);
+        this.profileCore.addBinding((Class<Object>)instance.getClass(), instance);
         return this;
     }
 
