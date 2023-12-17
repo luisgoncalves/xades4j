@@ -73,15 +73,7 @@ class SignatureUtils
 
         for (int i = 0; i < signedInfo.getLength(); i++)
         {
-            Reference ref;
-            try
-            {
-                ref = signedInfo.item(i);
-            } catch (XMLSecurityException ex)
-            {
-                throw new XAdES4jXMLSigException(String.format("Cannot process the %dth reference", i), ex);
-            }
-
+            Reference ref = getReference(signedInfo, i);
             String refTypeUri = ref.getType();
 
             // XAdES 6.3.1: "In order to protect the properties with the signature,
@@ -97,25 +89,11 @@ class SignatureUtils
                     throw new QualifyingPropertiesIncorporationException("Multiple references to SignedProperties");
                 }
                 signedPropsRef = ref;
-            } else
+            }
+            else
             {
-                RawDataObjectDesc dataObj = new RawDataObjectDesc(ref);
+                RawDataObjectDesc dataObj = createDataObjectDesc(ref);
                 dataObjsReferences.add(dataObj);
-                try
-                {
-                    Transforms transfs = ref.getTransforms();
-                    if (transfs != null)
-                    {
-                        for (int j = 0; j < transfs.getLength(); ++j)
-                        {
-                            dataObj.withTransform(new GenericAlgorithm(transfs.item(j).getURI()));
-                        }
-                    }
-                } catch (XMLSecurityException ex)
-                {
-                    throw new XAdES4jXMLSigException("Cannot process transfroms", ex);
-                }
-
             }
         }
 
@@ -128,6 +106,37 @@ class SignatureUtils
         }
 
         return new ReferencesRes(dataObjsReferences, signedPropsRef);
+    }
+
+    private static Reference getReference(SignedInfo signedInfo, int i) throws XAdES4jXMLSigException
+    {
+        try
+        {
+            return signedInfo.item(i);
+        } catch (XMLSecurityException ex)
+        {
+            throw new XAdES4jXMLSigException(String.format("Cannot process the %dth reference", i), ex);
+        }
+    }
+
+    private static RawDataObjectDesc createDataObjectDesc(Reference ref) throws XAdES4jXMLSigException
+    {
+        RawDataObjectDesc dataObj = new RawDataObjectDesc(ref);
+        try
+        {
+            Transforms transfs = ref.getTransforms();
+            if (transfs != null)
+            {
+                for (int j = 0; j < transfs.getLength(); ++j)
+                {
+                    dataObj.withTransform(new GenericAlgorithm(transfs.item(j).getURI()));
+                }
+            }
+        } catch (XMLSecurityException ex)
+        {
+            throw new XAdES4jXMLSigException("Cannot process transfroms", ex);
+        }
+        return dataObj;
     }
 
     /***************************************************************************/

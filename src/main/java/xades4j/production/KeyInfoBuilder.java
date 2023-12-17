@@ -1,16 +1,16 @@
 /*
  * XAdES4j - A Java library for generation and verification of XAdES signatures.
  * Copyright (C) 2011 Luis Goncalves.
- * 
+ *
  * XAdES4j is free software; you can redistribute it and/or modify it under
  * the terms of the GNU Lesser General Public License as published by the Free
  * Software Foundation; either version 3 of the License, or any later version.
- * 
+ *
  * XAdES4j is distributed in the hope that it will be useful, but WITHOUT
  * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
  * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
  * details.
- * 
+ *
  * You should have received a copy of the GNU Lesser General Public License along
  * with XAdES4j. If not, see <http://www.gnu.org/licenses/>.
  */
@@ -19,6 +19,7 @@ package xades4j.production;
 import java.security.cert.CertificateException;
 import java.security.cert.X509Certificate;
 import java.util.List;
+
 import org.apache.xml.security.exceptions.XMLSecurityException;
 import org.apache.xml.security.keys.content.X509Data;
 import org.apache.xml.security.signature.XMLSignature;
@@ -63,9 +64,18 @@ class KeyInfoBuilder
     {
         X509Certificate signingCertificate = getSigningCertificate(signingCertificateChain);
 
+        addSigningCertificateElements(signingCertificateChain, signingCertificate, xmlSig);
+
+        addPublicKey(signingCertificate, xmlSig);
+
+        addKeyInfoReference(xmlSig);
+    }
+
+    private void addSigningCertificateElements(List<X509Certificate> signingCertificateChain, X509Certificate signingCertificate, XMLSignature xmlSig) throws KeyingDataException
+    {
         if (this.basicSignatureOptions.includeSigningCertificate() != SigningCertificateMode.NONE
-            || this.basicSignatureOptions.includeIssuerSerial()
-            || this.basicSignatureOptions.includeSubjectName())
+                || this.basicSignatureOptions.includeIssuerSerial()
+                || this.basicSignatureOptions.includeSubjectName())
         {
             X509Data x509Data = new X509Data(xmlSig.getDocument());
             xmlSig.getKeyInfo().add(x509Data);
@@ -75,13 +85,13 @@ class KeyInfoBuilder
                 int loopLimit = this.basicSignatureOptions.includeSigningCertificate() == SigningCertificateMode.SIGNING_CERTIFICATE
                         ? 1
                         : signingCertificateChain.size();
-                
-                for(int i = 0; i < loopLimit; ++i)
+
+                for (int i = 0; i < loopLimit; ++i)
                 {
                     try
                     {
                         x509Data.addCertificate(signingCertificateChain.get(i));
-                    } 
+                    }
                     catch (XMLSecurityException ex)
                     {
                         throw new KeyingDataException(ex.getMessage(), ex);
@@ -99,12 +109,18 @@ class KeyInfoBuilder
                 x509Data.addSubjectName(this.x500NameStyleProvider.toString(signingCertificate.getSubjectX500Principal()));
             }
         }
+    }
 
+    private void addPublicKey(X509Certificate signingCertificate, XMLSignature xmlSig)
+    {
         if (this.basicSignatureOptions.includePublicKey())
         {
             xmlSig.addKeyInfo(signingCertificate.getPublicKey());
         }
+    }
 
+    private void addKeyInfoReference(XMLSignature xmlSig) throws UnsupportedAlgorithmException
+    {
         if (this.basicSignatureOptions.signKeyInfo())
         {
             try
@@ -118,26 +134,31 @@ class KeyInfoBuilder
                 Transforms transforms = TransformUtils.createTransforms(canonAlg, this.algorithmsParametersMarshaller, xmlSig.getDocument());
 
                 xmlSig.addDocument(
-                    '#' + keyInfoId,
-                    transforms,
-                    this.signatureAlgorithms.getDigestAlgorithmForDataObjectReferences());
+                        '#' + keyInfoId,
+                        transforms,
+                        this.signatureAlgorithms.getDigestAlgorithmForDataObjectReferences());
             }
             catch (XMLSignatureException ex)
             {
                 throw new UnsupportedAlgorithmException(
-                    "Digest algorithm not supported in the XML Signature provider",
-                    this.signatureAlgorithms.getDigestAlgorithmForDataObjectReferences(), ex);
+                        "Digest algorithm not supported in the XML Signature provider",
+                        this.signatureAlgorithms.getDigestAlgorithmForDataObjectReferences(), ex);
             }
         }
     }
 
-    private X509Certificate getSigningCertificate(List<X509Certificate> signingCertificateChain) throws SigningCertKeyUsageException, SigningCertValidityException {
+    private X509Certificate getSigningCertificate(List<X509Certificate> signingCertificateChain) throws SigningCertKeyUsageException, SigningCertValidityException
+    {
         X509Certificate signingCertificate = getX509Certificate(signingCertificateChain);
 
-        if (this.basicSignatureOptions.checkCertificateValidity()) {
-            try {
+        if (this.basicSignatureOptions.checkCertificateValidity())
+        {
+            try
+            {
                 signingCertificate.checkValidity();
-            } catch (final CertificateException ce) {
+            }
+            catch (final CertificateException ce)
+            {
                 // CertificateExpiredException or CertificateNotYetValidException
                 throw new SigningCertValidityException(signingCertificate);
             }
@@ -145,7 +166,8 @@ class KeyInfoBuilder
         return signingCertificate;
     }
 
-    private X509Certificate getX509Certificate(List<X509Certificate> signingCertificateChain) throws SigningCertKeyUsageException {
+    private X509Certificate getX509Certificate(List<X509Certificate> signingCertificateChain) throws SigningCertKeyUsageException
+    {
         X509Certificate signingCertificate = signingCertificateChain.get(0);
 
         if (this.basicSignatureOptions.checkKeyUsage())

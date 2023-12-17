@@ -19,6 +19,7 @@ package xades4j.xml.unmarshalling;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
+
 import xades4j.properties.CommitmentTypePropertyBase;
 import xades4j.properties.data.CommitmentTypeData;
 import xades4j.xml.bind.xades.XmlAnyType;
@@ -27,7 +28,6 @@ import xades4j.xml.bind.xades.XmlCommitmentTypeQualifiersListType;
 import xades4j.xml.bind.xades.XmlSignedDataObjectPropertiesType;
 
 /**
- *
  * @author Luís
  */
 class FromXmlCommitmentTypeConverter implements SignedDataObjPropFromXmlConv
@@ -55,28 +55,15 @@ class FromXmlCommitmentTypeConverter implements SignedDataObjPropFromXmlConv
             XmlCommitmentTypeQualifiersListType xmlQualifiers = xmlCommitment.getCommitmentTypeQualifiers();
             if (xmlQualifiers != null)
             {
-                Collection<Object> qualifiers = new ArrayList<>();
-                for (XmlAnyType xmlQualifier : xmlQualifiers.getCommitmentTypeQualifier())
-                {
-                    if (!xmlQualifier.getContent().isEmpty())
-                    {
-                        if (xmlQualifier.getContent().size() > 1)
-                        {
-                            throw new PropertyUnmarshalException("Qualifiers with multiple children are not support", CommitmentTypePropertyBase.PROP_NAME);
-                        }
-
-                        qualifiers.add(xmlQualifier.getContent().get(0));
-                    }
-                }
-                
-                commTypeData.setQualifiers(qualifiers);
+                commTypeData.setQualifiers(getQualifiers(xmlQualifiers));
             }
 
             propertyDataCollector.addCommitmentType(commTypeData);
         }
     }
 
-    private static List<String> getObjsRefs(XmlCommitmentTypeIndicationType xmlCommitment) throws PropertyUnmarshalException {
+    private static List<String> getObjsRefs(XmlCommitmentTypeIndicationType xmlCommitment) throws PropertyUnmarshalException
+    {
         List<String> objsRefs = xmlCommitment.getObjectReference();
         Object allDataObjs = xmlCommitment.getAllSignedDataObjects();
 
@@ -88,10 +75,29 @@ class FromXmlCommitmentTypeConverter implements SignedDataObjPropFromXmlConv
             {
                 throw new PropertyUnmarshalException("ObjectReference or AllSignedDataObjects have to be present", CommitmentTypePropertyBase.PROP_NAME);
             }
-        } else if (allDataObjs != null)
+        }
+        else if (allDataObjs != null)
         {
             throw new PropertyUnmarshalException("Both ObjectReference and AllSignedDataObjects are present", CommitmentTypePropertyBase.PROP_NAME);
         }
         return objsRefs;
+    }
+
+    private static Collection<Object> getQualifiers(XmlCommitmentTypeQualifiersListType xmlQualifiers) throws PropertyUnmarshalException
+    {
+        Collection<Object> qualifiers = new ArrayList<>();
+        for (XmlAnyType xmlQualifier : xmlQualifiers.getCommitmentTypeQualifier())
+        {
+            if (!xmlQualifier.getContent().isEmpty())
+            {
+                if (xmlQualifier.getContent().size() > 1)
+                {
+                    throw new PropertyUnmarshalException("Qualifiers with multiple children are not support", CommitmentTypePropertyBase.PROP_NAME);
+                }
+
+                qualifiers.add(xmlQualifier.getContent().get(0));
+            }
+        }
+        return qualifiers;
     }
 }
