@@ -17,6 +17,9 @@
 package xades4j.verification;
 
 import jakarta.inject.Inject;
+import java.io.IOException;
+import java.io.InputStream;
+import java.security.MessageDigest;
 import xades4j.UnsupportedAlgorithmException;
 import xades4j.properties.ObjectIdentifier;
 import xades4j.properties.QualifyingProperty;
@@ -26,11 +29,6 @@ import xades4j.properties.data.SignaturePolicyData;
 import xades4j.providers.MessageDigestEngineProvider;
 import xades4j.providers.SignaturePolicyDocumentProvider;
 import xades4j.utils.MessageDigestUtils;
-
-import java.io.IOException;
-import java.io.InputStream;
-import java.security.MessageDigest;
-import java.util.Arrays;
 
 /**
  *
@@ -75,7 +73,7 @@ class SignaturePolicyVerifier implements QualifyingPropertyVerifier<SignaturePol
             byte[] sigDocDigest = MessageDigestUtils.digestStream(md, sigDocStream);
 
             // Check the document digest.
-            if (!Arrays.equals(sigDocDigest, propData.getDigestValue()))
+            if (!MessageDigest.isEqual(sigDocDigest, propData.getDigestValue()))
             {
                 throw new SignaturePolicyDigestMismatchException(policyId);
             }
