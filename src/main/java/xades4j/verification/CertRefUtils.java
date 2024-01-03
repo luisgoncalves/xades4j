@@ -19,7 +19,6 @@ package xades4j.verification;
 import java.security.MessageDigest;
 import java.security.cert.CertificateEncodingException;
 import java.security.cert.X509Certificate;
-import java.util.Arrays;
 import java.util.Collection;
 import xades4j.UnsupportedAlgorithmException;
 import xades4j.XAdES4jException;
@@ -85,7 +84,7 @@ class CertRefUtils
         {
             messageDigest = messageDigestProvider.getEngine(certRef.getDigestAlgUri());
             byte[] actualDigest = messageDigest.digest(cert.getEncoded());
-            if (!Arrays.equals(certRef.getDigestValue(), actualDigest))
+            if (!MessageDigest.isEqual(certRef.getDigestValue(), actualDigest))
                 throw new InvalidCertRefException("digests mismatch");
             return;
         } catch (UnsupportedAlgorithmException | CertificateEncodingException ex)
