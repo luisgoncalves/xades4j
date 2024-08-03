@@ -60,11 +60,9 @@ public class KeyInfoBuilderTest extends SignatureServicesTestBase
     @Test
     void testIncludeCertAndKey() throws Exception
     {
-        KeyInfoBuilder keyInfoBuilder = new KeyInfoBuilder(
-                new BasicSignatureOptions().includeSigningCertificate(SigningCertificateMode.SIGNING_CERTIFICATE).includePublicKey(true),
-                new SignatureAlgorithms(),
-                new TestAlgorithmsParametersMarshallingProvider(),
-                new DefaultX500NameStyleProvider());
+        KeyInfoBuilder keyInfoBuilder = createKeyInfoBuilder(new BasicSignatureOptions()
+                .includeSigningCertificate(SigningCertificateMode.SIGNING_CERTIFICATE)
+                .includePublicKey(true));
         XMLSignature xmlSignature = getTestSignature();
 
         keyInfoBuilder.buildKeyInfo(certificates, xmlSignature);
@@ -74,6 +72,9 @@ public class KeyInfoBuilderTest extends SignatureServicesTestBase
         KeyValue kv = xmlSignature.getKeyInfo().itemKeyValue(0);
         assertTrue(kv.getPublicKey().getAlgorithm().startsWith("RSA"));
 
+        assertEquals(1, xmlSignature.getKeyInfo().lengthX509Data());
+        assertEquals(1, xmlSignature.getKeyInfo().itemX509Data(0).lengthCertificate());
+
         XMLX509Certificate x509Certificate = xmlSignature.getKeyInfo().itemX509Data(0).itemCertificate(0);
         assertEquals(testCertificate, x509Certificate.getX509Certificate());
     }
@@ -81,11 +82,8 @@ public class KeyInfoBuilderTest extends SignatureServicesTestBase
     @Test
     void testIncludeCertChain() throws Exception
     {
-        KeyInfoBuilder keyInfoBuilder = new KeyInfoBuilder(
-                new BasicSignatureOptions().includeSigningCertificate(SigningCertificateMode.FULL_CHAIN),
-                new SignatureAlgorithms(),
-                new TestAlgorithmsParametersMarshallingProvider(),
-                new DefaultX500NameStyleProvider());
+        KeyInfoBuilder keyInfoBuilder = createKeyInfoBuilder(new BasicSignatureOptions()
+                .includeSigningCertificate(SigningCertificateMode.FULL_CHAIN));
         XMLSignature xmlSignature = getTestSignature();
 
         keyInfoBuilder.buildKeyInfo(certificates, xmlSignature);
@@ -105,11 +103,8 @@ public class KeyInfoBuilderTest extends SignatureServicesTestBase
     @Test
     void testIncludeIssuerSerial() throws Exception
     {
-        KeyInfoBuilder keyInfoBuilder = new KeyInfoBuilder(
-                new BasicSignatureOptions().includeIssuerSerial(true),
-                new SignatureAlgorithms(),
-                new TestAlgorithmsParametersMarshallingProvider(),
-                new DefaultX500NameStyleProvider());
+        KeyInfoBuilder keyInfoBuilder = createKeyInfoBuilder(new BasicSignatureOptions()
+                .includeIssuerSerial(true));
         XMLSignature xmlSignature = getTestSignature();
 
         keyInfoBuilder.buildKeyInfo(certificates, xmlSignature);
@@ -121,11 +116,8 @@ public class KeyInfoBuilderTest extends SignatureServicesTestBase
     @Test
     void testIncludeSubjectName() throws Exception
     {
-        KeyInfoBuilder keyInfoBuilder = new KeyInfoBuilder(
-                new BasicSignatureOptions().includeSubjectName(true),
-                new SignatureAlgorithms(),
-                new TestAlgorithmsParametersMarshallingProvider(),
-                new DefaultX500NameStyleProvider());
+        KeyInfoBuilder keyInfoBuilder = createKeyInfoBuilder(new BasicSignatureOptions()
+                .includeSubjectName(true));
         XMLSignature xmlSignature = getTestSignature();
 
         keyInfoBuilder.buildKeyInfo(certificates, xmlSignature);
@@ -137,11 +129,8 @@ public class KeyInfoBuilderTest extends SignatureServicesTestBase
     @Test
     void testSignKeyInfo() throws Exception
     {
-        KeyInfoBuilder keyInfoBuilder = new KeyInfoBuilder(
-                new BasicSignatureOptions().signKeyInfo(true),
-                new SignatureAlgorithms(),
-                new TestAlgorithmsParametersMarshallingProvider(),
-                new DefaultX500NameStyleProvider());
+        KeyInfoBuilder keyInfoBuilder = createKeyInfoBuilder(new BasicSignatureOptions()
+                .signKeyInfo(true));
         XMLSignature xmlSignature = getTestSignature();
 
         keyInfoBuilder.buildKeyInfo(certificates, xmlSignature);
@@ -151,6 +140,15 @@ public class KeyInfoBuilderTest extends SignatureServicesTestBase
 
         Node refNode = signedInfo.item(0).getContentsBeforeTransformation().getSubNode();
         assertSame(xmlSignature.getKeyInfo().getElement(), refNode);
+    }
+
+    private static KeyInfoBuilder createKeyInfoBuilder(BasicSignatureOptions bso)
+    {
+        return new KeyInfoBuilder(
+                bso,
+                new SignatureAlgorithms(),
+                new TestAlgorithmsParametersMarshallingProvider(),
+                new DefaultX500NameStyleProvider());
     }
 
     private XMLSignature getTestSignature() throws Exception

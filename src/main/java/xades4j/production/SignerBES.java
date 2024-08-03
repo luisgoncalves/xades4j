@@ -19,12 +19,14 @@ package xades4j.production;
 import static xades4j.utils.CanonicalizerUtils.checkC14NAlgorithm;
 
 import jakarta.inject.Inject;
+
 import java.security.PrivateKey;
 import java.security.cert.X509Certificate;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 import java.util.UUID;
+
 import org.apache.xml.security.exceptions.XMLSecurityException;
 import org.apache.xml.security.signature.Manifest;
 import org.apache.xml.security.signature.ObjectContainer;
@@ -63,6 +65,7 @@ import xades4j.xml.marshalling.algorithms.AlgorithmsParametersMarshallingProvide
 
 /**
  * Base logic for producing XAdES signatures (XAdES-BES).
+ *
  * @author Luís
  */
 class SignerBES implements XadesSigner
@@ -72,9 +75,11 @@ class SignerBES implements XadesSigner
     {
         Init.initXMLSec();
     }
+
     /**/
     private final KeyingDataProvider keyingProvider;
     private final SignatureAlgorithms signatureAlgorithms;
+    private final BasicSignatureOptions basicSignatureOptions;
     private final SignedDataObjectsProcessor dataObjectDescsProcessor;
     private final PropertiesDataObjectsGenerator propsDataObjectsGenerator;
     private final SignedPropertiesMarshaller signedPropsMarshaller;
@@ -109,6 +114,7 @@ class SignerBES implements XadesSigner
 
         this.keyingProvider = keyingProvider;
         this.signatureAlgorithms = signatureAlgorithms;
+        this.basicSignatureOptions = basicSignatureOptions;
         this.propsDataObjectsGenerator = propsDataObjectsGenerator;
         this.signedPropsMarshaller = signedPropsMarshaller;
         this.unsignedPropsMarshaller = unsignedPropsMarshaller;
@@ -145,6 +151,8 @@ class SignerBES implements XadesSigner
             throw new IllegalArgumentException("Data objects list is empty");
         }
 
+        this.basicSignatureOptions.ensureValid();
+
         Document signatureDocument = DOMHelper.getOwnerDocument(referenceNode);
 
         // Generate unique identifiers for the Signature and the SignedProperties.
@@ -174,7 +182,7 @@ class SignerBES implements XadesSigner
         SignedDataObjectsProcessor.Result signedDataObjectsResult = this.dataObjectDescsProcessor.process(
                 signedDataObjects,
                 signature);
-        
+
         /* ds:KeyInfo */
         this.keyInfoBuilder.buildKeyInfo(signingCertificateChain, signature);
 
@@ -191,7 +199,8 @@ class SignerBES implements XadesSigner
         try
         {
             signature.appendObject(qPropsXmlObj);
-        } catch (XMLSignatureException ex)
+        }
+        catch (XMLSignatureException ex)
         {
             // -> xmlSignature.appendObject(xmlObj): not thrown when signing.
             throw new IllegalStateException(ex);
@@ -251,7 +260,8 @@ class SignerBES implements XadesSigner
                 Transforms transforms = TransformUtils.createTransforms(canonAlg, this.algorithmsParametersMarshaller, signatureDocument);
 
                 signature.addDocument('#' + signedPropsId, transforms, digestAlgUri, null, QualifyingProperty.SIGNED_PROPS_TYPE_URI);
-            } catch (XMLSignatureException ex)
+            }
+            catch (XMLSignatureException ex)
             {
                 // Seems to be thrown when the digest algorithm is not supported. In
                 // this case, if it wasn't thrown when processing the data objects it
@@ -296,7 +306,8 @@ class SignerBES implements XadesSigner
         return new XadesSignatureResult(signature, qualifProps);
     }
 
-    private String getDigestAlgUri() {
+    private String getDigestAlgUri()
+    {
         String digestAlgUri = this.signatureAlgorithms.getDigestAlgorithmForDataObjectReferences();
         if (StringUtils.isNullOrEmptyString(digestAlgUri))
         {
@@ -320,7 +331,8 @@ class SignerBES implements XadesSigner
         try
         {
             return new XMLSignature(signatureDocument, baseUri, signatureAlgElem, canonAlgElem);
-        } catch (XMLSecurityException ex)
+        }
+        catch (XMLSecurityException ex)
         {
             // Following the code, doesn't seem to be thrown at all.
             throw new XAdES4jXMLSigException(ex.getMessage(), ex);
@@ -351,7 +363,8 @@ class SignerBES implements XadesSigner
             {
                 m.generateDigestValues();
             }
-        } catch (XMLSignatureException ex)
+        }
+        catch (XMLSignatureException ex)
         {
             throw new XAdES4jXMLSigException("Error digesting manifest", ex);
         }
@@ -364,8 +377,12 @@ class SignerBES implements XadesSigner
     protected void getFormatSpecificSignatureProperties(
             Collection<SignedSignatureProperty> formatSpecificSignedSigProps,
             Collection<UnsignedSignatureProperty> formatSpecificUnsignedSigProps,
-            List<X509Certificate> signingCertificateChain) throws ValidationDataException {
-        SigningCertificateProperty scp = new SigningCertificateProperty(signingCertificateChain);
-        formatSpecificSignedSigProps.add(scp);
+            List<X509Certificate> signingCertificateChain) throws ValidationDataException
+    {
+        if (!this.basicSignatureOptions.omitSigningCertificateProperty())
+        {
+            SigningCertificateProperty scp = new SigningCertificateProperty(signingCertificateChain);
+            formatSpecificSignedSigProps.add(scp);
+        }
     }
 }

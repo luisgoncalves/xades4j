@@ -31,9 +31,14 @@ import xades4j.properties.CounterSignatureProperty;
 import xades4j.properties.DataObjectDesc;
 import xades4j.properties.DataObjectFormatProperty;
 import xades4j.properties.IndividualDataObjsTimeStampProperty;
+import xades4j.properties.QualifyingProperty;
 import xades4j.properties.SignerRoleProperty;
+import xades4j.properties.SigningCertificateProperty;
 
 import java.io.File;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 /**
  * @author Luís
@@ -60,7 +65,15 @@ class SignerBESTest extends SignerTestBase
         DataObjectDesc obj2 = new EnvelopedXmlObject(objectContent, "text/xml", null).withDataObjectFormat(new DataObjectFormatProperty("text/xml", "MyEncoding").withDescription("Isto é uma descrição do elemento dentro do object").withDocumentationUri("http://doc3.txt").withDocumentationUri("http://doc4.txt").withIdentifier("http://elem.in.object")).withCommitmentType(commitment).withDataObjectTimeStamp(dataObjsTimeStamp);
         SignedDataObjects dataObjs = new SignedDataObjects(obj1, obj2).withCommitmentType(globalCommitment).withDataObjectsTimeStamp();
 
-        signer.sign(dataObjs, elemToSign);
+        XadesSignatureResult result = signer.sign(dataObjs, elemToSign);
+
+        assertTrue(
+                result.getQualifyingProperties().getSignedProperties().getSigProps().stream()
+                        .anyMatch(it -> SigningCertificateProperty.class.equals(it.getClass())));
+
+        assertEquals(1,
+                doc1.getElementsByTagNameNS(QualifyingProperty.XADES_XMLNS, SigningCertificateProperty.PROP_NAME).getLength()
+        );
 
         outputDocument(doc1, "document.signed.bes.xml");
     }
