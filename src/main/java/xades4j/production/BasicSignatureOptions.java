@@ -1,16 +1,16 @@
 /*
  * XAdES4j - A Java library for generation and verification of XAdES signatures.
  * Copyright (C) 2018 Luis Goncalves.
- * 
+ *
  * XAdES4j is free software; you can redistribute it and/or modify it under
  * the terms of the GNU Lesser General Public License as published by the Free
  * Software Foundation; either version 3 of the License, or any later version.
- * 
+ *
  * XAdES4j is distributed in the hope that it will be useful, but WITHOUT
  * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
  * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
  * details.
- * 
+ *
  * You should have received a copy of the GNU Lesser General Public License along
  * with XAdES4j. If not, see <http://www.gnu.org/licenses/>.
  */
@@ -20,9 +20,8 @@ package xades4j.production;
  * Configuration of basic signature options such as whether {@code ds:KeyInfo}
  * elements should be included.
  *
- * @see XadesSigningProfile#withBasicSignatureOptions(BasicSignatureOptions)
- *
  * @author luis
+ * @see XadesSigningProfile#withBasicSignatureOptions(BasicSignatureOptions)
  */
 public final class BasicSignatureOptions
 {
@@ -32,7 +31,8 @@ public final class BasicSignatureOptions
     private boolean includeSubjectName = false;
     private boolean includeIssuerSerial = false;
     private boolean includePublicKey = false;
-    private boolean signKeyInfo = false ;
+    private boolean signKeyInfo = false;
+    private boolean omitSigningCertificateProperty = false;
 
     /**
      * Configures whether to check that the keyUsage of the signing certificate
@@ -77,6 +77,7 @@ public final class BasicSignatureOptions
     /**
      * Configures whether the signing certificate / chain should be included in {@code ds:KeyInfo}.
      * Defauls to {@link SigningCertificateMode#SIGNING_CERTIFICATE }.
+     *
      * @param includeSigningCertificateMode the include mode
      * @return the current instance
      */
@@ -85,7 +86,7 @@ public final class BasicSignatureOptions
         this.includeSigningCertificateMode = includeSigningCertificateMode;
         return this;
     }
-    
+
     SigningCertificateMode includeSigningCertificate()
     {
         return this.includeSigningCertificateMode;
@@ -94,6 +95,7 @@ public final class BasicSignatureOptions
     /**
      * Configures whether the subject name should be included in {@code ds:KeyInfo}.
      * Defaults to false.
+     *
      * @param includeSubjectName {@code true} if the subject name should be included; false otherwise
      * @return the current instance
      */
@@ -111,6 +113,7 @@ public final class BasicSignatureOptions
     /**
      * Configures whether the issuer/serial should be included in {@code ds:KeyInfo}.
      * Defaults to false.
+     *
      * @param includeIssuerSerial {@code true} if the issuer/serial should be included; false otherwise
      * @return the current instance
      */
@@ -119,7 +122,7 @@ public final class BasicSignatureOptions
         this.includeIssuerSerial = includeIssuerSerial;
         return this;
     }
-    
+
     boolean includeIssuerSerial()
     {
         return this.includeIssuerSerial;
@@ -129,6 +132,7 @@ public final class BasicSignatureOptions
      * Configures whether a {@code ds:KeyValue} element containing the public key's
      * value should be included in {@code ds:KeyInfo}.
      * Defaults to false.
+     *
      * @param includePublicKey {@code true} if the public key should be included; false otherwise
      * @return the current instance
      */
@@ -137,11 +141,12 @@ public final class BasicSignatureOptions
         this.includePublicKey = includePublicKey;
         return this;
     }
-    
+
     boolean includePublicKey()
     {
         return this.includePublicKey;
     }
+
     /**
      * Configures whether the signature should cover the {@code ds:KeyInfo} element.
      * Defaults to false.
@@ -158,5 +163,38 @@ public final class BasicSignatureOptions
     boolean signKeyInfo()
     {
         return this.signKeyInfo;
+    }
+
+    /**
+     * Configures whether the {@code SigningCertificate} qualifying property is omitted from the signature.
+     * Defaults to false, i.e. the property is included.
+     * <p>
+     * Note that XAdES mandates that either the {@code SigningCertificate} property is included or the signing
+     * certificate is incorporated within {@code ds:KeyInfo} and at least the signing certificate is signed.
+     * Enabling this setting is only allowed when {@link #signKeyInfo(boolean)} is enabled and
+     * {@link #includeSigningCertificate(SigningCertificateMode)} or {@link #includeIssuerSerial(boolean)} are
+     * also enabled.
+     *
+     * @param omitSigningCertificateProperty {@code true} if the property should be omitted; false otherwise
+     * @return
+     */
+    public BasicSignatureOptions omitSigningCertificateProperty(boolean omitSigningCertificateProperty)
+    {
+        this.omitSigningCertificateProperty = omitSigningCertificateProperty;
+        return this;
+    }
+
+    boolean omitSigningCertificateProperty()
+    {
+        return this.omitSigningCertificateProperty;
+    }
+
+    void ensureValid() throws KeyingDataException
+    {
+        if (this.omitSigningCertificateProperty &&
+                (!this.signKeyInfo || !this.includeIssuerSerial && this.includeSigningCertificateMode == SigningCertificateMode.NONE))
+        {
+            throw new KeyingDataException("Signing certificate must be included in KeyInfo and KeyInfo must be signed");
+        }
     }
 }

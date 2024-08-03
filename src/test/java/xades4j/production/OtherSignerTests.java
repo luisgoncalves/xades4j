@@ -24,18 +24,24 @@ import static org.apache.xml.security.signature.XMLSignature.ALGO_ID_SIGNATURE_R
 import static org.apache.xml.security.utils.Constants.SignatureSpecNS;
 import static org.apache.xml.security.utils.Constants._TAG_SIGNATURE;
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import java.util.Iterator;
+import java.util.stream.Stream;
 import javax.xml.namespace.NamespaceContext;
 import javax.xml.xpath.XPath;
 import javax.xml.xpath.XPathConstants;
 import javax.xml.xpath.XPathFactory;
+
 import org.apache.xml.security.signature.XMLSignatureByteInput;
 import org.apache.xml.security.signature.XMLSignatureInput;
 import org.apache.xml.security.utils.resolver.ResourceResolverContext;
 import org.apache.xml.security.utils.resolver.ResourceResolverException;
 import org.apache.xml.security.utils.resolver.ResourceResolverSpi;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.MethodSource;
 import org.w3c.dom.Attr;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
@@ -43,6 +49,7 @@ import xades4j.algorithms.EnvelopedSignatureTransform;
 import xades4j.algorithms.ExclusiveCanonicalXMLWithoutComments;
 import xades4j.properties.DataObjectDesc;
 import xades4j.properties.QualifyingProperty;
+import xades4j.properties.SigningCertificateProperty;
 import xades4j.providers.ValidationDataProvider;
 import xades4j.providers.impl.ValidationDataFromCertValidationProvider;
 import xades4j.verification.VerifierTestBase;
@@ -183,5 +190,87 @@ class OtherSignerTests extends SignerTestBase
         {
             return null;
         }
+    }
+
+    @ParameterizedTest
+    @MethodSource
+    void failsIfKeyInfoIsNotSignedAndSigningCertificatePropertyIsOmitted(BasicSignatureOptions options) throws Exception
+    {
+        Document doc = getTestDocument();
+        Element root = doc.getDocumentElement();
+
+        XadesSigner signer = new XadesBesSigningProfile(keyingProviderMy)
+                .withBasicSignatureOptions(options)
+                .newSigner();
+
+        SignedDataObjects dataObjs = new SignedDataObjects(new AnonymousDataObjectReference("foo".getBytes()));
+
+        KeyingDataException ex = assertThrows(KeyingDataException.class, () -> {
+            signer.sign(dataObjs, root);
+        });
+
+        assertEquals("Signing certificate must be included in KeyInfo and KeyInfo must be signed", ex.getMessage());
+    }
+
+    static Stream<BasicSignatureOptions> failsIfKeyInfoIsNotSignedAndSigningCertificatePropertyIsOmitted()
+    {
+        return Stream.of(
+                new BasicSignatureOptions()
+                        .omitSigningCertificateProperty(true)
+                        .signKeyInfo(false)
+                        .includeSigningCertificate(SigningCertificateMode.NONE)
+                        .includeIssuerSerial(false),
+                new BasicSignatureOptions()
+                        .omitSigningCertificateProperty(true)
+                        .signKeyInfo(false)
+                        .includeSigningCertificate(SigningCertificateMode.SIGNING_CERTIFICATE)
+                        .includeIssuerSerial(true),
+                new BasicSignatureOptions()
+                        .omitSigningCertificateProperty(true)
+                        .signKeyInfo(true)
+                        .includeSigningCertificate(SigningCertificateMode.NONE)
+                        .includeIssuerSerial(false)
+        );
+    }
+
+    @ParameterizedTest
+    @MethodSource
+    void signingCertificatePropertyCanBeOmittedIfKeyInfoIsSigned(BasicSignatureOptions options) throws Exception
+    {
+        Document doc = getTestDocument();
+        Element root = doc.getDocumentElement();
+
+        XadesSigner signer = new XadesBesSigningProfile(keyingProviderMy)
+                .withBasicSignatureOptions(options)
+                .newSigner();
+
+        SignedDataObjects dataObjs = new SignedDataObjects(new AnonymousDataObjectReference("foo".getBytes()));
+
+        XadesSignatureResult result = signer.sign(dataObjs, root);
+
+        assertFalse(
+                result.getQualifyingProperties().getSignedProperties().getSigProps().stream()
+                        .anyMatch(it -> SigningCertificateProperty.class.equals(it.getClass()))
+        );
+
+        assertEquals(0,
+                doc.getElementsByTagNameNS(QualifyingProperty.XADES_XMLNS, SigningCertificateProperty.PROP_NAME).getLength()
+        );
+    }
+
+    static Stream<BasicSignatureOptions> signingCertificatePropertyCanBeOmittedIfKeyInfoIsSigned()
+    {
+        return Stream.of(
+                new BasicSignatureOptions()
+                        .omitSigningCertificateProperty(true)
+                        .signKeyInfo(true)
+                        .includeSigningCertificate(SigningCertificateMode.SIGNING_CERTIFICATE)
+                        .includeIssuerSerial(false),
+                new BasicSignatureOptions()
+                        .omitSigningCertificateProperty(true)
+                        .signKeyInfo(true)
+                        .includeSigningCertificate(SigningCertificateMode.NONE)
+                        .includeIssuerSerial(true)
+        );
     }
 }
