@@ -18,6 +18,7 @@ package xades4j.production;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
@@ -44,10 +45,13 @@ import xades4j.utils.StringUtils;
  */
 public class SignedDataObjectsProcessorTest extends SignatureServicesTestBase
 {
+    private static ElementIdGenerator idGenerator;
+
     @BeforeAll
     public static void setUpClass()
     {
         Init.initXMLSec();
+        idGenerator = ElementIdGenerator.uuid();
     }
 
     @Test
@@ -61,12 +65,11 @@ public class SignedDataObjectsProcessorTest extends SignatureServicesTestBase
                 .withSignedDataObject(new EnvelopedXmlObject(doc.createElement("test2"), "text/xml", null));
 
         XMLSignature xmlSignature = new XMLSignature(doc, "", XMLSignature.ALGO_ID_SIGNATURE_RSA_SHA256);
-        xmlSignature.setId("sigId");
 
         AllwaysNullAlgsParamsMarshaller algsParamsMarshaller = new AllwaysNullAlgsParamsMarshaller();
 
         SignedDataObjectsProcessor processor = new SignedDataObjectsProcessor(new SignatureAlgorithms(), algsParamsMarshaller);
-        SignedDataObjectsProcessor.Result result = processor.process(dataObjsDescs, xmlSignature);
+        SignedDataObjectsProcessor.Result result = processor.process(dataObjsDescs, xmlSignature, idGenerator);
 
         assertEquals(3, result.referenceMappings.size());
         assertEquals(3, xmlSignature.getSignedInfo().getLength());
@@ -75,29 +78,29 @@ public class SignedDataObjectsProcessorTest extends SignatureServicesTestBase
         assertEquals(1, algsParamsMarshaller.getInvokeCount());
 
         Reference ref = xmlSignature.getSignedInfo().item(0);
-        assertEquals("sigId-ref0", ref.getId());
+        assertNotNull(ref.getId());
         assertEquals("uri", ref.getURI());
         assertEquals(1, ref.getTransforms().getLength());
 
+        ObjectContainer obj1 = xmlSignature.getObjectItem(0);
+        assertNotNull(obj1.getId());
+        assertTrue(StringUtils.isNullOrEmptyString(obj1.getMimeType()));
+        assertTrue(StringUtils.isNullOrEmptyString(obj1.getEncoding()));
+
         ref = xmlSignature.getSignedInfo().item(1);
-        assertEquals("sigId-ref1", ref.getId());
-        assertEquals("#sigId-object1", ref.getURI());
+        assertNotNull(ref.getId());
+        assertEquals("#" + obj1.getId(), ref.getURI());
         assertNull(ref.getTransforms());
 
-        ObjectContainer obj = xmlSignature.getObjectItem(0);
-        assertEquals("sigId-object1", obj.getId());
-        assertTrue(StringUtils.isNullOrEmptyString(obj.getMimeType()));
-        assertTrue(StringUtils.isNullOrEmptyString(obj.getEncoding()));
+        ObjectContainer obj2 = xmlSignature.getObjectItem(1);
+        assertNotNull(obj2.getId());
+        assertEquals("text/xml", obj2.getMimeType());
+        assertTrue(StringUtils.isNullOrEmptyString(obj2.getEncoding()));
 
         ref = xmlSignature.getSignedInfo().item(2);
-        assertEquals("sigId-ref2", ref.getId());
-        assertEquals("#sigId-object2", ref.getURI());
+        assertNotNull(ref.getId());
+        assertEquals("#" + obj2.getId(), ref.getURI());
         assertNull(ref.getTransforms());
-
-        obj = xmlSignature.getObjectItem(1);
-        assertEquals("sigId-object2", obj.getId());
-        assertEquals("text/xml", obj.getMimeType());
-        assertTrue(StringUtils.isNullOrEmptyString(obj.getEncoding()));
     }
 
     @Test
@@ -129,12 +132,11 @@ public class SignedDataObjectsProcessorTest extends SignatureServicesTestBase
                 });
 
         XMLSignature xmlSignature = new XMLSignature(doc, "", XMLSignature.ALGO_ID_SIGNATURE_RSA_SHA256);
-        xmlSignature.setId("sigId");
 
         AllwaysNullAlgsParamsMarshaller algsParamsMarshaller = new AllwaysNullAlgsParamsMarshaller();
 
         SignedDataObjectsProcessor processor = new SignedDataObjectsProcessor(new SignatureAlgorithms(), algsParamsMarshaller);
-        SignedDataObjectsProcessor.Result result = processor.process(signedObjects, xmlSignature);
+        SignedDataObjectsProcessor.Result result = processor.process(signedObjects, xmlSignature, idGenerator);
 
         // Simulate what's done during signature production
         doc.appendChild(xmlSignature.getElement());
@@ -149,31 +151,34 @@ public class SignedDataObjectsProcessorTest extends SignatureServicesTestBase
         assertEquals(1, xmlSignature.getSignedInfo().getLength());
 
         Manifest manifest1 = new Manifest(DOMHelper.getFirstChildElement(xmlSignature.getObjectItem(1).getElement()), "");
-        assertEquals("sigId-manifest0", manifest1.getId());
+        assertNotNull(manifest1.getId());
         assertEquals(3, manifest1.getLength());
+
+        Manifest manifest2 = new Manifest(DOMHelper.getFirstChildElement(xmlSignature.getObjectItem(0).getElement()), "");
+        assertNotNull(manifest2.getId());
+        assertEquals(1, manifest2.getLength());
+
+        Reference ref0 = xmlSignature.getSignedInfo().item(0);
+        assertEquals("#" + manifest1.getId(), ref0.getURI());
 
         Reference ref11 = manifest1.item(0);
         assertEquals("xades4j:1", ref11.getURI());
-        assertEquals("sigId-manifest0-ref0", ref11.getId());
+        assertNotNull(ref11.getId());
         assertNotEquals(0, ref11.getDigestValue().length);
 
         Reference ref12 = manifest1.item(1);
         assertEquals("xades4j:2", ref12.getURI());
-        assertEquals("sigId-manifest0-ref1", ref12.getId());
+        assertNotNull(ref12.getId());
         assertNotEquals(0, ref12.getDigestValue().length);
 
         Reference ref13 = manifest1.item(2);
-        assertEquals("#sigId-manifest0-manifest2", ref13.getURI());
-        assertEquals("sigId-manifest0-ref2", ref13.getId());
+        assertEquals("#" + manifest2.getId(), ref13.getURI());
+        assertNotNull(ref13.getId());
         assertNotEquals(0, ref13.getDigestValue().length);
-
-        Manifest manifest2 = new Manifest(DOMHelper.getFirstChildElement(xmlSignature.getObjectItem(0).getElement()), "");
-        assertEquals(1, manifest2.getLength());
-        assertEquals("sigId-manifest0-manifest2", manifest2.getId());
 
         Reference ref21 = manifest2.item(0);
         assertEquals("xades4j:3", ref21.getURI());
-        assertEquals("sigId-manifest0-manifest2-ref0", ref21.getId());
+        assertNotNull(ref21.getId());
         assertNotEquals(0, ref21.getDigestValue().length);
     }
 
@@ -186,10 +191,9 @@ public class SignedDataObjectsProcessorTest extends SignatureServicesTestBase
                 .withSignedDataObject(new AnonymousDataObjectReference("data".getBytes()));
 
         XMLSignature xmlSignature = new XMLSignature(doc, "", XMLSignature.ALGO_ID_SIGNATURE_RSA_SHA256);
-        xmlSignature.setId("sigId");
 
         SignedDataObjectsProcessor processor = new SignedDataObjectsProcessor(new SignatureAlgorithms(), new AllwaysNullAlgsParamsMarshaller());
-        SignedDataObjectsProcessor.Result result = processor.process(dataObjsDescs, xmlSignature);
+        SignedDataObjectsProcessor.Result result = processor.process(dataObjsDescs, xmlSignature, idGenerator);
 
         assertEquals(1, result.referenceMappings.size());
         assertEquals(0, xmlSignature.getObjectLength());

@@ -57,9 +57,10 @@ class SignerT extends SignerBES
             UnsignedPropertiesMarshaller unsignedPropsMarshaller,
             AlgorithmsParametersMarshallingProvider algorithmsParametersMarshaller,
             X500NameStyleProvider x500NameStyleProvider,
+            ElementIdGeneratorFactory idGeneratorFactory,
             Optional<SignaturePolicyInfoProvider> policyInfoProvider)
     {
-        super(keyingProvider, signatureAlgorithms, basicSignatureOptions, dataObjectDescsProcessor, signaturePropsProvider, dataObjPropsProvider, propsDataObjectsGenerator, signedPropsMarshaller, unsignedPropsMarshaller, algorithmsParametersMarshaller, x500NameStyleProvider);
+        super(keyingProvider, signatureAlgorithms, basicSignatureOptions, dataObjectDescsProcessor, signaturePropsProvider, dataObjPropsProvider, propsDataObjectsGenerator, signedPropsMarshaller, unsignedPropsMarshaller, algorithmsParametersMarshaller, x500NameStyleProvider, idGeneratorFactory);
         this.policyInfoProvider = policyInfoProvider;
     }
 

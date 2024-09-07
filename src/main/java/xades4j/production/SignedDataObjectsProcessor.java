@@ -40,6 +40,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import static xades4j.production.SignerBES.idFor;
+
 /**
  * Helper class that processes a set of data object descriptions.
  *
@@ -80,7 +82,8 @@ final class SignedDataObjectsProcessor
      */
     SignedDataObjectsProcessor.Result process(
             SignedDataObjects signedDataObjects,
-            XMLSignature xmlSignature) throws UnsupportedAlgorithmException {
+            XMLSignature xmlSignature,
+            ElementIdGenerator idGenerator) throws UnsupportedAlgorithmException {
         if (xmlSignature.getSignedInfo().getLength() != 0)
         {
             throw new IllegalStateException("XMLSignature already contains references");
@@ -89,19 +92,19 @@ final class SignedDataObjectsProcessor
         return process(
                 signedDataObjects.getDataObjectsDescs(),
                 xmlSignature.getSignedInfo(),
-                xmlSignature.getId(),
                 signedDataObjects.getResourceResolvers(),
                 xmlSignature,
-                false);
+                false,
+                idGenerator);
     }
 
     private SignedDataObjectsProcessor.Result process(
             Collection<? extends DataObjectDesc> dataObjects,
             Manifest container,
-            String idPrefix,
             List<ResourceResolverSpi> resourceResolvers,
             XMLSignature xmlSignature,
-            boolean hasNullURIReference) throws UnsupportedAlgorithmException {
+            boolean hasNullURIReference,
+            ElementIdGenerator idGenerator) throws UnsupportedAlgorithmException {
         Map<DataObjectDesc, Reference> referenceMappings = new IdentityHashMap<>(dataObjects.size());
         Set<Manifest> manifests = new HashSet<>();
 
@@ -134,9 +137,9 @@ final class SignedDataObjectsProcessor
                     // If the data object info is a EnvelopedXmlObject we need to create a ds:Object to embed it.
                     // The Reference uri will refer the new ds:Object's id.
                     EnvelopedXmlObject envXmlObj = (EnvelopedXmlObject) dataObjDesc;
-                    String xmlObjId = String.format("%s-object%d", idPrefix, index);
 
                     ObjectContainer xmlObj = new ObjectContainer(container.getDocument());
+                    String xmlObjId = idFor(xmlObj, idGenerator);
                     xmlObj.setId(xmlObjId);
                     xmlObj.appendChild(envXmlObj.getContent());
                     xmlObj.setMimeType(envXmlObj.getMimeType());
@@ -164,17 +167,18 @@ final class SignedDataObjectsProcessor
                     // If the data object info is a EnvelopedManifest we need to create a ds:Manifest and a ds:Object
                     // to embed it. The Reference uri will refer the manifest's id.
                     EnvelopedManifest envManifest = (EnvelopedManifest) dataObjDesc;
-                    String xmlManifestId = String.format("%s-manifest%d", idPrefix, index);
 
                     Manifest xmlManifest = new Manifest(container.getDocument());
+                    String xmlManifestId = idFor(xmlManifest, idGenerator);
                     xmlManifest.setId(xmlManifestId);
+
                     SignedDataObjectsProcessor.Result manifestResult = process(
                             envManifest.getDataObjects(),
                             xmlManifest,
-                            xmlManifestId,
                             resourceResolvers,
                             xmlSignature,
-                            hasNullURIReference);
+                            hasNullURIReference,
+                            idGenerator);
 
                     ObjectContainer xmlObj = new ObjectContainer(container.getDocument());
                     xmlObj.appendChild(xmlManifest.getElement());
@@ -199,12 +203,13 @@ final class SignedDataObjectsProcessor
                         refUri,
                         transforms,
                         digestMethodUri,
-                        String.format("%s-ref%d", idPrefix, index), // id
+                        null,
                         refType);
 
                 // SignedDataObjects and EnvelopedManifest don't allow repeated instances, so there's no
                 // need to check for duplicate entries on the map.
                 Reference ref = container.item(index);
+                ref.setId(idFor(ref, idGenerator));
                 referenceMappings.put(dataObjDesc, ref);
             }
 

@@ -74,6 +74,7 @@ class DefaultProductionBindingsModule extends AbstractModule
         bind(HttpTsaConfiguration.class).toProvider(() -> {
             throw new IllegalStateException("HttpTsaConfiguration must be configured in the profile in order to use an HTTP-based time-stamp token provider.");
         });
+        bind(ElementIdGeneratorFactory.class).to(DefaultElementIdGeneratorFactory.class);
 
         // PropertiesDataObjectsGenerator is not configurable but the individual
         // generators may have dependencies.
