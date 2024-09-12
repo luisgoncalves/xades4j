@@ -85,6 +85,7 @@ class SignerBES implements XadesSigner
     private final SignedPropertiesMarshaller signedPropsMarshaller;
     private final UnsignedPropertiesMarshaller unsignedPropsMarshaller;
     private final AlgorithmsParametersMarshallingProvider algorithmsParametersMarshaller;
+    private final ElementIdGeneratorFactory idGeneratorFactory;
     /**/
     private final KeyInfoBuilder keyInfoBuilder;
     private final QualifyingPropertiesProcessor qualifPropsProcessor;
@@ -101,13 +102,14 @@ class SignerBES implements XadesSigner
             SignedPropertiesMarshaller signedPropsMarshaller,
             UnsignedPropertiesMarshaller unsignedPropsMarshaller,
             AlgorithmsParametersMarshallingProvider algorithmsParametersMarshaller,
-            X500NameStyleProvider x500NameStyleProvider)
+            X500NameStyleProvider x500NameStyleProvider,
+            ElementIdGeneratorFactory idGeneratorFactory)
     {
         if (ObjectUtils.anyNull(
                 keyingProvider, signatureAlgorithms, basicSignatureOptions,
                 signaturePropsProvider, dataObjPropsProvider, propsDataObjectsGenerator,
                 signedPropsMarshaller, unsignedPropsMarshaller, algorithmsParametersMarshaller,
-                x500NameStyleProvider))
+                x500NameStyleProvider, idGeneratorFactory))
         {
             throw new NullPointerException("One or more arguments are null");
         }
@@ -120,6 +122,7 @@ class SignerBES implements XadesSigner
         this.unsignedPropsMarshaller = unsignedPropsMarshaller;
         this.algorithmsParametersMarshaller = algorithmsParametersMarshaller;
         this.dataObjectDescsProcessor = dataObjectDescsProcessor;
+        this.idGeneratorFactory = idGeneratorFactory;
         this.keyInfoBuilder = new KeyInfoBuilder(basicSignatureOptions, signatureAlgorithms, algorithmsParametersMarshaller, x500NameStyleProvider);
         this.qualifPropsProcessor = new QualifyingPropertiesProcessor(signaturePropsProvider, dataObjPropsProvider);
     }
@@ -154,10 +157,8 @@ class SignerBES implements XadesSigner
         this.basicSignatureOptions.ensureValid();
 
         Document signatureDocument = DOMHelper.getOwnerDocument(referenceNode);
+        ElementIdGenerator idGenerator = this.idGeneratorFactory.create();
 
-        // Generate unique identifiers for the Signature and the SignedProperties.
-        String signatureId = String.format("xmldsig-%s", UUID.randomUUID());
-        String signedPropsId = String.format("%s-signedprops", signatureId);
 
         // Signing certificate chain (may contain only the signing certificate).
         List<X509Certificate> signingCertificateChain = this.keyingProvider.getSigningCertificateChain();
@@ -173,6 +174,7 @@ class SignerBES implements XadesSigner
                 signedDataObjects.getBaseUri(),
                 signingCertificate.getPublicKey().getAlgorithm());
 
+        String signatureId = idFor(signature, idGenerator);
         signature.setId(signatureId);
 
         /* References */
@@ -181,10 +183,11 @@ class SignerBES implements XadesSigner
         // are added to the signature.
         SignedDataObjectsProcessor.Result signedDataObjectsResult = this.dataObjectDescsProcessor.process(
                 signedDataObjects,
-                signature);
+                signature,
+                idGenerator);
 
         /* ds:KeyInfo */
-        this.keyInfoBuilder.buildKeyInfo(signingCertificateChain, signature);
+        this.keyInfoBuilder.buildKeyInfo(signingCertificateChain, signature, idGenerator);
 
         /* QualifyingProperties element */
         // Create the QualifyingProperties element
@@ -239,6 +242,7 @@ class SignerBES implements XadesSigner
             // Marshal the signed properties data to the QualifyingProperties node.
             this.signedPropsMarshaller.marshal(signedPropsData, qualifyingPropsElem);
             Element signedPropsElem = DOMHelper.getFirstChildElement(qualifyingPropsElem);
+            String signedPropsId = idFor(signedPropsElem, idGenerator);
             DOMHelper.setIdAsXmlId(signedPropsElem, signedPropsId);
 
             // SignedProperties reference
@@ -285,7 +289,7 @@ class SignerBES implements XadesSigner
             Element sigValueElem = DOMHelper.getFirstDescendant(
                     signature.getElement(),
                     Constants.SignatureSpecNS, Constants._TAG_SIGNATUREVALUE);
-            DOMHelper.setIdAsXmlId(sigValueElem, String.format("%s-sigvalue", signatureId));
+            DOMHelper.setIdAsXmlId(sigValueElem, idFor(sigValueElem, idGenerator));
 
             /* Marshal unsigned properties */
             // Generate the unsigned properties data objects. The data objects structure
@@ -384,5 +388,15 @@ class SignerBES implements XadesSigner
             SigningCertificateProperty scp = new SigningCertificateProperty(signingCertificateChain);
             formatSpecificSignedSigProps.add(scp);
         }
+    }
+
+    public static String idFor(ElementProxy elementProxy, ElementIdGenerator idGenerator)
+    {
+        return idGenerator.generateId(elementProxy.getBaseNamespace(), elementProxy.getBaseLocalName());
+    }
+
+    public static String idFor(Element element, ElementIdGenerator idGenerator)
+    {
+        return idGenerator.generateId(element.getNamespaceURI(), element.getLocalName());
     }
 }

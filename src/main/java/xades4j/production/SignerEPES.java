@@ -36,6 +36,7 @@ import java.util.List;
 
 /**
  * Produces XAdES-EPES signatures.
+ *
  * @author Luís
  */
 class SignerEPES extends SignerBES
@@ -56,9 +57,10 @@ class SignerEPES extends SignerBES
             SignedPropertiesMarshaller signedPropsMarshaller,
             UnsignedPropertiesMarshaller unsignedPropsMarshaller,
             AlgorithmsParametersMarshallingProvider algorithmsParametersMarshaller,
-            X500NameStyleProvider x500NameStyleProvider)
+            X500NameStyleProvider x500NameStyleProvider,
+            ElementIdGeneratorFactory idGeneratorFactory)
     {
-        super(keyingProvider, signatureAlgorithms, basicSignatureOptions, dataObjectDescsProcessor, signaturePropsProvider, dataObjPropsProvider, propsDataObjectsGenerator, signedPropsMarshaller, unsignedPropsMarshaller, algorithmsParametersMarshaller, x500NameStyleProvider);
+        super(keyingProvider, signatureAlgorithms, basicSignatureOptions, dataObjectDescsProcessor, signaturePropsProvider, dataObjPropsProvider, propsDataObjectsGenerator, signedPropsMarshaller, unsignedPropsMarshaller, algorithmsParametersMarshaller, x500NameStyleProvider, idGeneratorFactory);
         this.policyInfoProvider = policyInfoProvider;
     }
 
@@ -66,7 +68,8 @@ class SignerEPES extends SignerBES
     protected void getFormatSpecificSignatureProperties(
             Collection<SignedSignatureProperty> formatSpecificSignedSigProps,
             Collection<UnsignedSignatureProperty> formatSpecificUnsignedSigProps,
-            List<X509Certificate> signingCertificateChain) throws ValidationDataException {
+            List<X509Certificate> signingCertificateChain) throws ValidationDataException
+    {
         super.getFormatSpecificSignatureProperties(formatSpecificSignedSigProps, formatSpecificUnsignedSigProps, signingCertificateChain);
 
         PropertiesUtils.addXadesEpesProperties(formatSpecificSignedSigProps, this.policyInfoProvider);

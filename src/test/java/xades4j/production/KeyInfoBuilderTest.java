@@ -45,6 +45,7 @@ public class KeyInfoBuilderTest extends SignatureServicesTestBase
     private static X509Certificate testCertificate;
     private static X509Certificate intermCertificate;
     private static List<X509Certificate> certificates;
+    private static ElementIdGenerator idGenerator;
 
     @BeforeAll
     public static void setUpClass() throws Exception
@@ -55,6 +56,7 @@ public class KeyInfoBuilderTest extends SignatureServicesTestBase
         testCertificate = (X509Certificate) certificateFactory.generateCertificate(new FileInputStream(toPlatformSpecificCertDirFilePath("my/LG.cer")));
         intermCertificate = (X509Certificate) certificateFactory.generateCertificate(new FileInputStream(toPlatformSpecificCertDirFilePath("my/Interm.cer")));
         certificates = Arrays.asList(testCertificate, intermCertificate);
+        idGenerator = ElementIdGenerator.uuid();
     }
 
     @Test
@@ -65,7 +67,7 @@ public class KeyInfoBuilderTest extends SignatureServicesTestBase
                 .includePublicKey(true));
         XMLSignature xmlSignature = getTestSignature();
 
-        keyInfoBuilder.buildKeyInfo(certificates, xmlSignature);
+        keyInfoBuilder.buildKeyInfo(certificates, xmlSignature, idGenerator);
 
         assertEquals(0, xmlSignature.getSignedInfo().getLength());
 
@@ -86,7 +88,7 @@ public class KeyInfoBuilderTest extends SignatureServicesTestBase
                 .includeSigningCertificate(SigningCertificateMode.FULL_CHAIN));
         XMLSignature xmlSignature = getTestSignature();
 
-        keyInfoBuilder.buildKeyInfo(certificates, xmlSignature);
+        keyInfoBuilder.buildKeyInfo(certificates, xmlSignature, idGenerator);
 
         assertEquals(0, xmlSignature.getSignedInfo().getLength());
 
@@ -107,7 +109,7 @@ public class KeyInfoBuilderTest extends SignatureServicesTestBase
                 .includeIssuerSerial(true));
         XMLSignature xmlSignature = getTestSignature();
 
-        keyInfoBuilder.buildKeyInfo(certificates, xmlSignature);
+        keyInfoBuilder.buildKeyInfo(certificates, xmlSignature, idGenerator);
 
         assertEquals(1, xmlSignature.getKeyInfo().lengthX509Data());
         assertEquals(1, xmlSignature.getKeyInfo().itemX509Data(0).lengthIssuerSerial());
@@ -120,7 +122,7 @@ public class KeyInfoBuilderTest extends SignatureServicesTestBase
                 .includeSubjectName(true));
         XMLSignature xmlSignature = getTestSignature();
 
-        keyInfoBuilder.buildKeyInfo(certificates, xmlSignature);
+        keyInfoBuilder.buildKeyInfo(certificates, xmlSignature, idGenerator);
 
         assertEquals(1, xmlSignature.getKeyInfo().lengthX509Data());
         assertEquals(1, xmlSignature.getKeyInfo().itemX509Data(0).lengthSubjectName());
@@ -133,7 +135,7 @@ public class KeyInfoBuilderTest extends SignatureServicesTestBase
                 .signKeyInfo(true));
         XMLSignature xmlSignature = getTestSignature();
 
-        keyInfoBuilder.buildKeyInfo(certificates, xmlSignature);
+        keyInfoBuilder.buildKeyInfo(certificates, xmlSignature, idGenerator);
 
         SignedInfo signedInfo = xmlSignature.getSignedInfo();
         assertEquals(1, signedInfo.getLength());

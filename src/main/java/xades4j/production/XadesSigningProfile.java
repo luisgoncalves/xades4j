@@ -61,13 +61,13 @@ import xades4j.xml.marshalling.algorithms.AlgorithmParametersBindingsModule;
  * <p>
  * Repeated dependency bindings will not cause an immediate error. An exception
  * will be thrown when an instance of {@code XadesSigner} is requested.
- * 
+ *
+ * @author Luís
  * @see XadesBesSigningProfile
  * @see XadesEpesSigningProfile
  * @see XadesTSigningProfile
  * @see XadesCSigningProfile
  * @see xades4j.utils.XadesProfileCore
- * @author Luís
  */
 public abstract class XadesSigningProfile
 {
@@ -87,21 +87,22 @@ public abstract class XadesSigningProfile
     }
 
     private static final Module[] overridableModules =
-    {
-        new DefaultProductionBindingsModule(),
-        new MarshallingBindingsModule()
-    };
+            {
+                    new DefaultProductionBindingsModule(),
+                    new MarshallingBindingsModule()
+            };
 
     private static final Module[] sealedModules =
-    {
-        new UtilsBindingsModule(),
-        new AlgorithmParametersBindingsModule()
-    };
+            {
+                    new UtilsBindingsModule(),
+                    new AlgorithmParametersBindingsModule()
+            };
 
     /**
      * Creates a new {@code XadesSigner} based on the current state of the profile.
      * If any changes are made after this call, the previously returned signer will
      * not be affected. Other signers can be created, accumulating the profile changes.
+     *
      * @return a {@code XadesSigner} accordingly to this profile
      * @throws XadesProfileResolutionException if the dependencies of the signer (direct and indirect) cannot be resolved
      */
@@ -127,8 +128,9 @@ public abstract class XadesSigningProfile
      * may in turn have its own dependencies.
      * <p>
      * The other {@code withNNNNNN} methods are convenient shortcuts for this one.
+     *
      * @param from the dependency
-     * @param to the type that resolves the dependency
+     * @param to   the type that resolves the dependency
      * @return this profile
      */
     public final <T> XadesSigningProfile withBinding(
@@ -143,8 +145,9 @@ public abstract class XadesSigningProfile
      * Adds a instance dependency mapping to the profile. When a dependency to
      * {@code from} is found, the {@code to} instance is used.
      * The other {@code withNNNNNN} methods are convenient shortcuts for this one.
+     *
      * @param from the dependency
-     * @param to the instance that resolves the dependency
+     * @param to   the instance that resolves the dependency
      * @return this profile
      */
     public final <T> XadesSigningProfile withBinding(
@@ -157,11 +160,13 @@ public abstract class XadesSigningProfile
 
     /**
      * Adds an instance dependency mapping to the profile, using the instance type as dependency.
+     *
      * @param instance the instance that resolves the dependency
      * @return this profile
      */
-    public final XadesSigningProfile with(Object instance) {
-        this.profileCore.addBinding((Class<Object>)instance.getClass(), instance);
+    public final XadesSigningProfile with(Object instance)
+    {
+        this.profileCore.addBinding((Class<Object>) instance.getClass(), instance);
         return this;
     }
 
@@ -203,11 +208,21 @@ public abstract class XadesSigningProfile
     {
         return withBinding(X500NameStyleProvider.class, x500NameStyleProviderClass);
     }
-    
+
     public XadesSigningProfile withBasicSignatureOptions(
             BasicSignatureOptions options)
     {
         return withBinding(BasicSignatureOptions.class, options);
+    }
+
+    public XadesSigningProfile withElementIdGenerator(ElementIdGeneratorFactory idGeneratorFactory)
+    {
+        return withBinding(ElementIdGeneratorFactory.class, idGeneratorFactory);
+    }
+
+    public XadesSigningProfile withElementIdGenerator(Class<? extends ElementIdGeneratorFactory> idGeneratorFactoryClass)
+    {
+        return withBinding(ElementIdGeneratorFactory.class, idGeneratorFactoryClass);
     }
 
     public XadesSigningProfile withSignaturePropertiesProvider(

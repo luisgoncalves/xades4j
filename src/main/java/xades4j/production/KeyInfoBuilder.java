@@ -32,6 +32,8 @@ import xades4j.utils.CanonicalizerUtils;
 import xades4j.utils.TransformUtils;
 import xades4j.xml.marshalling.algorithms.AlgorithmsParametersMarshallingProvider;
 
+import static xades4j.production.SignerBES.idFor;
+
 /**
  * Helper class that creates the {@code ds:KeyInfo} element accordingly to some
  * signature options. The signing certificate validity and key usages are
@@ -60,7 +62,8 @@ class KeyInfoBuilder
 
     void buildKeyInfo(
             List<X509Certificate> signingCertificateChain,
-            XMLSignature xmlSig) throws KeyingDataException, UnsupportedAlgorithmException
+            XMLSignature xmlSig,
+            ElementIdGenerator idGenerator) throws KeyingDataException, UnsupportedAlgorithmException
     {
         X509Certificate signingCertificate = getSigningCertificate(signingCertificateChain);
 
@@ -68,7 +71,7 @@ class KeyInfoBuilder
 
         addPublicKey(signingCertificate, xmlSig);
 
-        addKeyInfoReference(xmlSig);
+        addKeyInfoReference(xmlSig, idGenerator);
     }
 
     private void addSigningCertificateElements(List<X509Certificate> signingCertificateChain, X509Certificate signingCertificate, XMLSignature xmlSig) throws KeyingDataException
@@ -119,13 +122,13 @@ class KeyInfoBuilder
         }
     }
 
-    private void addKeyInfoReference(XMLSignature xmlSig) throws UnsupportedAlgorithmException
+    private void addKeyInfoReference(XMLSignature xmlSig, ElementIdGenerator idGenerator) throws UnsupportedAlgorithmException
     {
         if (this.basicSignatureOptions.signKeyInfo())
         {
             try
             {
-                String keyInfoId = xmlSig.getId() + "-keyinfo";
+                String keyInfoId = idFor(xmlSig.getKeyInfo(), idGenerator);
                 xmlSig.getKeyInfo().setId(keyInfoId);
 
                 // Use same canonicalization URI as specified in the ds:CanonicalizationMethod for Signature.

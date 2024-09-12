@@ -59,9 +59,10 @@ class SignerC extends SignerT
             UnsignedPropertiesMarshaller unsignedPropsMarshaller,
             AlgorithmsParametersMarshallingProvider algorithmsParametersMarshaller,
             X500NameStyleProvider x500NameStyleProvider,
+            ElementIdGeneratorFactory idGeneratorFactory,
             Optional<SignaturePolicyInfoProvider> policyInfoProvider)
     {
-        super(keyingProvider, signatureAlgorithms, basicSignatureOptions, dataObjectDescsProcessor, signaturePropsProvider, dataObjPropsProvider, propsDataObjectsGenerator, signedPropsMarshaller, unsignedPropsMarshaller, algorithmsParametersMarshaller, x500NameStyleProvider, policyInfoProvider);
+        super(keyingProvider, signatureAlgorithms, basicSignatureOptions, dataObjectDescsProcessor, signaturePropsProvider, dataObjPropsProvider, propsDataObjectsGenerator, signedPropsMarshaller, unsignedPropsMarshaller, algorithmsParametersMarshaller, x500NameStyleProvider, idGeneratorFactory, policyInfoProvider);
         if (null == validationDataProvider)
             throw new NullPointerException("ValidationDataProvider is null");
 
