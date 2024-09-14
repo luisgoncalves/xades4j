@@ -37,14 +37,18 @@ class XadesSignatureFormatExtenderImpl implements XadesSignatureFormatExtender
     {
         Init.initXMLSec();
     }
+
+    private final ElementIdGeneratorFactory idGeneratorFactory;
     private final PropertiesDataObjectsGenerator propsDataObjectsGenerator;
     private final UnsignedPropertiesMarshaller unsignedPropsMarshaller;
 
     @Inject
     XadesSignatureFormatExtenderImpl(
+            ElementIdGeneratorFactory idGeneratorFactory,
             PropertiesDataObjectsGenerator propsDataObjectsGenerator,
             UnsignedPropertiesMarshaller unsignedPropsMarshaller)
     {
+        this.idGeneratorFactory = idGeneratorFactory;
         this.propsDataObjectsGenerator = propsDataObjectsGenerator;
         this.unsignedPropsMarshaller = unsignedPropsMarshaller;
     }
@@ -76,10 +80,12 @@ class XadesSignatureFormatExtenderImpl implements XadesSignatureFormatExtender
             DOMHelper.useIdAsXmlId(signedProps);
         }
 
+        ElementIdGenerator idGenerator = idGeneratorFactory.create();
+
         SigAndDataObjsPropertiesData propsData = propsDataObjectsGenerator.generateUnsignedPropertiesData(
                 props,
-                new PropertiesDataGenerationContext(sig));
-        
+                new PropertiesDataGenerationContext(sig, idGenerator));
+
         // A little style trick to have nice prefixes.
         if(null == sig.getDocument().lookupPrefix(QualifyingProperty.XADESV141_XMLNS))
             qualifProps.setAttributeNS(Constants.NamespaceSpecNS, "xmlns:xades141", QualifyingProperty.XADESV141_XMLNS);

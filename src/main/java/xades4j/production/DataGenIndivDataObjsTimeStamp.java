@@ -74,7 +74,7 @@ class DataGenIndivDataObjsTimeStamp extends DataGenBaseTimeStamp<IndividualDataO
         for (DataObjectDesc dataObj : targetDataObjs)
         {
             Reference r = ctx.getReference(dataObj);
-            includes.add('#' + r.getId());
+            includes.add('#' + ctx.ensureElementId(r));
         }
 
         prop.setTime(tsTknRes.timeStampTime);

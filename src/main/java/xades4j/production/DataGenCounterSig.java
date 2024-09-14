@@ -66,12 +66,11 @@ class DataGenCounterSig implements PropertyDataObjectGenerator<CounterSignatureP
         try
         {
             // Rerence to the ds:SignatureValue element. This assumes that the
-            // QualifyingProperties are in the signature's document and that the
-            // SignatureValue element has an Id.
+            // QualifyingProperties are in the signature's document.
             Element sigValueElem = DOMHelper.getFirstDescendant(
                     ctx.getTargetXmlSignature().getElement(),
                     Constants.SignatureSpecNS, Constants._TAG_SIGNATUREVALUE);
-            String sigValueId = sigValueElem.getAttribute(Constants._ATT_ID);
+            String sigValueId = ctx.ensureElementId(sigValueElem);
             DataObjectReference sigValueRef = new DataObjectReference('#' + sigValueId)
                     .withType(CounterSignatureProperty.COUNTER_SIGNATURE_TYPE_URI);
 

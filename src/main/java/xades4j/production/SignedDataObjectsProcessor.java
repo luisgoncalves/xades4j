@@ -197,7 +197,7 @@ final class SignedDataObjectsProcessor
 
                 Transforms transforms = processTransforms(dataObjDesc, container.getDocument());
 
-                // Add the Reference. References need an ID because data object properties may refer them.
+                // Add the Reference
                 container.addDocument(
                         xmlSignature.getBaseURI(),
                         refUri,
@@ -209,7 +209,6 @@ final class SignedDataObjectsProcessor
                 // SignedDataObjects and EnvelopedManifest don't allow repeated instances, so there's no
                 // need to check for duplicate entries on the map.
                 Reference ref = container.item(index);
-                ref.setId(idFor(ref, idGenerator));
                 referenceMappings.put(dataObjDesc, ref);
             }
 

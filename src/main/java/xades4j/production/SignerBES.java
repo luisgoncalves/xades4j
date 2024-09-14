@@ -16,17 +16,7 @@
  */
 package xades4j.production;
 
-import static xades4j.utils.CanonicalizerUtils.checkC14NAlgorithm;
-
 import jakarta.inject.Inject;
-
-import java.security.PrivateKey;
-import java.security.cert.X509Certificate;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
-import java.util.UUID;
-
 import org.apache.xml.security.exceptions.XMLSecurityException;
 import org.apache.xml.security.signature.Manifest;
 import org.apache.xml.security.signature.ObjectContainer;
@@ -62,6 +52,14 @@ import xades4j.utils.TransformUtils;
 import xades4j.xml.marshalling.SignedPropertiesMarshaller;
 import xades4j.xml.marshalling.UnsignedPropertiesMarshaller;
 import xades4j.xml.marshalling.algorithms.AlgorithmsParametersMarshallingProvider;
+
+import java.security.PrivateKey;
+import java.security.cert.X509Certificate;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
+
+import static xades4j.utils.CanonicalizerUtils.checkC14NAlgorithm;
 
 /**
  * Base logic for producing XAdES signatures (XAdES-BES).
@@ -233,7 +231,8 @@ class SignerBES implements XadesSigner
             PropertiesDataGenerationContext propsDataGenCtx = new PropertiesDataGenerationContext(
                     signedDataObjects.getDataObjectsDescs(),
                     signedDataObjectsResult.referenceMappings,
-                    signatureDocument);
+                    signatureDocument,
+                    idGenerator);
             // Generate the signed properties data objects. The data objects structure
             // is verifier in the process.
             SigAndDataObjsPropertiesData signedPropsData = this.propsDataObjectsGenerator.generateSignedPropertiesData(
@@ -285,11 +284,6 @@ class SignerBES implements XadesSigner
             {
                 throw new XAdES4jXMLSigException(ex.getMessage(), ex);
             }
-            // Set the ds:SignatureValue id.
-            Element sigValueElem = DOMHelper.getFirstDescendant(
-                    signature.getElement(),
-                    Constants.SignatureSpecNS, Constants._TAG_SIGNATUREVALUE);
-            DOMHelper.setIdAsXmlId(sigValueElem, idFor(sigValueElem, idGenerator));
 
             /* Marshal unsigned properties */
             // Generate the unsigned properties data objects. The data objects structure
