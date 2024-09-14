@@ -48,7 +48,7 @@ class DataGenCommitmentType implements PropertyDataObjectGenerator<CommitmentTyp
         {
             // The ObjectReference refers the Reference element. This assumes
             // that the QualifyingProperties are in the signature's document.
-            commTypeData.addObjReferences('#' + ctx.getReference(obj).getId());
+            commTypeData.addObjReferences('#' + ctx.ensureElementId(ctx.getReference(obj)));
         }
 
         commTypeData.setQualifiers(prop.getQualifiers());

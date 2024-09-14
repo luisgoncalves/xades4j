@@ -20,6 +20,7 @@ import org.apache.xml.security.exceptions.XMLSecurityException;
 import org.apache.xml.security.signature.Reference;
 import org.apache.xml.security.signature.SignedInfo;
 import org.apache.xml.security.signature.XMLSignature;
+import org.apache.xml.security.utils.Constants;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import xades4j.XAdES4jXMLSigException;
@@ -31,6 +32,9 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
+
+import static xades4j.production.SignerBES.idFor;
+import static xades4j.utils.StringUtils.isNullOrEmptyString;
 
 /**
  * Context used during the generation of the properties low-level data (property
@@ -45,6 +49,7 @@ public final class PropertiesDataGenerationContext
     private final List<Reference> references;
     private final Map<DataObjectDesc, Reference> referencesMappings;
     private final Document sigDocument;
+    private final ElementIdGenerator idGenerator;
     private XMLSignature targetXmlSignature;
 
     /**
@@ -52,12 +57,14 @@ public final class PropertiesDataGenerationContext
      * will be processed.
      *
      * @param targetXmlSignature the target signature
+     * @param idGenerator        ID generator
      */
-    PropertiesDataGenerationContext(XMLSignature targetXmlSignature) throws XAdES4jXMLSigException
+    PropertiesDataGenerationContext(XMLSignature targetXmlSignature, ElementIdGenerator idGenerator) throws XAdES4jXMLSigException
     {
         this.targetXmlSignature = targetXmlSignature;
         this.sigDocument = targetXmlSignature.getDocument();
         this.referencesMappings = null;
+        this.idGenerator = idGenerator;
 
         SignedInfo signedInfo = targetXmlSignature.getSignedInfo();
         List<Reference> refs = new ArrayList<>(signedInfo.getLength());
@@ -83,10 +90,12 @@ public final class PropertiesDataGenerationContext
     PropertiesDataGenerationContext(
             Collection<DataObjectDesc> orderedDataObjs,
             Map<DataObjectDesc, Reference> referencesMappings,
-            Document sigDocument)
+            Document sigDocument,
+            ElementIdGenerator idGenerator)
     {
         this.referencesMappings = referencesMappings;
         this.sigDocument = sigDocument;
+        this.idGenerator = idGenerator;
 
         List<Reference> orderedRefs = new ArrayList<>(orderedDataObjs.size());
         for (DataObjectDesc dataObjDesc : orderedDataObjs)
@@ -118,6 +127,29 @@ public final class PropertiesDataGenerationContext
     public Reference getReference(DataObjectDesc dataObject)
     {
         return referencesMappings.get(dataObject);
+    }
+
+    public String ensureElementId(Reference element)
+    {
+        String id = element.getId();
+        if (isNullOrEmptyString(id))
+        {
+            id = idFor(element, idGenerator);
+            element.setId(id);
+        }
+
+        return id;
+    }
+
+    public String ensureElementId(Element element)
+    {
+        String id = element.getAttribute(Constants._ATT_ID);
+        if (isNullOrEmptyString(id))
+        {
+            id = idFor(element, idGenerator);
+            DOMHelper.setIdAsXmlId(element, id);
+        }
+        return id;
     }
 
     XMLSignature getTargetXmlSignature()
