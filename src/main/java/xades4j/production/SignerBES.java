@@ -25,7 +25,6 @@ import org.apache.xml.security.signature.XMLSignatureException;
 import org.apache.xml.security.transforms.Transforms;
 import org.apache.xml.security.utils.Constants;
 import org.apache.xml.security.utils.ElementProxy;
-import org.apache.xml.security.utils.XMLUtils;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
@@ -316,41 +315,40 @@ class SignerBES implements XadesSigner
 
     private XMLSignature createSignature(Document signatureDocument, String baseUri, String signingKeyAlgorithm) throws XAdES4jXMLSigException, UnsupportedAlgorithmException
     {
-        Algorithm signatureAlg = this.signatureAlgorithms.getSignatureAlgorithm(signingKeyAlgorithm);
-        Element signatureAlgElem = createElementForAlgorithm(signatureAlg, Constants._TAG_SIGNATUREMETHOD, signatureDocument);
-
+        SignatureMethodAlgorithm signatureAlg = this.signatureAlgorithms.getSignatureAlgorithm(signingKeyAlgorithm);
         Algorithm canonAlg = this.signatureAlgorithms.getCanonicalizationAlgorithmForSignature();
-        if (null == canonAlg)
-        {
-            throw new NullPointerException("Canonicalization algorithm not provided");
-        }
-        Element canonAlgElem = createElementForAlgorithm(canonAlg, Constants._TAG_CANONICALIZATIONMETHOD, signatureDocument);
 
+        XMLSignature signature;
         try
         {
-            return new XMLSignature(signatureDocument, baseUri, signatureAlgElem, canonAlgElem);
+            signature = new XMLSignature(
+                    signatureDocument,
+                    baseUri,
+                    signatureAlg.getUri(),
+                    0,
+                    canonAlg.getUri(),
+                    null,
+                    signatureAlg.getParameters());
         }
         catch (XMLSecurityException ex)
         {
-            // Following the code, doesn't seem to be thrown at all.
             throw new XAdES4jXMLSigException(ex.getMessage(), ex);
         }
-    }
 
-    private Element createElementForAlgorithm(Algorithm algorithm, String elementName, Document signatureDocument) throws UnsupportedAlgorithmException
-    {
-        Element algorithmElem = XMLUtils.createElementInSignatureSpace(signatureDocument, elementName);
-        algorithmElem.setAttributeNS(null, Constants._ATT_ALGORITHM, algorithm.getUri());
-
-        List<Node> algorithmParams = this.algorithmsParametersMarshaller.marshalParameters(algorithm, signatureDocument);
-        if (algorithmParams != null)
+        List<Node> canonAlgParams = this.algorithmsParametersMarshaller.marshalParameters(canonAlg, signatureDocument);
+        if (canonAlgParams != null)
         {
-            for (Node p : algorithmParams)
+            Element canonAlgElement = DOMHelper.getChildElementsByTagNameNS(
+                    signature.getSignedInfo().getElement(),
+                    Constants.SignatureSpecNS, Constants._TAG_CANONICALIZATIONMETHOD
+            ).get(0);
+            for (Node p : canonAlgParams)
             {
-                algorithmElem.appendChild(p);
+                canonAlgElement.appendChild(p);
             }
         }
-        return algorithmElem;
+
+        return signature;
     }
 
     private static void digestManifests(Iterable<Manifest> manifests) throws XAdES4jXMLSigException

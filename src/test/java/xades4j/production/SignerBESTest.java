@@ -16,6 +16,7 @@
  */
 package xades4j.production;
 
+import org.apache.xml.security.signature.XMLSignature;
 import org.apache.xml.security.utils.resolver.implementations.ResolverDirectHTTP;
 import org.apache.xml.security.utils.resolver.implementations.ResolverLocalFilesystem;
 import org.junit.jupiter.api.Test;
@@ -36,6 +37,8 @@ import xades4j.properties.SignerRoleProperty;
 import xades4j.properties.SigningCertificateProperty;
 
 import java.io.File;
+import java.security.spec.MGF1ParameterSpec;
+import java.security.spec.PSSParameterSpec;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
@@ -90,6 +93,21 @@ class SignerBESTest extends SignerTestBase
         new Enveloped(signer).sign(elemToSign);
 
         outputDocument(doc, "document.signed.bes.ec.xml");
+    }
+
+    @Test
+    void testSignBESWithRsaPss() throws Exception
+    {
+        Document doc = getTestDocument();
+        Element elemToSign = doc.getDocumentElement();
+
+        XadesSigner signer = new XadesBesSigningProfile(keyingProviderMy)
+                .withSignatureAlgorithms(new SignatureAlgorithms()
+                        .withSignatureAlgorithm("RSA", XMLSignature.ALGO_ID_SIGNATURE_RSA_PSS, new PSSParameterSpec("SHA-256", "MGF1", MGF1ParameterSpec.SHA256, 64, 1)))
+                .newSigner();
+        new Enveloped(signer).sign(elemToSign);
+
+        outputDocument(doc, "document.signed.bes.rsa_pss.xml");
     }
 
     @Test

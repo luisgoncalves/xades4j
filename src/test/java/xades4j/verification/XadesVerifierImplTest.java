@@ -200,6 +200,13 @@ class XadesVerifierImplTest extends VerifierTestBase
     }
 
     @Test
+    void testVerifyBesSigAlgParams() throws Exception
+    {
+        var result = verifySignature("document.signed.bes.rsa_pss.xml");
+        assertEquals(XAdESForm.BES, result.getSignatureForm());
+    }
+
+    @Test
     void testVerifyBESEnrichT() throws Exception
     {
         Document doc = getDocument("document.signed.bes.xml");

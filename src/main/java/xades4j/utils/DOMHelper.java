@@ -16,16 +16,17 @@
  */
 package xades4j.utils;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import javax.xml.parsers.DocumentBuilderFactory;
-import javax.xml.parsers.ParserConfigurationException;
 import org.apache.xml.security.utils.Constants;
 import org.apache.xml.security.utils.HelperNodeList;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
+
+import javax.xml.parsers.DocumentBuilderFactory;
+import javax.xml.parsers.ParserConfigurationException;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Utility methods for DOM nodes.
@@ -163,10 +164,10 @@ public class DOMHelper
      * @param localName element name
      * @return 
      */
-    public static Collection<Element> getChildElementsByTagNameNS(Element e, String namespaceURI, String localName)
+    public static List<Element> getChildElementsByTagNameNS(Element e, String namespaceURI, String localName)
     {
         Node node = e.getFirstChild();
-        Collection<Element> elements = new ArrayList<>();
+        List<Element> elements = new ArrayList<>();
 
         while (node != null)
         {

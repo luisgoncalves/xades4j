@@ -137,7 +137,7 @@ class OtherSignerTests extends SignerTestBase
         XadesSigner signer = new XadesCSigningProfile(keyingProviderNist, vdp)
                 .withSignatureAlgorithms(new SignatureAlgorithms()
                         .withSignatureAlgorithm("RSA", ALGO_ID_SIGNATURE_RSA_SHA512)
-                        .withCanonicalizationAlgorithmForTimeStampProperties(new ExclusiveCanonicalXMLWithoutComments())
+                        .withCanonicalizationAlgorithmForTimeStampProperties(new ExclusiveCanonicalXMLWithoutComments("x", "y"))
                         .withDigestAlgorithmForReferenceProperties(ALGO_ID_DIGEST_SHA512))
                 .with(DEFAULT_TEST_TSA)
                 .newSigner();
@@ -157,6 +157,8 @@ class OtherSignerTests extends SignerTestBase
 
         var tsC14n = (Attr) xpath.evaluate("//xades:UnsignedSignatureProperties/xades:SignatureTimeStamp/ds:CanonicalizationMethod/@Algorithm", doc, XPathConstants.NODE);
         assertEquals(ALGO_ID_C14N_EXCL_OMIT_COMMENTS, tsC14n.getValue());
+        var tsC14nParam = (Attr) xpath.evaluate("//xades:UnsignedSignatureProperties/xades:SignatureTimeStamp/ds:CanonicalizationMethod/exc-c14n:InclusiveNamespaces/@PrefixList", doc, XPathConstants.NODE);
+        assertEquals("x y", tsC14nParam.getValue());
 
         var certReferenceDigest = (Attr) xpath.evaluate("//xades:UnsignedSignatureProperties/xades:CompleteCertificateRefs/xades:CertRefs/xades:Cert/xades:CertDigest/ds:DigestMethod/@Algorithm", doc, XPathConstants.NODE);
         assertEquals(ALGO_ID_DIGEST_SHA512, certReferenceDigest.getValue());
@@ -175,6 +177,8 @@ class OtherSignerTests extends SignerTestBase
                     return QualifyingProperty.XADES_XMLNS;
                 case "xades141":
                     return QualifyingProperty.XADESV141_XMLNS;
+                case "exc-c14n":
+                    return "http://www.w3.org/2001/10/xml-exc-c14n#";
             }
             return null;
         }

@@ -23,6 +23,7 @@ import xades4j.algorithms.Algorithm;
 import xades4j.algorithms.CanonicalXMLWithoutComments;
 import xades4j.algorithms.GenericAlgorithm;
 
+import java.security.spec.AlgorithmParameterSpec;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -40,7 +41,7 @@ import java.util.Map;
  */
 public final class SignatureAlgorithms
 {
-    private final Map<String, Algorithm> keyAlgToSignatureAlg = new HashMap<>();
+    private final Map<String, SignatureMethodAlgorithm> keyAlgToSignatureAlg = new HashMap<>();
     private Algorithm canonicalizationAlgorithmForSignature = new CanonicalXMLWithoutComments();
     private Algorithm canonicalizationAlgorithmForTimeStampProperties = new CanonicalXMLWithoutComments();
     private String digestAlgorithmForDataObjectReferences = MessageDigestAlgorithm.ALGO_ID_DIGEST_SHA256;
@@ -49,9 +50,9 @@ public final class SignatureAlgorithms
 
     public SignatureAlgorithms()
     {
-        keyAlgToSignatureAlg.put("DSA", new GenericAlgorithm(XMLSignature.ALGO_ID_SIGNATURE_DSA));
-        keyAlgToSignatureAlg.put("RSA", new GenericAlgorithm(XMLSignature.ALGO_ID_SIGNATURE_RSA_SHA256));
-        keyAlgToSignatureAlg.put("EC", new GenericAlgorithm(XMLSignature.ALGO_ID_SIGNATURE_ECDSA_SHA256));
+        keyAlgToSignatureAlg.put("DSA", new SignatureMethodAlgorithm(XMLSignature.ALGO_ID_SIGNATURE_DSA));
+        keyAlgToSignatureAlg.put("RSA", new SignatureMethodAlgorithm(XMLSignature.ALGO_ID_SIGNATURE_RSA_SHA256));
+        keyAlgToSignatureAlg.put("EC", new SignatureMethodAlgorithm(XMLSignature.ALGO_ID_SIGNATURE_ECDSA_SHA256));
     }
 
     /**
@@ -63,11 +64,27 @@ public final class SignatureAlgorithms
      */
     public SignatureAlgorithms withSignatureAlgorithm(String keyAlgorithmName, String signatureAlgorithm)
     {
-        keyAlgToSignatureAlg.put(keyAlgorithmName, new GenericAlgorithm(signatureAlgorithm));
+        keyAlgToSignatureAlg.put(keyAlgorithmName, new SignatureMethodAlgorithm(signatureAlgorithm));
         return this;
     }
 
-    Algorithm getSignatureAlgorithm(String keyAlgorithmName) throws UnsupportedAlgorithmException
+    /**
+     * Set the signature algorithm and parameters to be used when the signing key has the given key algorithm.
+     *
+     * @param keyAlgorithmName   the key's algorithm name as defined in JCA standard algorithm names
+     * @param signatureAlgorithm the signature algorithm
+     * @param parameters the signature algorithm parameters
+     * @return the current instance
+     */
+    public SignatureAlgorithms withSignatureAlgorithm(String keyAlgorithmName,
+                                                      String signatureAlgorithm,
+                                                      AlgorithmParameterSpec parameters)
+    {
+        keyAlgToSignatureAlg.put(keyAlgorithmName, new SignatureMethodAlgorithm(signatureAlgorithm, parameters));
+        return this;
+    }
+
+    SignatureMethodAlgorithm getSignatureAlgorithm(String keyAlgorithmName) throws UnsupportedAlgorithmException
     {
         var algorithm = keyAlgToSignatureAlg.get(keyAlgorithmName);
 
