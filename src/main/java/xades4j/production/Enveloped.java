@@ -48,11 +48,11 @@ public class Enveloped
      * reference is used.
      *
      * @param elementToSign the element that will be signed and will be the signature's parent
-     *
-     * @throws XAdES4jException see {@link XadesSigner#sign(xades4j.production.SignedDataObjects, org.w3c.dom.Node)}
+     * @return the signature result
+     * @throws XAdES4jException         see {@link XadesSigner#sign(xades4j.production.SignedDataObjects, org.w3c.dom.Node)}
      * @throws IllegalArgumentException if {@code elementToSign} doesn't have an Id and isn't the document root
      */
-    public void sign(Element elementToSign) throws XAdES4jException
+    public XadesSignatureResult sign(Element elementToSign) throws XAdES4jException
     {
         String refUri;
         if (elementToSign.hasAttribute("Id"))
@@ -65,6 +65,6 @@ public class Enveloped
         }
 
         DataObjectDesc dataObjRef = new DataObjectReference(refUri).withTransform(new EnvelopedSignatureTransform());
-        signer.sign(new SignedDataObjects(dataObjRef), elementToSign);
+        return signer.sign(new SignedDataObjects(dataObjRef), elementToSign);
     }
 }

@@ -16,11 +16,6 @@
  */
 package xades4j.verification;
 
-import java.security.cert.X509CertSelector;
-import java.security.cert.X509Certificate;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
 import org.apache.xml.security.exceptions.XMLSecurityException;
 import org.apache.xml.security.keys.KeyInfo;
 import org.apache.xml.security.keys.content.X509Data;
@@ -29,8 +24,14 @@ import xades4j.properties.data.CertRef;
 import xades4j.providers.CertificateValidationException;
 import xades4j.providers.X500NameStyleProvider;
 
+import javax.annotation.Nullable;
+import java.security.cert.X509CertSelector;
+import java.security.cert.X509Certificate;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+
 /**
- *
  * @author Luís
  */
 class KeyInfoProcessor
@@ -42,39 +43,36 @@ class KeyInfoProcessor
 
     static class KeyInfoRes
     {
-        final X509CertSelector certSelector;
-        final List<X509Certificate> keyInfoCerts;
+        final X509CertSelector signingCertSelector;
+        final boolean signingCertSelectorFromKeyInfo;
+        final List<X509Certificate> certs;
+        @Nullable
         final XMLX509IssuerSerial issuerSerial;
 
-        KeyInfoRes(
-            X509CertSelector certSelector,
-            List<X509Certificate> keyInfoCerts,
-            XMLX509IssuerSerial issuerSerial)
+        private KeyInfoRes(
+                X509CertSelector signingCertSelector,
+                boolean signingCertSelectorFromKeyInfo,
+                List<X509Certificate> certs,
+                @Nullable XMLX509IssuerSerial issuerSerial)
         {
-            this.keyInfoCerts = keyInfoCerts;
-            this.certSelector = certSelector;
+            this.signingCertSelector = signingCertSelector;
+            this.signingCertSelectorFromKeyInfo = signingCertSelectorFromKeyInfo;
+            this.certs = certs;
             this.issuerSerial = issuerSerial;
-        }
-
-        KeyInfoRes(X509CertSelector certSelector)
-        {
-            this.certSelector = certSelector;
-            this.keyInfoCerts = Collections.emptyList();
-            this.issuerSerial = null;
         }
     }
 
     static KeyInfoRes process(
-            KeyInfo keyInfo, CertRef signingCertRef, X500NameStyleProvider x500NameStyleProvider) throws CertificateValidationException
+            KeyInfo keyInfo, @Nullable CertRef signingCertRef, X500NameStyleProvider x500NameStyleProvider) throws CertificateValidationException
     {
         if (null == keyInfo || !keyInfo.containsX509Data())
         {
             return tryUseSigningCertificateReference(signingCertRef, x500NameStyleProvider);
         }
-        
+
         List<X509Certificate> keyInfoCerts = new ArrayList<>(1);
         XMLX509IssuerSerial issuerSerial = null;
-        X509CertSelector certSelector = new X509CertSelector();
+        X509CertSelector signingCertSelector = new X509CertSelector();
 
         // XML-DSIG 4.4.4: "Any X509IssuerSerial, X509SKI, and X509SubjectName elements
         // that appear MUST refer to the certificate or certificates containing the
@@ -100,13 +98,13 @@ class KeyInfoProcessor
                     if (x509Data.containsIssuerSerial())
                     {
                         issuerSerial = x509Data.itemIssuerSerial(0);
-                        certSelector.setIssuer(x500NameStyleProvider.fromString(issuerSerial.getIssuerName()));
-                        certSelector.setSerialNumber(issuerSerial.getSerialNumber());
+                        signingCertSelector.setIssuer(x500NameStyleProvider.fromString(issuerSerial.getIssuerName()));
+                        signingCertSelector.setSerialNumber(issuerSerial.getSerialNumber());
                         hasSelectionCriteria = true;
                     }
                     else if (x509Data.containsSubjectName())
                     {
-                        certSelector.setSubject(x500NameStyleProvider.fromString(x509Data.itemSubjectName(0).getSubjectName()));
+                        signingCertSelector.setSubject(x500NameStyleProvider.fromString(x509Data.itemSubjectName(0).getSubjectName()));
                         hasSelectionCriteria = true;
                     }
                 }
@@ -121,14 +119,10 @@ class KeyInfoProcessor
                 }
             }
 
-            if (!hasSelectionCriteria)
+            if (!hasSelectionCriteria && !keyInfoCerts.isEmpty())
             {
-                if (keyInfoCerts.isEmpty())
-                {
-                    return tryUseSigningCertificateReference(signingCertRef, x500NameStyleProvider);
-                }
-
-                certSelector.setCertificate(keyInfoCerts.get(0));
+                signingCertSelector.setCertificate(keyInfoCerts.get(0));
+                hasSelectionCriteria = true;
             }
         }
         catch (XMLSecurityException ex)
@@ -136,7 +130,9 @@ class KeyInfoProcessor
             throw new InvalidKeyInfoDataException("Cannot process X509Data", ex);
         }
 
-        return new KeyInfoRes(certSelector, keyInfoCerts, issuerSerial);
+        return hasSelectionCriteria
+                ? new KeyInfoRes(signingCertSelector, true, keyInfoCerts, issuerSerial)
+                : tryUseSigningCertificateReference(signingCertRef, x500NameStyleProvider);
     }
 
     private static KeyInfoRes tryUseSigningCertificateReference(CertRef signingCertRef, X500NameStyleProvider x500NameStyleProvider) throws CertificateValidationException
@@ -149,7 +145,7 @@ class KeyInfoProcessor
         X509CertSelector certSelector = new X509CertSelector();
         certSelector.setIssuer(x500NameStyleProvider.fromString(signingCertRef.getIssuerDN()));
         certSelector.setSerialNumber(signingCertRef.getSerialNumber());
-        
-        return new KeyInfoRes(certSelector);     
+
+        return new KeyInfoRes(certSelector, false, Collections.emptyList(), null);
     }
 }

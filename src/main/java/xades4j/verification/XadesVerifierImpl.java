@@ -17,13 +17,6 @@
 package xades4j.verification;
 
 import jakarta.inject.Inject;
-import java.io.InputStream;
-import java.security.cert.X509Certificate;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Date;
-import java.util.List;
-import java.util.Set;
 import org.apache.xml.security.exceptions.XMLSecurityException;
 import org.apache.xml.security.signature.Reference;
 import org.apache.xml.security.signature.SignedInfo;
@@ -56,8 +49,18 @@ import xades4j.verification.SignatureUtils.ReferencesRes;
 import xades4j.xml.unmarshalling.QualifyingPropertiesUnmarshaller;
 import xades4j.xml.unmarshalling.UnmarshalException;
 
+import javax.annotation.Nullable;
+import java.io.InputStream;
+import java.security.cert.X509Certificate;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Date;
+import java.util.List;
+import java.util.Set;
+
+import static xades4j.verification.SignatureUtils.signatureReferencesElement;
+
 /**
- *
  * @author Luís
  */
 class XadesVerifierImpl implements XadesVerifier
@@ -68,6 +71,7 @@ class XadesVerifierImpl implements XadesVerifier
         org.apache.xml.security.Init.init();
         initFormExtension();
     }
+
     /**/
     private final CertificateValidationProvider certificateValidator;
     private final QualifyingPropertiesVerifier qualifyingPropertiesVerifier;
@@ -76,6 +80,7 @@ class XadesVerifierImpl implements XadesVerifier
     private final Set<CustomSignatureVerifier> customSigVerifiers;
     private final X500NameStyleProvider x500NameStyleProvider;
     private boolean secureValidation;
+    private boolean requireSigningCertificateProperty;
 
     @Inject
     protected XadesVerifierImpl(
@@ -99,6 +104,7 @@ class XadesVerifierImpl implements XadesVerifier
         this.customSigVerifiers = customSigVerifiers;
         this.x500NameStyleProvider = x500NameStyleProvider;
         this.secureValidation = false;
+        this.requireSigningCertificateProperty = true;
     }
 
     void setAcceptUnknownProperties(boolean accept)
@@ -109,6 +115,11 @@ class XadesVerifierImpl implements XadesVerifier
     void setSecureValidation(boolean secureValidation)
     {
         this.secureValidation = secureValidation;
+    }
+
+    void requireSigningCertificateProperty(boolean requireSigningCertificateProperty)
+    {
+        this.requireSigningCertificateProperty = requireSigningCertificateProperty;
     }
 
     @Override
@@ -130,7 +141,8 @@ class XadesVerifierImpl implements XadesVerifier
         try
         {
             signature = new XMLSignature(signatureElem, verificationOptions.getBaseUri(), this.secureValidation);
-        } catch (XMLSecurityException ex)
+        }
+        catch (XMLSecurityException ex)
         {
             throw new UnmarshalException("Bad XML signature", ex);
         }
@@ -177,26 +189,16 @@ class XadesVerifierImpl implements XadesVerifier
         CertRef signingCertRefAttempt = tryGetSigningCertificateRef(qualifPropsData);
         KeyInfoRes keyInfoRes = KeyInfoProcessor.process(signature.getKeyInfo(), signingCertRefAttempt, this.x500NameStyleProvider);
         ValidationData certValidationRes = this.certificateValidator.validate(
-                keyInfoRes.certSelector,
+                keyInfoRes.signingCertSelector,
                 validationDate,
-                keyInfoRes.keyInfoCerts);
+                keyInfoRes.certs);
         if (null == certValidationRes || certValidationRes.getCerts().isEmpty())
         {
             throw new NullPointerException("Certificate validator returned null or empty data");
         }
         X509Certificate validationCert = certValidationRes.getCerts().get(0);
 
-        if (verificationOptions.checkKeyUsage())
-        {
-            // Check key usage.
-            // - KeyUsage[0] = digitalSignature
-            // - KeyUsage[1] = nonRepudiation
-            boolean[] keyUsage = validationCert.getKeyUsage();
-            if (keyUsage != null && !keyUsage[0] && !keyUsage[1])
-            {
-                throw new SigningCertificateKeyUsageException();
-            }
-        }
+        checkKeyUsage(verificationOptions, validationCert);
 
         /* Signature verification */
 
@@ -207,20 +209,22 @@ class XadesVerifierImpl implements XadesVerifier
         QualifyingPropertyVerificationContext qPropsCtx = new QualifyingPropertyVerificationContext(
                 signature,
                 new QualifyingPropertyVerificationContext.CertificationChainData(
-                certValidationRes.getCerts(),
-                certValidationRes.getCrls(),
-                keyInfoRes.issuerSerial,
-                this.x500NameStyleProvider),
+                        certValidationRes.getCerts(),
+                        certValidationRes.getCrls(),
+                        keyInfoRes.issuerSerial,
+                        this.x500NameStyleProvider),
                 /**/
                 new QualifyingPropertyVerificationContext.SignedObjectsData(
-                referencesRes.dataObjsReferences,
-                signature));
+                        referencesRes.dataObjsReferences,
+                        signature));
 
         // Verify the properties. Data structure verification is included.
         Collection<PropertyInfo> props = this.qualifyingPropertiesVerifier.verifyProperties(qualifPropsData, qPropsCtx);
+        // Determine the XAdES form by checking which (needed) properties are present.
+        XAdESForm signatureForm = XAdESFormChecker.checkForm(props, requiresSigningCertificateProperty(signature, keyInfoRes));
 
         XAdESVerificationResult res = new XAdESVerificationResult(
-                XAdESFormChecker.checkForm(props),
+                signatureForm,
                 signature,
                 certValidationRes,
                 props,
@@ -235,7 +239,8 @@ class XadesVerifierImpl implements XadesVerifier
         return res;
     }
 
-    private static String getTargetValue(Element qualifyingPropsElem) throws QualifyingPropertiesIncorporationException {
+    private static String getTargetValue(Element qualifyingPropsElem) throws QualifyingPropertiesIncorporationException
+    {
         Node targetAttr = qualifyingPropsElem.getAttributeNodeNS(null, QualifyingProperty.TARGET_ATTR);
         if (null == targetAttr)
         {
@@ -250,7 +255,9 @@ class XadesVerifierImpl implements XadesVerifier
 
     /*************************************************************************************/
 
-    private CertRef tryGetSigningCertificateRef(Collection<PropertyDataObject> qualifPropsData){
+    @Nullable
+    private CertRef tryGetSigningCertificateRef(Collection<PropertyDataObject> qualifPropsData)
+    {
         // If the SigningCertificate property contains a single reference, it likely represents the signer's certificate.
         // In that case, it can be used as a fallback to identify the signing certificate when processing KeyInfo.
         // This is a temporary solution.
@@ -266,6 +273,21 @@ class XadesVerifierImpl implements XadesVerifier
         }
 
         return null;
+    }
+
+    private static void checkKeyUsage(SignatureSpecificVerificationOptions verificationOptions, X509Certificate validationCert) throws SigningCertificateKeyUsageException
+    {
+        if (verificationOptions.checkKeyUsage())
+        {
+            // Check key usage.
+            // - KeyUsage[0] = digitalSignature
+            // - KeyUsage[1] = nonRepudiation
+            boolean[] keyUsage = validationCert.getKeyUsage();
+            if (keyUsage != null && !keyUsage[0] && !keyUsage[1])
+            {
+                throw new SigningCertificateKeyUsageException();
+            }
+        }
     }
 
     private Date getValidationDate(
@@ -290,16 +312,49 @@ class XadesVerifierImpl implements XadesVerifier
                 new QualifyingPropertyVerificationContext.CertificationChainData(
                         new ArrayList<>(0),
                         new ArrayList<>(0),
-                null,
-                this.x500NameStyleProvider),
+                        null,
+                        this.x500NameStyleProvider),
                 /**/
                 new QualifyingPropertyVerificationContext.SignedObjectsData(
                         new ArrayList<>(0),
-                signature));
+                        signature));
         Collection<PropertyInfo> props = this.qualifyingPropertiesVerifier.verifyProperties((Collection<PropertyDataObject>) sigTsData, ctx);
         QualifyingProperty sigTs = props.iterator().next().getProperty();
 
         return ((SignatureTimeStampProperty) sigTs).getTime();
+    }
+
+    /**
+     * Determines if the SigningCertificate qualifying property must be in the signature. This depends on whether the
+     * signing certificate is protected in KeyInfo and what the profile allows.
+     * Note that the property is not required but is present, it's still validatated as any other property.
+     */
+    private boolean requiresSigningCertificateProperty(XMLSignature signature, KeyInfoRes keyInfoRes) throws XAdES4jException
+    {
+        if (this.requireSigningCertificateProperty)
+        {
+            // Profile requires protecting the signing certificate using the SigningCertificate property.
+            return true;
+        }
+
+        if (!keyInfoRes.signingCertSelectorFromKeyInfo)
+        {
+            // KeyInfo does not contain elements that identify the signing certificate, which means the
+            // SigningCertificate property must be used. This was already checked when processing KeyInfo, anyway.
+            return true;
+        }
+
+        try
+        {
+            // KeyInfo contains elements that identify the signing certificate. If these elements are not protected by
+            // the signature, then the SigningCertificate property is required.
+            // Note that this only supports References to the KeyInfo element itself, containing only C14N transforms.
+            return !signatureReferencesElement(signature, signature.getKeyInfo());
+        }
+        catch (XMLSecurityException e)
+        {
+            throw new XAdES4jXMLSigException("Error looking for KeyInfo reference", e);
+        }
     }
 
     private static void doCoreVerification(
@@ -308,7 +363,7 @@ class XadesVerifierImpl implements XadesVerifier
             X509Certificate validationCert) throws XAdES4jXMLSigException, InvalidSignatureException
     {
         List<ResourceResolverSpi> resolvers = verificationOptions.getResolvers();
-        if(!CollectionUtils.nullOrEmpty(resolvers))
+        if (!CollectionUtils.nullOrEmpty(resolvers))
         {
             for (ResourceResolverSpi resolver : resolvers)
             {
@@ -345,7 +400,8 @@ class XadesVerifierImpl implements XadesVerifier
             // itself.
             {
                 throw new SignatureValueException(signature);
-            } else
+            }
+            else
             {
                 // References are NOT OK; get the first invalid Reference.
                 SignedInfo si = signature.getSignedInfo();
@@ -370,8 +426,9 @@ class XadesVerifierImpl implements XadesVerifier
     {
 
         void addProps(Collection<UnsignedSignatureProperty> usp,
-                XAdESVerificationResult res);
+                      XAdESVerificationResult res);
     }
+
     private static FormExtensionPropsCollector[][] formsExtensionTransitions;
 
     private static void initFormExtension()
@@ -451,7 +508,8 @@ class XadesVerifierImpl implements XadesVerifier
         return res;
     }
 
-    private static FormExtensionPropsCollector getFinalFormPropsColector(XAdESForm finalForm, XAdESForm actualForm) throws InvalidFormExtensionException {
+    private static FormExtensionPropsCollector getFinalFormPropsColector(XAdESForm finalForm, XAdESForm actualForm) throws InvalidFormExtensionException
+    {
         FormExtensionPropsCollector finalFormPropsCollector = formsExtensionTransitions[actualForm.ordinal()][finalForm.ordinal()];
 
         if (null == finalFormPropsCollector)

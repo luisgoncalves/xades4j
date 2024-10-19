@@ -20,6 +20,7 @@ import org.junit.jupiter.api.Test;
 
 import java.util.ArrayList;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
 /**
@@ -30,6 +31,14 @@ class XAdESFormCheckerTest
     @Test
     void checkFormThrowsIfMinimumPropertiesAreNotPresent() throws InvalidXAdESFormException
     {
-        assertThrows(InvalidXAdESFormException.class, () -> XAdESFormChecker.checkForm(new ArrayList<PropertyInfo>(0)));
+        assertThrows(InvalidXAdESFormException.class, () -> XAdESFormChecker.checkForm(new ArrayList<PropertyInfo>(0), true));
+    }
+
+    @Test
+    void identifiesXadesBesWhenSigningCertificateIsNotPresentAndNotRequired() throws InvalidXAdESFormException
+    {
+        XAdESForm form = XAdESFormChecker.checkForm(new ArrayList<PropertyInfo>(0), false);
+
+        assertEquals(XAdESForm.BES, form);
     }
 }

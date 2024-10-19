@@ -67,12 +67,14 @@ public final class XadesVerificationProfile
     /**/
     private boolean acceptUnknownProperties;
     private boolean secureValidation;
+    private boolean requireSigningCertificateProperty;
 
     private XadesVerificationProfile()
     {
         this.profileCore = new XadesProfileCore();
         this.acceptUnknownProperties = false;
         this.secureValidation = false;
+        this.requireSigningCertificateProperty = true;
         withBinding(XadesVerifier.class, XadesVerifierImpl.class);
     }
 
@@ -149,6 +151,7 @@ public final class XadesVerificationProfile
         XadesVerifierImpl v = profileCore.getInstance(XadesVerifierImpl.class, overridableModules, sealedModules);
         v.setAcceptUnknownProperties(acceptUnknownProperties);
         v.setSecureValidation(secureValidation);
+        v.requireSigningCertificateProperty(requireSigningCertificateProperty);
         return v;
     }
 
@@ -253,6 +256,26 @@ public final class XadesVerificationProfile
     public XadesVerificationProfile withSecureValidation(boolean secureValidation)
     {
         this.secureValidation = secureValidation;
+        return this;
+    }
+
+    /**
+     * Indicates whether the signing certificate must be protected by incorporating the {@code SigningCertificate}
+     * signed property. Defaults to true.
+     * <p>
+     * If set to false, then the signing certificate can be protected by incorporating it in the {@code KeyInfo} element
+     * and signing that element. In this case the signature doesn't need to include the {@code SigningCertificate}
+     * property (but it may).
+     * <p>
+     * Either the {@code SigningCertificate} property must be present of the signing certificate must be included and
+     * protected in the {@code KeyInfo} element for signature verification to succeed.
+     *
+     * @param requireSigningCertificateProperty whether the {@code SigningCertificate} property is required
+     * @return the current instance
+     */
+    public XadesVerificationProfile requireSigningCertificateProperty(boolean requireSigningCertificateProperty)
+    {
+        this.requireSigningCertificateProperty = requireSigningCertificateProperty;
         return this;
     }
 
