@@ -18,8 +18,6 @@ package xades4j.verification;
 
 import jakarta.inject.Inject;
 import org.apache.xml.security.exceptions.XMLSecurityException;
-import org.apache.xml.security.signature.Reference;
-import org.apache.xml.security.signature.SignedInfo;
 import org.apache.xml.security.utils.Constants;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
@@ -27,11 +25,13 @@ import xades4j.XAdES4jException;
 import xades4j.properties.CounterSignatureProperty;
 import xades4j.properties.QualifyingProperty;
 import xades4j.properties.data.GenericDOMData;
-import xades4j.utils.CanonicalizerUtils;
 import xades4j.utils.DOMHelper;
+
+import static xades4j.verification.SignatureUtils.signatureReferencesElement;
 
 /**
  * XAdES section G.2.2.7
+ *
  * @author Luís
  */
 class CounterSignatureVerifier implements QualifyingPropertyVerifier<GenericDOMData>
@@ -56,7 +56,8 @@ class CounterSignatureVerifier implements QualifyingPropertyVerifier<GenericDOMD
         {
             Element sigElem = DOMHelper.getFirstChildElement(propData.getPropertyElement());
             res = verifier.verify(sigElem, null);
-        } catch (XAdES4jException ex)
+        }
+        catch (XAdES4jException ex)
         {
             throw new CounterSignatureXadesVerificationException(ex);
         }
@@ -69,25 +70,14 @@ class CounterSignatureVerifier implements QualifyingPropertyVerifier<GenericDOMD
 
         try
         {
-            SignedInfo si = res.getXmlSignature().getSignedInfo();
-            for (int i = 0; i < si.getLength(); i++)
+            if (signatureReferencesElement(res.getXmlSignature(), (Element) targetSigValueElem))
             {
-                Reference r = si.item(i);
-                if (r.getContentsAfterTransformation().getSubNode() == targetSigValueElem)
-                {
-                    // The signature references the SignatureValue element.
-                    return new CounterSignatureProperty(res);
-                }
-                else if (r.getContentsBeforeTransformation().getSubNode() == targetSigValueElem && CanonicalizerUtils.allTransformsAreC14N(r))
-                {
-                    // The signature references the SignatureValue element with
-                    // C14N transforms only.
-                    // TODO: same return value as before
-                    return new CounterSignatureProperty(res);
-                }
+                return new CounterSignatureProperty(res);
             }
+
             throw new CounterSignatureSigValueRefException();
-        } catch (XMLSecurityException e)
+        }
+        catch (XMLSecurityException e)
         {
             // Shouldn't happen because the signature was already verified.
             throw new CounterSignatureVerificationException(e);

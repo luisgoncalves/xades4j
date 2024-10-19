@@ -26,6 +26,7 @@ import org.apache.xml.security.signature.SignedInfo;
 import org.apache.xml.security.signature.XMLSignature;
 import org.apache.xml.security.signature.XMLSignatureException;
 import org.apache.xml.security.transforms.Transforms;
+import org.apache.xml.security.utils.ElementProxy;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import xades4j.XAdES4jXMLSigException;
@@ -33,21 +34,20 @@ import xades4j.algorithms.GenericAlgorithm;
 import xades4j.properties.QualifyingProperty;
 import xades4j.utils.DOMHelper;
 
+import static xades4j.utils.CanonicalizerUtils.allTransformsAreC14N;
+
 /**
  *
  * @author Luís
  */
 class SignatureUtils
 {
-
     private SignatureUtils()
     {
     }
-    /**/
 
     static class ReferencesRes
     {
-
         /**
          * In signature order.
          */
@@ -98,10 +98,9 @@ class SignatureUtils
         }
 
         if (null == signedPropsRef)
-        // !!!
-        // Still may be a XAdES signature, if the signing certificate is
-        // protected. For now, that scenario is not supported.
         {
+            // TODO Still may be a XAdES signature, if the signing certificate is
+            //  protected. For now, that scenario is not supported.
             throw new QualifyingPropertiesIncorporationException("SignedProperties reference not found");
         }
 
@@ -257,5 +256,26 @@ class SignatureUtils
 
         // The referenced signed properties element must be the child of qualifying properties.
         return (Element) sPropsNode;
+    }
+
+    static boolean signatureReferencesElement(XMLSignature signature, ElementProxy elementProxy) throws XMLSecurityException
+    {
+        return signatureReferencesElement(signature, elementProxy.getElement());
+    }
+
+    static boolean signatureReferencesElement(XMLSignature signature, Element element) throws XMLSecurityException
+    {
+        SignedInfo si = signature.getSignedInfo();
+        for (int i = 0; i < si.getLength(); i++)
+        {
+            Reference r = si.item(i);
+            if (r.getContentsAfterTransformation().getSubNode() == element ||
+                    r.getContentsBeforeTransformation().getSubNode() == element && allTransformsAreC14N(r))
+            {
+                return true;
+            }
+        }
+
+        return false;
     }
 }

@@ -19,6 +19,9 @@ package xades4j.verification;
 import jakarta.inject.Inject;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.CsvSource;
+import org.junit.jupiter.params.provider.ValueSource;
 import xades4j.properties.QualifyingProperty;
 import xades4j.properties.data.SigningTimeData;
 import xades4j.utils.BuiltIn;
@@ -87,5 +90,35 @@ class OtherVerifierTests extends VerifierTestBase
         SignatureSpecificVerificationOptions options = new SignatureSpecificVerificationOptions()
                 .followManifests(true);
         verifySignature("document.signed.bes.manifest.xml", mySigsVerificationProfile, options);
+    }
+
+    @ParameterizedTest
+    @ValueSource(strings = {
+            "document.bes.without-sign-cert-prop.xml",
+            "document.signed.bes.xml"
+    })
+    void verifyWhenSigningCertificatePropertyIsNotRequired(String file) throws Exception
+    {
+        mySigsVerificationProfile.requireSigningCertificateProperty(false);
+
+        XAdESVerificationResult result = verifySignature(file, mySigsVerificationProfile);
+
+        assertEquals(XAdESForm.BES, result.getSignatureForm());
+    }
+
+    @ParameterizedTest
+    @CsvSource({
+            // Profile requires the SigningCertificate property
+            "document.bes.without-sign-cert-prop.xml, true",
+            // Profile requires the SigningCertificate property
+            "bad/document.bes.without-sign-cert-prop-keyinfo-not-signed.xml, true",
+            // Profile does not require the SigningCertificate property but KeyInfo is not signed
+            "bad/document.bes.without-sign-cert-prop-keyinfo-not-signed.xml, false",
+    })
+    void verifyFailsWhenCertificateIsNotProtectedAsRequired(String file, boolean requireSigningCertificateProperty) throws Exception
+    {
+        mySigsVerificationProfile.requireSigningCertificateProperty(requireSigningCertificateProperty);
+
+        assertThrows(InvalidXAdESFormException.class, () -> verifySignature(file, mySigsVerificationProfile));
     }
 }

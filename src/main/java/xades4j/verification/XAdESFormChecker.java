@@ -40,7 +40,7 @@ class XAdESFormChecker
     {
     }
 
-    static XAdESForm checkForm(Collection<PropertyInfo> props) throws InvalidXAdESFormException
+    static XAdESForm checkForm(Collection<PropertyInfo> props, boolean requiresSigningCertificateProperty) throws InvalidXAdESFormException
     {
         Set<String> availablePropsNames = new HashSet<>();
         for (PropertyInfo propInfo : props)
@@ -51,7 +51,7 @@ class XAdESFormChecker
         XAdESFormDesc formDesc = XADES_C_DESC;
         do
         {
-            if (formDesc.check(availablePropsNames))
+            if (formDesc.check(availablePropsNames, requiresSigningCertificateProperty))
                 return formDesc.getForm();
         } while ((formDesc = formDesc.getPrevious()) != null);
 
@@ -84,10 +84,10 @@ class XAdESFormChecker
             this.baseForms = baseForms;
         }
 
-        boolean check(Set<String> availablePropsNames) throws InvalidXAdESFormException
+        boolean check(Set<String> availablePropsNames, boolean requiresSigningCertificateProperty) throws InvalidXAdESFormException
         {
             // Check the properties for the current form.
-            if (!checkProps(availablePropsNames))
+            if (!checkProps(availablePropsNames, requiresSigningCertificateProperty))
                 return false;
 
             // If the properties of the current form are available, at least one
@@ -97,7 +97,7 @@ class XAdESFormChecker
                 return true;
 
           for (XAdESFormDesc baseForm : baseForms) {
-            if (baseForm.check(availablePropsNames))
+            if (baseForm.check(availablePropsNames, requiresSigningCertificateProperty))
               return true;
           }
 
@@ -114,7 +114,7 @@ class XAdESFormChecker
          * when the form is malformed.
          * @return true if the format specific properties are available; false otherwise
          */
-        protected abstract boolean checkProps(Set<String> availablePropsNames) throws InvalidXAdESFormException;
+        protected abstract boolean checkProps(Set<String> availablePropsNames, boolean requiresSigningCertificateProperty) throws InvalidXAdESFormException;
 
         abstract XAdESForm getForm();
     }
@@ -123,9 +123,9 @@ class XAdESFormChecker
     static class XAdES_BES_Desc extends XAdESFormDesc
     {
         @Override
-        protected boolean checkProps(Set<String> availablePropsNames)
+        protected boolean checkProps(Set<String> availablePropsNames, boolean requiresSigningCertificateProperty)
         {
-            return availablePropsNames.contains(SigningCertificateProperty.PROP_NAME);
+            return availablePropsNames.contains(SigningCertificateProperty.PROP_NAME) || !requiresSigningCertificateProperty;
         }
 
         @Override
@@ -144,7 +144,7 @@ class XAdESFormChecker
         }
 
         @Override
-        protected boolean checkProps(Set<String> availablePropsNames)
+        protected boolean checkProps(Set<String> availablePropsNames, boolean requiresSigningCertificateProperty)
         {
             return availablePropsNames.contains(SignaturePolicyBase.PROP_NAME);
         }
@@ -165,7 +165,7 @@ class XAdESFormChecker
         }
 
         @Override
-        protected boolean checkProps(Set<String> availablePropsNames)
+        protected boolean checkProps(Set<String> availablePropsNames, boolean requiresSigningCertificateProperty)
         {
             return availablePropsNames.contains(SignatureTimeStampProperty.PROP_NAME);
         }
@@ -186,7 +186,7 @@ class XAdESFormChecker
         }
 
         @Override
-        protected boolean checkProps(Set<String> availablePropsNames) throws InvalidXAdESFormException
+        protected boolean checkProps(Set<String> availablePropsNames, boolean requiresSigningCertificateProperty) throws InvalidXAdESFormException
         {
             boolean hasCompCertRefs = availablePropsNames.contains(CompleteCertificateRefsProperty.PROP_NAME);
             boolean hasCompRevocRefs = availablePropsNames.contains(CompleteRevocationRefsProperty.PROP_NAME);
@@ -225,7 +225,7 @@ class XAdESFormChecker
         }
 
         @Override
-        protected boolean checkProps(Set<String> availablePropsNames) {
+        protected boolean checkProps(Set<String> availablePropsNames, boolean requiresSigningCertificateProperty) {
             return availablePropsNames.contains(SigAndRefsTimeStampProperty.PROP_NAME) ||
                     availablePropsNames.contains("RefsOnlyTimeStamp");
         }
@@ -246,7 +246,7 @@ class XAdESFormChecker
         }
 
         @Override
-        protected boolean checkProps(Set<String> availablePropsNames) throws InvalidXAdESFormException
+        protected boolean checkProps(Set<String> availablePropsNames, boolean requiresSigningCertificateProperty) throws InvalidXAdESFormException
         {
             boolean hasCompCert = availablePropsNames.contains(CertificateValuesProperty.PROP_NAME);
             boolean hasCompRevoc = availablePropsNames.contains(RevocationValuesProperty.PROP_NAME);
@@ -277,7 +277,7 @@ class XAdESFormChecker
         }
 
         @Override
-        protected boolean checkProps(Set<String> availablePropsNames) {
+        protected boolean checkProps(Set<String> availablePropsNames, boolean requiresSigningCertificateProperty) {
             return availablePropsNames.contains(ArchiveTimeStampProperty.PROP_NAME);
         }
 
