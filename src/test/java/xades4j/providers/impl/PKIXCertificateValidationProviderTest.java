@@ -16,13 +16,18 @@
  */
 package xades4j.providers.impl;
 
+import org.bouncycastle.jce.provider.BouncyCastleProvider;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.MethodSource;
 import xades4j.providers.ValidationData;
 import xades4j.utils.FileSystemDirectoryCertStore;
 
 import javax.security.auth.x500.X500Principal;
 import java.io.FileInputStream;
 import java.security.KeyStore;
+import java.security.Provider;
+import java.security.Security;
 import java.security.cert.X509CertSelector;
 import java.security.cert.X509Certificate;
 import java.util.Collection;
@@ -36,8 +41,9 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
  */
 class PKIXCertificateValidationProviderTest
 {
-    @Test
-    void testValidateMy() throws Exception
+    @ParameterizedTest
+    @MethodSource
+    void testValidateMy(Provider provider) throws Exception
     {
         FileSystemDirectoryCertStore certStore = new FileSystemDirectoryCertStore("./src/test/cert/my");
         KeyStore ks = KeyStore.getInstance("jks");
@@ -49,13 +55,38 @@ class PKIXCertificateValidationProviderTest
         certSelector.setSubject(new X500Principal("CN = Luis Goncalves,OU = CC,O = ISEL,C = PT"));
         Collection<X509Certificate> otherCerts = Collections.emptyList();
 
-        PKIXCertificateValidationProvider instance = PKIXCertificateValidationProvider
+        PKIXCertificateValidationProvider.Builder builder = PKIXCertificateValidationProvider
                 .builder(ks)
                 .checkRevocation(false)
-                .intermediateCertStores(certStore.getStore())
-                .build();
+                .intermediateCertStores(certStore.getStore());
+
+        if (provider != null)
+        {
+            builder.signatureProvider(provider.getName());
+        }
+
+        PKIXCertificateValidationProvider instance = builder.build();
+
+        if (provider != null)
+        {
+            Security.addProvider(provider);
+        }
+
         ValidationData result = instance.validate(certSelector, new Date(), otherCerts);
         assertEquals(3, result.getCerts().size());
+
+        if (provider != null)
+        {
+            Security.removeProvider(provider.getName());
+        }
+    }
+
+    public static Provider[] testValidateMy()
+    {
+        return new Provider[]{
+                null,
+                new BouncyCastleProvider()
+        };
     }
 
     @Test
