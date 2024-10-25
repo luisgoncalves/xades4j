@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="UTF-8"?><collection Id="root">
+	<album>
+		<title>Questions, unanswered</title>
+		<artist>Steve and the flubberblubs</artist>
+		<year>1989</year>
+		<t:tracks xmlns:t="http://test.xades4j/tracks">
+			<t:song length="4:05" tracknumber="1">
+				<t:title>What do you know?</t:title>
+				<t:artist>Steve and the flubberblubs</t:artist>
+				<t:lastplayed>2006-10-17-08:31</t:lastplayed>
+			</t:song>
+			<t:song length="3:45" tracknumber="2">
+				<t:title>Who do you know?</t:title>
+				<t:artist>Steve and the flubberblubs</t:artist>
+				<t:lastplayed>2006-10-17-08:35</t:lastplayed>
+			</t:song>
+			<t:song length="5:14" tracknumber="3">
+				<t:title>When do you know?</t:title>
+				<t:artist>Steve and the flubberblubs</t:artist>
+				<t:lastplayed>2006-10-17-08:39</t:lastplayed>
+			</t:song>
+			<t:song length="4:19" tracknumber="4">
+				<t:title>Do you know?</t:title>
+				<t:artist>Steve and the flubberblubs</t:artist>
+				<t:lastplayed>2006-10-17-08:44</t:lastplayed>
+			</t:song>
+		</t:tracks>
+	</album>
+<ds:Signature xmlns:ds="http://www.w3.org/2000/09/xmldsig#" Id="signature-51bb5edf-039c-4c35-ab4b-4304e73a93ee">
+<ds:SignedInfo>
+<ds:CanonicalizationMethod Algorithm="http://www.w3.org/TR/2001/REC-xml-c14n-20010315"/>
+<ds:SignatureMethod Algorithm="http://www.w3.org/2007/05/xmldsig-more#rsa-pss">
+<pss:RSAPSSParams xmlns:pss="http://www.w3.org/2007/05/xmldsig-more#">
+<ds:DigestMethod Algorithm="http://www.w3.org/2001/04/xmlenc#sha256"/>
+<pss:SaltLength>64</pss:SaltLength>
+<pss:TrailerField>1</pss:TrailerField>
+</pss:RSAPSSParams>
+</ds:SignatureMethod>
+<ds:Reference URI="#root">
+<ds:Transforms>
+<ds:Transform Algorithm="http://www.w3.org/2000/09/xmldsig#enveloped-signature"/>
+</ds:Transforms>
+<ds:DigestMethod Algorithm="http://www.w3.org/2001/04/xmlenc#sha256"/>
+<ds:DigestValue>rD/g8soqKz8EiPUBhEWfcQacS0ta4ULHX3dKMEH6ZoQ=</ds:DigestValue>
+</ds:Reference>
+<ds:Reference Type="http://uri.etsi.org/01903#SignedProperties" URI="#signedproperties-211e1eb4-e409-4169-a083-06e2201a6e3f">
+<ds:Transforms>
+<ds:Transform Algorithm="http://www.w3.org/TR/2001/REC-xml-c14n-20010315"/>
+</ds:Transforms>
+<ds:DigestMethod Algorithm="http://www.w3.org/2001/04/xmlenc#sha256"/>
+<ds:DigestValue>GddpcMqEMdYowP4GlEdTiqQcp9Mym1Mz3o9CFSyCet8=</ds:DigestValue>
+</ds:Reference>
+</ds:SignedInfo>
+<ds:SignatureValue>
+UKoTfgDL22+mv7q9NmrtFyP55WBj8WNWTM+CXDrPk9aDxps5xS/wHv1X9k1bZK9O2nw4UAqBz42f&#13;
+3h3o1or/JrDdI3w5gsY3+rFdzmUq2z0CC5I1yGkCsl9wepxJjFC9R+ODTd1rxzO0rFS+cCM8sOgr&#13;
+7olgkXW4K+fViZ0KarY=
+</ds:SignatureValue>
+<ds:KeyInfo>
+<ds:X509Data>
+<ds:X509Certificate>
+MIICbTCCAdqgAwIBAgIQpkK0uals+ItHxBlpJuypOTAJBgUrDgMCHQUAMD8xCzAJBgNVBAYTAlBU&#13;
+MQ0wCwYDVQQKEwRJU0VMMQswCQYDVQQLEwJDQzEUMBIGA1UEAxMLSXRlcm1lZGlhdGUwHhcNMTAw&#13;
+NjI1MTc1ODQ5WhcNMzkxMjMxMjM1OTU5WjBCMQswCQYDVQQGEwJQVDENMAsGA1UEChMESVNFTDEL&#13;
+MAkGA1UECxMCQ0MxFzAVBgNVBAMTDkx1aXMgR29uY2FsdmVzMIGfMA0GCSqGSIb3DQEBAQUAA4GN&#13;
+ADCBiQKBgQCpP9acMX69Dbg9ciMLFc5dm1tlpTY9OTNZ/EaCYoGVhh/3+DFgyIbEer6SA24hpREm&#13;
+AhNG9+Ca0AurDPPgb3aKWFY9pj1WcOctis0VsR0YvzqP+2IGFqKDCd7bXFvv2tI0dEvpdc0oO6PF&#13;
+Q02xvJG0kxQf44XljOCjUBU43jkJawIDAQABo28wbTBrBgNVHQEEZDBigBBdbbL4pDKLT56PpOpA&#13;
+/56toTwwOjELMAkGA1UEBhMCUFQxDTALBgNVBAoTBElTRUwxCzAJBgNVBAsTAkNDMQ8wDQYDVQQD&#13;
+EwZUZXN0Q0GCEN00x9qe7SuWQvpLK0/oay8wCQYFKw4DAh0FAAOBgQBSma8g9dQjiQo4WUljRRuG&#13;
+yMUVRyCqW/9oRz8+0EoLNR/AhrIlGqdNbqQ1BkncgNNdqMAus5VD34v/EhgrkgWN5fZajMpYsmcR&#13;
+Ahu4PzJ6hggAlWWMy245JwIYuV0s1Oi39GVTxVNOBIX//AONZlGWO4S2Psb1mqdZ99b/MugsaA==
+</ds:X509Certificate>
+</ds:X509Data>
+</ds:KeyInfo>
+<ds:Object><xades:QualifyingProperties xmlns:xades="http://uri.etsi.org/01903/v1.3.2#" xmlns:xades141="http://uri.etsi.org/01903/v1.4.1#" Target="#signature-51bb5edf-039c-4c35-ab4b-4304e73a93ee"><xades:SignedProperties Id="signedproperties-211e1eb4-e409-4169-a083-06e2201a6e3f"><xades:SignedSignatureProperties><xades:SigningTime>2024-10-18T23:17:54.123+01:00</xades:SigningTime><xades:SigningCertificate><xades:Cert><xades:CertDigest><ds:DigestMethod Algorithm="http://www.w3.org/2001/04/xmlenc#sha256"/><ds:DigestValue>4btVb5gQ5cdcNhGpvDSWQZabPQrR9jf1x8e3YF9Ajss=</ds:DigestValue></xades:CertDigest><xades:IssuerSerial><ds:X509IssuerName>cn=Itermediate,ou=CC,o=ISEL,c=PT</ds:X509IssuerName><ds:X509SerialNumber>-119284162484605703133798696662099777223</ds:X509SerialNumber></xades:IssuerSerial></xades:Cert><xades:Cert><xades:CertDigest><ds:DigestMethod Algorithm="http://www.w3.org/2001/04/xmlenc#sha256"/><ds:DigestValue>vm5QpbblsWV7fCYXotPhNTeCt4nk8cLFuF36L5RJ4Ok=</ds:DigestValue></xades:CertDigest><xades:IssuerSerial><ds:X509IssuerName>cn=TestCA,ou=CC,o=ISEL,c=PT</ds:X509IssuerName><ds:X509SerialNumber>-46248926895392336918291885380930606289</ds:X509SerialNumber></xades:IssuerSerial></xades:Cert><xades:Cert><xades:CertDigest><ds:DigestMethod Algorithm="http://www.w3.org/2001/04/xmlenc#sha256"/><ds:DigestValue>AUaN+IdhKQqxIVmEOrFwq+Dn22ebTkXJqD3BoOP/x8E=</ds:DigestValue></xades:CertDigest><xades:IssuerSerial><ds:X509IssuerName>cn=TestCA,ou=CC,o=ISEL,c=PT</ds:X509IssuerName><ds:X509SerialNumber>-99704378678639105802976522062798066869</ds:X509SerialNumber></xades:IssuerSerial></xades:Cert></xades:SigningCertificate></xades:SignedSignatureProperties></xades:SignedProperties></xades:QualifyingProperties></ds:Object>
+</ds:Signature></collection>
