@@ -40,7 +40,7 @@ signer.sign(new SignedDataObjects(obj), doc.getDocumentElement());
 # Docs and Q&A
 
 - General usage documentation can be found on the project's [wiki](https://github.com/luisgoncalves/xades4j/wiki).
-- Javadocs for the latest version can be found [here](http://luisgoncalves.github.io/xades4j/javadocs/2.2.0). 
+- Javadocs for the latest version can be found [here](http://luisgoncalves.github.io/xades4j/javadocs/2.4.0).
 - Unit tests in the source code illustrate all the features.
 - Overview of the architecture and implementation on the [XAdES4j Prezi](http://prezi.com/06vyxbgohncv/xades4j-en/).
 - `xades4j` tag on [Stack Overflow](http://stackoverflow.com/questions/tagged/xades4j).
